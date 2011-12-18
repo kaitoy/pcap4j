@@ -1,0 +1,32 @@
+Pcap4J
+
+・概要
+  Javaのパケットキャプチャライブラリ。パケットの作成・送信もできる。
+  ネイティブのパケットキャプチャライブラリであるlibpcap(http://www.tcpdump.org/)またはWinPcap(http://www.winpcap.org/)を、
+  JNA(https://github.com/twall/jna)でラッピングして、JavaらしいAPIに仕上げた(つもりの)もの。
+  
+・開発経緯
+  SNMPネットワークシミュレータをJavaで作っていて、パケットキャプチャをしたくなったが、
+  Raw Socketを使って自力でやるのは大変そうなので、pcap APIを使うことに。
+  
+  pcap APIの実装は、UNIX系にはlibpcap、WindowsにはWinPcapがあるが、いずれもネイティブライブラリ。
+  これらのJavaラッパはjpcap(http://jpcap.sourceforge.net/)やjNetPcap(http://jnetpcap.com/)が既にあるが、
+  これらはパケットキャプチャに特化していて、パケット作成・送信がしにくいような気がした。
+  Jpcap(http://netresearch.ics.uci.edu/kfujii/Jpcap/doc/)はパケット作成・送信もやりやすいけど、
+  ICMPのキャプチャ周りにバグがあって使えなかった。結構前から開発が止まっているようだし。
+  
+  ということで自作した。
+  
+・機能
+  - パケットのキャプチャ、作成、送信。
+  - Ethernet、ARP、IPv4、ICMPv4、UDPに対応。
+  - ライブラリをいじらずに、対応プロトコルをユーザが追加できる。
+  
+・使い方
+  ドキュメントは作成中。
+  テストクラスやlibpcapのドキュメントを見れば…
+  
+・ライセンス
+  This library is provided under the LGPL, version 2.1 or later.
+  
+
