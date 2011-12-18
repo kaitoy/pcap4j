@@ -26,6 +26,14 @@ Pcap4J
   ドキュメントは作成中。
   テストクラスやlibpcapのドキュメントを見れば…
   
+  UNIX系ならlibpcap、WindowsならWinPcapがインストールされている必要がある。
+  jnaもクラスパスに含める必要がある。
+  動作確認済みのバージョンは以下。
+  
+    - libpcap1.1.1
+    - WinPcap4.1.2
+    - jna3.3.0
+  
 ・ライセンス
   This library is provided under the LGPL, version 2.1 or later.
   
