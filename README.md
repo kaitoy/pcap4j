@@ -1,76 +1,76 @@
 Pcap4J
 ======
 
-Java‚ÌƒpƒPƒbƒgƒLƒƒƒvƒ`ƒƒƒ‰ƒCƒuƒ‰ƒŠBƒpƒPƒbƒg‚Ìì¬E‘—M‚à‚Å‚«‚éB
+Javaã®ãƒ‘ã‚±ãƒƒãƒˆã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã€‚ãƒ‘ã‚±ãƒƒãƒˆã®ä½œæˆãƒ»é€ä¿¡ã‚‚ã§ãã‚‹ã€‚
 
-ƒlƒCƒeƒBƒu‚ÌƒpƒPƒbƒgƒLƒƒƒvƒ`ƒƒƒ‰ƒCƒuƒ‰ƒŠ‚Å‚ ‚élibpcap( http://www.tcpdump.org/ )‚Ü‚½‚ÍWinPcap( http://www.winpcap.org/ )‚ðA
+ãƒã‚¤ãƒ†ã‚£ãƒ–ã®ãƒ‘ã‚±ãƒƒãƒˆã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã§ã‚ã‚‹[libpcap](http://www.tcpdump.org/)ã¾ãŸã¯[WinPcap](http://www.winpcap.org/)ã‚’ã€
 
-JNA( https://github.com/twall/jna )‚ðŽg‚Á‚Äƒ‰ƒbƒsƒ“ƒO‚µ‚ÄAJava‚ç‚µ‚¢API‚ÉŽdã‚°‚½(‚Â‚à‚è‚Ì)‚à‚ÌB
+[JNA](https://github.com/twall/jna)ã‚’ä½¿ã£ã¦ãƒ©ãƒƒãƒ”ãƒ³ã‚°ã—ã¦ã€Javaã‚‰ã—ã„APIã«ä»•ä¸Šã’ãŸ(ã¤ã‚‚ã‚Šã®)ã‚‚ã®ã€‚
 
-ƒ_ƒEƒ“ƒ[ƒh
+ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
 ============
 
 pcap4j1.0.0
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
-ŠJ”­ŒoˆÜ
+é–‹ç™ºçµŒç·¯
 ========
 
-SNMPƒlƒbƒgƒ[ƒNƒVƒ~ƒ…ƒŒ[ƒ^‚ðJava‚Åì‚Á‚Ä‚¢‚ÄAƒpƒPƒbƒgƒLƒƒƒvƒ`ƒƒ‚ð‚µ‚½‚­‚È‚Á‚½‚ªA
+SNMPãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚¿ã‚’Javaã§ä½œã£ã¦ã„ã¦ã€ãƒ‘ã‚±ãƒƒãƒˆã‚­ãƒ£ãƒ—ãƒãƒ£ã‚’ã—ãŸããªã£ãŸãŒã€
 
-Raw Socket‚ðŽg‚Á‚ÄŽ©—Í‚Å‚â‚é‚Ì‚Í‘å•Ï‚»‚¤‚È‚Ì‚ÅApcap API‚ðŽg‚¤‚±‚Æ‚ÉB
+Raw Socketã‚’ä½¿ã£ã¦è‡ªåŠ›ã§ã‚„ã‚‹ã®ã¯å¤§å¤‰ãã†ãªã®ã§ã€pcap APIã‚’ä½¿ã†ã“ã¨ã«ã€‚
 
 
-pcap API‚ÌŽÀ‘•‚ÍAUNIXŒn‚É‚ÍlibpcapAWindows‚É‚ÍWinPcap‚ª‚ ‚é‚ªA‚¢‚¸‚ê‚àƒlƒCƒeƒBƒuƒ‰ƒCƒuƒ‰ƒŠB
+pcap APIã®å®Ÿè£…ã¯ã€UNIXç³»ã«ã¯libpcapã€Windowsã«ã¯WinPcapãŒã‚ã‚‹ãŒã€ã„ãšã‚Œã‚‚ãƒã‚¤ãƒ†ã‚£ãƒ–ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã€‚
 
-‚±‚ê‚ç‚ÌJavaƒ‰ƒbƒp‚Íjpcap( http://jpcap.sourceforge.net/ )‚âjNetPcap( http://jnetpcap.com/ )‚ªŠù‚É‚ ‚é‚ªA
+ã“ã‚Œã‚‰ã®Javaãƒ©ãƒƒãƒ‘ã¯[jpcap](http://jpcap.sourceforge.net/)ã‚„[jNetPcap](http://jnetpcap.com/)ãŒæ—¢ã«ã‚ã‚‹ãŒã€
 
-‚±‚ê‚ç‚ÍƒpƒPƒbƒgƒLƒƒƒvƒ`ƒƒ‚É“Á‰»‚µ‚Ä‚¢‚ÄAƒpƒPƒbƒgì¬E‘—M‚ª‚µ‚É‚­‚¢‚æ‚¤‚È‹C‚ª‚µ‚½B
+ã“ã‚Œã‚‰ã¯ãƒ‘ã‚±ãƒƒãƒˆã‚­ãƒ£ãƒ—ãƒãƒ£ã«ç‰¹åŒ–ã—ã¦ã„ã¦ã€ãƒ‘ã‚±ãƒƒãƒˆä½œæˆãƒ»é€ä¿¡ãŒã—ã«ãã„ã‚ˆã†ãªæ°—ãŒã—ãŸã€‚
 
-Jpcap( http://netresearch.ics.uci.edu/kfujii/Jpcap/doc/ )‚ÍƒpƒPƒbƒgì¬E‘—M‚à‚â‚è‚â‚·‚¢‚¯‚ÇA
+[Jpcap](http://netresearch.ics.uci.edu/kfujii/Jpcap/doc/)ã¯ãƒ‘ã‚±ãƒƒãƒˆä½œæˆãƒ»é€ä¿¡ã‚‚ã‚„ã‚Šã‚„ã™ã„ã‘ã©ã€
 
-ICMP‚ÌƒLƒƒƒvƒ`ƒƒŽü‚è‚ÉƒoƒO‚ª‚ ‚Á‚ÄŽg‚¦‚È‚©‚Á‚½BŒ‹\‘O‚©‚çŠJ”­‚ªŽ~‚Ü‚Á‚Ä‚¢‚é‚æ‚¤‚¾‚µB
+ICMPã®ã‚­ãƒ£ãƒ—ãƒãƒ£å‘¨ã‚Šã«ãƒã‚°ãŒã‚ã£ã¦ä½¿ãˆãªã‹ã£ãŸã€‚çµæ§‹å‰ã‹ã‚‰é–‹ç™ºãŒæ­¢ã¾ã£ã¦ã„ã‚‹ã‚ˆã†ã ã—ã€‚
 
-‚Æ‚¢‚¤‚±‚Æ‚ÅŽ©ì‚µ‚½B
+ã¨ã„ã†ã“ã¨ã§è‡ªä½œã—ãŸã€‚
 
-‹@”\
+æ©Ÿèƒ½
 ====
 
-* ƒpƒPƒbƒg‚ÌƒLƒƒƒvƒ`ƒƒAì¬A‘—MB
-* EthernetAARPAIPv4AICMPv4AUDP‚É‘Î‰žB
-* ƒ‰ƒCƒuƒ‰ƒŠ‚ð‚¢‚¶‚ç‚¸‚ÉA‘Î‰žƒvƒƒgƒRƒ‹‚ðƒ†[ƒU‚ª’Ç‰Á‚Å‚«‚éB
+* ãƒ‘ã‚±ãƒƒãƒˆã®ã‚­ãƒ£ãƒ—ãƒãƒ£ã€ä½œæˆã€é€ä¿¡ã€‚
+* Ethernetã€ARPã€IPv4ã€ICMPv4ã€UDPã«å¯¾å¿œã€‚
+* ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ã„ã˜ã‚‰ãšã«ã€å¯¾å¿œãƒ—ãƒ­ãƒˆã‚³ãƒ«ã‚’ãƒ¦ãƒ¼ã‚¶ãŒè¿½åŠ ã§ãã‚‹ã€‚
   
-Žg‚¢•û
+ä½¿ã„æ–¹
 ======
 
-ƒhƒLƒ…ƒƒ“ƒg‚Íì¬’†B
+ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯ä½œæˆä¸­ã€‚
 
-ƒeƒXƒgƒNƒ‰ƒX‚âlibpcap‚ÌƒhƒLƒ…ƒƒ“ƒg‚ðŒ©‚ê‚Îc
+ãƒ†ã‚¹ãƒˆã‚¯ãƒ©ã‚¹ã‚„libpcapã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’è¦‹ã‚Œã°â€¦
 
 
-UNIXŒn‚È‚çlibpcapAWindows‚È‚çWinPcap‚ªƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ä‚¢‚é•K—v‚ª‚ ‚éB
+UNIXç³»ãªã‚‰libpcapã€Windowsãªã‚‰WinPcapãŒã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ã„ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
 
-jna‚àƒNƒ‰ƒXƒpƒX‚ÉŠÜ‚ß‚é•K—v‚ª‚ ‚éB
+jnaã‚‚ã‚¯ãƒ©ã‚¹ãƒ‘ã‚¹ã«å«ã‚ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
 
-“®ìŠm”FÏ‚Ý‚Ìƒo[ƒWƒ‡ƒ“‚ÍˆÈ‰ºB
+å‹•ä½œç¢ºèªæ¸ˆã¿ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã¯ä»¥ä¸‹ã€‚
 
 * libpcap1.1.1
 * WinPcap4.1.2
 * jna3.3.0
   
-ƒ‰ƒCƒZƒ“ƒX
+ãƒ©ã‚¤ã‚»ãƒ³ã‚¹
 ==========
 
 pcap4j is provided under the LGPL, version 2.1 or later.
 
-‚¨‚Ü‚¯
+ãŠã¾ã‘
 ======
 
-pcap4j‚ðŽg‚Á‚½SNMPƒlƒbƒgƒ[ƒNƒVƒ~ƒ…ƒŒ[ƒ^ASnmpNetSimB
+pcap4jã‚’ä½¿ã£ãŸSNMPãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚¿ã€SnmpNetSimã€‚
 
-‚Æ‚è‚ ‚¦‚¸’u‚¢‚Ä‚¨‚­‚¾‚¯B
-¤—p‚Å‚à‚È‚ñ‚Å‚à–³—¿‚ÅŽg—p‰ÂBƒRƒs[‚àÄ”z•z‚à‰ÂB
+ã¨ã‚Šã‚ãˆãšç½®ã„ã¦ãŠãã ã‘ã€‚
+å•†ç”¨ã§ã‚‚ãªã‚“ã§ã‚‚ç„¡æ–™ã§ä½¿ç”¨å¯ã€‚ã‚³ãƒ”ãƒ¼ã‚‚å†é…å¸ƒã‚‚å¯ã€‚
 
 SnmpNetSim0.9.0
 
