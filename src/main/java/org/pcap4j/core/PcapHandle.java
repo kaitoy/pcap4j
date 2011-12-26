@@ -121,20 +121,11 @@ public final class PcapHandle {
     PcapLibrary.INSTANCE.pcap_freecode(prog);
   }
 
-  public Packet getNextPacket() throws PcapNativeException {
+  public Packet getNextPacket() {
     if (!isOpening()) {
       throw new IllegalStateException("Not opening.");
     }
 
-    if (PcapPropertiesLoader.getInstance().usesNextEx()) {
-      return nextEx();
-    }
-    else {
-      return next();
-    }
-  }
-
-  private Packet next() {
     pcap_pkthdr header = new pcap_pkthdr();
     Pointer packet = PcapLibrary.INSTANCE.pcap_next(handle, header);
 
@@ -148,7 +139,11 @@ public final class PcapHandle {
     }
   }
 
-  private Packet nextEx() throws PcapNativeException {
+  public Packet getNextPacketEx() throws PcapNativeException {
+    if (!isOpening()) {
+      throw new IllegalStateException("Not opening.");
+    }
+
     PointerByReference headerPP = new PointerByReference();
     PointerByReference dataPP = new PointerByReference();
 
@@ -183,7 +178,6 @@ public final class PcapHandle {
       default:
         throw new AssertionError("Never get here.");
     }
-
   }
 
   public void loop(

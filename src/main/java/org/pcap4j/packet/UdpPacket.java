@@ -8,31 +8,19 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
-
 import java.net.InetAddress;
-
 import org.pcap4j.packet.namedvalue.IpNumber;
 import org.pcap4j.util.ByteArrays;
 
-public class UdpPacket extends AbstractPacket implements L4Packet {
+public final class UdpPacket extends AbstractPacket implements L4Packet {
 
   private static final int PSEUDO_HEADER_SIZE = 12;
 
-  private UdpHeader header;
-  private Packet payload;
-
-  // for pseudo header
-  private InetAddress srcAddr = null;
-  private InetAddress dstAddr = null;
-
-  public UdpPacket() {
-    this.header = new UdpHeader();
-    this.payload = null;
-  }
+  private final UdpHeader header;
+  private final Packet payload;
 
   public UdpPacket(byte[] rawData) {
     this.header = new UdpHeader(rawData);
-
     this.payload
       = new AnonymousPacket(
               ByteArrays.getSubArray(
@@ -43,9 +31,40 @@ public class UdpPacket extends AbstractPacket implements L4Packet {
             );
   }
 
+  private UdpPacket(Builder builder) {
+    if (
+         builder == null
+      || builder.payload == null
+    ) {
+      throw new NullPointerException();
+    }
+
+    if (
+         builder.validateAtBuild
+      && (builder.srcAddr == null || builder.dstAddr == null)
+    ) {
+      throw new NullPointerException();
+    }
+
+    this.payload = builder.payload;
+    this.header = new UdpHeader(builder);
+  }
+
   @Override
   public UdpHeader getHeader() {
     return header;
+  }
+
+  @Override
+  public boolean isValid() {
+    throw new UnsupportedOperationException();
+  }
+
+  public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
+    if (!payload.isValid()) {
+      return false;
+    }
+    return header.isValid(srcAddr, dstAddr);
   }
 
   @Override
@@ -53,28 +72,74 @@ public class UdpPacket extends AbstractPacket implements L4Packet {
     return payload;
   }
 
-  @Override
-  public void setPayload(Packet payload) {
-    this.payload = payload;
+  public static final class Builder {
+
+    private short srcPort;
+    private short dstPort;
+    private short length;
+    private short checksum;
+    private Packet payload;
+    private InetAddress srcAddr;
+    private InetAddress dstAddr;
+    private boolean validateAtBuild = true;
+
+    public Builder() {}
+
+    public Builder(UdpPacket packet) {
+      this.srcPort = packet.header.srcPort;
+      this.dstPort = packet.header.dstPort;
+      this.length = packet.header.length;
+      this.checksum = packet.header.checksum;
+      this.payload = packet.payload;
+    }
+
+    public Builder srcPort(short srcPort) {
+      this.srcPort = srcPort;
+      return this;
+    }
+
+    public Builder dstPort(short dstPort) {
+      this.dstPort = dstPort;
+      return this;
+    }
+
+    public Builder length(short length) {
+      this.length = length;
+      return this;
+    }
+
+    public Builder checksum(short checksum) {
+      this.checksum = checksum;
+      return this;
+    }
+
+    public Builder payload(Packet payload) {
+      this.payload = payload;
+      return this;
+    }
+
+    public Builder srcAddr(InetAddress srcAddr) {
+      this.srcAddr = srcAddr;
+      return this;
+    }
+
+    public Builder dstAddr(InetAddress dstAddr) {
+      this.dstAddr = dstAddr;
+      return this;
+    }
+
+    public Builder validateAtBuild(boolean validateAtBuild) {
+      this.validateAtBuild = validateAtBuild;
+      return this;
+    }
+
+    public UdpPacket build() {
+      return new UdpPacket(this);
+    }
+
   }
 
-  public void setSrcAddr(InetAddress srcAddr) {
-    this.srcAddr = srcAddr;
-  }
-
-  public InetAddress getSrcAddr() {
-    return srcAddr;
-  }
-
-  public void setDstAddr(InetAddress dstAddr) {
-    this.dstAddr = dstAddr;
-  }
-
-  public InetAddress getDstAddr() {
-    return dstAddr;
-  }
-
-  public class UdpHeader extends AbstractHeader {
+  public final class UdpHeader extends AbstractHeader {
 
     private static final int SRC_PORT_OFFSET
       = 0;
@@ -95,117 +160,66 @@ public class UdpPacket extends AbstractPacket implements L4Packet {
     private static final int UCP_HEADER_SIZE
       = CHECKSUM_OFFSET + CHECKSUM_SIZE;
 
-    private short srcPort;
-    private short dstPort;
-    private short length;
-    private short checksum;
+    private final short srcPort;
+    private final short dstPort;
+    private final short length;
+    private final short checksum;
 
-    private UdpHeader() {}
+//    private byte[] rawData = null;
+//    private String stringData = null;
 
-    private UdpHeader(byte[] rawHeader) {
-      if (rawHeader.length < UCP_HEADER_SIZE) {
+    private UdpHeader(byte[] rawData) {
+      if (rawData.length < UCP_HEADER_SIZE) {
         throw new IllegalArgumentException();
       }
 
-      this.srcPort = ByteArrays.getShort(rawHeader, SRC_PORT_OFFSET);
-      this.dstPort = ByteArrays.getShort(rawHeader, DST_PORT_OFFSET);
-      this.length = ByteArrays.getShort(rawHeader, LENGTH_OFFSET);
-      this.checksum = ByteArrays.getShort(rawHeader, CHECKSUM_OFFSET);
+      this.srcPort = ByteArrays.getShort(rawData, SRC_PORT_OFFSET);
+      this.dstPort = ByteArrays.getShort(rawData, DST_PORT_OFFSET);
+      this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET);
+      this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET);
     }
 
-    public short getSrcPort() {
-      return srcPort;
-    }
+    private UdpHeader(Builder builder) {
+      this.srcPort = builder.srcPort;
+      this.dstPort = builder.dstPort;
 
-    public int getSrcPortAsInt() {
-      return (int)(0xFFFF & srcPort);
-    }
+      if (builder.validateAtBuild) {
+        this.length = (short)(UdpPacket.this.payload.length() + length());
 
-    public void setSrcPort(short srcPort) {
-      this.srcPort = srcPort;
-    }
-
-    public short getDstPort() {
-      return dstPort;
-    }
-
-    public int getDstPortAsInt() {
-      return (int)(0xFFFF & dstPort);
-    }
-
-    public void setDstPort(short dstPort) {
-      this.dstPort = dstPort;
-    }
-
-    public short getLength() {
-      return length;
-    }
-
-    public int getLengthAsInt() {
-      return (int)(0xFFFF & length);
-    }
-
-    public void setLength(short length) {
-      this.length = length;
-    }
-
-    public short getChecksum() {
-      return checksum;
-    }
-
-    public void setChecksum(short checksum) {
-      this.checksum = checksum;
-    }
-
-    @Override
-    public int length() {
-      return UCP_HEADER_SIZE;
-    }
-
-    @Override
-    public void validate() {
-      setLength((short)UdpPacket.this.length());
-
-      if (
-        PacketPropertiesLoader.getInstance()
-          .isEnableUdpChecksumVaridation()
-      ) {
-        setChecksum(calcChecksum());
+        if (
+          PacketPropertiesLoader.getInstance()
+            .isEnabledUdpChecksumVaridation()
+        ) {
+          this.checksum = calcChecksum(builder.srcAddr, builder.dstAddr);
+        }
+        else {
+          this.checksum = (short)0;
+        }
       }
       else {
-        setChecksum((short)0);
+        this.length = builder.length;
+        this.checksum = builder.checksum;
       }
     }
 
-    private short calcChecksum() {
-      if (srcAddr == null || dstAddr == null) {
-        throw new IllegalStateException(
-                "Source or destination IP address is not set. src: "
-                  + srcAddr + " dst: " + dstAddr
-              );
-      }
-
+    private short calcChecksum(InetAddress srcAddr, InetAddress dstAddr) {
       byte[] data;
-      int packetLength = UdpPacket.this.length();
-      int destPos = 0;
+      int destPos;
 
-      if ((packetLength % 2) != 0) {
-        data = new byte[packetLength + 1 + PSEUDO_HEADER_SIZE];
-        System.arraycopy(
-          UdpPacket.this.getRawData(), 0, data, destPos, packetLength
-        );
-        destPos += packetLength;
-
-        data[destPos] = (byte)0;
-        destPos++;
+      if ((length % 2) != 0) {
+        data = new byte[length + 1 + PSEUDO_HEADER_SIZE];
+        destPos = length + 1;
       }
       else {
-        data = new byte[packetLength + PSEUDO_HEADER_SIZE];
-        System.arraycopy(
-          UdpPacket.this.getRawData(), 0, data, destPos, packetLength
-        );
-        destPos += packetLength;
+        data = new byte[length + PSEUDO_HEADER_SIZE];
+        destPos = length;
       }
+
+      System.arraycopy(getRawData(), 0, data, 0, length());
+      System.arraycopy(
+        UdpPacket.this.payload.getRawData(), 0,
+        data, length(), UdpPacket.this.payload.length()
+      );
 
       for (int i = 0; i < CHECKSUM_SIZE; i++) {
         data[CHECKSUM_OFFSET + i] = (byte)0;
@@ -239,15 +253,52 @@ public class UdpPacket extends AbstractPacket implements L4Packet {
       return ByteArrays.calcChecksum(data);
     }
 
+    public short getSrcPort() {
+      return srcPort;
+    }
+
+    public int getSrcPortAsInt() {
+      return (int)(0xFFFF & srcPort);
+    }
+
+    public short getDstPort() {
+      return dstPort;
+    }
+
+    public int getDstPortAsInt() {
+      return (int)(0xFFFF & dstPort);
+    }
+
+    public short getLength() {
+      return length;
+    }
+
+    public int getLengthAsInt() {
+      return (int)(0xFFFF & length);
+    }
+
+    public short getChecksum() {
+      return checksum;
+    }
+
+    @Override
+    public int length() {
+      return UCP_HEADER_SIZE;
+    }
+
     @Override
     public boolean isValid() {
+      throw new UnsupportedOperationException();
+    }
+
+    public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
       if (
         PacketPropertiesLoader.getInstance()
-          .isEnableUdpChecksumVerification()
+          .isEnabledUdpChecksumVerification()
       ) {
         short cs = getChecksum();
         return    ((short)UdpPacket.this.length() != getLength())
-               && (cs == 0 ? true : calcChecksum() != cs);
+               && (cs == 0 ? true : calcChecksum(srcAddr, dstAddr) != cs);
       }
       else {
         return true;
@@ -256,24 +307,25 @@ public class UdpPacket extends AbstractPacket implements L4Packet {
 
     @Override
     public byte[] getRawData() {
-      byte[] data = new byte[length()];
+      byte[] rawData = new byte[length()];
       System.arraycopy(
         ByteArrays.toByteArray(srcPort), 0,
-        data, SRC_PORT_OFFSET, SRC_PORT_SIZE
+        rawData, SRC_PORT_OFFSET, SRC_PORT_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(dstPort), 0,
-        data, DST_PORT_OFFSET, DST_PORT_SIZE
+        rawData, DST_PORT_OFFSET, DST_PORT_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(length), 0,
-        data, LENGTH_OFFSET, LENGTH_SIZE
+        rawData, LENGTH_OFFSET, LENGTH_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(checksum), 0,
-        data, CHECKSUM_OFFSET, CHECKSUM_SIZE
+        rawData, CHECKSUM_OFFSET, CHECKSUM_SIZE
       );
-      return data;
+
+      return rawData;
     }
 
     @Override

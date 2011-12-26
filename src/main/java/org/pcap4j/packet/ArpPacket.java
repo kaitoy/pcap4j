@@ -8,32 +8,43 @@
 package org.pcap4j.packet;
 
 import java.net.InetAddress;
-
 import org.pcap4j.packet.namedvalue.ArpHardwareType;
 import org.pcap4j.packet.namedvalue.ArpOperation;
 import org.pcap4j.packet.namedvalue.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
-
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.IP_ADDRESS_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
 
-public class ArpPacket extends AbstractPacket implements L3Packet {
+public final class ArpPacket extends AbstractPacket implements L3Packet {
 
-  private ArpHeader header;
-
-  public ArpPacket() {
-    this.header = new ArpHeader();
-  }
+  private final ArpHeader header;
 
   public ArpPacket(byte[] rawData) {
 //    if (rawData.length != ArpHeader.ARP_HEADER_SIZE) {
 //      throw new AssertionError();
 //    }
-//  ARP packet may be with ether trailer(padding). Only ignore it.
+//  ARP packet may be with Ethernet trailer(padding). Ignore it.
     this.header = new ArpHeader(rawData);
+  }
+
+  private ArpPacket(Builder builder) {
+    if (
+         builder == null
+      || builder.hardwareType == null
+      || builder.protocolType == null
+      || builder.operation == null
+      || builder.srcHardwareAddr == null
+      || builder.srcProtocolAddr == null
+      || builder.dstHardwareAddr == null
+      || builder.dstProtocolAddr == null
+    ) {
+      throw new NullPointerException();
+    }
+
+    this.header = new ArpHeader(builder);
   }
 
   @Override
@@ -46,12 +57,84 @@ public class ArpPacket extends AbstractPacket implements L3Packet {
     return null;
   }
 
-  @Override
-  public void setPayload(Packet payload) {
-    throw new UnsupportedOperationException();
+  public static final class Builder {
+
+    private ArpHardwareType hardwareType = ArpHardwareType.ETHERNET;
+    private EtherType protocolType = EtherType.IPV4;
+    private byte hardwareLength = (byte)ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE;
+    private byte protocolLength = (byte)ByteArrays.IP_ADDRESS_SIZE_IN_BYTE;
+    private ArpOperation operation;
+    private MacAddress srcHardwareAddr;
+    private InetAddress srcProtocolAddr;
+    private MacAddress dstHardwareAddr;
+    private InetAddress dstProtocolAddr;
+
+    public Builder() {}
+
+    public Builder(ArpPacket packet) {
+      this.hardwareType = packet.header.hardwareType;
+      this.protocolType = packet.header.protocolType;
+      this.hardwareLength = packet.header.hardwareLength;
+      this.protocolLength = packet.header.protocolLength;
+      this.operation = packet.header.operation;
+      this.srcHardwareAddr = packet.header.srcHardwareAddr;
+      this.srcProtocolAddr = packet.header.srcProtocolAddr;
+      this.dstHardwareAddr = packet.header.dstHardwareAddr;
+      this.dstProtocolAddr = packet.header.dstProtocolAddr;
+    }
+
+    public Builder hardwareType(ArpHardwareType hardwareType) {
+      this.hardwareType = hardwareType;
+      return this;
+    }
+
+    public Builder protocolType(EtherType protocolType) {
+      this.protocolType = protocolType;
+      return this;
+    }
+
+    public Builder hardwareLength(byte hardwareLength) {
+      this.hardwareLength = hardwareLength;
+      return this;
+    }
+
+    public Builder protocolLength(byte protocolLength) {
+      this.protocolLength = protocolLength;
+      return this;
+    }
+
+    public Builder operation(ArpOperation operation) {
+      this.operation = operation;
+      return this;
+    }
+
+    public Builder srcHardwareAddr(MacAddress srcHardwareAddr) {
+      this.srcHardwareAddr = srcHardwareAddr;
+      return this;
+    }
+
+    public Builder srcProtocolAddr(InetAddress srcProtocolAddr) {
+      this.srcProtocolAddr = srcProtocolAddr;
+      return this;
+    }
+
+    public Builder dstHardwareAddr(MacAddress dstHardwareAddr) {
+      this.dstHardwareAddr = dstHardwareAddr;
+      return this;
+    }
+
+    public Builder dstProtocolAddr(InetAddress dstProtocolAddr) {
+      this.dstProtocolAddr = dstProtocolAddr;
+      return this;
+    }
+
+    public ArpPacket build() {
+      return new ArpPacket(this);
+    }
+
   }
 
-  public class ArpHeader extends AbstractHeader {
+  public final class ArpHeader extends AbstractHeader {
 
     private static final int HARDWARE_TYPE_OFFSET
       = 0;
@@ -92,60 +175,65 @@ public class ArpPacket extends AbstractPacket implements L3Packet {
     private static final int ARP_HEADER_SIZE
       = DST_PROTOCOL_ADDR_OFFSET + DST_PROTOCOL_ADDR_SIZE;
 
-    private ArpHardwareType hardwareType;
-    private EtherType protocolType;
-    private byte hardwareLength;
-    private byte protocolLength;
-    private ArpOperation operation;
-    private MacAddress srcHardwareAddr;
-    private InetAddress srcProtocolAddr;
-    private MacAddress dstHardwareAddr;
-    private InetAddress dstProtocolAddr;
+    private final ArpHardwareType hardwareType;
+    private final EtherType protocolType;
+    private final byte hardwareLength;
+    private final byte protocolLength;
+    private final ArpOperation operation;
+    private final MacAddress srcHardwareAddr;
+    private final InetAddress srcProtocolAddr;
+    private final MacAddress dstHardwareAddr;
+    private final InetAddress dstProtocolAddr;
 
-    private ArpHeader() {}
+//    private final byte[] rawData;    // TODO cache
+//    private final String stringData;
 
-    private ArpHeader(byte[] rawHeader) {
-      if (rawHeader.length < ARP_HEADER_SIZE) {
+    private ArpHeader(byte[] rawData) {
+      if (rawData.length < ARP_HEADER_SIZE) {
         throw new IllegalArgumentException();
       }
 
       this.hardwareType
         = ArpHardwareType
-            .getInstance(ByteArrays.getShort(rawHeader, HARDWARE_TYPE_OFFSET));
+            .getInstance(ByteArrays.getShort(rawData, HARDWARE_TYPE_OFFSET));
       this.protocolType
         = EtherType
-            .getInstance(ByteArrays.getShort(rawHeader, PROTOCOL_TYPE_OFFSET));
+            .getInstance(ByteArrays.getShort(rawData, PROTOCOL_TYPE_OFFSET));
       this.hardwareLength
-        = ByteArrays.getByte(rawHeader, HARDWARE_LENGTH_OFFSET);
+        = ByteArrays.getByte(rawData, HARDWARE_LENGTH_OFFSET);
       this.protocolLength
-        = ByteArrays.getByte(rawHeader, PROTOCOL_LENGTH_OFFSET);
+        = ByteArrays.getByte(rawData, PROTOCOL_LENGTH_OFFSET);
       this.operation
         = ArpOperation
-            .getInstance(ByteArrays.getShort(rawHeader, OPERATION_OFFSET));
+            .getInstance(ByteArrays.getShort(rawData, OPERATION_OFFSET));
       this.srcHardwareAddr
-        = ByteArrays.getMacAddress(rawHeader, SRC_HARDWARE_ADDR_OFFSET);
+        = ByteArrays.getMacAddress(rawData, SRC_HARDWARE_ADDR_OFFSET);
       this.srcProtocolAddr
-        = ByteArrays.getInet4Address(rawHeader, SRC_PROTOCOL_ADDR_OFFSET);
+        = ByteArrays.getInet4Address(rawData, SRC_PROTOCOL_ADDR_OFFSET);
       this.dstHardwareAddr
-        = ByteArrays.getMacAddress(rawHeader, DST_HARDWARE_ADDR_OFFSET);
+        = ByteArrays.getMacAddress(rawData, DST_HARDWARE_ADDR_OFFSET);
       this.dstProtocolAddr
-        = ByteArrays.getInet4Address(rawHeader, DST_PROTOCOL_ADDR_OFFSET);
+        = ByteArrays.getInet4Address(rawData, DST_PROTOCOL_ADDR_OFFSET);
+    }
+
+    private ArpHeader(Builder builder) {
+      this.hardwareType = builder.hardwareType;
+      this.protocolType = builder.protocolType;
+      this.hardwareLength = builder.hardwareLength;
+      this.protocolLength = builder.protocolLength;
+      this.operation = builder.operation;
+      this.srcHardwareAddr = builder.srcHardwareAddr;
+      this.srcProtocolAddr = builder.srcProtocolAddr;
+      this.dstHardwareAddr = builder.dstHardwareAddr;
+      this.dstProtocolAddr = builder.dstProtocolAddr;
     }
 
     public ArpHardwareType getHardwareType() {
       return hardwareType;
     }
 
-    public void setHardwareType(ArpHardwareType hardwareType) {
-      this.hardwareType = hardwareType;
-    }
-
     public EtherType getProtocolType() {
       return protocolType;
-    }
-
-    public void setProtocolType(EtherType protocolType) {
-      this.protocolType = protocolType;
     }
 
     public byte getHardwareLength() {
@@ -156,10 +244,6 @@ public class ArpPacket extends AbstractPacket implements L3Packet {
       return (int)(0xFF & hardwareLength);
     }
 
-    public void setHardwareLength(byte hardwareLength) {
-      this.hardwareLength = hardwareLength;
-    }
-
     public byte getProtocolLength() {
       return protocolLength;
     }
@@ -168,48 +252,24 @@ public class ArpPacket extends AbstractPacket implements L3Packet {
       return (int)(0xFF & protocolLength);
     }
 
-    public void setProtocolLength(byte protocolLength) {
-      this.protocolLength = protocolLength;
-    }
-
     public ArpOperation getOperation() {
       return operation;
-    }
-
-    public void setOperation(ArpOperation operation) {
-      this.operation = operation;
     }
 
     public MacAddress getSrcHardwareAddr() {
       return srcHardwareAddr;
     }
 
-    public void setSrcHardwareAddr(MacAddress srcHardwareAddr) {
-      this.srcHardwareAddr = srcHardwareAddr;
-    }
-
     public InetAddress getSrcProtocolAddr() {
       return srcProtocolAddr;
-    }
-
-    public void setSrcProtocolAddr(InetAddress srcProtocolAddr) {
-      this.srcProtocolAddr = srcProtocolAddr;
     }
 
     public MacAddress getDstHardwareAddr() {
       return dstHardwareAddr;
     }
 
-    public void setDstHardwareAddr(MacAddress dstHardwareAddr) {
-      this.dstHardwareAddr = dstHardwareAddr;
-    }
-
     public InetAddress getDstProtocolAddr() {
       return dstProtocolAddr;
-    }
-
-    public void setDstProtocolAddr(InetAddress dstProtocolAddr) {
-      this.dstProtocolAddr = dstProtocolAddr;
     }
 
     @Override
@@ -217,44 +277,45 @@ public class ArpPacket extends AbstractPacket implements L3Packet {
 
     @Override
     public byte[] getRawData() {
-      byte[] data = new byte[length()];
+      byte[] rawData = new byte[length()];
       System.arraycopy(
         ByteArrays.toByteArray(hardwareType.value()), 0,
-        data, HARDWARE_TYPE_OFFSET, HARDWARE_TYPE_SIZE
+        rawData, HARDWARE_TYPE_OFFSET, HARDWARE_TYPE_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(protocolType.value()), 0,
-        data, PROTOCOL_TYPE_OFFSET, PROTOCOL_TYPE_SIZE
+        rawData, PROTOCOL_TYPE_OFFSET, PROTOCOL_TYPE_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(hardwareLength), 0,
-        data, HARDWARE_LENGTH_OFFSET, HARDWARE_LENGTH_SIZE
+        rawData, HARDWARE_LENGTH_OFFSET, HARDWARE_LENGTH_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(protocolLength), 0,
-        data, PROTOCOL_LENGTH_OFFSET, PROTOCOL_LENGTH_SIZE
+        rawData, PROTOCOL_LENGTH_OFFSET, PROTOCOL_LENGTH_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(operation.value()), 0,
-        data, OPERATION_OFFSET, OPERATION_SIZE
+        rawData, OPERATION_OFFSET, OPERATION_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(srcHardwareAddr), 0,
-        data, SRC_HARDWARE_ADDR_OFFSET, SRC_HARDWARE_ADDR_SIZE
+        rawData, SRC_HARDWARE_ADDR_OFFSET, SRC_HARDWARE_ADDR_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(srcProtocolAddr), 0,
-        data, SRC_PROTOCOL_ADDR_OFFSET, SRC_PROTOCOL_ADDR_SIZE
+        rawData, SRC_PROTOCOL_ADDR_OFFSET, SRC_PROTOCOL_ADDR_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(dstHardwareAddr), 0,
-        data, DST_HARDWARE_ADDR_OFFSET, DST_HARDWARE_ADDR_SIZE
+        rawData, DST_HARDWARE_ADDR_OFFSET, DST_HARDWARE_ADDR_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(dstProtocolAddr), 0,
-        data, DST_PROTOCOL_ADDR_OFFSET, DST_PROTOCOL_ADDR_SIZE
+        rawData, DST_PROTOCOL_ADDR_OFFSET, DST_PROTOCOL_ADDR_SIZE
       );
-      return data;
+
+      return rawData;
     }
 
     @Override

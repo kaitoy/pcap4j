@@ -33,42 +33,42 @@ class PacketPropertiesLoader {
     return INSTANCE;
   }
 
-  public boolean isEnableIcmpChecksumVaridation() {
+  public boolean isEnabledIcmpChecksumVaridation() {
     return loader.getBoolean(
              KEY_PREFIX + ".icmp.enableChecksumValidation",
              Boolean.FALSE
            ).booleanValue();
   }
 
-  public boolean isEnableIcmpChecksumVerification() {
+  public boolean isEnabledIcmpChecksumVerification() {
     return loader.getBoolean(
              KEY_PREFIX + ".icmp.enableChecksumVerification",
              Boolean.FALSE
            ).booleanValue();
   }
 
-  public boolean isEnableIpv4ChecksumVaridation() {
+  public boolean isEnabledIpv4ChecksumVaridation() {
     return loader.getBoolean(
              KEY_PREFIX + ".ipv4.enableChecksumValidation",
              Boolean.FALSE
            ).booleanValue();
   }
 
-  public boolean isEnableIpv4ChecksumVerification() {
+  public boolean isEnabledIpv4ChecksumVerification() {
     return loader.getBoolean(
              KEY_PREFIX + ".ipv4.enableChecksumVerification",
              Boolean.FALSE
            ).booleanValue();
   }
 
-  public boolean isEnableUdpChecksumVaridation() {
+  public boolean isEnabledUdpChecksumVaridation() {
     return loader.getBoolean(
              KEY_PREFIX + ".udp.enableChecksumValidation",
              Boolean.FALSE
            ).booleanValue();
   }
 
-  public boolean isEnableUdpChecksumVerification() {
+  public boolean isEnabledUdpChecksumVerification() {
     return loader.getBoolean(
              KEY_PREFIX + ".udp.enableChecksumVerification",
              Boolean.FALSE
@@ -82,7 +82,7 @@ class PacketPropertiesLoader {
            );
   }
 
-  public boolean extendNewPacketByDlt() {
+  public boolean isExtendedNewPacketByDlt() {
     return loader.getBoolean(
              KEY_PREFIX + ".PacketFactory.extendNewPacketByDlt",
              Boolean.FALSE
@@ -96,7 +96,7 @@ class PacketPropertiesLoader {
            );
   }
 
-  public boolean extendNewPacketByEtherType() {
+  public boolean isExtendedNewPacketByEtherType() {
     return loader.getBoolean(
              KEY_PREFIX + ".PacketFactory.extendNewPacketByEtherType",
              Boolean.FALSE
@@ -111,7 +111,7 @@ class PacketPropertiesLoader {
            );
   }
 
-  public boolean extendNewPacketByIPNumber() {
+  public boolean isExtendedNewPacketByIPNumber() {
     return loader.getBoolean(
              KEY_PREFIX + ".PacketFactory.extendNewPacketByIPNumber",
              Boolean.FALSE

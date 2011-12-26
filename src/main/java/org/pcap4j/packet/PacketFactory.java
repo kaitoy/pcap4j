@@ -44,13 +44,13 @@ public class PacketFactory {
   }
 
   public Packet newPacketByDlt(byte[] rawData, Integer dlt) {
-    if (PacketPropertiesLoader.getInstance().extendNewPacketByDlt()) {
+    if (PacketPropertiesLoader.getInstance().isExtendedNewPacketByDlt()) {
       Class<? extends Packet> packetClass
         = PacketPropertiesLoader.getInstance().getPacketClassByDlt(dlt);
       return newPacket(rawData, packetClass);
     }
     else {
-      if (dlt.equals(DataLinkType.EN10MB)) {
+      if (dlt.equals(DataLinkType.EN10MB.value())) {
         return new EthernetPacket(rawData);
       }
       else {
@@ -60,19 +60,19 @@ public class PacketFactory {
   }
 
   public Packet newPacketByEtherType(byte[] rawData, Short etherType) {
-    if (PacketPropertiesLoader.getInstance().extendNewPacketByEtherType()) {
+    if (PacketPropertiesLoader.getInstance().isExtendedNewPacketByEtherType()) {
       Class<? extends Packet> packetClass
         = PacketPropertiesLoader.getInstance().getPacketClassByEtherType(etherType);
       return newPacket(rawData, packetClass);
     }
     else {
-      if (etherType.equals(EtherType.IPV4)) {
+      if (etherType.equals(EtherType.IPV4.value())) {
         return new IpV4Packet(rawData);
       }
-      else if (etherType.equals(EtherType.ARP)) {
+      else if (etherType.equals(EtherType.ARP.value())) {
         return new ArpPacket(rawData);
       }
-      else if (etherType.equals(EtherType.IPV6)) {
+      else if (etherType.equals(EtherType.IPV6.value())) {
         // TODO support IPv6
         return new AnonymousPacket(rawData);
       }
@@ -83,19 +83,19 @@ public class PacketFactory {
   }
 
   public Packet newPacketByIpNumber(byte[] rawData, Byte ipNumber) {
-    if (PacketPropertiesLoader.getInstance().extendNewPacketByIPNumber()) {
+    if (PacketPropertiesLoader.getInstance().isExtendedNewPacketByIPNumber()) {
       Class<? extends Packet> packetClass
         = PacketPropertiesLoader.getInstance().getPacketClassByIPNumber(ipNumber);
       return newPacket(rawData, packetClass);
     }
     else {
-      if (ipNumber.equals(IpNumber.UDP)) {
+      if (ipNumber.equals(IpNumber.UDP.value())) {
         return new UdpPacket(rawData);
       }
-      else if (ipNumber.equals(IpNumber.ICMP_V4)) {
+      else if (ipNumber.equals(IpNumber.ICMP_V4.value())) {
         return new IcmpV4Packet(rawData);
       }
-      else if (ipNumber.equals(IpNumber.TCP)) {
+      else if (ipNumber.equals(IpNumber.TCP.value())) {
         // TODO support TCP
         return new AnonymousPacket(rawData);
       }

@@ -9,13 +9,14 @@ package org.pcap4j.packet;
 
 import org.pcap4j.util.ByteArrays;
 
-public class AnonymousPacket extends AbstractPacket {
+public final class AnonymousPacket extends AbstractPacket {
 
-  private byte[] rawData;
-
-  public AnonymousPacket() { rawData = new byte[0]; }
+  private final byte[] rawData;
 
   public AnonymousPacket(byte[] rawData) {
+    if (rawData == null) {
+      throw new NullPointerException();
+    }
     byte[] copy = new byte[rawData.length];
     System.arraycopy(rawData, 0, copy, 0, copy.length);
     this.rawData = rawData;
@@ -26,11 +27,6 @@ public class AnonymousPacket extends AbstractPacket {
 
   @Override
   public Packet getPayload() { return null; }
-
-  @Override
-  public void setPayload(Packet payload) {
-    throw new UnsupportedOperationException();
-  }
 
   @Override
   public boolean isValid() { return true; }

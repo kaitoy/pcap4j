@@ -1,5 +1,11 @@
-package org.pcap4j.test;
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2011  Kaito Yamada
+  _##
+  _##########################################################################
+*/
 
+package org.pcap4j.test;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,11 +14,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
 import org.pcap4j.core.Pcap;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.GotPacketEventListener;
@@ -23,14 +27,11 @@ import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.ArpPacket;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.ArpPacket.ArpHeader;
-import org.pcap4j.packet.EthernetPacket.EthernetHeader;
 import org.pcap4j.packet.namedvalue.ArpHardwareType;
 import org.pcap4j.packet.namedvalue.ArpOperation;
 import org.pcap4j.packet.namedvalue.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
-
 
 public class SendPacketTest {
 
@@ -53,6 +54,7 @@ public class SendPacketTest {
    = MacAddress.newInstance(
        new byte[] {(byte)0, (byte)1,(byte)2, (byte)3, (byte)4, (byte)5}
      );
+
   public static void main(String[] args) throws PcapNativeException {
     BasicConfigurator.configure();
     Logger.getRootLogger().setLevel(Level.INFO);
@@ -107,45 +109,45 @@ public class SendPacketTest {
       Task t = new Task(handle, listener);
       pool.execute(t);
 
-      ArpPacket arpPacket = new ArpPacket();
-      ArpHeader arpHeader = arpPacket.getHeader();
-      arpHeader.setHardwareType(ArpHardwareType.ETHERNET);
-      arpHeader.setProtocolType(EtherType.IPV4);
-      arpHeader.setHardwareLength((byte)ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE);
-      arpHeader.setProtocolLength((byte)ByteArrays.IP_ADDRESS_SIZE_IN_BYTE);
-      arpHeader.setOperation(ArpOperation.REQUEST);
-      arpHeader.setSrcHardwareAddr(SRC_MAC_ADDR);
+      ArpPacket.Builder arpBuilder = new ArpPacket.Builder();
+      ArpPacket arpPacket = null;
       try {
-        arpHeader.setSrcProtocolAddr(InetAddress.getByName(args[0]));
-      } catch (UnknownHostException e) {
-        throw new IllegalArgumentException(e);
-      }
-      arpHeader.setDstHardwareAddr(
-        MacAddress.newInstance(
-          new byte[] {
-            (byte)255, (byte)255, (byte)255, (byte)255, (byte)255, (byte)255
-          }
-        )
-      );
-      try {
-        arpHeader.setDstProtocolAddr(InetAddress.getByName(args[1]));
+      arpPacket
+        = arpBuilder.hardwareType(ArpHardwareType.ETHERNET)
+                    .protocolType(EtherType.IPV4)
+                    .hardwareLength((byte)ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE)
+                    .protocolLength((byte)ByteArrays.IP_ADDRESS_SIZE_IN_BYTE)
+                    .operation(ArpOperation.REQUEST)
+                    .srcHardwareAddr(SRC_MAC_ADDR)
+                    .srcProtocolAddr(InetAddress.getByName(args[0]))
+                    .dstHardwareAddr(
+                      MacAddress.newInstance(
+                        new byte[] {
+                          (byte)255, (byte)255, (byte)255,
+                          (byte)255, (byte)255, (byte)255
+                        }
+                      )
+                    )
+                    .dstProtocolAddr(InetAddress.getByName(args[1]))
+                    .build();
       } catch (UnknownHostException e) {
         throw new IllegalArgumentException(e);
       }
 
-      EthernetPacket etherPacket = new EthernetPacket();
-      EthernetHeader etherHeader = etherPacket.getHeader();
-      etherHeader.setDstAddr(
-        MacAddress.newInstance(
-          new byte[] {
-            (byte)255, (byte)255, (byte)255, (byte)255, (byte)255, (byte)255
-          }
-        )
-      );
-      etherHeader.setSrcAddr(SRC_MAC_ADDR);
-      etherHeader.setType(EtherType.ARP);
-      etherPacket.setPayload(arpPacket);
-      etherPacket.validate();
+      EthernetPacket.Builder etherBuilder = new EthernetPacket.Builder();
+      EthernetPacket etherPacket
+        = etherBuilder.dstAddr(
+                        MacAddress.newInstance(
+                          new byte[] {
+                            (byte)255, (byte)255, (byte)255,
+                            (byte)255, (byte)255, (byte)255
+                          }
+                        )
+                      )
+                      .srcAddr(SRC_MAC_ADDR)
+                      .type(EtherType.ARP)
+                      .payload(arpPacket)
+                      .build();
 
       for (int i = 0; i < COUNT; i++) {
         handle.sendPacket(etherPacket);

@@ -15,15 +15,10 @@ import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
 
-public class IpV4Packet extends AbstractPacket implements L3Packet {
+public final class IpV4Packet extends AbstractPacket implements L3Packet {
 
-  private IpV4Header header;
-  private Packet payload;
-
-  public IpV4Packet() {
-    this.header = new IpV4Header();
-    this.payload = null;
-  }
+  private final IpV4Header header;
+  private final Packet payload;
 
   public IpV4Packet(byte[] rawData) {
     this.header = new IpV4Header(rawData);
@@ -40,14 +35,25 @@ public class IpV4Packet extends AbstractPacket implements L3Packet {
           .newPacketByIpNumber(rawPayload, header.getProtocol().value());
   }
 
-  @Override
-  public IpV4Header getHeader() {
-    return header;
+  private IpV4Packet(Builder builder) {
+    if (
+         builder == null
+      || builder.version == null
+      || builder.protocol == null
+      || builder.srcAddr == null
+      || builder.dstAddr == null
+      || builder.payload == null
+    ) {
+      throw new NullPointerException();
+    }
+
+    this.payload = builder.payload;
+    this.header = new IpV4Header(builder);
   }
 
   @Override
-  public void setPayload(Packet payload) {
-    this.payload = payload;
+  public IpV4Header getHeader() {
+    return header;
   }
 
   @Override
@@ -56,42 +62,166 @@ public class IpV4Packet extends AbstractPacket implements L3Packet {
   }
 
   @Override
-  public void validate() {
-    if (payload != null) {
-      if (payload instanceof UdpPacket) {
-        ((UdpPacket)payload).setSrcAddr(header.getSrcAddr());
-        ((UdpPacket)payload).setDstAddr(header.getDstAddr());
-      }
-
-      payload.validate();
-    }
-    if (header != null) {
-      header.validate();
-    }
-  }
-
-  @Override
   public boolean isValid() {
-    if (payload != null) {
-      if (payload instanceof UdpPacket) {
-        ((UdpPacket)payload).setSrcAddr(header.getSrcAddr());
-        ((UdpPacket)payload).setDstAddr(header.getDstAddr());
+    if (payload instanceof UdpPacket) {
+      if (!((UdpPacket)payload).isValid(header.srcAddr, header.dstAddr)) {
+        return false;
       }
-
+    }
+    else {
       if (!payload.isValid()) {
         return false;
       }
     }
 
-    if (header == null) {
-      return false;
-    }
-    else {
-      return header.isValid();
-    }
+    return header.isValid();
   }
 
-  public class IpV4Header extends AbstractHeader {
+  public static final class Builder {
+
+    private IpVersion version = IpVersion.IPv4;
+    private byte ihl = (byte)5;
+    private byte tos = (byte)0;
+    private short totalLength;
+    private short identification;
+    private byte flags = (byte)0;
+    private short flagmentOffset = (byte)0;
+    private byte ttl;
+    private IpNumber protocol;
+    private short headerChecksum;
+    private InetAddress srcAddr;
+    private InetAddress dstAddr;
+    private Packet payload;
+    private boolean validateAtBuild = true;
+
+    public Builder() {}
+
+    public Builder(IpV4Packet packet) {
+      this.version = packet.header.version;
+      this.ihl = packet.header.ihl;
+      this.tos = packet.header.tos;
+      this.totalLength = packet.header.totalLength;
+      this.identification = packet.header.identification;
+      this.flags = packet.header.flags;
+      this.flagmentOffset = packet.header.flagmentOffset;
+      this.ttl = packet.header.ttl;
+      this.protocol = packet.header.protocol;
+      this.headerChecksum = packet.header.headerChecksum;
+      this.srcAddr = packet.header.srcAddr;
+      this.dstAddr = packet.header.dstAddr;
+      this.payload = packet.payload;
+    }
+
+    public Builder version(IpVersion version) {
+      this.version = version;
+      return this;
+    }
+
+    public Builder ihl(byte ihl) {
+      this.ihl = ihl;
+      return this;
+    }
+
+    public Builder tos(byte tos) {
+      this.tos = tos;
+      return this;
+    }
+
+    public Builder totalLength(short totalLength) {
+      this.totalLength = totalLength;
+      return this;
+    }
+
+    public Builder identification(short identification) {
+      this.identification = identification;
+      return this;
+    }
+
+    public Builder flags(byte flags) {
+      this.flags = flags;
+      return this;
+    }
+
+    public Builder reservedFlag(boolean flag) {
+      if (getReservedFlag() != flag) {
+        this.flags = (byte)((flags & 3) | (~flags & 4));
+      }
+      return this;
+    }
+
+    public Builder dontFragmentFlag(boolean flag) {
+      if (getDontFragmentFlag() != flag) {
+        this.flags = (byte)((flags & 5) | (~flags & 2));
+      }
+      return this;
+    }
+
+    public Builder moreFragmentFlag(boolean flag) {
+      if (getMoreFragmentFlag() != flag) {
+        flags = (byte)((flags & 6) | (~flags & 1));
+      }
+      return this;
+    }
+
+    private boolean getReservedFlag() {
+      return ((flags & 0x4) >> 2) != 0 ? true : false;
+    }
+
+    private boolean getDontFragmentFlag() {
+      return ((flags & 0x2) >> 1) != 0 ? true : false;
+    }
+
+    private boolean getMoreFragmentFlag() {
+      return ((flags & 0x1) >> 0) != 0 ? true : false;
+    }
+
+    public Builder flagmentOffset(short flagmentOffset) {
+      this.flagmentOffset = flagmentOffset;
+      return this;
+    }
+
+    public Builder ttl(byte ttl) {
+      this.ttl = ttl;
+      return this;
+    }
+
+    public Builder protocol(IpNumber protocol) {
+      this.protocol = protocol;
+      return this;
+    }
+
+    public Builder headerChecksum(short headerChecksum) {
+      this.headerChecksum = headerChecksum;
+      return this;
+    }
+
+    public Builder srcAddr(InetAddress srcAddr) {
+      this.srcAddr = srcAddr;
+      return this;
+    }
+
+    public Builder dstAddr(InetAddress dstAddr) {
+      this.dstAddr = dstAddr;
+      return this;
+    }
+
+    public Builder payload(Packet payload) {
+      this.payload = payload;
+      return this;
+    }
+
+    public Builder validateAtBuild(boolean validateAtBuild) {
+      this.validateAtBuild = validateAtBuild;
+      return this;
+    }
+
+    public IpV4Packet build() {
+      return new IpV4Packet(this);
+    }
+
+  }
+
+  public final class IpV4Header extends AbstractHeader {
 
     private static final int VERSION_AND_IHL_OFFSET
       = 0;
@@ -137,20 +267,21 @@ public class IpV4Packet extends AbstractPacket implements L3Packet {
       = DST_ADDR_OFFSET + DST_ADDR_SIZE;
     // TODO options
 
-    private IpVersion version;
-    private byte ihl;
-    private byte tos;
-    private short totalLength;
-    private short identification;
-    private byte flags;
-    private short flagmentOffset;
-    private byte ttl;
-    private IpNumber protocol;
-    private short headerChecksum;
-    private InetAddress srcAddr;
-    private InetAddress dstAddr;
+    private final IpVersion version;
+    private final byte ihl;
+    private final byte tos;
+    private final short totalLength;
+    private final short identification;
+    private final byte flags;
+    private final short flagmentOffset;
+    private final byte ttl;
+    private final IpNumber protocol;
+    private final short headerChecksum;
+    private final InetAddress srcAddr;
+    private final InetAddress dstAddr;
 
-    private IpV4Header() {}
+//    private byte[] rawData = null;
+//    private String stringData = null;
 
     private IpV4Header(byte[] rawHeader) {
       if (rawHeader.length < IPV4_HEADER_SIZE) {
@@ -193,16 +324,56 @@ public class IpV4Packet extends AbstractPacket implements L3Packet {
       }
     }
 
+    private IpV4Header(Builder builder) {
+      this.tos = builder.tos;
+      this.identification = builder.identification;
+      this.flags = builder.flags;
+      this.flagmentOffset = builder.flagmentOffset;
+      this.ttl = builder.ttl;
+      this.protocol = builder.protocol;
+      this.srcAddr = builder.srcAddr;
+      this.dstAddr = builder.dstAddr;
+
+      if (builder.validateAtBuild) {
+        this.version = IpVersion.IPv4;
+        this.ihl = (byte)(length() / 4);
+        this.totalLength
+          = (short)(IpV4Packet.this.payload.length() + length());
+
+        if (
+          PacketPropertiesLoader.getInstance()
+            .isEnabledIpv4ChecksumVaridation()
+        ) {
+          headerChecksum = calcHeaderChecksum();
+        }
+        else {
+          headerChecksum = (short)0;
+        }
+      }
+      else {
+        this.version = builder.version;
+        this.ihl = builder.ihl;
+        this.totalLength = builder.totalLength;
+        this.headerChecksum = builder.headerChecksum;
+      }
+    }
+
+    private short calcHeaderChecksum() {
+      byte[] data = getRawData();
+
+      for (int i = 0; i < HEADER_CHECKSUM_SIZE; i++) {
+        data[HEADER_CHECKSUM_OFFSET + i] = (byte)0;
+      }
+
+      return ByteArrays.calcChecksum(data);
+    }
+
     public IpVersion getVersion() {
       return version;
     }
 
     public int getVersionAsInt() {
       return (int)(0xFF & version.value());
-    }
-
-    public void setVersion(IpVersion version) {
-      this.version = version;
     }
 
     public byte getIhl() {
@@ -213,26 +384,12 @@ public class IpV4Packet extends AbstractPacket implements L3Packet {
       return (int)(0xFF & ihl);
     }
 
-    public void setIhl(byte ihl) {
-      if ((ihl & 0xF0) != 0) {
-        throw new IllegalArgumentException(
-                ihl + "is invalid value. "
-                  + "IHL field of IP header must be between 0 and 15"
-              );
-      }
-      this.ihl = ihl;
-    }
-
     public byte getTos() {
       return tos;
     }
 
     public int getTosAsInt() {
       return (int)(0xFF & tos);
-    }
-
-    public void setTos(byte tos) {
-      this.tos = tos;
     }
 
     public short getTotalLength() {
@@ -243,10 +400,6 @@ public class IpV4Packet extends AbstractPacket implements L3Packet {
       return (int)(0xFFFF & totalLength);
     }
 
-    public void setTotalLength(short totalLength) {
-      this.totalLength = totalLength;
-    }
-
     public short getIdentification() {
       return identification;
     }
@@ -255,11 +408,7 @@ public class IpV4Packet extends AbstractPacket implements L3Packet {
       return (int)(0xFFFF & identification);
     }
 
-    public void setIdentification(short identification) {
-      this.identification = identification;
-    }
-
-    private byte getFlags() {
+    public byte getFlags() {
       return flags;
     }
 
@@ -275,63 +424,12 @@ public class IpV4Packet extends AbstractPacket implements L3Packet {
       return ((flags & 0x1) >> 0) != 0 ? true : false;
     }
 
-    private void setFlags(byte flags) {
-      if ((flags & 0xFE) != 0) {
-        throw new IllegalArgumentException(
-                flags + "is invalid value. "
-                  + "Flags field of IP header must be between 0 and 7"
-              );
-      }
-      this.flags = flags;
-    }
-
-    public void setReservedFlag(boolean flag) {
-      if (getReservedFlag() == flag) {
-        return;
-      }
-      else {
-        byte flags = getFlags();
-        setFlags((byte)((flags & 3) | (~flags & 4)));
-      }
-    }
-
-    public void setDontFragmentFlag(boolean flag) {
-      if (getDontFragmentFlag() == flag) {
-        return;
-      }
-      else {
-        byte flags = getFlags();
-        setFlags((byte)((flags & 5) | (~flags & 2)));
-      }
-    }
-
-    public void setMoreFragmentFlag(boolean flag) {
-      if (getMoreFragmentFlag() == flag) {
-        return;
-      }
-      else {
-        byte flags = getFlags();
-        setFlags((byte)((flags & 6) | (~flags & 1)));
-      }
-    }
-
     public short getFlagmentOffset() {
       return flagmentOffset;
     }
 
     public int getFlagmentOffsetAsInt() {
       return (int)(flagmentOffset & 0xFFFF);
-    }
-
-    public void setFlagmentOffset(short flagmentOffset) {
-      if ((flagmentOffset & 0xE000) != 0) {
-        throw
-          new IllegalArgumentException(
-            flagmentOffset + "is invalid value. "
-              + "FlagmentOffset field of IP header must be between 0 and 8191"
-          );
-      }
-      this.flagmentOffset = flagmentOffset;
     }
 
     public byte getTtl() {
@@ -342,74 +440,27 @@ public class IpV4Packet extends AbstractPacket implements L3Packet {
       return (int)(0xFF & ttl);
     }
 
-    public void setTtl(byte ttl) {
-      this.ttl = ttl;
-    }
-
     public IpNumber getProtocol() {
       return protocol;
-    }
-
-    public void setProtocol(IpNumber protocol) {
-      this.protocol = protocol;
     }
 
     public short getHeaderChecksum() {
       return headerChecksum;
     }
 
-    public void setHeaderChecksum(short headerChecksum) {
-      this.headerChecksum = headerChecksum;
-    }
-
     public InetAddress getSrcAddr() {
       return srcAddr;
-    }
-
-    public void setSrcAddr(InetAddress srcAddr) {
-      this.srcAddr = srcAddr;
     }
 
     public InetAddress getDstAddr() {
       return dstAddr;
     }
 
-    public void setDstAddr(InetAddress dstAddr) {
-      this.dstAddr = dstAddr;
-    }
-
-    @Override
-    public void validate() {
-      setVersion(IpVersion.IPv4);
-      setIhl((byte)(length() / 4));
-      setTotalLength((short)IpV4Packet.this.length());
-
-      if (
-        PacketPropertiesLoader.getInstance()
-          .isEnableIpv4ChecksumVaridation()
-      ) {
-        setHeaderChecksum(calcHeaderChecksum());
-      }
-      else {
-        setHeaderChecksum((short)0);
-      }
-    }
-
-    private short calcHeaderChecksum() {
-      byte[] data = getRawData();
-
-      for (int i = 0; i < HEADER_CHECKSUM_SIZE; i++) {
-        data[HEADER_CHECKSUM_OFFSET + i] = (byte)0;
-      }
-
-      return ByteArrays.calcChecksum(data);
-    }
-
     @Override
     public boolean isValid() {
       if (
           PacketPropertiesLoader.getInstance()
-            .isEnableIpv4ChecksumVerification()
+            .isEnabledIpv4ChecksumVerification()
         ) {
         short cs = getHeaderChecksum();
         return    ((byte)(length() / 4) == getIhl())
@@ -428,48 +479,49 @@ public class IpV4Packet extends AbstractPacket implements L3Packet {
 
     @Override
     public byte[] getRawData() {
-      byte[] data = new byte[length()];
+      byte[] rawData = new byte[length()];
       System.arraycopy(
         ByteArrays.toByteArray((byte)((version.value() << 4) | ihl)), 0,
-        data, VERSION_AND_IHL_OFFSET, VERSION_AND_IHL_SIZE
+        rawData, VERSION_AND_IHL_OFFSET, VERSION_AND_IHL_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(tos), 0,
-        data, TOS_OFFSET, TOS_SIZE
+        rawData, TOS_OFFSET, TOS_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(totalLength), 0,
-        data, TOTAL_LENGTH_OFFSET, TOTAL_LENGTH_SIZE
+        rawData, TOTAL_LENGTH_OFFSET, TOTAL_LENGTH_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(identification), 0,
-        data, IDENTIFICATION_OFFSET, IDENTIFICATION_SIZE
+        rawData, IDENTIFICATION_OFFSET, IDENTIFICATION_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray((short)((flags << 13) | flagmentOffset)), 0,
-        data, FLAGS_AND_FLAGMENT_OFFSET_OFFSET, FLAGS_AND_FLAGMENT_OFFSET_SIZE
+        rawData, FLAGS_AND_FLAGMENT_OFFSET_OFFSET, FLAGS_AND_FLAGMENT_OFFSET_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(ttl), 0,
-        data, TTL_OFFSET, TTL_SIZE
+        rawData, TTL_OFFSET, TTL_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(protocol.value()), 0,
-        data, PROTOCOL_OFFSET, PROTOCOL_SIZE
+        rawData, PROTOCOL_OFFSET, PROTOCOL_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(headerChecksum), 0,
-        data, HEADER_CHECKSUM_OFFSET, HEADER_CHECKSUM_SIZE
+        rawData, HEADER_CHECKSUM_OFFSET, HEADER_CHECKSUM_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(srcAddr), 0,
-        data, SRC_ADDR_OFFSET, SRC_ADDR_SIZE
+        rawData, SRC_ADDR_OFFSET, SRC_ADDR_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(dstAddr), 0,
-        data, DST_ADDR_OFFSET, DST_ADDR_SIZE
+        rawData, DST_ADDR_OFFSET, DST_ADDR_SIZE
       );
-      return data;
+
+      return rawData;
     }
 
     @Override
@@ -534,6 +586,7 @@ public class IpV4Packet extends AbstractPacket implements L3Packet {
 
       return sb.toString();
     }
+
   }
 
 }

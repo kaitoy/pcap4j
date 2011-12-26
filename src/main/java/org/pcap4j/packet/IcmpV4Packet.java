@@ -9,41 +9,42 @@ package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
-
 import org.pcap4j.packet.namedvalue.IcmpV4TypeCode;
 import org.pcap4j.util.ByteArrays;
 
-public class IcmpV4Packet extends AbstractPacket implements L4Packet {
+public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
 
-  private IcmpHeader header;
-  private Packet payload;
-
-  public IcmpV4Packet() {
-    this.header = new IcmpHeader();
-    this.payload = null;
-  }
+  private final IcmpV4Header header;
+  private final Packet payload;
 
   public IcmpV4Packet(byte[] rawData) {
-    this.header = new IcmpHeader(rawData);
-
+    this.header = new IcmpV4Header(rawData);
     this.payload
       = new AnonymousPacket(
           ByteArrays.getSubArray(
             rawData,
-            IcmpHeader.ICMP_HEADER_SIZE,
-            rawData.length - IcmpHeader.ICMP_HEADER_SIZE
+            IcmpV4Header.ICMP_HEADER_SIZE,
+            rawData.length - IcmpV4Header.ICMP_HEADER_SIZE
           )
         );
   }
 
-  @Override
-  public IcmpHeader getHeader() {
-    return header;
+  private IcmpV4Packet(Builder builder) {
+    if (
+         builder == null
+      || builder.typeCode == null
+      || builder.payload == null
+    ) {
+      throw new NullPointerException();
+    }
+
+    this.payload = builder.payload;
+    this.header = new IcmpV4Header(builder);
   }
 
   @Override
-  public void setPayload(Packet payload) {
-    this.payload = payload;
+  public IcmpV4Header getHeader() {
+    return header;
   }
 
   @Override
@@ -51,7 +52,62 @@ public class IcmpV4Packet extends AbstractPacket implements L4Packet {
     return payload;
   }
 
-  public class IcmpHeader extends AbstractHeader {
+  public static final class Builder {
+
+    private IcmpV4TypeCode typeCode;
+    private short checksum;
+    private short identifier;
+    private short sequenceNumber;
+    private Packet payload;
+    private boolean validateAtBuild = true;
+
+    public Builder() {}
+
+    public Builder(IcmpV4Packet packet) {
+      this.typeCode = packet.header.typeCode;
+      this.checksum = packet.header.checksum;
+      this.identifier = packet.header.identifier;
+      this.sequenceNumber = packet.header.sequenceNumber;
+      this.payload = packet.payload;
+    }
+
+    public Builder typeCode(IcmpV4TypeCode typeCode) {
+      this.typeCode = typeCode;
+      return this;
+    }
+
+    public Builder checksum(short checksum) {
+      this.checksum = checksum;
+      return this;
+    }
+
+    public Builder identifier(short identifier) {
+      this.identifier = identifier;
+      return this;
+    }
+
+    public Builder sequenceNumber(short sequenceNumber) {
+      this.sequenceNumber = sequenceNumber;
+      return this;
+    }
+
+    public Builder payload(Packet payload) {
+      this.payload = payload;
+      return this;
+    }
+
+    public Builder validateAtBuild(boolean validateAtBuild) {
+      this.validateAtBuild = validateAtBuild;
+      return this;
+    }
+
+    public IcmpV4Packet build() {
+      return new IcmpV4Packet(this);
+    }
+
+  }
+
+  public final class IcmpV4Header extends AbstractHeader {
 
     private static final int TYPE_OFFSET
       = 0;
@@ -84,43 +140,81 @@ public class IcmpV4Packet extends AbstractPacket implements L4Packet {
     public static final byte CODE_NETWROK_UNREACHABLE = (byte)0;
     public static final byte CODE_HOST_UNREACHABLE = (byte)1;
 
-    private IcmpV4TypeCode typeCode;
-    private short checksum;
-    private short identifier;
-    private short sequenceNumber;
+    private final IcmpV4TypeCode typeCode;
+    private final short checksum;
+    private final short identifier;
+    private final short sequenceNumber;
 
-    private IcmpHeader() {}
+//    private byte[] rawData = null;
+//    private String stringData = null;
 
-    private IcmpHeader(byte[] rawHeader) {
-      if (rawHeader.length < ICMP_HEADER_SIZE) {
+    private IcmpV4Header(byte[] rawData) {
+      if (rawData.length < ICMP_HEADER_SIZE) {
         throw new IllegalArgumentException();
       }
 
       this.typeCode
         = IcmpV4TypeCode
-            .getInstance(ByteArrays.getShort(rawHeader, TYPE_OFFSET));
+            .getInstance(ByteArrays.getShort(rawData, TYPE_OFFSET));
       this.checksum
-        = ByteArrays.getShort(rawHeader, CHECKSUM_OFFSET);
+        = ByteArrays.getShort(rawData, CHECKSUM_OFFSET);
       this.identifier
-        = ByteArrays.getShort(rawHeader, IDENTIFIER_OFFSET);
+        = ByteArrays.getShort(rawData, IDENTIFIER_OFFSET);
       this.sequenceNumber
-        = ByteArrays.getShort(rawHeader, SEQUENCE_NUMBER_OFFSET);
+        = ByteArrays.getShort(rawData, SEQUENCE_NUMBER_OFFSET);
+    }
+
+    private IcmpV4Header(Builder builder) {
+      this.typeCode = builder.typeCode;
+      this.identifier = builder.identifier;
+      this.sequenceNumber = builder.sequenceNumber;
+
+      if (builder.validateAtBuild) {
+        if (
+          PacketPropertiesLoader.getInstance()
+            .isEnabledIcmpChecksumVaridation()
+        ) {
+          this.checksum = calcChecksum();
+        }
+        else {
+          this.checksum = (short)0;
+        }
+      }
+      else {
+        this.checksum = builder.checksum;
+      }
+    }
+
+    private short calcChecksum() {
+      byte[] data;
+      int packetLength = IcmpV4Packet.this.payload.length() + length();
+
+      if ((packetLength % 2) != 0) {
+        data = new byte[packetLength + 1];
+      }
+      else {
+        data = new byte[packetLength];
+      }
+
+      System.arraycopy(getRawData(), 0, data, 0, length());
+      System.arraycopy(
+        IcmpV4Packet.this.payload.getRawData(), 0,
+        data, length(), IcmpV4Packet.this.payload.length()
+      );
+
+      for (int i = 0; i < CHECKSUM_SIZE; i++) {
+        data[CHECKSUM_OFFSET + i] = (byte)0;
+      }
+
+      return ByteArrays.calcChecksum(data);
     }
 
     public IcmpV4TypeCode getTypeCode() {
       return typeCode;
     }
 
-    public void setTypeCode(IcmpV4TypeCode typeCode) {
-      this.typeCode = typeCode;
-    }
-
     public short getChecksum() {
       return checksum;
-    }
-
-    public void setChecksum(short checksum) {
-      this.checksum = checksum;
     }
 
     public short getIdentifier() {
@@ -131,10 +225,6 @@ public class IcmpV4Packet extends AbstractPacket implements L4Packet {
       return (int)(0xFFFF & identifier);
     }
 
-    public void setIdentifier(short identifier) {
-      this.identifier = identifier;
-    }
-
     public short getSequenceNumber() {
       return sequenceNumber;
     }
@@ -143,48 +233,11 @@ public class IcmpV4Packet extends AbstractPacket implements L4Packet {
       return (int)(0xFFFF & sequenceNumber);
     }
 
-    public void setSequenceNumber(short sequenceNumber) {
-      this.sequenceNumber = sequenceNumber;
-    }
-
-    @Override
-    public void validate() {
-      if (
-        PacketPropertiesLoader.getInstance()
-          .isEnableIcmpChecksumVaridation()
-      ) {
-        setChecksum(calcChecksum());
-      }
-      else {
-        setChecksum((short)0);
-      }
-    }
-
-    private short calcChecksum() {
-      byte[] data;
-
-      int packetLength = IcmpV4Packet.this.length();
-      if ((packetLength % 2) != 0) {
-        data = new byte[packetLength + 1];
-        System.arraycopy(IcmpV4Packet.this.getRawData(), 0, data, 0, packetLength);
-        data[packetLength] = (byte)0;
-      }
-      else {
-        data = IcmpV4Packet.this.getRawData();
-      }
-
-      for (int i = 0; i < CHECKSUM_SIZE; i++) {
-        data[CHECKSUM_OFFSET + i] = (byte)0;
-      }
-
-      return ByteArrays.calcChecksum(data);
-    }
-
     @Override
     public boolean isValid() {
       if (
         PacketPropertiesLoader.getInstance()
-          .isEnableIcmpChecksumVerification()
+          .isEnabledIcmpChecksumVerification()
       ) {
         short cs = getChecksum();
         return cs == 0 ? true : (calcChecksum() == cs);
@@ -201,24 +254,25 @@ public class IcmpV4Packet extends AbstractPacket implements L4Packet {
 
     @Override
     public byte[] getRawData() {
-      byte[] data = new byte[length()];
+      byte[] rawData = new byte[length()];
       System.arraycopy(
         ByteArrays.toByteArray(typeCode.value()), 0,
-        data, TYPE_OFFSET, TYPE_SIZE + CODE_SIZE
+        rawData, TYPE_OFFSET, TYPE_SIZE + CODE_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(checksum), 0,
-        data, CHECKSUM_OFFSET, CHECKSUM_SIZE
+        rawData, CHECKSUM_OFFSET, CHECKSUM_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(identifier), 0,
-        data, IDENTIFIER_OFFSET, IDENTIFIER_SIZE
+        rawData, IDENTIFIER_OFFSET, IDENTIFIER_SIZE
       );
       System.arraycopy(
         ByteArrays.toByteArray(sequenceNumber), 0,
-        data, SEQUENCE_NUMBER_OFFSET, SEQUENCE_NUMBER_SIZE
+        rawData, SEQUENCE_NUMBER_OFFSET, SEQUENCE_NUMBER_SIZE
       );
-      return data;
+
+      return rawData;
     }
 
     @Override
@@ -247,6 +301,7 @@ public class IcmpV4Packet extends AbstractPacket implements L4Packet {
 
       return sb.toString();
     }
+
   }
 
 }

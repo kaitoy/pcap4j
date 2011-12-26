@@ -15,21 +15,7 @@ public abstract class AbstractPacket implements Packet {
 
   public abstract Header getHeader();
 
-  public void setHeader() {
-    throw new UnsupportedOperationException();
-  }
-
   public abstract Packet getPayload();
-  public abstract void setPayload(Packet payload);
-
-  public void validate() {
-    if (getPayload() != null) {
-      getPayload().validate();
-    }
-    if (getHeader() != null) {
-      getHeader().validate();
-    }
-  }
 
   public boolean isValid() {
     if (getPayload() != null) {
@@ -135,8 +121,6 @@ public abstract class AbstractPacket implements Packet {
 
   public abstract class AbstractHeader implements Header {
 
-    public void validate() {}
-
     public boolean isValid() { return true; }
 
     public int length() { return getRawData().length; }
@@ -167,5 +151,7 @@ public abstract class AbstractPacket implements Packet {
     public int hashCode() {
       return Arrays.hashCode(getRawData());
     }
+
   }
+
 }

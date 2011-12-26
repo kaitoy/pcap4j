@@ -9,10 +9,12 @@ package org.pcap4j.packet;
 
 public interface Header {
 
-  public void validate();
   public boolean isValid();
+
   public int length();
+
   public byte[] getRawData();
+
   public String toHexString();
 
 }
