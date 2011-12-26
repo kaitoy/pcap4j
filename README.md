@@ -11,7 +11,7 @@ Javaのパケットキャプチャライブラリ。パケットの作成・送�
 ダウンロード
 ------------
 
-pcap4j1.0.0
+pcap4j1.0.1
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
@@ -77,6 +77,6 @@ pcap4jを使ったSNMPネットワークシミュレータ、SnmpNetSim。
 とりあえず置いておくだけ。
 商用でもなんでも無料で使用可。コピーも再配布も可。
 
-SnmpNetSim0.9.0
+SnmpNetSim0.9.1
 
 * [snmpnetsim.jar](/downloads/Kaitoy/pcap4j/snmpnetsim.jar)
