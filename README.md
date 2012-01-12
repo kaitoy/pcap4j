@@ -59,20 +59,20 @@ jna、log4jもクラスパスに含める必要がある。<br>
 
 ビルド手順は以下。
 
-1. Eclipseインストール
+1. Eclipseインストール<br>
    ダウンロードして解凍するだけ。
-2. M2Eインストール
+2. M2Eインストール<br>
    EclipseのGUIで、[ヘルプ]＞[新規ソフトウェアのインストール] を開き、<br>
    「作業対象」に http://download.eclipse.org/technology/m2e/releases を入力してEnter。<br>
    m2e - Eclipse用のMaven統合をチェックして「次へ」。<br>
    使用条件の条項に同意しますにチェックして「完了」。<br>
    M2Eのインストール完了したらEclipseを再起動。<br>
-3. pcap4jのレポジトリのダウンロード
+3. pcap4jのレポジトリのダウンロード<br>
    `git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-4. プロジェクトのインポート
+4. プロジェクトのインポート<br>
   EclipseのGUIで、[ファイル]＞[インポート] を開き、<br>
   「一般」の「既存プロジェクトをワークスペースへ」で 3. でダウンロードしたレポジトリ内のプロジェクトをインポートする。
-5. ビルド
+5. ビルド<br>
    EclipseのGUIのプロジェクト・エクスプローラーで、pcap4jのプロジェクトを右クリックして、<br>
    [実行]＞[Maven package] か [実行]＞[Maven install] を実行する。
 
