@@ -8,7 +8,7 @@ Javaのパケットキャプチャライブラリ。パケットの作成・送�
 ダウンロード
 ------------
 
-pcap4j 1.0.2
+pcap4j 0.9.2
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
