@@ -7,6 +7,10 @@
 
 package org.pcap4j.packet;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public interface L3Packet extends Packet {
 
 }

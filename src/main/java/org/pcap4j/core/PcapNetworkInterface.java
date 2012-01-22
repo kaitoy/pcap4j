@@ -17,6 +17,10 @@ import org.pcap4j.core.NativeMappings.pcap_addr;
 import org.pcap4j.core.NativeMappings.pcap_if;
 import com.sun.jna.Pointer;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public final class PcapNetworkInterface {
 
   private static final Logger logger
@@ -66,22 +70,43 @@ public final class PcapNetworkInterface {
     return new PcapNetworkInterface(pif);
   }
 
+  /**
+   *
+   * @return
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   *
+   * @return
+   */
   public String getDescription() {
     return description;
   }
 
+  /**
+   *
+   * @return
+   */
   public List<PcapAddress> getAddresses() {
     return Collections.unmodifiableList(addresses);
   }
 
+  /**
+   *
+   * @return
+   */
   public boolean isLoopBack() {
     return isLoopBack;
   }
 
+  /**
+   *
+   * @author Kaito Yamada
+   * @version pcap4j 0.9.1
+   */
   public enum PromiscuousMode {
     PROMISCUOUS(1),
     NONPROMISCUOUS(0);
@@ -92,11 +117,23 @@ public final class PcapNetworkInterface {
       this.value = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getValue() {
       return value;
     }
   }
 
+  /**
+   *
+   * @param packetLength
+   * @param mode
+   * @param timeoutMillis
+   * @return
+   * @throws PcapNativeException
+   */
   public PcapHandle openLive(
     int packetLength, PromiscuousMode mode, int timeoutMillis
   ) throws PcapNativeException {

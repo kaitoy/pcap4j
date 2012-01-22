@@ -15,11 +15,19 @@ import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public final class IpV4Packet extends AbstractPacket implements L3Packet {
 
   private final IpV4Header header;
   private final Packet payload;
 
+  /**
+   *
+   * @param rawData
+   */
   public IpV4Packet(byte[] rawData) {
     this.header = new IpV4Header(rawData);
 
@@ -77,6 +85,10 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
     return header.isValid();
   }
 
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.1
+   */
   public static final class Builder {
 
     private IpVersion version = IpVersion.IPv4;
@@ -94,8 +106,15 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
     private Packet payload;
     private boolean validateAtBuild = true;
 
+    /**
+     *
+     */
     public Builder() {}
 
+    /**
+     *
+     * @param packet
+     */
     public Builder(IpV4Packet packet) {
       this.version = packet.header.version;
       this.ihl = packet.header.ihl;
@@ -112,36 +131,71 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
       this.payload = packet.payload;
     }
 
+    /**
+     *
+     * @param version
+     * @return
+     */
     public Builder version(IpVersion version) {
       this.version = version;
       return this;
     }
 
+    /**
+     *
+     * @param ihl
+     * @return
+     */
     public Builder ihl(byte ihl) {
       this.ihl = ihl;
       return this;
     }
 
+    /**
+     *
+     * @param tos
+     * @return
+     */
     public Builder tos(byte tos) {
       this.tos = tos;
       return this;
     }
 
+    /**
+     *
+     * @param totalLength
+     * @return
+     */
     public Builder totalLength(short totalLength) {
       this.totalLength = totalLength;
       return this;
     }
 
+    /**
+     *
+     * @param identification
+     * @return
+     */
     public Builder identification(short identification) {
       this.identification = identification;
       return this;
     }
 
+    /**
+     *
+     * @param flags
+     * @return
+     */
     public Builder flags(byte flags) {
       this.flags = flags;
       return this;
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public Builder reservedFlag(boolean flag) {
       if (getReservedFlag() != flag) {
         this.flags = (byte)((flags & 3) | (~flags & 4));
@@ -149,6 +203,11 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
       return this;
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public Builder dontFragmentFlag(boolean flag) {
       if (getDontFragmentFlag() != flag) {
         this.flags = (byte)((flags & 5) | (~flags & 2));
@@ -156,6 +215,11 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
       return this;
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public Builder moreFragmentFlag(boolean flag) {
       if (getMoreFragmentFlag() != flag) {
         flags = (byte)((flags & 6) | (~flags & 1));
@@ -163,64 +227,124 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
       return this;
     }
 
+    /**
+     *
+     * @return
+     */
     private boolean getReservedFlag() {
       return ((flags & 0x4) >> 2) != 0 ? true : false;
     }
 
+    /**
+     *
+     * @return
+     */
     private boolean getDontFragmentFlag() {
       return ((flags & 0x2) >> 1) != 0 ? true : false;
     }
 
+    /**
+     *
+     * @return
+     */
     private boolean getMoreFragmentFlag() {
       return ((flags & 0x1) >> 0) != 0 ? true : false;
     }
 
+    /**
+     *
+     * @param flagmentOffset
+     * @return
+     */
     public Builder flagmentOffset(short flagmentOffset) {
       this.flagmentOffset = flagmentOffset;
       return this;
     }
 
+    /**
+     *
+     * @param ttl
+     * @return
+     */
     public Builder ttl(byte ttl) {
       this.ttl = ttl;
       return this;
     }
 
+    /**
+     *
+     * @param protocol
+     * @return
+     */
     public Builder protocol(IpNumber protocol) {
       this.protocol = protocol;
       return this;
     }
 
+    /**
+     *
+     * @param headerChecksum
+     * @return
+     */
     public Builder headerChecksum(short headerChecksum) {
       this.headerChecksum = headerChecksum;
       return this;
     }
 
+    /**
+     *
+     * @param srcAddr
+     * @return
+     */
     public Builder srcAddr(InetAddress srcAddr) {
       this.srcAddr = srcAddr;
       return this;
     }
 
+    /**
+     *
+     * @param dstAddr
+     * @return
+     */
     public Builder dstAddr(InetAddress dstAddr) {
       this.dstAddr = dstAddr;
       return this;
     }
 
+    /**
+     *
+     * @param payload
+     * @return
+     */
     public Builder payload(Packet payload) {
       this.payload = payload;
       return this;
     }
 
+    /**
+     *
+     * @param validateAtBuild
+     * @return
+     */
     public Builder validateAtBuild(boolean validateAtBuild) {
       this.validateAtBuild = validateAtBuild;
       return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public IpV4Packet build() {
       return new IpV4Packet(this);
     }
 
   }
 
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.1
+   */
   public final class IpV4Header extends AbstractHeader {
 
     private static final int VERSION_AND_IHL_OFFSET
@@ -368,90 +492,178 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
       return ByteArrays.calcChecksum(data);
     }
 
+    /**
+     *
+     * @return
+     */
     public IpVersion getVersion() {
       return version;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getVersionAsInt() {
       return (int)(0xFF & version.value());
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getIhl() {
       return ihl;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getIhlAsInt() {
       return (int)(0xFF & ihl);
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getTos() {
       return tos;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTosAsInt() {
       return (int)(0xFF & tos);
     }
 
+    /**
+     *
+     * @return
+     */
     public short getTotalLength() {
       return totalLength;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTotalLengthAsInt() {
       return (int)(0xFFFF & totalLength);
     }
 
+    /**
+     *
+     * @return
+     */
     public short getIdentification() {
       return identification;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getIdentificationAsInt() {
       return (int)(0xFFFF & identification);
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getFlags() {
       return flags;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getReservedFlag() {
       return ((flags & 0x4) >> 2) != 0 ? true : false;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getDontFragmentFlag() {
       return ((flags & 0x2) >> 1) != 0 ? true : false;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getMoreFragmentFlag() {
       return ((flags & 0x1) >> 0) != 0 ? true : false;
     }
 
+    /**
+     *
+     * @return
+     */
     public short getFlagmentOffset() {
       return flagmentOffset;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getFlagmentOffsetAsInt() {
       return (int)(flagmentOffset & 0xFFFF);
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getTtl() {
       return ttl;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTtlAsInt() {
       return (int)(0xFF & ttl);
     }
 
+    /**
+     *
+     * @return
+     */
     public IpNumber getProtocol() {
       return protocol;
     }
 
+    /**
+     *
+     * @return
+     */
     public short getHeaderChecksum() {
       return headerChecksum;
     }
 
+    /**
+     *
+     * @return
+     */
     public InetAddress getSrcAddr() {
       return srcAddr;
     }
 
+    /**
+     *
+     * @return
+     */
     public InetAddress getDstAddr() {
       return dstAddr;
     }

@@ -11,17 +11,37 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public
 final class ArpHardwareType
 extends NamedNumber<Short> implements Comparable<Short> {
 
   // http://www.iana.org/assignments/arp-parameters/arp-parameters.xml#hardware-type-rules
+
+  /**
+   *
+   */
   public static final ArpHardwareType ETHERNET
     = new ArpHardwareType((short)1, "Ethernet(10Mb)");
+
+  /**
+   *
+   */
   public static final ArpHardwareType EXPERIMENTAL_ETHERNET
     = new ArpHardwareType((short)2, "ExperimentalEthernet(3Mb)");
+
+  /**
+   *
+   */
   public static final ArpHardwareType FRAME_RELAY
     = new ArpHardwareType((short)15, "FrameRelay");
+
+  /**
+   *
+   */
   public static final ArpHardwareType IPSEC_TUNNEL
     = new ArpHardwareType((short)31, "IPsec tunnel");
 
@@ -49,6 +69,11 @@ extends NamedNumber<Short> implements Comparable<Short> {
     super(value, name);
   }
 
+  /**
+   *
+   * @param value
+   * @return
+   */
   public static ArpHardwareType getInstance(Short value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
@@ -63,6 +88,9 @@ extends NamedNumber<Short> implements Comparable<Short> {
     return String.valueOf(value() & 0xFFFF);
   }
 
+  /**
+   *
+   */
   public int compareTo(Short o) {
     return value().compareTo(o);
   }

@@ -1,24 +1,18 @@
 package org.pcap4j.test;
 
-
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
-import org.pcap4j.core.Pcap;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapHandle.BpfCompileMode;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
-
+import org.pcap4j.util.NifSelector;
 
 public class GetNextPacketTest {
 
@@ -48,10 +42,7 @@ public class GetNextPacketTest {
 
     PcapNetworkInterface nif;
     try {
-      nif = Pcap.selectNetworkInterface(
-              new InputStreamReader(System.in),
-              new OutputStreamWriter(System.out)
-            );
+      nif = new NifSelector().selectNetworkInterface();
     } catch (IOException e) {
       e.printStackTrace();
       return;

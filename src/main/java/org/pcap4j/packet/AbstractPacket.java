@@ -11,12 +11,28 @@ import java.util.Arrays;
 import java.util.Iterator;
 import org.pcap4j.util.ByteArrays;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public abstract class AbstractPacket implements Packet {
 
+  /**
+   *
+   * @return
+   */
   public abstract Header getHeader();
 
+  /**
+   *
+   * @return
+   */
   public abstract Packet getPayload();
 
+  /**
+   *
+   * @return
+   */
   public boolean isValid() {
     if (getPayload() != null) {
       if (!getPayload().isValid()) {
@@ -32,6 +48,10 @@ public abstract class AbstractPacket implements Packet {
     }
   }
 
+  /**
+   *
+   * @return
+   */
   public int length() {
     int length = 0;
 
@@ -45,6 +65,10 @@ public abstract class AbstractPacket implements Packet {
     return length;
   }
 
+  /**
+   *
+   * @return
+   */
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     Header header = getHeader();
@@ -67,10 +91,19 @@ public abstract class AbstractPacket implements Packet {
     return rawData;
   }
 
+  /**
+   *
+   * @return
+   */
   public Iterator<Packet> iterator() {
     return new PacketIterator(this);
   }
 
+  /**
+   *
+   * @param packetClass
+   * @return
+   */
   public <T extends Packet> T get(Class<T> packetClass) {
     for (Packet next: this) {
       if (packetClass.isInstance(next)) {
@@ -80,10 +113,19 @@ public abstract class AbstractPacket implements Packet {
     return null;
   }
 
+  /**
+   *
+   * @param packetClass
+   * @return
+   */
   public <T extends Packet> boolean contains(Class<T> packetClass) {
     return get(packetClass) != null;
   }
 
+  /**
+   *
+   * @return
+   */
   public String toHexString() {
     return ByteArrays.toHexString(getRawData(), ":");
   }
@@ -119,14 +161,35 @@ public abstract class AbstractPacket implements Packet {
     return Arrays.hashCode(getRawData());
   }
 
+  /**
+   *
+   * @author Kaito Yamada
+   * @version pcap4j 0.9.1
+   */
   public abstract class AbstractHeader implements Header {
 
+    /**
+     *
+     * @return
+     */
     public boolean isValid() { return true; }
 
+    /**
+     *
+     * @return
+     */
     public int length() { return getRawData().length; }
 
+    /**
+     *
+     * @return
+     */
     public abstract byte[] getRawData();
 
+    /**
+     *
+     * @return
+     */
     public String toHexString() {
       return ByteArrays.toHexString(getRawData(), ":");
     }

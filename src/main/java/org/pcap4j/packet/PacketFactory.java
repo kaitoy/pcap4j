@@ -13,17 +13,31 @@ import org.pcap4j.packet.namedvalue.DataLinkType;
 import org.pcap4j.packet.namedvalue.EtherType;
 import org.pcap4j.packet.namedvalue.IpNumber;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public class PacketFactory {
 
   private static final PacketFactory INSTANCE = new PacketFactory();
 
   private PacketFactory() {}
 
+  /**
+   *
+   * @return
+   */
   public static PacketFactory getInstance() {
     return INSTANCE;
   }
 
-  private Packet newPacket(byte[] rawData, Class<? extends Packet> packetClass) {
+  /**
+   *
+   * @param rawData
+   * @param packetClass
+   * @return
+   */
+  public Packet newPacket(byte[] rawData, Class<? extends Packet> packetClass) {
     try {
       Constructor<? extends Packet> constructor
         = packetClass.getConstructor(byte[].class);
@@ -43,6 +57,12 @@ public class PacketFactory {
     }
   }
 
+  /**
+   *
+   * @param rawData
+   * @param dlt
+   * @return
+   */
   public Packet newPacketByDlt(byte[] rawData, Integer dlt) {
     if (PacketPropertiesLoader.getInstance().isExtendedNewPacketByDlt()) {
       Class<? extends Packet> packetClass
@@ -59,6 +79,12 @@ public class PacketFactory {
     }
   }
 
+  /**
+   *
+   * @param rawData
+   * @param etherType
+   * @return
+   */
   public Packet newPacketByEtherType(byte[] rawData, Short etherType) {
     if (PacketPropertiesLoader.getInstance().isExtendedNewPacketByEtherType()) {
       Class<? extends Packet> packetClass
@@ -82,6 +108,12 @@ public class PacketFactory {
     }
   }
 
+  /**
+   *
+   * @param rawData
+   * @param ipNumber
+   * @return
+   */
   public Packet newPacketByIpNumber(byte[] rawData, Byte ipNumber) {
     if (PacketPropertiesLoader.getInstance().isExtendedNewPacketByIPNumber()) {
       Class<? extends Packet> packetClass

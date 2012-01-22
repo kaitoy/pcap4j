@@ -18,10 +18,18 @@ import static org.pcap4j.util.ByteArrays.IP_ADDRESS_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public final class ArpPacket extends AbstractPacket implements L3Packet {
 
   private final ArpHeader header;
 
+  /**
+   *
+   * @param rawData
+   */
   public ArpPacket(byte[] rawData) {
 //    if (rawData.length != ArpHeader.ARP_HEADER_SIZE) {
 //      throw new AssertionError();
@@ -57,6 +65,11 @@ public final class ArpPacket extends AbstractPacket implements L3Packet {
     return null;
   }
 
+  /**
+   *
+   * @author Kaito Yamada
+   *
+   */
   public static final class Builder {
 
     private ArpHardwareType hardwareType = ArpHardwareType.ETHERNET;
@@ -69,8 +82,15 @@ public final class ArpPacket extends AbstractPacket implements L3Packet {
     private MacAddress dstHardwareAddr;
     private InetAddress dstProtocolAddr;
 
+    /**
+     *
+     */
     public Builder() {}
 
+    /**
+     *
+     * @param packet
+     */
     public Builder(ArpPacket packet) {
       this.hardwareType = packet.header.hardwareType;
       this.protocolType = packet.header.protocolType;
@@ -83,57 +103,111 @@ public final class ArpPacket extends AbstractPacket implements L3Packet {
       this.dstProtocolAddr = packet.header.dstProtocolAddr;
     }
 
+    /**
+     *
+     * @param hardwareType
+     * @return
+     */
     public Builder hardwareType(ArpHardwareType hardwareType) {
       this.hardwareType = hardwareType;
       return this;
     }
 
+    /**
+     *
+     * @param protocolType
+     * @return
+     */
     public Builder protocolType(EtherType protocolType) {
       this.protocolType = protocolType;
       return this;
     }
 
+    /**
+     *
+     * @param hardwareLength
+     * @return
+     */
     public Builder hardwareLength(byte hardwareLength) {
       this.hardwareLength = hardwareLength;
       return this;
     }
 
+    /**
+     *
+     * @param protocolLength
+     * @return
+     */
     public Builder protocolLength(byte protocolLength) {
       this.protocolLength = protocolLength;
       return this;
     }
 
+    /**
+     *
+     * @param operation
+     * @return
+     */
     public Builder operation(ArpOperation operation) {
       this.operation = operation;
       return this;
     }
 
+    /**
+     *
+     * @param srcHardwareAddr
+     * @return
+     */
     public Builder srcHardwareAddr(MacAddress srcHardwareAddr) {
       this.srcHardwareAddr = srcHardwareAddr;
       return this;
     }
 
+    /**
+     *
+     * @param srcProtocolAddr
+     * @return
+     */
     public Builder srcProtocolAddr(InetAddress srcProtocolAddr) {
       this.srcProtocolAddr = srcProtocolAddr;
       return this;
     }
 
+    /**
+     *
+     * @param dstHardwareAddr
+     * @return
+     */
     public Builder dstHardwareAddr(MacAddress dstHardwareAddr) {
       this.dstHardwareAddr = dstHardwareAddr;
       return this;
     }
 
+    /**
+     *
+     * @param dstProtocolAddr
+     * @return
+     */
     public Builder dstProtocolAddr(InetAddress dstProtocolAddr) {
       this.dstProtocolAddr = dstProtocolAddr;
       return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArpPacket build() {
       return new ArpPacket(this);
     }
 
   }
 
+  /**
+   *
+   * @author Kaito Yamada
+   * @version pcap4j 0.9.1
+   */
   public final class ArpHeader extends AbstractHeader {
 
     private static final int HARDWARE_TYPE_OFFSET
@@ -228,46 +302,90 @@ public final class ArpPacket extends AbstractPacket implements L3Packet {
       this.dstProtocolAddr = builder.dstProtocolAddr;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArpHardwareType getHardwareType() {
       return hardwareType;
     }
 
+    /**
+     *
+     * @return
+     */
     public EtherType getProtocolType() {
       return protocolType;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getHardwareLength() {
       return hardwareLength;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getHardwareLengthAsInt() {
       return (int)(0xFF & hardwareLength);
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getProtocolLength() {
       return protocolLength;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getProtocolLengthAsInt() {
       return (int)(0xFF & protocolLength);
     }
 
+    /**
+     *
+     * @return
+     */
     public ArpOperation getOperation() {
       return operation;
     }
 
+    /**
+     *
+     * @return
+     */
     public MacAddress getSrcHardwareAddr() {
       return srcHardwareAddr;
     }
 
+    /**
+     *
+     * @return
+     */
     public InetAddress getSrcProtocolAddr() {
       return srcProtocolAddr;
     }
 
+    /**
+     *
+     * @return
+     */
     public MacAddress getDstHardwareAddr() {
       return dstHardwareAddr;
     }
 
+    /**
+     *
+     * @return
+     */
     public InetAddress getDstProtocolAddr() {
       return dstProtocolAddr;
     }

@@ -11,21 +11,49 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public
 final class IpVersion
 extends NamedNumber<Byte> implements Comparable<Byte> {
 
   // http://www.iana.org/assignments/version-numbers/version-numbers.xml
+
+  /**
+   *
+   */
   public static final IpVersion IPv4
     = new IpVersion((byte)4, "IPv4");
+
+  /**
+   *
+   */
   public static final IpVersion ST
     = new IpVersion((byte)4, "ST Datagram Mode");
+
+  /**
+   *
+   */
   public static final IpVersion IPv6
     = new IpVersion((byte)6, "IPv6");
+
+  /**
+   *
+   */
   public static final IpVersion TPIX
     = new IpVersion((byte)4, "TP/IX: The Next Internet");
+
+  /**
+   *
+   */
   public static final IpVersion PIP
     = new IpVersion((byte)4, "The P Internet Protocol");
+
+  /**
+   *
+   */
   public static final IpVersion TUBA
     = new IpVersion((byte)4, "TUBA");
 
@@ -53,6 +81,11 @@ extends NamedNumber<Byte> implements Comparable<Byte> {
     super(value, name);
   }
 
+  /**
+   *
+   * @param value
+   * @return
+   */
   public static IpVersion getInstance(Byte value) {
     if ((value & 0xF0) != 0) {
       throw new IllegalArgumentException(

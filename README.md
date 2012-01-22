@@ -8,7 +8,7 @@ Javaのパケットキャプチャライブラリ。パケットの作成・送�
 ダウンロード
 ------------
 
-pcap4j1.0.1
+pcap4j 1.0.2
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
@@ -44,10 +44,10 @@ jna、log4jもクラスパスに含める必要がある。<br>
 
 動作確認済みのバージョンは以下。
 
-* libpcap1.1.1
-* WinPcap4.1.2
-* jna3.3.0
-* log4j1.2.14
+* libpcap 1.1.1
+* WinPcap 4.1.2
+* jna 3.3.0
+* log4j 1.2.14
 
 
 ビルド
@@ -87,10 +87,10 @@ pcap4j is provided under the LGPL, version 2.1 or later.<br>
 おまけ
 ------
 
-pcap4jを使ったSNMPネットワークシミュレータ、SnmpNetSim。<br>
+pcap4j 0.9.2 を使ったSNMPネットワークシミュレータ、SnmpNetSim。<br>
 とりあえず置いておくだけ。<br>
 商用でもなんでも無料で使用可。コピーも再配布も可。<br>
 
-SnmpNetSim0.9.1
+SnmpNetSim 1.0.2
 
 * [snmpnetsim.jar](/downloads/Kaitoy/pcap4j/snmpnetsim.jar)

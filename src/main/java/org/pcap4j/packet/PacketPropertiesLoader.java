@@ -10,11 +10,15 @@ package org.pcap4j.packet;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.PropertiesLoader;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 class PacketPropertiesLoader {
 
   private static final String KEY_PREFIX
     = PacketPropertiesLoader.class.getPackage().getName();
-  public static final String PACKET_PROPERTIES_NAME_KEY
+  private static final String PACKET_PROPERTIES_NAME_KEY
     = KEY_PREFIX + "packet.properties";
   private static final PacketPropertiesLoader INSTANCE
     = new PacketPropertiesLoader();
@@ -29,10 +33,18 @@ class PacketPropertiesLoader {
 
   private PacketPropertiesLoader() {}
 
+  /**
+   *
+   * @return
+   */
   public static PacketPropertiesLoader getInstance() {
     return INSTANCE;
   }
 
+  /**
+   *
+   * @return
+   */
   public boolean isEnabledIcmpChecksumVaridation() {
     return loader.getBoolean(
              KEY_PREFIX + ".icmp.enableChecksumValidation",
@@ -40,6 +52,10 @@ class PacketPropertiesLoader {
            ).booleanValue();
   }
 
+  /**
+   *
+   * @return
+   */
   public boolean isEnabledIcmpChecksumVerification() {
     return loader.getBoolean(
              KEY_PREFIX + ".icmp.enableChecksumVerification",
@@ -47,6 +63,10 @@ class PacketPropertiesLoader {
            ).booleanValue();
   }
 
+  /**
+   *
+   * @return
+   */
   public boolean isEnabledIpv4ChecksumVaridation() {
     return loader.getBoolean(
              KEY_PREFIX + ".ipv4.enableChecksumValidation",
@@ -54,6 +74,10 @@ class PacketPropertiesLoader {
            ).booleanValue();
   }
 
+  /**
+   *
+   * @return
+   */
   public boolean isEnabledIpv4ChecksumVerification() {
     return loader.getBoolean(
              KEY_PREFIX + ".ipv4.enableChecksumVerification",
@@ -61,6 +85,10 @@ class PacketPropertiesLoader {
            ).booleanValue();
   }
 
+  /**
+   *
+   * @return
+   */
   public boolean isEnabledUdpChecksumVaridation() {
     return loader.getBoolean(
              KEY_PREFIX + ".udp.enableChecksumValidation",
@@ -68,6 +96,10 @@ class PacketPropertiesLoader {
            ).booleanValue();
   }
 
+  /**
+   *
+   * @return
+   */
   public boolean isEnabledUdpChecksumVerification() {
     return loader.getBoolean(
              KEY_PREFIX + ".udp.enableChecksumVerification",
@@ -75,6 +107,10 @@ class PacketPropertiesLoader {
            ).booleanValue();
   }
 
+  /**
+   *
+   * @return
+   */
   public Class<? extends Packet> getAnonymousPacketClass() {
     return loader.<Packet>getClass(
              KEY_PREFIX + ".anonymous",
@@ -82,6 +118,10 @@ class PacketPropertiesLoader {
            );
   }
 
+  /**
+   *
+   * @return
+   */
   public boolean isExtendedNewPacketByDlt() {
     return loader.getBoolean(
              KEY_PREFIX + ".PacketFactory.extendNewPacketByDlt",
@@ -89,6 +129,11 @@ class PacketPropertiesLoader {
            );
   }
 
+  /**
+   *
+   * @param dlt
+   * @return
+   */
   public Class<? extends Packet> getPacketClassByDlt(Integer dlt) {
     return loader.<Packet>getClass(
              KEY_PREFIX + ".DLT." + dlt,
@@ -96,6 +141,10 @@ class PacketPropertiesLoader {
            );
   }
 
+  /**
+   *
+   * @return
+   */
   public boolean isExtendedNewPacketByEtherType() {
     return loader.getBoolean(
              KEY_PREFIX + ".PacketFactory.extendNewPacketByEtherType",
@@ -103,6 +152,11 @@ class PacketPropertiesLoader {
            );
   }
 
+  /**
+   *
+   * @param etherType
+   * @return
+   */
   public Class<? extends Packet> getPacketClassByEtherType(Short etherType) {
     return loader.<Packet>getClass(
              KEY_PREFIX + ".EtherType."
@@ -111,6 +165,10 @@ class PacketPropertiesLoader {
            );
   }
 
+  /**
+   *
+   * @return
+   */
   public boolean isExtendedNewPacketByIPNumber() {
     return loader.getBoolean(
              KEY_PREFIX + ".PacketFactory.extendNewPacketByIPNumber",
@@ -118,6 +176,11 @@ class PacketPropertiesLoader {
            );
   }
 
+  /**
+   *
+   * @param ipNumber
+   * @return
+   */
   public Class<? extends Packet> getPacketClassByIPNumber(Byte ipNumber) {
     return loader.<Packet>getClass(
              KEY_PREFIX + ".IPNumber." + String.valueOf(ipNumber & 0xFF),

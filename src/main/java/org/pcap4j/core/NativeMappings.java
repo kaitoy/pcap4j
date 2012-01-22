@@ -16,10 +16,14 @@ import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.ptr.PointerByReference;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 final class NativeMappings {
 
-  public interface PcapLibrary extends Library {
-    public static final PcapLibrary INSTANCE
+  interface PcapLibrary extends Library {
+    static final PcapLibrary INSTANCE
       = (PcapLibrary)Native.loadLibrary(
           (Platform.isWindows() ? "wpcap" : "pcap"),
           PcapLibrary.class
@@ -88,7 +92,7 @@ final class NativeMappings {
 
   }
 
-  public static interface pcap_handler extends Callback {
+  static interface pcap_handler extends Callback {
     // void got_packet(
     //   u_char *args, const struct pcap_pkthdr *header, const u_char *packet
     // );

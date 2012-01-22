@@ -13,19 +13,55 @@ import java.net.UnknownHostException;
 
 import org.pcap4j.util.MacAddress;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public final class ByteArrays {
 
+  /**
+   *
+   */
   public static final int BYTE_SIZE_IN_BYTE = 1;
+
+  /**
+   *
+   */
   public static final int SHORT_SIZE_IN_BYTE = 2;
+
+  /**
+   *
+   */
   public static final int INT_SIZE_IN_BYTE = 4;
+
+  /**
+   *
+   */
   public static final int LONG_SIZE_IN_BYTE = 8;
+
+  /**
+   *
+   */
   public static final int MAC_ADDRESS_SIZE_IN_BYTE = 6;
+
+  /**
+   *
+   */
   public static final int IP_ADDRESS_SIZE_IN_BYTE = 4;
 
+  /**
+   *
+   */
   public static final int BYTE_SIZE_IN_BIT = 8;
 
   private ByteArrays() { throw new AssertionError(); }
 
+  /**
+   *
+   * @param array
+   * @param offset
+   * @return
+   */
   public static byte getByte(byte[] array, int offset) {
     if (offset + BYTE_SIZE_IN_BYTE > array.length) {
       throw new IllegalArgumentException();
@@ -33,14 +69,31 @@ public final class ByteArrays {
     return array[offset];
   }
 
+  /**
+   *
+   * @param value
+   * @return
+   */
   public static byte[] toByteArray(byte value) {
     return new byte[] { value };
   }
 
+  /**
+   *
+   * @param value
+   * @param separator
+   * @return
+   */
   public static String toHexString(byte value, String separator) {
     return toHexString(toByteArray(value), separator);
   }
 
+  /**
+   *
+   * @param array
+   * @param offset
+   * @return
+   */
   public static short getShort(byte[] array, int offset) {
     if (offset + SHORT_SIZE_IN_BYTE > array.length) {
       throw new IllegalArgumentException();
@@ -51,6 +104,11 @@ public final class ByteArrays {
             );
   }
 
+  /**
+   *
+   * @param value
+   * @return
+   */
   public static byte[] toByteArray(short value) {
     return new byte[] {
              (byte)((value & 0xFF00) >> BYTE_SIZE_IN_BIT * 1),
@@ -58,10 +116,22 @@ public final class ByteArrays {
            };
   }
 
+  /**
+   *
+   * @param value
+   * @param separator
+   * @return
+   */
   public static String toHexString(short value, String separator) {
     return toHexString(toByteArray(value), separator);
   }
 
+  /**
+   *
+   * @param array
+   * @param offset
+   * @return
+   */
   public static int getInt(byte[] array, int offset) {
     if (offset + INT_SIZE_IN_BYTE > array.length) {
       throw new IllegalArgumentException();
@@ -74,6 +144,11 @@ public final class ByteArrays {
             );
   }
 
+  /**
+   *
+   * @param value
+   * @return
+   */
   public static byte[] toByteArray(int value) {
     return new byte[] {
              (byte)((value & 0xFF000000) >> BYTE_SIZE_IN_BIT * 3),
@@ -83,10 +158,22 @@ public final class ByteArrays {
            };
   }
 
+  /**
+   *
+   * @param value
+   * @param separator
+   * @return
+   */
   public static String toHexString(int value, String separator) {
     return toHexString(toByteArray(value), separator);
   }
 
+  /**
+   *
+   * @param array
+   * @param offset
+   * @return
+   */
   public static long getLong(byte[] array, int offset) {
     if (offset + LONG_SIZE_IN_BYTE > array.length) {
       throw new IllegalArgumentException();
@@ -103,6 +190,11 @@ public final class ByteArrays {
             );
   }
 
+  /**
+   *
+   * @param value
+   * @return
+   */
   public static byte[] toByteArray(long value) {
     return new byte[] {
              (byte)((value & 0xFF00000000000000L) >> BYTE_SIZE_IN_BIT * 7),
@@ -116,20 +208,43 @@ public final class ByteArrays {
            };
   }
 
+  /**
+   *
+   * @param value
+   * @param separator
+   * @return
+   */
   public static String toHexString(long value, String separator) {
     return toHexString(toByteArray(value), separator);
   }
 
+  /**
+   *
+   * @param array
+   * @param offset
+   * @return
+   */
   public static MacAddress getMacAddress(byte[] array, int offset) {
     return MacAddress.newInstance(
              getSubArray(array, offset, MAC_ADDRESS_SIZE_IN_BYTE)
            );
   }
 
+  /**
+   *
+   * @param value
+   * @return
+   */
   public static byte[] toByteArray(MacAddress value) {
     return value.getAddress();
   }
 
+  /**
+   *
+   * @param array
+   * @param offset
+   * @return
+   */
   public static Inet4Address getInet4Address(byte[] array, int offset) {
     try {
       return (Inet4Address)Inet4Address.getByAddress(
@@ -144,16 +259,34 @@ public final class ByteArrays {
     }
   }
 
+  /**
+   *
+   * @param value
+   * @return
+   */
   public static byte[] toByteArray(InetAddress value) {
     return value.getAddress();
   }
 
+  /**
+   *
+   * @param array
+   * @param offset
+   * @param size
+   * @return
+   */
   public static byte[] getSubArray(byte[] array, int offset, int size) {
     byte[] subArray = new byte[size];
     System.arraycopy(array, offset, subArray, 0, size);
     return subArray;
   }
 
+  /**
+   *
+   * @param array
+   * @param separator
+   * @return
+   */
   public static String toHexString(byte[] array, String separator) {
     StringBuffer buf = new StringBuffer();
 
@@ -169,6 +302,11 @@ public final class ByteArrays {
     return buf.toString();
   }
 
+  /**
+   *
+   * @param data
+   * @return
+   */
   public static short calcChecksum(byte[] data) {
     int sum = 0;
     for (int i = 0; i < data.length; i += SHORT_SIZE_IN_BYTE) {
@@ -184,4 +322,5 @@ public final class ByteArrays {
 
     return (short)(0xFFFF & ~sum);
   }
+
 }

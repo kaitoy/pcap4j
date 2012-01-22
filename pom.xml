@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pcap4j</groupId>
   <artifactId>pcap4j</artifactId>
-  <version>0.9.1</version>
+  <version>0.9.2</version>
   <name>org.pcap4j</name>
   <dependencies>
   	<dependency>

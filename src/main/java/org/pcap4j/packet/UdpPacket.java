@@ -12,6 +12,10 @@ import java.net.InetAddress;
 import org.pcap4j.packet.namedvalue.IpNumber;
 import org.pcap4j.util.ByteArrays;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public final class UdpPacket extends AbstractPacket implements L4Packet {
 
   private static final int PSEUDO_HEADER_SIZE = 12;
@@ -19,6 +23,10 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
   private final UdpHeader header;
   private final Packet payload;
 
+  /**
+   *
+   * @param rawData
+   */
   public UdpPacket(byte[] rawData) {
     this.header = new UdpHeader(rawData);
     this.payload
@@ -55,11 +63,20 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
     return header;
   }
 
+  /**
+   *
+   */
   @Override
   public boolean isValid() {
     throw new UnsupportedOperationException();
   }
 
+  /**
+   *
+   * @param srcAddr
+   * @param dstAddr
+   * @return
+   */
   public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
     if (!payload.isValid()) {
       return false;
@@ -72,6 +89,10 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
     return payload;
   }
 
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.1
+   */
   public static final class Builder {
 
     private short srcPort;
@@ -83,8 +104,15 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
     private InetAddress dstAddr;
     private boolean validateAtBuild = true;
 
+    /**
+     *
+     */
     public Builder() {}
 
+    /**
+     *
+     * @param packet
+     */
     public Builder(UdpPacket packet) {
       this.srcPort = packet.header.srcPort;
       this.dstPort = packet.header.dstPort;
@@ -93,52 +121,100 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
       this.payload = packet.payload;
     }
 
+    /**
+     *
+     * @param srcPort
+     * @return
+     */
     public Builder srcPort(short srcPort) {
       this.srcPort = srcPort;
       return this;
     }
 
+    /**
+     *
+     * @param dstPort
+     * @return
+     */
     public Builder dstPort(short dstPort) {
       this.dstPort = dstPort;
       return this;
     }
 
+    /**
+     *
+     * @param length
+     * @return
+     */
     public Builder length(short length) {
       this.length = length;
       return this;
     }
 
+    /**
+     *
+     * @param checksum
+     * @return
+     */
     public Builder checksum(short checksum) {
       this.checksum = checksum;
       return this;
     }
 
+    /**
+     *
+     * @param payload
+     * @return
+     */
     public Builder payload(Packet payload) {
       this.payload = payload;
       return this;
     }
 
+    /**
+     *
+     * @param srcAddr
+     * @return
+     */
     public Builder srcAddr(InetAddress srcAddr) {
       this.srcAddr = srcAddr;
       return this;
     }
 
+    /**
+     *
+     * @param dstAddr
+     * @return
+     */
     public Builder dstAddr(InetAddress dstAddr) {
       this.dstAddr = dstAddr;
       return this;
     }
 
+    /**
+     *
+     * @param validateAtBuild
+     * @return
+     */
     public Builder validateAtBuild(boolean validateAtBuild) {
       this.validateAtBuild = validateAtBuild;
       return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public UdpPacket build() {
       return new UdpPacket(this);
     }
 
   }
 
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.1
+   */
   public final class UdpHeader extends AbstractHeader {
 
     private static final int SRC_PORT_OFFSET
@@ -253,30 +329,58 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
       return ByteArrays.calcChecksum(data);
     }
 
+    /**
+     *
+     * @return
+     */
     public short getSrcPort() {
       return srcPort;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSrcPortAsInt() {
       return (int)(0xFFFF & srcPort);
     }
 
+    /**
+     *
+     * @return
+     */
     public short getDstPort() {
       return dstPort;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDstPortAsInt() {
       return (int)(0xFFFF & dstPort);
     }
 
+    /**
+     *
+     * @return
+     */
     public short getLength() {
       return length;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getLengthAsInt() {
       return (int)(0xFFFF & length);
     }
 
+    /**
+     *
+     * @return
+     */
     public short getChecksum() {
       return checksum;
     }
@@ -286,11 +390,20 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
       return UCP_HEADER_SIZE;
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isValid() {
       throw new UnsupportedOperationException();
     }
 
+    /**
+     *
+     * @param srcAddr
+     * @param dstAddr
+     * @return
+     */
     public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
       if (
         PacketPropertiesLoader.getInstance()

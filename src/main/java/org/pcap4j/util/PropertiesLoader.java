@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -14,10 +14,14 @@ import java.util.Map;
 import java.util.Properties;
 import org.apache.log4j.Logger;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public class PropertiesLoader {
 
-  protected static final Logger logger
-    = Logger.getLogger(PropertiesLoader.class);
+  private static final Logger logger
+    = Logger.getLogger(PropertiesLoader.class.getPackage().getName());
 
   private final String resourceName;
   private final Properties prop = new Properties();
@@ -26,6 +30,10 @@ public class PropertiesLoader {
   private boolean usingCache = true;
   private Map<String, Object> cache = new HashMap<String, Object>();
 
+  /**
+   *
+   * @param resourceName
+   */
   public PropertiesLoader(String resourceName) {
     this.resourceName = resourceName;
 
@@ -45,16 +53,28 @@ public class PropertiesLoader {
     }
   }
 
+  /**
+   *
+   * @return
+   */
   public final String getResourceName() {
     return resourceName;
   }
 
+  /**
+   *
+   * @return
+   */
   public final Properties getProp() {
     Properties copy = new Properties();
     copy.putAll(prop);
     return copy;
   }
 
+  /**
+   *
+   * @param gettingPropertiesFromSystemBeforeFile
+   */
   public final void setGettingPropertiesFromSystemBeforeFile(
     boolean gettingPropertiesFromSystemBeforeFile
   ) {
@@ -62,10 +82,18 @@ public class PropertiesLoader {
       = gettingPropertiesFromSystemBeforeFile;
   }
 
+  /**
+   *
+   * @return
+   */
   public final boolean isGettingPropertiesFromSystemBeforeFile() {
     return gettingPropertiesFromSystemBeforeFile;
   }
 
+  /**
+   *
+   * @param usingCache
+   */
   public final void setUsingCache(boolean usingCache) {
     if (!usingCache) {
       clearCache();
@@ -73,10 +101,20 @@ public class PropertiesLoader {
     this.usingCache = usingCache;
   }
 
+  /**
+   *
+   * @return
+   */
   public final boolean isUsingCache() {
     return usingCache;
   }
 
+  /**
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
   public String getString(String key, String defaultValue) {
     StringBuilder sb = new StringBuilder();
 
@@ -129,6 +167,12 @@ public class PropertiesLoader {
     return value;
   }
 
+  /**
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
   public int getInteger(String key, Integer defaultValue) {
     StringBuilder sb = new StringBuilder();
 
@@ -191,6 +235,12 @@ public class PropertiesLoader {
     return value;
   }
 
+  /**
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
   public Boolean getBoolean(String key, Boolean defaultValue) {
     StringBuilder sb = new StringBuilder();
 
@@ -249,6 +299,12 @@ public class PropertiesLoader {
     return value;
   }
 
+  /**
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
   public <T> Class<? extends T> getClass(String key, Class<? extends T> defaultValue) {
     StringBuilder sb = new StringBuilder();
 
@@ -341,6 +397,9 @@ public class PropertiesLoader {
     return value;
   }
 
+  /**
+   *
+   */
   public final void clearCache() {
     cache.clear();
   }

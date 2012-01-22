@@ -1,18 +1,21 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011  Kaito Yamada Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.core;
 
-
 import java.net.InetAddress;
 
 import org.pcap4j.core.NativeMappings.pcap_addr;
 import org.pcap4j.core.NativeMappings.sockaddr;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 abstract class AbstractPcapAddress implements PcapAddress {
 
   private final InetAddress address;
@@ -20,7 +23,15 @@ abstract class AbstractPcapAddress implements PcapAddress {
   private final InetAddress broadcastAddr;
   private final InetAddress dstAddr; // for point- to-point interface
 
+  /**
+   *
+   * @param pcapAddr
+   */
   protected AbstractPcapAddress(pcap_addr pcapAddr) {
+    if (pcapAddr == null) {
+      throw new NullPointerException();
+    }
+
     this.address = ntoInetAddress(pcapAddr.addr);
 
     if (pcapAddr.netmask != null && pcapAddr.netmask.sa_family != Inet.AF_UNSPEC) {
@@ -54,21 +65,40 @@ abstract class AbstractPcapAddress implements PcapAddress {
     }
   }
 
+  /**
+   *
+   */
   public InetAddress getAddress() {
     return address;
   }
 
+  /**
+   *
+   */
   public InetAddress getNetmask() {
     return netmask;
   }
 
+  /**
+   *
+   */
   public InetAddress getBroadcastAddress() {
     return broadcastAddr;
   }
 
+  /**
+   *
+   */
   public InetAddress getDestinationAddress() {
     return dstAddr;
   }
+
+  /**
+  *
+  * @param sa
+  * @return
+  */
+ protected abstract InetAddress ntoInetAddress(sockaddr sa);
 
   @Override
   public String toString() {
@@ -101,7 +131,5 @@ abstract class AbstractPcapAddress implements PcapAddress {
   public int hashCode() {
     return toString().hashCode();
   }
-
-  protected abstract InetAddress ntoInetAddress(sockaddr sa);
 
 }

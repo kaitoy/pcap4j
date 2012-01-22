@@ -7,25 +7,45 @@
 
 package org.pcap4j.packet.namedvalue;
 
-
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public abstract class NamedNumber<T extends Number> {
 
   private final T value;
   private final String name;
 
+  /**
+   *
+   * @param value
+   * @param name
+   */
   protected NamedNumber(T value, String name) {
     this.value = value;
     this.name = name;
   }
 
+  /**
+   *
+   * @return
+   */
   public T value() {
     return value;
   }
 
+  /**
+   *
+   * @return
+   */
   public String name() {
     return name;
   }
 
+  /**
+   *
+   * @return
+   */
   public String valueAsString() {
     return value.toString();
   }

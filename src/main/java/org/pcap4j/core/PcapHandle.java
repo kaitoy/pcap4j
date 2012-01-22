@@ -22,6 +22,10 @@ import org.pcap4j.util.MacAddress;
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BIT;
 import static org.pcap4j.util.ByteArrays.IP_ADDRESS_SIZE_IN_BYTE;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public final class PcapHandle {
 
   private static final Logger logger = Logger.getLogger(PcapHandle.class);
@@ -32,6 +36,10 @@ public final class PcapHandle {
   private boolean opening;
   private String filteringExpression = "";
 
+  /**
+   *
+   * @param handle
+   */
   public PcapHandle(Pointer handle) {
     this.dlt = DataLinkType.getInstance(
                  PcapLibrary.INSTANCE.pcap_datalink(handle)
@@ -40,14 +48,27 @@ public final class PcapHandle {
     this.opening = true;
   }
 
+  /**
+   *
+   * @return
+   */
   public boolean isOpening() {
     return opening;
   }
 
+  /**
+   *
+   * @return
+   */
   public String getFilteringExpression() {
     return filteringExpression;
   }
 
+  /**
+   *
+   * @author Kaito Yamada
+   * @version pcap4j 0.9.1
+   */
   public enum BpfCompileMode {
     OPTIMIZE(1),
     NONOPTIMIZE(0);
@@ -58,16 +79,30 @@ public final class PcapHandle {
       this.value = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getValue() {
       return value;
     }
   }
 
+  /**
+   *
+   * @param InetAddr
+   * @return
+   */
   public static String toBpfString (InetAddress inetAddr){
     // TODO IPv6
     return inetAddr.toString().replaceFirst("\\A.*/", "");
   }
 
+  /**
+   *
+   * @param macAddr
+   * @return
+   */
   public static String toBpfString(MacAddress macAddr) {
     StringBuffer buf = new StringBuffer();
     byte[] address = macAddr.getAddress();
@@ -81,6 +116,13 @@ public final class PcapHandle {
     return buf.toString();
   }
 
+  /**
+   *
+   * @param bpfExpression
+   * @param mode
+   * @param netmask
+   * @throws PcapNativeException
+   */
   public void setFilter(
     String bpfExpression, BpfCompileMode mode, InetAddress netmask
   ) throws PcapNativeException {
@@ -121,6 +163,10 @@ public final class PcapHandle {
     PcapLibrary.INSTANCE.pcap_freecode(prog);
   }
 
+  /**
+   *
+   * @return
+   */
   public Packet getNextPacket() {
     if (!isOpening()) {
       throw new IllegalStateException("Not opening.");
@@ -139,6 +185,11 @@ public final class PcapHandle {
     }
   }
 
+  /**
+   *
+   * @return
+   * @throws PcapNativeException
+   */
   public Packet getNextPacketEx() throws PcapNativeException {
     if (!isOpening()) {
       throw new IllegalStateException("Not opening.");
@@ -180,6 +231,12 @@ public final class PcapHandle {
     }
   }
 
+  /**
+   *
+   * @param packetCount
+   * @param eventListener
+   * @throws PcapNativeException
+   */
   public void loop(
     int packetCount, GotPacketEventListener eventListener
   ) throws PcapNativeException {
@@ -220,6 +277,9 @@ public final class PcapHandle {
     }
   }
 
+  /**
+   *
+   */
   public void breakLoop() {
     if (!isOpening()) {
       throw new IllegalStateException("Not opening.");
@@ -228,16 +288,12 @@ public final class PcapHandle {
     PcapLibrary.INSTANCE.pcap_breakloop(handle);
   }
 
-
+  /**
+   *
+   * @param packet
+   * @throws PcapNativeException
+   */
   public void sendPacket(Packet packet) throws PcapNativeException {
-//    Memory memory = new Memory(packet.length());
-//    memory.write(0, packet.getRawData(), 0, packet.length());
-// TOD freeをMemoryのfinalizerに頼ってる
-//
-//    int rc = PcapLibrary.INSTANCE.pcap_sendpacket(
-//               handle, memory, packet.length()
-//             );
-
     int rc = PcapLibrary.INSTANCE.pcap_sendpacket(
                handle, packet.getRawData(), packet.length()
              );
@@ -248,6 +304,9 @@ public final class PcapHandle {
     }
   }
 
+  /**
+   *
+   */
   public void close() {
     if (!isOpening()) {
       logger.warn("Already closed.");
@@ -259,6 +318,10 @@ public final class PcapHandle {
     logger.info("Closed.");
   }
 
+  /**
+   *
+   * @return
+   */
   public String getError() {
     return PcapLibrary.INSTANCE.pcap_geterr(handle).getString(0);
   }
@@ -280,10 +343,4 @@ public final class PcapHandle {
 //  @Override
 //  public int hashCode() {}
 
-  @Override
-  protected void finalize() {
-    if (isOpening()) {
-      close();
-    }
-  }
 }

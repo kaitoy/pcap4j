@@ -13,6 +13,10 @@ import org.pcap4j.util.MacAddress;
 import static org.pcap4j.util.ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public final class EthernetPacket extends AbstractPacket implements L2Packet {
 
   private static final int MIN_ETHERNET_PACKET_LENGTH = 60;
@@ -24,6 +28,10 @@ public final class EthernetPacket extends AbstractPacket implements L2Packet {
   // Although this class handles trailer, it's actually responsibility of NIF.
   private final byte[] trailer;
 
+  /**
+   *
+   * @param rawData
+   */
   public EthernetPacket(byte[] rawData) {
     this.header = new EthernetHeader(rawData);
 
@@ -116,6 +124,10 @@ public final class EthernetPacket extends AbstractPacket implements L2Packet {
     return rawData;
   }
 
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.1
+   */
   public static final class Builder {
 
     private MacAddress dstAddr;
@@ -125,8 +137,15 @@ public final class EthernetPacket extends AbstractPacket implements L2Packet {
     private byte[] trailer = new byte[0];
     private boolean validateAtBuild = true;
 
+    /**
+     *
+     */
     public Builder() {}
 
+    /**
+     *
+     * @param packet
+     */
     public Builder(EthernetPacket packet) {
       this.dstAddr = packet.header.dstAddr;
       this.srcAddr = packet.header.srcAddr;
@@ -140,26 +159,51 @@ public final class EthernetPacket extends AbstractPacket implements L2Packet {
       }
     }
 
+    /**
+     *
+     * @param dstAddr
+     * @return
+     */
     public Builder dstAddr(MacAddress dstAddr) {
       this.dstAddr = dstAddr;
       return this;
     }
 
+    /**
+     *
+     * @param srcAddr
+     * @return
+     */
     public Builder srcAddr(MacAddress srcAddr) {
       this.srcAddr = srcAddr;
       return this;
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     public Builder type(EtherType type) {
       this.type = type;
       return this;
     }
 
+    /**
+     *
+     * @param payload
+     * @return
+     */
     public Builder payload(Packet payload) {
       this.payload = payload;
       return this;
     }
 
+    /**
+     *
+     * @param trailer
+     * @return
+     */
     public Builder trailer(byte[] trailer) {
       if (trailer != null) {
         this.trailer = new byte[trailer.length];
@@ -171,17 +215,30 @@ public final class EthernetPacket extends AbstractPacket implements L2Packet {
       return this;
     }
 
+    /**
+     *
+     * @param validateAtBuild
+     * @return
+     */
     public Builder validateAtBuild(boolean validateAtBuild) {
       this.validateAtBuild = validateAtBuild;
       return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public EthernetPacket build() {
       return new EthernetPacket(this);
     }
 
   }
 
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.1
+   */
   public final class EthernetHeader extends AbstractHeader {
 
     private static final int DST_ADDR_OFFSET = 0;
@@ -216,14 +273,26 @@ public final class EthernetPacket extends AbstractPacket implements L2Packet {
       this.type = builder.type;
     }
 
+    /**
+     *
+     * @return
+     */
     public MacAddress getDstAddr() {
       return dstAddr;
     }
 
+    /**
+     *
+     * @return
+     */
     public MacAddress getSrcAddr() {
       return srcAddr;
     }
 
+    /**
+     *
+     * @return
+     */
     public EtherType getType() {
       return type;
     }

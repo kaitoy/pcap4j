@@ -8,8 +8,6 @@
 package org.pcap4j.test;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
@@ -17,7 +15,6 @@ import java.util.concurrent.Executors;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.pcap4j.core.Pcap;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.GotPacketEventListener;
 import org.pcap4j.core.PcapHandle.BpfCompileMode;
@@ -32,6 +29,7 @@ import org.pcap4j.packet.namedvalue.ArpOperation;
 import org.pcap4j.packet.namedvalue.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
+import org.pcap4j.util.NifSelector;
 
 public class SendPacketTest {
 
@@ -66,10 +64,7 @@ public class SendPacketTest {
 
     PcapNetworkInterface nif;
     try {
-      nif = Pcap.selectNetworkInterface(
-              new InputStreamReader(System.in),
-              new OutputStreamWriter(System.out)
-            );
+      nif = new NifSelector().selectNetworkInterface();
     } catch (IOException e) {
       e.printStackTrace();
       return;

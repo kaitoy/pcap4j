@@ -12,11 +12,19 @@ import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
 import org.pcap4j.packet.namedvalue.IcmpV4TypeCode;
 import org.pcap4j.util.ByteArrays;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
 
   private final IcmpV4Header header;
   private final Packet payload;
 
+  /**
+   *
+   * @param rawData
+   */
   public IcmpV4Packet(byte[] rawData) {
     this.header = new IcmpV4Header(rawData);
     this.payload
@@ -52,6 +60,10 @@ public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
     return payload;
   }
 
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.1
+   */
   public static final class Builder {
 
     private IcmpV4TypeCode typeCode;
@@ -61,8 +73,15 @@ public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
     private Packet payload;
     private boolean validateAtBuild = true;
 
+    /**
+     *
+     */
     public Builder() {}
 
+    /**
+     *
+     * @param packet
+     */
     public Builder(IcmpV4Packet packet) {
       this.typeCode = packet.header.typeCode;
       this.checksum = packet.header.checksum;
@@ -71,42 +90,80 @@ public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
       this.payload = packet.payload;
     }
 
+    /**
+     *
+     * @param typeCode
+     * @return
+     */
     public Builder typeCode(IcmpV4TypeCode typeCode) {
       this.typeCode = typeCode;
       return this;
     }
 
+    /**
+     *
+     * @param checksum
+     * @return
+     */
     public Builder checksum(short checksum) {
       this.checksum = checksum;
       return this;
     }
 
+    /**
+     *
+     * @param identifier
+     * @return
+     */
     public Builder identifier(short identifier) {
       this.identifier = identifier;
       return this;
     }
 
+    /**
+     *
+     * @param sequenceNumber
+     * @return
+     */
     public Builder sequenceNumber(short sequenceNumber) {
       this.sequenceNumber = sequenceNumber;
       return this;
     }
 
+    /**
+     *
+     * @param payload
+     * @return
+     */
     public Builder payload(Packet payload) {
       this.payload = payload;
       return this;
     }
 
+    /**
+     *
+     * @param validateAtBuild
+     * @return
+     */
     public Builder validateAtBuild(boolean validateAtBuild) {
       this.validateAtBuild = validateAtBuild;
       return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public IcmpV4Packet build() {
       return new IcmpV4Packet(this);
     }
 
   }
 
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.1
+   */
   public final class IcmpV4Header extends AbstractHeader {
 
     private static final int TYPE_OFFSET
@@ -131,14 +188,6 @@ public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
       = SHORT_SIZE_IN_BYTE;
     private static final int ICMP_HEADER_SIZE
       = SEQUENCE_NUMBER_OFFSET + SEQUENCE_NUMBER_SIZE;
-
-    public static final byte TYPE_ECHO_REPLY = (byte)0;
-    public static final byte TYPE_DST_UNREACHABLE = (byte)3;
-    public static final byte TYPE_ECHO_REQUEST = (byte)8;
-    public static final byte TYPE_TIME_EXCEEDED = (byte)11;
-    public static final byte CODE_ECHO_REPLY = (byte)0;
-    public static final byte CODE_NETWROK_UNREACHABLE = (byte)0;
-    public static final byte CODE_HOST_UNREACHABLE = (byte)1;
 
     private final IcmpV4TypeCode typeCode;
     private final short checksum;
@@ -209,26 +258,50 @@ public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
       return ByteArrays.calcChecksum(data);
     }
 
+    /**
+     *
+     * @return
+     */
     public IcmpV4TypeCode getTypeCode() {
       return typeCode;
     }
 
+    /**
+     *
+     * @return
+     */
     public short getChecksum() {
       return checksum;
     }
 
+    /**
+     *
+     * @return
+     */
     public short getIdentifier() {
       return identifier;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getIdentifierAsInt() {
       return (int)(0xFFFF & identifier);
     }
 
+    /**
+     *
+     * @return
+     */
     public short getSequenceNumber() {
       return sequenceNumber;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSequenceNumberAsInt() {
       return (int)(0xFFFF & sequenceNumber);
     }

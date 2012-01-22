@@ -9,10 +9,18 @@ package org.pcap4j.packet;
 
 import org.pcap4j.util.ByteArrays;
 
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.1
+ */
 public final class AnonymousPacket extends AbstractPacket {
 
   private final byte[] rawData;
 
+  /**
+   *
+   * @param rawData
+   */
   public AnonymousPacket(byte[] rawData) {
     if (rawData == null) {
       throw new NullPointerException();
