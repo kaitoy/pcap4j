@@ -105,47 +105,42 @@ public class SendPacketTest {
       pool.execute(t);
 
       ArpPacket.Builder arpBuilder = new ArpPacket.Builder();
-      ArpPacket arpPacket = null;
       try {
-      arpPacket
-        = arpBuilder.hardwareType(ArpHardwareType.ETHERNET)
-                    .protocolType(EtherType.IPV4)
-                    .hardwareLength((byte)ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE)
-                    .protocolLength((byte)ByteArrays.IP_ADDRESS_SIZE_IN_BYTE)
-                    .operation(ArpOperation.REQUEST)
-                    .srcHardwareAddr(SRC_MAC_ADDR)
-                    .srcProtocolAddr(InetAddress.getByName(args[0]))
-                    .dstHardwareAddr(
-                      MacAddress.newInstance(
-                        new byte[] {
-                          (byte)255, (byte)255, (byte)255,
-                          (byte)255, (byte)255, (byte)255
-                        }
-                      )
-                    )
-                    .dstProtocolAddr(InetAddress.getByName(args[1]))
-                    .build();
+        arpBuilder.hardwareType(ArpHardwareType.ETHERNET)
+          .protocolType(EtherType.IPV4)
+          .hardwareLength((byte)ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE)
+          .protocolLength((byte)ByteArrays.IP_ADDRESS_SIZE_IN_BYTE)
+          .operation(ArpOperation.REQUEST)
+          .srcHardwareAddr(SRC_MAC_ADDR)
+          .srcProtocolAddr(InetAddress.getByName(args[0]))
+          .dstHardwareAddr(
+             MacAddress.newInstance(
+               new byte[] {
+                 (byte)255, (byte)255, (byte)255,
+                 (byte)255, (byte)255, (byte)255
+               }
+             )
+           )
+          .dstProtocolAddr(InetAddress.getByName(args[1]));
       } catch (UnknownHostException e) {
         throw new IllegalArgumentException(e);
       }
 
       EthernetPacket.Builder etherBuilder = new EthernetPacket.Builder();
-      EthernetPacket etherPacket
-        = etherBuilder.dstAddr(
-                        MacAddress.newInstance(
-                          new byte[] {
-                            (byte)255, (byte)255, (byte)255,
-                            (byte)255, (byte)255, (byte)255
-                          }
-                        )
-                      )
-                      .srcAddr(SRC_MAC_ADDR)
-                      .type(EtherType.ARP)
-                      .payload(arpPacket)
-                      .build();
+      etherBuilder.dstAddr(
+                     MacAddress.newInstance(
+                       new byte[] {
+                         (byte)255, (byte)255, (byte)255,
+                         (byte)255, (byte)255, (byte)255
+                       }
+                     )
+                   )
+                  .srcAddr(SRC_MAC_ADDR)
+                  .type(EtherType.ARP)
+                  .payloadBuilder(arpBuilder);
 
       for (int i = 0; i < COUNT; i++) {
-        handle.sendPacket(etherPacket);
+        handle.sendPacket(etherBuilder.build());
         try {
           Thread.sleep(1000);
         } catch (InterruptedException e) {

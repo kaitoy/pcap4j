@@ -22,7 +22,7 @@ import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class ArpPacket extends AbstractPacket implements L3Packet {
+public final class ArpPacket extends AbstractPacket {
 
   private final ArpHeader header;
 
@@ -65,12 +65,16 @@ public final class ArpPacket extends AbstractPacket implements L3Packet {
     return null;
   }
 
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
+
   /**
    *
    * @author Kaito Yamada
    *
    */
-  public static final class Builder {
+  public static final class Builder implements Packet.Builder {
 
     private ArpHardwareType hardwareType = ArpHardwareType.ETHERNET;
     private EtherType protocolType = EtherType.IPV4;
@@ -87,11 +91,7 @@ public final class ArpPacket extends AbstractPacket implements L3Packet {
      */
     public Builder() {}
 
-    /**
-     *
-     * @param packet
-     */
-    public Builder(ArpPacket packet) {
+    private Builder(ArpPacket packet) {
       this.hardwareType = packet.header.hardwareType;
       this.protocolType = packet.header.protocolType;
       this.hardwareLength = packet.header.hardwareLength;

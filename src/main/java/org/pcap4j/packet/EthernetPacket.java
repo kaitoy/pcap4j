@@ -17,7 +17,7 @@ import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class EthernetPacket extends AbstractPacket implements L2Packet {
+public final class EthernetPacket extends AbstractPacket {
 
   private static final int MIN_ETHERNET_PACKET_LENGTH = 60;
 
@@ -63,13 +63,13 @@ public final class EthernetPacket extends AbstractPacket implements L2Packet {
       || builder.dstAddr == null
       || builder.srcAddr == null
       || builder.type == null
-      || builder.payload == null
+      || builder.payloadBuilder == null
       || builder.trailer == null
     ) {
       throw new NullPointerException();
     }
 
-    this.payload = builder.payload;
+    this.payload = builder.payloadBuilder.build();
     this.header = new EthernetHeader(builder);
 
     if (
@@ -124,16 +124,20 @@ public final class EthernetPacket extends AbstractPacket implements L2Packet {
     return rawData;
   }
 
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
+
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class Builder {
+  public static final class Builder implements Packet.Builder {
 
     private MacAddress dstAddr;
     private MacAddress srcAddr;
     private EtherType type;
-    private Packet payload;
+    private Packet.Builder payloadBuilder;
     private byte[] trailer = new byte[0];
     private boolean validateAtBuild = true;
 
@@ -142,15 +146,11 @@ public final class EthernetPacket extends AbstractPacket implements L2Packet {
      */
     public Builder() {}
 
-    /**
-     *
-     * @param packet
-     */
-    public Builder(EthernetPacket packet) {
+    private Builder(EthernetPacket packet) {
       this.dstAddr = packet.header.dstAddr;
       this.srcAddr = packet.header.srcAddr;
       this.type = packet.header.type;
-      this.payload = packet.payload;
+      this.payloadBuilder = packet.payload.getBuilder();
       if (packet.trailer != null) {
         this.trailer = new byte[packet.trailer.length];
         System.arraycopy(
@@ -194,8 +194,8 @@ public final class EthernetPacket extends AbstractPacket implements L2Packet {
      * @param payload
      * @return
      */
-    public Builder payload(Packet payload) {
-      this.payload = payload;
+    public Builder payloadBuilder(Packet.Builder payloadBuilder) {
+      this.payloadBuilder = payloadBuilder;
       return this;
     }
 

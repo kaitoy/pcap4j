@@ -19,7 +19,7 @@ import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class IpV4Packet extends AbstractPacket implements L3Packet {
+public final class IpV4Packet extends AbstractPacket {
 
   private final IpV4Header header;
   private final Packet payload;
@@ -50,12 +50,17 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
       || builder.protocol == null
       || builder.srcAddr == null
       || builder.dstAddr == null
-      || builder.payload == null
+      || builder.payloadBuilder == null
     ) {
       throw new NullPointerException();
     }
 
-    this.payload = builder.payload;
+    if (builder.payloadBuilder instanceof UdpPacket.Builder) {
+      ((UdpPacket.Builder)builder.payloadBuilder)
+        .dstAddr(builder.dstAddr)
+        .srcAddr(builder.srcAddr);
+    }
+    this.payload = builder.payloadBuilder.build();
     this.header = new IpV4Header(builder);
   }
 
@@ -85,11 +90,15 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
     return header.isValid();
   }
 
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
+
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class Builder {
+  public static final class Builder implements Packet.Builder {
 
     private IpVersion version = IpVersion.IPv4;
     private byte ihl = (byte)5;
@@ -103,7 +112,7 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
     private short headerChecksum;
     private InetAddress srcAddr;
     private InetAddress dstAddr;
-    private Packet payload;
+    private Packet.Builder payloadBuilder;
     private boolean validateAtBuild = true;
 
     /**
@@ -128,7 +137,7 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
       this.headerChecksum = packet.header.headerChecksum;
       this.srcAddr = packet.header.srcAddr;
       this.dstAddr = packet.header.dstAddr;
-      this.payload = packet.payload;
+      this.payloadBuilder = packet.payload.getBuilder();
     }
 
     /**
@@ -316,8 +325,8 @@ public final class IpV4Packet extends AbstractPacket implements L3Packet {
      * @param payload
      * @return
      */
-    public Builder payload(Packet payload) {
-      this.payload = payload;
+    public Builder payloadBuilder(Packet.Builder payloadBuilder) {
+      this.payloadBuilder = payloadBuilder;
       return this;
     }
 

@@ -16,7 +16,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
+public final class IcmpV4Packet extends AbstractPacket {
 
   private final IcmpV4Header header;
   private final Packet payload;
@@ -41,12 +41,12 @@ public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
     if (
          builder == null
       || builder.typeCode == null
-      || builder.payload == null
+      || builder.payloadBuilder == null
     ) {
       throw new NullPointerException();
     }
 
-    this.payload = builder.payload;
+    this.payload = builder.payloadBuilder.build();
     this.header = new IcmpV4Header(builder);
   }
 
@@ -60,17 +60,21 @@ public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
     return payload;
   }
 
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
+
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class Builder {
+  public static final class Builder implements Packet.Builder {
 
     private IcmpV4TypeCode typeCode;
     private short checksum;
     private short identifier;
     private short sequenceNumber;
-    private Packet payload;
+    private Packet.Builder payloadBuilder;
     private boolean validateAtBuild = true;
 
     /**
@@ -78,16 +82,12 @@ public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
      */
     public Builder() {}
 
-    /**
-     *
-     * @param packet
-     */
-    public Builder(IcmpV4Packet packet) {
+    private Builder(IcmpV4Packet packet) {
       this.typeCode = packet.header.typeCode;
       this.checksum = packet.header.checksum;
       this.identifier = packet.header.identifier;
       this.sequenceNumber = packet.header.sequenceNumber;
-      this.payload = packet.payload;
+      this.payloadBuilder = packet.payload.getBuilder();
     }
 
     /**
@@ -135,8 +135,8 @@ public final class IcmpV4Packet extends AbstractPacket implements L4Packet {
      * @param payload
      * @return
      */
-    public Builder payload(Packet payload) {
-      this.payload = payload;
+    public Builder payloadBuilder(Packet.Builder payloadBuilder) {
+      this.payloadBuilder = payloadBuilder;
       return this;
     }
 

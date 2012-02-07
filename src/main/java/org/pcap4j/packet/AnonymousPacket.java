@@ -25,9 +25,22 @@ public final class AnonymousPacket extends AbstractPacket {
     if (rawData == null) {
       throw new NullPointerException();
     }
-    byte[] copy = new byte[rawData.length];
-    System.arraycopy(rawData, 0, copy, 0, copy.length);
-    this.rawData = rawData;
+    this.rawData = new byte[rawData.length];
+    System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);
+  }
+
+  public AnonymousPacket(Builder builder) {
+    if (
+         builder == null
+      || builder.rawData == null
+    ) {
+      throw new NullPointerException();
+    }
+
+    this.rawData = new byte[builder.rawData.length];
+    System.arraycopy(
+      builder.rawData, 0, this.rawData, 0, builder.rawData.length
+    );
   }
 
   @Override
@@ -49,6 +62,49 @@ public final class AnonymousPacket extends AbstractPacket {
     return copy;
   }
 
+  /**
+   *
+   */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.1
+   */
+  public static final class Builder implements Packet.Builder {
+
+    private byte[] rawData = new byte[0];
+
+    /**
+     *
+     */
+    public Builder() {}
+
+    private Builder(AnonymousPacket packet) {
+      rawData = packet.rawData;
+    }
+
+    /**
+     *
+     * @param rawData
+     * @return
+     */
+    public Builder rawData(byte[] rawData) {
+      this.rawData = rawData;
+      return this;
+    }
+
+    /**
+     *
+     */
+    public AnonymousPacket build() {
+      return new AnonymousPacket(this);
+    }
+
+  }
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
@@ -63,4 +119,5 @@ public final class AnonymousPacket extends AbstractPacket {
 
     return sb.toString();
   }
+
 }

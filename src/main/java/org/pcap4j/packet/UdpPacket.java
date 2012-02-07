@@ -16,7 +16,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class UdpPacket extends AbstractPacket implements L4Packet {
+public final class UdpPacket extends AbstractPacket {
 
   private static final int PSEUDO_HEADER_SIZE = 12;
 
@@ -42,7 +42,7 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
   private UdpPacket(Builder builder) {
     if (
          builder == null
-      || builder.payload == null
+      || builder.payloadBuilder == null
     ) {
       throw new NullPointerException();
     }
@@ -54,7 +54,7 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
       throw new NullPointerException();
     }
 
-    this.payload = builder.payload;
+    this.payload = builder.payloadBuilder.build();
     this.header = new UdpHeader(builder);
   }
 
@@ -89,17 +89,21 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
     return payload;
   }
 
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
+
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class Builder {
+  public static final class Builder implements Packet.Builder {
 
     private short srcPort;
     private short dstPort;
     private short length;
     private short checksum;
-    private Packet payload;
+    private Packet.Builder payloadBuilder;
     private InetAddress srcAddr;
     private InetAddress dstAddr;
     private boolean validateAtBuild = true;
@@ -118,7 +122,7 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
       this.dstPort = packet.header.dstPort;
       this.length = packet.header.length;
       this.checksum = packet.header.checksum;
-      this.payload = packet.payload;
+      this.payloadBuilder = packet.payload.getBuilder();
     }
 
     /**
@@ -166,8 +170,8 @@ public final class UdpPacket extends AbstractPacket implements L4Packet {
      * @param payload
      * @return
      */
-    public Builder payload(Packet payload) {
-      this.payload = payload;
+    public Builder payloadBuilder(Packet.Builder payloadBuilder) {
+      this.payloadBuilder = payloadBuilder;
       return this;
     }
 
