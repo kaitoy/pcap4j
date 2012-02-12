@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -8,6 +8,9 @@
 package org.pcap4j.packet;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pcap4j.packet.namedvalue.IpNumber;
 import org.pcap4j.packet.namedvalue.IpVersion;
 import org.pcap4j.util.ByteArrays;
@@ -75,7 +78,7 @@ public final class IpV4Packet extends AbstractPacket {
   }
 
   @Override
-  public boolean isValid() {
+  protected boolean verify() {
     if (payload instanceof UdpPacket) {
       if (!((UdpPacket)payload).isValid(header.srcAddr, header.dstAddr)) {
         return false;
@@ -90,6 +93,7 @@ public final class IpV4Packet extends AbstractPacket {
     return header.isValid();
   }
 
+  @Override
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -322,7 +326,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @param payload
+     * @param payloadBuilder
      * @return
      */
     public Builder payloadBuilder(Packet.Builder payloadBuilder) {
@@ -340,10 +344,6 @@ public final class IpV4Packet extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @return
-     */
     public IpV4Packet build() {
       return new IpV4Packet(this);
     }
@@ -412,9 +412,6 @@ public final class IpV4Packet extends AbstractPacket {
     private final short headerChecksum;
     private final InetAddress srcAddr;
     private final InetAddress dstAddr;
-
-//    private byte[] rawData = null;
-//    private String stringData = null;
 
     private IpV4Header(byte[] rawHeader) {
       if (rawHeader.length < IPV4_HEADER_SIZE) {
@@ -492,7 +489,7 @@ public final class IpV4Packet extends AbstractPacket {
     }
 
     private short calcHeaderChecksum() {
-      byte[] data = getRawData();
+      byte[] data = buildRawData();
 
       for (int i = 0; i < HEADER_CHECKSUM_SIZE; i++) {
         data[HEADER_CHECKSUM_OFFSET + i] = (byte)0;
@@ -678,7 +675,7 @@ public final class IpV4Packet extends AbstractPacket {
     }
 
     @Override
-    public boolean isValid() {
+    protected boolean verify() {
       if (
           PacketPropertiesLoader.getInstance()
             .isEnabledIpv4ChecksumVerification()
@@ -694,85 +691,48 @@ public final class IpV4Packet extends AbstractPacket {
     }
 
     @Override
+    protected List<byte[]> getRawFields() {
+      List<byte[]> rawFields = new ArrayList<byte[]>();
+      rawFields.add(ByteArrays.toByteArray((byte)((version.value() << 4) | ihl)));
+      rawFields.add(ByteArrays.toByteArray(tos));
+      rawFields.add(ByteArrays.toByteArray(totalLength));
+      rawFields.add(ByteArrays.toByteArray(identification));
+      rawFields.add(ByteArrays.toByteArray((short)((flags << 13) | flagmentOffset)));
+      rawFields.add(ByteArrays.toByteArray(ttl));
+      rawFields.add(ByteArrays.toByteArray(protocol.value()));
+      rawFields.add(ByteArrays.toByteArray(headerChecksum));
+      rawFields.add(ByteArrays.toByteArray(srcAddr));
+      rawFields.add(ByteArrays.toByteArray(dstAddr));
+      return rawFields;
+    }
+
+    @Override
     public int length() {
       return IPV4_HEADER_SIZE;
     }
 
     @Override
-    public byte[] getRawData() {
-      byte[] rawData = new byte[length()];
-      System.arraycopy(
-        ByteArrays.toByteArray((byte)((version.value() << 4) | ihl)), 0,
-        rawData, VERSION_AND_IHL_OFFSET, VERSION_AND_IHL_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(tos), 0,
-        rawData, TOS_OFFSET, TOS_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(totalLength), 0,
-        rawData, TOTAL_LENGTH_OFFSET, TOTAL_LENGTH_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(identification), 0,
-        rawData, IDENTIFICATION_OFFSET, IDENTIFICATION_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray((short)((flags << 13) | flagmentOffset)), 0,
-        rawData, FLAGS_AND_FLAGMENT_OFFSET_OFFSET, FLAGS_AND_FLAGMENT_OFFSET_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(ttl), 0,
-        rawData, TTL_OFFSET, TTL_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(protocol.value()), 0,
-        rawData, PROTOCOL_OFFSET, PROTOCOL_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(headerChecksum), 0,
-        rawData, HEADER_CHECKSUM_OFFSET, HEADER_CHECKSUM_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(srcAddr), 0,
-        rawData, SRC_ADDR_OFFSET, SRC_ADDR_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(dstAddr), 0,
-        rawData, DST_ADDR_OFFSET, DST_ADDR_SIZE
-      );
-
-      return rawData;
-    }
-
-    @Override
-    public String toString() {
+    protected String buildString() {
       StringBuilder sb = new StringBuilder();
 
       sb.append("[IPv4 Header (")
         .append(length())
         .append(" bytes)]\n");
-
       sb.append("  Version: ")
         .append(getVersionAsInt())
         .append("\n");
-
       sb.append("  IHL: ")
         .append(getIhlAsInt() * 4)
         .append(" [bytes]\n");
-
       sb.append("  TOS: ")
         .append(getTosAsInt())
         .append("\n");
-
       sb.append("  Total length: ")
         .append(getTotalLengthAsInt())
         .append(" [bytes]\n");
-
       sb.append("  Identification: ")
         .append(getIdentificationAsInt())
         .append("\n");
-
       sb.append("  Flags: (Reserved, Don't Fragment, More Fragment) = (")
         .append(getReservedFlag())
         .append(", ")
@@ -780,27 +740,21 @@ public final class IpV4Packet extends AbstractPacket {
         .append(", ")
         .append(getMoreFragmentFlag())
         .append(")\n");
-
       sb.append("  Flagment offset: ")
         .append(getFlagmentOffsetAsInt())
         .append("\n");
-
       sb.append("  TTL: ")
         .append(getTtlAsInt())
         .append("\n");
-
       sb.append("  Protocol: ")
         .append(protocol)
         .append("\n");
-
       sb.append("  Header checksum: 0x")
         .append(ByteArrays.toHexString(headerChecksum, ""))
         .append("\n");
-
       sb.append("  Source address: ")
         .append(srcAddr)
         .append("\n");
-
       sb.append("  Destination address: ")
         .append(dstAddr)
         .append("\n");

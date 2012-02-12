@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -8,6 +8,9 @@
 package org.pcap4j.packet;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pcap4j.packet.namedvalue.ArpHardwareType;
 import org.pcap4j.packet.namedvalue.ArpOperation;
 import org.pcap4j.packet.namedvalue.EtherType;
@@ -61,10 +64,6 @@ public final class ArpPacket extends AbstractPacket {
   }
 
   @Override
-  public Packet getPayload() {
-    return null;
-  }
-
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -193,10 +192,6 @@ public final class ArpPacket extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @return
-     */
     public ArpPacket build() {
       return new ArpPacket(this);
     }
@@ -258,9 +253,6 @@ public final class ArpPacket extends AbstractPacket {
     private final InetAddress srcProtocolAddr;
     private final MacAddress dstHardwareAddr;
     private final InetAddress dstProtocolAddr;
-
-//    private final byte[] rawData;    // TODO cache
-//    private final String stringData;
 
     private ArpHeader(byte[] rawData) {
       if (rawData.length < ARP_HEADER_SIZE) {
@@ -391,91 +383,57 @@ public final class ArpPacket extends AbstractPacket {
     }
 
     @Override
-    public int length() { return ARP_HEADER_SIZE; }
+    public boolean isValid() { return true; }
 
     @Override
-    public byte[] getRawData() {
-      byte[] rawData = new byte[length()];
-      System.arraycopy(
-        ByteArrays.toByteArray(hardwareType.value()), 0,
-        rawData, HARDWARE_TYPE_OFFSET, HARDWARE_TYPE_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(protocolType.value()), 0,
-        rawData, PROTOCOL_TYPE_OFFSET, PROTOCOL_TYPE_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(hardwareLength), 0,
-        rawData, HARDWARE_LENGTH_OFFSET, HARDWARE_LENGTH_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(protocolLength), 0,
-        rawData, PROTOCOL_LENGTH_OFFSET, PROTOCOL_LENGTH_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(operation.value()), 0,
-        rawData, OPERATION_OFFSET, OPERATION_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(srcHardwareAddr), 0,
-        rawData, SRC_HARDWARE_ADDR_OFFSET, SRC_HARDWARE_ADDR_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(srcProtocolAddr), 0,
-        rawData, SRC_PROTOCOL_ADDR_OFFSET, SRC_PROTOCOL_ADDR_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(dstHardwareAddr), 0,
-        rawData, DST_HARDWARE_ADDR_OFFSET, DST_HARDWARE_ADDR_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(dstProtocolAddr), 0,
-        rawData, DST_PROTOCOL_ADDR_OFFSET, DST_PROTOCOL_ADDR_SIZE
-      );
-
-      return rawData;
+    protected List<byte[]> getRawFields() {
+      List<byte[]> rawFields = new ArrayList<byte[]>();
+      rawFields.add(ByteArrays.toByteArray(hardwareType.value()));
+      rawFields.add(ByteArrays.toByteArray(protocolType.value()));
+      rawFields.add(ByteArrays.toByteArray(hardwareLength));
+      rawFields.add(ByteArrays.toByteArray(protocolLength));
+      rawFields.add(ByteArrays.toByteArray(operation.value()));
+      rawFields.add(ByteArrays.toByteArray(srcHardwareAddr));
+      rawFields.add(ByteArrays.toByteArray(srcProtocolAddr));
+      rawFields.add(ByteArrays.toByteArray(dstHardwareAddr));
+      rawFields.add(ByteArrays.toByteArray(dstProtocolAddr));
+      return rawFields;
     }
 
     @Override
-    public String toString() {
+    public int length() { return ARP_HEADER_SIZE; }
+
+    @Override
+    protected String buildString() {
       StringBuilder sb = new StringBuilder();
 
       sb.append("[ARP Header (")
         .append(length())
         .append(" bytes)]\n");
-
       sb.append("  Hardware type: ")
         .append(hardwareType)
         .append("\n");
-
       sb.append("  Protocol type: ")
         .append(protocolType)
         .append("\n");
-
       sb.append("  Hardware length: ")
         .append(getHardwareLengthAsInt())
         .append(" [bytes]\n");
-
       sb.append("  Protocol length: ")
         .append(getProtocolLengthAsInt())
         .append(" [bytes]\n");
-
       sb.append("  Operation: ")
         .append(operation)
         .append("\n");
-
       sb.append("  Source hardware address: ")
         .append(srcHardwareAddr)
         .append("\n");
-
       sb.append("  Source protocol address: ")
         .append(srcProtocolAddr)
         .append("\n");
-
       sb.append("  Destination hardware address: ")
         .append(dstHardwareAddr)
         .append("\n");
-
       sb.append("  Destination protocol address: ")
         .append(dstProtocolAddr)
         .append("\n");

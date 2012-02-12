@@ -1,11 +1,14 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.pcap4j.packet.namedvalue.EtherType;
 import org.pcap4j.util.ByteArrays;
@@ -24,7 +27,7 @@ public final class EthernetPacket extends AbstractPacket {
   private final EthernetHeader header;
   private final Packet payload;
 
-  // e.g. Ethernet frame must be at least 60 bytes except FCS. If it's less than 60 bytes, pad with this field.
+  // Ethernet frame must be at least 60 bytes except FCS. If it's less than 60 bytes, pad with this field.
   // Although this class handles trailer, it's actually responsibility of NIF.
   private final byte[] trailer;
 
@@ -46,10 +49,11 @@ public final class EthernetPacket extends AbstractPacket {
       = PacketFactory.getInstance()
           .newPacketByEtherType(rawPayload, header.getType().value());
 
-    if (rawData.length > super.length()) {
+    int payloadLength = this.payload.length();
+    if (rawData.length > payloadLength) {
       this.trailer
         = ByteArrays.getSubArray(
-            rawData, super.length(), rawData.length - super.length()
+            rawData, payloadLength, rawData.length - payloadLength
           );
     }
     else {
@@ -74,14 +78,17 @@ public final class EthernetPacket extends AbstractPacket {
 
     if (
          builder.validateAtBuild
-      && super.length() + builder.trailer.length < MIN_ETHERNET_PACKET_LENGTH
+      && this.payload.length() + builder.trailer.length
+           < MIN_ETHERNET_PACKET_LENGTH
     ) {
       this.trailer = new byte[MIN_ETHERNET_PACKET_LENGTH];
-      System.arraycopy(builder.trailer, 0, this.trailer, 0, builder.trailer.length);
     }
     else {
-      this.trailer = builder.trailer;
+      this.trailer = new byte[builder.trailer.length];
     }
+    System.arraycopy(
+      builder.trailer, 0, this.trailer, 0, builder.trailer.length
+    );
   }
 
   @Override
@@ -94,28 +101,27 @@ public final class EthernetPacket extends AbstractPacket {
     return payload;
   }
 
-  @Override
-  public boolean isValid() {
-    if (super.isValid()) {
-      // A packet before padding may be captured. How do I verify?
-      // return length() >= MIN_ETHERNET_PACKET_LENGTH;
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
+//  @Override
+//  public boolean isValid() {
+//    if (super.buildValid()) {
+//      // A packet before padding may be captured. How do I verify?
+//      return length() >= MIN_ETHERNET_PACKET_LENGTH;
+//    }
+//    else {
+//      return false;
+//    }
+//  }
 
   @Override
-  public int length() {
-    int length = super.length();
+  protected int measureLength() {
+    int length = super.measureLength();
     length += trailer.length;
     return length;
   }
 
   @Override
-  public byte[] getRawData() {
-    byte[] rawData = super.getRawData();
+  protected byte[] buildRawData() {
+    byte[] rawData = super.buildRawData();
     if (trailer.length != 0) {
       System.arraycopy(
         trailer, 0, rawData, rawData.length - trailer.length, trailer.length
@@ -124,6 +130,7 @@ public final class EthernetPacket extends AbstractPacket {
     return rawData;
   }
 
+  @Override
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -191,7 +198,7 @@ public final class EthernetPacket extends AbstractPacket {
 
     /**
      *
-     * @param payload
+     * @param payloadBuilder
      * @return
      */
     public Builder payloadBuilder(Packet.Builder payloadBuilder) {
@@ -205,13 +212,7 @@ public final class EthernetPacket extends AbstractPacket {
      * @return
      */
     public Builder trailer(byte[] trailer) {
-      if (trailer != null) {
-        this.trailer = new byte[trailer.length];
-        System.arraycopy(trailer, 0, this.trailer, 0, trailer.length);
-      }
-      else {
-        this.trailer = null;
-      }
+      this.trailer = trailer;
       return this;
     }
 
@@ -225,10 +226,6 @@ public final class EthernetPacket extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @return
-     */
     public EthernetPacket build() {
       return new EthernetPacket(this);
     }
@@ -252,9 +249,6 @@ public final class EthernetPacket extends AbstractPacket {
     private final MacAddress dstAddr;
     private final MacAddress srcAddr;
     private final EtherType type;
-
-//    private byte[] rawData = null;
-//    private String stringData = null;
 
     private EthernetHeader(byte[] rawData) {
       if (rawData.length < ETHERNET_HEADER_SIZE) {
@@ -298,42 +292,32 @@ public final class EthernetPacket extends AbstractPacket {
     }
 
     @Override
+    protected List<byte[]> getRawFields() {
+      List<byte[]> rawFields = new ArrayList<byte[]>();
+      rawFields.add(ByteArrays.toByteArray(dstAddr));
+      rawFields.add(ByteArrays.toByteArray(srcAddr));
+      rawFields.add(ByteArrays.toByteArray(type.value()));
+      return rawFields;
+    }
+
+    @Override
     public int length() {
       return ETHERNET_HEADER_SIZE;
     }
 
     @Override
-    public byte[] getRawData() {
-      byte[] rawData = new byte[length()];
-      System.arraycopy(
-        ByteArrays.toByteArray(dstAddr), 0, rawData, DST_ADDR_OFFSET, DST_ADDR_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(srcAddr), 0, rawData, SRC_ADDR_OFFSET, SRC_ADDR_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(type.value()), 0, rawData, TYPE_OFFSET, TYPE_SIZE
-      );
-
-      return rawData;
-    }
-
-    @Override
-    public String toString() {
+    protected String buildString() {
       StringBuilder sb = new StringBuilder();
 
       sb.append("[Ethernet Header (")
         .append(length())
         .append(" bytes)]\n");
-
       sb.append("  Destination address: ")
         .append(dstAddr)
         .append("\n");
-
       sb.append("  Source address: ")
         .append(srcAddr)
         .append("\n");
-
       sb.append("  Type: ")
         .append(type)
         .append("\n");

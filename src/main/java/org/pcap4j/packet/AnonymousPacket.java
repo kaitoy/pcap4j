@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -29,7 +29,7 @@ public final class AnonymousPacket extends AbstractPacket {
     System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);
   }
 
-  public AnonymousPacket(Builder builder) {
+  private AnonymousPacket(Builder builder) {
     if (
          builder == null
       || builder.rawData == null
@@ -42,12 +42,6 @@ public final class AnonymousPacket extends AbstractPacket {
       builder.rawData, 0, this.rawData, 0, builder.rawData.length
     );
   }
-
-  @Override
-  public Header getHeader() { return null; }
-
-  @Override
-  public Packet getPayload() { return null; }
 
   @Override
   public boolean isValid() { return true; }
@@ -96,9 +90,6 @@ public final class AnonymousPacket extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     */
     public AnonymousPacket build() {
       return new AnonymousPacket(this);
     }
@@ -106,13 +97,12 @@ public final class AnonymousPacket extends AbstractPacket {
   }
 
   @Override
-  public String toString() {
+  protected String buildString() {
     StringBuilder sb = new StringBuilder();
 
     sb.append("[data (")
       .append(length())
       .append(" bytes)]\n");
-
     sb.append("  Hex stream: ")
       .append(ByteArrays.toHexString(rawData, " "))
       .append("\n");

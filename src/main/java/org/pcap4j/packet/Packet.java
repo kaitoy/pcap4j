@@ -13,7 +13,7 @@ package org.pcap4j.packet;
  */
 public interface Packet extends Iterable<Packet> {
 
-  // public Packet(byte[] rawData); /* mandatory */
+  // public Packet(byte[] rawData); /* necessary */
 
   /**
    *
@@ -102,12 +102,6 @@ public interface Packet extends Iterable<Packet> {
      * @return
      */
     public byte[] getRawData();
-
-    /**
-     *
-     * @return
-     */
-    public String toHexString();
 
   }
 

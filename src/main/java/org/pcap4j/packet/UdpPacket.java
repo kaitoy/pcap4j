@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -9,6 +9,9 @@ package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pcap4j.packet.namedvalue.IpNumber;
 import org.pcap4j.util.ByteArrays;
 
@@ -22,6 +25,9 @@ public final class UdpPacket extends AbstractPacket {
 
   private final UdpHeader header;
   private final Packet payload;
+
+  private volatile Boolean valid = null;
+  private final Object validLock = new Object();
 
   /**
    *
@@ -63,9 +69,24 @@ public final class UdpPacket extends AbstractPacket {
     return header;
   }
 
+  @Override
+  public Packet getPayload() {
+    return payload;
+  }
+
   /**
    *
    */
+  @Deprecated
+  @Override
+  public boolean verify() {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   *
+   */
+  @Deprecated
   @Override
   public boolean isValid() {
     throw new UnsupportedOperationException();
@@ -77,18 +98,33 @@ public final class UdpPacket extends AbstractPacket {
    * @param dstAddr
    * @return
    */
-  public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
+  private boolean verify(InetAddress srcAddr, InetAddress dstAddr) {
     if (!payload.isValid()) {
       return false;
     }
     return header.isValid(srcAddr, dstAddr);
   }
 
-  @Override
-  public Packet getPayload() {
-    return payload;
+  /**
+   *
+   * @param srcAddr
+   * @param dstAddr
+   * @return
+   */
+  public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
+    Boolean result = valid;
+    if (result == null) {
+      synchronized (validLock) {
+        result = valid;
+        if (result == null) {
+          valid = result = verify(srcAddr, dstAddr);
+        }
+      }
+    }
+    return result.booleanValue();
   }
 
+  @Override
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -167,7 +203,7 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
-     * @param payload
+     * @param payloadBuilder
      * @return
      */
     public Builder payloadBuilder(Packet.Builder payloadBuilder) {
@@ -205,10 +241,6 @@ public final class UdpPacket extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @return
-     */
     public UdpPacket build() {
       return new UdpPacket(this);
     }
@@ -245,8 +277,8 @@ public final class UdpPacket extends AbstractPacket {
     private final short length;
     private final short checksum;
 
-//    private byte[] rawData = null;
-//    private String stringData = null;
+    private volatile Boolean valid = null;
+    private final Object validLock = new Object();
 
     private UdpHeader(byte[] rawData) {
       if (rawData.length < UCP_HEADER_SIZE) {
@@ -295,7 +327,7 @@ public final class UdpPacket extends AbstractPacket {
         destPos = length;
       }
 
-      System.arraycopy(getRawData(), 0, data, 0, length());
+      System.arraycopy(buildRawData(), 0, data, 0, length());
       System.arraycopy(
         UdpPacket.this.payload.getRawData(), 0,
         data, length(), UdpPacket.this.payload.length()
@@ -389,14 +421,19 @@ public final class UdpPacket extends AbstractPacket {
       return checksum;
     }
 
+    /**
+     *
+     */
+    @Deprecated
     @Override
-    public int length() {
-      return UCP_HEADER_SIZE;
+    protected boolean verify() {
+      throw new UnsupportedOperationException();
     }
 
     /**
      *
      */
+    @Deprecated
     @Override
     public boolean isValid() {
       throw new UnsupportedOperationException();
@@ -408,13 +445,13 @@ public final class UdpPacket extends AbstractPacket {
      * @param dstAddr
      * @return
      */
-    public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
+    private boolean verify(InetAddress srcAddr, InetAddress dstAddr) {
       if (
         PacketPropertiesLoader.getInstance()
           .isEnabledUdpChecksumVerification()
       ) {
         short cs = getChecksum();
-        return    ((short)UdpPacket.this.length() != getLength())
+        return    ((short)UdpPacket.this.length() != length())
                && (cs == 0 ? true : calcChecksum(srcAddr, dstAddr) != cs);
       }
       else {
@@ -422,49 +459,56 @@ public final class UdpPacket extends AbstractPacket {
       }
     }
 
-    @Override
-    public byte[] getRawData() {
-      byte[] rawData = new byte[length()];
-      System.arraycopy(
-        ByteArrays.toByteArray(srcPort), 0,
-        rawData, SRC_PORT_OFFSET, SRC_PORT_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(dstPort), 0,
-        rawData, DST_PORT_OFFSET, DST_PORT_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(length), 0,
-        rawData, LENGTH_OFFSET, LENGTH_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(checksum), 0,
-        rawData, CHECKSUM_OFFSET, CHECKSUM_SIZE
-      );
-
-      return rawData;
+    /**
+     *
+     * @param srcAddr
+     * @param dstAddr
+     * @return
+     */
+    public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
+      Boolean result = valid;
+      if (result == null) {
+        synchronized (validLock) {
+          result = valid;
+          if (result == null) {
+            valid = result = verify(srcAddr, dstAddr);
+          }
+        }
+      }
+      return result.booleanValue();
     }
 
     @Override
-    public String toString() {
+    protected List<byte[]> getRawFields() {
+      List<byte[]> rawFields = new ArrayList<byte[]>();
+      rawFields.add(ByteArrays.toByteArray(srcPort));
+      rawFields.add(ByteArrays.toByteArray(dstPort));
+      rawFields.add(ByteArrays.toByteArray(length));
+      rawFields.add(ByteArrays.toByteArray(checksum));
+      return rawFields;
+    }
+
+    @Override
+    public int length() {
+      return UCP_HEADER_SIZE;
+    }
+
+    @Override
+    protected String buildString() {
       StringBuilder sb = new StringBuilder();
 
       sb.append("[UDP Header (")
         .append(length())
         .append(" bytes)]\n");
-
       sb.append("  Source port: ")
         .append(getSrcPortAsInt())
         .append("\n");
-
       sb.append("  Destination port: ")
         .append(getDstPortAsInt())
         .append("\n");
-
       sb.append("  Length: ")
         .append(getLengthAsInt())
         .append(" [bytes]\n");
-
       sb.append("  Checksum: 0x")
         .append(ByteArrays.toHexString(checksum, ""))
         .append("\n");

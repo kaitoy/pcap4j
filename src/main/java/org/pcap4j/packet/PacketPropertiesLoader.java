@@ -28,7 +28,9 @@ class PacketPropertiesLoader {
         System.getProperty(
           PACKET_PROPERTIES_NAME_KEY,
           KEY_PREFIX.replace('.', '/') + "/packet.properties"
-        )
+        ),
+        true,
+        true
       );
 
   private PacketPropertiesLoader() {}

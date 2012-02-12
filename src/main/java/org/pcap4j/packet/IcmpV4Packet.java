@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -9,6 +9,10 @@ package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pcap4j.packet.namedvalue.IcmpV4TypeCode;
 import org.pcap4j.util.ByteArrays;
 
@@ -60,6 +64,7 @@ public final class IcmpV4Packet extends AbstractPacket {
     return payload;
   }
 
+  @Override
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -132,7 +137,7 @@ public final class IcmpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @param payload
+     * @param payloadBuilder
      * @return
      */
     public Builder payloadBuilder(Packet.Builder payloadBuilder) {
@@ -150,10 +155,6 @@ public final class IcmpV4Packet extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @return
-     */
     public IcmpV4Packet build() {
       return new IcmpV4Packet(this);
     }
@@ -193,9 +194,6 @@ public final class IcmpV4Packet extends AbstractPacket {
     private final short checksum;
     private final short identifier;
     private final short sequenceNumber;
-
-//    private byte[] rawData = null;
-//    private String stringData = null;
 
     private IcmpV4Header(byte[] rawData) {
       if (rawData.length < ICMP_HEADER_SIZE) {
@@ -245,7 +243,7 @@ public final class IcmpV4Packet extends AbstractPacket {
         data = new byte[packetLength];
       }
 
-      System.arraycopy(getRawData(), 0, data, 0, length());
+      System.arraycopy(buildRawData(), 0, data, 0, length());
       System.arraycopy(
         IcmpV4Packet.this.payload.getRawData(), 0,
         data, length(), IcmpV4Packet.this.payload.length()
@@ -307,7 +305,7 @@ public final class IcmpV4Packet extends AbstractPacket {
     }
 
     @Override
-    public boolean isValid() {
+    protected boolean verify() {
       if (
         PacketPropertiesLoader.getInstance()
           .isEnabledIcmpChecksumVerification()
@@ -321,53 +319,36 @@ public final class IcmpV4Packet extends AbstractPacket {
     }
 
     @Override
+    protected List<byte[]> getRawFields() {
+      List<byte[]> rawFields = new ArrayList<byte[]>();
+      rawFields.add(ByteArrays.toByteArray(typeCode.value()));
+      rawFields.add(ByteArrays.toByteArray(checksum));
+      rawFields.add(ByteArrays.toByteArray(identifier));
+      rawFields.add(ByteArrays.toByteArray(sequenceNumber));
+      return rawFields;
+    }
+
+    @Override
     public int length() {
       return ICMP_HEADER_SIZE;
     }
 
     @Override
-    public byte[] getRawData() {
-      byte[] rawData = new byte[length()];
-      System.arraycopy(
-        ByteArrays.toByteArray(typeCode.value()), 0,
-        rawData, TYPE_OFFSET, TYPE_SIZE + CODE_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(checksum), 0,
-        rawData, CHECKSUM_OFFSET, CHECKSUM_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(identifier), 0,
-        rawData, IDENTIFIER_OFFSET, IDENTIFIER_SIZE
-      );
-      System.arraycopy(
-        ByteArrays.toByteArray(sequenceNumber), 0,
-        rawData, SEQUENCE_NUMBER_OFFSET, SEQUENCE_NUMBER_SIZE
-      );
-
-      return rawData;
-    }
-
-    @Override
-    public String toString() {
+    protected String buildString() {
       StringBuilder sb = new StringBuilder();
 
       sb.append("[ICMP Header (")
         .append(length())
         .append(" bytes)]\n");
-
       sb.append("  Type,Code: ")
         .append(typeCode)
         .append("\n");
-
       sb.append("  Checksum: 0x")
         .append(ByteArrays.toHexString(checksum, ""))
         .append("\n");
-
       sb.append("  Identifier: ")
         .append(getIdentifierAsInt())
         .append("\n");
-
       sb.append("  Sequence number: ")
         .append(getSequenceNumberAsInt())
         .append("\n");

@@ -8,7 +8,7 @@ Javaのパケットキャプチャライブラリ。パケットの作成・送�
 ダウンロード
 ------------
 
-pcap4j 0.9.2
+pcap4j 0.9.4
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
@@ -16,7 +16,7 @@ pcap4j 0.9.2
 --------
 
 SNMPネットワークシミュレータをJavaで作っていて、パケットキャプチャをしたくなったが、<br>
-Raw Socketを使って自力でやるのは大変そうなので、pcap APIを使うことに。<br>
+Raw Socketを使って自力でやるのは大変そうなので pcap APIを使うことに。<br>
 
 pcap APIの実装は、UNIX系にはlibpcap、WindowsにはWinPcapがあるが、いずれもネイティブライブラリ。<br>
 これらのJavaラッパは[jpcap](http://jpcap.sourceforge.net/)や[jNetPcap](http://jnetpcap.com/)が既にあるが、<br>
@@ -29,8 +29,8 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 機能
 ----
 
-* パケットのキャプチャ、作成、送信。
-* Ethernet、ARP、IPv4、ICMPv4、UDPに対応。
+* パケットのキャプチャ、解析、作成、送信。
+* Ethernet、ARP、IPv4(オプションなし)、ICMPv4、UDPに対応。
 * ライブラリをいじらずに、対応プロトコルをユーザが追加できる。
 
 
@@ -87,10 +87,10 @@ pcap4j is provided under the LGPL, version 2.1 or later.<br>
 おまけ
 ------
 
-pcap4j 0.9.2 を使ったSNMPネットワークシミュレータ、SnmpNetSim。<br>
+pcap4j 0.9.4 を使ったSNMPネットワークシミュレータ、SNeO(SNe夫)。<br>
 とりあえず置いておくだけ。<br>
 商用でもなんでも無料で使用可。コピーも再配布も可。<br>
 
-SnmpNetSim 1.0.2
+SNeO 1.0.3
 
-* [snmpnetsim.jar](/downloads/Kaitoy/pcap4j/snmpnetsim.jar)
+* [sneo.jar](/downloads/Kaitoy/pcap4j/sneo.jar)

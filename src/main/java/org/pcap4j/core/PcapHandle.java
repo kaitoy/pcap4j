@@ -90,7 +90,7 @@ public final class PcapHandle {
 
   /**
    *
-   * @param InetAddr
+   * @param inetAddr
    * @return
    */
   public static String toBpfString (InetAddress inetAddr){
