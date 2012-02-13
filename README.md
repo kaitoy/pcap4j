@@ -87,7 +87,7 @@ pcap4j is provided under the LGPL, version 2.1 or later.<br>
 おまけ
 ------
 
-pcap4j 0.9.4 を使ったSNMPネットワークシミュレータ、SNeO(SNe夫)。<br>
+pcap4j 0.9.4 を使ったSNMPネットワークシミュレータ、SNeO。<br>
 とりあえず置いておくだけ。<br>
 商用でもなんでも無料で使用可。コピーも再配布も可。<br>
 
