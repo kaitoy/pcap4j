@@ -32,6 +32,8 @@ public abstract class AbstractPacket implements Packet {
   private volatile Integer hashCode = null;
   private final Object hashCodeLock = new Object();
 
+  //public static Packet newPacket(byte[] rawData); /* necessary */
+
   public Header getHeader() { return null; }
 
   public Packet getPayload() { return null; }

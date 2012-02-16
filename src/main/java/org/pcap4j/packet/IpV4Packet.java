@@ -30,19 +30,24 @@ public final class IpV4Packet extends AbstractPacket {
   /**
    *
    * @param rawData
+   * @return
    */
-  public IpV4Packet(byte[] rawData) {
+  public static IpV4Packet newPacket(byte[] rawData) {
+    return new IpV4Packet(rawData);
+  }
+
+  private IpV4Packet(byte[] rawData) {
     this.header = new IpV4Header(rawData);
 
     byte[] rawPayload
       = ByteArrays.getSubArray(
           rawData,
-          IpV4Header.IPV4_HEADER_SIZE,
-          this.header.getTotalLength() - IpV4Header.IPV4_HEADER_SIZE
+          this.header.length(),
+          rawData.length - this.header.length()
         );
 
     this.payload
-      = PacketFactory.getInstance()
+      = PacketFactory
           .newPacketByIpNumber(rawPayload, header.getProtocol().value());
   }
 

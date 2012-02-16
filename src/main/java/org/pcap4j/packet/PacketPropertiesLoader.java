@@ -18,15 +18,15 @@ class PacketPropertiesLoader {
 
   private static final String KEY_PREFIX
     = PacketPropertiesLoader.class.getPackage().getName();
-  private static final String PACKET_PROPERTIES_NAME_KEY
-    = KEY_PREFIX + "packet.properties";
+  private static final String PACKET_PROPERTIES_PATH_KEY
+    = KEY_PREFIX + ".properties";
   private static final PacketPropertiesLoader INSTANCE
     = new PacketPropertiesLoader();
 
   private PropertiesLoader loader
     = new PropertiesLoader(
         System.getProperty(
-          PACKET_PROPERTIES_NAME_KEY,
+          PACKET_PROPERTIES_PATH_KEY,
           KEY_PREFIX.replace('.', '/') + "/packet.properties"
         ),
         true,
@@ -43,16 +43,23 @@ class PacketPropertiesLoader {
     return INSTANCE;
   }
 
+  private static String ICMP_CHECKSUMVARIDATION_KEY
+    = KEY_PREFIX + ".icmp.enableChecksumValidation";
+
   /**
    *
    * @return
    */
   public boolean isEnabledIcmpChecksumVaridation() {
     return loader.getBoolean(
-             KEY_PREFIX + ".icmp.enableChecksumValidation",
+             ICMP_CHECKSUMVARIDATION_KEY,
              Boolean.FALSE
            ).booleanValue();
   }
+
+
+  private static String ICMP_ENABLECHECKSUMVERIFICATION_KEY
+    = KEY_PREFIX + ".icmp.enableChecksumVerification";
 
   /**
    *
@@ -60,10 +67,13 @@ class PacketPropertiesLoader {
    */
   public boolean isEnabledIcmpChecksumVerification() {
     return loader.getBoolean(
-             KEY_PREFIX + ".icmp.enableChecksumVerification",
+             ICMP_ENABLECHECKSUMVERIFICATION_KEY,
              Boolean.FALSE
            ).booleanValue();
   }
+
+  private static String IPV4_ENABLECHECKSUMVALIDATION_KEY
+    = KEY_PREFIX + ".ipv4.enableChecksumValidation";
 
   /**
    *
@@ -71,10 +81,13 @@ class PacketPropertiesLoader {
    */
   public boolean isEnabledIpv4ChecksumVaridation() {
     return loader.getBoolean(
-             KEY_PREFIX + ".ipv4.enableChecksumValidation",
+             IPV4_ENABLECHECKSUMVALIDATION_KEY,
              Boolean.FALSE
            ).booleanValue();
   }
+
+  private static String IPV4_ENABLECHECKSUMVERIFICATION_KEY
+    = KEY_PREFIX + ".ipv4.enableChecksumVerification";
 
   /**
    *
@@ -82,10 +95,13 @@ class PacketPropertiesLoader {
    */
   public boolean isEnabledIpv4ChecksumVerification() {
     return loader.getBoolean(
-             KEY_PREFIX + ".ipv4.enableChecksumVerification",
+             IPV4_ENABLECHECKSUMVERIFICATION_KEY,
              Boolean.FALSE
            ).booleanValue();
   }
+
+  private static String UDP_ENABLECHECKSUMVALIDATION_KEY
+    = KEY_PREFIX + ".udp.enableChecksumValidation";
 
   /**
    *
@@ -93,10 +109,13 @@ class PacketPropertiesLoader {
    */
   public boolean isEnabledUdpChecksumVaridation() {
     return loader.getBoolean(
-             KEY_PREFIX + ".udp.enableChecksumValidation",
+             UDP_ENABLECHECKSUMVALIDATION_KEY,
              Boolean.FALSE
            ).booleanValue();
   }
+
+  private static String UDP_ENABLECHECKSUMVERIFICATION_KEY
+    = KEY_PREFIX + ".udp.enableChecksumVerification";
 
   /**
    *
@@ -104,10 +123,13 @@ class PacketPropertiesLoader {
    */
   public boolean isEnabledUdpChecksumVerification() {
     return loader.getBoolean(
-             KEY_PREFIX + ".udp.enableChecksumVerification",
+             UDP_ENABLECHECKSUMVERIFICATION_KEY,
              Boolean.FALSE
            ).booleanValue();
   }
+
+  private static String PACKETFACTORY_ANONYMOUS_KEY
+    = KEY_PREFIX + ".PacketFactory.anonymous";
 
   /**
    *
@@ -115,10 +137,13 @@ class PacketPropertiesLoader {
    */
   public Class<? extends Packet> getAnonymousPacketClass() {
     return loader.<Packet>getClass(
-             KEY_PREFIX + ".anonymous",
+             PACKETFACTORY_ANONYMOUS_KEY,
              AnonymousPacket.class
            );
   }
+
+  private static String PACKETFACTORY_EXTENDNEWPACKETBYDLT_KEY
+    = KEY_PREFIX + ".PacketFactory.extendNewPacketByDlt";
 
   /**
    *
@@ -126,10 +151,13 @@ class PacketPropertiesLoader {
    */
   public boolean isExtendedNewPacketByDlt() {
     return loader.getBoolean(
-             KEY_PREFIX + ".PacketFactory.extendNewPacketByDlt",
+             PACKETFACTORY_EXTENDNEWPACKETBYDLT_KEY,
              Boolean.FALSE
            );
   }
+
+  private static String PACKETFACTORY_DLT_KEY
+    = KEY_PREFIX + ".PacketFactory.DLT.";
 
   /**
    *
@@ -138,10 +166,13 @@ class PacketPropertiesLoader {
    */
   public Class<? extends Packet> getPacketClassByDlt(Integer dlt) {
     return loader.<Packet>getClass(
-             KEY_PREFIX + ".DLT." + dlt,
+             PACKETFACTORY_DLT_KEY + dlt,
              getAnonymousPacketClass()
            );
   }
+
+  private static String PACKETFACTORY_EXTENDNEWPACKETBYETHERTYPE_KEY
+    = KEY_PREFIX + ".PacketFactory.extendNewPacketByEtherType";
 
   /**
    *
@@ -149,10 +180,13 @@ class PacketPropertiesLoader {
    */
   public boolean isExtendedNewPacketByEtherType() {
     return loader.getBoolean(
-             KEY_PREFIX + ".PacketFactory.extendNewPacketByEtherType",
+             PACKETFACTORY_EXTENDNEWPACKETBYETHERTYPE_KEY,
              Boolean.FALSE
            );
   }
+
+  private static String PACKETFACTORY_ETHERTYPE_KEY
+    = KEY_PREFIX + ".PacketFactory.EtherType.";
 
   /**
    *
@@ -161,11 +195,14 @@ class PacketPropertiesLoader {
    */
   public Class<? extends Packet> getPacketClassByEtherType(Short etherType) {
     return loader.<Packet>getClass(
-             KEY_PREFIX + ".EtherType."
+             PACKETFACTORY_ETHERTYPE_KEY
                + ByteArrays.toHexString(etherType, "").toLowerCase(),
              getAnonymousPacketClass()
            );
   }
+
+  private static String PACKETFACTORY_EXTENDNEWPACKETBYIPNUMBER_KEY
+    = KEY_PREFIX + ".PacketFactory.extendNewPacketByIPNumber";
 
   /**
    *
@@ -173,10 +210,13 @@ class PacketPropertiesLoader {
    */
   public boolean isExtendedNewPacketByIPNumber() {
     return loader.getBoolean(
-             KEY_PREFIX + ".PacketFactory.extendNewPacketByIPNumber",
+             PACKETFACTORY_EXTENDNEWPACKETBYIPNUMBER_KEY,
              Boolean.FALSE
            );
   }
+
+  private static String PACKETFACTORY_IPNUMBER_KEY
+    = KEY_PREFIX + ".PacketFactory.IPNumber.";
 
   /**
    *
@@ -185,7 +225,36 @@ class PacketPropertiesLoader {
    */
   public Class<? extends Packet> getPacketClassByIPNumber(Byte ipNumber) {
     return loader.<Packet>getClass(
-             KEY_PREFIX + ".IPNumber." + String.valueOf(ipNumber & 0xFF),
+             PACKETFACTORY_IPNUMBER_KEY + String.valueOf(ipNumber & 0xFF),
+             getAnonymousPacketClass()
+           );
+  }
+
+  private static String PACKETFACTORY_EXTENDNEWPACKETBYPORT_KEY
+    = KEY_PREFIX + ".PacketFactory.extendNewPacketByPort";
+
+  /**
+   *
+   * @return
+   */
+  public boolean isExtendedNewPacketByPort() {
+    return loader.getBoolean(
+             PACKETFACTORY_EXTENDNEWPACKETBYPORT_KEY,
+             Boolean.FALSE
+           );
+  }
+
+  private static String PACKETFACTORY_PORT_KEY
+    = KEY_PREFIX + ".PacketFactory.port.";
+
+  /**
+   *
+   * @param port
+   * @return
+   */
+  public Class<? extends Packet> getPacketClassByPort(short port) {
+    return loader.<Packet>getClass(
+             PACKETFACTORY_PORT_KEY + String.valueOf(port & 0xFFFF),
              getAnonymousPacketClass()
            );
   }

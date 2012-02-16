@@ -22,42 +22,51 @@ import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
  */
 public final class EthernetPacket extends AbstractPacket {
 
+  // This Class handles from DA to data.
+  // Both preamble, SFD, and FCS are not contained.
+
   private static final int MIN_ETHERNET_PACKET_LENGTH = 60;
 
   private final EthernetHeader header;
   private final Packet payload;
 
-  // Ethernet frame must be at least 60 bytes except FCS. If it's less than 60 bytes, pad with this field.
-  // Although this class handles trailer, it's actually responsibility of NIF.
-  private final byte[] trailer;
+  // Ethernet frame must be at least 60 bytes except FCS.
+  // If it's less than 60 bytes, it's padded with this field.
+  // Although this class handles pad, it's actually responsibility of NIF.
+  private final byte[] pad;
 
   /**
    *
    * @param rawData
+   * @return
    */
-  public EthernetPacket(byte[] rawData) {
+  public static EthernetPacket newPacket(byte[] rawData) {
+    return new EthernetPacket(rawData);
+  }
+
+  private EthernetPacket(byte[] rawData) {
     this.header = new EthernetHeader(rawData);
 
     byte[] rawPayload
       = ByteArrays.getSubArray(
           rawData,
-          EthernetHeader.ETHERNET_HEADER_SIZE,
-          rawData.length - EthernetHeader.ETHERNET_HEADER_SIZE
+          this.header.length(),
+          rawData.length - this.header.length()
         );
 
     this.payload
-      = PacketFactory.getInstance()
+      = PacketFactory
           .newPacketByEtherType(rawPayload, header.getType().value());
 
     int payloadLength = this.payload.length();
     if (rawData.length > payloadLength) {
-      this.trailer
+      this.pad
         = ByteArrays.getSubArray(
             rawData, payloadLength, rawData.length - payloadLength
           );
     }
     else {
-      this.trailer = new byte[0];
+      this.pad = new byte[0];
     }
   }
 
@@ -68,7 +77,7 @@ public final class EthernetPacket extends AbstractPacket {
       || builder.srcAddr == null
       || builder.type == null
       || builder.payloadBuilder == null
-      || builder.trailer == null
+      || builder.pad == null
     ) {
       throw new NullPointerException();
     }
@@ -78,16 +87,16 @@ public final class EthernetPacket extends AbstractPacket {
 
     if (
          builder.validateAtBuild
-      && this.payload.length() + builder.trailer.length
+      && this.payload.length() + builder.pad.length
            < MIN_ETHERNET_PACKET_LENGTH
     ) {
-      this.trailer = new byte[MIN_ETHERNET_PACKET_LENGTH];
+      this.pad = new byte[MIN_ETHERNET_PACKET_LENGTH];
     }
     else {
-      this.trailer = new byte[builder.trailer.length];
+      this.pad = new byte[builder.pad.length];
     }
     System.arraycopy(
-      builder.trailer, 0, this.trailer, 0, builder.trailer.length
+      builder.pad, 0, this.pad, 0, builder.pad.length
     );
   }
 
@@ -115,16 +124,16 @@ public final class EthernetPacket extends AbstractPacket {
   @Override
   protected int measureLength() {
     int length = super.measureLength();
-    length += trailer.length;
+    length += pad.length;
     return length;
   }
 
   @Override
   protected byte[] buildRawData() {
     byte[] rawData = super.buildRawData();
-    if (trailer.length != 0) {
+    if (pad.length != 0) {
       System.arraycopy(
-        trailer, 0, rawData, rawData.length - trailer.length, trailer.length
+        pad, 0, rawData, rawData.length - pad.length, pad.length
       );
     }
     return rawData;
@@ -145,7 +154,7 @@ public final class EthernetPacket extends AbstractPacket {
     private MacAddress srcAddr;
     private EtherType type;
     private Packet.Builder payloadBuilder;
-    private byte[] trailer = new byte[0];
+    private byte[] pad = new byte[0];
     private boolean validateAtBuild = true;
 
     /**
@@ -158,10 +167,10 @@ public final class EthernetPacket extends AbstractPacket {
       this.srcAddr = packet.header.srcAddr;
       this.type = packet.header.type;
       this.payloadBuilder = packet.payload.getBuilder();
-      if (packet.trailer != null) {
-        this.trailer = new byte[packet.trailer.length];
+      if (packet.pad != null) {
+        this.pad = new byte[packet.pad.length];
         System.arraycopy(
-          packet.trailer, 0, this.trailer, 0, packet.trailer.length
+          packet.pad, 0, this.pad, 0, packet.pad.length
         );
       }
     }
@@ -208,11 +217,11 @@ public final class EthernetPacket extends AbstractPacket {
 
     /**
      *
-     * @param trailer
+     * @param pad
      * @return
      */
-    public Builder trailer(byte[] trailer) {
-      this.trailer = trailer;
+    public Builder pad(byte[] pad) {
+      this.pad = pad;
       return this;
     }
 
@@ -322,9 +331,9 @@ public final class EthernetPacket extends AbstractPacket {
         .append(type)
         .append("\n");
 
-      if (trailer != null && trailer.length != 0) {
-        sb.append("  Trailer: 0x")
-          .append(ByteArrays.toHexString(trailer, ""))
+      if (pad != null && pad.length != 0) {
+        sb.append("  Pad: 0x")
+          .append(ByteArrays.toHexString(pad, ""))
           .append("\n");
       }
 

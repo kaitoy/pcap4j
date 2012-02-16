@@ -20,8 +20,13 @@ public final class AnonymousPacket extends AbstractPacket {
   /**
    *
    * @param rawData
+   * @return
    */
-  public AnonymousPacket(byte[] rawData) {
+  public static AnonymousPacket newPacket(byte[] rawData) {
+    return new AnonymousPacket(rawData);
+  }
+
+  private AnonymousPacket(byte[] rawData) {
     if (rawData == null) {
       throw new NullPointerException();
     }

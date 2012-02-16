@@ -32,8 +32,13 @@ public final class ArpPacket extends AbstractPacket {
   /**
    *
    * @param rawData
+   * @return
    */
-  public ArpPacket(byte[] rawData) {
+  public static ArpPacket newPacket(byte[] rawData) {
+    return new ArpPacket(rawData);
+  }
+
+  private ArpPacket(byte[] rawData) {
 //    if (rawData.length != ArpHeader.ARP_HEADER_SIZE) {
 //      throw new AssertionError();
 //    }

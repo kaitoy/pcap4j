@@ -28,11 +28,16 @@ public final class IcmpV4Packet extends AbstractPacket {
   /**
    *
    * @param rawData
+   * @return
    */
-  public IcmpV4Packet(byte[] rawData) {
+  public static IcmpV4Packet newPacket(byte[] rawData) {
+    return new IcmpV4Packet(rawData);
+  }
+
+  private IcmpV4Packet(byte[] rawData) {
     this.header = new IcmpV4Header(rawData);
     this.payload
-      = new AnonymousPacket(
+      = AnonymousPacket.newPacket(
           ByteArrays.getSubArray(
             rawData,
             IcmpV4Header.ICMP_HEADER_SIZE,

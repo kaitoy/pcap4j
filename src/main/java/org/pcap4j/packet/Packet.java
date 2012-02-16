@@ -13,7 +13,7 @@ package org.pcap4j.packet;
  */
 public interface Packet extends Iterable<Packet> {
 
-  // public Packet(byte[] rawData); /* necessary */
+  // public static Packet newPacket(byte[] rawData); /* necessary */
 
   /**
    *

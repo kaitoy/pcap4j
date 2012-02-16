@@ -11,7 +11,6 @@ import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.namedvalue.IpNumber;
 import org.pcap4j.util.ByteArrays;
 
@@ -29,20 +28,22 @@ public final class UdpPacket extends AbstractPacket {
   private volatile Boolean valid = null;
   private final Object validLock = new Object();
 
-  /**
-   *
-   * @param rawData
-   */
-  public UdpPacket(byte[] rawData) {
+  public static UdpPacket newPacket(byte[] rawData) {
+    return new UdpPacket(rawData);
+  }
+
+  private UdpPacket(byte[] rawData) {
     this.header = new UdpHeader(rawData);
+
+    byte[] rawPayload
+      = ByteArrays.getSubArray(
+          rawData,
+          this.header.length(),
+          rawData.length - this.header.length()
+        );
+
     this.payload
-      = new AnonymousPacket(
-              ByteArrays.getSubArray(
-                rawData,
-                UdpHeader.UCP_HEADER_SIZE,
-                rawData.length - UdpHeader.UCP_HEADER_SIZE
-              )
-            );
+      = PacketFactory.newPacketByPort(rawPayload, header.getDstPort());
   }
 
   private UdpPacket(Builder builder) {

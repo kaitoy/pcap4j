@@ -7,8 +7,8 @@
 
 package org.pcap4j.packet;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import org.pcap4j.packet.namedvalue.DataLinkType;
 import org.pcap4j.packet.namedvalue.EtherType;
 import org.pcap4j.packet.namedvalue.IpNumber;
@@ -19,17 +19,7 @@ import org.pcap4j.packet.namedvalue.IpNumber;
  */
 public class PacketFactory {
 
-  private static final PacketFactory INSTANCE = new PacketFactory();
-
-  private PacketFactory() {}
-
-  /**
-   *
-   * @return
-   */
-  public static PacketFactory getInstance() {
-    return INSTANCE;
-  }
+  private PacketFactory() { throw new AssertionError(); }
 
   /**
    *
@@ -37,18 +27,15 @@ public class PacketFactory {
    * @param packetClass
    * @return
    */
-  public Packet newPacket(byte[] rawData, Class<? extends Packet> packetClass) {
+  public static Packet newPacket(byte[] rawData, Class<? extends Packet> packetClass) {
     try {
-      Constructor<? extends Packet> constructor
-        = packetClass.getConstructor(byte[].class);
-      return constructor.newInstance(rawData);
+      Method newPacket = packetClass.getMethod("newPacket", byte[].class);
+      return (Packet)newPacket.invoke(null, rawData);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
       throw new IllegalStateException(e);
     } catch (IllegalArgumentException e) {
-      throw new IllegalStateException(e);
-    } catch (InstantiationException e) {
       throw new IllegalStateException(e);
     } catch (IllegalAccessException e) {
       throw new IllegalStateException(e);
@@ -63,7 +50,7 @@ public class PacketFactory {
    * @param dlt
    * @return
    */
-  public Packet newPacketByDlt(byte[] rawData, Integer dlt) {
+  public static Packet newPacketByDlt(byte[] rawData, Integer dlt) {
     if (PacketPropertiesLoader.getInstance().isExtendedNewPacketByDlt()) {
       Class<? extends Packet> packetClass
         = PacketPropertiesLoader.getInstance().getPacketClassByDlt(dlt);
@@ -71,10 +58,10 @@ public class PacketFactory {
     }
     else {
       if (dlt.equals(DataLinkType.EN10MB.value())) {
-        return new EthernetPacket(rawData);
+        return EthernetPacket.newPacket(rawData);
       }
       else {
-        return new AnonymousPacket(rawData);
+        return AnonymousPacket.newPacket(rawData);
       }
     }
   }
@@ -85,7 +72,7 @@ public class PacketFactory {
    * @param etherType
    * @return
    */
-  public Packet newPacketByEtherType(byte[] rawData, Short etherType) {
+  public static Packet newPacketByEtherType(byte[] rawData, Short etherType) {
     if (PacketPropertiesLoader.getInstance().isExtendedNewPacketByEtherType()) {
       Class<? extends Packet> packetClass
         = PacketPropertiesLoader.getInstance().getPacketClassByEtherType(etherType);
@@ -93,17 +80,17 @@ public class PacketFactory {
     }
     else {
       if (etherType.equals(EtherType.IPV4.value())) {
-        return new IpV4Packet(rawData);
+        return IpV4Packet.newPacket(rawData);
       }
       else if (etherType.equals(EtherType.ARP.value())) {
-        return new ArpPacket(rawData);
+        return ArpPacket.newPacket(rawData);
       }
       else if (etherType.equals(EtherType.IPV6.value())) {
         // TODO support IPv6
-        return new AnonymousPacket(rawData);
+        return AnonymousPacket.newPacket(rawData);
       }
       else {
-        return new AnonymousPacket(rawData);
+        return AnonymousPacket.newPacket(rawData);
       }
     }
   }
@@ -114,7 +101,7 @@ public class PacketFactory {
    * @param ipNumber
    * @return
    */
-  public Packet newPacketByIpNumber(byte[] rawData, Byte ipNumber) {
+  public static Packet newPacketByIpNumber(byte[] rawData, Byte ipNumber) {
     if (PacketPropertiesLoader.getInstance().isExtendedNewPacketByIPNumber()) {
       Class<? extends Packet> packetClass
         = PacketPropertiesLoader.getInstance().getPacketClassByIPNumber(ipNumber);
@@ -122,18 +109,35 @@ public class PacketFactory {
     }
     else {
       if (ipNumber.equals(IpNumber.UDP.value())) {
-        return new UdpPacket(rawData);
+        return UdpPacket.newPacket(rawData);
       }
       else if (ipNumber.equals(IpNumber.ICMP_V4.value())) {
-        return new IcmpV4Packet(rawData);
+        return IcmpV4Packet.newPacket(rawData);
       }
       else if (ipNumber.equals(IpNumber.TCP.value())) {
         // TODO support TCP
-        return new AnonymousPacket(rawData);
+        return AnonymousPacket.newPacket(rawData);
       }
       else {
-        return new AnonymousPacket(rawData);
+        return AnonymousPacket.newPacket(rawData);
       }
+    }
+  }
+
+  /**
+   *
+   * @param rawData
+   * @param port
+   * @return
+   */
+  public static Packet newPacketByPort(byte[] rawData, short port) {
+    if (PacketPropertiesLoader.getInstance().isExtendedNewPacketByPort()) {
+      Class<? extends Packet> packetClass
+        = PacketPropertiesLoader.getInstance().getPacketClassByPort(port);
+      return newPacket(rawData, packetClass);
+    }
+    else {
+      return AnonymousPacket.newPacket(rawData);
     }
   }
 

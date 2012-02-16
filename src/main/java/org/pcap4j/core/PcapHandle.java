@@ -176,7 +176,7 @@ public final class PcapHandle {
     Pointer packet = PcapLibrary.INSTANCE.pcap_next(handle, header);
 
     if (packet != null) {
-      return PacketFactory.getInstance().newPacketByDlt(
+      return PacketFactory.newPacketByDlt(
                packet.getByteArray(0, header.caplen), dlt.value()
              );
     }
@@ -212,7 +212,7 @@ public final class PcapHandle {
           throw new AssertionError("Never get here.");
         }
 
-        return PacketFactory.getInstance().newPacketByDlt(
+        return PacketFactory.newPacketByDlt(
                  dataP.getByteArray(0, new pcap_pkthdr(headerP).caplen),
                  dlt.value()
                );
@@ -253,7 +253,7 @@ public final class PcapHandle {
 
       public void got_packet(String args, pcap_pkthdr header, Pointer packet) {
         eventListener.gotPacket(
-          PacketFactory.getInstance().newPacketByDlt(
+          PacketFactory.newPacketByDlt(
             packet.getByteArray(0, header.caplen),
             dlt.value()
           )
