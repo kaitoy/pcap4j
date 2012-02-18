@@ -1,6 +1,10 @@
 package org.pcap4j.test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.apache.log4j.BasicConfigurator;
@@ -18,21 +22,21 @@ import org.pcap4j.util.NifSelector;
 public class LoopTest {
 
   private static final String COUNT_KEY
-    = LoopTest.class.getPackage().getName() + ".count";
+    = LoopTest.class.getName() + ".count";
   private static final int COUNT
     = Integer.getInteger(COUNT_KEY, 5);
 
   private static final String READ_TIMEOUT_KEY
-    = LoopTest.class.getPackage().getName() + ".readTimeOut";
+    = LoopTest.class.getName() + ".readTimeOut";
   private static final int READ_TIMEOUT
     = Integer.getInteger(READ_TIMEOUT_KEY, 5); // [ms]
 
   private static final String MAX_PACKT_SIZE_KEY
-    = LoopTest.class.getPackage().getName() + ".maxPacketSize";
+    = LoopTest.class.getName() + ".maxPacketSize";
   private static final int MAX_PACKT_SIZE
     = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65535); // [bytes]
 
-  public static void main(String[] args) throws PcapNativeException {
+  public static void main(String[] args) throws PcapNativeException, FileNotFoundException, IOException {
     BasicConfigurator.configure();
     Logger.getRootLogger().setLevel(Level.INFO);
 
@@ -69,10 +73,17 @@ public class LoopTest {
       assert true; // never get here
     }
 
+    final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("out")));
+
     GotPacketEventListener listener
       = new GotPacketEventListener() {
           public void gotPacket(Packet packet) {
             System.out.println(packet);
+            try {
+              oos.writeObject(packet);
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
           }
         };
     handle.loop(COUNT, listener);

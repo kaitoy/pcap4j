@@ -10,7 +10,7 @@ import java.io.ObjectInputStream;
 public class ReadPacketObjectTest {
 
   public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
-    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("out/out")));
+    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("out")));
     try {
       while (true) {
         System.out.println(ois.readObject());

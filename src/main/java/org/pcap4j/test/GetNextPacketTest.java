@@ -21,17 +21,17 @@ import org.pcap4j.util.NifSelector;
 public class GetNextPacketTest {
 
   private static final String COUNT_KEY
-    = LoopTest.class.getPackage().getName() + ".count";
+    = LoopTest.class.getName() + ".count";
   private static final int COUNT
     = Integer.getInteger(COUNT_KEY, 5);
 
   private static final String READ_TIMEOUT_KEY
-    = LoopTest.class.getPackage().getName() + ".readTimeOut";
+    = LoopTest.class.getName() + ".readTimeOut";
   private static final int READ_TIMEOUT
     = Integer.getInteger(READ_TIMEOUT_KEY, 5); // [ms]
 
   private static final String MAX_PACKT_SIZE_KEY
-    = LoopTest.class.getPackage().getName() + ".maxPacketSize";
+    = LoopTest.class.getName() + ".maxPacketSize";
   private static final int MAX_PACKT_SIZE
     = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65535); // [bytes]
 
@@ -73,7 +73,7 @@ public class GetNextPacketTest {
     }
 
 
-    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("out/out")));
+    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("out")));
 
     int num = 0;
     while (true) {
