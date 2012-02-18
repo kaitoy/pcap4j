@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.namedvalue.IpNumber;
 import org.pcap4j.util.ByteArrays;
+import org.pcap4j.util.ValueCache;
 
 /**
  * @author Kaito Yamada
@@ -20,13 +21,17 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class UdpPacket extends AbstractPacket {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 4638029542367352625L;
+
   private static final int PSEUDO_HEADER_SIZE = 12;
 
   private final UdpHeader header;
   private final Packet payload;
 
-  private volatile Boolean valid = null;
-  private final Object validLock = new Object();
+  private final ValueCache<Boolean> validCache = new ValueCache<Boolean>();
 
   public static UdpPacket newPacket(byte[] rawData) {
     return new UdpPacket(rawData);
@@ -113,12 +118,13 @@ public final class UdpPacket extends AbstractPacket {
    * @return
    */
   public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
-    Boolean result = valid;
+    Boolean result = validCache.getValue();
     if (result == null) {
-      synchronized (validLock) {
-        result = valid;
+      synchronized (validCache) {
+        result = validCache.getValue();
         if (result == null) {
-          valid = result = verify(srcAddr, dstAddr);
+          result = verify(srcAddr, dstAddr);
+          validCache.setValue(result);
         }
       }
     }
@@ -254,6 +260,11 @@ public final class UdpPacket extends AbstractPacket {
    */
   public final class UdpHeader extends AbstractHeader {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = -1746545325551976324L;
+
     private static final int SRC_PORT_OFFSET
       = 0;
     private static final int SRC_PORT_SIZE
@@ -278,8 +289,7 @@ public final class UdpPacket extends AbstractPacket {
     private final short length;
     private final short checksum;
 
-    private volatile Boolean valid = null;
-    private final Object validLock = new Object();
+    private final ValueCache<Boolean> validCache = new ValueCache<Boolean>();
 
     private UdpHeader(byte[] rawData) {
       if (rawData.length < UCP_HEADER_SIZE) {
@@ -467,12 +477,13 @@ public final class UdpPacket extends AbstractPacket {
      * @return
      */
     public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
-      Boolean result = valid;
+      Boolean result = validCache.getValue();
       if (result == null) {
-        synchronized (validLock) {
-          result = valid;
+        synchronized (validCache) {
+          result = validCache.getValue();
           if (result == null) {
-            valid = result = verify(srcAddr, dstAddr);
+            result = verify(srcAddr, dstAddr);
+            validCache.setValue(result);
           }
         }
       }

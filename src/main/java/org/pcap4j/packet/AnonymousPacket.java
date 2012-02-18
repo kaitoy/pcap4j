@@ -13,7 +13,13 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class AnonymousPacket extends AbstractPacket {
+public
+final class AnonymousPacket extends AbstractPacket {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = 4601589840627505036L;
 
   private final byte[] rawData;
 

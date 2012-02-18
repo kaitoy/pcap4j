@@ -24,6 +24,11 @@ import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
  */
 public final class IpV4Packet extends AbstractPacket {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = -3907669810080927342L;
+
   private final IpV4Header header;
   private final Packet payload;
 
@@ -245,26 +250,14 @@ public final class IpV4Packet extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @return
-     */
     private boolean getReservedFlag() {
       return ((flags & 0x4) >> 2) != 0 ? true : false;
     }
 
-    /**
-     *
-     * @return
-     */
     private boolean getDontFragmentFlag() {
       return ((flags & 0x2) >> 1) != 0 ? true : false;
     }
 
-    /**
-     *
-     * @return
-     */
     private boolean getMoreFragmentFlag() {
       return ((flags & 0x1) >> 0) != 0 ? true : false;
     }
@@ -361,6 +354,11 @@ public final class IpV4Packet extends AbstractPacket {
    */
   public final class IpV4Header extends AbstractHeader {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = -337098234014128285L;
+
     private static final int VERSION_AND_IHL_OFFSET
       = 0;
     private static final int VERSION_AND_IHL_SIZE
@@ -418,41 +416,41 @@ public final class IpV4Packet extends AbstractPacket {
     private final InetAddress srcAddr;
     private final InetAddress dstAddr;
 
-    private IpV4Header(byte[] rawHeader) {
-      if (rawHeader.length < IPV4_HEADER_SIZE) {
+    private IpV4Header(byte[] rawData) {
+      if (rawData.length < IPV4_HEADER_SIZE) {
         throw new IllegalArgumentException();
       }
 
       byte versionAndIhl
-        = ByteArrays.getByte(rawHeader, VERSION_AND_IHL_OFFSET);
+        = ByteArrays.getByte(rawData, VERSION_AND_IHL_OFFSET);
       this.version = IpVersion.getInstance(
                        (byte)((versionAndIhl & 0xF0) >> 4)
                      );
       this.ihl = (byte)(versionAndIhl & 0x0F);
 
       this.tos
-        = ByteArrays.getByte(rawHeader, TOS_OFFSET);
+        = ByteArrays.getByte(rawData, TOS_OFFSET);
       this.totalLength
-        = ByteArrays.getShort(rawHeader, TOTAL_LENGTH_OFFSET);
+        = ByteArrays.getShort(rawData, TOTAL_LENGTH_OFFSET);
       this.identification
-        = ByteArrays.getShort(rawHeader, IDENTIFICATION_OFFSET);
+        = ByteArrays.getShort(rawData, IDENTIFICATION_OFFSET);
 
       short flagsAndFlagmentOffset
-        = ByteArrays.getShort(rawHeader, FLAGS_AND_FLAGMENT_OFFSET_OFFSET);
+        = ByteArrays.getShort(rawData, FLAGS_AND_FLAGMENT_OFFSET_OFFSET);
       this.flags = (byte)((flagsAndFlagmentOffset & 0xE000) >> 13);
       this.flagmentOffset = (short)(flagsAndFlagmentOffset & 0x1FFF);
 
       this.ttl
-        = ByteArrays.getByte(rawHeader, TTL_OFFSET);
+        = ByteArrays.getByte(rawData, TTL_OFFSET);
       this.protocol
         = IpNumber
-            .getInstance(ByteArrays.getByte(rawHeader, PROTOCOL_OFFSET));
+            .getInstance(ByteArrays.getByte(rawData, PROTOCOL_OFFSET));
       this.headerChecksum
-        = ByteArrays.getShort(rawHeader, HEADER_CHECKSUM_OFFSET);
+        = ByteArrays.getShort(rawData, HEADER_CHECKSUM_OFFSET);
       this.srcAddr
-        = ByteArrays.getInet4Address(rawHeader, SRC_ADDR_OFFSET);
+        = ByteArrays.getInet4Address(rawData, SRC_ADDR_OFFSET);
       this.dstAddr
-        = ByteArrays.getInet4Address(rawHeader, DST_ADDR_OFFSET);
+        = ByteArrays.getInet4Address(rawData, DST_ADDR_OFFSET);
 
       if (!version.equals(IpVersion.IPv4)) {
         throw new AssertionError();

@@ -9,6 +9,7 @@ package org.pcap4j.core;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
@@ -62,7 +63,7 @@ public final class Pcaps {
     Pointer alldevsp = alldevsPP.getValue();
     if (alldevsp == null) {
       logger.info("No NIF was found.");
-      return new ArrayList<PcapNetworkInterface>(0);
+      return Collections.<PcapNetworkInterface>emptyList();
     }
 
     pcap_if pcapIf = new pcap_if(alldevsp);

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,9 +15,12 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public
-final class ArpOperation
-extends NamedNumber<Short> implements Comparable<Short> {
+public final class ArpOperation extends NamedNumber<Short> {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = 5558693543482950163L;
 
   // http://www.iana.org/assignments/arp-parameters/arp-parameters.xml#arp-parameters-1
 
@@ -33,7 +36,7 @@ extends NamedNumber<Short> implements Comparable<Short> {
   public static final ArpOperation REPLY
     = new ArpOperation((short)2, "REPLY");
 
-  private static Map<Short, ArpOperation> registry
+  private static final Map<Short, ArpOperation> registry
     = new HashMap<Short, ArpOperation>();
 
   static {
@@ -79,9 +82,7 @@ extends NamedNumber<Short> implements Comparable<Short> {
     return String.valueOf(value() & 0xFFFF);
   }
 
-  /**
-   *
-   */
+  @Override
   public int compareTo(Short o) {
     return value().compareTo(o);
   }

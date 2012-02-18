@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,9 +15,12 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public
-final class ArpHardwareType
-extends NamedNumber<Short> implements Comparable<Short> {
+public final class ArpHardwareType extends NamedNumber<Short> {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = -4679864421785826910L;
 
   // http://www.iana.org/assignments/arp-parameters/arp-parameters.xml#hardware-type-rules
 
@@ -45,7 +48,7 @@ extends NamedNumber<Short> implements Comparable<Short> {
   public static final ArpHardwareType IPSEC_TUNNEL
     = new ArpHardwareType((short)31, "IPsec tunnel");
 
-  private static Map<Short, ArpHardwareType> registry
+  private static final Map<Short, ArpHardwareType> registry
     = new HashMap<Short, ArpHardwareType>();
 
   static {
@@ -88,9 +91,7 @@ extends NamedNumber<Short> implements Comparable<Short> {
     return String.valueOf(value() & 0xFFFF);
   }
 
-  /**
-   *
-   */
+  @Override
   public int compareTo(Short o) {
     return value().compareTo(o);
   }

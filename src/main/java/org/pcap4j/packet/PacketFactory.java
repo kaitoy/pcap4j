@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -75,7 +75,8 @@ public class PacketFactory {
   public static Packet newPacketByEtherType(byte[] rawData, Short etherType) {
     if (PacketPropertiesLoader.getInstance().isExtendedNewPacketByEtherType()) {
       Class<? extends Packet> packetClass
-        = PacketPropertiesLoader.getInstance().getPacketClassByEtherType(etherType);
+        = PacketPropertiesLoader.getInstance()
+            .getPacketClassByEtherType(etherType);
       return newPacket(rawData, packetClass);
     }
     else {
@@ -84,6 +85,9 @@ public class PacketFactory {
       }
       else if (etherType.equals(EtherType.ARP.value())) {
         return ArpPacket.newPacket(rawData);
+      }
+      else if (etherType.equals(EtherType.DOT1Q_VLAN_TAGGED_FRAMES.value())) {
+        return Dot1qVlanTaggedPacket.newPacket(rawData);
       }
       else if (etherType.equals(EtherType.IPV6.value())) {
         // TODO support IPv6

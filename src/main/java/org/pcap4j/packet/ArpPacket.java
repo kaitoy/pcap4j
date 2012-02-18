@@ -10,7 +10,6 @@ package org.pcap4j.packet;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.namedvalue.ArpHardwareType;
 import org.pcap4j.packet.namedvalue.ArpOperation;
 import org.pcap4j.packet.namedvalue.EtherType;
@@ -27,7 +26,12 @@ import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
  */
 public final class ArpPacket extends AbstractPacket {
 
-  private final ArpHeader header;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 2232443026999119934L;
+
+  private transient final ArpHeader header;
 
   /**
    *
@@ -209,6 +213,11 @@ public final class ArpPacket extends AbstractPacket {
    * @version pcap4j 0.9.1
    */
   public final class ArpHeader extends AbstractHeader {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 2098135951321047828L;
 
     private static final int HARDWARE_TYPE_OFFSET
       = 0;

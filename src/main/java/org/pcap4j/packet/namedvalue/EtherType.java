@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -20,9 +20,12 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public
-final class EtherType
-extends NamedNumber<Short> implements Comparable<Short> {
+public final class EtherType extends NamedNumber<Short> {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = 7866667243677334444L;
 
   //http://www.iana.org/assignments/ethernet-numbers
 
@@ -37,6 +40,12 @@ extends NamedNumber<Short> implements Comparable<Short> {
    */
   public static final EtherType ARP
     = new EtherType((short)0x0806, "ARP");
+
+  /**
+   *
+   */
+  public static final EtherType DOT1Q_VLAN_TAGGED_FRAMES
+    = new EtherType((short)0x8100, "IEEE 802.1Q VLAN-tagged frames");
 
   /**
    *
@@ -80,9 +89,9 @@ extends NamedNumber<Short> implements Comparable<Short> {
   public static final EtherType PPPOE_SESSION_STAGE
     = new EtherType((short)0x8864, "PPPoE Session Stage");
 
-  private static Map<Short, EtherType> registry
+  private static final Map<Short, EtherType> registry
     = new HashMap<Short, EtherType>();
-  private static Map<Class<? extends Packet>, EtherType> etherTypeOfPacket
+  private static final Map<Class<? extends Packet>, EtherType> etherTypeOfPacket
     = new HashMap<Class<? extends Packet>, EtherType>();
 
   static {
@@ -134,15 +143,14 @@ extends NamedNumber<Short> implements Comparable<Short> {
 
   /**
    *
+   * @return
    */
   @Override
   public String valueAsString() {
     return "0x" + ByteArrays.toHexString(value(), "");
   }
 
-  /**
-   *
-   */
+  @Override
   public int compareTo(Short o) {
     return value().compareTo(o);
   }

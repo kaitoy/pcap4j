@@ -7,11 +7,13 @@
 
 package org.pcap4j.packet;
 
+import java.io.Serializable;
+
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public interface Packet extends Iterable<Packet> {
+public interface Packet extends Iterable<Packet>, Serializable {
 
   // public static Packet newPacket(byte[] rawData); /* necessary */
 
@@ -83,7 +85,7 @@ public interface Packet extends Iterable<Packet> {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public interface Header {
+  public interface Header extends Serializable {
 
     /**
      *

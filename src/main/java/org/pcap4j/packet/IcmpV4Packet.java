@@ -22,6 +22,11 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IcmpV4Packet extends AbstractPacket {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 7643067752830062365L;
+
   private final IcmpV4Header header;
   private final Packet payload;
 
@@ -171,6 +176,11 @@ public final class IcmpV4Packet extends AbstractPacket {
    * @since pcap4j 0.9.1
    */
   public final class IcmpV4Header extends AbstractHeader {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 752307079936231186L;
 
     private static final int TYPE_OFFSET
       = 0;

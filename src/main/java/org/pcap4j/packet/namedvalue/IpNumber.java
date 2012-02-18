@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -18,9 +18,12 @@ import org.pcap4j.packet.UdpPacket;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public
-final class IpNumber
-extends NamedNumber<Byte> implements Comparable<Byte> {
+public final class IpNumber extends NamedNumber<Byte> {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = -3109332132272568136L;
 
   // http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml
 
@@ -132,9 +135,9 @@ extends NamedNumber<Byte> implements Comparable<Byte> {
   public static final IpNumber L2TP
     = new IpNumber((byte)115, "L2TP");
 
-  private static Map<Byte, IpNumber> registry
+  private static final Map<Byte, IpNumber> registry
     = new HashMap<Byte, IpNumber>();
-  private static Map<Class<? extends Packet>, IpNumber> IpNumberOfPacket
+  private static final Map<Class<? extends Packet>, IpNumber> IpNumberOfPacket
     = new HashMap<Class<? extends Packet>, IpNumber>();
 
   static {
@@ -189,6 +192,7 @@ extends NamedNumber<Byte> implements Comparable<Byte> {
     return String.valueOf(value() & 0xFF);
   }
 
+  @Override
   public int compareTo(Byte o) {
     return value().compareTo(o);
   }

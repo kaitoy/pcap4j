@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,9 +15,12 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public
-final class DataLinkType
-extends NamedNumber<Integer> implements Comparable<Integer> {
+public final class DataLinkType extends NamedNumber<Integer> {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = -4299486028394578120L;
 
   /**
    *
@@ -55,7 +58,7 @@ extends NamedNumber<Integer> implements Comparable<Integer> {
   public static final DataLinkType IEEE802_11
     = new DataLinkType(105, "Wireless"); // IEEE 802.11 wireless
 
-  private static Map<Integer, DataLinkType> registry
+  private static final Map<Integer, DataLinkType> registry
     = new HashMap<Integer, DataLinkType>();
 
   static {
@@ -101,9 +104,7 @@ extends NamedNumber<Integer> implements Comparable<Integer> {
     return String.valueOf(value() & 0xFFFF);
   }
 
-  /**
-   *
-   */
+  @Override
   public int compareTo(Integer o) {
     return value().compareTo(o);
   }

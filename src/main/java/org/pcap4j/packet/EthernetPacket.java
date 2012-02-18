@@ -9,7 +9,6 @@ package org.pcap4j.packet;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.namedvalue.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
@@ -17,13 +16,18 @@ import static org.pcap4j.util.ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
 
 /**
+ * This Class handles from DA to data.
+ * Both preamble, SFD, and FCS are not contained.
+ *
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
 public final class EthernetPacket extends AbstractPacket {
 
-  // This Class handles from DA to data.
-  // Both preamble, SFD, and FCS are not contained.
+  /**
+   *
+   */
+  private static final long serialVersionUID = 3461432646404254300L;
 
   private static final int MIN_ETHERNET_PACKET_LENGTH = 60;
 
@@ -246,6 +250,11 @@ public final class EthernetPacket extends AbstractPacket {
    * @since pcap4j 0.9.1
    */
   public final class EthernetHeader extends AbstractHeader {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = -8271269099161190389L;
 
     private static final int DST_ADDR_OFFSET = 0;
     private static final int DST_ADDR_SIZE = MAC_ADDRESS_SIZE_IN_BYTE;

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,11 +15,14 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public
-final class IpVersion
-extends NamedNumber<Byte> implements Comparable<Byte> {
+public final class IpVersion extends NamedNumber<Byte> {
 
-  // http://www.iana.org/assignments/version-numbers/version-numbers.xml
+  /**
+   *
+   */
+  private static final long serialVersionUID = 3155818580398801532L;
+
+  //http://www.iana.org/assignments/version-numbers/version-numbers.xml
 
   /**
    *
@@ -57,7 +60,7 @@ extends NamedNumber<Byte> implements Comparable<Byte> {
   public static final IpVersion TUBA
     = new IpVersion((byte)4, "TUBA");
 
-  private static Map<Byte, IpVersion> registry
+  private static final Map<Byte, IpVersion> registry
     = new HashMap<Byte, IpVersion>();
 
   static {
@@ -102,6 +105,7 @@ extends NamedNumber<Byte> implements Comparable<Byte> {
     }
   }
 
+  @Override
   public int compareTo(Byte o) {
     return value().compareTo(o);
   }

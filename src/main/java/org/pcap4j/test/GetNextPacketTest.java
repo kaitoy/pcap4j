@@ -1,6 +1,10 @@
 package org.pcap4j.test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.apache.log4j.BasicConfigurator;
@@ -31,7 +35,7 @@ public class GetNextPacketTest {
   private static final int MAX_PACKT_SIZE
     = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65535); // [bytes]
 
-  public static void main(String[] args) throws PcapNativeException {
+  public static void main(String[] args) throws PcapNativeException, FileNotFoundException, IOException {
     BasicConfigurator.configure();
     Logger.getRootLogger().setLevel(Level.INFO);
 
@@ -68,6 +72,9 @@ public class GetNextPacketTest {
       assert true; // never get here
     }
 
+
+    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("out/out")));
+
     int num = 0;
     while (true) {
       Packet packet = handle.getNextPacket();
@@ -76,6 +83,7 @@ public class GetNextPacketTest {
       }
       else {
         System.out.println(packet);
+        oos.writeObject(packet);
         num++;
         if (num >= COUNT) {
           break;

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -16,11 +16,14 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public
-final class IcmpV4TypeCode
-extends NamedNumber<Short> implements Comparable<Short> {
+public final class IcmpV4TypeCode extends NamedNumber<Short> {
 
-  // http://www.iana.org/assignments/icmp-parameters/icmp-parameters.xml
+  /**
+   *
+   */
+  private static final long serialVersionUID = 5392428616149161453L;
+
+  //http://www.iana.org/assignments/icmp-parameters/icmp-parameters.xml
 
   /**
    *
@@ -154,7 +157,7 @@ extends NamedNumber<Short> implements Comparable<Short> {
   public static final IcmpV4TypeCode TIME_TO_LIVE_EXCEEDED
     = new IcmpV4TypeCode((short)0x0b00, "Time to Live exceeded in Transit");
 
-  private static Map<Short, IcmpV4TypeCode> registry
+  private static final Map<Short, IcmpV4TypeCode> registry
     = new HashMap<Short, IcmpV4TypeCode>();
 
   static {
@@ -194,6 +197,7 @@ extends NamedNumber<Short> implements Comparable<Short> {
 
   /**
    *
+   * @return
    */
   @Override
   public String valueAsString() {
@@ -201,9 +205,7 @@ extends NamedNumber<Short> implements Comparable<Short> {
     return bytes[0] + "," + bytes[1];
   }
 
-  /**
-   *
-   */
+  @Override
   public int compareTo(Short o) {
     return value().compareTo(o);
   }

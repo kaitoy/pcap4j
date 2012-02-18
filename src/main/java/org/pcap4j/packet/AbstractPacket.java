@@ -10,8 +10,8 @@ package org.pcap4j.packet;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
 import org.pcap4j.util.ByteArrays;
+import org.pcap4j.util.ValueCache;
 
 /**
  * @author Kaito Yamada
@@ -19,18 +19,17 @@ import org.pcap4j.util.ByteArrays;
  */
 public abstract class AbstractPacket implements Packet {
 
-  private volatile Boolean valid = null;
-  private final Object validLock = new Object();
-  private volatile Integer length = null;
-  private final Object lengthLock = new Object();
-  private volatile byte[] rawData = null;
-  private final Object rawDataLock = new Object();
-  private volatile String hexString = null;
-  private final Object hexStringLock = new Object();
-  private volatile String string = null;
-  private final Object stringLock = new Object();
-  private volatile Integer hashCode = null;
-  private final Object hashCodeLock = new Object();
+  /**
+   *
+   */
+  private static final long serialVersionUID = -3016622134481071576L;
+
+  private final ValueCache<Boolean> validCache = new ValueCache<Boolean>();
+  private final ValueCache<Integer> lengthCache = new ValueCache<Integer>();
+  private final ValueCache<byte[]> rawDataCache = new ValueCache<byte[]>();
+  private final ValueCache<String> hexStringCache = new ValueCache<String>();
+  private final ValueCache<String> stringCache = new ValueCache<String>();
+  private final ValueCache<Integer> hashCodeCache = new ValueCache<Integer>();
 
   //public static Packet newPacket(byte[] rawData); /* necessary */
 
@@ -57,12 +56,13 @@ public abstract class AbstractPacket implements Packet {
   }
 
   public boolean isValid() {
-    Boolean result = valid;
+    Boolean result = validCache.getValue();
     if (result == null) {
-      synchronized (validLock) {
-        result = valid;
+      synchronized (validCache) {
+        result = validCache.getValue();
         if (result == null) {
-          valid = result = verify();
+          result = verify();
+          validCache.setValue(result);
         }
       }
     }
@@ -87,12 +87,13 @@ public abstract class AbstractPacket implements Packet {
   }
 
   public int length() {
-    Integer result = length;
+    Integer result = lengthCache.getValue();
     if (result == null) {
-      synchronized (lengthLock) {
-        result = length;
+      synchronized (lengthCache) {
+        result = lengthCache.getValue();
         if (result == null) {
-          length = result = measureLength();
+          result = measureLength();
+          lengthCache.setValue(result);
         }
       }
     }
@@ -126,12 +127,13 @@ public abstract class AbstractPacket implements Packet {
   }
 
   public byte[] getRawData() {
-    byte[] result = rawData;
+    byte[] result = rawDataCache.getValue();
     if (result == null) {
-      synchronized (rawDataLock) {
-        result = rawData;
+      synchronized (rawDataCache) {
+        result = rawDataCache.getValue();
         if (result == null) {
-          rawData = result = buildRawData();
+          result = buildRawData();
+          rawDataCache.setValue(result);
         }
       }
     }
@@ -173,12 +175,13 @@ public abstract class AbstractPacket implements Packet {
    * @return
    */
  public String toHexString() {
-   String result = hexString;
+   String result = hexStringCache.getValue();
    if (result == null) {
-     synchronized (hexStringLock) {
-       result = hexString;
+     synchronized (hexStringCache) {
+       result = hexStringCache.getValue();
        if (result == null) {
-         hexString = result = buildHexString();
+         result = buildHexString();
+         hexStringCache.setValue(result);
        }
      }
    }
@@ -204,12 +207,13 @@ public abstract class AbstractPacket implements Packet {
 
   @Override
   public String toString() {
-    String result = string;
+    String result = stringCache.getValue();
     if (result == null) {
-      synchronized (stringLock) {
-        result = string;
+      synchronized (stringCache) {
+        result = stringCache.getValue();
         if (result == null) {
-          string = result = buildString();
+          result = buildString();
+          stringCache.setValue(result);
         }
       }
     }
@@ -237,12 +241,13 @@ public abstract class AbstractPacket implements Packet {
 
   @Override
   public int hashCode() {
-    Integer result = hashCode;
+    Integer result = hashCodeCache.getValue();
     if (result == null) {
-      synchronized (hashCodeLock) {
-        result = hashCode;
+      synchronized (hashCodeCache) {
+        result = hashCodeCache.getValue();
         if (result == null) {
-          hashCode = result = calcHashCode();
+          result = calcHashCode();
+          hashCodeCache.setValue(result);
         }
       }
     }
@@ -256,18 +261,18 @@ public abstract class AbstractPacket implements Packet {
    */
   public abstract class AbstractHeader implements Header {
 
-    private volatile Boolean valid = null;
-    private final Object validLock = new Object();
-    private volatile Integer length = null;
-    private final Object lengthLock = new Object();
-    private volatile byte[] rawData = null;
-    private final Object rawDataLock = new Object();
-    private volatile String hexString = null;
-    private final Object hexStringLock = new Object();
-    private volatile String string = null;
-    private final Object stringLock = new Object();
-    private volatile Integer hashCode = null;
-    private final Object hashCodeLock = new Object();
+    /**
+     *
+     */
+    private static final long serialVersionUID = -8916517326403680608L;
+
+    // caches
+    private final ValueCache<Boolean> validCache = new ValueCache<Boolean>();
+    private final ValueCache<Integer> lengthCache = new ValueCache<Integer>();
+    private final ValueCache<byte[]> rawDataCache = new ValueCache<byte[]>();
+    private final ValueCache<String> hexStringCache = new ValueCache<String>();
+    private final ValueCache<String> stringCache = new ValueCache<String>();
+    private final ValueCache<Integer> hashCodeCache = new ValueCache<Integer>();
 
     /**
      *
@@ -276,12 +281,13 @@ public abstract class AbstractPacket implements Packet {
     protected boolean verify() { return true; }
 
     public boolean isValid() {
-      Boolean result = valid;
+      Boolean result = validCache.getValue();
       if (result == null) {
-        synchronized (validLock) {
-          result = valid;
+        synchronized (validCache) {
+          result = validCache.getValue();
           if (result == null) {
-            valid = result = verify();
+            result = verify();
+            validCache.setValue(result);
           }
         }
       }
@@ -303,12 +309,13 @@ public abstract class AbstractPacket implements Packet {
     }
 
     public int length() {
-      Integer result = length;
+      Integer result = lengthCache.getValue();
       if (result == null) {
-        synchronized (lengthLock) {
-          result = length;
+        synchronized (lengthCache) {
+          result = lengthCache.getValue();
           if (result == null) {
-            length = result = measureLength();
+            result = measureLength();
+            lengthCache.setValue(result);
           }
         }
       }
@@ -341,12 +348,13 @@ public abstract class AbstractPacket implements Packet {
     }
 
     public byte[] getRawData() {
-      byte[] result = rawData;
+      byte[] result = rawDataCache.getValue();
       if (result == null) {
-        synchronized (rawDataLock) {
-          result = rawData;
+        synchronized (rawDataCache) {
+          result = rawDataCache.getValue();
           if (result == null) {
-            rawData = result = buildRawData();
+            result = buildRawData();
+            rawDataCache.setValue(result);
           }
         }
       }
@@ -369,12 +377,13 @@ public abstract class AbstractPacket implements Packet {
      * @return
      */
     public String toHexString() {
-      String result = hexString;
+      String result = hexStringCache.getValue();
       if (result == null) {
-        synchronized (hexStringLock) {
-          result = hexString;
+        synchronized (hexStringCache) {
+          result = hexStringCache.getValue();
           if (result == null) {
-            hexString = result = buildHexString();
+            result = buildHexString();
+            hexStringCache.setValue(result);
           }
         }
       }
@@ -391,12 +400,13 @@ public abstract class AbstractPacket implements Packet {
 
     @Override
     public String toString() {
-      String result = string;
+      String result = stringCache.getValue();
       if (result == null) {
-        synchronized (stringLock) {
-          result = string;
+        synchronized (stringCache) {
+          result = stringCache.getValue();
           if (result == null) {
-            string = result = buildString();
+            result = buildString();
+            stringCache.setValue(result);
           }
         }
       }
@@ -424,12 +434,13 @@ public abstract class AbstractPacket implements Packet {
 
     @Override
     public int hashCode() {
-      Integer result = hashCode;
+      Integer result = hashCodeCache.getValue();
       if (result == null) {
-        synchronized (hashCodeLock) {
-          result = hashCode;
+        synchronized (hashCodeCache) {
+          result = hashCodeCache.getValue();
           if (result == null) {
-            hashCode = result = buildHashCode();
+            result = buildHashCode();
+            hashCodeCache.setValue(result);
           }
         }
       }

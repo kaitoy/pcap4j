@@ -1,17 +1,26 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.namedvalue;
 
+import java.io.Serializable;
+
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public abstract class NamedNumber<T extends Number> {
+public
+abstract class NamedNumber<T extends Number>
+implements Comparable<T>, Serializable {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = 3858426889927624965L;
 
   private final T value;
   private final String name;
@@ -49,6 +58,8 @@ public abstract class NamedNumber<T extends Number> {
   public String valueAsString() {
     return value.toString();
   }
+
+  public abstract int compareTo(T o);
 
   @Override
   public String toString() {
