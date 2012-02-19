@@ -8,7 +8,7 @@ Javaのパケットキャプチャライブラリ。パケットの作成・送�
 ダウンロード
 ------------
 
-pcap4j 0.9.5
+Pcap4J 0.9.5
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
@@ -67,13 +67,13 @@ jna、log4jもクラスパスに含める必要がある。<br>
    m2e - Eclipse用のMaven統合をチェックして「次へ」。<br>
    使用条件の条項に同意しますにチェックして「完了」。<br>
    M2Eのインストール完了したらEclipseを再起動。<br>
-3. pcap4jのレポジトリのダウンロード<br>
+3. Pcap4Jのレポジトリのダウンロード<br>
    `git clone git@github.com:kaitoy/pcap4j.git` を実行する。
 4. プロジェクトのインポート<br>
   EclipseのGUIで、[ファイル]＞[インポート] を開き、<br>
   「一般」の「既存プロジェクトをワークスペースへ」で 3. でダウンロードしたレポジトリ内のプロジェクトをインポートする。
 5. ビルド<br>
-   EclipseのGUIのプロジェクト・エクスプローラーで、pcap4jのプロジェクトを右クリックして、<br>
+   EclipseのGUIのプロジェクト・エクスプローラーで、Pcap4Jのプロジェクトを右クリックして、<br>
    [実行]＞[Maven package] か [実行]＞[Maven install] を実行する。
 
 因みに、M2Eは旧[m2eclipse](http://m2eclipse.sonatype.org/)。<br>
@@ -82,12 +82,12 @@ m2eclipseでビルドしたい場合は、2. をスキップして、4. でMaven
 ライセンス
 ----------
 
-pcap4j is provided under the LGPL, version 2.1 or later.<br>
+Pcap4J is provided under the LGPL, version 2.1 or later.<br>
 
 おまけ
 ------
 
-pcap4j 0.9.5 を使ったSNMPネットワークシミュレータ、SNeO。<br>
+Pcap4J 0.9.5 を使ったSNMPネットワークシミュレータ、SNeO。<br>
 とりあえず置いておくだけ。<br>
 商用でもなんでも無料で使用可。コピーも再配布も可。<br>
 

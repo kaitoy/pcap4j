@@ -3,7 +3,7 @@
   <groupId>org.pcap4j</groupId>
   <artifactId>pcap4j</artifactId>
   <version>0.9.5</version>
-  <name>org.pcap4j</name>
+  <name>Pcap4J</name>
   <dependencies>
   	<dependency>
   		<groupId>net.java.dev.jna</groupId>
@@ -19,4 +19,5 @@
   		<scope>provided</scope>
   	</dependency>
   </dependencies>
+  <url>https://github.com/kaitoy/pcap4j</url>
 </project>
