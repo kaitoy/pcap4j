@@ -212,7 +212,12 @@ public final class IcmpV4Packet extends AbstractPacket {
 
     private IcmpV4Header(byte[] rawData) {
       if (rawData.length < ICMP_HEADER_SIZE) {
-        throw new IllegalArgumentException();
+        StringBuilder sb = new StringBuilder(80);
+        sb.append("The data is too short to build an ICMPv4 header(")
+          .append(ICMP_HEADER_SIZE)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "));
+        throw new IllegalPacketDataException(sb.toString());
       }
 
       this.typeCode

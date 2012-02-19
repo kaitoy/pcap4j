@@ -31,8 +31,9 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
    *
    * @param rawData
    * @return
+   * @throws PacketException
    */
-  public static Dot1qVlanTaggedPacket newPacket(byte[] rawData) {
+  public static Dot1qVlanTaggedPacket newPacket(byte[] rawData){
     return new Dot1qVlanTaggedPacket(rawData);
   }
 
@@ -174,7 +175,12 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
 
     private Dot1qVlanTagHeader(byte[] rawData) {
       if (rawData.length < DOT1Q_TAG_HEADER_SIZE) {
-        throw new IllegalArgumentException();
+        StringBuilder sb = new StringBuilder(110);
+        sb.append("The data is too short to build an IEEE802.1Q Tag header(")
+          .append(DOT1Q_TAG_HEADER_SIZE)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "));
+        throw new IllegalPacketDataException(sb.toString());
       }
 
       short priorityAndCfiAndVid

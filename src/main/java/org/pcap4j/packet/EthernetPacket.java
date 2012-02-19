@@ -43,6 +43,7 @@ public final class EthernetPacket extends AbstractPacket {
    *
    * @param rawData
    * @return
+   * @throws PacketException
    */
   public static EthernetPacket newPacket(byte[] rawData) {
     return new EthernetPacket(rawData);
@@ -63,10 +64,10 @@ public final class EthernetPacket extends AbstractPacket {
           .newPacketByEtherType(rawPayload, header.getType().value());
 
     int payloadLength = this.payload.length();
-    if (rawData.length > payloadLength) {
+    if (rawPayload.length > payloadLength) {
       this.pad
         = ByteArrays.getSubArray(
-            rawData, payloadLength, rawData.length - payloadLength
+            rawPayload, payloadLength, rawPayload.length - payloadLength
           );
     }
     else {
@@ -270,7 +271,12 @@ public final class EthernetPacket extends AbstractPacket {
 
     private EthernetHeader(byte[] rawData) {
       if (rawData.length < ETHERNET_HEADER_SIZE) {
-        throw new IllegalArgumentException();
+        StringBuilder sb = new StringBuilder(100);
+        sb.append("The data is too short to build an Ethernet header(")
+          .append(ETHERNET_HEADER_SIZE)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "));
+        throw new IllegalPacketDataException(sb.toString());
       }
 
       this.dstAddr = ByteArrays.getMacAddress(rawData, DST_ADDR_OFFSET);
@@ -342,7 +348,7 @@ public final class EthernetPacket extends AbstractPacket {
 
       if (pad != null && pad.length != 0) {
         sb.append("  Pad: 0x")
-          .append(ByteArrays.toHexString(pad, ""))
+          .append(ByteArrays.toHexString(pad, " "))
           .append("\n");
       }
 

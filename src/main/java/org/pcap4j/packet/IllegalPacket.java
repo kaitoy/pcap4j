@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -11,14 +11,14 @@ import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.1
+ * @since pcap4j 0.9.5
  */
-public final class AnonymousPacket extends AbstractPacket {
+public final class IllegalPacket extends AbstractPacket {
 
   /**
    *
    */
-  private static final long serialVersionUID = 4601589840627505036L;
+  private static final long serialVersionUID = -8028013257441150031L;
 
   private final byte[] rawData;
 
@@ -27,11 +27,11 @@ public final class AnonymousPacket extends AbstractPacket {
    * @param rawData
    * @return
    */
-  public static AnonymousPacket newPacket(byte[] rawData) {
-    return new AnonymousPacket(rawData);
+  public static IllegalPacket newPacket(byte[] rawData) {
+    return new IllegalPacket(rawData);
   }
 
-  private AnonymousPacket(byte[] rawData) {
+  private IllegalPacket(byte[] rawData) {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -39,7 +39,7 @@ public final class AnonymousPacket extends AbstractPacket {
     System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);
   }
 
-  private AnonymousPacket(Builder builder) {
+  private IllegalPacket(Builder builder) {
     if (
          builder == null
       || builder.rawData == null
@@ -54,7 +54,7 @@ public final class AnonymousPacket extends AbstractPacket {
   }
 
   @Override
-  public boolean isValid() { return true; }
+  public boolean isValid() { return false; }
 
   @Override
   public int length() { return rawData.length; }
@@ -75,7 +75,7 @@ public final class AnonymousPacket extends AbstractPacket {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 0.9.1
+   * @since pcap4j 0.9.5
    */
   public static final class Builder implements Packet.Builder {
 
@@ -86,7 +86,7 @@ public final class AnonymousPacket extends AbstractPacket {
      */
     public Builder() {}
 
-    private Builder(AnonymousPacket packet) {
+    private Builder(IllegalPacket packet) {
       rawData = packet.rawData;
     }
 
@@ -100,8 +100,8 @@ public final class AnonymousPacket extends AbstractPacket {
       return this;
     }
 
-    public AnonymousPacket build() {
-      return new AnonymousPacket(this);
+    public IllegalPacket build() {
+      return new IllegalPacket(this);
     }
 
   }
@@ -110,7 +110,7 @@ public final class AnonymousPacket extends AbstractPacket {
   protected String buildString() {
     StringBuilder sb = new StringBuilder();
 
-    sb.append("[data (")
+    sb.append("[Illegal Packet (")
       .append(length())
       .append(" bytes)]\n");
     sb.append("  Hex stream: ")

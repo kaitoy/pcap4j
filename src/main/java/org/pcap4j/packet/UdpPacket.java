@@ -44,7 +44,7 @@ public final class UdpPacket extends AbstractPacket {
       = ByteArrays.getSubArray(
           rawData,
           this.header.length(),
-          rawData.length - this.header.length()
+          this.header.getLengthAsInt() - this.header.length()
         );
 
     this.payload
@@ -293,7 +293,12 @@ public final class UdpPacket extends AbstractPacket {
 
     private UdpHeader(byte[] rawData) {
       if (rawData.length < UCP_HEADER_SIZE) {
-        throw new IllegalArgumentException();
+        StringBuilder sb = new StringBuilder(80);
+        sb.append("The data is too short to build a UDP header(")
+          .append(UCP_HEADER_SIZE)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "));
+        throw new IllegalPacketDataException(sb.toString());
       }
 
       this.srcPort = ByteArrays.getShort(rawData, SRC_PORT_OFFSET);

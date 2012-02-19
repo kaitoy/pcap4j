@@ -43,10 +43,9 @@ public final class ArpPacket extends AbstractPacket {
   }
 
   private ArpPacket(byte[] rawData) {
-//    if (rawData.length != ArpHeader.ARP_HEADER_SIZE) {
-//      throw new AssertionError();
-//    }
-//  ARP packet may be with Ethernet trailer(padding). Ignore it.
+    if (rawData == null) {
+      throw new NullPointerException();
+    }
     this.header = new ArpHeader(rawData);
   }
 
@@ -270,7 +269,12 @@ public final class ArpPacket extends AbstractPacket {
 
     private ArpHeader(byte[] rawData) {
       if (rawData.length < ARP_HEADER_SIZE) {
-        throw new IllegalArgumentException();
+        StringBuilder sb = new StringBuilder(120);
+        sb.append("The data is too short to build an ARP header(")
+          .append(ARP_HEADER_SIZE)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "));
+        throw new IllegalPacketDataException(sb.toString());
       }
 
       this.hardwareType

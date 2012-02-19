@@ -48,7 +48,7 @@ public final class IpV4Packet extends AbstractPacket {
       = ByteArrays.getSubArray(
           rawData,
           this.header.length(),
-          rawData.length - this.header.length()
+          this.header.getTotalLengthAsInt() - this.header.length()
         );
 
     this.payload
@@ -418,7 +418,12 @@ public final class IpV4Packet extends AbstractPacket {
 
     private IpV4Header(byte[] rawData) {
       if (rawData.length < IPV4_HEADER_SIZE) {
-        throw new IllegalArgumentException();
+        StringBuilder sb = new StringBuilder(110);
+        sb.append("The data is too short to build an IPv4 header(")
+          .append(IPV4_HEADER_SIZE)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "));
+        throw new IllegalPacketDataException(sb.toString());
       }
 
       byte versionAndIhl
