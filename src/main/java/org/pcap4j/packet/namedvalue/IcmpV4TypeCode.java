@@ -34,8 +34,8 @@ public final class IcmpV4TypeCode extends NamedNumber<Short> {
   /**
    *
    */
-  public static final IcmpV4TypeCode NET_UNREACHABLE
-    = new IcmpV4TypeCode((short)0x0300, "Net Unreachable");
+  public static final IcmpV4TypeCode NETWORK_UNREACHABLE
+    = new IcmpV4TypeCode((short)0x0300, "Network Unreachable");
 
   /**
    *
@@ -61,40 +61,40 @@ public final class IcmpV4TypeCode extends NamedNumber<Short> {
   public static final IcmpV4TypeCode FRAGMENTATION_BLOCKED
     = new IcmpV4TypeCode(
         (short)0x0304,
-        "Fragmentation Needed and Don't Fragment was Set"
+        "Fragmentation needed but no fragment bit set"
       );
 
   /**
    *
    */
   public static final IcmpV4TypeCode SRC_ROUTE_FAILED
-    = new IcmpV4TypeCode((short)0x0305, "Source Route Failed");
+    = new IcmpV4TypeCode((short)0x0305, "Source routing failed");
 
   /**
    *
    */
-  public static final IcmpV4TypeCode DST_NET_UNKNOWN
-    = new IcmpV4TypeCode((short)0x0306, "Destination Network Unknown");
+  public static final IcmpV4TypeCode DST_NETWORK_UNKNOWN
+    = new IcmpV4TypeCode((short)0x0306, "Destination network unknown");
 
   /**
    *
    */
   public static final IcmpV4TypeCode DST_HOST_UNKNOWN
-    = new IcmpV4TypeCode((short)0x0307, "Destination Host Unknown");
+    = new IcmpV4TypeCode((short)0x0307, "Destination host unknown");
 
   /**
    *
    */
   public static final IcmpV4TypeCode SRC_HOST_ISOLATED
-    = new IcmpV4TypeCode((short)0x0308, "Source Host Isolated");
+    = new IcmpV4TypeCode((short)0x0308, "Source host isolated");
 
   /**
    *
    */
-  public static final IcmpV4TypeCode DST_NET_PROHIBITED
+  public static final IcmpV4TypeCode DST_NETWORK_PROHIBITED
     = new IcmpV4TypeCode(
         (short)0x0309,
-        "Communication with Destination Network is Administratively Prohibited"
+        "Destination network administratively prohibited "
       );
 
   /**
@@ -103,26 +103,20 @@ public final class IcmpV4TypeCode extends NamedNumber<Short> {
   public static final IcmpV4TypeCode DST_HOST_PROHIBITED
     = new IcmpV4TypeCode(
         (short)0x030a,
-        "Communication with Destination Host is Administratively Prohibited"
+        "Destination host administratively prohibited"
       );
 
   /**
    *
    */
-  public static final IcmpV4TypeCode DST_NET_UNREACHABLE_FOR_TOS
-    = new IcmpV4TypeCode(
-        (short)0x030b,
-        "Destination Network Unreachable for Type of Service"
-      );
+  public static final IcmpV4TypeCode DST_NETWORK_UNREACHABLE_FOR_TOS
+    = new IcmpV4TypeCode((short)0x030b, "Network unreachable for TOS");
 
   /**
    *
    */
   public static final IcmpV4TypeCode DST_HOST_UNREACHABLE_FOR_TOS
-    = new IcmpV4TypeCode(
-        (short)0x030c,
-        "Destination Host Unreachable for Type of Service"
-      );
+    = new IcmpV4TypeCode((short)0x030c, "Host unreachable for TOS");
 
   /**
    *
@@ -130,14 +124,20 @@ public final class IcmpV4TypeCode extends NamedNumber<Short> {
   public static final IcmpV4TypeCode COMMUNICATION_PROHIBITED
     = new IcmpV4TypeCode(
         (short)0x030d,
-        "Communication Administratively Prohibited"
+        "Communication administratively prohibited by filtering"
       );
 
   /**
    *
    */
+  public static final IcmpV4TypeCode SOURCE_QUENCH
+    = new IcmpV4TypeCode((short)0x0400, "Source quench");
+
+  /**
+   *
+   */
   public static final IcmpV4TypeCode HOST_PRECEDENCE_VIOLATION
-    = new IcmpV4TypeCode((short)0x030e, "Host Precedence Violation");
+    = new IcmpV4TypeCode((short)0x030e, "Host precedence violation");
 
   /**
    *
@@ -155,7 +155,7 @@ public final class IcmpV4TypeCode extends NamedNumber<Short> {
    *
    */
   public static final IcmpV4TypeCode TIME_TO_LIVE_EXCEEDED
-    = new IcmpV4TypeCode((short)0x0b00, "Time to Live exceeded in Transit");
+    = new IcmpV4TypeCode((short)0x0b00, "Time to Live exceeded during transit");
 
   private static final Map<Short, IcmpV4TypeCode> registry
     = new HashMap<Short, IcmpV4TypeCode>();
@@ -193,6 +193,18 @@ public final class IcmpV4TypeCode extends NamedNumber<Short> {
     else {
       return new IcmpV4TypeCode(value, "unknown");
     }
+  }
+
+  public static IcmpV4TypeCode getInstance(int type, int code) {
+    return getInstance(Short.valueOf((short)(type << 16 | code)));
+  }
+
+  public int getType() {
+    return value() >>> 8;
+  }
+
+  public int getCode() {
+    return value() & 0xFF;
   }
 
   /**

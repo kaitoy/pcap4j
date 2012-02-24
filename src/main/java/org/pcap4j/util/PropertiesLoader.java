@@ -9,6 +9,8 @@ package org.pcap4j.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -372,6 +374,88 @@ public class PropertiesLoader {
             );
             value = defaultValue;
           }
+        }
+        else {
+          logger.warn(
+            sb.append("[").append(resourceName)
+              .append("] Could not get value for ").append(key)
+              .append(", use defalut value: ").append(defaultValue)
+          );
+          value = defaultValue;
+        }
+      }
+
+      if (useCache) {
+        cache.put(key, value);
+      }
+
+      return value;
+    }
+  }
+
+  /**
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public InetAddress getInetAddress(String key, InetAddress defaultValue) {
+    StringBuilder sb = new StringBuilder();
+
+    synchronized (cache) {
+      if (useCache && cache.containsKey(key)) {
+        InetAddress cacheValue = (InetAddress)cache.get(key);
+        if (logger.isDebugEnabled()) {
+          logger.debug(
+            sb.append("[").append(resourceName).append("] Got ")
+              .append(cacheValue).append(" from cache for ").append(key)
+          );
+        }
+        return cacheValue;
+      }
+
+      InetAddress value = null;
+
+      if (givePrioritySystemPropertiesThanPropertiesFile) {
+        String strValue = System.getProperty(key);
+
+        if (strValue != null) {
+          try {
+            value = InetAddress.getByName(strValue);
+          } catch (UnknownHostException e) {
+            logger.error(
+              sb.append("[System properties] Got Invalid value: ")
+                .append(strValue).append(" for ").append(key)
+                .append(", ignore it.")
+            );
+          }
+          logger.info(
+            sb.append("[System properties] Got \"")
+              .append(strValue).append("\" means ").append(value)
+              .append(" for ").append(key)
+          );
+        }
+      }
+
+      if (value == null) {
+        String strValue = prop.getProperty(key);
+
+        if (strValue != null) {
+          try {
+            value = InetAddress.getByName(strValue);
+          } catch (UnknownHostException e) {
+            logger.warn(
+              sb.append("[").append(resourceName).append("] ")
+                .append(strValue).append(" is invalid for ").append(key)
+                .append(", use defalut value: ").append(defaultValue)
+            );
+            value = defaultValue;
+          }
+          logger.info(
+            sb.append("[").append(resourceName).append("] Got \"")
+              .append(strValue).append("\" means ").append(value)
+              .append(" for ").append(key)
+          );
         }
         else {
           logger.warn(
