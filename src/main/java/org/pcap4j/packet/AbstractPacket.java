@@ -415,13 +415,9 @@ public abstract class AbstractPacket implements Packet {
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) {
-        return true;
-      }
-      if (obj.getClass().getName().equals(getClass().getName())) {
-        return false;
-      }
-      return (getClass().cast(obj)).getRawData().equals(getRawData());
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+      return Arrays.equals(getClass().cast(obj).getRawData(), getRawData());
     }
 
     /**

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -16,7 +16,7 @@ import org.pcap4j.core.NativeMappings.in_addr;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-final class Inet {
+final class Inets {
 
   /**
    *
@@ -48,7 +48,7 @@ final class Inet {
    */
   public static final short AF_BTM = 32;
 
-  private Inet() { throw new AssertionError(); }
+  private Inets() { throw new AssertionError(); }
 
   /**
    *

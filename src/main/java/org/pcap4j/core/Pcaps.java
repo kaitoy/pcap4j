@@ -70,7 +70,7 @@ public final class Pcaps {
 
     List<PcapNetworkInterface> ifList = new ArrayList<PcapNetworkInterface>();
     for (pcap_if pif = pcapIf; pif != null; pif = pif.next) {
-      ifList.add(PcapNetworkInterface.newInstance(pif));
+      ifList.add(PcapNetworkInterface.newInstance(pif, true));
     }
 
     PcapLibrary.INSTANCE.pcap_freealldevs(pcapIf.getPointer());

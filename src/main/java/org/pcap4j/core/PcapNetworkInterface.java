@@ -31,9 +31,10 @@ public final class PcapNetworkInterface {
   private final String name;
   private final String description;
   private final List<PcapAddress> addresses = new ArrayList<PcapAddress>();
-  private final boolean isLoopBack;
+  private final boolean loopBack;
+  private final boolean local;
 
-  private PcapNetworkInterface(pcap_if pif) {
+  private PcapNetworkInterface(pcap_if pif, boolean local) {
     this.name = pif.name;
     this.description = pif.description;
 
@@ -43,10 +44,10 @@ public final class PcapNetworkInterface {
       pcapAddr = pcapAddr.next
     ) {
      switch (pcapAddr.addr.sa_family) {
-       case Inet.AF_INET:
+       case Inets.AF_INET:
          addresses.add(PcapIpv4Address.newInstance(pcapAddr));
          break;
-       case Inet.AF_INET6:
+       case Inets.AF_INET6:
          addresses.add(PcapIpv6Address.newInstance(pcapAddr));
          break;
        default:
@@ -59,15 +60,17 @@ public final class PcapNetworkInterface {
     }
 
     if (pif.flags == PCAP_IF_LOOPBACK) {
-      this.isLoopBack = true;
+      this.loopBack = true;
     }
     else {
-      this.isLoopBack = false;
+      this.loopBack = false;
     }
+
+    this.local = local;
   }
 
-  static PcapNetworkInterface newInstance(pcap_if pif) {
-    return new PcapNetworkInterface(pif);
+  static PcapNetworkInterface newInstance(pcap_if pif, boolean local) {
+    return new PcapNetworkInterface(pif, local);
   }
 
   /**
@@ -99,7 +102,15 @@ public final class PcapNetworkInterface {
    * @return
    */
   public boolean isLoopBack() {
-    return isLoopBack;
+    return loopBack;
+  }
+
+  /**
+   *
+   * @return
+   */
+  public boolean isLocal() {
+    return local;
   }
 
   /**
@@ -156,9 +167,19 @@ public final class PcapNetworkInterface {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder(250);
 
-    sb.append(name).append("(").append(description).append(")");
+    sb.append("name: [").append(name)
+      .append("] description: [").append(description);
+
+    for (PcapAddress addr: addresses) {
+      sb.append("] address: [").append(addr.getAddress());
+    }
+
+    sb.append("] loopBack: [").append(loopBack)
+      .append("]");
+    sb.append("] local: [").append(local)
+      .append("]");
 
     return sb.toString();
   }
@@ -166,13 +187,11 @@ public final class PcapNetworkInterface {
   @Override
   public boolean equals(Object obj) {
     if (this == obj) { return true; }
-    if (!this.getClass().getName().equals(obj.getClass().getName())) {
-      return false;
-    }
+    if (!(obj instanceof PcapNetworkInterface)) { return false; }
 
-    PcapNetworkInterface other = this.getClass().cast(obj);
+    PcapNetworkInterface other = (PcapNetworkInterface)obj;
     return    this.name.equals(other.getName())
-           && this.description.equals(other.description);
+           && this.local == other.isLocal();
   }
 
   @Override

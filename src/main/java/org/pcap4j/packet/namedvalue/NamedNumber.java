@@ -63,7 +63,7 @@ implements Comparable<T>, Serializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder(70);
     return sb.append(valueAsString()).append("(")
              .append(name).append(")").toString();
   }

@@ -78,6 +78,8 @@ public class SendPacketTest {
 
     PcapHandle handle
       = nif.openLive(MAX_PACKT_SIZE, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+    PcapHandle sendHandle
+      = nif.openLive(MAX_PACKT_SIZE, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
     ExecutorService pool = Executors.newSingleThreadExecutor();
 
     try {
@@ -138,9 +140,9 @@ public class SendPacketTest {
                   .srcAddr(SRC_MAC_ADDR)
                   .type(EtherType.ARP)
                   .payloadBuilder(arpBuilder);
-
+;
       for (int i = 0; i < COUNT; i++) {
-        handle.sendPacket(etherBuilder.build());
+        sendHandle.sendPacket(etherBuilder.build());
         try {
           Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -148,10 +150,13 @@ public class SendPacketTest {
         }
       }
     } finally {
-      if (handle.isOpening()) {
+      if (handle != null && handle.isOpening()) {
         handle.close();
       }
-      if (!pool.isShutdown()) {
+      if (sendHandle != null && sendHandle.isOpening()) {
+        sendHandle.close();
+      }
+      if (pool != null && !pool.isShutdown()) {
         pool.shutdown();
       }
     }

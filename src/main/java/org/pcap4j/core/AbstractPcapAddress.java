@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada Yamada
   _##
   _##########################################################################
 */
@@ -34,7 +34,7 @@ abstract class AbstractPcapAddress implements PcapAddress {
 
     this.address = ntoInetAddress(pcapAddr.addr);
 
-    if (pcapAddr.netmask != null && pcapAddr.netmask.sa_family != Inet.AF_UNSPEC) {
+    if (pcapAddr.netmask != null && pcapAddr.netmask.sa_family != Inets.AF_UNSPEC) {
       if (pcapAddr.addr.sa_family != pcapAddr.netmask.sa_family) {
         throw new AssertionError();
       }
@@ -44,7 +44,7 @@ abstract class AbstractPcapAddress implements PcapAddress {
       this.netmask = null;
     }
 
-    if (pcapAddr.broadaddr != null && pcapAddr.broadaddr.sa_family != Inet.AF_UNSPEC) {
+    if (pcapAddr.broadaddr != null && pcapAddr.broadaddr.sa_family != Inets.AF_UNSPEC) {
       if (pcapAddr.addr.sa_family != pcapAddr.broadaddr.sa_family) {
         throw new AssertionError();
       }
@@ -54,7 +54,7 @@ abstract class AbstractPcapAddress implements PcapAddress {
       this.broadcastAddr = null;
     }
 
-    if (pcapAddr.dstaddr != null && pcapAddr.dstaddr.sa_family != Inet.AF_UNSPEC) {
+    if (pcapAddr.dstaddr != null && pcapAddr.dstaddr.sa_family != Inets.AF_UNSPEC) {
       if (pcapAddr.addr.sa_family != pcapAddr.dstaddr.sa_family) {
         throw new AssertionError();
       }
@@ -94,15 +94,15 @@ abstract class AbstractPcapAddress implements PcapAddress {
   }
 
   /**
-  *
-  * @param sa
-  * @return
-  */
- protected abstract InetAddress ntoInetAddress(sockaddr sa);
+   *
+   * @param sa
+   * @return
+   */
+  protected abstract InetAddress ntoInetAddress(sockaddr sa);
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder(190);
 
     sb.append("address: [").append(address)
       .append("] netmask: [").append(netmask)
@@ -116,15 +116,13 @@ abstract class AbstractPcapAddress implements PcapAddress {
   @Override
   public boolean equals(Object obj) {
     if (this == obj) { return true; }
-    if (!this.getClass().getName().equals(obj.getClass().getName())) {
-      return false;
-    }
+    if (!this.getClass().isInstance(obj)) { return false; }
 
-    AbstractPcapAddress addr = this.getClass().cast(obj);
-    return    this.address.equals(addr.address)
-           && this.netmask.equals(addr.netmask)
-           && this.broadcastAddr.equals(addr.broadcastAddr)
-           && this.dstAddr.equals(addr.dstAddr);
+    AbstractPcapAddress other = this.getClass().cast(obj);
+    return    this.address.equals(other.address)
+           && this.netmask.equals(other.netmask)
+           && this.broadcastAddr.equals(other.broadcastAddr)
+           && this.dstAddr.equals(other.dstAddr);
   }
 
   @Override

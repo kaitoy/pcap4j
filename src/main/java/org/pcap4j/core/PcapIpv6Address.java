@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -34,10 +34,7 @@ public final class PcapIpv6Address extends AbstractPcapAddress {
   @Override
   protected InetAddress ntoInetAddress(sockaddr sa) {
     sockaddr_in6 addr = new sockaddr_in6(sa.getPointer());
-    return Inet.ntoInetAddress(addr.sin6_addr);
+    return Inets.ntoInetAddress(addr.sin6_addr);
   }
 
-  // TODO toString()
-  // TODO equals()
-  // TODO hashCode()
 }
