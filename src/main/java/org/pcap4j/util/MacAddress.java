@@ -61,7 +61,7 @@ public final class MacAddress implements Serializable {
    * @return
    */
   public byte[] getOui() {
-    return new byte[] {address[0], address[1]};
+    return new byte[] {address[0], address[1], address[2]};
   }
 
   /**

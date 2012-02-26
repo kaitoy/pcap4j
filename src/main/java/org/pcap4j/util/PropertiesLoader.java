@@ -54,9 +54,7 @@ public class PropertiesLoader {
     }
 
     try {
-      this.prop.load(
-        this.getClass().getClassLoader().getResourceAsStream(resourceName)
-      );
+      this.prop.load(in);
     } catch (IOException e) {
       logger.error(e);
     }
