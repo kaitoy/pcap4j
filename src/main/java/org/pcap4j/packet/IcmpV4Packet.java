@@ -7,16 +7,16 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTE;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTE;
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pcap4j.packet.namedvalue.IcmpV4TypeCode;
+import org.pcap4j.packet.namednumber.IcmpV4TypeCode;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -220,19 +220,19 @@ public final class IcmpV4Packet extends AbstractPacket {
     private static final int TYPE_OFFSET
       = 0;
     private static final int TYPE_SIZE
-      = BYTE_SIZE_IN_BYTE;
+      = BYTE_SIZE_IN_BYTES;
     private static final int CODE_OFFSET
       = TYPE_OFFSET + TYPE_SIZE;
     private static final int CODE_SIZE
-      = BYTE_SIZE_IN_BYTE;
+      = BYTE_SIZE_IN_BYTES;
     private static final int CHECKSUM_OFFSET
       = CODE_OFFSET + CODE_SIZE;
     private static final int CHECKSUM_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int TYPE_SPECIFIC_FIELD_OFFSET
       = CHECKSUM_OFFSET + CHECKSUM_SIZE;
     private static final int TYPE_SPECIFIC_FIELD_SIZE
-      = INT_SIZE_IN_BYTE;
+      = INT_SIZE_IN_BYTES;
     private static final int ICMP_HEADER_SIZE
       = TYPE_SPECIFIC_FIELD_OFFSET + TYPE_SPECIFIC_FIELD_SIZE;
 

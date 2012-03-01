@@ -7,11 +7,13 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-import org.pcap4j.packet.namedvalue.IpNumber;
+
+import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.packet.namednumber.UdpPort;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.ValueCache;
 
@@ -25,8 +27,6 @@ public final class UdpPacket extends AbstractPacket {
    *
    */
   private static final long serialVersionUID = 4638029542367352625L;
-
-  private static final int PSEUDO_HEADER_SIZE = 12;
 
   private final UdpHeader header;
   private final Packet payload;
@@ -48,7 +48,8 @@ public final class UdpPacket extends AbstractPacket {
         );
 
     this.payload
-      = PacketFactory.newPacketByPort(rawPayload, header.getDstPort());
+      = PacketFactories.getPacketFactory(UdpPort.class)
+          .newPacket(rawPayload, header.getDstPort());
   }
 
   private UdpPacket(Builder builder) {
@@ -142,8 +143,8 @@ public final class UdpPacket extends AbstractPacket {
    */
   public static final class Builder implements Packet.Builder {
 
-    private short srcPort;
-    private short dstPort;
+    private UdpPort srcPort;
+    private UdpPort dstPort;
     private short length;
     private short checksum;
     private Packet.Builder payloadBuilder;
@@ -173,7 +174,7 @@ public final class UdpPacket extends AbstractPacket {
      * @param srcPort
      * @return
      */
-    public Builder srcPort(short srcPort) {
+    public Builder srcPort(UdpPort srcPort) {
       this.srcPort = srcPort;
       return this;
     }
@@ -183,7 +184,7 @@ public final class UdpPacket extends AbstractPacket {
      * @param dstPort
      * @return
      */
-    public Builder dstPort(short dstPort) {
+    public Builder dstPort(UdpPort dstPort) {
       this.dstPort = dstPort;
       return this;
     }
@@ -268,24 +269,26 @@ public final class UdpPacket extends AbstractPacket {
     private static final int SRC_PORT_OFFSET
       = 0;
     private static final int SRC_PORT_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int DST_PORT_OFFSET
       = SRC_PORT_OFFSET + SRC_PORT_SIZE;
     private static final int DST_PORT_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int LENGTH_OFFSET
       = DST_PORT_OFFSET + DST_PORT_SIZE;
     private static final int LENGTH_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int CHECKSUM_OFFSET
       = LENGTH_OFFSET + LENGTH_SIZE;
     private static final int CHECKSUM_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int UCP_HEADER_SIZE
       = CHECKSUM_OFFSET + CHECKSUM_SIZE;
 
-    private final short srcPort;
-    private final short dstPort;
+    private static final int PSEUDO_HEADER_SIZE = 12;
+
+    private final UdpPort srcPort;
+    private final UdpPort dstPort;
     private final short length;
     private final short checksum;
 
@@ -301,8 +304,10 @@ public final class UdpPacket extends AbstractPacket {
         throw new IllegalPacketDataException(sb.toString());
       }
 
-      this.srcPort = ByteArrays.getShort(rawData, SRC_PORT_OFFSET);
-      this.dstPort = ByteArrays.getShort(rawData, DST_PORT_OFFSET);
+      this.srcPort
+        = UdpPort.getInstance(ByteArrays.getShort(rawData, SRC_PORT_OFFSET));
+      this.dstPort
+        = UdpPort.getInstance(ByteArrays.getShort(rawData, DST_PORT_OFFSET));
       this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET);
       this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET);
     }
@@ -356,15 +361,15 @@ public final class UdpPacket extends AbstractPacket {
       // pseudo header
       System.arraycopy(
         srcAddr.getAddress(), 0,
-        data, destPos, ByteArrays.IP_ADDRESS_SIZE_IN_BYTE
+        data, destPos, ByteArrays.IP_ADDRESS_SIZE_IN_BYTES
       );
-      destPos += ByteArrays.IP_ADDRESS_SIZE_IN_BYTE;
+      destPos += ByteArrays.IP_ADDRESS_SIZE_IN_BYTES;
 
       System.arraycopy(
         dstAddr.getAddress(), 0,
-        data, destPos, ByteArrays.IP_ADDRESS_SIZE_IN_BYTE
+        data, destPos, ByteArrays.IP_ADDRESS_SIZE_IN_BYTES
       );
-      destPos += ByteArrays.IP_ADDRESS_SIZE_IN_BYTE;
+      destPos += ByteArrays.IP_ADDRESS_SIZE_IN_BYTES;
 
       data[destPos] = (byte)0;
       destPos++;
@@ -374,9 +379,9 @@ public final class UdpPacket extends AbstractPacket {
 
       System.arraycopy(
         ByteArrays.toByteArray(length), 0,
-        data, destPos, SHORT_SIZE_IN_BYTE
+        data, destPos, SHORT_SIZE_IN_BYTES
       );
-      destPos += SHORT_SIZE_IN_BYTE;
+      destPos += SHORT_SIZE_IN_BYTES;
 
       return ByteArrays.calcChecksum(data);
     }
@@ -385,7 +390,7 @@ public final class UdpPacket extends AbstractPacket {
      *
      * @return
      */
-    public short getSrcPort() {
+    public UdpPort getSrcPort() {
       return srcPort;
     }
 
@@ -393,24 +398,8 @@ public final class UdpPacket extends AbstractPacket {
      *
      * @return
      */
-    public int getSrcPortAsInt() {
-      return (int)(0xFFFF & srcPort);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public short getDstPort() {
+    public UdpPort getDstPort() {
       return dstPort;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getDstPortAsInt() {
-      return (int)(0xFFFF & dstPort);
     }
 
     /**
@@ -498,8 +487,8 @@ public final class UdpPacket extends AbstractPacket {
     @Override
     protected List<byte[]> getRawFields() {
       List<byte[]> rawFields = new ArrayList<byte[]>();
-      rawFields.add(ByteArrays.toByteArray(srcPort));
-      rawFields.add(ByteArrays.toByteArray(dstPort));
+      rawFields.add(ByteArrays.toByteArray(srcPort.value()));
+      rawFields.add(ByteArrays.toByteArray(dstPort.value()));
       rawFields.add(ByteArrays.toByteArray(length));
       rawFields.add(ByteArrays.toByteArray(checksum));
       return rawFields;
@@ -518,10 +507,10 @@ public final class UdpPacket extends AbstractPacket {
         .append(length())
         .append(" bytes)]\n");
       sb.append("  Source port: ")
-        .append(getSrcPortAsInt())
+        .append(getSrcPort())
         .append("\n");
       sb.append("  Destination port: ")
-        .append(getDstPortAsInt())
+        .append(getDstPort())
         .append("\n");
       sb.append("  Length: ")
         .append(getLengthAsInt())

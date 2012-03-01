@@ -5,14 +5,11 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.namedvalue;
+package org.pcap4j.packet.namednumber;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-import org.pcap4j.packet.IcmpV4Packet;
-import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.UdpPacket;
 
 /**
  * @author Kaito Yamada
@@ -137,8 +134,6 @@ public final class IpNumber extends NamedNumber<Byte> {
 
   private static final Map<Byte, IpNumber> registry
     = new HashMap<Byte, IpNumber>();
-  private static final Map<Class<? extends Packet>, IpNumber> IpNumberOfPacket
-    = new HashMap<Class<? extends Packet>, IpNumber>();
 
   static {
     for (Field field: IpNumber.class.getFields()) {
@@ -155,9 +150,6 @@ public final class IpNumber extends NamedNumber<Byte> {
         }
       }
     }
-
-    IpNumberOfPacket.put(IcmpV4Packet.class, ICMP_V4);
-    IpNumberOfPacket.put(UdpPacket.class, UDP);
   }
 
   private IpNumber(Byte value, String name) {
@@ -176,15 +168,6 @@ public final class IpNumber extends NamedNumber<Byte> {
     else {
       return new IpNumber(value, "unknown");
     }
-  }
-
-  /**
-   *
-   * @param clazz
-   * @return
-   */
-  public static IpNumber getInstance(Class<? extends Packet> clazz) {
-    return IpNumberOfPacket.get(clazz);
   }
 
   @Override

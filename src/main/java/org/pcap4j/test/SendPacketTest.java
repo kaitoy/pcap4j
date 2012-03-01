@@ -24,9 +24,9 @@ import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.ArpPacket;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.namedvalue.ArpHardwareType;
-import org.pcap4j.packet.namedvalue.ArpOperation;
-import org.pcap4j.packet.namedvalue.EtherType;
+import org.pcap4j.packet.namednumber.ArpHardwareType;
+import org.pcap4j.packet.namednumber.ArpOperation;
+import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
@@ -110,8 +110,8 @@ public class SendPacketTest {
       try {
         arpBuilder.hardwareType(ArpHardwareType.ETHERNET)
           .protocolType(EtherType.IPV4)
-          .hardwareLength((byte)ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE)
-          .protocolLength((byte)ByteArrays.IP_ADDRESS_SIZE_IN_BYTE)
+          .hardwareLength((byte)MacAddress.SIZE_IN_BYTES)
+          .protocolLength((byte)ByteArrays.IP_ADDRESS_SIZE_IN_BYTES)
           .operation(ArpOperation.REQUEST)
           .srcHardwareAddr(SRC_MAC_ADDR)
           .srcProtocolAddr(InetAddress.getByName(args[0]))

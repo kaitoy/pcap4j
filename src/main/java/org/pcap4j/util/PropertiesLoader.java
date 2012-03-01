@@ -101,12 +101,11 @@ public class PropertiesLoader {
    * @return
    */
   public String getString(String key, String defaultValue) {
-    StringBuilder sb = new StringBuilder();
-
     synchronized (cache) {
       if (useCache && cache.containsKey(key)) {
         String cacheValue = ((String)cache.get(key));
         if (logger.isDebugEnabled()) {
+          StringBuilder sb = new StringBuilder();
           logger.debug(
             sb.append("[").append(resourceName).append("] Got ")
               .append(cacheValue).append(" from cache for ").append(key)
@@ -122,6 +121,7 @@ public class PropertiesLoader {
       }
 
       if (value != null) {
+        StringBuilder sb = new StringBuilder();
         logger.info(
           sb.append("[System properties] Got ")
             .append(value).append(" for ").append(key)
@@ -131,12 +131,14 @@ public class PropertiesLoader {
         value = prop.getProperty(key);
 
         if (value != null) {
+          StringBuilder sb = new StringBuilder();
           logger.info(
             sb.append("[").append(resourceName).append("] Got ")
               .append(value).append(" for ").append(key)
           );
         }
         else {
+          StringBuilder sb = new StringBuilder();
           logger.warn(
             sb.append("[").append(resourceName)
               .append("] Could not get value for ").append(key)
@@ -162,12 +164,11 @@ public class PropertiesLoader {
    * @return
    */
   public int getInteger(String key, Integer defaultValue) {
-    StringBuilder sb = new StringBuilder();
-
     synchronized (cache) {
       if (useCache && cache.containsKey(key)) {
         Integer cacheValue = (Integer)cache.get(key);
         if (logger.isDebugEnabled()) {
+          StringBuilder sb = new StringBuilder();
           logger.debug(
             sb.append("[").append(resourceName).append("] Got ")
               .append(cacheValue).append(" from cache for ").append(key)
@@ -183,6 +184,7 @@ public class PropertiesLoader {
       }
 
       if (value != null) {
+        StringBuilder sb = new StringBuilder();
         logger.info(
           sb.append("[System properties] Got ")
             .append(value).append(" for ").append(key)
@@ -194,11 +196,14 @@ public class PropertiesLoader {
         if (strValue != null) {
           try {
             value = Integer.decode(strValue);
+
+            StringBuilder sb = new StringBuilder();
             logger.info(
               sb.append("[").append(resourceName).append("] Got ")
                 .append(value).append(" for ").append(key)
             );
           } catch (NumberFormatException e) {
+            StringBuilder sb = new StringBuilder();
             logger.warn(
               sb.append("[").append(resourceName).append("] ")
                 .append(strValue).append(" is invalid for ").append(key)
@@ -208,6 +213,7 @@ public class PropertiesLoader {
           }
         }
         else {
+          StringBuilder sb = new StringBuilder();
           logger.warn(
             sb.append("[").append(resourceName)
               .append("] Could not get value for ").append(key)
@@ -232,12 +238,11 @@ public class PropertiesLoader {
    * @return
    */
   public Boolean getBoolean(String key, Boolean defaultValue) {
-    StringBuilder sb = new StringBuilder();
-
     synchronized (cache) {
       if (useCache && cache.containsKey(key)) {
         Boolean cacheValue = (Boolean)cache.get(key);
         if (logger.isDebugEnabled()) {
+          StringBuilder sb = new StringBuilder();
           logger.debug(
             sb.append("[").append(resourceName).append("] Got ")
               .append(cacheValue).append(" from cache for ").append(key)
@@ -253,6 +258,8 @@ public class PropertiesLoader {
 
         if (strValue != null) {
           value = Boolean.valueOf(strValue);
+
+          StringBuilder sb = new StringBuilder();
           logger.info(
             sb.append("[System properties] Got \"")
               .append(strValue).append("\" means ").append(value)
@@ -266,6 +273,8 @@ public class PropertiesLoader {
 
         if (strValue != null) {
           value = Boolean.valueOf(strValue);
+
+          StringBuilder sb = new StringBuilder();
           logger.info(
             sb.append("[").append(resourceName).append("] Got \"")
               .append(strValue).append("\" means ").append(value)
@@ -274,6 +283,7 @@ public class PropertiesLoader {
           );
         }
         else {
+          StringBuilder sb = new StringBuilder();
           logger.warn(
             sb.append("[").append(resourceName)
               .append("] Could not get value for ").append(key)
@@ -298,13 +308,12 @@ public class PropertiesLoader {
    * @return
    */
   public <T> Class<? extends T> getClass(String key, Class<? extends T> defaultValue) {
-    StringBuilder sb = new StringBuilder();
-
     synchronized (cache) {
       if (useCache && cache.containsKey(key)) {
         @SuppressWarnings("unchecked")
         Class<? extends T> cacheValue = (Class<? extends T>)cache.get(key);
         if (logger.isDebugEnabled()) {
+          StringBuilder sb = new StringBuilder();
           logger.debug(
             sb.append("[").append(resourceName).append("] Got ")
               .append(cacheValue).append(" from cache for ").append(key)
@@ -324,17 +333,21 @@ public class PropertiesLoader {
             Class<? extends T> clazz
               = (Class<? extends T>)Class.forName(strValue);
             value = clazz;
+
+            StringBuilder sb = new StringBuilder();
             logger.info(
               sb.append("[System properties] Got ")
                 .append(strValue).append(" for ").append(key)
             );
           } catch (ClassNotFoundException e) {
+            StringBuilder sb = new StringBuilder();
             logger.error(
               sb.append("[System properties] Got Invalid value: ")
                 .append(strValue).append(" for ").append(key)
                 .append(", ignore it.")
             );
           } catch (ClassCastException e) {
+            StringBuilder sb = new StringBuilder();
             logger.error(
               sb.append("[System properties] Got Invalid value: ")
                 .append(strValue).append(" for ").append(key)
@@ -353,11 +366,14 @@ public class PropertiesLoader {
             Class<? extends T> clazz
               = (Class<? extends T>)Class.forName(strValue);
             value = clazz;
+
+            StringBuilder sb = new StringBuilder();
             logger.info(
               sb.append("[").append(resourceName).append("] Got ")
                 .append(strValue).append(" for ").append(key)
             );
           } catch (ClassNotFoundException e) {
+            StringBuilder sb = new StringBuilder();
             logger.warn(
               sb.append("[").append(resourceName).append("] ")
                 .append(strValue).append(" is invalid for ").append(key)
@@ -365,6 +381,7 @@ public class PropertiesLoader {
             );
             value = defaultValue;
           } catch (ClassCastException e) {
+            StringBuilder sb = new StringBuilder();
             logger.warn(
               sb.append("[").append(resourceName).append("] ")
                 .append(strValue).append(" is invalid for ").append(key)
@@ -374,6 +391,7 @@ public class PropertiesLoader {
           }
         }
         else {
+          StringBuilder sb = new StringBuilder();
           logger.warn(
             sb.append("[").append(resourceName)
               .append("] Could not get value for ").append(key)
@@ -398,12 +416,11 @@ public class PropertiesLoader {
    * @return
    */
   public InetAddress getInetAddress(String key, InetAddress defaultValue) {
-    StringBuilder sb = new StringBuilder();
-
     synchronized (cache) {
       if (useCache && cache.containsKey(key)) {
         InetAddress cacheValue = (InetAddress)cache.get(key);
         if (logger.isDebugEnabled()) {
+          StringBuilder sb = new StringBuilder();
           logger.debug(
             sb.append("[").append(resourceName).append("] Got ")
               .append(cacheValue).append(" from cache for ").append(key)
@@ -421,12 +438,14 @@ public class PropertiesLoader {
           try {
             value = InetAddress.getByName(strValue);
           } catch (UnknownHostException e) {
+            StringBuilder sb = new StringBuilder();
             logger.error(
               sb.append("[System properties] Got Invalid value: ")
                 .append(strValue).append(" for ").append(key)
                 .append(", ignore it.")
             );
           }
+          StringBuilder sb = new StringBuilder();
           logger.info(
             sb.append("[System properties] Got \"")
               .append(strValue).append("\" means ").append(value)
@@ -442,6 +461,7 @@ public class PropertiesLoader {
           try {
             value = InetAddress.getByName(strValue);
           } catch (UnknownHostException e) {
+            StringBuilder sb = new StringBuilder();
             logger.warn(
               sb.append("[").append(resourceName).append("] ")
                 .append(strValue).append(" is invalid for ").append(key)
@@ -449,6 +469,7 @@ public class PropertiesLoader {
             );
             value = defaultValue;
           }
+          StringBuilder sb = new StringBuilder();
           logger.info(
             sb.append("[").append(resourceName).append("] Got \"")
               .append(strValue).append("\" means ").append(value)
@@ -456,6 +477,7 @@ public class PropertiesLoader {
           );
         }
         else {
+          StringBuilder sb = new StringBuilder();
           logger.warn(
             sb.append("[").append(resourceName)
               .append("] Could not get value for ").append(key)

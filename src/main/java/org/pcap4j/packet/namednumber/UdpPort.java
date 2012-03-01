@@ -5,7 +5,7 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.namedvalue;
+package org.pcap4j.packet.namednumber;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -13,37 +13,37 @@ import java.util.Map;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.1
+ * @since pcap4j 0.9.6
  */
-public final class ArpOperation extends NamedNumber<Short> {
+public final class UdpPort extends NamedNumber<Short> {
 
   /**
    *
    */
-  private static final long serialVersionUID = 5558693543482950163L;
+  private static final long serialVersionUID = -7898348444366318292L;
 
-  // http://www.iana.org/assignments/arp-parameters/arp-parameters.xml#arp-parameters-1
-
-  /**
-   *
-   */
-  public static final ArpOperation REQUEST
-    = new ArpOperation((short)1, "REQUEST");
+  //http://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml
 
   /**
    *
    */
-  public static final ArpOperation REPLY
-    = new ArpOperation((short)2, "REPLY");
+  public static final UdpPort SNMP
+    = new UdpPort((short)161, "SNMP");
 
-  private static final Map<Short, ArpOperation> registry
-    = new HashMap<Short, ArpOperation>();
+  /**
+   *
+   */
+  public static final UdpPort SNMP_TRAP
+    = new UdpPort((short)162, "SNMP Trap");
+
+  private static final Map<Short, UdpPort> registry
+    = new HashMap<Short, UdpPort>();
 
   static {
-    for (Field field: ArpOperation.class.getFields()) {
-      if (field.getType().isAssignableFrom(ArpOperation.class)) {
+    for (Field field: UdpPort.class.getFields()) {
+      if (field.getType().isAssignableFrom(UdpPort.class)) {
         try {
-          ArpOperation typeCode = (ArpOperation)field.get(null);
+          UdpPort typeCode = (UdpPort)field.get(null);
           registry.put(typeCode.value(), typeCode);
         } catch (IllegalArgumentException e) {
           throw new AssertionError(e);
@@ -54,9 +54,10 @@ public final class ArpOperation extends NamedNumber<Short> {
         }
       }
     }
+
   }
 
-  private ArpOperation(Short value, String name) {
+  private UdpPort(Short value, String name) {
     super(value, name);
   }
 
@@ -65,21 +66,22 @@ public final class ArpOperation extends NamedNumber<Short> {
    * @param value
    * @return
    */
-  public static ArpOperation getInstance(Short value) {
+  public static UdpPort getInstance(Short value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
     }
     else {
-      return new ArpOperation(value, "unknown");
+      return new UdpPort(value, "unknown");
     }
   }
 
   /**
    *
+   * @return
    */
   @Override
   public String valueAsString() {
-    return String.valueOf(value() & 0xFFFF);
+    return String.valueOf(0xFFFF & value());
   }
 
   @Override

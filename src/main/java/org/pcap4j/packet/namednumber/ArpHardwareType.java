@@ -5,7 +5,7 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.namedvalue;
+package org.pcap4j.packet.namednumber;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

@@ -5,7 +5,7 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.namedvalue;
+package org.pcap4j.packet.namednumber;
 
 import java.io.Serializable;
 
@@ -70,16 +70,14 @@ implements Comparable<T>, Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) { return true; }
-    if (!this.getClass().getName().equals(obj.getClass().getName())) {
-      return false;
-    }
+    if (obj == this) { return true; }
+    if (!this.getClass().isInstance(obj)) { return false; }
     return this.value.equals(this.getClass().cast(obj).value());
   }
 
   @Override
   public int hashCode() {
-    return value.intValue();
+    return value.hashCode();
   }
 
 }

@@ -10,15 +10,15 @@ package org.pcap4j.packet;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-import org.pcap4j.packet.namedvalue.ArpHardwareType;
-import org.pcap4j.packet.namedvalue.ArpOperation;
-import org.pcap4j.packet.namedvalue.EtherType;
+
+import org.pcap4j.packet.namednumber.ArpHardwareType;
+import org.pcap4j.packet.namednumber.ArpOperation;
+import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTE;
-import static org.pcap4j.util.ByteArrays.IP_ADDRESS_SIZE_IN_BYTE;
-import static org.pcap4j.util.ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.IP_ADDRESS_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -85,8 +85,8 @@ public final class ArpPacket extends AbstractPacket {
 
     private ArpHardwareType hardwareType = ArpHardwareType.ETHERNET;
     private EtherType protocolType = EtherType.IPV4;
-    private byte hardwareLength = (byte)ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE;
-    private byte protocolLength = (byte)ByteArrays.IP_ADDRESS_SIZE_IN_BYTE;
+    private byte hardwareLength = (byte)MacAddress.SIZE_IN_BYTES;
+    private byte protocolLength = (byte)ByteArrays.IP_ADDRESS_SIZE_IN_BYTES;
     private ArpOperation operation;
     private MacAddress srcHardwareAddr;
     private InetAddress srcProtocolAddr;
@@ -221,39 +221,39 @@ public final class ArpPacket extends AbstractPacket {
     private static final int HARDWARE_TYPE_OFFSET
       = 0;
     private static final int HARDWARE_TYPE_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int PROTOCOL_TYPE_OFFSET
       = HARDWARE_TYPE_OFFSET + HARDWARE_TYPE_SIZE;
     private static final int PROTOCOL_TYPE_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int HARDWARE_LENGTH_OFFSET
       = PROTOCOL_TYPE_OFFSET + PROTOCOL_TYPE_SIZE;
     private static final int HARDWARE_LENGTH_SIZE
-      = BYTE_SIZE_IN_BYTE;
+      = BYTE_SIZE_IN_BYTES;
     private static final int PROTOCOL_LENGTH_OFFSET
       = HARDWARE_LENGTH_OFFSET + HARDWARE_LENGTH_SIZE;
     private static final int PROTOCOL_LENGTH_SIZE
-      = BYTE_SIZE_IN_BYTE;
+      = BYTE_SIZE_IN_BYTES;
     private static final int OPERATION_OFFSET
       = PROTOCOL_LENGTH_OFFSET + PROTOCOL_LENGTH_SIZE;
     private static final int OPERATION_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int SRC_HARDWARE_ADDR_OFFSET
       = OPERATION_OFFSET + OPERATION_SIZE;
     private static final int SRC_HARDWARE_ADDR_SIZE
-      = MAC_ADDRESS_SIZE_IN_BYTE;
+      = MacAddress.SIZE_IN_BYTES;
     private static final int SRC_PROTOCOL_ADDR_OFFSET
       = SRC_HARDWARE_ADDR_OFFSET + SRC_HARDWARE_ADDR_SIZE;
     private static final int SRC_PROTOCOL_ADDR_SIZE
-      = IP_ADDRESS_SIZE_IN_BYTE;
+      = IP_ADDRESS_SIZE_IN_BYTES;
     private static final int DST_HARDWARE_ADDR_OFFSET
       = SRC_PROTOCOL_ADDR_OFFSET + SRC_PROTOCOL_ADDR_SIZE;
     private static final int DST_HARDWARE_ADDR_SIZE
-      = MAC_ADDRESS_SIZE_IN_BYTE;
+      = MacAddress.SIZE_IN_BYTES;
     private static final int DST_PROTOCOL_ADDR_OFFSET
       = DST_HARDWARE_ADDR_OFFSET + DST_HARDWARE_ADDR_SIZE;
     private static final int DST_PROTOCOL_ADDR_SIZE
-      = IP_ADDRESS_SIZE_IN_BYTE;
+      = IP_ADDRESS_SIZE_IN_BYTES;
     private static final int ARP_HEADER_SIZE
       = DST_PROTOCOL_ADDR_OFFSET + DST_PROTOCOL_ADDR_SIZE;
 

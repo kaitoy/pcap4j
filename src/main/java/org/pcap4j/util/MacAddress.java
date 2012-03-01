@@ -31,6 +31,11 @@ public final class MacAddress implements Serializable {
         }
       );
 
+  /**
+   *
+   */
+  public static final int SIZE_IN_BYTES = 6;
+
   private final byte[] address;
 
   private MacAddress(byte[] address) { this.address = address; }
@@ -41,6 +46,11 @@ public final class MacAddress implements Serializable {
    * @return
    */
   public static MacAddress newInstance(byte[] address) {
+    if (address.length != SIZE_IN_BYTES) {
+      throw new IllegalArgumentException(
+              "address length must be " + SIZE_IN_BYTES
+            );
+    }
     byte[] copy = new byte[address.length];
     System.arraycopy(address, 0, copy, 0, copy.length);
     return new MacAddress(copy);

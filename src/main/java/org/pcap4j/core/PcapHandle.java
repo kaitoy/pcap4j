@@ -16,11 +16,11 @@ import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.bpf_program;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.PacketFactory;
-import org.pcap4j.packet.namedvalue.DataLinkType;
+import org.pcap4j.packet.PacketFactories;
+import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BIT;
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BITS;
 
 /**
  * @author Kaito Yamada
@@ -136,9 +136,9 @@ public final class PcapHandle {
       if (netmask != null) {
         byte[] rawNetmask = ByteArrays.toByteArray(netmask);
         mask =    rawNetmask[3]
-               | (rawNetmask[2] << (BYTE_SIZE_IN_BIT * 1))
-               | (rawNetmask[1] << (BYTE_SIZE_IN_BIT * 2))
-               | (rawNetmask[0] << (BYTE_SIZE_IN_BIT * 3));
+               | (rawNetmask[2] << (BYTE_SIZE_IN_BITS * 1))
+               | (rawNetmask[1] << (BYTE_SIZE_IN_BITS * 2))
+               | (rawNetmask[0] << (BYTE_SIZE_IN_BITS * 3));
       }
       else {
         mask = 0;
@@ -180,8 +180,9 @@ public final class PcapHandle {
     }
 
     if (packet != null) {
-      return PacketFactory.newPacketByDlt(
-               packet.getByteArray(0, header.caplen), dlt.value()
+      return PacketFactories.getPacketFactory(DataLinkType.class).newPacket(
+               packet.getByteArray(0, header.caplen),
+               dlt
              );
     }
     else {
@@ -217,9 +218,9 @@ public final class PcapHandle {
         if (headerP == null || dataP == null) {
           throw new AssertionError("Never get here.");
         }
-        return PacketFactory.newPacketByDlt(
+        return PacketFactories.getPacketFactory(DataLinkType.class).newPacket(
                  dataP.getByteArray(0, new pcap_pkthdr(headerP).caplen),
-                 dlt.value()
+                 dlt
                );
       case -1:
         throw new PcapNativeException(
@@ -276,9 +277,9 @@ public final class PcapHandle {
 
     public void got_packet(String args, pcap_pkthdr header, Pointer packet) {
       eventListener.gotPacket(
-        PacketFactory.newPacketByDlt(
+          PacketFactories.getPacketFactory(DataLinkType.class).newPacket(
           packet.getByteArray(0, header.caplen),
-          dlt.value()
+          dlt
         )
       );
     }

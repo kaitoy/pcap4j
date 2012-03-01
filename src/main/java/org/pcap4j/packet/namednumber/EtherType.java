@@ -5,15 +5,11 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.namedvalue;
+package org.pcap4j.packet.namednumber;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.pcap4j.packet.ArpPacket;
-import org.pcap4j.packet.IpV4Packet;
-import org.pcap4j.packet.Packet;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -91,8 +87,6 @@ public final class EtherType extends NamedNumber<Short> {
 
   private static final Map<Short, EtherType> registry
     = new HashMap<Short, EtherType>();
-  private static final Map<Class<? extends Packet>, EtherType> etherTypeOfPacket
-    = new HashMap<Class<? extends Packet>, EtherType>();
 
   static {
     for (Field field: EtherType.class.getFields()) {
@@ -109,9 +103,6 @@ public final class EtherType extends NamedNumber<Short> {
         }
       }
     }
-
-    etherTypeOfPacket.put(ArpPacket.class, ARP);
-    etherTypeOfPacket.put(IpV4Packet.class, IPV4);
   }
 
   private EtherType(Short value, String name) {
@@ -130,15 +121,6 @@ public final class EtherType extends NamedNumber<Short> {
     else {
       return new EtherType(value, "unknown");
     }
-  }
-
-  /**
-   *
-   * @param clazz
-   * @return
-   */
-  public static EtherType getInstance(Class<? extends Packet> clazz) {
-    return etherTypeOfPacket.get(clazz);
   }
 
   /**

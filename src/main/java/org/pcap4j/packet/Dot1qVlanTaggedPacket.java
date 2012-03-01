@@ -7,10 +7,10 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 import java.util.ArrayList;
 import java.util.List;
-import org.pcap4j.packet.namedvalue.EtherType;
+import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -48,8 +48,8 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
         );
 
     this.payload
-      = PacketFactory
-          .newPacketByEtherType(rawPayload, header.getType().value());
+      = PacketFactories.getPacketFactory(EtherType.class)
+          .newPacket(rawPayload, header.getType());
   }
 
   private Dot1qVlanTaggedPacket(Builder builder) {
@@ -165,7 +165,7 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
     private static final int VID_OFFSET = CFI_OFFSET + CFI_SIZE;
     private static final int VID_SIZE = 12;
     private static final int TYPE_OFFSET = VID_OFFSET + VID_SIZE;
-    private static final int TYPE_SIZE = SHORT_SIZE_IN_BYTE;
+    private static final int TYPE_SIZE = SHORT_SIZE_IN_BYTES;
     private static final int DOT1Q_TAG_HEADER_SIZE = TYPE_OFFSET + TYPE_SIZE;
 
     private final byte priority;

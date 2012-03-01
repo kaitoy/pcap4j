@@ -9,11 +9,11 @@ package org.pcap4j.packet;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.pcap4j.packet.namedvalue.EtherType;
+
+import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
-import static org.pcap4j.util.ByteArrays.MAC_ADDRESS_SIZE_IN_BYTE;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 /**
  * This Class handles from DA to data.
@@ -60,8 +60,8 @@ public final class EthernetPacket extends AbstractPacket {
         );
 
     this.payload
-      = PacketFactory
-          .newPacketByEtherType(rawPayload, header.getType().value());
+      = PacketFactories.getPacketFactory(EtherType.class)
+          .newPacket(rawPayload, header.getType());
 
     int payloadLength = this.payload.length();
     if (rawPayload.length > payloadLength) {
@@ -258,11 +258,11 @@ public final class EthernetPacket extends AbstractPacket {
     private static final long serialVersionUID = -8271269099161190389L;
 
     private static final int DST_ADDR_OFFSET = 0;
-    private static final int DST_ADDR_SIZE = MAC_ADDRESS_SIZE_IN_BYTE;
+    private static final int DST_ADDR_SIZE = MacAddress.SIZE_IN_BYTES;
     private static final int SRC_ADDR_OFFSET = DST_ADDR_OFFSET + DST_ADDR_SIZE;
-    private static final int SRC_ADDR_SIZE = MAC_ADDRESS_SIZE_IN_BYTE;
+    private static final int SRC_ADDR_SIZE = MacAddress.SIZE_IN_BYTES;
     private static final int TYPE_OFFSET = SRC_ADDR_OFFSET + SRC_ADDR_SIZE;
-    private static final int TYPE_SIZE = SHORT_SIZE_IN_BYTE;
+    private static final int TYPE_SIZE = SHORT_SIZE_IN_BYTES;
     private static final int ETHERNET_HEADER_SIZE = TYPE_OFFSET + TYPE_SIZE;
 
     private final MacAddress dstAddr;

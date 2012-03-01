@@ -22,37 +22,32 @@ public final class ByteArrays {
   /**
    *
    */
-  public static final int BYTE_SIZE_IN_BYTE = 1;
+  public static final int BYTE_SIZE_IN_BYTES = 1;
 
   /**
    *
    */
-  public static final int SHORT_SIZE_IN_BYTE = 2;
+  public static final int SHORT_SIZE_IN_BYTES = 2;
 
   /**
    *
    */
-  public static final int INT_SIZE_IN_BYTE = 4;
+  public static final int INT_SIZE_IN_BYTES = 4;
 
   /**
    *
    */
-  public static final int LONG_SIZE_IN_BYTE = 8;
+  public static final int LONG_SIZE_IN_BYTES = 8;
 
   /**
    *
    */
-  public static final int MAC_ADDRESS_SIZE_IN_BYTE = 6;
+  public static final int IP_ADDRESS_SIZE_IN_BYTES = 4;
 
   /**
    *
    */
-  public static final int IP_ADDRESS_SIZE_IN_BYTE = 4;
-
-  /**
-   *
-   */
-  public static final int BYTE_SIZE_IN_BIT = 8;
+  public static final int BYTE_SIZE_IN_BITS = 8;
 
   private ByteArrays() { throw new AssertionError(); }
 
@@ -63,7 +58,7 @@ public final class ByteArrays {
    * @return
    */
   public static byte getByte(byte[] array, int offset) {
-    if (offset + BYTE_SIZE_IN_BYTE > array.length) {
+    if (offset + BYTE_SIZE_IN_BYTES > array.length) {
       throw new IllegalArgumentException();
     }
     return array[offset];
@@ -95,12 +90,12 @@ public final class ByteArrays {
    * @return
    */
   public static short getShort(byte[] array, int offset) {
-    if (offset + SHORT_SIZE_IN_BYTE > array.length) {
+    if (offset + SHORT_SIZE_IN_BYTES > array.length) {
       throw new IllegalArgumentException();
     }
     return (short)(
-                ((0xFF & array[offset    ]) << (BYTE_SIZE_IN_BIT * 1))
-              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BIT * 0))
+                ((0xFF & array[offset    ]) << (BYTE_SIZE_IN_BITS * 1))
+              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 0))
             );
   }
 
@@ -111,8 +106,8 @@ public final class ByteArrays {
    */
   public static byte[] toByteArray(short value) {
     return new byte[] {
-             (byte)((value & 0xFF00) >> BYTE_SIZE_IN_BIT * 1),
-             (byte)((value & 0x00FF) >> BYTE_SIZE_IN_BIT * 0)
+             (byte)((value & 0xFF00) >> BYTE_SIZE_IN_BITS * 1),
+             (byte)((value & 0x00FF) >> BYTE_SIZE_IN_BITS * 0)
            };
   }
 
@@ -133,14 +128,14 @@ public final class ByteArrays {
    * @return
    */
   public static int getInt(byte[] array, int offset) {
-    if (offset + INT_SIZE_IN_BYTE > array.length) {
+    if (offset + INT_SIZE_IN_BYTES > array.length) {
       throw new IllegalArgumentException();
     }
     return (int)(
-                ((0xFF & array[offset    ]) << (BYTE_SIZE_IN_BIT * 3))
-              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BIT * 2))
-              | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BIT * 1))
-              | ((0xFF & array[offset + 3]) << (BYTE_SIZE_IN_BIT * 0))
+                ((0xFF & array[offset    ]) << (BYTE_SIZE_IN_BITS * 3))
+              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 2))
+              | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 1))
+              | ((0xFF & array[offset + 3]) << (BYTE_SIZE_IN_BITS * 0))
             );
   }
 
@@ -151,10 +146,10 @@ public final class ByteArrays {
    */
   public static byte[] toByteArray(int value) {
     return new byte[] {
-             (byte)((value & 0xFF000000) >> BYTE_SIZE_IN_BIT * 3),
-             (byte)((value & 0x00FF0000) >> BYTE_SIZE_IN_BIT * 2),
-             (byte)((value & 0x0000FF00) >> BYTE_SIZE_IN_BIT * 1),
-             (byte)((value & 0x000000FF) >> BYTE_SIZE_IN_BIT * 0)
+             (byte)((value & 0xFF000000) >> BYTE_SIZE_IN_BITS * 3),
+             (byte)((value & 0x00FF0000) >> BYTE_SIZE_IN_BITS * 2),
+             (byte)((value & 0x0000FF00) >> BYTE_SIZE_IN_BITS * 1),
+             (byte)((value & 0x000000FF) >> BYTE_SIZE_IN_BITS * 0)
            };
   }
 
@@ -175,18 +170,18 @@ public final class ByteArrays {
    * @return
    */
   public static long getLong(byte[] array, int offset) {
-    if (offset + LONG_SIZE_IN_BYTE > array.length) {
+    if (offset + LONG_SIZE_IN_BYTES > array.length) {
       throw new IllegalArgumentException();
     }
     return (long)(
-                ((0xFF & array[offset    ]) << (BYTE_SIZE_IN_BIT * 7))
-              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BIT * 6))
-              | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BIT * 5))
-              | ((0xFF & array[offset + 3]) << (BYTE_SIZE_IN_BIT * 4))
-              | ((0xFF & array[offset + 4]) << (BYTE_SIZE_IN_BIT * 3))
-              | ((0xFF & array[offset + 5]) << (BYTE_SIZE_IN_BIT * 2))
-              | ((0xFF & array[offset + 6]) << (BYTE_SIZE_IN_BIT * 1))
-              | ((0xFF & array[offset + 7]) << (BYTE_SIZE_IN_BIT * 0))
+                ((0xFF & array[offset    ]) << (BYTE_SIZE_IN_BITS * 7))
+              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 6))
+              | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 5))
+              | ((0xFF & array[offset + 3]) << (BYTE_SIZE_IN_BITS * 4))
+              | ((0xFF & array[offset + 4]) << (BYTE_SIZE_IN_BITS * 3))
+              | ((0xFF & array[offset + 5]) << (BYTE_SIZE_IN_BITS * 2))
+              | ((0xFF & array[offset + 6]) << (BYTE_SIZE_IN_BITS * 1))
+              | ((0xFF & array[offset + 7]) << (BYTE_SIZE_IN_BITS * 0))
             );
   }
 
@@ -197,14 +192,14 @@ public final class ByteArrays {
    */
   public static byte[] toByteArray(long value) {
     return new byte[] {
-             (byte)((value & 0xFF00000000000000L) >> BYTE_SIZE_IN_BIT * 7),
-             (byte)((value & 0x00FF000000000000L) >> BYTE_SIZE_IN_BIT * 6),
-             (byte)((value & 0x0000FF0000000000L) >> BYTE_SIZE_IN_BIT * 5),
-             (byte)((value & 0x000000FF00000000L) >> BYTE_SIZE_IN_BIT * 4),
-             (byte)((value & 0x00000000FF000000L) >> BYTE_SIZE_IN_BIT * 3),
-             (byte)((value & 0x0000000000FF0000L) >> BYTE_SIZE_IN_BIT * 2),
-             (byte)((value & 0x000000000000FF00L) >> BYTE_SIZE_IN_BIT * 1),
-             (byte)((value & 0x00000000000000FFL) >> BYTE_SIZE_IN_BIT * 0)
+             (byte)((value & 0xFF00000000000000L) >> BYTE_SIZE_IN_BITS * 7),
+             (byte)((value & 0x00FF000000000000L) >> BYTE_SIZE_IN_BITS * 6),
+             (byte)((value & 0x0000FF0000000000L) >> BYTE_SIZE_IN_BITS * 5),
+             (byte)((value & 0x000000FF00000000L) >> BYTE_SIZE_IN_BITS * 4),
+             (byte)((value & 0x00000000FF000000L) >> BYTE_SIZE_IN_BITS * 3),
+             (byte)((value & 0x0000000000FF0000L) >> BYTE_SIZE_IN_BITS * 2),
+             (byte)((value & 0x000000000000FF00L) >> BYTE_SIZE_IN_BITS * 1),
+             (byte)((value & 0x00000000000000FFL) >> BYTE_SIZE_IN_BITS * 0)
            };
   }
 
@@ -226,7 +221,7 @@ public final class ByteArrays {
    */
   public static MacAddress getMacAddress(byte[] array, int offset) {
     return MacAddress.newInstance(
-             getSubArray(array, offset, MAC_ADDRESS_SIZE_IN_BYTE)
+             getSubArray(array, offset, MacAddress.SIZE_IN_BYTES)
            );
   }
 
@@ -251,7 +246,7 @@ public final class ByteArrays {
                              getSubArray(
                                array,
                                offset,
-                               IP_ADDRESS_SIZE_IN_BYTE
+                               IP_ADDRESS_SIZE_IN_BYTES
                              )
                            );
     } catch (UnknownHostException e) {
@@ -309,16 +304,16 @@ public final class ByteArrays {
    */
   public static short calcChecksum(byte[] data) {
     int sum = 0;
-    for (int i = 0; i < data.length; i += SHORT_SIZE_IN_BYTE) {
+    for (int i = 0; i < data.length; i += SHORT_SIZE_IN_BYTES) {
       sum += (0xFFFF) & ByteArrays.getShort(data, i);
     }
 
     sum
       = (0xFFFF & sum)
-        + ((0xFFFF0000 & sum) >> (BYTE_SIZE_IN_BIT * SHORT_SIZE_IN_BYTE));
+        + ((0xFFFF0000 & sum) >> (BYTE_SIZE_IN_BITS * SHORT_SIZE_IN_BYTES));
     sum
       = (0xFFFF & sum)
-        + ((0xFFFF0000 & sum) >> (BYTE_SIZE_IN_BIT * SHORT_SIZE_IN_BYTE));
+        + ((0xFFFF0000 & sum) >> (BYTE_SIZE_IN_BITS * SHORT_SIZE_IN_BYTES));
 
     return (short)(0xFFFF & ~sum);
   }

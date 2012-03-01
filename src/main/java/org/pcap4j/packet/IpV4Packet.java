@@ -11,12 +11,12 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pcap4j.packet.namedvalue.IpNumber;
-import org.pcap4j.packet.namedvalue.IpVersion;
+import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.util.ByteArrays;
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTE;
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTE;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTE;
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -52,8 +52,8 @@ public final class IpV4Packet extends AbstractPacket {
         );
 
     this.payload
-      = PacketFactory
-          .newPacketByIpNumber(rawPayload, header.getProtocol().value());
+      = PacketFactories.getPacketFactory(IpNumber.class)
+          .newPacket(rawPayload, header.getProtocol());
   }
 
   private IpV4Packet(Builder builder) {
@@ -362,43 +362,43 @@ public final class IpV4Packet extends AbstractPacket {
     private static final int VERSION_AND_IHL_OFFSET
       = 0;
     private static final int VERSION_AND_IHL_SIZE
-      = BYTE_SIZE_IN_BYTE;
+      = BYTE_SIZE_IN_BYTES;
     private static final int TOS_OFFSET
       = VERSION_AND_IHL_OFFSET + VERSION_AND_IHL_SIZE;
     private static final int TOS_SIZE
-      = BYTE_SIZE_IN_BYTE;
+      = BYTE_SIZE_IN_BYTES;
     private static final int TOTAL_LENGTH_OFFSET
       = TOS_OFFSET + TOS_SIZE;
     private static final int TOTAL_LENGTH_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int IDENTIFICATION_OFFSET
       = TOTAL_LENGTH_OFFSET + TOTAL_LENGTH_SIZE;
     private static final int IDENTIFICATION_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int FLAGS_AND_FLAGMENT_OFFSET_OFFSET
       = IDENTIFICATION_OFFSET + IDENTIFICATION_SIZE;
     private static final int FLAGS_AND_FLAGMENT_OFFSET_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int TTL_OFFSET
       = FLAGS_AND_FLAGMENT_OFFSET_OFFSET + FLAGS_AND_FLAGMENT_OFFSET_SIZE;
     private static final int TTL_SIZE
-      = BYTE_SIZE_IN_BYTE;
+      = BYTE_SIZE_IN_BYTES;
     private static final int PROTOCOL_OFFSET
       = TTL_OFFSET + TTL_SIZE;
     private static final int PROTOCOL_SIZE
-      = BYTE_SIZE_IN_BYTE;
+      = BYTE_SIZE_IN_BYTES;
     private static final int HEADER_CHECKSUM_OFFSET
       = PROTOCOL_OFFSET + PROTOCOL_SIZE;
     private static final int HEADER_CHECKSUM_SIZE
-      = SHORT_SIZE_IN_BYTE;
+      = SHORT_SIZE_IN_BYTES;
     private static final int SRC_ADDR_OFFSET
       = HEADER_CHECKSUM_OFFSET + HEADER_CHECKSUM_SIZE;
     private static final int SRC_ADDR_SIZE
-      = INT_SIZE_IN_BYTE;
+      = INT_SIZE_IN_BYTES;
     private static final int DST_ADDR_OFFSET
       = SRC_ADDR_OFFSET + SRC_ADDR_SIZE;
     private static final int DST_ADDR_SIZE
-      = INT_SIZE_IN_BYTE;
+      = INT_SIZE_IN_BYTES;
     private static final int IPV4_HEADER_SIZE
       = DST_ADDR_OFFSET + DST_ADDR_SIZE;
     // TODO options
