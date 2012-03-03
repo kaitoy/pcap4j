@@ -11,7 +11,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.pcap4j.util.ByteArrays;
-import org.pcap4j.util.ValueCache;
+import org.pcap4j.util.LazyValue;
+import org.pcap4j.util.LazyValue.BuildValueCommand;
 
 /**
  * @author Kaito Yamada
@@ -24,12 +25,63 @@ public abstract class AbstractPacket implements Packet {
    */
   private static final long serialVersionUID = -3016622134481071576L;
 
-  private final ValueCache<Boolean> validCache = new ValueCache<Boolean>();
-  private final ValueCache<Integer> lengthCache = new ValueCache<Integer>();
-  private final ValueCache<byte[]> rawDataCache = new ValueCache<byte[]>();
-  private final ValueCache<String> hexStringCache = new ValueCache<String>();
-  private final ValueCache<String> stringCache = new ValueCache<String>();
-  private final ValueCache<Integer> hashCodeCache = new ValueCache<Integer>();
+  private final LazyValue<Boolean> validCache;
+  private final LazyValue<Integer> lengthCache;
+  private final LazyValue<byte[]> rawDataCache;
+  private final LazyValue<String> hexStringCache;
+  private final LazyValue<String> stringCache;
+  private final LazyValue<Integer> hashCodeCache;
+
+  public AbstractPacket() {
+    this.validCache
+      = new LazyValue<Boolean>(
+          new BuildValueCommand<Boolean>() {
+            public Boolean buildValue() {
+              return verify();
+            }
+          }
+        );
+    this.lengthCache
+    = new LazyValue<Integer>(
+        new BuildValueCommand<Integer>() {
+          public Integer buildValue() {
+            return measureLength();
+          }
+        }
+      );
+    this.rawDataCache
+      = new LazyValue<byte[]>(
+          new BuildValueCommand<byte[]>() {
+            public byte[] buildValue() {
+              return buildRawData();
+            }
+          }
+        );
+    this.hexStringCache
+      = new LazyValue<String>(
+          new BuildValueCommand<String>() {
+            public String buildValue() {
+              return buildHexString();
+            }
+          }
+        );
+    this.stringCache
+      = new LazyValue<String>(
+          new BuildValueCommand<String>() {
+            public String buildValue() {
+              return buildString();
+            }
+          }
+        );
+    this.hashCodeCache
+      = new LazyValue<Integer>(
+          new BuildValueCommand<Integer>() {
+            public Integer buildValue() {
+              return calcHashCode();
+            }
+          }
+        );
+  }
 
   //public static Packet newPacket(byte[] rawData); /* necessary */
 
@@ -56,17 +108,7 @@ public abstract class AbstractPacket implements Packet {
   }
 
   public boolean isValid() {
-    Boolean result = validCache.getValue();
-    if (result == null) {
-      synchronized (validCache) {
-        result = validCache.getValue();
-        if (result == null) {
-          result = verify();
-          validCache.setValue(result);
-        }
-      }
-    }
-    return result.booleanValue();
+    return validCache.getValue();
   }
 
   /**
@@ -87,17 +129,7 @@ public abstract class AbstractPacket implements Packet {
   }
 
   public int length() {
-    Integer result = lengthCache.getValue();
-    if (result == null) {
-      synchronized (lengthCache) {
-        result = lengthCache.getValue();
-        if (result == null) {
-          result = measureLength();
-          lengthCache.setValue(result);
-        }
-      }
-    }
-    return result.intValue();
+    return lengthCache.getValue();
   }
 
   /**
@@ -127,19 +159,10 @@ public abstract class AbstractPacket implements Packet {
   }
 
   public byte[] getRawData() {
-    byte[] result = rawDataCache.getValue();
-    if (result == null) {
-      synchronized (rawDataCache) {
-        result = rawDataCache.getValue();
-        if (result == null) {
-          result = buildRawData();
-          rawDataCache.setValue(result);
-        }
-      }
-    }
+    byte[] rawData = rawDataCache.getValue();
 
-    byte[] copy = new byte[result.length];
-    System.arraycopy(result, 0, copy, 0, copy.length);
+    byte[] copy = new byte[rawData.length];
+    System.arraycopy(rawData, 0, copy, 0, copy.length);
     return copy;
   }
 
@@ -175,17 +198,7 @@ public abstract class AbstractPacket implements Packet {
    * @return
    */
  public String toHexString() {
-   String result = hexStringCache.getValue();
-   if (result == null) {
-     synchronized (hexStringCache) {
-       result = hexStringCache.getValue();
-       if (result == null) {
-         result = buildHexString();
-         hexStringCache.setValue(result);
-       }
-     }
-   }
-   return result;
+   return hexStringCache.getValue();
  }
 
  /**
@@ -207,17 +220,7 @@ public abstract class AbstractPacket implements Packet {
 
   @Override
   public String toString() {
-    String result = stringCache.getValue();
-    if (result == null) {
-      synchronized (stringCache) {
-        result = stringCache.getValue();
-        if (result == null) {
-          result = buildString();
-          stringCache.setValue(result);
-        }
-      }
-    }
-    return result;
+    return stringCache.getValue();
   }
 
   @Override
@@ -241,17 +244,7 @@ public abstract class AbstractPacket implements Packet {
 
   @Override
   public int hashCode() {
-    Integer result = hashCodeCache.getValue();
-    if (result == null) {
-      synchronized (hashCodeCache) {
-        result = hashCodeCache.getValue();
-        if (result == null) {
-          result = calcHashCode();
-          hashCodeCache.setValue(result);
-        }
-      }
-    }
-    return result.intValue();
+    return hashCodeCache.getValue();
   }
 
   /**
@@ -266,13 +259,63 @@ public abstract class AbstractPacket implements Packet {
      */
     private static final long serialVersionUID = -8916517326403680608L;
 
-    // caches
-    private final ValueCache<Boolean> validCache = new ValueCache<Boolean>();
-    private final ValueCache<Integer> lengthCache = new ValueCache<Integer>();
-    private final ValueCache<byte[]> rawDataCache = new ValueCache<byte[]>();
-    private final ValueCache<String> hexStringCache = new ValueCache<String>();
-    private final ValueCache<String> stringCache = new ValueCache<String>();
-    private final ValueCache<Integer> hashCodeCache = new ValueCache<Integer>();
+    private final LazyValue<Boolean> validCache;
+    private final LazyValue<Integer> lengthCache;
+    private final LazyValue<byte[]> rawDataCache;
+    private final LazyValue<String> hexStringCache;
+    private final LazyValue<String> stringCache;
+    private final LazyValue<Integer> hashCodeCache;
+
+    public AbstractHeader() {
+      this.validCache
+        = new LazyValue<Boolean>(
+            new BuildValueCommand<Boolean>() {
+              public Boolean buildValue() {
+                return verify();
+              }
+            }
+          );
+      this.lengthCache
+        = new LazyValue<Integer>(
+            new BuildValueCommand<Integer>() {
+              public Integer buildValue() {
+                return measureLength();
+              }
+            }
+          );
+      this.rawDataCache
+        = new LazyValue<byte[]>(
+            new BuildValueCommand<byte[]>() {
+              public byte[] buildValue() {
+                return buildRawData();
+              }
+            }
+          );
+      this.hexStringCache
+        = new LazyValue<String>(
+            new BuildValueCommand<String>() {
+              public String buildValue() {
+                return buildHexString();
+              }
+            }
+          );
+      this.stringCache
+        = new LazyValue<String>(
+            new BuildValueCommand<String>() {
+              public String buildValue() {
+                return buildString();
+              }
+            }
+          );
+      this.hashCodeCache
+        = new LazyValue<Integer>(
+            new BuildValueCommand<Integer>() {
+              public Integer buildValue() {
+                return calcHashCode();
+              }
+            }
+          );
+    }
 
     /**
      *
@@ -281,17 +324,7 @@ public abstract class AbstractPacket implements Packet {
     protected boolean verify() { return true; }
 
     public boolean isValid() {
-      Boolean result = validCache.getValue();
-      if (result == null) {
-        synchronized (validCache) {
-          result = validCache.getValue();
-          if (result == null) {
-            result = verify();
-            validCache.setValue(result);
-          }
-        }
-      }
-      return result.booleanValue();
+      return validCache.getValue();
     }
 
     protected abstract List<byte[]> getRawFields();
@@ -309,17 +342,7 @@ public abstract class AbstractPacket implements Packet {
     }
 
     public int length() {
-      Integer result = lengthCache.getValue();
-      if (result == null) {
-        synchronized (lengthCache) {
-          result = lengthCache.getValue();
-          if (result == null) {
-            result = measureLength();
-            lengthCache.setValue(result);
-          }
-        }
-      }
-      return result.intValue();
+      return lengthCache.getValue();
     }
 
     /**
@@ -348,19 +371,10 @@ public abstract class AbstractPacket implements Packet {
     }
 
     public byte[] getRawData() {
-      byte[] result = rawDataCache.getValue();
-      if (result == null) {
-        synchronized (rawDataCache) {
-          result = rawDataCache.getValue();
-          if (result == null) {
-            result = buildRawData();
-            rawDataCache.setValue(result);
-          }
-        }
-      }
+      byte[] rawData = rawDataCache.getValue();
 
-      byte[] copy = new byte[result.length];
-      System.arraycopy(result, 0, copy, 0, copy.length);
+      byte[] copy = new byte[rawData.length];
+      System.arraycopy(rawData, 0, copy, 0, copy.length);
       return copy;
     }
 
@@ -377,17 +391,7 @@ public abstract class AbstractPacket implements Packet {
      * @return
      */
     public String toHexString() {
-      String result = hexStringCache.getValue();
-      if (result == null) {
-        synchronized (hexStringCache) {
-          result = hexStringCache.getValue();
-          if (result == null) {
-            result = buildHexString();
-            hexStringCache.setValue(result);
-          }
-        }
-      }
-      return result;
+      return hexStringCache.getValue();
     }
 
     /**
@@ -400,17 +404,7 @@ public abstract class AbstractPacket implements Packet {
 
     @Override
     public String toString() {
-      String result = stringCache.getValue();
-      if (result == null) {
-        synchronized (stringCache) {
-          result = stringCache.getValue();
-          if (result == null) {
-            result = buildString();
-            stringCache.setValue(result);
-          }
-        }
-      }
-      return result;
+      return stringCache.getValue();
     }
 
     @Override
@@ -424,23 +418,13 @@ public abstract class AbstractPacket implements Packet {
      *
      * @return
      */
-    protected int buildHashCode() {
+    protected int calcHashCode() {
       return Arrays.hashCode(getRawData());
     }
 
     @Override
     public int hashCode() {
-      Integer result = hashCodeCache.getValue();
-      if (result == null) {
-        synchronized (hashCodeCache) {
-          result = hashCodeCache.getValue();
-          if (result == null) {
-            result = buildHashCode();
-            hashCodeCache.setValue(result);
-          }
-        }
-      }
-      return result.intValue();
+      return hashCodeCache.getValue();
     }
 
   }

@@ -12,7 +12,10 @@ import java.lang.reflect.Method;
 
 import org.pcap4j.packet.namednumber.NamedNumber;
 
-
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 0.9.6
+ */
 public final class PacketFactories {
 
   private PacketFactories() { throw new AssertionError(); }

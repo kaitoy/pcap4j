@@ -11,11 +11,9 @@ import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.UdpPort;
 import org.pcap4j.util.ByteArrays;
-import org.pcap4j.util.ValueCache;
 
 /**
  * @author Kaito Yamada
@@ -30,8 +28,6 @@ public final class UdpPacket extends AbstractPacket {
 
   private final UdpHeader header;
   private final Packet payload;
-
-  private final ValueCache<Boolean> validCache = new ValueCache<Boolean>();
 
   public static UdpPacket newPacket(byte[] rawData) {
     return new UdpPacket(rawData);
@@ -87,7 +83,7 @@ public final class UdpPacket extends AbstractPacket {
   @Deprecated
   @Override
   public boolean verify() {
-    throw new UnsupportedOperationException();
+    return false;
   }
 
   /**
@@ -96,20 +92,7 @@ public final class UdpPacket extends AbstractPacket {
   @Deprecated
   @Override
   public boolean isValid() {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @param srcAddr
-   * @param dstAddr
-   * @return
-   */
-  private boolean verify(InetAddress srcAddr, InetAddress dstAddr) {
-    if (!payload.isValid()) {
-      return false;
-    }
-    return header.isValid(srcAddr, dstAddr);
+    return false;
   }
 
   /**
@@ -119,17 +102,10 @@ public final class UdpPacket extends AbstractPacket {
    * @return
    */
   public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
-    Boolean result = validCache.getValue();
-    if (result == null) {
-      synchronized (validCache) {
-        result = validCache.getValue();
-        if (result == null) {
-          result = verify(srcAddr, dstAddr);
-          validCache.setValue(result);
-        }
-      }
+    if (!payload.isValid()) {
+      return false;
     }
-    return result.booleanValue();
+    return header.isValid(srcAddr, dstAddr);
   }
 
   @Override
@@ -292,8 +268,6 @@ public final class UdpPacket extends AbstractPacket {
     private final short length;
     private final short checksum;
 
-    private final ValueCache<Boolean> validCache = new ValueCache<Boolean>();
-
     private UdpHeader(byte[] rawData) {
       if (rawData.length < UCP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
@@ -432,7 +406,7 @@ public final class UdpPacket extends AbstractPacket {
     @Deprecated
     @Override
     protected boolean verify() {
-      throw new UnsupportedOperationException();
+      return false;
     }
 
     /**
@@ -441,7 +415,7 @@ public final class UdpPacket extends AbstractPacket {
     @Deprecated
     @Override
     public boolean isValid() {
-      throw new UnsupportedOperationException();
+      return false;
     }
 
     /**
@@ -450,7 +424,7 @@ public final class UdpPacket extends AbstractPacket {
      * @param dstAddr
      * @return
      */
-    private boolean verify(InetAddress srcAddr, InetAddress dstAddr) {
+    public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
       if (
         PacketPropertiesLoader.getInstance()
           .isEnabledUdpChecksumVerification()
@@ -462,26 +436,6 @@ public final class UdpPacket extends AbstractPacket {
       else {
         return true;
       }
-    }
-
-    /**
-     *
-     * @param srcAddr
-     * @param dstAddr
-     * @return
-     */
-    public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
-      Boolean result = validCache.getValue();
-      if (result == null) {
-        synchronized (validCache) {
-          result = validCache.getValue();
-          if (result == null) {
-            result = verify(srcAddr, dstAddr);
-            validCache.setValue(result);
-          }
-        }
-      }
-      return result.booleanValue();
     }
 
     @Override
