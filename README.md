@@ -8,7 +8,7 @@ Javaのパケットキャプチャライブラリ。パケットの作成・送�
 ダウンロード
 ------------
 
-Pcap4J 0.9.5
+Pcap4J 0.9.6
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
@@ -39,6 +39,7 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 
 ドキュメントは作成中。<br>
 テストクラスやlibpcapのドキュメントを見ればなんとか使えるかも。<br>
+まだAPIは固まってなく、こっそりと変更する可能性がある。<br>
 UNIX系ならlibpcap、WindowsならWinPcapがインストールされている必要がある。<br>
 jna、log4jもクラスパスに含める必要がある。<br>
 
@@ -87,10 +88,10 @@ Pcap4J is provided under the LGPL, version 2.1 or later.<br>
 おまけ
 ------
 
-Pcap4J 0.9.5 を使ったSNMPネットワークシミュレータ、SNeO。<br>
+Pcap4J 0.9.6 を使ったSNMPネットワークシミュレータ、SNeO。<br>
 とりあえず置いておくだけ。<br>
-商用でもなんでも無料で使用可。コピーも再配布も可。<br>
+今のところ商用でもなんでも無料で使用可。コピーも再配布も可。<br>
 
-SNeO 1.0.4
+SNeO 1.0.5
 
 * [sneo.jar](/downloads/Kaitoy/pcap4j/sneo.jar)
