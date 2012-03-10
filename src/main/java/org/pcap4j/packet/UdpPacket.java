@@ -335,15 +335,15 @@ public final class UdpPacket extends AbstractPacket {
       // pseudo header
       System.arraycopy(
         srcAddr.getAddress(), 0,
-        data, destPos, ByteArrays.IP_ADDRESS_SIZE_IN_BYTES
+        data, destPos, ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES
       );
-      destPos += ByteArrays.IP_ADDRESS_SIZE_IN_BYTES;
+      destPos += ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
 
       System.arraycopy(
         dstAddr.getAddress(), 0,
-        data, destPos, ByteArrays.IP_ADDRESS_SIZE_IN_BYTES
+        data, destPos, ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES
       );
-      destPos += ByteArrays.IP_ADDRESS_SIZE_IN_BYTES;
+      destPos += ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
 
       data[destPos] = (byte)0;
       destPos++;

@@ -25,7 +25,7 @@ public final class MacAddress implements Serializable {
    *
    */
   public static final MacAddress ETHER_BROADCAST_ADDRESS
-    = MacAddress.newInstance(
+    = MacAddress.getByAddress(
         new byte[]{
           (byte)255, (byte)255, (byte)255, (byte)255, (byte)255, (byte)255
         }
@@ -45,7 +45,7 @@ public final class MacAddress implements Serializable {
    * @param address
    * @return
    */
-  public static MacAddress newInstance(byte[] address) {
+  public static MacAddress getByAddress(byte[] address) {
     if (address.length != SIZE_IN_BYTES) {
       throw new IllegalArgumentException(
               "address length must be " + SIZE_IN_BYTES
@@ -54,6 +54,16 @@ public final class MacAddress implements Serializable {
     byte[] copy = new byte[address.length];
     System.arraycopy(address, 0, copy, 0, copy.length);
     return new MacAddress(copy);
+  }
+
+  /**
+   *
+   * @param name
+   * @param separator
+   * @return
+   */
+  public static MacAddress getByName(String name, String separator) {
+    return getByAddress(ByteArrays.toByteArray(name, separator));
   }
 
   /**

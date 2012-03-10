@@ -8,8 +8,10 @@
 package org.pcap4j.util;
 
 import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.regex.Pattern;
 
 import org.pcap4j.util.MacAddress;
 
@@ -42,12 +44,20 @@ public final class ByteArrays {
   /**
    *
    */
-  public static final int IP_ADDRESS_SIZE_IN_BYTES = 4;
+  public static final int INET4_ADDRESS_SIZE_IN_BYTES = 4;
+
+  /**
+   *
+   */
+  public static final int INET6_ADDRESS_SIZE_IN_BYTES = 16;
 
   /**
    *
    */
   public static final int BYTE_SIZE_IN_BITS = 8;
+
+  private static final Pattern NO_SEPARATOR_HEX_STRING_PATTERN
+    = Pattern.compile("\\A([0-9a-fA-F][0-9a-fA-F])+\\z");
 
   private ByteArrays() { throw new AssertionError(); }
 
@@ -220,7 +230,10 @@ public final class ByteArrays {
    * @return
    */
   public static MacAddress getMacAddress(byte[] array, int offset) {
-    return MacAddress.newInstance(
+    if (offset + MacAddress.SIZE_IN_BYTES > array.length) {
+      throw new IllegalArgumentException();
+    }
+    return MacAddress.getByAddress(
              getSubArray(array, offset, MacAddress.SIZE_IN_BYTES)
            );
   }
@@ -241,12 +254,38 @@ public final class ByteArrays {
    * @return
    */
   public static Inet4Address getInet4Address(byte[] array, int offset) {
+    if (offset + INET4_ADDRESS_SIZE_IN_BYTES > array.length) {
+      throw new IllegalArgumentException();
+    }
     try {
       return (Inet4Address)Inet4Address.getByAddress(
                              getSubArray(
                                array,
                                offset,
-                               IP_ADDRESS_SIZE_IN_BYTES
+                               INET4_ADDRESS_SIZE_IN_BYTES
+                             )
+                           );
+    } catch (UnknownHostException e) {
+      throw new AssertionError();
+    }
+  }
+
+  /**
+   *
+   * @param array
+   * @param offset
+   * @return
+   */
+  public static Inet6Address getInet6Address(byte[] array, int offset) {
+    if (offset + INET6_ADDRESS_SIZE_IN_BYTES > array.length) {
+      throw new IllegalArgumentException();
+    }
+    try {
+      return (Inet6Address)Inet6Address.getByAddress(
+                             getSubArray(
+                               array,
+                               offset,
+                               INET6_ADDRESS_SIZE_IN_BYTES
                              )
                            );
     } catch (UnknownHostException e) {
@@ -316,6 +355,79 @@ public final class ByteArrays {
         + ((0xFFFF0000 & sum) >> (BYTE_SIZE_IN_BITS * SHORT_SIZE_IN_BYTES));
 
     return (short)(0xFFFF & ~sum);
+  }
+
+  /**
+   *
+   * @param hexString
+   * @param separator
+   * @return
+   */
+  public static byte[] toByteArray(String hexString, String separator) {
+    if (
+         hexString == null
+      || separator == null
+    ) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("hexString: ")
+        .append(hexString)
+        .append(" separator: ")
+        .append(separator);
+      throw new NullPointerException(sb.toString());
+    }
+
+    if (hexString.startsWith("0x")) {
+      hexString = hexString.substring(2);
+    }
+
+    String noSeparatorHexString;
+    if (separator.length() == 0) {
+      if (
+       !NO_SEPARATOR_HEX_STRING_PATTERN.matcher(hexString).matches()
+      ) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("invalid hex string(")
+          .append(hexString)
+          .append("), not match pattern(")
+          .append(NO_SEPARATOR_HEX_STRING_PATTERN.pattern())
+          .append(")");
+        throw new IllegalArgumentException(sb.toString());
+      }
+      noSeparatorHexString = hexString;
+    }
+    else {
+      StringBuilder patternSb = new StringBuilder();
+      patternSb.append("\\A[0-9a-fA-F]")
+               .append("[0-9a-fA-F](")
+               .append(Pattern.quote(separator))
+               .append("[0-9a-fA-F][0-9a-fA-F])*\\z");
+      String patternString = patternSb.toString();
+
+      Pattern pattern = Pattern.compile(patternString);
+      if (!pattern.matcher(hexString).matches()) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("invalid hex string(")
+          .append(hexString)
+          .append("), not match pattern(")
+          .append(patternString)
+          .append(")");
+        throw new IllegalArgumentException(sb.toString());
+      }
+      noSeparatorHexString
+        = hexString.replaceAll(Pattern.quote(separator), "");
+    }
+
+    int arrayLength = noSeparatorHexString.length() / 2;
+    byte[] array = new byte[arrayLength];
+    for (int i = 0; i < arrayLength; i++) {
+      array[i]
+        = (byte)Integer.parseInt(
+            noSeparatorHexString.substring(i * 2, i * 2 + 2),
+            16
+          );
+    }
+
+    return array;
   }
 
 }

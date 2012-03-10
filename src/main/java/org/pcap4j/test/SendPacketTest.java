@@ -49,7 +49,7 @@ public class SendPacketTest {
     = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65535); // [bytes]
 
   private static final MacAddress SRC_MAC_ADDR
-   = MacAddress.newInstance(
+   = MacAddress.getByAddress(
        new byte[] {(byte)0, (byte)1,(byte)2, (byte)3, (byte)4, (byte)5}
      );
 
@@ -111,12 +111,12 @@ public class SendPacketTest {
         arpBuilder.hardwareType(ArpHardwareType.ETHERNET)
           .protocolType(EtherType.IPV4)
           .hardwareLength((byte)MacAddress.SIZE_IN_BYTES)
-          .protocolLength((byte)ByteArrays.IP_ADDRESS_SIZE_IN_BYTES)
+          .protocolLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
           .operation(ArpOperation.REQUEST)
           .srcHardwareAddr(SRC_MAC_ADDR)
           .srcProtocolAddr(InetAddress.getByName(args[0]))
           .dstHardwareAddr(
-             MacAddress.newInstance(
+             MacAddress.getByAddress(
                new byte[] {
                  (byte)255, (byte)255, (byte)255,
                  (byte)255, (byte)255, (byte)255
@@ -130,7 +130,7 @@ public class SendPacketTest {
 
       EthernetPacket.Builder etherBuilder = new EthernetPacket.Builder();
       etherBuilder.dstAddr(
-                     MacAddress.newInstance(
+                     MacAddress.getByAddress(
                        new byte[] {
                          (byte)255, (byte)255, (byte)255,
                          (byte)255, (byte)255, (byte)255

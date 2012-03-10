@@ -17,7 +17,7 @@ import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.IP_ADDRESS_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 /**
@@ -86,7 +86,7 @@ public final class ArpPacket extends AbstractPacket {
     private ArpHardwareType hardwareType = ArpHardwareType.ETHERNET;
     private EtherType protocolType = EtherType.IPV4;
     private byte hardwareLength = (byte)MacAddress.SIZE_IN_BYTES;
-    private byte protocolLength = (byte)ByteArrays.IP_ADDRESS_SIZE_IN_BYTES;
+    private byte protocolLength = (byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
     private ArpOperation operation;
     private MacAddress srcHardwareAddr;
     private InetAddress srcProtocolAddr;
@@ -245,7 +245,7 @@ public final class ArpPacket extends AbstractPacket {
     private static final int SRC_PROTOCOL_ADDR_OFFSET
       = SRC_HARDWARE_ADDR_OFFSET + SRC_HARDWARE_ADDR_SIZE;
     private static final int SRC_PROTOCOL_ADDR_SIZE
-      = IP_ADDRESS_SIZE_IN_BYTES;
+      = INET4_ADDRESS_SIZE_IN_BYTES;
     private static final int DST_HARDWARE_ADDR_OFFSET
       = SRC_PROTOCOL_ADDR_OFFSET + SRC_PROTOCOL_ADDR_SIZE;
     private static final int DST_HARDWARE_ADDR_SIZE
@@ -253,7 +253,7 @@ public final class ArpPacket extends AbstractPacket {
     private static final int DST_PROTOCOL_ADDR_OFFSET
       = DST_HARDWARE_ADDR_OFFSET + DST_HARDWARE_ADDR_SIZE;
     private static final int DST_PROTOCOL_ADDR_SIZE
-      = IP_ADDRESS_SIZE_IN_BYTES;
+      = INET4_ADDRESS_SIZE_IN_BYTES;
     private static final int ARP_HEADER_SIZE
       = DST_PROTOCOL_ADDR_OFFSET + DST_PROTOCOL_ADDR_SIZE;
 
