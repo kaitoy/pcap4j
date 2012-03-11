@@ -8,7 +8,7 @@ Javaのパケットキャプチャライブラリ。パケットの作成・送�
 ダウンロード
 ------------
 
-Pcap4J 0.9.6
+Pcap4J 0.9.7
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
@@ -88,10 +88,10 @@ Pcap4J is provided under the LGPL, version 2.1 or later.<br>
 おまけ
 ------
 
-Pcap4J 0.9.6 を使ったSNMPネットワークシミュレータ、SNeO。<br>
+Pcap4J 0.9.7 を使ったSNMPネットワークシミュレータ、SNeO。<br>
 とりあえず置いておくだけ。<br>
 今のところ商用でもなんでも無料で使用可。コピーも再配布も可。<br>
 
-SNeO 1.0.5
+SNeO 1.0.6
 
 * [sneo.jar](/downloads/Kaitoy/pcap4j/sneo.jar)

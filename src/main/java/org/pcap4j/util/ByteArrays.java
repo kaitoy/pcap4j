@@ -363,7 +363,7 @@ public final class ByteArrays {
    * @param separator
    * @return
    */
-  public static byte[] toByteArray(String hexString, String separator) {
+  public static byte[] parseByteArray(String hexString, String separator) {
     if (
          hexString == null
       || separator == null
@@ -385,7 +385,7 @@ public final class ByteArrays {
       if (
        !NO_SEPARATOR_HEX_STRING_PATTERN.matcher(hexString).matches()
       ) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(100);
         sb.append("invalid hex string(")
           .append(hexString)
           .append("), not match pattern(")
@@ -396,7 +396,7 @@ public final class ByteArrays {
       noSeparatorHexString = hexString;
     }
     else {
-      StringBuilder patternSb = new StringBuilder();
+      StringBuilder patternSb = new StringBuilder(60);
       patternSb.append("\\A[0-9a-fA-F]")
                .append("[0-9a-fA-F](")
                .append(Pattern.quote(separator))
@@ -405,7 +405,7 @@ public final class ByteArrays {
 
       Pattern pattern = Pattern.compile(patternString);
       if (!pattern.matcher(hexString).matches()) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(150);
         sb.append("invalid hex string(")
           .append(hexString)
           .append("), not match pattern(")

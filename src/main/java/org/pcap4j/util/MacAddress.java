@@ -63,7 +63,7 @@ public final class MacAddress implements Serializable {
    * @return
    */
   public static MacAddress getByName(String name, String separator) {
-    return getByAddress(ByteArrays.toByteArray(name, separator));
+    return getByAddress(ByteArrays.parseByteArray(name, separator));
   }
 
   /**

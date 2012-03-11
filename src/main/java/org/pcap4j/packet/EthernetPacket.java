@@ -90,12 +90,16 @@ public final class EthernetPacket extends AbstractPacket {
     this.payload = builder.payloadBuilder.build();
     this.header = new EthernetHeader(builder);
 
+    int currentLength
+      = this.header.length() + this.payload.length() + builder.pad.length;
     if (
          builder.validateAtBuild
-      && this.payload.length() + builder.pad.length
-           < MIN_ETHERNET_PACKET_LENGTH
+      && currentLength < MIN_ETHERNET_PACKET_LENGTH
     ) {
-      this.pad = new byte[MIN_ETHERNET_PACKET_LENGTH];
+      this.pad = new byte[
+                   builder.pad.length
+                     + MIN_ETHERNET_PACKET_LENGTH - currentLength
+                 ];
     }
     else {
       this.pad = new byte[builder.pad.length];
