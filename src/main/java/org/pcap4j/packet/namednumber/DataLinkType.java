@@ -63,7 +63,7 @@ public final class DataLinkType extends NamedNumber<Integer> {
 
   static {
     for (Field field: DataLinkType.class.getFields()) {
-      if (field.getType().isAssignableFrom(DataLinkType.class)) {
+      if (DataLinkType.class.isAssignableFrom(field.getType())) {
         try {
           DataLinkType typeCode = (DataLinkType)field.get(null);
           registry.put(typeCode.value(), typeCode);

@@ -41,7 +41,7 @@ public final class ArpOperation extends NamedNumber<Short> {
 
   static {
     for (Field field: ArpOperation.class.getFields()) {
-      if (field.getType().isAssignableFrom(ArpOperation.class)) {
+      if (ArpOperation.class.isAssignableFrom(field.getType())) {
         try {
           ArpOperation typeCode = (ArpOperation)field.get(null);
           registry.put(typeCode.value(), typeCode);

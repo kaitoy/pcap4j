@@ -90,7 +90,7 @@ public final class EtherType extends NamedNumber<Short> {
 
   static {
     for (Field field: EtherType.class.getFields()) {
-      if (field.getType().isAssignableFrom(EtherType.class)) {
+      if (EtherType.class.isAssignableFrom(field.getType())) {
         try {
           EtherType typeCode = (EtherType)field.get(null);
           registry.put(typeCode.value(), typeCode);

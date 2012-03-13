@@ -162,7 +162,7 @@ public final class IcmpV4TypeCode extends NamedNumber<Short> {
 
   static {
     for (Field field: IcmpV4TypeCode.class.getFields()) {
-      if (field.getType().isAssignableFrom(IcmpV4TypeCode.class)) {
+      if (IcmpV4TypeCode.class.isAssignableFrom(field.getType())) {
         try {
           IcmpV4TypeCode typeCode = (IcmpV4TypeCode)field.get(null);
           registry.put(typeCode.value(), typeCode);

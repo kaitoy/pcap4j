@@ -41,7 +41,7 @@ public final class UdpPort extends NamedNumber<Short> {
 
   static {
     for (Field field: UdpPort.class.getFields()) {
-      if (field.getType().isAssignableFrom(UdpPort.class)) {
+      if (UdpPort.class.isAssignableFrom(field.getType())) {
         try {
           UdpPort typeCode = (UdpPort)field.get(null);
           registry.put(typeCode.value(), typeCode);

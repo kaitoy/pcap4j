@@ -19,7 +19,6 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.PacketFactories;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.ByteArrays;
-import org.pcap4j.util.MacAddress;
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BITS;
 
 /**
@@ -87,34 +86,6 @@ public final class PcapHandle {
     public int getValue() {
       return value;
     }
-  }
-
-  /**
-   *
-   * @param inetAddr
-   * @return
-   */
-  public static String toBpfString (InetAddress inetAddr){
-    // TODO IPv6
-    return inetAddr.toString().replaceFirst("\\A.*/", "");
-  }
-
-  /**
-   *
-   * @param macAddr
-   * @return
-   */
-  public static String toBpfString(MacAddress macAddr) {
-    StringBuffer buf = new StringBuffer();
-    byte[] address = macAddr.getAddress();
-
-    for (int i = 0; i < address.length; i++) {
-      buf.append(String.format("%02x", address[i]));
-      buf.append(":");
-    }
-    buf.deleteCharAt(buf.length() - 1);
-
-    return buf.toString();
   }
 
   /**
@@ -263,7 +234,7 @@ public final class PcapHandle {
       case -1: throw new PcapNativeException(
                        "Error occured in pcap_loop(): " + getError()
                      );
-      case -2: logger.info("Breaked."); break;
+      case -2: logger.info("Broken."); break;
       default: throw new AssertionError();
     }
   }
@@ -289,7 +260,7 @@ public final class PcapHandle {
    *
    */
   public void breakLoop() {
-//    if (!isOpening()) {
+//    if (!isOpening()) {  // not need to check
 //      throw new IllegalStateException("Not opening.");
 //    }
     logger.info("Break loop.");

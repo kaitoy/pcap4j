@@ -53,7 +53,7 @@ public final class ArpHardwareType extends NamedNumber<Short> {
 
   static {
     for (Field field: ArpHardwareType.class.getFields()) {
-      if (field.getType().isAssignableFrom(ArpHardwareType.class)) {
+      if (ArpHardwareType.class.isAssignableFrom(field.getType())) {
         try {
           ArpHardwareType typeCode = (ArpHardwareType)field.get(null);
           registry.put(typeCode.value(), typeCode);

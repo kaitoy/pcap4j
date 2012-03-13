@@ -15,6 +15,8 @@ import org.apache.log4j.Logger;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.pcap_if;
+import org.pcap4j.util.MacAddress;
+
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -116,5 +118,32 @@ public final class Pcaps {
     return result.getString(0, true);
   }
 
+  /**
+   *
+   * @param inetAddr
+   * @return
+   */
+  public static String toBpfString (InetAddress inetAddr){
+    // TODO IPv6
+    return inetAddr.toString().replaceFirst("\\A.*/", "");
+  }
+
+  /**
+   *
+   * @param macAddr
+   * @return
+   */
+  public static String toBpfString(MacAddress macAddr) {
+    StringBuffer buf = new StringBuffer();
+    byte[] address = macAddr.getAddress();
+
+    for (int i = 0; i < address.length; i++) {
+      buf.append(String.format("%02x", address[i]));
+      buf.append(":");
+    }
+    buf.deleteCharAt(buf.length() - 1);
+
+    return buf.toString();
+  }
 }
 

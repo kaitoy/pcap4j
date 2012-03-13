@@ -21,6 +21,7 @@ import org.pcap4j.core.PcapHandle.BpfCompileMode;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
+import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.ArpPacket;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.Packet;
@@ -46,7 +47,7 @@ public class SendPacketTest {
   private static final String MAX_PACKT_SIZE_KEY
     = LoopTest.class.getName() + ".maxPacketSize";
   private static final int MAX_PACKT_SIZE
-    = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65535); // [bytes]
+    = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65536); // [bytes]
 
   private static final MacAddress SRC_MAC_ADDR
    = MacAddress.getByAddress(
@@ -87,7 +88,7 @@ public class SendPacketTest {
         handle.setFilter(
           "arp and src host " + args[1]
             + " and dst host " + args[0]
-            + " and ether dst " + PcapHandle.toBpfString(SRC_MAC_ADDR),
+            + " and ether dst " + Pcaps.toBpfString(SRC_MAC_ADDR),
           BpfCompileMode.OPTIMIZE,
           InetAddress
             .getByAddress(new byte[] {(byte)255, (byte)255, (byte)255, (byte)0})

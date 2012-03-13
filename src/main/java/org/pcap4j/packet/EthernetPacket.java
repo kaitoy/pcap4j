@@ -29,7 +29,8 @@ public final class EthernetPacket extends AbstractPacket {
    */
   private static final long serialVersionUID = 3461432646404254300L;
 
-  private static final int MIN_ETHERNET_PACKET_LENGTH = 60;
+  private static final int MIN_ETHERNET_PAYLOAD_LENGTH = 46; // [bytes]
+  private static final int MAX_ETHERNET_PAYLOAD_LENGTH = 1500; // [bytes]
 
   private final EthernetHeader header;
   private final Packet payload;
@@ -90,15 +91,15 @@ public final class EthernetPacket extends AbstractPacket {
     this.payload = builder.payloadBuilder.build();
     this.header = new EthernetHeader(builder);
 
-    int currentLength
-      = this.header.length() + this.payload.length() + builder.pad.length;
+    int paddedPayloadLength
+      = this.payload.length() + builder.pad.length;
     if (
          builder.validateAtBuild
-      && currentLength < MIN_ETHERNET_PACKET_LENGTH
+      && paddedPayloadLength < MIN_ETHERNET_PAYLOAD_LENGTH
     ) {
       this.pad = new byte[
                    builder.pad.length
-                     + MIN_ETHERNET_PACKET_LENGTH - currentLength
+                     + MIN_ETHERNET_PAYLOAD_LENGTH - paddedPayloadLength
                  ];
     }
     else {

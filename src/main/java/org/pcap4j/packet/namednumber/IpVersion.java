@@ -65,7 +65,7 @@ public final class IpVersion extends NamedNumber<Byte> {
 
   static {
     for (Field field: IpVersion.class.getFields()) {
-      if (field.getType().isAssignableFrom(IpVersion.class)) {
+      if (IpVersion.class.isAssignableFrom(field.getType())) {
         try {
           IpVersion typeCode = (IpVersion)field.get(null);
           registry.put(typeCode.value(), typeCode);

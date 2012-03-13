@@ -137,7 +137,7 @@ public final class IpNumber extends NamedNumber<Byte> {
 
   static {
     for (Field field: IpNumber.class.getFields()) {
-      if (field.getType().isAssignableFrom(IpNumber.class)) {
+      if (IpNumber.class.isAssignableFrom(field.getType())) {
         try {
           IpNumber typeCode = (IpNumber)field.get(null);
           registry.put(typeCode.value(), typeCode);

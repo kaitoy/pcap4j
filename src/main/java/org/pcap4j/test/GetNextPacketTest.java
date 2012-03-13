@@ -33,7 +33,7 @@ public class GetNextPacketTest {
   private static final String MAX_PACKT_SIZE_KEY
     = LoopTest.class.getName() + ".maxPacketSize";
   private static final int MAX_PACKT_SIZE
-    = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65535); // [bytes]
+    = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65536); // [bytes]
 
   public static void main(String[] args) throws PcapNativeException, FileNotFoundException, IOException {
     BasicConfigurator.configure();
