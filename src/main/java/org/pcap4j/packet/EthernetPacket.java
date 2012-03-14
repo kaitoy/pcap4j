@@ -30,7 +30,7 @@ public final class EthernetPacket extends AbstractPacket {
   private static final long serialVersionUID = 3461432646404254300L;
 
   private static final int MIN_ETHERNET_PAYLOAD_LENGTH = 46; // [bytes]
-  private static final int MAX_ETHERNET_PAYLOAD_LENGTH = 1500; // [bytes]
+  //private static final int MAX_ETHERNET_PAYLOAD_LENGTH = 1500; // [bytes]
 
   private final EthernetHeader header;
   private final Packet payload;

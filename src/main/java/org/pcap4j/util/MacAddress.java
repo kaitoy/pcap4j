@@ -48,7 +48,9 @@ public final class MacAddress implements Serializable {
   public static MacAddress getByAddress(byte[] address) {
     if (address.length != SIZE_IN_BYTES) {
       throw new IllegalArgumentException(
-              "address length must be " + SIZE_IN_BYTES
+              ByteArrays.toHexString(address, ":")
+                + " is invalid for address. The length must be "
+                + SIZE_IN_BYTES
             );
     }
     byte[] copy = new byte[address.length];
