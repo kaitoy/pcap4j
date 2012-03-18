@@ -12,11 +12,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.pcap4j.core.PcapHandle;
-import org.pcap4j.core.GotPacketEventListener;
+import org.pcap4j.core.PacketListener;
 import org.pcap4j.core.PcapHandle.BpfCompileMode;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
@@ -55,9 +52,6 @@ public class SendPacketTest {
      );
 
   public static void main(String[] args) throws PcapNativeException {
-    BasicConfigurator.configure();
-    Logger.getRootLogger().setLevel(Level.INFO);
-
     System.out.println(COUNT_KEY + ": " + COUNT);
     System.out.println(READ_TIMEOUT_KEY + ": " + READ_TIMEOUT);
     System.out.println(MAX_PACKT_SIZE_KEY + ": " + MAX_PACKT_SIZE);
@@ -97,8 +91,8 @@ public class SendPacketTest {
         throw new AssertionError("Never get here.");
       }
 
-      GotPacketEventListener listener
-        = new GotPacketEventListener() {
+      PacketListener listener
+        = new PacketListener() {
             public void gotPacket(Packet packet) {
               System.out.println(packet);
             }
@@ -166,9 +160,9 @@ public class SendPacketTest {
   private static class Task implements Runnable {
 
     private PcapHandle handle;
-    private GotPacketEventListener listener;
+    private PacketListener listener;
 
-    public Task(PcapHandle handle, GotPacketEventListener listener) {
+    public Task(PcapHandle handle, PacketListener listener) {
       this.handle = handle;
       this.listener = listener;
     }

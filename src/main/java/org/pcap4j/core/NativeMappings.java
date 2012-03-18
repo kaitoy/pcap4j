@@ -256,10 +256,11 @@ final class NativeMappings {
     }
 
     public int length() {
-      return getMessage().length();
+      return toString().length();
     }
 
-    public String getMessage() {
+    @Override
+    public String toString() {
       return Native.toString(buf);
     }
   }

@@ -7,12 +7,9 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapHandle.BpfCompileMode;
-import org.pcap4j.core.GotPacketEventListener;
+import org.pcap4j.core.PacketListener;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
@@ -37,9 +34,6 @@ public class LoopTest {
     = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65536); // [bytes]
 
   public static void main(String[] args) throws PcapNativeException, FileNotFoundException, IOException {
-    BasicConfigurator.configure();
-    Logger.getRootLogger().setLevel(Level.INFO);
-
     System.out.println(COUNT_KEY + ": " + COUNT);
     System.out.println(READ_TIMEOUT_KEY + ": " + READ_TIMEOUT);
     System.out.println(MAX_PACKT_SIZE_KEY + ": " + MAX_PACKT_SIZE);
@@ -75,8 +69,8 @@ public class LoopTest {
 
     final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("out")));
 
-    GotPacketEventListener listener
-      = new GotPacketEventListener() {
+    PacketListener listener
+      = new PacketListener() {
           public void gotPacket(Packet packet) {
             System.out.println(packet);
             try {

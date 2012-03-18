@@ -9,7 +9,6 @@ package org.pcap4j.core;
 
 import java.io.EOFException;
 import java.net.InetAddress;
-import org.apache.log4j.Logger;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
@@ -19,7 +18,8 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.PacketFactories;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.ByteArrays;
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BITS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kaito Yamada
@@ -27,7 +27,7 @@ import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BITS;
  */
 public final class PcapHandle {
 
-  private static final Logger logger = Logger.getLogger(PcapHandle.class);
+  private static final Logger logger = LoggerFactory.getLogger(PcapHandle.class);
 
   private final DataLinkType dlt;
   private final Pointer handle;
@@ -99,37 +99,40 @@ public final class PcapHandle {
     String bpfExpression, BpfCompileMode mode, InetAddress netmask
   ) throws PcapNativeException {
     synchronized (thisLock) {
-      if (!isOpening()) {
+      if (!opening) {
         throw new IllegalStateException("Not opening.");
       }
 
       int mask;
       if (netmask != null) {
-        byte[] rawNetmask = ByteArrays.toByteArray(netmask);
-        mask =    rawNetmask[3]
-               | (rawNetmask[2] << (BYTE_SIZE_IN_BITS * 1))
-               | (rawNetmask[1] << (BYTE_SIZE_IN_BITS * 2))
-               | (rawNetmask[0] << (BYTE_SIZE_IN_BITS * 3));
+        mask = ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0);
       }
       else {
         mask = 0;
       }
 
       bpf_program prog = new bpf_program();
-      int rc = PcapLibrary.INSTANCE.pcap_compile(
-                 handle, prog, bpfExpression, mode.getValue(), mask
-               );
-      if (rc < 0) {
-        throw new PcapNativeException("Error occured in pcap_compile: " + getError());
-      }
+      try {
+        int rc = PcapLibrary.INSTANCE.pcap_compile(
+                   handle, prog, bpfExpression, mode.getValue(), mask
+                 );
+        if (rc < 0) {
+          throw new PcapNativeException(
+                      "Error occured in pcap_compile: " + getError()
+                    );
+        }
 
-      rc = PcapLibrary.INSTANCE.pcap_setfilter(handle, prog);
-      if (rc < 0) {
-        throw new PcapNativeException("Error occured in pcap_setfilger: " + getError());
-      }
+        rc = PcapLibrary.INSTANCE.pcap_setfilter(handle, prog);
+        if (rc < 0) {
+          throw new PcapNativeException(
+                      "Error occured in pcap_setfilger: " + getError()
+                    );
+        }
 
-      this.filteringExpression = bpfExpression;
-      PcapLibrary.INSTANCE.pcap_freecode(prog);
+        this.filteringExpression = bpfExpression;
+      } finally {
+        PcapLibrary.INSTANCE.pcap_freecode(prog);
+      }
     }
   }
 
@@ -142,7 +145,7 @@ public final class PcapHandle {
     Pointer packet;
 
     synchronized (thisLock) {
-      if (!isOpening()) {
+      if (!opening) {
         throw new IllegalStateException("Not opening.");
       }
 
@@ -173,7 +176,7 @@ public final class PcapHandle {
     int rc;
 
     synchronized (thisLock) {
-      if (!isOpening()) {
+      if (!opening) {
         throw new IllegalStateException("Not opening.");
       }
       rc = PcapLibrary.INSTANCE.pcap_next_ex(handle, headerPP, dataPP);
@@ -187,8 +190,12 @@ public final class PcapHandle {
         Pointer headerP = headerPP.getValue();
         Pointer dataP = dataPP.getValue();
         if (headerP == null || dataP == null) {
-          throw new AssertionError("Never get here.");
+          throw new PcapNativeException(
+                      "Failed to get packet. *header: "
+                        + headerP + " *data: " + dataP
+                    );
         }
+
         return PacketFactories.getPacketFactory(DataLinkType.class).newPacket(
                  dataP.getByteArray(0, new pcap_pkthdr(headerP).caplen),
                  dlt
@@ -207,16 +214,16 @@ public final class PcapHandle {
   /**
    *
    * @param packetCount
-   * @param eventListener
+   * @param listener
    * @throws PcapNativeException
    */
   public void loop(
-    int packetCount, GotPacketEventListener eventListener
+    int packetCount, PacketListener listener
   ) throws PcapNativeException {
     int rc;
 
     synchronized (thisLock) {
-      if (!isOpening()) {
+      if (!opening) {
         throw new IllegalStateException("Not opening.");
       }
 
@@ -224,7 +231,7 @@ public final class PcapHandle {
       rc = PcapLibrary.INSTANCE.pcap_loop(
              handle,
              packetCount,
-             new gotPacketFunc(eventListener),
+             new gotPacketFunc(listener, dlt),
              ""
            );
     }
@@ -239,16 +246,18 @@ public final class PcapHandle {
     }
   }
 
-  private class gotPacketFunc implements NativeMappings.pcap_handler {
-    private final GotPacketEventListener eventListener;
+  private static class gotPacketFunc implements NativeMappings.pcap_handler {
+    private DataLinkType dlt;
+    private final PacketListener listener;
 
-    public gotPacketFunc(GotPacketEventListener eventListener) {
-      this.eventListener = eventListener;
+    public gotPacketFunc(PacketListener listener, DataLinkType dlt) {
+      this.dlt = dlt;
+      this.listener = listener;
     }
 
     public void got_packet(String args, pcap_pkthdr header, Pointer packet) {
-      eventListener.gotPacket(
-          PacketFactories.getPacketFactory(DataLinkType.class).newPacket(
+      listener.gotPacket(
+        PacketFactories.getPacketFactory(DataLinkType.class).newPacket(
           packet.getByteArray(0, header.caplen),
           dlt
         )
@@ -260,7 +269,7 @@ public final class PcapHandle {
    *
    */
   public void breakLoop() {
-//    if (!isOpening()) {  // not need to check
+//    if (!opening) {  // not need to check
 //      throw new IllegalStateException("Not opening.");
 //    }
     logger.info("Break loop.");
@@ -276,7 +285,7 @@ public final class PcapHandle {
     int rc;
 
     synchronized (thisLock) {
-      if (!isOpening()) {
+      if (!opening) {
         throw new IllegalStateException("Not opening.");
       }
       rc = PcapLibrary.INSTANCE.pcap_sendpacket(
@@ -295,12 +304,11 @@ public final class PcapHandle {
    *
    */
   public void close() {
-    if (!isOpening()) {
-      logger.warn("Already closed.");
-      return;
-    }
-
     synchronized (thisLock) {
+      if (!opening) {
+        logger.warn("Already closed.");
+        return;
+      }
       PcapLibrary.INSTANCE.pcap_close(handle);
       opening = false;
     }

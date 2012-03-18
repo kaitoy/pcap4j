@@ -150,6 +150,23 @@ public final class EthernetPacket extends AbstractPacket {
   }
 
   @Override
+  protected String buildString() {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append(header.toString());
+    if (payload != null) {
+      sb.append(payload.toString());
+    }
+    if (pad.length != 0) {
+      sb.append("  Pad: 0x")
+        .append(ByteArrays.toHexString(pad, " "))
+        .append("\n");
+    }
+
+    return sb.toString();
+  }
+
+  @Override
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -255,7 +272,7 @@ public final class EthernetPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public final class EthernetHeader extends AbstractHeader {
+  public static final class EthernetHeader extends AbstractHeader {
 
     /**
      *
@@ -350,12 +367,6 @@ public final class EthernetPacket extends AbstractPacket {
       sb.append("  Type: ")
         .append(type)
         .append("\n");
-
-      if (pad != null && pad.length != 0) {
-        sb.append("  Pad: 0x")
-          .append(ByteArrays.toHexString(pad, " "))
-          .append("\n");
-      }
 
       return sb.toString();
     }

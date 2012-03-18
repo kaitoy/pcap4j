@@ -151,7 +151,7 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
 
   }
 
-  public final class Dot1qVlanTagHeader extends AbstractHeader {
+  public static final class Dot1qVlanTagHeader extends AbstractHeader {
 
     /**
      *

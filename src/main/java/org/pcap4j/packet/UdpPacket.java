@@ -34,7 +34,7 @@ public final class UdpPacket extends AbstractPacket {
   }
 
   private UdpPacket(byte[] rawData) {
-    this.header = new UdpHeader(rawData);
+    this.header = new UdpHeader(rawData, this);
 
     byte[] rawPayload
       = ByteArrays.getSubArray(
@@ -64,7 +64,7 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     this.payload = builder.payloadBuilder.build();
-    this.header = new UdpHeader(builder);
+    this.header = new UdpHeader(builder, this);
   }
 
   @Override
@@ -96,6 +96,8 @@ public final class UdpPacket extends AbstractPacket {
   }
 
   /**
+   * Because the result of this method depends on srcAddr and dstAddr
+   * it will not be cached.
    *
    * @param srcAddr
    * @param dstAddr
@@ -267,8 +269,9 @@ public final class UdpPacket extends AbstractPacket {
     private final UdpPort dstPort;
     private final short length;
     private final short checksum;
+//    private transient final WeakReference<UdpPacket> hostRef;
 
-    private UdpHeader(byte[] rawData) {
+    private UdpHeader(byte[] rawData, UdpPacket host) {
       if (rawData.length < UCP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build a UDP header(")
@@ -284,14 +287,16 @@ public final class UdpPacket extends AbstractPacket {
         = UdpPort.getInstance(ByteArrays.getShort(rawData, DST_PORT_OFFSET));
       this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET);
       this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET);
+//      this.hostRef = new WeakReference<UdpPacket>(host);
     }
 
-    private UdpHeader(Builder builder) {
+    private UdpHeader(Builder builder, UdpPacket host) {
       this.srcPort = builder.srcPort;
       this.dstPort = builder.dstPort;
+//      this.hostRef = new WeakReference<UdpPacket>(host);
 
       if (builder.validateAtBuild) {
-        this.length = (short)(UdpPacket.this.payload.length() + length());
+        this.length = (short)(host.payload.length() + length());
 
         if (
           PacketPropertiesLoader.getInstance()
@@ -310,6 +315,11 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     private short calcChecksum(InetAddress srcAddr, InetAddress dstAddr) {
+//      UdpPacket host = hostRef.get();
+//      if (host == null) {
+//        throw new IllegalStateException("Can't access host packet");
+//      }
+
       byte[] data;
       int destPos;
 
@@ -419,12 +429,19 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     /**
+     * Because the result of this method depends on srcAddr and dstAddr
+     * it will not be cached.
      *
      * @param srcAddr
      * @param dstAddr
      * @return
      */
     public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
+//      UdpPacket host = hostRef.get();
+//      if (host == null) {
+//        throw new IllegalStateException("Can't access host packet");
+//      }
+
       if (
         PacketPropertiesLoader.getInstance()
           .isEnabledUdpChecksumVerification()

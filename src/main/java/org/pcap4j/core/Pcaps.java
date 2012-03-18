@@ -11,11 +11,12 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.apache.log4j.Logger;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.pcap_if;
 import org.pcap4j.util.MacAddress;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
@@ -38,7 +39,7 @@ public final class Pcaps {
 //  #define PCAP_WARNING      1 /* generic warning code */
 //  #define PCAP_WARNING_PROMISC_NOTSUP 2 /* this device doesn't support promiscuous mode */
 
-  private static final Logger logger = Logger.getLogger(Pcaps.class);
+  private static final Logger logger = LoggerFactory.getLogger(Pcaps.class);
 
   private Pcaps() { throw new AssertionError(); }
 
@@ -54,12 +55,15 @@ public final class Pcaps {
 
     int rc = PcapLibrary.INSTANCE.pcap_findalldevs(alldevsPP, errbuf);
     if (rc != 0) {
-      throw new PcapNativeException(
-              "Return code: " + rc + ", Message: " + errbuf.getMessage()
-            );
+      StringBuilder sb = new StringBuilder(50);
+      sb.append("Return code: ")
+        .append(rc)
+        .append(", Message: ")
+        .append(errbuf);
+      throw new PcapNativeException(sb.toString());
     }
     if (errbuf.length() != 0) {
-      logger.warn(errbuf.getMessage());
+      logger.warn("{}", errbuf);
     }
 
     Pointer alldevsp = alldevsPP.getValue();
@@ -77,7 +81,7 @@ public final class Pcaps {
 
     PcapLibrary.INSTANCE.pcap_freealldevs(pcapIf.getPointer());
 
-    logger.info(ifList.size() + " NIF(s) found.");
+    logger.info("{} NIF(s) found.", ifList.size());
     return ifList;
   }
 
@@ -87,8 +91,9 @@ public final class Pcaps {
    * @return
    * @throws PcapNativeException
    */
-  public static
-  PcapNetworkInterface getNifBy(InetAddress addr) throws PcapNativeException {
+  public static PcapNetworkInterface getNifBy(
+    InetAddress addr
+  ) throws PcapNativeException {
     List<PcapNetworkInterface> allDevs = Pcaps.findAllDevs();
 
     for (PcapNetworkInterface pif: allDevs) {
@@ -112,7 +117,7 @@ public final class Pcaps {
     Pointer result = PcapLibrary.INSTANCE.pcap_lookupdev(errbuf);
 
     if (result == null || errbuf.length() != 0) {
-      throw new PcapNativeException(errbuf.getMessage());
+      throw new PcapNativeException(errbuf.toString());
     }
 
     return result.getString(0, true);

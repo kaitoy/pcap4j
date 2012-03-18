@@ -10,11 +10,13 @@ package org.pcap4j.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.apache.log4j.Logger;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.pcap_addr;
 import org.pcap4j.core.NativeMappings.pcap_if;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sun.jna.Pointer;
 
 /**
@@ -24,7 +26,7 @@ import com.sun.jna.Pointer;
 public final class PcapNetworkInterface {
 
   private static final Logger logger
-    = Logger.getLogger(PcapNetworkInterface.class);
+    = LoggerFactory.getLogger(PcapNetworkInterface.class);
 
   private static final int PCAP_IF_LOOPBACK = 0x00000001;
 
@@ -52,8 +54,8 @@ public final class PcapNetworkInterface {
          break;
        default:
          logger.warn(
+           "{} is not supported address family. Ignore it.",
            pcapAddr.addr.sa_family
-             + " is not supported address family. Ignore it."
          );
          break;
       }
@@ -159,7 +161,7 @@ public final class PcapNetworkInterface {
           errbuf
         );
     if (ifaceHandle == null || errbuf.length() != 0) {
-      throw new PcapNativeException(errbuf.getMessage());
+      throw new PcapNativeException(errbuf.toString());
     }
 
     return new PcapHandle(ifaceHandle);

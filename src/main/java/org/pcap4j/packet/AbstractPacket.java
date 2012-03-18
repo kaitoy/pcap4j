@@ -252,7 +252,7 @@ public abstract class AbstractPacket implements Packet {
    * @author Kaito Yamada
    * @version pcap4j 0.9.1
    */
-  public abstract class AbstractHeader implements Header {
+  public static abstract class AbstractHeader implements Header {
 
     /**
      *
@@ -266,7 +266,7 @@ public abstract class AbstractPacket implements Packet {
     private final LazyValue<String> stringCache;
     private final LazyValue<Integer> hashCodeCache;
 
-    public AbstractHeader() {
+    protected AbstractHeader() {
       this.validCache
         = new LazyValue<Boolean>(
             new BuildValueCommand<Boolean>() {

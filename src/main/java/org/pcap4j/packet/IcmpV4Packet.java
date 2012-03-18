@@ -10,7 +10,6 @@ package org.pcap4j.packet;
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public final class IcmpV4Packet extends AbstractPacket {
   }
 
   private IcmpV4Packet(byte[] rawData) {
-    this.header = new IcmpV4Header(rawData);
+    this.header = new IcmpV4Header(rawData, this);
     this.payload
       = AnonymousPacket.newPacket(
           ByteArrays.getSubArray(
@@ -64,7 +63,7 @@ public final class IcmpV4Packet extends AbstractPacket {
     }
 
     this.payload = builder.payloadBuilder.build();
-    this.header = new IcmpV4Header(builder);
+    this.header = new IcmpV4Header(builder, this);
   }
 
   @Override
@@ -239,8 +238,9 @@ public final class IcmpV4Packet extends AbstractPacket {
     private final IcmpV4TypeCode typeCode;
     private final short checksum;
     private final int typeSpecificField;
+//    private transient final WeakReference<IcmpV4Packet> hostRef;
 
-    private IcmpV4Header(byte[] rawData) {
+    private IcmpV4Header(byte[] rawData, IcmpV4Packet host) {
       if (rawData.length < ICMP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 header(")
@@ -257,11 +257,13 @@ public final class IcmpV4Packet extends AbstractPacket {
         = ByteArrays.getShort(rawData, CHECKSUM_OFFSET);
       this.typeSpecificField
         = ByteArrays.getInt(rawData, TYPE_SPECIFIC_FIELD_OFFSET);
+//      this.hostRef = new WeakReference<IcmpV4Packet>(host);
     }
 
-    private IcmpV4Header(Builder builder) {
+    private IcmpV4Header(Builder builder, IcmpV4Packet host) {
       this.typeCode = builder.typeCode;
       this.typeSpecificField = builder.typeSpecificField;
+//      this.hostRef = new WeakReference<IcmpV4Packet>(host);
 
       if (builder.validateAtBuild) {
         if (
@@ -280,6 +282,11 @@ public final class IcmpV4Packet extends AbstractPacket {
     }
 
     private short calcChecksum() {
+//      IcmpV4Packet host = hostRef.get();
+//      if (host == null) {
+//        throw new IllegalStateException("Can't access host packet");
+//      }
+
       byte[] data;
       int packetLength = IcmpV4Packet.this.payload.length() + length();
 

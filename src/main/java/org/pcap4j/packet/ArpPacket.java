@@ -211,7 +211,7 @@ public final class ArpPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @version pcap4j 0.9.1
    */
-  public final class ArpHeader extends AbstractHeader {
+  public static final class ArpHeader extends AbstractHeader {
 
     /**
      *

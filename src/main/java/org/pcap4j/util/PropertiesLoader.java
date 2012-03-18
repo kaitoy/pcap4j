@@ -14,7 +14,8 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kaito Yamada
@@ -23,10 +24,10 @@ import org.apache.log4j.Logger;
 public class PropertiesLoader {
 
   private static final Logger logger
-    = Logger.getLogger(PropertiesLoader.class.getPackage().getName());
+    = LoggerFactory.getLogger(PropertiesLoader.class);
 
   private final String resourceName;
-  private final boolean givePrioritySystemPropertiesThanPropertiesFile;
+  private final boolean givePriorityToSystemPropertiesOverPropertiesFile;
   private final boolean useCache;
   private final Properties prop = new Properties();
 
@@ -42,21 +43,21 @@ public class PropertiesLoader {
     boolean useCache
   ) {
     this.resourceName = resourceName;
-    this.givePrioritySystemPropertiesThanPropertiesFile
+    this.givePriorityToSystemPropertiesOverPropertiesFile
       = givePrioritySystemPropertiesThanPropertiesFile;
     this.useCache = useCache;
 
     InputStream in
       = this.getClass().getClassLoader().getResourceAsStream(resourceName);
     if (in == null) {
-      logger.warn(resourceName + " not found.");
+      logger.warn("{} not found.", resourceName);
       return;
     }
 
     try {
       this.prop.load(in);
     } catch (IOException e) {
-      logger.error(e);
+      logger.error("Exception follows", e);
     }
   }
 
@@ -82,8 +83,8 @@ public class PropertiesLoader {
    *
    * @return
    */
-  public final boolean isGivingPrioritySystemPropertiesThanPropertiesFile() {
-    return givePrioritySystemPropertiesThanPropertiesFile;
+  public final boolean isGivingPriorityToSystemPropertiesOverPropertiesFile() {
+    return givePriorityToSystemPropertiesOverPropertiesFile;
   }
 
   /**
@@ -104,46 +105,37 @@ public class PropertiesLoader {
     synchronized (cache) {
       if (useCache && cache.containsKey(key)) {
         String cacheValue = ((String)cache.get(key));
-        if (logger.isDebugEnabled()) {
-          StringBuilder sb = new StringBuilder();
-          logger.debug(
-            sb.append("[").append(resourceName).append("] Got ")
-              .append(cacheValue).append(" from cache for ").append(key)
-          );
-        }
+        logger.debug(
+          "[{}] Got {} from cache for {}",
+          new Object[] {resourceName, cacheValue, key}
+        );
         return cacheValue;
       }
 
       String value = null;
 
-      if (givePrioritySystemPropertiesThanPropertiesFile) {
+      if (givePriorityToSystemPropertiesOverPropertiesFile) {
         value = System.getProperty(key);
       }
 
       if (value != null) {
-        StringBuilder sb = new StringBuilder();
         logger.info(
-          sb.append("[System properties] Got ")
-            .append(value).append(" for ").append(key)
+          "[System properties] Got {} for {}", value, key
         );
       }
       else {
         value = prop.getProperty(key);
 
         if (value != null) {
-          StringBuilder sb = new StringBuilder();
           logger.info(
-            sb.append("[").append(resourceName).append("] Got ")
-              .append(value).append(" for ").append(key)
+            "[{}] Got {} for {}",
+            new Object[] {resourceName, value, key}
           );
         }
         else {
-          StringBuilder sb = new StringBuilder();
           logger.warn(
-            sb.append("[").append(resourceName)
-              .append("] Could not get value for ").append(key)
-              .append(", use defalut value: ").append(defaultValue)
-
+            "[{}] Could not get value for {}, use default value: {}",
+            new Object[] {resourceName, key, defaultValue}
           );
           value = defaultValue;
         }
@@ -167,27 +159,22 @@ public class PropertiesLoader {
     synchronized (cache) {
       if (useCache && cache.containsKey(key)) {
         Integer cacheValue = (Integer)cache.get(key);
-        if (logger.isDebugEnabled()) {
-          StringBuilder sb = new StringBuilder();
-          logger.debug(
-            sb.append("[").append(resourceName).append("] Got ")
-              .append(cacheValue).append(" from cache for ").append(key)
-          );
-        }
+        logger.debug(
+          "[{}] Got {} from cache for {}",
+          new Object[] {resourceName, cacheValue, key}
+        );
         return cacheValue;
       }
 
       Integer value = null;
 
-      if (givePrioritySystemPropertiesThanPropertiesFile) {
+      if (givePriorityToSystemPropertiesOverPropertiesFile) {
         value = Integer.getInteger(key);
       }
 
       if (value != null) {
-        StringBuilder sb = new StringBuilder();
         logger.info(
-          sb.append("[System properties] Got ")
-            .append(value).append(" for ").append(key)
+          "[System properties] Got {} for {}", value, key
         );
       }
       else {
@@ -196,28 +183,22 @@ public class PropertiesLoader {
         if (strValue != null) {
           try {
             value = Integer.decode(strValue);
-
-            StringBuilder sb = new StringBuilder();
             logger.info(
-              sb.append("[").append(resourceName).append("] Got ")
-                .append(value).append(" for ").append(key)
+              "[{}] Got {} for {}",
+              new Object[] {resourceName, value, key}
             );
           } catch (NumberFormatException e) {
-            StringBuilder sb = new StringBuilder();
             logger.warn(
-              sb.append("[").append(resourceName).append("] ")
-                .append(strValue).append(" is invalid for ").append(key)
-                .append(", use defalut value: ").append(defaultValue)
+              "[{}] {} is invalid for {}, use default value: {}",
+              new Object[] {resourceName, strValue, key, defaultValue}
             );
             value = defaultValue;
           }
         }
         else {
-          StringBuilder sb = new StringBuilder();
           logger.warn(
-            sb.append("[").append(resourceName)
-              .append("] Could not get value for ").append(key)
-              .append(", use defalut value: ").append(defaultValue)
+            "[{}] Could not get value for {}, use default value: {}",
+            new Object[] {resourceName, key, defaultValue}
           );
           value = defaultValue;
         }
@@ -241,29 +222,23 @@ public class PropertiesLoader {
     synchronized (cache) {
       if (useCache && cache.containsKey(key)) {
         Boolean cacheValue = (Boolean)cache.get(key);
-        if (logger.isDebugEnabled()) {
-          StringBuilder sb = new StringBuilder();
-          logger.debug(
-            sb.append("[").append(resourceName).append("] Got ")
-              .append(cacheValue).append(" from cache for ").append(key)
-          );
-        }
+        logger.debug(
+          "[{}] Got {} from cache for {}",
+          new Object[] {resourceName, cacheValue, key}
+        );
         return cacheValue;
       }
 
       Boolean value = null;
 
-      if (givePrioritySystemPropertiesThanPropertiesFile) {
+      if (givePriorityToSystemPropertiesOverPropertiesFile) {
         String strValue = System.getProperty(key);
 
         if (strValue != null) {
           value = Boolean.valueOf(strValue);
-
-          StringBuilder sb = new StringBuilder();
           logger.info(
-            sb.append("[System properties] Got \"")
-              .append(strValue).append("\" means ").append(value)
-              .append(" for ").append(key)
+            "[System properties] Got \"{}\" means {} for {}",
+            new Object[] {strValue, value, key}
           );
         }
       }
@@ -273,21 +248,15 @@ public class PropertiesLoader {
 
         if (strValue != null) {
           value = Boolean.valueOf(strValue);
-
-          StringBuilder sb = new StringBuilder();
           logger.info(
-            sb.append("[").append(resourceName).append("] Got \"")
-              .append(strValue).append("\" means ").append(value)
-              .append(" for ").append(key)
-
+            "[{}] Got\"{}\" means {} for {}",
+            new Object[] {resourceName, strValue, value, key}
           );
         }
         else {
-          StringBuilder sb = new StringBuilder();
           logger.warn(
-            sb.append("[").append(resourceName)
-              .append("] Could not get value for ").append(key)
-              .append(", use defalut value: ").append(defaultValue)
+            "[{}] Could not get value for {}, use default value: {}",
+            new Object[] {resourceName, key, defaultValue}
           );
           value = defaultValue;
         }
@@ -312,19 +281,16 @@ public class PropertiesLoader {
       if (useCache && cache.containsKey(key)) {
         @SuppressWarnings("unchecked")
         Class<? extends T> cacheValue = (Class<? extends T>)cache.get(key);
-        if (logger.isDebugEnabled()) {
-          StringBuilder sb = new StringBuilder();
-          logger.debug(
-            sb.append("[").append(resourceName).append("] Got ")
-              .append(cacheValue).append(" from cache for ").append(key)
-          );
-        }
+        logger.debug(
+          "[{}] Got {} from cache for {}",
+          new Object[] {resourceName, cacheValue, key}
+        );
         return cacheValue;
       }
 
       Class<? extends T> value = null;
 
-      if (givePrioritySystemPropertiesThanPropertiesFile) {
+      if (givePriorityToSystemPropertiesOverPropertiesFile) {
         String strValue = System.getProperty(key);
 
         if (strValue != null) {
@@ -334,24 +300,18 @@ public class PropertiesLoader {
               = (Class<? extends T>)Class.forName(strValue);
             value = clazz;
 
-            StringBuilder sb = new StringBuilder();
             logger.info(
-              sb.append("[System properties] Got ")
-                .append(strValue).append(" for ").append(key)
+              "[System properties] Got {} for {}", strValue, key
             );
           } catch (ClassNotFoundException e) {
-            StringBuilder sb = new StringBuilder();
             logger.error(
-              sb.append("[System properties] Got Invalid value: ")
-                .append(strValue).append(" for ").append(key)
-                .append(", ignore it.")
+              "[System properties] Got Invalid value: {} for {}, ignore it.",
+                strValue, key
             );
           } catch (ClassCastException e) {
-            StringBuilder sb = new StringBuilder();
             logger.error(
-              sb.append("[System properties] Got Invalid value: ")
-                .append(strValue).append(" for ").append(key)
-                .append(", ignore it.")
+              "[System properties] Got Invalid value: {} for {}, ignore it.",
+                strValue, key
             );
           }
         }
@@ -366,36 +326,28 @@ public class PropertiesLoader {
             Class<? extends T> clazz
               = (Class<? extends T>)Class.forName(strValue);
             value = clazz;
-
-            StringBuilder sb = new StringBuilder();
             logger.info(
-              sb.append("[").append(resourceName).append("] Got ")
-                .append(strValue).append(" for ").append(key)
+              "[{}] Got {} for {}",
+              new Object[] {resourceName, strValue, key}
             );
           } catch (ClassNotFoundException e) {
-            StringBuilder sb = new StringBuilder();
             logger.warn(
-              sb.append("[").append(resourceName).append("] ")
-                .append(strValue).append(" is invalid for ").append(key)
-                .append(", use defalut value: ").append(defaultValue)
+              "[{}] {} is invalid for {}, use default value: {}",
+              new Object[] {resourceName, strValue, key, defaultValue}
             );
             value = defaultValue;
           } catch (ClassCastException e) {
-            StringBuilder sb = new StringBuilder();
             logger.warn(
-              sb.append("[").append(resourceName).append("] ")
-                .append(strValue).append(" is invalid for ").append(key)
-                .append(", use defalut value: ").append(defaultValue)
+              "[{}] {} is invalid for {}, use default value: {}",
+              new Object[] {resourceName, strValue, key, defaultValue}
             );
             value = defaultValue;
           }
         }
         else {
-          StringBuilder sb = new StringBuilder();
           logger.warn(
-            sb.append("[").append(resourceName)
-              .append("] Could not get value for ").append(key)
-              .append(", use defalut value: ").append(defaultValue)
+            "[{}] Could not get value for {}, use default value: {}",
+            new Object[] {resourceName, key, defaultValue}
           );
           value = defaultValue;
         }
@@ -419,37 +371,31 @@ public class PropertiesLoader {
     synchronized (cache) {
       if (useCache && cache.containsKey(key)) {
         InetAddress cacheValue = (InetAddress)cache.get(key);
-        if (logger.isDebugEnabled()) {
-          StringBuilder sb = new StringBuilder();
-          logger.debug(
-            sb.append("[").append(resourceName).append("] Got ")
-              .append(cacheValue).append(" from cache for ").append(key)
-          );
-        }
+        logger.debug(
+          "[{}] Got {} from cache for {}",
+          new Object[] {resourceName, cacheValue, key}
+        );
         return cacheValue;
       }
 
       InetAddress value = null;
 
-      if (givePrioritySystemPropertiesThanPropertiesFile) {
+      if (givePriorityToSystemPropertiesOverPropertiesFile) {
         String strValue = System.getProperty(key);
 
         if (strValue != null) {
           try {
             value = InetAddress.getByName(strValue);
           } catch (UnknownHostException e) {
-            StringBuilder sb = new StringBuilder();
             logger.error(
-              sb.append("[System properties] Got Invalid value: ")
-                .append(strValue).append(" for ").append(key)
-                .append(", ignore it.")
+              "[System properties] Got Invalid value: {} for {}, ignore it.",
+                strValue, key
             );
           }
-          StringBuilder sb = new StringBuilder();
+
           logger.info(
-            sb.append("[System properties] Got \"")
-              .append(strValue).append("\" means ").append(value)
-              .append(" for ").append(key)
+            "[System properties] Got \"{}\" means {} for {}",
+            new Object[] {strValue, value, key}
           );
         }
       }
@@ -461,27 +407,22 @@ public class PropertiesLoader {
           try {
             value = InetAddress.getByName(strValue);
           } catch (UnknownHostException e) {
-            StringBuilder sb = new StringBuilder();
             logger.warn(
-              sb.append("[").append(resourceName).append("] ")
-                .append(strValue).append(" is invalid for ").append(key)
-                .append(", use defalut value: ").append(defaultValue)
+              "[{}] {} is invalid for {}, use default value: {}",
+              new Object[] {resourceName, strValue, key, defaultValue}
             );
             value = defaultValue;
           }
-          StringBuilder sb = new StringBuilder();
+
           logger.info(
-            sb.append("[").append(resourceName).append("] Got \"")
-              .append(strValue).append("\" means ").append(value)
-              .append(" for ").append(key)
+            "[{}] Got\"{}\" means {} for {}",
+            new Object[] {resourceName, strValue, value, key}
           );
         }
         else {
-          StringBuilder sb = new StringBuilder();
           logger.warn(
-            sb.append("[").append(resourceName)
-              .append("] Could not get value for ").append(key)
-              .append(", use defalut value: ").append(defaultValue)
+            "[{}] Could not get value for {}, use default value: {}",
+            new Object[] {resourceName, key, defaultValue}
           );
           value = defaultValue;
         }
