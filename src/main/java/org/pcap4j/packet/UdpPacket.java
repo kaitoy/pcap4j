@@ -269,7 +269,6 @@ public final class UdpPacket extends AbstractPacket {
     private final UdpPort dstPort;
     private final short length;
     private final short checksum;
-//    private transient final WeakReference<UdpPacket> hostRef;
 
     private UdpHeader(byte[] rawData, UdpPacket host) {
       if (rawData.length < UCP_HEADER_SIZE) {
@@ -287,13 +286,11 @@ public final class UdpPacket extends AbstractPacket {
         = UdpPort.getInstance(ByteArrays.getShort(rawData, DST_PORT_OFFSET));
       this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET);
       this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET);
-//      this.hostRef = new WeakReference<UdpPacket>(host);
     }
 
     private UdpHeader(Builder builder, UdpPacket host) {
       this.srcPort = builder.srcPort;
       this.dstPort = builder.dstPort;
-//      this.hostRef = new WeakReference<UdpPacket>(host);
 
       if (builder.validateAtBuild) {
         this.length = (short)(host.payload.length() + length());
@@ -315,11 +312,6 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     private short calcChecksum(InetAddress srcAddr, InetAddress dstAddr) {
-//      UdpPacket host = hostRef.get();
-//      if (host == null) {
-//        throw new IllegalStateException("Can't access host packet");
-//      }
-
       byte[] data;
       int destPos;
 
@@ -437,11 +429,6 @@ public final class UdpPacket extends AbstractPacket {
      * @return
      */
     public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
-//      UdpPacket host = hostRef.get();
-//      if (host == null) {
-//        throw new IllegalStateException("Can't access host packet");
-//      }
-
       if (
         PacketPropertiesLoader.getInstance()
           .isEnabledUdpChecksumVerification()

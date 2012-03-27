@@ -60,7 +60,7 @@ final class Inets {
       return null;
     }
 
-    byte[] rawAddr
+    byte[] rawAddr // TODO little endian(x86), big endian(sparc)
       = new byte[] {
           (byte)(in.s_addr       & 0xFF),
           (byte)(in.s_addr >>  8 & 0xFF),

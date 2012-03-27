@@ -414,7 +414,6 @@ public final class IpV4Packet extends AbstractPacket {
     private final short headerChecksum;
     private final InetAddress srcAddr;
     private final InetAddress dstAddr;
-//    private transient final WeakReference<IpV4Packet> hostRef;
 
     private IpV4Header(byte[] rawData, IpV4Packet host) {
       if (rawData.length < IPV4_HEADER_SIZE) {
@@ -456,7 +455,6 @@ public final class IpV4Packet extends AbstractPacket {
         = ByteArrays.getInet4Address(rawData, SRC_ADDR_OFFSET);
       this.dstAddr
         = ByteArrays.getInet4Address(rawData, DST_ADDR_OFFSET);
-//      this.hostRef = new WeakReference<IpV4Packet>(host);
     }
 
     private IpV4Header(Builder builder, IpV4Packet host) {
@@ -468,7 +466,6 @@ public final class IpV4Packet extends AbstractPacket {
       this.protocol = builder.protocol;
       this.srcAddr = builder.srcAddr;
       this.dstAddr = builder.dstAddr;
-//      this.hostRef = new WeakReference<IpV4Packet>(host);
 
       if (builder.validateAtBuild) {
         this.version = IpVersion.IPv4;
@@ -682,11 +679,6 @@ public final class IpV4Packet extends AbstractPacket {
 
     @Override
     protected boolean verify() {
-//      IpV4Packet host = hostRef.get();
-//      if (host == null) {
-//        throw new IllegalStateException("Can't access host packet");
-//      }
-
       if (
           PacketPropertiesLoader.getInstance()
             .isEnabledIpv4ChecksumVerification()

@@ -8,7 +8,7 @@ Javaのパケットキャプチャライブラリ。パケットの作成・送�
 ダウンロード
 ------------
 
-Pcap4J 0.9.7
+Pcap4J 0.9.8
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
@@ -40,15 +40,18 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 ドキュメントは作成中。<br>
 テストクラスやlibpcapのドキュメントを見ればなんとか使えるかも。<br>
 まだAPIは固まってなく、こっそりと変更する可能性がある。<br>
-UNIX系ならlibpcap、WindowsならWinPcapがインストールされている必要がある。<br>
-jna、log4jもクラスパスに含める必要がある。<br>
+JRE1.5以降で動く。<br>
+UNIX系ならlibpcap (多分)0.9.3以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。<br>
+jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。<br>
 
-動作確認済みのバージョンは以下。
+動作確認に使っているバージョンは以下。
 
 * libpcap 1.1.1
 * WinPcap 4.1.2
 * jna 3.3.0
-* log4j 1.2.14
+* slf4j-api 1.6.4
+* logback-core 1.0.1
+* logback-classic 1.0.1
 
 
 ビルド
@@ -83,15 +86,42 @@ m2eclipseでビルドしたい場合は、2. をスキップして、4. でMaven
 ライセンス
 ----------
 
-Pcap4J is provided under the LGPL, version 2.1 or later.<br>
+Pcap4J is provided distributed under the MIT license.<br>
+
+    Copyright (c) 2011-2012 Kaito Yamada
+    All rights reserved.
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy of
+    this software and associated documentation files (the "Software"), to deal in the Software without restriction,
+    including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+    and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+    subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+    NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    
+    以下に定める条件に従い、本ソフトウェアおよび関連文書のファイル（以下「ソフトウェア」）の複製を取得するすべての人に対し、
+    ソフトウェアを無制限に扱うことを無償で許可します。これには、ソフトウェアの複製を使用、複写、変更、結合、掲載、頒布、サブライセンス、
+    および/または販売する権利、およびソフトウェアを提供する相手に同じことを許可する権利も無制限に含まれます。
+    上記の著作権表示および本許諾表示を、ソフトウェアのすべての複製または重要な部分に記載するものとします。
+    
+    ソフトウェアは「現状のまま」で、明示であるか暗黙であるかを問わず、何らの保証もなく提供されます。
+    ここでいう保証とは、商品性、特定の目的への適合性、および権利非侵害についての保証も含みますが、それに限定されるものではありません。
+    作者または著作権者は、契約行為、不法行為、またはそれ以外であろうと、ソフトウェアに起因または関連し、
+    あるいはソフトウェアの使用またはその他の扱いによって生じる一切の請求、損害、その他の義務について何らの責任も負わないものとします。
+
 
 おまけ
 ------
 
-Pcap4J 0.9.7 を使ったSNMPネットワークシミュレータ、SNeO。<br>
+Pcap4J 0.9.8 を使ったSNMPネットワークシミュレータ、SNeO。<br>
 とりあえず置いておくだけ。<br>
 今のところ商用でもなんでも無料で使用可。コピーも再配布も可。<br>
 
-SNeO 1.0.6
+SNeO 1.0.7
 
 * [sneo.jar](/downloads/Kaitoy/pcap4j/sneo.jar)

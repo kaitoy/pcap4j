@@ -9,6 +9,8 @@ package org.pcap4j.core;
 
 import java.io.EOFException;
 import java.net.InetAddress;
+import java.util.concurrent.Executor;
+
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
@@ -239,7 +241,7 @@ public final class PcapHandle {
     switch (rc) {
       case  0: logger.info("Finish loop."); break;
       case -1: throw new PcapNativeException(
-                       "Error occured in pcap_loop(): " + getError()
+                       "Error occured: " + getError()
                      );
       case -2: logger.info("Broken."); break;
       default: throw new AssertionError();
@@ -247,7 +249,8 @@ public final class PcapHandle {
   }
 
   private static class gotPacketFunc implements NativeMappings.pcap_handler {
-    private DataLinkType dlt;
+
+    private final DataLinkType dlt;
     private final PacketListener listener;
 
     public gotPacketFunc(PacketListener listener, DataLinkType dlt) {
@@ -263,6 +266,70 @@ public final class PcapHandle {
         )
       );
     }
+
+  }
+
+  public void loop(
+    int packetCount, PacketListener listener, Executor executor
+  ) throws PcapNativeException {
+    int rc;
+
+    synchronized (thisLock) {
+      if (!opening) {
+        throw new IllegalStateException("Not opening.");
+      }
+
+      logger.info("Start loop");
+      rc = PcapLibrary.INSTANCE.pcap_loop(
+             handle,
+             packetCount,
+             new gotPacketFuncExecutor(listener, dlt, executor),
+             ""
+           );
+    }
+
+    switch (rc) {
+      case  0: logger.info("Finish loop."); break;
+      case -1: throw new PcapNativeException(
+                       "Error occured: " + getError()
+                     );
+      case -2: logger.info("Broken."); break;
+      default: throw new AssertionError();
+    }
+  }
+
+  private static class gotPacketFuncExecutor
+  implements NativeMappings.pcap_handler {
+
+    private final DataLinkType dlt;
+    private final PacketListener listener;
+    private final Executor executor;
+
+    public gotPacketFuncExecutor(
+      PacketListener listener, DataLinkType dlt, Executor executor
+    ) {
+      this.dlt = dlt;
+      this.listener = listener;
+      this.executor = executor;
+    }
+
+    public void got_packet(
+      String args, final pcap_pkthdr header, final Pointer packet
+    ) {
+      executor.execute(
+        new Runnable() {
+          public void run() {
+            listener.gotPacket(
+              PacketFactories.getPacketFactory(DataLinkType.class).newPacket(
+                packet.getByteArray(0, header.caplen),
+                dlt
+              )
+            );
+          }
+        }
+      );
+    }
+
   }
 
   /**

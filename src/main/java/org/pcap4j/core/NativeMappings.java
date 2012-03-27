@@ -45,6 +45,7 @@ final class NativeMappings {
     Pointer pcap_open_live(
       String device, int snaplen, int promisc, int to_ms, PcapErrbuf errbuf
     );
+
     // TODO WinPcap: pcap_t *pcap_open(const char *source, int snaplen, int flags, int read_timeout, struct pcap_rmtauth *auth, char *errbuf)
 
     // TODO pcap_dumper_t *pcap_dump_open(pcap_t *p, const char *fname)
@@ -54,7 +55,6 @@ final class NativeMappings {
 
     // int pcap_next_ex(pcap_t *p, struct pcap_pkthdr **h, const u_char **data)
     int pcap_next_ex(Pointer p, PointerByReference h, PointerByReference data);
-    // TODO Solarisではこっちをつかわないとだめ。リードタイムアウト設定を無視される
 
     // int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user)
     int pcap_loop(Pointer p, int cnt, pcap_handler callback, String user);
@@ -78,7 +78,6 @@ final class NativeMappings {
     void  pcap_freecode(bpf_program fp);
 
     // int pcap_sendpacket(pcap_t *p, const u_char *buf, int size)
-    // int pcap_sendpacket(Pointer p, Pointer buf, int size);
     int pcap_sendpacket(Pointer p, byte buf[], int size);
 
     // void pcap_close(pcap_t *p)
