@@ -84,7 +84,7 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.5
    */
-  public final class Builder implements Packet.Builder {
+  public final class Builder extends AbstractBuilder {
 
     private EtherType type;
     private byte priority = 0;
@@ -145,6 +145,18 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
       return this;
     }
 
+    @Override
+    public Builder payloadBuilder(Packet.Builder payloadBuilder) {
+      this.payloadBuilder = payloadBuilder;
+      return this;
+    }
+
+    @Override
+    public Packet.Builder getPayloadBuilder() {
+      return payloadBuilder;
+    }
+
+    @Override
     public Dot1qVlanTaggedPacket build() {
       return new Dot1qVlanTaggedPacket(this);
     }
@@ -255,22 +267,24 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
     @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
+      String ls = System.getProperty("line.separator");
 
       sb.append("[IEEE802.1Q Tag header (")
         .append(length())
-        .append(" bytes)]\n");
+        .append(" bytes)]")
+        .append(ls);
       sb.append("  Priority: ")
         .append(priority)
-        .append("\n");
+        .append(ls);
       sb.append("  CFI: ")
         .append(cfi)
-        .append("\n");
+        .append(ls);
       sb.append("  VID: ")
         .append(vid)
-        .append("\n");
+        .append(ls);
       sb.append("  Type: ")
         .append(type)
-        .append("\n");
+        .append(ls);
 
       return sb.toString();
     }

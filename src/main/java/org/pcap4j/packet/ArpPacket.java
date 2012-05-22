@@ -10,7 +10,6 @@ package org.pcap4j.packet;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.namednumber.ArpHardwareType;
 import org.pcap4j.packet.namednumber.ArpOperation;
 import org.pcap4j.packet.namednumber.EtherType;
@@ -81,7 +80,7 @@ public final class ArpPacket extends AbstractPacket {
    * @author Kaito Yamada
    *
    */
-  public static final class Builder implements Packet.Builder {
+  public static final class Builder extends AbstractBuilder {
 
     private ArpHardwareType hardwareType = ArpHardwareType.ETHERNET;
     private EtherType protocolType = EtherType.IPV4;
@@ -200,6 +199,7 @@ public final class ArpPacket extends AbstractPacket {
       return this;
     }
 
+    @Override
     public ArpPacket build() {
       return new ArpPacket(this);
     }
@@ -424,37 +424,41 @@ public final class ArpPacket extends AbstractPacket {
     @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
+      String ls = System.getProperty("line.separator");
 
       sb.append("[ARP Header (")
         .append(length())
-        .append(" bytes)]\n");
+        .append(" bytes)]")
+        .append(ls);
       sb.append("  Hardware type: ")
         .append(hardwareType)
-        .append("\n");
+        .append(ls);
       sb.append("  Protocol type: ")
         .append(protocolType)
-        .append("\n");
+        .append(ls);
       sb.append("  Hardware length: ")
         .append(getHardwareLengthAsInt())
-        .append(" [bytes]\n");
+        .append(" [bytes]")
+        .append(ls);
       sb.append("  Protocol length: ")
         .append(getProtocolLengthAsInt())
-        .append(" [bytes]\n");
+        .append(" [bytes]")
+        .append(ls);
       sb.append("  Operation: ")
         .append(operation)
-        .append("\n");
+        .append(ls);
       sb.append("  Source hardware address: ")
         .append(srcHardwareAddr)
-        .append("\n");
+        .append(ls);
       sb.append("  Source protocol address: ")
         .append(srcProtocolAddr)
-        .append("\n");
+        .append(ls);
       sb.append("  Destination hardware address: ")
         .append(dstHardwareAddr)
-        .append("\n");
+        .append(ls);
       sb.append("  Destination protocol address: ")
         .append(dstProtocolAddr)
-        .append("\n");
+        .append(ls);
 
       return sb.toString();
     }

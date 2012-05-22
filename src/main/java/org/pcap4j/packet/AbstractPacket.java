@@ -171,9 +171,18 @@ public abstract class AbstractPacket implements Packet {
   }
 
   public <T extends Packet> T get(Class<T> clazz) {
-    for (Packet next: this) {
-      if (clazz.isInstance(next)) {
-        return clazz.cast(next);
+    for (Packet p: this) {
+      if (clazz.isInstance(p)) {
+        return clazz.cast(p);
+      }
+    }
+    return null;
+  }
+
+  public Packet getOuterOf(Class<? extends Packet> clazz) {
+    for (Packet p: this) {
+      if (clazz.isInstance(p.getPayload())) {
+        return p;
       }
     }
     return null;
@@ -187,10 +196,48 @@ public abstract class AbstractPacket implements Packet {
 
   /**
    *
+   * @author Kaito Yamada
+   * @version pcap4j 0.9.9
+   */
+  public static abstract class AbstractBuilder implements Builder {
+
+    public Iterator<Builder> iterator() {
+      return new BuilderIterator(this);
+    }
+
+    public <T extends Builder> T get(Class<T> clazz) {
+      for (Builder b: this) {
+        if (clazz.isInstance(b)) {
+          return clazz.cast(b);
+        }
+      }
+      return null;
+    }
+
+    public Builder getOuterOf(Class<? extends Builder> clazz) {
+      for (Builder b: this) {
+        if (clazz.isInstance(b.getPayloadBuilder())) {
+          return b;
+        }
+      }
+      return null;
+    }
+    public AbstractBuilder payloadBuilder(Builder payloadBuilder) {
+      throw new UnsupportedOperationException();
+    }
+
+    public Builder getPayloadBuilder() { return null; }
+
+    public abstract Packet build();
+
+  }
+
+  /**
+   *
    * @return
    */
   protected String buildHexString() {
-    return ByteArrays.toHexString(getRawData(), ":");
+    return ByteArrays.toHexString(getRawData(), " ");
   }
 
   /**
@@ -386,10 +433,6 @@ public abstract class AbstractPacket implements Packet {
       return ByteArrays.toHexString(getRawData(), ":");
     }
 
-    /**
-     *
-     * @return
-     */
     public String toHexString() {
       return hexStringCache.getValue();
     }

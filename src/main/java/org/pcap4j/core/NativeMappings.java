@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -8,6 +8,7 @@
 package org.pcap4j.core;
 
 import com.sun.jna.Callback;
+import com.sun.jna.Function;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
@@ -21,6 +22,14 @@ import com.sun.jna.ptr.PointerByReference;
  * @since pcap4j 0.9.1
  */
 final class NativeMappings {
+
+  private static final Function PCAP_DUMP
+    = Function.getFunction(
+        (Platform.isWindows() ? "wpcap" : "pcap"),
+        "pcap_dump"
+      );
+
+  public static Function get_pcap_dump() { return PCAP_DUMP; }
 
   interface PcapLibrary extends Library {
     static final PcapLibrary INSTANCE
@@ -46,9 +55,21 @@ final class NativeMappings {
       String device, int snaplen, int promisc, int to_ms, PcapErrbuf errbuf
     );
 
+    // pcap_t *pcap_open_offline(const char *fname, char *errbuf)
+    Pointer pcap_open_offline(String fname, PcapErrbuf errbuf);
+
     // TODO WinPcap: pcap_t *pcap_open(const char *source, int snaplen, int flags, int read_timeout, struct pcap_rmtauth *auth, char *errbuf)
 
-    // TODO pcap_dumper_t *pcap_dump_open(pcap_t *p, const char *fname)
+    // pcap_dumper_t *pcap_dump_open(pcap_t *p, const char *fname)
+    Pointer pcap_dump_open(Pointer p, String fname);
+
+    // void pcap_dump(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
+    void pcap_dump(Pointer user, pcap_pkthdr header, byte[] packet);
+
+    // void  pcap_dump_close(pcap_dumper_t *p)
+    void pcap_dump_close(Pointer p);
+
+    // TODO WinPcap: int pcap_live_dump(pcap_t *p, char *filename, int maxsize, int maxpacks)
 
     // u_char *pcap_next(pcap_t *p, struct pcap_pkthdr *h)
     Pointer pcap_next(Pointer p, pcap_pkthdr h);
@@ -57,7 +78,8 @@ final class NativeMappings {
     int pcap_next_ex(Pointer p, PointerByReference h, PointerByReference data);
 
     // int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user)
-    int pcap_loop(Pointer p, int cnt, pcap_handler callback, String user);
+    int pcap_loop(Pointer p, int cnt, pcap_handler callback, Pointer user);
+    int pcap_loop(Pointer p, int cnt, Function callback, Pointer user);
     // openした時のタイムアウトを遵守しない
 
     // void pcap_breakloop(pcap_t *p)
@@ -95,7 +117,7 @@ final class NativeMappings {
     // void got_packet(
     //   u_char *args, const struct pcap_pkthdr *header, const u_char *packet
     // );
-    public void got_packet(String args, pcap_pkthdr header, Pointer packet);
+    public void got_packet(Pointer args, pcap_pkthdr header, Pointer packet);
   }
 
   public static class pcap_if extends Structure {

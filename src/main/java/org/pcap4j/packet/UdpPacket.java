@@ -119,7 +119,7 @@ public final class UdpPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class Builder implements Packet.Builder {
+  public static final class Builder extends AbstractBuilder {
 
     private UdpPort srcPort;
     private UdpPort dstPort;
@@ -187,14 +187,15 @@ public final class UdpPacket extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @param payloadBuilder
-     * @return
-     */
+    @Override
     public Builder payloadBuilder(Packet.Builder payloadBuilder) {
       this.payloadBuilder = payloadBuilder;
       return this;
+    }
+
+    @Override
+    public Packet.Builder getPayloadBuilder() {
+      return payloadBuilder;
     }
 
     /**
@@ -227,6 +228,7 @@ public final class UdpPacket extends AbstractPacket {
       return this;
     }
 
+    @Override
     public UdpPacket build() {
       return new UdpPacket(this);
     }
@@ -460,22 +462,25 @@ public final class UdpPacket extends AbstractPacket {
     @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
+      String ls = System.getProperty("line.separator");
 
       sb.append("[UDP Header (")
         .append(length())
-        .append(" bytes)]\n");
+        .append(" bytes)]")
+        .append(ls);
       sb.append("  Source port: ")
         .append(getSrcPort())
-        .append("\n");
+        .append(ls);
       sb.append("  Destination port: ")
         .append(getDstPort())
-        .append("\n");
+        .append(ls);
       sb.append("  Length: ")
         .append(getLengthAsInt())
-        .append(" [bytes]\n");
+        .append(" [bytes]")
+        .append(ls);
       sb.append("  Checksum: 0x")
         .append(ByteArrays.toHexString(checksum, ""))
-        .append("\n");
+        .append(ls);
 
       return sb.toString();
     }

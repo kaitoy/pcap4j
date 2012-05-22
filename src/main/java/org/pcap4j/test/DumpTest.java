@@ -3,32 +3,36 @@ package org.pcap4j.test;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.sql.Timestamp;
+import org.pcap4j.core.PcapDumper;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapHandle.BpfCompileMode;
-import org.pcap4j.core.PacketListener;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
 
-public class LoopTest {
+public class DumpTest {
 
   private static final String COUNT_KEY
-    = LoopTest.class.getName() + ".count";
+    = DumpTest.class.getName() + ".count";
   private static final int COUNT
     = Integer.getInteger(COUNT_KEY, 5);
 
   private static final String READ_TIMEOUT_KEY
-    = LoopTest.class.getName() + ".readTimeOut";
+    = DumpTest.class.getName() + ".readTimeOut";
   private static final int READ_TIMEOUT
     = Integer.getInteger(READ_TIMEOUT_KEY, 5); // [ms]
 
   private static final String MAX_PACKT_SIZE_KEY
-    = LoopTest.class.getName() + ".maxPacketSize";
+    = DumpTest.class.getName() + ".maxPacketSize";
   private static final int MAX_PACKT_SIZE
     = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65536); // [bytes]
+
+  private static final String PCAP_FILE_KEY
+    = DumpTest.class.getName() + ".pcapFile";
+  private static final String PCAP_FILE
+    = System.getProperty(PCAP_FILE_KEY, "DumpTest.pcap");
 
   public static void main(String[] args) throws PcapNativeException {
     String filter = args.length != 0 ? args[0] : "";
@@ -52,7 +56,7 @@ public class LoopTest {
 
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
-    final PcapHandle handle
+    PcapHandle handle
       = nif.openLive(MAX_PACKT_SIZE, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
 
     try {
@@ -66,23 +70,23 @@ public class LoopTest {
       assert true; // never get here
     }
 
-    PacketListener listener
-      = new PacketListener() {
-          public void gotPacket(Packet packet) {
-            Timestamp ts = new Timestamp(handle.getTimestampInts() * 1000L);
-            ts.setNanos(handle.getTimestampMicros() * 1000);
-
-            System.out.println(ts);
-            System.out.println(packet);
-          }
-        };
-
-    try {
-      handle.loop(COUNT, listener);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    int num = 0;
+    PcapDumper dumper = handle.dumpOpen(PCAP_FILE);
+    while (true) {
+      Packet packet = handle.getNextPacket();
+      if (packet == null) {
+        continue;
+      }
+      else {
+        dumper.dump(packet, handle.getTimestampInts(), handle.getTimestampMicros());
+        num++;
+        if (num >= COUNT) {
+          break;
+        }
+      }
     }
 
+    dumper.close();
     handle.close();
   }
 

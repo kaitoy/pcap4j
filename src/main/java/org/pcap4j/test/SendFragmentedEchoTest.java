@@ -12,41 +12,51 @@ import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.core.Pcaps;
-import org.pcap4j.packet.ArpPacket;
+import org.pcap4j.packet.AbstractPacket.AbstractBuilder;
+import org.pcap4j.packet.AnonymousPacket;
 import org.pcap4j.packet.EthernetPacket;
+import org.pcap4j.packet.IcmpV4Packet;
+import org.pcap4j.packet.IpV4Packet;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.namednumber.ArpHardwareType;
-import org.pcap4j.packet.namednumber.ArpOperation;
 import org.pcap4j.packet.namednumber.EtherType;
-import org.pcap4j.util.ByteArrays;
+import org.pcap4j.packet.namednumber.IcmpV4TypeCode;
+import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.util.IpV4Helper;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
 
-public class SendPacketTest {
+public class SendFragmentedEchoTest {
 
   private static final String COUNT_KEY
-    = SendPacketTest.class.getName() + ".count";
+    = SendFragmentedEchoTest.class.getName() + ".count";
   private static final int COUNT
     = Integer.getInteger(COUNT_KEY, 3);
 
   private static final String READ_TIMEOUT_KEY
-    = SendPacketTest.class.getName() + ".readTimeOut";
+    = SendFragmentedEchoTest.class.getName() + ".readTimeOut";
   private static final int READ_TIMEOUT
     = Integer.getInteger(READ_TIMEOUT_KEY, 5); // [ms]
 
   private static final String MAX_PACKT_SIZE_KEY
-    = SendPacketTest.class.getName() + ".maxPacketSize";
+    = SendFragmentedEchoTest.class.getName() + ".maxPacketSize";
   private static final int MAX_PACKT_SIZE
     = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65536); // [bytes]
 
-  private static final MacAddress SRC_MAC_ADDR
-   = MacAddress.getByAddress(
-       new byte[] {(byte)0, (byte)1,(byte)2, (byte)3, (byte)4, (byte)5}
-     );
+  private static final String TU_KEY
+    = SendFragmentedEchoTest.class.getName() + ".tu";
+  private static final int TU
+    = Integer.getInteger(TU_KEY, 4000); // [bytes]
+
+  private static final String MTU_KEY
+    = SendFragmentedEchoTest.class.getName() + ".mtu";
+  private static final int MTU
+    = Integer.getInteger(MTU_KEY, 1403); // [bytes]
 
   public static void main(String[] args) throws PcapNativeException {
     String strSrcIpAddress = args[0]; // for InetAddress.getByName()
+    String strSrcMacAddress = args[1]; // e.g. 12:34:56:ab:cd:ef
     String strDstIpAddress = args[2]; // for InetAddress.getByName()
+    String strDstMacAddress = args[3]; // e.g. 12:34:56:ab:cd:ef
 
     System.out.println(COUNT_KEY + ": " + COUNT);
     System.out.println(READ_TIMEOUT_KEY + ": " + READ_TIMEOUT);
@@ -73,12 +83,11 @@ public class SendPacketTest {
       = nif.openLive(MAX_PACKT_SIZE, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
     ExecutorService pool = Executors.newSingleThreadExecutor();
 
+    MacAddress srcMacAddr = MacAddress.getByName(strSrcMacAddress, ":");
     try {
       try {
         handle.setFilter(
-          "arp and src host " + strDstIpAddress
-            + " and dst host " + strSrcIpAddress
-            + " and ether dst " + Pcaps.toBpfString(SRC_MAC_ADDR),
+          "icmp and ether dst " + Pcaps.toBpfString(srcMacAddr),
           BpfCompileMode.OPTIMIZE,
           InetAddress
             .getByAddress(new byte[] {(byte)255, (byte)255, (byte)255, (byte)0})
@@ -97,36 +106,55 @@ public class SendPacketTest {
       Task t = new Task(handle, listener);
       pool.execute(t);
 
-      ArpPacket.Builder arpBuilder = new ArpPacket.Builder();
+      byte[] echoData = new byte[TU - 28];
+      for (int i = 0; i < echoData.length; i++) {
+        echoData[i] = (byte)i;
+      }
+
+      IcmpV4Packet.Builder echoBuilder = new IcmpV4Packet.Builder();
+      echoBuilder.typeCode(IcmpV4TypeCode.ECHO)
+                 .identifier((short)1)
+                 .payloadBuilder(new AnonymousPacket.Builder().rawData(echoData));
+
+      IpV4Packet.Builder ipV4Builder = new IpV4Packet.Builder();
       try {
-        arpBuilder.hardwareType(ArpHardwareType.ETHERNET)
-          .protocolType(EtherType.IPV4)
-          .hardwareLength((byte)MacAddress.SIZE_IN_BYTES)
-          .protocolLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
-          .operation(ArpOperation.REQUEST)
-          .srcHardwareAddr(SRC_MAC_ADDR)
-          .srcProtocolAddr(InetAddress.getByName(strSrcIpAddress))
-          .dstHardwareAddr(
-             MacAddress.getByAddress(
-               new byte[] {
-                 (byte)255, (byte)255, (byte)255,
-                 (byte)255, (byte)255, (byte)255
-               }
-             )
-           )
-          .dstProtocolAddr(InetAddress.getByName(strDstIpAddress));
-      } catch (UnknownHostException e) {
-        throw new IllegalArgumentException(e);
+        ipV4Builder.ttl((byte)100)
+                   .protocol(IpNumber.ICMP_V4)
+                   .srcAddr(InetAddress.getByName(strSrcIpAddress))
+                   .dstAddr(InetAddress.getByName(strDstIpAddress))
+                   .payloadBuilder(echoBuilder);
+      } catch (UnknownHostException e1) {
+        throw new IllegalArgumentException(e1);
       }
 
       EthernetPacket.Builder etherBuilder = new EthernetPacket.Builder();
-      etherBuilder.dstAddr(MacAddress.ETHER_BROADCAST_ADDRESS)
-                  .srcAddr(SRC_MAC_ADDR)
-                  .type(EtherType.ARP)
-                  .payloadBuilder(arpBuilder);
+      etherBuilder.dstAddr(MacAddress.getByName(strDstMacAddress, ":"))
+                  .srcAddr(srcMacAddr)
+                  .type(EtherType.IPV4);
 
       for (int i = 0; i < COUNT; i++) {
-        sendHandle.sendPacket(etherBuilder.build());
+        echoBuilder.sequenceNumber((short)i);
+        ipV4Builder.identification((short)i);
+
+        for (
+          final Packet ipV4Packet: IpV4Helper.fragment(ipV4Builder.build(), MTU)
+        ) {
+          etherBuilder.payloadBuilder(
+            new AbstractBuilder() {
+              public Packet build() {
+                return ipV4Packet;
+              }
+            }
+          );
+          sendHandle.sendPacket(etherBuilder.build());
+
+          try {
+            Thread.sleep(100);
+          } catch (InterruptedException e) {
+            break;
+          }
+        }
+
         try {
           Thread.sleep(1000);
         } catch (InterruptedException e) {

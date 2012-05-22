@@ -77,7 +77,7 @@ public final class IllegalPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.5
    */
-  public static final class Builder implements Packet.Builder {
+  public static final class Builder extends AbstractBuilder {
 
     private byte[] rawData = new byte[0];
 
@@ -100,6 +100,7 @@ public final class IllegalPacket extends AbstractPacket {
       return this;
     }
 
+    @Override
     public IllegalPacket build() {
       return new IllegalPacket(this);
     }
@@ -109,13 +110,15 @@ public final class IllegalPacket extends AbstractPacket {
   @Override
   protected String buildString() {
     StringBuilder sb = new StringBuilder();
+    String ls = System.getProperty("line.separator");
 
     sb.append("[Illegal Packet (")
       .append(length())
-      .append(" bytes)]\n");
+      .append(" bytes)]")
+      .append(ls);
     sb.append("  Hex stream: ")
       .append(ByteArrays.toHexString(rawData, " "))
-      .append("\n");
+      .append(ls);
 
     return sb.toString();
   }

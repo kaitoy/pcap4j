@@ -77,7 +77,7 @@ public final class AnonymousPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class Builder implements Packet.Builder {
+  public static final class Builder extends AbstractBuilder {
 
     private byte[] rawData = new byte[0];
 
@@ -100,6 +100,7 @@ public final class AnonymousPacket extends AbstractPacket {
       return this;
     }
 
+    @Override
     public AnonymousPacket build() {
       return new AnonymousPacket(this);
     }
@@ -109,13 +110,15 @@ public final class AnonymousPacket extends AbstractPacket {
   @Override
   protected String buildString() {
     StringBuilder sb = new StringBuilder();
+    String ls = System.getProperty("line.separator");
 
     sb.append("[data (")
       .append(length())
-      .append(" bytes)]\n");
+      .append(" bytes)]")
+      .append(ls);
     sb.append("  Hex stream: ")
       .append(ByteArrays.toHexString(rawData, " "))
-      .append("\n");
+      .append(ls);
 
     return sb.toString();
   }

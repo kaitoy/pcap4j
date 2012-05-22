@@ -2,21 +2,36 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pcap4j</groupId>
   <artifactId>pcap4j</artifactId>
-  <version>0.9.8</version>
+  <version>0.9.9</version>
   <name>Pcap4J</name>
   <dependencies>
   	<dependency>
   		<groupId>net.java.dev.jna</groupId>
   		<artifactId>jna</artifactId>
   		<version>3.3.0</version>
-  		<type>jar</type>
-  		<scope>provided</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.slf4j</groupId>
   		<artifactId>slf4j-api</artifactId>
   		<version>1.6.4</version>
   	</dependency>
+  	<dependency>
+  	  <groupId>ch.qos.logback</groupId>
+  	  <artifactId>logback-core</artifactId>
+  	  <version>1.0.0</version>
+  	  <scope>runtime</scope>
+  	  <optional>true</optional>
+  	</dependency>
+  	<dependency>
+  	  <groupId>ch.qos.logback</groupId>
+  	  <artifactId>logback-classic</artifactId>
+  	  <version>1.0.0</version>
+  	  <scope>runtime</scope>
+  	  <optional>true</optional>
+  	</dependency>
   </dependencies>
+  <build>
+    <finalName>pcap4j</finalName>
+  </build>
   <url>https://github.com/kaitoy/pcap4j</url>
 </project>

@@ -111,7 +111,7 @@ public final class IpV4Packet extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class Builder implements Packet.Builder {
+  public static final class Builder extends AbstractBuilder {
 
     private IpVersion version = IpVersion.IPv4;
     private byte ihl = (byte)5;
@@ -321,14 +321,15 @@ public final class IpV4Packet extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @param payloadBuilder
-     * @return
-     */
+    @Override
     public Builder payloadBuilder(Packet.Builder payloadBuilder) {
       this.payloadBuilder = payloadBuilder;
       return this;
+    }
+
+    @Override
+    public Packet.Builder getPayloadBuilder() {
+      return payloadBuilder;
     }
 
     /**
@@ -341,10 +342,41 @@ public final class IpV4Packet extends AbstractPacket {
       return this;
     }
 
+    @Override
     public IpV4Packet build() {
       return new IpV4Packet(this);
     }
 
+  }
+
+  @Override
+  protected String buildString() {
+    StringBuilder sb = new StringBuilder();
+
+    if (header != null) {
+      sb.append(header.toString());
+    }
+    if (payload != null) {
+      if (
+           (header != null)
+        && (header.getMoreFragmentFlag() || header.getFlagmentOffset() != 0)
+      ){
+        String ls = System.getProperty("line.separator");
+
+        sb.append("[Fragmented data (")
+          .append(payload.length())
+          .append(" bytes)]")
+          .append(ls);
+        sb.append("  Hex stream: ")
+          .append(ByteArrays.toHexString(payload.getRawData(), " "))
+          .append(ls);
+      }
+      else {
+        sb.append(getPayload().toString());
+      }
+    }
+
+    return sb.toString();
   }
 
   /**
@@ -717,50 +749,56 @@ public final class IpV4Packet extends AbstractPacket {
     @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
+      String ls = System.getProperty("line.separator");
 
       sb.append("[IPv4 Header (")
         .append(length())
-        .append(" bytes)]\n");
+        .append(" bytes)]")
+        .append(ls);
       sb.append("  Version: ")
         .append(getVersionAsInt())
-        .append("\n");
+        .append(ls);
       sb.append("  IHL: ")
         .append(getIhlAsInt() * 4)
-        .append(" [bytes]\n");
+        .append(" [bytes]")
+        .append(ls);
       sb.append("  TOS: ")
         .append(getTosAsInt())
-        .append("\n");
+        .append(ls);
       sb.append("  Total length: ")
         .append(getTotalLengthAsInt())
-        .append(" [bytes]\n");
+        .append(" [bytes]")
+        .append(ls);
       sb.append("  Identification: ")
         .append(getIdentificationAsInt())
-        .append("\n");
+        .append(ls);
       sb.append("  Flags: (Reserved, Don't Fragment, More Fragment) = (")
         .append(getReservedFlag())
         .append(", ")
         .append(getDontFragmentFlag())
         .append(", ")
         .append(getMoreFragmentFlag())
-        .append(")\n");
+        .append(")")
+        .append(ls);
       sb.append("  Flagment offset: ")
-        .append(getFlagmentOffsetAsInt())
-        .append("\n");
+        .append(getFlagmentOffsetAsInt() * 8)
+        .append(" [bytes]")
+        .append(ls);
       sb.append("  TTL: ")
         .append(getTtlAsInt())
-        .append("\n");
+        .append(ls);
       sb.append("  Protocol: ")
         .append(protocol)
-        .append("\n");
+        .append(ls);
       sb.append("  Header checksum: 0x")
         .append(ByteArrays.toHexString(headerChecksum, ""))
-        .append("\n");
+        .append(ls);
       sb.append("  Source address: ")
         .append(srcAddr)
-        .append("\n");
+        .append(ls);
       sb.append("  Destination address: ")
         .append(dstAddr)
-        .append("\n");
+        .append(ls);
 
       return sb.toString();
     }

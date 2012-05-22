@@ -125,6 +125,24 @@ public final class Pcaps {
 
   /**
    *
+   * @param filePath "-" for stdin
+   * @return
+   * @throws PcapNativeException
+   */
+  public static PcapHandle openOffline(String filePath) throws PcapNativeException {
+    PcapErrbuf errbuf = new PcapErrbuf();
+    Pointer handle
+      = PcapLibrary.INSTANCE.pcap_open_offline(filePath, errbuf);
+
+    if (handle == null || errbuf.length() != 0) {
+      throw new PcapNativeException(errbuf.toString());
+    }
+
+    return new PcapHandle(handle);
+  }
+
+  /**
+   *
    * @param inetAddr
    * @return
    */
@@ -150,5 +168,6 @@ public final class Pcaps {
 
     return buf.toString();
   }
+
 }
 

@@ -59,6 +59,13 @@ public interface Packet extends Iterable<Packet>, Serializable {
    * @param clazz
    * @return
    */
+  public Packet getOuterOf(Class<? extends Packet> clazz);
+
+  /**
+   *
+   * @param clazz
+   * @return
+   */
   public <T extends Packet> boolean contains(Class<T> clazz);
 
   /**
@@ -71,7 +78,32 @@ public interface Packet extends Iterable<Packet>, Serializable {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public interface Builder {
+  public interface Builder extends Iterable<Builder> {
+
+    /**
+     *
+     * @param clazz
+     * @return
+     */
+    public <T extends Builder> T get(Class<T> clazz);
+
+    /**
+     *
+     * @param clazz
+     * @return
+     */
+    public Builder getOuterOf(Class<? extends Builder> clazz);
+
+    /**
+     * setter
+     */
+    public Builder payloadBuilder(Builder payloadBuilder);
+
+    /**
+     *
+     * @return
+     */
+    public Builder getPayloadBuilder();
 
     /**
      *

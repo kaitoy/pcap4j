@@ -152,7 +152,7 @@ public final class PcapNetworkInterface {
   ) throws PcapNativeException {
     PcapErrbuf errbuf = new PcapErrbuf();
 
-    Pointer ifaceHandle
+    Pointer handle
       = PcapLibrary.INSTANCE.pcap_open_live(
           this.getName(),
           packetLength,
@@ -160,11 +160,11 @@ public final class PcapNetworkInterface {
           timeoutMillis,
           errbuf
         );
-    if (ifaceHandle == null || errbuf.length() != 0) {
+    if (handle == null || errbuf.length() != 0) {
       throw new PcapNativeException(errbuf.toString());
     }
 
-    return new PcapHandle(ifaceHandle);
+    return new PcapHandle(handle);
   }
 
   @Override

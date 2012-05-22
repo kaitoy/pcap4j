@@ -14,7 +14,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.namednumber.IcmpV4TypeCode;
 import org.pcap4j.util.ByteArrays;
 
@@ -85,7 +84,7 @@ public final class IcmpV4Packet extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class Builder implements Packet.Builder {
+  public static final class Builder extends AbstractBuilder {
 
     private IcmpV4TypeCode typeCode;
     private short checksum;
@@ -179,14 +178,15 @@ public final class IcmpV4Packet extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @param payloadBuilder
-     * @return
-     */
+    @Override
     public Builder payloadBuilder(Packet.Builder payloadBuilder) {
       this.payloadBuilder = payloadBuilder;
       return this;
+    }
+
+    @Override
+    public Packet.Builder getPayloadBuilder() {
+      return payloadBuilder;
     }
 
     /**
@@ -199,6 +199,7 @@ public final class IcmpV4Packet extends AbstractPacket {
       return this;
     }
 
+    @Override
     public IcmpV4Packet build() {
       return new IcmpV4Packet(this);
     }
@@ -399,16 +400,18 @@ public final class IcmpV4Packet extends AbstractPacket {
     @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
+      String ls = System.getProperty("line.separator");
 
       sb.append("[ICMP Header (")
         .append(length())
-        .append(" bytes)]\n");
+        .append(" bytes)]")
+        .append(ls);
       sb.append("  Type,Code: ")
         .append(typeCode)
-        .append("\n");
+        .append(ls);
       sb.append("  Checksum: 0x")
         .append(ByteArrays.toHexString(checksum, ""))
-        .append("\n");
+        .append(ls);
 
       switch (typeCode.getType()) {
         case 0:
@@ -419,27 +422,27 @@ public final class IcmpV4Packet extends AbstractPacket {
         case 16:
           sb.append("  Identifier: ")
             .append(getIdentifierAsInt())
-            .append("\n");
+            .append(ls);
           sb.append("  Sequence number: ")
             .append(getSequenceNumberAsInt())
-            .append("\n");
+            .append(ls);
           break;
         case 3:
         case 4:
         case 11:
           sb.append("  Unused: ")
             .append(ByteArrays.toHexString(typeSpecificField, " "))
-            .append("\n");
+            .append(ls);
           break;
         case 5:
           sb.append("  Gateway Internet Address: ")
             .append(getGatewayInternetAddress())
-            .append("\n");
+            .append(ls);
           break;
         case 12:
           sb.append("  Pointer: ")
             .append(getPointer())
-            .append("\n");
+            .append(ls);
           sb.append("  Unused: ")
             .append(
                ByteArrays.toHexString(
@@ -454,12 +457,12 @@ public final class IcmpV4Packet extends AbstractPacket {
                  " "
                )
              )
-            .append("\n");
+            .append(ls);
           break;
         default:
           sb.append("  Unknown: ")
             .append(ByteArrays.toHexString(typeSpecificField, " "))
-            .append("\n");
+            .append(ls);
           break;
       }
 

@@ -1,12 +1,9 @@
 package org.pcap4j.test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.Timestamp;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapHandle.BpfCompileMode;
 import org.pcap4j.core.PcapNativeException;
@@ -18,21 +15,23 @@ import org.pcap4j.util.NifSelector;
 public class GetNextPacketTest {
 
   private static final String COUNT_KEY
-    = LoopTest.class.getName() + ".count";
+    = GetNextPacketTest.class.getName() + ".count";
   private static final int COUNT
     = Integer.getInteger(COUNT_KEY, 5);
 
   private static final String READ_TIMEOUT_KEY
-    = LoopTest.class.getName() + ".readTimeOut";
+    = GetNextPacketTest.class.getName() + ".readTimeOut";
   private static final int READ_TIMEOUT
     = Integer.getInteger(READ_TIMEOUT_KEY, 5); // [ms]
 
   private static final String MAX_PACKT_SIZE_KEY
-    = LoopTest.class.getName() + ".maxPacketSize";
+    = GetNextPacketTest.class.getName() + ".maxPacketSize";
   private static final int MAX_PACKT_SIZE
     = Integer.getInteger(MAX_PACKT_SIZE_KEY, 65536); // [bytes]
 
-  public static void main(String[] args) throws PcapNativeException, FileNotFoundException, IOException {
+  public static void main(String[] args) throws PcapNativeException {
+    String filter = args.length != 0 ? args[0] : "";
+
     System.out.println(COUNT_KEY + ": " + COUNT);
     System.out.println(READ_TIMEOUT_KEY + ": " + READ_TIMEOUT);
     System.out.println(MAX_PACKT_SIZE_KEY + ": " + MAX_PACKT_SIZE);
@@ -57,7 +56,7 @@ public class GetNextPacketTest {
 
     try {
       handle.setFilter(
-        args.length != 0 ? args[0] : "",
+        filter,
         BpfCompileMode.OPTIMIZE,
         InetAddress
           .getByAddress(new byte[] {(byte)255, (byte)255, (byte)255, (byte)0})
@@ -66,9 +65,6 @@ public class GetNextPacketTest {
       assert true; // never get here
     }
 
-
-    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("out")));
-
     int num = 0;
     while (true) {
       Packet packet = handle.getNextPacket();
@@ -76,9 +72,11 @@ public class GetNextPacketTest {
         continue;
       }
       else {
-        System.out.println(packet);
-        oos.writeObject(packet);
+        Timestamp ts = new Timestamp(handle.getTimestampInts() * 1000L);
+        ts.setNanos(handle.getTimestampMicros() * 1000);
 
+        System.out.println(ts);
+        System.out.println(packet);
         num++;
         if (num >= COUNT) {
           break;
