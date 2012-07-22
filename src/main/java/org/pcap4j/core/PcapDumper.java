@@ -20,7 +20,7 @@ import com.sun.jna.Pointer;
  * @author Kaito Yamada
  * @since pcap4j 0.9.9
  */
-public class PcapDumper {
+public final class PcapDumper {
 
   private static final Logger logger = LoggerFactory.getLogger(PcapDumper.class);
   private final Pointer dumper;

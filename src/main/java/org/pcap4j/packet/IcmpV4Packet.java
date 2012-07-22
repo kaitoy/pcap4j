@@ -41,7 +41,7 @@ public final class IcmpV4Packet extends AbstractPacket {
   }
 
   private IcmpV4Packet(byte[] rawData) {
-    this.header = new IcmpV4Header(rawData, this);
+    this.header = new IcmpV4Header(rawData);
     this.payload
       = AnonymousPacket.newPacket(
           ByteArrays.getSubArray(
@@ -62,7 +62,7 @@ public final class IcmpV4Packet extends AbstractPacket {
     }
 
     this.payload = builder.payloadBuilder.build();
-    this.header = new IcmpV4Header(builder, this);
+    this.header = new IcmpV4Header(builder);
   }
 
   @Override
@@ -212,6 +212,60 @@ public final class IcmpV4Packet extends AbstractPacket {
    */
   public final class IcmpV4Header extends AbstractHeader {
 
+    /*
+     *            Echo/Reply/
+     *    Timestamp Request/Timestamp Reply/
+     * Information Request/Information Reply
+     * 0                               16
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |      Type     |     Code      |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Checksum              |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Identifier            |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |       Sequence Number         |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *
+     *      Destination Unreachable/
+     *          Source Quench/
+     *          TTL equals 0
+     * 0                               16
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |      Type     |     Code      |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Checksum              |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |           Unused              |
+     * +                               +
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *
+     *              Redirect
+     * 0                               16
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |      Type     |     Code      |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Checksum              |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |   Gateway Internet Address    |
+     * +                               +
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *
+     *        Parameter Problem
+     * 0                               16
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |      Type     |     Code      |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Checksum              |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |   Pointer     |    Unused     |
+     * +-+-+-+-+-+-+-+-+               +
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     */
+
     /**
      *
      */
@@ -240,7 +294,7 @@ public final class IcmpV4Packet extends AbstractPacket {
     private final short checksum;
     private final int typeSpecificField;
 
-    private IcmpV4Header(byte[] rawData, IcmpV4Packet host) {
+    private IcmpV4Header(byte[] rawData) {
       if (rawData.length < ICMP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 header(")
@@ -259,7 +313,7 @@ public final class IcmpV4Packet extends AbstractPacket {
         = ByteArrays.getInt(rawData, TYPE_SPECIFIC_FIELD_OFFSET);
     }
 
-    private IcmpV4Header(Builder builder, IcmpV4Packet host) {
+    private IcmpV4Header(Builder builder) {
       this.typeCode = builder.typeCode;
       this.typeSpecificField = builder.typeSpecificField;
 
@@ -290,7 +344,10 @@ public final class IcmpV4Packet extends AbstractPacket {
         data = new byte[packetLength];
       }
 
+      // getRawData()だとchecksum field設定前にrawDataがキャッシュされてしまうので、
+      // 代わりにbuildRawData()を使う。
       System.arraycopy(buildRawData(), 0, data, 0, length());
+
       System.arraycopy(
         IcmpV4Packet.this.payload.getRawData(), 0,
         data, length(), IcmpV4Packet.this.payload.length()

@@ -15,7 +15,7 @@ import org.pcap4j.packet.Packet.Builder;
  * @author Kaito Yamada
  * @since pcap4j 0.9.9
  */
-public class BuilderIterator implements Iterator<Builder> {
+public final class BuilderIterator implements Iterator<Builder> {
 
   private Builder next;
   private Builder previous = null;

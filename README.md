@@ -8,7 +8,7 @@ Javaのパケットキャプチャライブラリ。パケットの作成・送�
 ダウンロード
 ------------
 
-Pcap4J 0.9.9
+Pcap4J 0.9.10
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
@@ -32,9 +32,9 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 * ネットワークインターフェースからパケットをキャプチャし、Javaのオブジェクトに変換する。
 * パケットオブジェクトにアクセスしてパケットのフィールドを取得、編集できる。
 * 手動でパケットオブジェクトを組み立てることもできる。
-* パケットオブジェクトは、現実のネットワークに送信できる。
+* パケットオブジェクトを現実のネットワークに送信できる。
 * pcap APIのダンプファイル(Wiresharkのcapture fileなど)の読み込み、書き込み。
-* Ethernet、IEEE802.1Q、ARP、IPv4(オプションなし)、ICMPv4、UDPに対応。
+* Ethernet、IEEE802.1Q、ARP、IPv4(オプションなし)、IPv6(RFC2460)、ICMPv4、UDPに対応。
 * 各パケットクラスはシリアライズに対応。スレッドセーフ(実質的に不変)。
 * ライブラリをいじらずに、対応プロトコルをユーザが追加できる。
 
@@ -123,10 +123,10 @@ Pcap4J is provided distributed under the MIT license.<br>
 おまけ
 ------
 
-Pcap4J 0.9.9 を使ったSNMPネットワークシミュレータ、SNeO。<br>
+Pcap4J 0.9.10 を使ったSNMPネットワークシミュレータ、SNeO。<br>
 とりあえず置いておくだけ。<br>
 今のところ商用でもなんでも無料で使用可。コピーも再配布も可。<br>
 
-SNeO 1.0.8
+SNeO 1.0.9
 
 * [sneo.jar](/downloads/Kaitoy/pcap4j/sneo.jar)

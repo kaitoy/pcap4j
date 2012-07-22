@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public class PacketIterator implements Iterator<Packet> {
+public final class PacketIterator implements Iterator<Packet> {
 
   private Packet next;
   private Packet previous = null;

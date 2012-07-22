@@ -306,12 +306,12 @@ public final class ByteArrays {
    *
    * @param array
    * @param offset
-   * @param size
+   * @param length
    * @return
    */
-  public static byte[] getSubArray(byte[] array, int offset, int size) {
-    byte[] subArray = new byte[size];
-    System.arraycopy(array, offset, subArray, 0, size);
+  public static byte[] getSubArray(byte[] array, int offset, int length) {
+    byte[] subArray = new byte[length];
+    System.arraycopy(array, offset, subArray, 0, length);
     return subArray;
   }
 
@@ -330,6 +330,27 @@ public final class ByteArrays {
     }
 
     if (separator.length() != 0 && array.length > 0) {
+      buf.delete(buf.lastIndexOf(separator), buf.length());
+    }
+
+    return buf.toString();
+  }
+
+  public static String toHexString(
+    byte[] array, String separator, int offset, int length
+  ) {
+    if (offset < 0 || length < 0 || offset + length > array.length) {
+      throw new IllegalArgumentException();
+    }
+
+    StringBuffer buf = new StringBuffer();
+
+    for (int i = offset; i < offset + length; i++) {
+      buf.append(String.format("%02x", array[i]));
+      buf.append(separator);
+    }
+
+    if (separator.length() != 0 && length > 0) {
       buf.delete(buf.lastIndexOf(separator), buf.length());
     }
 

@@ -27,7 +27,7 @@ public final class IpVersion extends NamedNumber<Byte> {
   /**
    *
    */
-  public static final IpVersion IPv4
+  public static final IpVersion IP_V4
     = new IpVersion((byte)4, "IPv4");
 
   /**
@@ -39,7 +39,7 @@ public final class IpVersion extends NamedNumber<Byte> {
   /**
    *
    */
-  public static final IpVersion IPv6
+  public static final IpVersion IP_V6
     = new IpVersion((byte)6, "IPv6");
 
   /**

@@ -276,6 +276,25 @@ public final class EthernetPacket extends AbstractPacket {
    */
   public static final class EthernetHeader extends AbstractHeader {
 
+    /*
+     * 0                               16
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |    Dst Hardware Address       |
+     * +                               +
+     * |                               |
+     * +                               +
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |    Src Hardware Address       |
+     * +                               +
+     * |                               |
+     * +                               +
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Type                  |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     */
+
     /**
      *
      */

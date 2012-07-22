@@ -83,7 +83,7 @@ public final class ArpPacket extends AbstractPacket {
   public static final class Builder extends AbstractBuilder {
 
     private ArpHardwareType hardwareType = ArpHardwareType.ETHERNET;
-    private EtherType protocolType = EtherType.IPV4;
+    private EtherType protocolType = EtherType.IP_V4;
     private byte hardwareLength = (byte)MacAddress.SIZE_IN_BYTES;
     private byte protocolLength = (byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
     private ArpOperation operation;
@@ -213,6 +213,39 @@ public final class ArpPacket extends AbstractPacket {
    */
   public static final class ArpHeader extends AbstractHeader {
 
+    /*
+     * 0                               16
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Hardware Type         |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Protocol Type         |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |Hardware Length|Protocol Length|
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Operation             |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |    Src Hardware Address       |
+     * +                               +
+     * |                               |
+     * +                               +
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |    Src Protocol Address       |
+     * +                               |
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |    Dst Hardware Address       |
+     * +                               +
+     * |                               |
+     * +                               +
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |    Dst Protocol Address       |
+     * +                               |
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     */
+
     /**
      *
      */
@@ -341,7 +374,7 @@ public final class ArpPacket extends AbstractPacket {
      * @return
      */
     public int getHardwareLengthAsInt() {
-      return (int)(0xFF & hardwareLength);
+      return 0xFF & hardwareLength;
     }
 
     /**
@@ -357,7 +390,7 @@ public final class ArpPacket extends AbstractPacket {
      * @return
      */
     public int getProtocolLengthAsInt() {
-      return (int)(0xFF & protocolLength);
+      return 0xFF & protocolLength;
     }
 
     /**

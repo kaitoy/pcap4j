@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @author Kaito Yamada
  * @since pcap4j 0.9.6
  */
-public class LazyValue<T1> implements Serializable {
+public final class LazyValue<T1> implements Serializable {
 
   /**
    *

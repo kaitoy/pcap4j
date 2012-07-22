@@ -8,6 +8,9 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
+
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,7 @@ public final class UdpPacket extends AbstractPacket {
   }
 
   private UdpPacket(byte[] rawData) {
-    this.header = new UdpHeader(rawData, this);
+    this.header = new UdpHeader(rawData);
 
     byte[] rawPayload
       = ByteArrays.getSubArray(
@@ -241,6 +244,37 @@ public final class UdpPacket extends AbstractPacket {
    */
   public final class UdpHeader extends AbstractHeader {
 
+    /*
+     * 0                               16
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |           Src Port            |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |           Dst Port            |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |            Length             |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |           Checksum            |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     */
+
+    /*
+     *          Pseudo Header
+     *
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Src IP Address        |
+     * +                               +
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Dst IP Address        |
+     * +                               +
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |      PAD      | Protocol(UDP) |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |            Length             |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     */
+
     /**
      *
      */
@@ -265,14 +299,15 @@ public final class UdpPacket extends AbstractPacket {
     private static final int UCP_HEADER_SIZE
       = CHECKSUM_OFFSET + CHECKSUM_SIZE;
 
-    private static final int PSEUDO_HEADER_SIZE = 12;
+    private static final int IP_V4_PSEUDO_HEADER_SIZE = 12;
+    private static final int IP_V6_PSEUDO_HEADER_SIZE = 40;
 
     private final UdpPort srcPort;
     private final UdpPort dstPort;
     private final short length;
     private final short checksum;
 
-    private UdpHeader(byte[] rawData, UdpPacket host) {
+    private UdpHeader(byte[] rawData) {
       if (rawData.length < UCP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build a UDP header(")
@@ -297,9 +332,11 @@ public final class UdpPacket extends AbstractPacket {
       if (builder.validateAtBuild) {
         this.length = (short)(host.payload.length() + length());
 
+        // checksum calculation is necessary for IPv6
         if (
-          PacketPropertiesLoader.getInstance()
-            .isEnabledUdpChecksumVaridation()
+             builder.srcAddr instanceof Inet6Address
+          || PacketPropertiesLoader.getInstance()
+               .isEnabledUdpChecksumVaridation()
         ) {
           this.checksum = calcChecksum(builder.srcAddr, builder.dstAddr);
         }
@@ -316,17 +353,26 @@ public final class UdpPacket extends AbstractPacket {
     private short calcChecksum(InetAddress srcAddr, InetAddress dstAddr) {
       byte[] data;
       int destPos;
+      int totalLength = UdpPacket.this.payload.length() + length();
+      boolean lowerLayerIsIpV4 = srcAddr instanceof Inet4Address;
 
-      if ((length % 2) != 0) {
-        data = new byte[length + 1 + PSEUDO_HEADER_SIZE];
-        destPos = length + 1;
+      int pseudoHeaderSize
+        = lowerLayerIsIpV4 ? IP_V4_PSEUDO_HEADER_SIZE
+                           : IP_V6_PSEUDO_HEADER_SIZE;
+
+      if ((totalLength % 2) != 0) {
+        data = new byte[totalLength + 1 + pseudoHeaderSize];
+        destPos = totalLength + 1;
       }
       else {
-        data = new byte[length + PSEUDO_HEADER_SIZE];
-        destPos = length;
+        data = new byte[totalLength + pseudoHeaderSize];
+        destPos = totalLength;
       }
 
+      // getRawData()だとchecksum field設定前にrawDataがキャッシュされてしまうので、
+      // 代わりにbuildRawData()を使う。
       System.arraycopy(buildRawData(), 0, data, 0, length());
+
       System.arraycopy(
         UdpPacket.this.payload.getRawData(), 0,
         data, length(), UdpPacket.this.payload.length()
@@ -349,14 +395,19 @@ public final class UdpPacket extends AbstractPacket {
       );
       destPos += ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
 
-      data[destPos] = (byte)0;
-      destPos++;
+      if (lowerLayerIsIpV4) {
+        //data[destPos] = (byte)0;
+        destPos++;
+      }
+      else {
+        destPos += 24;
+      }
 
       data[destPos] = IpNumber.UDP.value();
       destPos++;
 
       System.arraycopy(
-        ByteArrays.toByteArray(length), 0,
+        ByteArrays.toByteArray((short)totalLength), 0,
         data, destPos, SHORT_SIZE_IN_BYTES
       );
       destPos += SHORT_SIZE_IN_BYTES;
@@ -431,13 +482,23 @@ public final class UdpPacket extends AbstractPacket {
      * @return
      */
     public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
+      if (UdpPacket.this.length() != getLengthAsInt()) { return false; }
+
+      boolean lowerLayerIsIpV6 = srcAddr instanceof Inet6Address;
+
+      // checksum varification is necessary for IPv6
       if (
-        PacketPropertiesLoader.getInstance()
-          .isEnabledUdpChecksumVerification()
+           lowerLayerIsIpV6
+        || PacketPropertiesLoader.getInstance()
+             .isEnabledUdpChecksumVerification()
       ) {
         short cs = getChecksum();
-        return    ((short)UdpPacket.this.length() != length())
-               && (cs == 0 ? true : calcChecksum(srcAddr, dstAddr) != cs);
+        if (lowerLayerIsIpV6) {
+          return calcChecksum(srcAddr, dstAddr) != cs;
+        }
+        else {
+          return cs == 0 ? true : calcChecksum(srcAddr, dstAddr) != cs;
+        }
       }
       else {
         return true;

@@ -28,7 +28,7 @@ public final class EtherType extends NamedNumber<Short> {
   /**
    *
    */
-  public static final EtherType IPV4
+  public static final EtherType IP_V4
     = new EtherType((short)0x0800, "IPv4");
 
   /**
@@ -58,7 +58,7 @@ public final class EtherType extends NamedNumber<Short> {
   /**
    *
    */
-  public static final EtherType IPV6
+  public static final EtherType IP_V6
     = new EtherType((short)0x86dd, "IPv6");
 
   /**

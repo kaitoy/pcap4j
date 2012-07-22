@@ -23,7 +23,7 @@ import org.pcap4j.packet.Packet;
  * @author Kaito
  * @since pcap4j 0.9.9
  */
-public class IpV4Helper {
+public final class IpV4Helper {
 
   private IpV4Helper() { throw new AssertionError(); }
 

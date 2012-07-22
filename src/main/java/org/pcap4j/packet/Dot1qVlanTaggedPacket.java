@@ -17,7 +17,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.5
  */
-public class Dot1qVlanTaggedPacket extends AbstractPacket {
+public final class Dot1qVlanTaggedPacket extends AbstractPacket {
 
   /**
    *
@@ -86,10 +86,10 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
    */
   public final class Builder extends AbstractBuilder {
 
-    private EtherType type;
     private byte priority = 0;
-    private byte cfi = 0;
+    private boolean cfi = false;
     private short vid;
+    private EtherType type;
     private Packet.Builder payloadBuilder;
 
     /**
@@ -98,21 +98,11 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
     public Builder() {}
 
     private Builder(Dot1qVlanTaggedPacket packet) {
-      this.type = packet.header.type;
       this.priority = packet.header.priority;
       this.cfi = packet.header.cfi;
       this.vid = packet.header.vid;
+      this.type = packet.header.type;
       this.payloadBuilder = packet.payload.getBuilder();
-    }
-
-    /**
-     *
-     * @param type
-     * @return
-     */
-    public Builder type(EtherType type) {
-      this.type = type;
-      return this;
     }
 
     /**
@@ -126,11 +116,12 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
     }
 
     /**
+     * true: 1, false: 0
      *
      * @param cfi
      * @return
      */
-    public Builder cfi(byte cfi) {
+    public Builder cfi(boolean cfi) {
       this.cfi = cfi;
       return this;
     }
@@ -142,6 +133,16 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
      */
     public Builder vid(short vid) {
       this.vid = vid;
+      return this;
+    }
+
+    /**
+     *
+     * @param type
+     * @return
+     */
+    public Builder type(EtherType type) {
+      this.type = type;
       return this;
     }
 
@@ -165,23 +166,33 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
 
   public static final class Dot1qVlanTagHeader extends AbstractHeader {
 
+    /*
+     * 0                                                               16
+     * +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+     * |Priority   |CFI|                   VID                         |
+     * +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+     * |                            Type                               |
+     * +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+     */
+
     /**
      *
      */
     private static final long serialVersionUID = 7130569411806479522L;
 
-    private static final int PRIORITY_OFFSET = 0;
-    private static final int PRIORITY_SIZE = 3;
-    private static final int CFI_OFFSET = PRIORITY_OFFSET + PRIORITY_SIZE;
-    private static final int CFI_SIZE = 1;
-    private static final int VID_OFFSET = CFI_OFFSET + CFI_SIZE;
-    private static final int VID_SIZE = 12;
-    private static final int TYPE_OFFSET = VID_OFFSET + VID_SIZE;
-    private static final int TYPE_SIZE = SHORT_SIZE_IN_BYTES;
-    private static final int DOT1Q_TAG_HEADER_SIZE = TYPE_OFFSET + TYPE_SIZE;
+    private static final int PRIORITY_AND_CFI_AND_VID_OFFSET
+      = 0;
+    private static final int PRIORITY_AND_CFI_AND_VID_SIZE
+      = SHORT_SIZE_IN_BYTES;
+    private static final int TYPE_OFFSET
+      = PRIORITY_AND_CFI_AND_VID_OFFSET + PRIORITY_AND_CFI_AND_VID_SIZE;
+    private static final int TYPE_SIZE
+      = SHORT_SIZE_IN_BYTES;
+    private static final int DOT1Q_TAG_HEADER_SIZE
+      = TYPE_OFFSET + TYPE_SIZE;
 
     private final byte priority;
-    private final byte cfi;
+    private final boolean cfi;
     private final short vid;
     private final EtherType type;
 
@@ -196,16 +207,23 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
       }
 
       short priorityAndCfiAndVid
-        = ByteArrays.getShort(rawData, PRIORITY_OFFSET);
+        = ByteArrays.getShort(rawData, PRIORITY_AND_CFI_AND_VID_OFFSET);
 
       this.priority = (byte)((priorityAndCfiAndVid & 0xE000) >> 13);
-      this.cfi = (byte)((priorityAndCfiAndVid & 0x1000) >> 12);
+      this.cfi = ((priorityAndCfiAndVid & 0x1000) >> 12) == 1;
       this.vid = (byte)(priorityAndCfiAndVid & 0x0FFF);
       this.type
         = EtherType.getInstance(ByteArrays.getShort(rawData, TYPE_OFFSET));
     }
 
     private Dot1qVlanTagHeader(Builder builder) {
+      if ((builder.priority & 0xF8) != 0) {
+        throw new IllegalArgumentException("priority: " + builder.priority);
+      }
+      if ((builder.vid & 0xF000) != 0) {
+        throw new IllegalArgumentException("vid: " + builder.vid);
+      }
+
       this.priority = builder.priority;
       this.cfi = builder.cfi;
       this.vid = builder.vid;
@@ -221,10 +239,11 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
     }
 
     /**
+     * true: 1, false: 0
      *
      * @return
      */
-    public byte getCfi() {
+    public boolean getCfi() {
       return cfi;
     }
 
@@ -234,6 +253,14 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
      */
     public short getVid() {
       return vid;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getVidAsInt() {
+      return 0x0FFF & vid;
     }
 
     /**
@@ -250,7 +277,7 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
       rawFields.add(ByteArrays.toByteArray(type.value()));
       rawFields.add(
         ByteArrays.toByteArray(
-          (short)((priority << 13) | (cfi << 12) | vid)
+          (short)((priority << 13) | ((cfi ? 1 : 0) << 12) | vid)
         )
       );
       return rawFields;
@@ -277,10 +304,10 @@ public class Dot1qVlanTaggedPacket extends AbstractPacket {
         .append(priority)
         .append(ls);
       sb.append("  CFI: ")
-        .append(cfi)
+        .append(cfi ? 1 : 0)
         .append(ls);
       sb.append("  VID: ")
-        .append(vid)
+        .append(getVidAsInt())
         .append(ls);
       sb.append("  Type: ")
         .append(type)

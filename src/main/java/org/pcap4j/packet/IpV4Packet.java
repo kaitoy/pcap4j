@@ -7,15 +7,15 @@
 
 package org.pcap4j.packet;
 
-import java.net.InetAddress;
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.util.ByteArrays;
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -41,7 +41,7 @@ public final class IpV4Packet extends AbstractPacket {
   }
 
   private IpV4Packet(byte[] rawData) {
-    this.header = new IpV4Header(rawData, this);
+    this.header = new IpV4Header(rawData);
 
     byte[] rawPayload
       = ByteArrays.getSubArray(
@@ -113,7 +113,7 @@ public final class IpV4Packet extends AbstractPacket {
    */
   public static final class Builder extends AbstractBuilder {
 
-    private IpVersion version = IpVersion.IPv4;
+    private IpVersion version = IpVersion.IP_V4;
     private byte ihl = (byte)5;
     private byte tos = (byte)0;
     private short totalLength;
@@ -123,8 +123,8 @@ public final class IpV4Packet extends AbstractPacket {
     private byte ttl;
     private IpNumber protocol;
     private short headerChecksum;
-    private InetAddress srcAddr;
-    private InetAddress dstAddr;
+    private Inet4Address srcAddr;
+    private Inet4Address dstAddr;
     private Packet.Builder payloadBuilder;
     private boolean validateAtBuild = true;
 
@@ -306,7 +306,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @param srcAddr
      * @return
      */
-    public Builder srcAddr(InetAddress srcAddr) {
+    public Builder srcAddr(Inet4Address srcAddr) {
       this.srcAddr = srcAddr;
       return this;
     }
@@ -316,7 +316,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @param dstAddr
      * @return
      */
-    public Builder dstAddr(InetAddress dstAddr) {
+    public Builder dstAddr(Inet4Address dstAddr) {
       this.dstAddr = dstAddr;
       return this;
     }
@@ -385,6 +385,35 @@ public final class IpV4Packet extends AbstractPacket {
    */
   public final class IpV4Header extends AbstractHeader {
 
+    /*
+     * 0                               16
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * | Ver   |  IHL  |      TOS      |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Total Length          |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Identification        |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |Flag |     Flagment Offset     |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Operation             |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |      TTL      |  Protocol     |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |      Header Checksum          |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |        Src IP Address         |
+     * +                               +
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |        Dst IP Address         |
+     * +                               +
+     * |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |           Option              |
+     * +                               +
+     */
+
     /**
      *
      */
@@ -425,11 +454,11 @@ public final class IpV4Packet extends AbstractPacket {
     private static final int SRC_ADDR_OFFSET
       = HEADER_CHECKSUM_OFFSET + HEADER_CHECKSUM_SIZE;
     private static final int SRC_ADDR_SIZE
-      = INT_SIZE_IN_BYTES;
+      = INET4_ADDRESS_SIZE_IN_BYTES;
     private static final int DST_ADDR_OFFSET
       = SRC_ADDR_OFFSET + SRC_ADDR_SIZE;
     private static final int DST_ADDR_SIZE
-      = INT_SIZE_IN_BYTES;
+      = INET4_ADDRESS_SIZE_IN_BYTES;
     private static final int IPV4_HEADER_SIZE
       = DST_ADDR_OFFSET + DST_ADDR_SIZE;
     // TODO options
@@ -444,10 +473,10 @@ public final class IpV4Packet extends AbstractPacket {
     private final byte ttl;
     private final IpNumber protocol;
     private final short headerChecksum;
-    private final InetAddress srcAddr;
-    private final InetAddress dstAddr;
+    private final Inet4Address srcAddr;
+    private final Inet4Address dstAddr;
 
-    private IpV4Header(byte[] rawData, IpV4Packet host) {
+    private IpV4Header(byte[] rawData) {
       if (rawData.length < IPV4_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an IPv4 header(")
@@ -490,6 +519,15 @@ public final class IpV4Packet extends AbstractPacket {
     }
 
     private IpV4Header(Builder builder, IpV4Packet host) {
+      if ((builder.flags & 0xF8) != 0) {
+        throw new IllegalArgumentException("Invalid flags: " + builder.flags);
+      }
+      if ((builder.flagmentOffset & 0xE000) != 0) {
+        throw new IllegalArgumentException(
+                "Invalid flagmentOffset: " + builder.flagmentOffset
+              );
+      }
+
       this.tos = builder.tos;
       this.identification = builder.identification;
       this.flags = builder.flags;
@@ -500,7 +538,7 @@ public final class IpV4Packet extends AbstractPacket {
       this.dstAddr = builder.dstAddr;
 
       if (builder.validateAtBuild) {
-        this.version = IpVersion.IPv4;
+        this.version = IpVersion.IP_V4;
         this.ihl = (byte)(length() / 4);
         this.totalLength
           = (short)(host.payload.length() + length());
@@ -516,6 +554,9 @@ public final class IpV4Packet extends AbstractPacket {
         }
       }
       else {
+        if ((builder.ihl & 0xF0) != 0) {
+          throw new IllegalArgumentException("Invalid ihl: " + builder.ihl);
+        }
         this.version = builder.version;
         this.ihl = builder.ihl;
         this.totalLength = builder.totalLength;
@@ -524,6 +565,8 @@ public final class IpV4Packet extends AbstractPacket {
     }
 
     private short calcHeaderChecksum() {
+      // getRawData()だとchecksum field設定前にrawDataがキャッシュされてしまうので、
+      // 代わりにbuildRawData()を使う。
       byte[] data = buildRawData();
 
       for (int i = 0; i < HEADER_CHECKSUM_SIZE; i++) {
@@ -546,7 +589,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @return
      */
     public int getVersionAsInt() {
-      return (int)(0xFF & version.value());
+      return 0xFF & version.value();
     }
 
     /**
@@ -562,7 +605,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @return
      */
     public int getIhlAsInt() {
-      return (int)(0xFF & ihl);
+      return 0xFF & ihl;
     }
 
     /**
@@ -578,7 +621,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @return
      */
     public int getTosAsInt() {
-      return (int)(0xFF & tos);
+      return 0xFF & tos;
     }
 
     /**
@@ -594,7 +637,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @return
      */
     public int getTotalLengthAsInt() {
-      return (int)(0xFFFF & totalLength);
+      return 0xFFFF & totalLength;
     }
 
     /**
@@ -610,7 +653,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @return
      */
     public int getIdentificationAsInt() {
-      return (int)(0xFFFF & identification);
+      return 0xFFFF & identification;
     }
 
     /**
@@ -658,7 +701,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @return
      */
     public int getFlagmentOffsetAsInt() {
-      return (int)(flagmentOffset & 0xFFFF);
+      return flagmentOffset & 0xFFFF;
     }
 
     /**
@@ -674,7 +717,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @return
      */
     public int getTtlAsInt() {
-      return (int)(0xFF & ttl);
+      return 0xFF & ttl;
     }
 
     /**
@@ -697,7 +740,7 @@ public final class IpV4Packet extends AbstractPacket {
      *
      * @return
      */
-    public InetAddress getSrcAddr() {
+    public Inet4Address getSrcAddr() {
       return srcAddr;
     }
 
@@ -705,20 +748,21 @@ public final class IpV4Packet extends AbstractPacket {
      *
      * @return
      */
-    public InetAddress getDstAddr() {
+    public Inet4Address getDstAddr() {
       return dstAddr;
     }
 
     @Override
     protected boolean verify() {
+      if ((length() / 4) != getIhlAsInt()) { return false; }
+      if (IpV4Packet.this.length() != getTotalLengthAsInt()) { return false; }
+
       if (
-          PacketPropertiesLoader.getInstance()
-            .isEnabledIpv4ChecksumVerification()
-        ) {
+        PacketPropertiesLoader.getInstance()
+          .isEnabledIpv4ChecksumVerification()
+      ) {
         short cs = getHeaderChecksum();
-        return    ((byte)(length() / 4) == getIhl())
-               && ((short)IpV4Packet.this.length() == getTotalLength())
-               && (cs == 0 ? true : calcHeaderChecksum() == cs);
+        return cs == 0 ? true : calcHeaderChecksum() == cs;
       }
       else {
         return true;
@@ -759,8 +803,10 @@ public final class IpV4Packet extends AbstractPacket {
         .append(getVersionAsInt())
         .append(ls);
       sb.append("  IHL: ")
+        .append(getIhlAsInt())
+        .append(" (")
         .append(getIhlAsInt() * 4)
-        .append(" [bytes]")
+        .append(" [bytes])")
         .append(ls);
       sb.append("  TOS: ")
         .append(getTosAsInt())

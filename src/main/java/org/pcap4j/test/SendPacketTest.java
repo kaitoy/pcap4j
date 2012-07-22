@@ -46,7 +46,7 @@ public class SendPacketTest {
 
   public static void main(String[] args) throws PcapNativeException {
     String strSrcIpAddress = args[0]; // for InetAddress.getByName()
-    String strDstIpAddress = args[2]; // for InetAddress.getByName()
+    String strDstIpAddress = args[1]; // for InetAddress.getByName()
 
     System.out.println(COUNT_KEY + ": " + COUNT);
     System.out.println(READ_TIMEOUT_KEY + ": " + READ_TIMEOUT);
@@ -100,7 +100,7 @@ public class SendPacketTest {
       ArpPacket.Builder arpBuilder = new ArpPacket.Builder();
       try {
         arpBuilder.hardwareType(ArpHardwareType.ETHERNET)
-          .protocolType(EtherType.IPV4)
+          .protocolType(EtherType.IP_V4)
           .hardwareLength((byte)MacAddress.SIZE_IN_BYTES)
           .protocolLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
           .operation(ArpOperation.REQUEST)

@@ -1,6 +1,7 @@
 package org.pcap4j.test;
 
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
@@ -120,8 +121,8 @@ public class SendFragmentedEchoTest {
       try {
         ipV4Builder.ttl((byte)100)
                    .protocol(IpNumber.ICMP_V4)
-                   .srcAddr(InetAddress.getByName(strSrcIpAddress))
-                   .dstAddr(InetAddress.getByName(strDstIpAddress))
+                   .srcAddr((Inet4Address)InetAddress.getByName(strSrcIpAddress))
+                   .dstAddr((Inet4Address)InetAddress.getByName(strDstIpAddress))
                    .payloadBuilder(echoBuilder);
       } catch (UnknownHostException e1) {
         throw new IllegalArgumentException(e1);
@@ -130,7 +131,7 @@ public class SendFragmentedEchoTest {
       EthernetPacket.Builder etherBuilder = new EthernetPacket.Builder();
       etherBuilder.dstAddr(MacAddress.getByName(strDstMacAddress, ":"))
                   .srcAddr(srcMacAddr)
-                  .type(EtherType.IPV4);
+                  .type(EtherType.IP_V4);
 
       for (int i = 0; i < COUNT; i++) {
         echoBuilder.sequenceNumber((short)i);
@@ -146,7 +147,10 @@ public class SendFragmentedEchoTest {
               }
             }
           );
-          sendHandle.sendPacket(etherBuilder.build());
+
+          Packet p = etherBuilder.build();
+          sendHandle.sendPacket(p);
+          //System.out.println("Sent a echo:\n" + p);
 
           try {
             Thread.sleep(100);
@@ -161,8 +165,14 @@ public class SendFragmentedEchoTest {
           break;
         }
       }
+    } catch (Exception e) {
+      e.printStackTrace();
     } finally {
       if (handle != null && handle.isOpening()) {
+        handle.breakLoop();
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException e) {}
         handle.close();
       }
       if (sendHandle != null && sendHandle.isOpening()) {
@@ -186,12 +196,10 @@ public class SendFragmentedEchoTest {
 
     public void run() {
       try {
-        handle.loop(COUNT, listener);
+        handle.loop(-1, listener);
       } catch (PcapNativeException e) {
         e.printStackTrace();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+      } catch (InterruptedException e) {}
     }
 
   }

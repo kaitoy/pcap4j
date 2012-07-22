@@ -44,8 +44,11 @@ public final class DefaultPacketFactory implements PacketFactory {
       }
     }
     else if (number instanceof EtherType) {
-      if (number.equals(EtherType.IPV4)) {
+      if (number.equals(EtherType.IP_V4)) {
         return IpV4Packet.newPacket(rawData);
+      }
+      else if (number.equals(EtherType.IP_V6)) {
+        return IpV6Packet.newPacket(rawData);
       }
       else if (number.equals(EtherType.ARP)) {
         return ArpPacket.newPacket(rawData);
@@ -60,6 +63,21 @@ public final class DefaultPacketFactory implements PacketFactory {
       }
       else if (number.equals(IpNumber.ICMP_V4)) {
         return IcmpV4Packet.newPacket(rawData);
+      }
+      else if (number.equals(IpNumber.HOPOPT)) {
+        return IpV6ExtHopByHopOptionsPacket.newPacket(rawData);
+      }
+      else if (number.equals(IpNumber.IP_V6_FRAG)) {
+        return IpV6ExtFragmentPacket.newPacket(rawData);
+      }
+      else if (number.equals(IpNumber.IP_V6_OPTS)) {
+        return IpV6ExtDestinationOptionsPacket.newPacket(rawData);
+      }
+      else if (number.equals(IpNumber.IP_V6_ROUTE)) {
+        return IpV6ExtRoutingPacket.newPacket(rawData);
+      }
+      else if (number.equals(IpNumber.IP_V6_NONXT)) {
+        return AnonymousPacket.newPacket(rawData);
       }
     }
 //    else if (number instanceof UdpPort) {
