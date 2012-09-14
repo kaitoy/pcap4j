@@ -7,10 +7,15 @@
 
 package org.pcap4j.packet;
 
+import java.io.Serializable;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
+import org.pcap4j.packet.factory.ClassifiedDataFactories;
+import org.pcap4j.packet.factory.IpV4TosFactories;
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.util.ByteArrays;
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
@@ -43,37 +48,59 @@ public final class IpV4Packet extends AbstractPacket {
   private IpV4Packet(byte[] rawData) {
     this.header = new IpV4Header(rawData);
 
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          this.header.length(),
-          this.header.getTotalLengthAsInt() - this.header.length()
-        );
+    int payloadLength = header.getTotalLengthAsInt() - header.length();
+    byte[] rawPayload;
 
-    this.payload
-      = PacketFactories.getPacketFactory(IpNumber.class)
-          .newPacket(rawPayload, header.getProtocol());
+    if (payloadLength > rawData.length - header.length()) {
+      rawPayload
+        = ByteArrays.getSubArray(
+          rawData,
+          header.length(),
+          rawData.length - header.length()
+        );
+    }
+    else {
+      rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+    }
+
+    if (header.getMoreFragmentFlag() || header.getFlagmentOffset() != 0) {
+      this.payload = FragmentedPacket.newPacket(rawPayload);
+    }
+    else {
+      this.payload
+        = PacketFactories.getFactory(IpNumber.class)
+            .newPacket(rawPayload, header.getProtocol());
+    }
   }
 
   private IpV4Packet(Builder builder) {
     if (
          builder == null
       || builder.version == null
+      || builder.tos == null
       || builder.protocol == null
       || builder.srcAddr == null
       || builder.dstAddr == null
       || builder.payloadBuilder == null
     ) {
-      throw new NullPointerException();
+      StringBuilder sb = new StringBuilder();
+      sb.append("builder: ").append(builder)
+        .append(" builder.version: ").append(builder.version)
+        .append(" builder.tos: ").append(builder.tos)
+        .append(" builder.protocol: ").append(builder.protocol)
+        .append(" builder.srcAddr: ").append(builder.srcAddr)
+        .append(" builder.dstAddr: ").append(builder.dstAddr)
+        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+      throw new NullPointerException(sb.toString());
     }
 
-    if (builder.payloadBuilder instanceof UdpPacket.Builder) {
-      ((UdpPacket.Builder)builder.payloadBuilder)
-        .dstAddr(builder.dstAddr)
-        .srcAddr(builder.srcAddr);
-    }
     this.payload = builder.payloadBuilder.build();
-    this.header = new IpV4Header(builder, this);
+    this.header = new IpV4Header(builder, payload);
   }
 
   @Override
@@ -87,22 +114,6 @@ public final class IpV4Packet extends AbstractPacket {
   }
 
   @Override
-  protected boolean verify() {
-    if (payload instanceof UdpPacket) {
-      if (!((UdpPacket)payload).isValid(header.srcAddr, header.dstAddr)) {
-        return false;
-      }
-    }
-    else {
-      if (!payload.isValid()) {
-        return false;
-      }
-    }
-
-    return header.isValid();
-  }
-
-  @Override
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -111,22 +122,28 @@ public final class IpV4Packet extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class Builder extends AbstractBuilder {
+  public static final
+  class Builder extends AbstractBuilder
+  implements ChecksumBuilder<IpV4Packet>, LengthBuilder<IpV4Packet> {
 
-    private IpVersion version = IpVersion.IP_V4;
-    private byte ihl = (byte)5;
-    private byte tos = (byte)0;
+    private IpVersion version;
+    private byte ihl;
+    private IpV4Tos tos;
     private short totalLength;
     private short identification;
-    private byte flags = (byte)0;
-    private short flagmentOffset = (byte)0;
+    private boolean reservedFlag;
+    private boolean dontFragmentFlag;
+    private boolean moreFragmentFlag;
+    private short flagmentOffset;
     private byte ttl;
     private IpNumber protocol;
     private short headerChecksum;
     private Inet4Address srcAddr;
     private Inet4Address dstAddr;
+    private List<IpV4Option> options;
     private Packet.Builder payloadBuilder;
-    private boolean validateAtBuild = true;
+    private boolean correctChecksumAtBuild;
+    private boolean correctLengthAtBuild;
 
     /**
      *
@@ -143,13 +160,16 @@ public final class IpV4Packet extends AbstractPacket {
       this.tos = packet.header.tos;
       this.totalLength = packet.header.totalLength;
       this.identification = packet.header.identification;
-      this.flags = packet.header.flags;
+      this.reservedFlag = packet.header.reservedFlag;
+      this.dontFragmentFlag = packet.header.dontFragmentFlag;
+      this.moreFragmentFlag = packet.header.moreFragmentFlag;
       this.flagmentOffset = packet.header.flagmentOffset;
       this.ttl = packet.header.ttl;
       this.protocol = packet.header.protocol;
       this.headerChecksum = packet.header.headerChecksum;
       this.srcAddr = packet.header.srcAddr;
       this.dstAddr = packet.header.dstAddr;
+      this.options = packet.header.options;
       this.payloadBuilder = packet.payload.getBuilder();
     }
 
@@ -178,7 +198,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @param tos
      * @return
      */
-    public Builder tos(byte tos) {
+    public Builder tos(IpV4Tos tos) {
       this.tos = tos;
       return this;
     }
@@ -203,62 +223,24 @@ public final class IpV4Packet extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @param flags
-     * @return
-     */
-    public Builder flags(byte flags) {
-      this.flags = flags;
+    public Builder reservedFlag(boolean reservedFlag) {
+      this.reservedFlag = reservedFlag;
+      return this;
+    }
+
+    public Builder dontFragmentFlag(boolean dontFragmentFlag) {
+      this.dontFragmentFlag = dontFragmentFlag;
       return this;
     }
 
     /**
      *
-     * @param flag
+     * @param moreFragmentFlag
      * @return
      */
-    public Builder reservedFlag(boolean flag) {
-      if (getReservedFlag() != flag) {
-        this.flags = (byte)((flags & 3) | (~flags & 4));
-      }
+    public Builder moreFragmentFlag(boolean moreFragmentFlag) {
+      this.moreFragmentFlag = moreFragmentFlag;
       return this;
-    }
-
-    /**
-     *
-     * @param flag
-     * @return
-     */
-    public Builder dontFragmentFlag(boolean flag) {
-      if (getDontFragmentFlag() != flag) {
-        this.flags = (byte)((flags & 5) | (~flags & 2));
-      }
-      return this;
-    }
-
-    /**
-     *
-     * @param flag
-     * @return
-     */
-    public Builder moreFragmentFlag(boolean flag) {
-      if (getMoreFragmentFlag() != flag) {
-        flags = (byte)((flags & 6) | (~flags & 1));
-      }
-      return this;
-    }
-
-    private boolean getReservedFlag() {
-      return ((flags & 0x4) >> 2) != 0 ? true : false;
-    }
-
-    private boolean getDontFragmentFlag() {
-      return ((flags & 0x2) >> 1) != 0 ? true : false;
-    }
-
-    private boolean getMoreFragmentFlag() {
-      return ((flags & 0x1) >> 0) != 0 ? true : false;
     }
 
     /**
@@ -321,6 +303,16 @@ public final class IpV4Packet extends AbstractPacket {
       return this;
     }
 
+    /**
+     *
+     * @param options
+     * @return
+     */
+    public Builder options(List<IpV4Option> options) {
+      this.options = options;
+      return this;
+    }
+
     @Override
     public Builder payloadBuilder(Packet.Builder payloadBuilder) {
       this.payloadBuilder = payloadBuilder;
@@ -332,13 +324,13 @@ public final class IpV4Packet extends AbstractPacket {
       return payloadBuilder;
     }
 
-    /**
-     *
-     * @param validateAtBuild
-     * @return
-     */
-    public Builder validateAtBuild(boolean validateAtBuild) {
-      this.validateAtBuild = validateAtBuild;
+    public Builder correctChecksumAtBuild(boolean correctChecksumAtBuild) {
+      this.correctChecksumAtBuild = correctChecksumAtBuild;
+      return this;
+    }
+
+    public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
+      this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
@@ -349,69 +341,26 @@ public final class IpV4Packet extends AbstractPacket {
 
   }
 
-  @Override
-  protected String buildString() {
-    StringBuilder sb = new StringBuilder();
-
-    if (header != null) {
-      sb.append(header.toString());
-    }
-    if (payload != null) {
-      if (
-           (header != null)
-        && (header.getMoreFragmentFlag() || header.getFlagmentOffset() != 0)
-      ){
-        String ls = System.getProperty("line.separator");
-
-        sb.append("[Fragmented data (")
-          .append(payload.length())
-          .append(" bytes)]")
-          .append(ls);
-        sb.append("  Hex stream: ")
-          .append(ByteArrays.toHexString(payload.getRawData(), " "))
-          .append(ls);
-      }
-      else {
-        sb.append(getPayload().toString());
-      }
-    }
-
-    return sb.toString();
-  }
-
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public final class IpV4Header extends AbstractHeader {
+  public static final class IpV4Header extends AbstractHeader {
 
-    /*
-     * 0                               16
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * | Ver   |  IHL  |      TOS      |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |         Total Length          |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |         Identification        |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |Flag |     Flagment Offset     |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |         Operation             |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |      TTL      |  Protocol     |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |      Header Checksum          |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |        Src IP Address         |
-     * +                               +
-     * |                               |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |        Dst IP Address         |
-     * +                               +
-     * |                               |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |           Option              |
-     * +                               +
+    /*  0                              16                            31
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |Version|  IHL  |Type of Service|           Total Length        |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |         Identification        |Flags|      Fragment Offset    |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |  Time to Live |    Protocol   |         Header Checksum       |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |                       Source Address                          |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |                    Destination Address                        |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |                    Options                    |    Padding    |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      */
 
     /**
@@ -459,42 +408,49 @@ public final class IpV4Packet extends AbstractPacket {
       = SRC_ADDR_OFFSET + SRC_ADDR_SIZE;
     private static final int DST_ADDR_SIZE
       = INET4_ADDRESS_SIZE_IN_BYTES;
-    private static final int IPV4_HEADER_SIZE
+    private static final int OPTIONS_OFFSET
       = DST_ADDR_OFFSET + DST_ADDR_SIZE;
-    // TODO options
+
+    private static final int MIN_IPV4_HEADER_SIZE
+      = DST_ADDR_OFFSET + DST_ADDR_SIZE;
 
     private final IpVersion version;
     private final byte ihl;
-    private final byte tos;
+    private final IpV4Tos tos;
     private final short totalLength;
     private final short identification;
-    private final byte flags;
+    private final boolean reservedFlag;
+    private final boolean dontFragmentFlag;
+    private final boolean moreFragmentFlag;
     private final short flagmentOffset;
     private final byte ttl;
     private final IpNumber protocol;
     private final short headerChecksum;
     private final Inet4Address srcAddr;
     private final Inet4Address dstAddr;
+    private final List<IpV4Option> options;
+    // padding is included in options.
 
     private IpV4Header(byte[] rawData) {
-      if (rawData.length < IPV4_HEADER_SIZE) {
+      if (rawData.length < MIN_IPV4_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(110);
-        sb.append("The data is too short to build an IPv4 header(")
-          .append(IPV4_HEADER_SIZE)
-          .append(" bytes). data: ")
+        sb.append("The data is too short to build an IPv4 header. ")
+          .append("It must be at least ")
+          .append(MIN_IPV4_HEADER_SIZE)
+          .append(" bytes. data: ")
           .append(ByteArrays.toHexString(rawData, " "));
-        throw new IllegalPacketDataException(sb.toString());
+        throw new IllegalRawDataException(sb.toString());
       }
 
       byte versionAndIhl
         = ByteArrays.getByte(rawData, VERSION_AND_IHL_OFFSET);
       this.version = IpVersion.getInstance(
-                       (byte)((versionAndIhl & 0xF0) >> 4)
+                       (byte)(versionAndIhl >>> 4)
                      );
       this.ihl = (byte)(versionAndIhl & 0x0F);
 
       this.tos
-        = ByteArrays.getByte(rawData, TOS_OFFSET);
+        = IpV4TosFactories.getFactory().newTos(rawData[TOS_OFFSET]);
       this.totalLength
         = ByteArrays.getShort(rawData, TOTAL_LENGTH_OFFSET);
       this.identification
@@ -502,7 +458,9 @@ public final class IpV4Packet extends AbstractPacket {
 
       short flagsAndFlagmentOffset
         = ByteArrays.getShort(rawData, FLAGS_AND_FLAGMENT_OFFSET_OFFSET);
-      this.flags = (byte)((flagsAndFlagmentOffset & 0xE000) >> 13);
+      this.reservedFlag = (flagsAndFlagmentOffset & 0x8000) != 0;
+      this.dontFragmentFlag = (flagsAndFlagmentOffset & 0x4000) != 0;
+      this.moreFragmentFlag = (flagsAndFlagmentOffset & 0x2000) != 0;
       this.flagmentOffset = (short)(flagsAndFlagmentOffset & 0x1FFF);
 
       this.ttl
@@ -516,37 +474,80 @@ public final class IpV4Packet extends AbstractPacket {
         = ByteArrays.getInet4Address(rawData, SRC_ADDR_OFFSET);
       this.dstAddr
         = ByteArrays.getInet4Address(rawData, DST_ADDR_OFFSET);
+
+      int headerLength = ihl * 4;
+      if (rawData.length < headerLength) {
+        StringBuilder sb = new StringBuilder(110);
+        sb.append("The data is too short to build an IPv4 header(")
+          .append(headerLength)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "));
+        throw new IllegalRawDataException(sb.toString());
+      }
+
+      this.options = new ArrayList<IpV4Option>();
+      int currentOffset = OPTIONS_OFFSET;
+      while (currentOffset < headerLength) {
+        byte[] optRawData = ByteArrays.getSubArray(
+                              rawData,
+                              currentOffset,
+                              headerLength - currentOffset
+                            );
+        IpV4OptionType type = IpV4OptionType.getInstance(optRawData[0]);
+        IpV4Option newOne
+          = ClassifiedDataFactories
+              .getFactory(IpV4Option.class, IpV4OptionType.class)
+                 .newData(optRawData, type);
+        options.add(newOne);
+        currentOffset += newOne.length();
+      }
     }
 
-    private IpV4Header(Builder builder, IpV4Packet host) {
-      if ((builder.flags & 0xF8) != 0) {
-        throw new IllegalArgumentException("Invalid flags: " + builder.flags);
-      }
+    private IpV4Header(Builder builder, Packet payload) {
       if ((builder.flagmentOffset & 0xE000) != 0) {
         throw new IllegalArgumentException(
                 "Invalid flagmentOffset: " + builder.flagmentOffset
               );
       }
 
+      this.version = builder.version;
       this.tos = builder.tos;
       this.identification = builder.identification;
-      this.flags = builder.flags;
+      this.reservedFlag = builder.reservedFlag;
+      this.dontFragmentFlag = builder.dontFragmentFlag;
+      this.moreFragmentFlag = builder.moreFragmentFlag;
       this.flagmentOffset = builder.flagmentOffset;
       this.ttl = builder.ttl;
       this.protocol = builder.protocol;
       this.srcAddr = builder.srcAddr;
       this.dstAddr = builder.dstAddr;
+      if (builder.options != null) {
+        this.options = new ArrayList<IpV4Option>(builder.options);
+      }
+      else {
+        this.options = new ArrayList<IpV4Option>(0);
+      }
 
-      if (builder.validateAtBuild) {
-        this.version = IpVersion.IP_V4;
+      if (builder.correctLengthAtBuild) {
         this.ihl = (byte)(length() / 4);
-        this.totalLength
-          = (short)(host.payload.length() + length());
 
-        if (
-          PacketPropertiesLoader.getInstance()
-            .isEnabledIpv4ChecksumVaridation()
-        ) {
+        if (payload != null) {
+          this.totalLength = (short)(payload.length() + length());
+        }
+        else {
+          this.totalLength = builder.totalLength;
+        }
+      }
+      else {
+        if ((builder.ihl & 0xF0) != 0) {
+          throw new IllegalArgumentException("Invalid ihl: " + builder.ihl);
+        }
+        this.ihl = builder.ihl;
+        this.totalLength = builder.totalLength;
+      }
+
+      if (builder.correctChecksumAtBuild) {
+        if (PacketPropertiesLoader.getInstance().ipV4CalcChecksum()) {
           headerChecksum = calcHeaderChecksum();
         }
         else {
@@ -554,12 +555,6 @@ public final class IpV4Packet extends AbstractPacket {
         }
       }
       else {
-        if ((builder.ihl & 0xF0) != 0) {
-          throw new IllegalArgumentException("Invalid ihl: " + builder.ihl);
-        }
-        this.version = builder.version;
-        this.ihl = builder.ihl;
-        this.totalLength = builder.totalLength;
         this.headerChecksum = builder.headerChecksum;
       }
     }
@@ -588,14 +583,6 @@ public final class IpV4Packet extends AbstractPacket {
      *
      * @return
      */
-    public int getVersionAsInt() {
-      return 0xFF & version.value();
-    }
-
-    /**
-     *
-     * @return
-     */
     public byte getIhl() {
       return ihl;
     }
@@ -604,24 +591,8 @@ public final class IpV4Packet extends AbstractPacket {
      *
      * @return
      */
-    public int getIhlAsInt() {
-      return 0xFF & ihl;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public byte getTos() {
+    public IpV4Tos getTos() {
       return tos;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getTosAsInt() {
-      return 0xFF & tos;
     }
 
     /**
@@ -660,16 +631,8 @@ public final class IpV4Packet extends AbstractPacket {
      *
      * @return
      */
-    public byte getFlags() {
-      return flags;
-    }
-
-    /**
-     *
-     * @return
-     */
     public boolean getReservedFlag() {
-      return ((flags & 0x4) >> 2) != 0 ? true : false;
+      return reservedFlag;
     }
 
     /**
@@ -677,7 +640,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @return
      */
     public boolean getDontFragmentFlag() {
-      return ((flags & 0x2) >> 1) != 0 ? true : false;
+      return dontFragmentFlag;
     }
 
     /**
@@ -685,7 +648,7 @@ public final class IpV4Packet extends AbstractPacket {
      * @return
      */
     public boolean getMoreFragmentFlag() {
-      return ((flags & 0x1) >> 0) != 0 ? true : false;
+      return moreFragmentFlag;
     }
 
     /**
@@ -694,14 +657,6 @@ public final class IpV4Packet extends AbstractPacket {
      */
     public short getFlagmentOffset() {
       return flagmentOffset;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getFlagmentOffsetAsInt() {
-      return flagmentOffset & 0xFFFF;
     }
 
     /**
@@ -752,28 +707,37 @@ public final class IpV4Packet extends AbstractPacket {
       return dstAddr;
     }
 
-    @Override
-    protected boolean verify() {
-      if ((length() / 4) != getIhlAsInt()) { return false; }
-      if (IpV4Packet.this.length() != getTotalLengthAsInt()) { return false; }
+    /**
+     *
+     * @return
+     */
+    public List<IpV4Option> getOptions() {
+      return new ArrayList<IpV4Option>(options);
+    }
 
-      if (
-        PacketPropertiesLoader.getInstance()
-          .isEnabledIpv4ChecksumVerification()
-      ) {
-        short cs = getHeaderChecksum();
-        return cs == 0 ? true : calcHeaderChecksum() == cs;
+    /**
+     *
+     * @param acceptZero
+     * @return
+     */
+    public boolean hasValidChecksum(boolean acceptZero) {
+      if (headerChecksum == 0) {
+        if (acceptZero) { return true; }
+        else { return false; }
       }
-      else {
-        return true;
-      }
+      return calcHeaderChecksum() == headerChecksum;
     }
 
     @Override
     protected List<byte[]> getRawFields() {
+      byte flags = 0;
+      if (moreFragmentFlag) { flags = (byte)1; }
+      if (dontFragmentFlag) { flags = (byte)(flags | 2); }
+      if (reservedFlag) { flags = (byte)(flags | 4); }
+
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(ByteArrays.toByteArray((byte)((version.value() << 4) | ihl)));
-      rawFields.add(ByteArrays.toByteArray(tos));
+      rawFields.add(new byte[] {tos.value()});
       rawFields.add(ByteArrays.toByteArray(totalLength));
       rawFields.add(ByteArrays.toByteArray(identification));
       rawFields.add(ByteArrays.toByteArray((short)((flags << 13) | flagmentOffset)));
@@ -782,12 +746,19 @@ public final class IpV4Packet extends AbstractPacket {
       rawFields.add(ByteArrays.toByteArray(headerChecksum));
       rawFields.add(ByteArrays.toByteArray(srcAddr));
       rawFields.add(ByteArrays.toByteArray(dstAddr));
+      for (IpV4Option o: options) {
+        rawFields.add(o.getRawData());
+      }
       return rawFields;
     }
 
     @Override
-    public int length() {
-      return IPV4_HEADER_SIZE;
+    protected int measureLength() {
+      int len = 0;
+      for (IpV4Option o: options) {
+        len += o.length();
+      }
+      return len + MIN_IPV4_HEADER_SIZE;
     }
 
     @Override
@@ -800,16 +771,16 @@ public final class IpV4Packet extends AbstractPacket {
         .append(" bytes)]")
         .append(ls);
       sb.append("  Version: ")
-        .append(getVersionAsInt())
+        .append(version)
         .append(ls);
       sb.append("  IHL: ")
-        .append(getIhlAsInt())
+        .append(ihl)
         .append(" (")
-        .append(getIhlAsInt() * 4)
+        .append(ihl * 4)
         .append(" [bytes])")
         .append(ls);
       sb.append("  TOS: ")
-        .append(getTosAsInt())
+        .append(tos)
         .append(ls);
       sb.append("  Total length: ")
         .append(getTotalLengthAsInt())
@@ -827,8 +798,10 @@ public final class IpV4Packet extends AbstractPacket {
         .append(")")
         .append(ls);
       sb.append("  Flagment offset: ")
-        .append(getFlagmentOffsetAsInt() * 8)
-        .append(" [bytes]")
+        .append(flagmentOffset)
+        .append(" (")
+        .append(flagmentOffset * 8)
+        .append(" [bytes])")
         .append(ls);
       sb.append("  TTL: ")
         .append(getTtlAsInt())
@@ -845,9 +818,59 @@ public final class IpV4Packet extends AbstractPacket {
       sb.append("  Destination address: ")
         .append(dstAddr)
         .append(ls);
-
+      for (IpV4Option opt: options) {
+        sb.append("  Option: ")
+          .append(opt)
+          .append(ls);
+      }
       return sb.toString();
     }
+
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.11
+   */
+  public interface IpV4Option extends Serializable {
+
+    // /* must implement if use DynamicIpV4OptionFactory */
+    // public static IpV4Option newInstance(byte[] rawData);
+
+    /**
+     *
+     * @return
+     */
+    public IpV4OptionType getType();
+
+    /**
+     *
+     * @return
+     */
+    public int length();
+
+    /**
+     *
+     * @return
+     */
+    public byte[] getRawData();
+
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.11
+   */
+  public interface IpV4Tos extends Serializable {
+
+    // /* must implement if use DynamicIpV4TosFactory */
+    // public static IpV4Tos newInstance(byte value);
+
+    /**
+     *
+     * @return
+     */
+    public byte value();
 
   }
 

@@ -15,7 +15,8 @@ import java.io.Serializable;
  */
 public interface Packet extends Iterable<Packet>, Serializable {
 
-  // public static Packet newPacket(byte[] rawData); /* necessary */
+  // /* must implement if use DynamicPacketFactory */
+  // public static Packet newPacket(byte[] rawData);
 
   /**
    *
@@ -28,12 +29,6 @@ public interface Packet extends Iterable<Packet>, Serializable {
    * @return
    */
   public Packet getPayload();
-
-  /**
-   *
-   * @return
-   */
-  public boolean isValid();
 
   /**
    *
@@ -118,12 +113,6 @@ public interface Packet extends Iterable<Packet>, Serializable {
    * @since pcap4j 0.9.1
    */
   public interface Header extends Serializable {
-
-    /**
-     *
-     * @return
-     */
-    public boolean isValid();
 
     /**
      *

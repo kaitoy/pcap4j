@@ -10,6 +10,7 @@ package org.pcap4j.packet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
@@ -56,19 +57,18 @@ public final class EthernetPacket extends AbstractPacket {
     byte[] rawPayload
       = ByteArrays.getSubArray(
           rawData,
-          this.header.length(),
-          rawData.length - this.header.length()
+          header.length(),
+          rawData.length - header.length()
         );
 
     this.payload
-      = PacketFactories.getPacketFactory(EtherType.class)
+      = PacketFactories.getFactory(EtherType.class)
           .newPacket(rawPayload, header.getType());
 
-    int payloadLength = this.payload.length();
-    if (rawPayload.length > payloadLength) {
+    if (rawPayload.length > payload.length()) {
       this.pad
         = ByteArrays.getSubArray(
-            rawPayload, payloadLength, rawPayload.length - payloadLength
+            rawPayload, payload.length(), rawPayload.length - payload.length()
           );
     }
     else {
@@ -83,31 +83,40 @@ public final class EthernetPacket extends AbstractPacket {
       || builder.srcAddr == null
       || builder.type == null
       || builder.payloadBuilder == null
-      || builder.pad == null
     ) {
-      throw new NullPointerException();
+      StringBuilder sb = new StringBuilder();
+      sb.append("builder: ").append(builder)
+        .append(" builder.dstAddr: ").append(builder.dstAddr)
+        .append(" builder.srcAddr: ").append(builder.srcAddr)
+        .append(" builder.type: ").append(builder.type)
+        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+      throw new NullPointerException(sb.toString());
+    }
+
+    if (!builder.paddingAtBuild && builder.pad == null) {
+      throw new NullPointerException(
+                  "builder.pad must not be null"
+                    + " if builder.paddingAtBuild is false"
+                );
     }
 
     this.payload = builder.payloadBuilder.build();
     this.header = new EthernetHeader(builder);
 
-    int paddedPayloadLength
-      = this.payload.length() + builder.pad.length;
-    if (
-         builder.validateAtBuild
-      && paddedPayloadLength < MIN_ETHERNET_PAYLOAD_LENGTH
-    ) {
-      this.pad = new byte[
-                   builder.pad.length
-                     + MIN_ETHERNET_PAYLOAD_LENGTH - paddedPayloadLength
-                 ];
+    if (builder.paddingAtBuild) {
+      if (payload.length() < MIN_ETHERNET_PAYLOAD_LENGTH) {
+        this.pad = new byte[MIN_ETHERNET_PAYLOAD_LENGTH - payload.length()];
+      }
+      else {
+        this.pad = new byte[0];
+      }
     }
     else {
       this.pad = new byte[builder.pad.length];
+      System.arraycopy(
+        builder.pad, 0, this.pad, 0, builder.pad.length
+      );
     }
-    System.arraycopy(
-      builder.pad, 0, this.pad, 0, builder.pad.length
-    );
   }
 
   @Override
@@ -120,16 +129,15 @@ public final class EthernetPacket extends AbstractPacket {
     return payload;
   }
 
-//  @Override
-//  public boolean isValid() {
-//    if (super.buildValid()) {
-//      // A packet before padding may be captured. How do I verify?
-//      return length() >= MIN_ETHERNET_PACKET_LENGTH;
-//    }
-//    else {
-//      return false;
-//    }
-//  }
+  /**
+   *
+   * @return
+   */
+  public byte[] getPad() {
+    byte[] copy = new byte[pad.length];
+    System.arraycopy(pad, 0, copy, 0, pad.length);
+    return copy;
+  }
 
   @Override
   protected int measureLength() {
@@ -154,13 +162,16 @@ public final class EthernetPacket extends AbstractPacket {
     StringBuilder sb = new StringBuilder();
 
     sb.append(header.toString());
-    if (payload != null) {
-      sb.append(payload.toString());
-    }
+    sb.append(payload.toString());
     if (pad.length != 0) {
-      sb.append("  Pad: 0x")
+      String ls = System.getProperty("line.separator");
+      sb.append("[Ethernet Pad (")
+        .append(pad.length)
+        .append(" bytes)]")
+        .append(ls)
+        .append("  Hex stream: ")
         .append(ByteArrays.toHexString(pad, " "))
-        .append(System.getProperty("line.separator"));
+        .append(ls);
     }
 
     return sb.toString();
@@ -181,8 +192,8 @@ public final class EthernetPacket extends AbstractPacket {
     private MacAddress srcAddr;
     private EtherType type;
     private Packet.Builder payloadBuilder;
-    private byte[] pad = new byte[0];
-    private boolean validateAtBuild = true;
+    private byte[] pad;
+    private boolean paddingAtBuild;
 
     /**
      *
@@ -194,12 +205,10 @@ public final class EthernetPacket extends AbstractPacket {
       this.srcAddr = packet.header.srcAddr;
       this.type = packet.header.type;
       this.payloadBuilder = packet.payload.getBuilder();
-      if (packet.pad != null) {
-        this.pad = new byte[packet.pad.length];
-        System.arraycopy(
-          packet.pad, 0, this.pad, 0, packet.pad.length
-        );
-      }
+      this.pad = new byte[packet.pad.length];
+      System.arraycopy(
+        packet.pad, 0, this.pad, 0, packet.pad.length
+      );
     }
 
     /**
@@ -255,11 +264,11 @@ public final class EthernetPacket extends AbstractPacket {
 
     /**
      *
-     * @param validateAtBuild
+     * @param paddingAtBuild
      * @return
      */
-    public Builder validateAtBuild(boolean validateAtBuild) {
-      this.validateAtBuild = validateAtBuild;
+    public Builder paddingAtBuild(boolean paddingAtBuild) {
+      this.paddingAtBuild = paddingAtBuild;
       return this;
     }
 
@@ -277,7 +286,7 @@ public final class EthernetPacket extends AbstractPacket {
   public static final class EthernetHeader extends AbstractHeader {
 
     /*
-     * 0                               16
+     *  0                            15
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      * |    Dst Hardware Address       |
      * +                               +
@@ -319,7 +328,7 @@ public final class EthernetPacket extends AbstractPacket {
           .append(ETHERNET_HEADER_SIZE)
           .append(" bytes). data: ")
           .append(ByteArrays.toHexString(rawData, " "));
-        throw new IllegalPacketDataException(sb.toString());
+        throw new IllegalRawDataException(sb.toString());
       }
 
       this.dstAddr = ByteArrays.getMacAddress(rawData, DST_ADDR_OFFSET);

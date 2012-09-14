@@ -30,7 +30,7 @@ public final class ArpPacket extends AbstractPacket {
    */
   private static final long serialVersionUID = 2232443026999119934L;
 
-  private transient final ArpHeader header;
+  private final ArpHeader header;
 
   /**
    *
@@ -59,7 +59,16 @@ public final class ArpPacket extends AbstractPacket {
       || builder.dstHardwareAddr == null
       || builder.dstProtocolAddr == null
     ) {
-      throw new NullPointerException();
+      StringBuilder sb = new StringBuilder();
+      sb.append("builder: ").append(builder)
+        .append(" builder.hardwareType: ").append(builder.hardwareType)
+        .append(" builder.protocolType: ").append(builder.protocolType)
+        .append(" builder.operation: ").append(builder.operation)
+        .append(" builder.srcHardwareAddr: ").append(builder.srcHardwareAddr)
+        .append(" builder.srcProtocolAddr: ").append(builder.srcProtocolAddr)
+        .append(" builder.dstHardwareAddr: ").append(builder.dstHardwareAddr)
+        .append(" builder.dstProtocolAddr: ").append(builder.dstProtocolAddr);
+      throw new NullPointerException(sb.toString());
     }
 
     this.header = new ArpHeader(builder);
@@ -82,10 +91,10 @@ public final class ArpPacket extends AbstractPacket {
    */
   public static final class Builder extends AbstractBuilder {
 
-    private ArpHardwareType hardwareType = ArpHardwareType.ETHERNET;
-    private EtherType protocolType = EtherType.IP_V4;
-    private byte hardwareLength = (byte)MacAddress.SIZE_IN_BYTES;
-    private byte protocolLength = (byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
+    private ArpHardwareType hardwareType;
+    private EtherType protocolType;
+    private byte hardwareLength;
+    private byte protocolLength;
     private ArpOperation operation;
     private MacAddress srcHardwareAddr;
     private InetAddress srcProtocolAddr;
@@ -214,7 +223,7 @@ public final class ArpPacket extends AbstractPacket {
   public static final class ArpHeader extends AbstractHeader {
 
     /*
-     * 0                               16
+     *  0                            15
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      * |         Hardware Type         |
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -307,7 +316,7 @@ public final class ArpPacket extends AbstractPacket {
           .append(ARP_HEADER_SIZE)
           .append(" bytes). data: ")
           .append(ByteArrays.toHexString(rawData, " "));
-        throw new IllegalPacketDataException(sb.toString());
+        throw new IllegalRawDataException(sb.toString());
       }
 
       this.hardwareType
@@ -432,9 +441,6 @@ public final class ArpPacket extends AbstractPacket {
     public InetAddress getDstProtocolAddr() {
       return dstProtocolAddr;
     }
-
-    @Override
-    public boolean isValid() { return true; }
 
     @Override
     protected List<byte[]> getRawFields() {

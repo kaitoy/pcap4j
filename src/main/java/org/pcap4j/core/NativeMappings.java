@@ -7,10 +7,12 @@
 
 package org.pcap4j.core;
 
+import java.nio.ByteOrder;
 import com.sun.jna.Callback;
 import com.sun.jna.Function;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
@@ -23,18 +25,39 @@ import com.sun.jna.ptr.PointerByReference;
  */
 final class NativeMappings {
 
-  private static final Function PCAP_DUMP
+  static final String PCAP_LIB_NAME
+    = System.getProperty(
+        NativeMappings.class.getPackage().getName() + ".pcapLibName",
+        Platform.isWindows() ? "wpcap" : "pcap"
+      );
+
+  static final Function PCAP_DUMP
     = Function.getFunction(
-        (Platform.isWindows() ? "wpcap" : "pcap"),
+        PCAP_LIB_NAME,
         "pcap_dump"
       );
 
-  public static Function get_pcap_dump() { return PCAP_DUMP; }
+  // LITTLE_ENDIAN: SPARC, JVM
+  // BIG_ENDIAN: x86, network bite order
+  static final ByteOrder NATIVE_BYTE_ORDER = ByteOrder.nativeOrder();
+
+  static final int SBIOCSTIME = 0x4201;
+
+  static final Pointer ERRNO_P
+    = Platform.isWindows() ?
+        null : NativeLibrary.getInstance(PCAP_LIB_NAME)
+                 .getGlobalVariableAddress("errno");
+
+  // pcap-int.h: struct pcap
+  static int getFdFromPcapT(Pointer p) {
+    if (Platform.isWindows()) { return -1; }
+    return p.getInt(0);
+  }
 
   interface PcapLibrary extends Library {
     static final PcapLibrary INSTANCE
       = (PcapLibrary)Native.loadLibrary(
-          (Platform.isWindows() ? "wpcap" : "pcap"),
+          PCAP_LIB_NAME,
           PcapLibrary.class
         );
 
@@ -54,6 +77,9 @@ final class NativeMappings {
     Pointer pcap_open_live(
       String device, int snaplen, int promisc, int to_ms, PcapErrbuf errbuf
     );
+
+    // pcap_t *   pcap_open_dead (int linktype, int snaplen)
+    Pointer pcap_open_dead(int linktype, int snaplen);
 
     // pcap_t *pcap_open_offline(const char *fname, char *errbuf)
     Pointer pcap_open_offline(String fname, PcapErrbuf errbuf);
@@ -110,6 +136,12 @@ final class NativeMappings {
 
     // char *  pcap_geterr (pcap_t *p)
     Pointer pcap_geterr(Pointer p);
+
+    // char* pcap_strerror  (int errno)
+    Pointer pcap_strerror(int errno);
+
+    // int strioctl(int fd, int cmd, int len, char *dp)
+    int strioctl(int fd, int cmd, int len, Pointer dp);
 
   }
 

@@ -8,15 +8,17 @@
 package org.pcap4j.core;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.pcap_addr;
 import org.pcap4j.core.NativeMappings.pcap_if;
+import org.pcap4j.core.NativeMappings.timeval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sun.jna.NativeLong;
+import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 
 /**
@@ -96,7 +98,7 @@ public final class PcapNetworkInterface {
    * @return
    */
   public List<PcapAddress> getAddresses() {
-    return Collections.unmodifiableList(addresses);
+    return new ArrayList<PcapAddress>(addresses);
   }
 
   /**
@@ -141,21 +143,27 @@ public final class PcapNetworkInterface {
 
   /**
    *
-   * @param packetLength
+   * @param maxCaptureLength
    * @param mode
-   * @param timeoutMillis
+   * @param timeoutMillis Read timeout. Most OSs buffer packets.
+   *        The OSs pass the packets to Pcap4j after the buffer gets full
+   *        or the read timeout expires.
+   *        Must be non-negative. May be ignored by some OSs.
+   *        0 means disable buffering on Solaris.
+   *        0 means infinite on the other OSs.
+   *        1 through 9 means infinite on Solaris.
    * @return
    * @throws PcapNativeException
    */
   public PcapHandle openLive(
-    int packetLength, PromiscuousMode mode, int timeoutMillis
+    int maxCaptureLength, PromiscuousMode mode, int timeoutMillis
   ) throws PcapNativeException {
     PcapErrbuf errbuf = new PcapErrbuf();
 
     Pointer handle
       = PcapLibrary.INSTANCE.pcap_open_live(
           this.getName(),
-          packetLength,
+          maxCaptureLength,
           mode.getValue(),
           timeoutMillis,
           errbuf
@@ -164,7 +172,30 @@ public final class PcapNetworkInterface {
       throw new PcapNativeException(errbuf.toString());
     }
 
-    return new PcapHandle(handle);
+    if (timeoutMillis == 0 && Platform.isSolaris()) {
+      // disable buffering
+      timeval to = new timeval();
+      to.tv_sec = new NativeLong(0);
+      to.tv_usec = new NativeLong(0);
+
+      int rc = PcapLibrary.INSTANCE.strioctl(
+                 NativeMappings.getFdFromPcapT(handle),
+                 NativeMappings.SBIOCSTIME,
+                 to.size(),
+                 to.getPointer()
+               );
+
+      if (rc < 0) {
+        throw new PcapNativeException(
+          "SBIOCSTIME: "
+            + PcapLibrary.INSTANCE.pcap_strerror(
+                NativeMappings.ERRNO_P.getInt(0)
+              ).getString(0)
+        );
+      }
+    }
+
+    return new PcapHandle(handle, true);
   }
 
   @Override

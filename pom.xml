@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pcap4j</groupId>
   <artifactId>pcap4j</artifactId>
-  <version>0.9.10</version>
+  <version>0.9.11</version>
   <name>Pcap4J</name>
   <dependencies>
   	<dependency>
@@ -28,6 +28,12 @@
   	  <version>1.0.0</version>
   	  <scope>runtime</scope>
   	  <optional>true</optional>
+  	</dependency>
+  	<dependency>
+  	  <groupId>junit</groupId>
+  	  <artifactId>junit</artifactId>
+  	  <version>4.10</version>
+  	  <scope>test</scope>
   	</dependency>
   </dependencies>
   <build>

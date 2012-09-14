@@ -7,10 +7,12 @@
 
 package org.pcap4j.core;
 
-import java.net.InetAddress;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.UnknownHostException;
 import org.pcap4j.core.NativeMappings.in6_addr;
 import org.pcap4j.core.NativeMappings.in_addr;
+import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
@@ -18,75 +20,36 @@ import org.pcap4j.core.NativeMappings.in_addr;
  */
 final class Inets {
 
-  /**
-   *
-   */
-  public static final short AF_UNSPEC = 0;
-
-  /**
-   *
-   */
-  public static final short AF_INET = 2;
-
-  /**
-   *
-   */
-  public static final short AF_NETBIOS = 17;
-
-  /**
-   *
-   */
-  public static final short AF_INET6 = 23;
-
-  /**
-   *
-   */
-  public static final short AF_IRDA = 26;
-
-  /**
-   *
-   */
-  public static final short AF_BTM = 32;
+  static final short AF_UNSPEC = 0;
+  static final short AF_INET = 2;
+  static final short AF_NETBIOS = 17;
+  static final short AF_INET6 = 23;
+  static final short AF_IRDA = 26;
+  static final short AF_BTM = 32;
 
   private Inets() { throw new AssertionError(); }
 
-  /**
-   *
-   * @param in
-   * @return
-   */
-  public static InetAddress ntoInetAddress(in_addr in) {
+  static Inet4Address ntoInetAddress(in_addr in) {
     if (in == null) {
       return null;
     }
 
-    byte[] rawAddr // TODO little endian(x86), big endian(sparc)
-      = new byte[] {
-          (byte)(in.s_addr       & 0xFF),
-          (byte)(in.s_addr >>  8 & 0xFF),
-          (byte)(in.s_addr >> 16 & 0xFF),
-          (byte)(in.s_addr >> 24 & 0xFF),
-        };
-
-    try {
-      return InetAddress.getByAddress(rawAddr);
-    } catch (UnknownHostException e) {
-      throw new AssertionError();
-    }
+    return ByteArrays.getInet4Address(
+             ByteArrays.toByteArray(
+               in.s_addr,
+               NativeMappings.NATIVE_BYTE_ORDER
+             ),
+             0
+           );
   }
 
-  /**
-   *
-   * @param in6
-   * @return
-   */
-  public static InetAddress ntoInetAddress(in6_addr in6) {
+  static Inet6Address ntoInetAddress(in6_addr in6) {
     if (in6 == null) {
       return null;
     }
 
     try {
-      return InetAddress.getByAddress(in6.s6_addr);
+      return (Inet6Address)Inet6Address.getByAddress(in6.s6_addr);
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }

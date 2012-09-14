@@ -14,6 +14,7 @@ import java.util.List;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.pcap_if;
+import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,6 +110,26 @@ public final class Pcaps {
 
   /**
    *
+   * @param name
+   * @return
+   * @throws PcapNativeException
+   */
+  public static PcapNetworkInterface getNifBy(
+    String name
+  ) throws PcapNativeException {
+    List<PcapNetworkInterface> allDevs = Pcaps.findAllDevs();
+
+    for (PcapNetworkInterface pif: allDevs) {
+      if (pif.getName().equals(name)) {
+        return pif;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   *
    * @return
    * @throws PcapNativeException
    */
@@ -125,11 +146,13 @@ public final class Pcaps {
 
   /**
    *
-   * @param filePath "-" for stdin
+   * @param filePath "-" means stdin
    * @return
    * @throws PcapNativeException
    */
-  public static PcapHandle openOffline(String filePath) throws PcapNativeException {
+  public static PcapHandle openOffline(
+    String filePath
+  ) throws PcapNativeException {
     PcapErrbuf errbuf = new PcapErrbuf();
     Pointer handle
       = PcapLibrary.INSTANCE.pcap_open_offline(filePath, errbuf);
@@ -138,7 +161,29 @@ public final class Pcaps {
       throw new PcapNativeException(errbuf.toString());
     }
 
-    return new PcapHandle(handle);
+    return new PcapHandle(handle, true);
+  }
+
+  /**
+   *
+   * @param dlt
+   * @param maxCaptureLength
+   * @return
+   * @throws PcapNativeException
+   */
+  public static PcapHandle openDead(
+    DataLinkType dlt, int maxCaptureLength
+  ) throws PcapNativeException {
+    Pointer handle
+      = PcapLibrary.INSTANCE.pcap_open_dead(dlt.value(), maxCaptureLength);
+    if (handle == null) {
+      StringBuilder sb = new StringBuilder(50);
+      sb.append("Failed to open a PcapHandle. dlt: ").append(dlt)
+        .append(" maxCaptureLength: ").append(maxCaptureLength);
+      throw new PcapNativeException(sb.toString());
+    }
+
+    return new PcapHandle(handle, false);
   }
 
   /**

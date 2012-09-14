@@ -1,55 +1,54 @@
 Pcap4J
 ======
 
-Javaのパケットキャプチャライブラリ。パケットの作成・送信もできる。<br>
-ネイティブのパケットキャプチャライブラリである[libpcap](http://www.tcpdump.org/)または[WinPcap](http://www.winpcap.org/)を、<br>
-[JNA](https://github.com/twall/jna)を使ってラッピングして、JavaらしいAPIに仕上げたもの。<br>
+Pcap4J is a packet capture library for Java. You can also craft packets and send them with it.
+Pcap4J wraps a native packet capture library([libpcap](http://www.tcpdump.org/) or
+[WinPcap](http://www.winpcap.org/) via [JNA](https://github.com/twall/jna)
+and provides you Java-Oriented APIs.
 
-ダウンロード
-------------
+Download
+--------
 
-Pcap4J 0.9.10
+Pcap4J 0.9.11
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
-開発経緯
+Why Pcap4J was born
 --------
+I have been developing an SNMP network simulator(SNeO, downloadable below) by Java.
+During the development, I got need to capture packets, and I found that the pcap API is useful for it.
+Although there are some implementations of pcap API; libpcap for UNIX and WinPcap for Windows,
+because they are both native libraries, a Java wrapper library is necessary in order to use them for SNeO.
+I searched it and found three Java wrapper libraries for pcap; [jpcap](http://jpcap.sourceforge.net/),
+[jNetPcap](http://jnetpcap.com/), and [Jpcap](http://netresearch.ics.uci.edu/kfujii/Jpcap/doc/).
+But both jpcap and jNetPcap are unsuitable for SNeO because they seem to be designed for mainly capturing packets
+and not to be much useful for making and sending packets. On the other hand, Jpcap is useful for
+making and sending packets. But it has a defect in capturing ICMP packets and
+it has already stopped updating long ago.
+So I decided to develop Pcap4j.
 
-SNMPネットワークシミュレータをJavaで作っていて、パケットキャプチャをしたくなったが、<br>
-Raw Socketを使って自力でやるのは大変そうなので pcap APIを使うことに。<br>
+Feature
+-------
 
-pcap APIの実装は、UNIX系にはlibpcap、WindowsにはWinPcapがあるが、いずれもネイティブライブラリ。<br>
-これらのJavaラッパは[jpcap](http://jpcap.sourceforge.net/)や[jNetPcap](http://jnetpcap.com/)が既にあるが、<br>
-これらはパケットキャプチャに特化していて、パケット作成・送信がしにくいような気がした。<br>
-
-[Jpcap](http://netresearch.ics.uci.edu/kfujii/Jpcap/doc/)はパケット作成・送信もやりやすいけど、<br>
-ICMPのキャプチャ周りにバグがあって使えなかった。結構前から開発が止まっているようだし。<br>
-ということで自作した。<br>
-
-機能
-----
-
-* ネットワークインターフェースからパケットをキャプチャし、Javaのオブジェクトに変換する。
-* パケットオブジェクトにアクセスしてパケットのフィールドを取得、編集できる。
-* 手動でパケットオブジェクトを組み立てることもできる。
-* パケットオブジェクトを現実のネットワークに送信できる。
-* pcap APIのダンプファイル(Wiresharkのcapture fileなど)の読み込み、書き込み。
-* Ethernet、IEEE802.1Q、ARP、IPv4(オプションなし)、IPv6(RFC2460)、ICMPv4、UDPに対応。
-* 各パケットクラスはシリアライズに対応。スレッドセーフ(実質的に不変)。
-* ライブラリをいじらずに、対応プロトコルをユーザが追加できる。
+* Capturing packets via a network interface and converting them into Java objects.
+  You can access the packet objects to obtain fields of packets.
+  You can also craft packets objects as you like.
+* Sending packet objects to real network.
+* Implementations for Ethernet, IEEE802.1Q, ARP, IPv4(RFC791 and RFC1349), IPv6(RFC2460), ICMPv4(RFC792), and UDP.
+* All packet classes are serializable and thread-safe(practically immutable).
+* Pluggable packet classes.
+* Dumping and reading pcap-formatted files(e.g. capture file of Wireshark)
 
 
-使い方
-------
+How to use
+----------
 
-ドキュメントは作成中。<br>
-テストクラスやlibpcapのドキュメントを見ればなんとか使えるかも。<br>
-まだAPIは固まってなく、こっそりと変更する可能性がある。<br>
-JRE1.5以降で動く。<br>
-UNIX系ならlibpcap (多分)0.9.3以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。<br>
-jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。<br>
-
-動作確認に使っているバージョンは以下。
+Documentation is in progress. You may know how to use Pcap4J from
+documents of libpcap(or WinPcap) and sample classes.
+The APIs are not stable yet and may be changed without announcement.
+This library works with J2SE 5.0+, libpcap 0.9.3+ or WinPcap 3.0+, jna, slf4j-api,
+and an implementation of logger.
+I'm using the following libraries for the test.
 
 * libpcap 1.1.1
 * WinPcap 4.1.2
@@ -58,75 +57,79 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 * logback-core 1.0.1
 * logback-classic 1.0.1
 
+#### About pcap library loading ####
+As the default, Pcap4j loads the pcap library on the following conditions.
 
-ビルド
-------
-開発に使っている環境は以下。
+* Windows
+ * search path: The paths in the environmental variable; `PATH`.
+ * file name: wpcap.dll
+* Linux/UNIX
+ * search path: The search paths of shared libraries configured on the OS.
+   (e.g. The paths in the environmental variable; `LD_LIBRARY_PATH`)
+ * file name: libpcap.so
+
+You can use the following Java System Properties to change the default behavior.
+
+* jna.library.path: Specify the serch path
+* org.pcap4j.core.pcapLibName: Specify the full path of the pcap library
+
+How to build
+------------
+I'm developing Pcap4j in the following environment.
 
 * [Eclipse](http://www.eclipse.org/) Java EE IDE for Web Developers Indigo Service Release 1([Pleiades](http://mergedoc.sourceforge.jp/) All in One 3.7.1.v20110924)
 * [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
 
-ビルド手順は以下。
+The build procedure is the following.
 
-1. Eclipseインストール<br>
-   ダウンロードして解凍するだけ。
-2. M2Eインストール<br>
-   EclipseのGUIで、[ヘルプ]＞[新規ソフトウェアのインストール] を開き、<br>
-   「作業対象」に http://download.eclipse.org/technology/m2e/releases を入力してEnter。<br>
-   m2e - Eclipse用のMaven統合をチェックして「次へ」。<br>
-   使用条件の条項に同意しますにチェックして「完了」。<br>
-   M2Eのインストール完了したらEclipseを再起動。<br>
-3. Pcap4Jのレポジトリのダウンロード<br>
-   `git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-4. プロジェクトのインポート<br>
-  EclipseのGUIで、[ファイル]＞[インポート] を開き、<br>
-  「一般」の「既存プロジェクトをワークスペースへ」で 3. でダウンロードしたレポジトリ内のプロジェクトをインポートする。
-5. ビルド<br>
-   EclipseのGUIのプロジェクト・エクスプローラーで、Pcap4Jのプロジェクトを右クリックして、<br>
-   [実行]＞[Maven package] か [実行]＞[Maven install] を実行する。
+1. Setup Eclipse 3.7+
+   Install JDK, download a compressed Eclipse file from
+   the [Eclipse Downloads Page](http://www.eclipse.org/downloads/), and decompress it.
+2. Install m2e
+   Launch the Eclipse and select Help > Install New Software to open the "Install" wizard.
+   Paste the Update Site URL(http://download.eclipse.org/technology/m2e/releases)
+   into the field named "Work with:" and press Enter.
+   Click and check the box of "Maven Integration for Eclipse".
+   Click Next or Finish until beginning of the installation process.
+   Once the installation process is finished, restart the Eclipse.
+3. Install Git
+   Download [Git[(http://git-scm.com/downloads) and install it.
+4. Clone the Pcap4J repository
+   Execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`
+5. Import the Eclipse project
+   In the Eclipse, select [File] > [Import]  to open the "Import" wizard.
+   Select [General] > [Existing Projects into Workspace] and
+   follow the wizard to import the project in the Pcap4J repository.
+6. Build
+   Right-click the Pcap4J project in the Project Explorer of Eclipse and select [Run as] > [Maven install]
 
-因みに、M2Eは旧[m2eclipse](http://m2eclipse.sonatype.org/)。<br>
-m2eclipseでビルドしたい場合は、2. をスキップして、4. でMavenプロジェクトの方をインポートすればよい。<br>
+License
+-------
 
-ライセンス
-----------
-
-Pcap4J is provided distributed under the MIT license.<br>
+Pcap4J is distributed under the MIT license.
 
     Copyright (c) 2011-2012 Kaito Yamada
     All rights reserved.
-    
+
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in the Software without restriction,
     including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
     and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
     subject to the following conditions:
-    
+
     The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
     NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
     IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-    
-    以下に定める条件に従い、本ソフトウェアおよび関連文書のファイル（以下「ソフトウェア」）の複製を取得するすべての人に対し、
-    ソフトウェアを無制限に扱うことを無償で許可します。これには、ソフトウェアの複製を使用、複写、変更、結合、掲載、頒布、サブライセンス、
-    および/または販売する権利、およびソフトウェアを提供する相手に同じことを許可する権利も無制限に含まれます。
-    上記の著作権表示および本許諾表示を、ソフトウェアのすべての複製または重要な部分に記載するものとします。
-    
-    ソフトウェアは「現状のまま」で、明示であるか暗黙であるかを問わず、何らの保証もなく提供されます。
-    ここでいう保証とは、商品性、特定の目的への適合性、および権利非侵害についての保証も含みますが、それに限定されるものではありません。
-    作者または著作権者は、契約行為、不法行為、またはそれ以外であろうと、ソフトウェアに起因または関連し、
-    あるいはソフトウェアの使用またはその他の扱いによって生じる一切の請求、損害、その他の義務について何らの責任も負わないものとします。
 
+Extra
+-----
 
-おまけ
-------
+SNeO: an SNMP Network Simulator using Pcap4J 0.9.11 is available below. The documents will come someday.
+You can use this version of SNeO in both personal and commercial for free. You can also copy and distribute it.
 
-Pcap4J 0.9.10 を使ったSNMPネットワークシミュレータ、SNeO。<br>
-とりあえず置いておくだけ。<br>
-今のところ商用でもなんでも無料で使用可。コピーも再配布も可。<br>
-
-SNeO 1.0.9
+SNeO 1.0.10
 
 * [sneo.jar](/downloads/Kaitoy/pcap4j/sneo.jar)

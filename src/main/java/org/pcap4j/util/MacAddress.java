@@ -9,6 +9,9 @@ package org.pcap4j.util;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.pcap4j.packet.namednumber.Oui;
 
 /**
  * @author Kaito Yamada
@@ -20,6 +23,8 @@ public final class MacAddress implements Serializable {
    *
    */
   private static final long serialVersionUID = 751211532491344621L;
+
+  private static final Pattern HEX_PATTERN = Pattern.compile("([^0-9a-fA-F])");
 
   /**
    *
@@ -61,6 +66,17 @@ public final class MacAddress implements Serializable {
   /**
    *
    * @param name
+   * @return
+   */
+  public static MacAddress getByName(String name) {
+    Matcher m = HEX_PATTERN.matcher(name);
+    m.find();
+    return getByName(name, m.group(1));
+  }
+
+  /**
+   *
+   * @param name
    * @param separator
    * @return
    */
@@ -82,8 +98,8 @@ public final class MacAddress implements Serializable {
    *
    * @return
    */
-  public byte[] getOui() {
-    return new byte[] {address[0], address[1], address[2]};
+  public Oui getOui() {
+    return Oui.getInstance(ByteArrays.getInt(address, 0) >>> 8);
   }
 
   /**

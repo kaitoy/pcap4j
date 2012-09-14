@@ -1,0 +1,7 @@
+[UDP Header (8 bytes)]
+  Source port: 161(SNMP)
+  Destination port: 0(unknown)
+  Length: 12 [bytes]
+  Checksum: 0xabcd
+[data (4 bytes)]
+  Hex stream: 00 01 02 03

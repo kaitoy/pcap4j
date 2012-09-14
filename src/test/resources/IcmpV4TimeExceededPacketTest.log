@@ -1,0 +1,26 @@
+[ICMPv4 Time Exceeded Header (32 bytes)]
+  Unused: 12345
+  Invoking Packet: {
+[IPv4 Header (20 bytes)]
+  Version: 4(IPv4)
+  IHL: 5 (20 [bytes])
+  TOS: [precedence: 0(Routine)] [lowDelay: false] [highThroughput: false] [highReliability: false] [seventhBit: 0] [eighthBit: 0]
+  Total length: 31 [bytes]
+  Identification: 100
+  Flags: (Reserved, Don't Fragment, More Fragment) = (false, false, false)
+  Flagment offset: 0 (0 [bytes])
+  TTL: 100
+  Protocol: 1(ICMPv4)
+  Header checksum: 0xd276
+  Source address: /192.0.2.2
+  Destination address: /192.0.2.1
+[ICMP Common Header (4 bytes)]
+  Type: 8(Echo)
+  Code: 0(No Code)
+  Checksum: 0xf590
+[ICMPv4 Echo Header (4 bytes)]
+  Identifier: 100
+  SequenceNumber: 10
+[data (0 bytes)]
+  Hex stream: 
+}

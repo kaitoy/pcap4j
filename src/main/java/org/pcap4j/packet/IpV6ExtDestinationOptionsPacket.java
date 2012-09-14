@@ -7,6 +7,10 @@
 
 package org.pcap4j.packet;
 
+import java.util.List;
+import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.util.ByteArrays;
+
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.10
@@ -16,7 +20,9 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
   /**
    *
    */
-  private static final long serialVersionUID = 4366835831332691570L;
+  private static final long serialVersionUID = -3293888276359687328L;
+
+  private final IpV6ExtDestinationOptionsHeader header;
 
   /**
    *
@@ -24,15 +30,33 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
    * @return
    */
   public static IpV6ExtDestinationOptionsPacket newPacket(byte[] rawData) {
-    return new IpV6ExtDestinationOptionsPacket(rawData);
+    IpV6ExtDestinationOptionsHeader optHeader
+      = new IpV6ExtDestinationOptionsHeader(rawData);
+    byte[] rawPayload
+      = ByteArrays.getSubArray(
+          rawData,
+          optHeader.length(),
+          rawData.length - optHeader.length()
+        );
+
+    return new IpV6ExtDestinationOptionsPacket(rawPayload, optHeader);
   }
 
-  protected IpV6ExtDestinationOptionsPacket(byte[] rawData) {
-    super(rawData);
+  private IpV6ExtDestinationOptionsPacket(
+    byte[] rawPayload, IpV6ExtDestinationOptionsHeader optHeader
+  ) {
+    super(rawPayload, optHeader.getNextHeader());
+    this.header = optHeader;
   }
 
-  protected IpV6ExtDestinationOptionsPacket(Builder builder) {
+  private IpV6ExtDestinationOptionsPacket(Builder builder) {
     super(builder);
+    this.header = new IpV6ExtDestinationOptionsHeader(builder);
+  }
+
+  @Override
+  public IpV6ExtDestinationOptionsHeader getHeader() {
+    return header;
   }
 
   @Override
@@ -40,25 +64,88 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
     return new Builder(this);
   }
 
-  @Override
-  public String getExactOptionName() {
-    return "Destination Options";
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.10
+   */
+  public static final class Builder
+  extends org.pcap4j.packet.IpV6ExtOptionsPacket.Builder {
+
+    /**
+     *
+     */
+    public Builder() {}
+
+    private Builder(IpV6ExtDestinationOptionsPacket packet) {
+      super(packet);
+    }
+
+    @Override
+    public Builder nextHeader(IpNumber nextHeader) {
+      super.nextHeader(nextHeader);
+      return this;
+    }
+
+    @Override
+    public Builder hdrExtLen(byte hdrExtLen) {
+      super.hdrExtLen(hdrExtLen);
+      return this;
+    }
+
+    @Override
+    public Builder options(List<IpV6Option> options) {
+      super.options(options);
+      return this;
+    }
+
+    @Override
+    public Builder payloadBuilder(Packet.Builder payloadBuilder) {
+      super.payloadBuilder(payloadBuilder);
+      return this;
+    }
+
+    @Override
+    public IpV6ExtDestinationOptionsPacket build() {
+      return new IpV6ExtDestinationOptionsPacket(this);
+    }
+
   }
 
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public static class Builder extends org.pcap4j.packet.IpV6ExtOptionsPacket.Builder {
+  public static
+  final class IpV6ExtDestinationOptionsHeader extends IpV6ExtOptionsHeader {
 
-    public Builder(IpV6ExtDestinationOptionsPacket packet) {
-      super(packet);
-    }
+    /*
+     *  0                              16                            31
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |  Next Header  |  Hdr Ext Len  |                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+     * |                                                               |
+     * .                                                               .
+     * .                            Options                            .
+     * .                                                               .
+     * |                                                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *
+     */
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 4686702407537705400L;
+
+    private IpV6ExtDestinationOptionsHeader(byte[] rawData) { super(rawData); }
+
+    private IpV6ExtDestinationOptionsHeader(Builder builder) { super(builder); }
 
     @Override
-    public IpV6ExtOptionsPacket build() {
-      return new IpV6ExtDestinationOptionsPacket(this);
+    protected String getHeaderName() {
+      return "IPv6 Destination Options Header";
     }
 
   }
+
 }

@@ -43,8 +43,8 @@ public final class ArpOperation extends NamedNumber<Short> {
     for (Field field: ArpOperation.class.getFields()) {
       if (ArpOperation.class.isAssignableFrom(field.getType())) {
         try {
-          ArpOperation typeCode = (ArpOperation)field.get(null);
-          registry.put(typeCode.value(), typeCode);
+          ArpOperation f = (ArpOperation)field.get(null);
+          registry.put(f.value(), f);
         } catch (IllegalArgumentException e) {
           throw new AssertionError(e);
         } catch (IllegalAccessException e) {
@@ -56,7 +56,12 @@ public final class ArpOperation extends NamedNumber<Short> {
     }
   }
 
-  private ArpOperation(Short value, String name) {
+  /**
+   *
+   * @param value
+   * @param name
+   */
+  public ArpOperation(Short value, String name) {
     super(value, name);
   }
 
@@ -72,6 +77,15 @@ public final class ArpOperation extends NamedNumber<Short> {
     else {
       return new ArpOperation(value, "unknown");
     }
+  }
+
+  /**
+   *
+   * @param operation
+   * @return
+   */
+  public static ArpOperation register(ArpOperation operation) {
+    return registry.put(operation.value(), operation);
   }
 
   /**

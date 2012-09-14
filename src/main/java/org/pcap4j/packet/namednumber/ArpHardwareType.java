@@ -55,8 +55,8 @@ public final class ArpHardwareType extends NamedNumber<Short> {
     for (Field field: ArpHardwareType.class.getFields()) {
       if (ArpHardwareType.class.isAssignableFrom(field.getType())) {
         try {
-          ArpHardwareType typeCode = (ArpHardwareType)field.get(null);
-          registry.put(typeCode.value(), typeCode);
+          ArpHardwareType f = (ArpHardwareType)field.get(null);
+          registry.put(f.value(), f);
         } catch (IllegalArgumentException e) {
           throw new AssertionError(e);
         } catch (IllegalAccessException e) {
@@ -68,7 +68,12 @@ public final class ArpHardwareType extends NamedNumber<Short> {
     }
   }
 
-  private ArpHardwareType(Short value, String name) {
+  /**
+   *
+   * @param value
+   * @param name
+   */
+  public ArpHardwareType(Short value, String name) {
     super(value, name);
   }
 
@@ -84,6 +89,15 @@ public final class ArpHardwareType extends NamedNumber<Short> {
     else {
       return new ArpHardwareType(value, "unknown");
     }
+  }
+
+  /**
+   *
+   * @param type
+   * @return
+   */
+  public static ArpHardwareType register(ArpHardwareType type) {
+    return registry.put(type.value(), type);
   }
 
   @Override

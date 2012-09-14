@@ -1,0 +1,5 @@
+[ICMPv4 Echo Reply Header (4 bytes)]
+  Identifier: 1234
+  SequenceNumber: 4321
+[data (4 bytes)]
+  Hex stream: 00 01 02 03

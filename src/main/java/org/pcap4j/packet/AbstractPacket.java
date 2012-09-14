@@ -25,7 +25,6 @@ public abstract class AbstractPacket implements Packet {
    */
   private static final long serialVersionUID = -3016622134481071576L;
 
-  private final LazyValue<Boolean> validCache;
   private final LazyValue<Integer> lengthCache;
   private final LazyValue<byte[]> rawDataCache;
   private final LazyValue<String> hexStringCache;
@@ -33,14 +32,6 @@ public abstract class AbstractPacket implements Packet {
   private final LazyValue<Integer> hashCodeCache;
 
   public AbstractPacket() {
-    this.validCache
-      = new LazyValue<Boolean>(
-          new BuildValueCommand<Boolean>() {
-            public Boolean buildValue() {
-              return verify();
-            }
-          }
-        );
     this.lengthCache
     = new LazyValue<Integer>(
         new BuildValueCommand<Integer>() {
@@ -83,33 +74,12 @@ public abstract class AbstractPacket implements Packet {
         );
   }
 
-  //public static Packet newPacket(byte[] rawData); /* necessary */
+  // /* must implement if use DynamicPacketFactory */
+  // public static Packet newPacket(byte[] rawData);
 
   public Header getHeader() { return null; }
 
   public Packet getPayload() { return null; }
-
-  /**
-   *
-   * @return
-   */
-  protected boolean verify() {
-    if (getPayload() != null) {
-      if (!getPayload().isValid()) {
-        return false;
-      }
-    }
-    if (getHeader() == null) {
-      return false;
-    }
-    else {
-      return getHeader().isValid();
-    }
-  }
-
-  public boolean isValid() {
-    return validCache.getValue();
-  }
 
   /**
    *
@@ -196,44 +166,6 @@ public abstract class AbstractPacket implements Packet {
 
   /**
    *
-   * @author Kaito Yamada
-   * @version pcap4j 0.9.9
-   */
-  public static abstract class AbstractBuilder implements Builder {
-
-    public Iterator<Builder> iterator() {
-      return new BuilderIterator(this);
-    }
-
-    public <T extends Builder> T get(Class<T> clazz) {
-      for (Builder b: this) {
-        if (clazz.isInstance(b)) {
-          return clazz.cast(b);
-        }
-      }
-      return null;
-    }
-
-    public Builder getOuterOf(Class<? extends Builder> clazz) {
-      for (Builder b: this) {
-        if (clazz.isInstance(b.getPayloadBuilder())) {
-          return b;
-        }
-      }
-      return null;
-    }
-    public AbstractBuilder payloadBuilder(Builder payloadBuilder) {
-      throw new UnsupportedOperationException();
-    }
-
-    public Builder getPayloadBuilder() { return null; }
-
-    public abstract Packet build();
-
-  }
-
-  /**
-   *
    * @return
    */
   protected String buildHexString() {
@@ -272,13 +204,31 @@ public abstract class AbstractPacket implements Packet {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
+    if (obj == this) { return true; }
+    if (!this.getClass().isInstance(obj)) { return false; }
+
+    Packet other = (Packet)obj;
+
+    if (this.getHeader() == null || other.getHeader() == null) {
+      if (!(this.getHeader() == null && other.getHeader() == null)) {
+        return false;
+      }
     }
-    if (!obj.getClass().getName().equals(getClass().getName())) {
-      return false;
+    else {
+      if (!this.getHeader().equals(other.getHeader())) { return false; }
     }
-    return (getClass().cast(obj)).getRawData().equals(getRawData());
+
+    if (this.getPayload() == null || other.getPayload() == null) {
+      if (!(this.getPayload() == null && other.getPayload() == null)) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
+    else {
+      return this.getPayload().equals(other.getPayload());
+    }
   }
 
   /**
@@ -297,6 +247,45 @@ public abstract class AbstractPacket implements Packet {
   /**
    *
    * @author Kaito Yamada
+   * @version pcap4j 0.9.9
+   */
+  public static abstract class AbstractBuilder implements Builder {
+
+    public Iterator<Builder> iterator() {
+      return new BuilderIterator(this);
+    }
+
+    public <T extends Builder> T get(Class<T> clazz) {
+      for (Builder b: this) {
+        if (clazz.isInstance(b)) {
+          return clazz.cast(b);
+        }
+      }
+      return null;
+    }
+
+    public Builder getOuterOf(Class<? extends Builder> clazz) {
+      for (Builder b: this) {
+        if (clazz.isInstance(b.getPayloadBuilder())) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+    public AbstractBuilder payloadBuilder(Builder payloadBuilder) {
+      throw new UnsupportedOperationException();
+    }
+
+    public Builder getPayloadBuilder() { return null; }
+
+    public abstract Packet build();
+
+  }
+
+  /**
+   *
+   * @author Kaito Yamada
    * @version pcap4j 0.9.1
    */
   public static abstract class AbstractHeader implements Header {
@@ -306,7 +295,6 @@ public abstract class AbstractPacket implements Packet {
      */
     private static final long serialVersionUID = -8916517326403680608L;
 
-    private final LazyValue<Boolean> validCache;
     private final LazyValue<Integer> lengthCache;
     private final LazyValue<byte[]> rawDataCache;
     private final LazyValue<String> hexStringCache;
@@ -314,14 +302,6 @@ public abstract class AbstractPacket implements Packet {
     private final LazyValue<Integer> hashCodeCache;
 
     protected AbstractHeader() {
-      this.validCache
-        = new LazyValue<Boolean>(
-            new BuildValueCommand<Boolean>() {
-              public Boolean buildValue() {
-                return verify();
-              }
-            }
-          );
       this.lengthCache
         = new LazyValue<Integer>(
             new BuildValueCommand<Integer>() {
@@ -362,16 +342,6 @@ public abstract class AbstractPacket implements Packet {
               }
             }
           );
-    }
-
-    /**
-     *
-     * @return
-     */
-    protected boolean verify() { return true; }
-
-    public boolean isValid() {
-      return validCache.getValue();
     }
 
     protected abstract List<byte[]> getRawFields();

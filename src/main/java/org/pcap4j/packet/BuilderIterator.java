@@ -22,7 +22,7 @@ public final class BuilderIterator implements Iterator<Builder> {
 
   /**
    *
-   * @param p
+   * @param b
    */
   public BuilderIterator(Builder b) {
     this.next = b;

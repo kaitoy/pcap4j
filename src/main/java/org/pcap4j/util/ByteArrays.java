@@ -11,7 +11,9 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.ByteOrder;
 import java.util.regex.Pattern;
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
 import org.pcap4j.util.MacAddress;
 
@@ -64,12 +66,31 @@ public final class ByteArrays {
   /**
    *
    * @param array
+   * @return
+   */
+  public static byte[] reverse(byte[] array) {
+    byte[] rarray = new byte[array.length];
+    for (int i = 0; i < array.length; i++) {
+      rarray[i] = array[array.length - i - 1];
+    }
+    return rarray;
+  }
+
+  /**
+   *
+   * @param array
    * @param offset
    * @return
    */
   public static byte getByte(byte[] array, int offset) {
-    if (offset + BYTE_SIZE_IN_BYTES > array.length) {
-      throw new IllegalArgumentException();
+    if (array == null) {
+      throw new NullPointerException("array may not be null");
+    }
+    if (offset < 0 || offset + BYTE_SIZE_IN_BYTES > array.length) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("array: ").append(toHexString(array, " "))
+        .append(" offset: ").append(offset);
+      throw new ArrayIndexOutOfBoundsException(sb.toString());
     }
     return array[offset];
   }
@@ -100,13 +121,43 @@ public final class ByteArrays {
    * @return
    */
   public static short getShort(byte[] array, int offset) {
-    if (offset + SHORT_SIZE_IN_BYTES > array.length) {
-      throw new IllegalArgumentException();
+    return getShort(array, offset, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param array
+   * @param offset
+   * @param bo
+   * @return
+   */
+  public static short getShort(byte[] array, int offset, ByteOrder bo) {
+    if (array == null || bo == null) {
+      StringBuilder sb = new StringBuilder(40);
+      sb.append("array: ").append(array)
+        .append(" bo: ").append(bo);
+      throw new NullPointerException(sb.toString());
     }
-    return (short)(
-                ((0xFF & array[offset    ]) << (BYTE_SIZE_IN_BITS * 1))
-              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 0))
-            );
+    if (offset < 0 || offset + SHORT_SIZE_IN_BYTES > array.length) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("array: ").append(toHexString(array, " "))
+        .append(" offset: ").append(offset)
+        .append(" bo: ").append(bo);
+      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    }
+
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return (short)(
+                  ((       array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
+                | ((0xFF & array[offset    ])                           )
+              );
+    }
+    else {
+      return (short)(
+                  ((       array[offset    ]) << (BYTE_SIZE_IN_BITS * 1))
+                | ((0xFF & array[offset + 1])                           )
+              );
+    }
   }
 
   /**
@@ -115,10 +166,28 @@ public final class ByteArrays {
    * @return
    */
   public static byte[] toByteArray(short value) {
-    return new byte[] {
-             (byte)((value & 0xFF00) >> BYTE_SIZE_IN_BITS * 1),
-             (byte)((value & 0x00FF) >> BYTE_SIZE_IN_BITS * 0)
-           };
+    return toByteArray(value, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param value
+   * @param bo
+   * @return
+   */
+  public static byte[] toByteArray(short value, ByteOrder bo) {
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return new byte[] {
+               (byte)(value                         ),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 1)
+             };
+    }
+    else {
+      return new byte[] {
+               (byte)(value >> BYTE_SIZE_IN_BITS * 1),
+               (byte)(value                         )
+             };
+    }
   }
 
   /**
@@ -128,7 +197,18 @@ public final class ByteArrays {
    * @return
    */
   public static String toHexString(short value, String separator) {
-    return toHexString(toByteArray(value), separator);
+    return toHexString(value, separator, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param value
+   * @param separator
+   * @param bo
+   * @return
+   */
+  public static String toHexString(short value, String separator, ByteOrder bo) {
+    return toHexString(toByteArray(value, bo), separator);
   }
 
   /**
@@ -138,15 +218,47 @@ public final class ByteArrays {
    * @return
    */
   public static int getInt(byte[] array, int offset) {
-    if (offset + INT_SIZE_IN_BYTES > array.length) {
-      throw new IllegalArgumentException();
+    return getInt(array, offset, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param array
+   * @param offset
+   * @param bo
+   * @return
+   */
+  public static int getInt(byte[] array, int offset, ByteOrder bo) {
+    if (array == null || bo == null) {
+      StringBuilder sb = new StringBuilder(40);
+      sb.append("array: ").append(array)
+        .append(" bo: ").append(bo);
+      throw new NullPointerException(sb.toString());
     }
-    return (int)(
-                ((0xFF & array[offset    ]) << (BYTE_SIZE_IN_BITS * 3))
-              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 2))
-              | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 1))
-              | ((0xFF & array[offset + 3]) << (BYTE_SIZE_IN_BITS * 0))
-            );
+    if (offset < 0 || offset + INT_SIZE_IN_BYTES > array.length) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("array: ").append(toHexString(array, " "))
+        .append(" offset: ").append(offset)
+        .append(" bo: ").append(bo);
+      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    }
+
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return (int)(
+                 ((       array[offset + 3]) << (BYTE_SIZE_IN_BITS * 3))
+               | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
+               | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
+               | ((0xFF & array[offset    ])                           )
+             );
+    }
+    else {
+      return (int)(
+                 ((       array[offset    ]) << (BYTE_SIZE_IN_BITS * 3))
+               | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 2))
+               | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 1))
+               | ((0xFF & array[offset + 3])                           )
+             );
+    }
   }
 
   /**
@@ -155,12 +267,32 @@ public final class ByteArrays {
    * @return
    */
   public static byte[] toByteArray(int value) {
-    return new byte[] {
-             (byte)((value & 0xFF000000) >> BYTE_SIZE_IN_BITS * 3),
-             (byte)((value & 0x00FF0000) >> BYTE_SIZE_IN_BITS * 2),
-             (byte)((value & 0x0000FF00) >> BYTE_SIZE_IN_BITS * 1),
-             (byte)((value & 0x000000FF) >> BYTE_SIZE_IN_BITS * 0)
-           };
+    return toByteArray(value, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param value
+   * @param bo
+   * @return
+   */
+  public static byte[] toByteArray(int value, ByteOrder bo) {
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return new byte[] {
+               (byte)(value                         ),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 1),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 2),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 3),
+             };
+    }
+    else {
+      return new byte[] {
+               (byte)(value >> BYTE_SIZE_IN_BITS * 3),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 2),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 1),
+               (byte)(value                         )
+             };
+    }
   }
 
   /**
@@ -170,7 +302,18 @@ public final class ByteArrays {
    * @return
    */
   public static String toHexString(int value, String separator) {
-    return toHexString(toByteArray(value), separator);
+    return toHexString(value, separator, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param value
+   * @param separator
+   * @param bo
+   * @return
+   */
+  public static String toHexString(int value, String separator, ByteOrder bo) {
+    return toHexString(toByteArray(value, bo), separator);
   }
 
   /**
@@ -180,19 +323,55 @@ public final class ByteArrays {
    * @return
    */
   public static long getLong(byte[] array, int offset) {
-    if (offset + LONG_SIZE_IN_BYTES > array.length) {
-      throw new IllegalArgumentException();
+    return getLong(array, offset, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param array
+   * @param offset
+   * @param bo
+   * @return
+   */
+  public static long getLong(byte[] array, int offset, ByteOrder bo) {
+    if (array == null || bo == null) {
+      StringBuilder sb = new StringBuilder(40);
+      sb.append("array: ").append(array)
+        .append(" bo: ").append(bo);
+      throw new NullPointerException(sb.toString());
     }
-    return (long)(
-                ((0xFF & array[offset    ]) << (BYTE_SIZE_IN_BITS * 7))
-              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 6))
-              | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 5))
-              | ((0xFF & array[offset + 3]) << (BYTE_SIZE_IN_BITS * 4))
-              | ((0xFF & array[offset + 4]) << (BYTE_SIZE_IN_BITS * 3))
-              | ((0xFF & array[offset + 5]) << (BYTE_SIZE_IN_BITS * 2))
-              | ((0xFF & array[offset + 6]) << (BYTE_SIZE_IN_BITS * 1))
-              | ((0xFF & array[offset + 7]) << (BYTE_SIZE_IN_BITS * 0))
-            );
+    if (offset < 0 || offset + LONG_SIZE_IN_BYTES > array.length) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("array: ").append(toHexString(array, " "))
+        .append(" offset: ").append(offset)
+        .append(" bo: ").append(bo);
+      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    }
+
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return (long)(
+                 ((        (long)array[offset + 7]) << (BYTE_SIZE_IN_BITS * 7))
+               | ((0xFFL & (long)array[offset + 6]) << (BYTE_SIZE_IN_BITS * 6))
+               | ((0xFFL & (long)array[offset + 5]) << (BYTE_SIZE_IN_BITS * 5))
+               | ((0xFFL & (long)array[offset + 4]) << (BYTE_SIZE_IN_BITS * 4))
+               | ((0xFFL & (long)array[offset + 3]) << (BYTE_SIZE_IN_BITS * 3))
+               | ((0xFFL & (long)array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
+               | ((0xFFL & (long)array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
+               | ((0xFFL & (long)array[offset    ])                           )
+             );
+    }
+    else {
+      return (long)(
+                 ((        (long)array[offset    ]) << (BYTE_SIZE_IN_BITS * 7))
+               | ((0xFFL & (long)array[offset + 1]) << (BYTE_SIZE_IN_BITS * 6))
+               | ((0xFFL & (long)array[offset + 2]) << (BYTE_SIZE_IN_BITS * 5))
+               | ((0xFFL & (long)array[offset + 3]) << (BYTE_SIZE_IN_BITS * 4))
+               | ((0xFFL & (long)array[offset + 4]) << (BYTE_SIZE_IN_BITS * 3))
+               | ((0xFFL & (long)array[offset + 5]) << (BYTE_SIZE_IN_BITS * 2))
+               | ((0xFFL & (long)array[offset + 6]) << (BYTE_SIZE_IN_BITS * 1))
+               | ((0xFFL & (long)array[offset + 7])                           )
+             );
+    }
   }
 
   /**
@@ -201,16 +380,40 @@ public final class ByteArrays {
    * @return
    */
   public static byte[] toByteArray(long value) {
-    return new byte[] {
-             (byte)((value & 0xFF00000000000000L) >> BYTE_SIZE_IN_BITS * 7),
-             (byte)((value & 0x00FF000000000000L) >> BYTE_SIZE_IN_BITS * 6),
-             (byte)((value & 0x0000FF0000000000L) >> BYTE_SIZE_IN_BITS * 5),
-             (byte)((value & 0x000000FF00000000L) >> BYTE_SIZE_IN_BITS * 4),
-             (byte)((value & 0x00000000FF000000L) >> BYTE_SIZE_IN_BITS * 3),
-             (byte)((value & 0x0000000000FF0000L) >> BYTE_SIZE_IN_BITS * 2),
-             (byte)((value & 0x000000000000FF00L) >> BYTE_SIZE_IN_BITS * 1),
-             (byte)((value & 0x00000000000000FFL) >> BYTE_SIZE_IN_BITS * 0)
-           };
+    return toByteArray(value, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param value
+   * @param bo
+   * @return
+   */
+  public static byte[] toByteArray(long value, ByteOrder bo) {
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return new byte[] {
+               (byte)(value                         ),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 1),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 2),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 3),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 4),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 5),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 6),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 7)
+             };
+    }
+    else {
+      return new byte[] {
+               (byte)(value >> BYTE_SIZE_IN_BITS * 7),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 6),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 5),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 4),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 3),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 2),
+               (byte)(value >> BYTE_SIZE_IN_BITS * 1),
+               (byte)(value                         )
+             };
+    }
   }
 
   /**
@@ -220,7 +423,18 @@ public final class ByteArrays {
    * @return
    */
   public static String toHexString(long value, String separator) {
-    return toHexString(toByteArray(value), separator);
+    return toHexString(value, separator, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param value
+   * @param separator
+   * @param bo
+   * @return
+   */
+  public static String toHexString(long value, String separator, ByteOrder bo) {
+    return toHexString(toByteArray(value, bo), separator);
   }
 
   /**
@@ -230,12 +444,43 @@ public final class ByteArrays {
    * @return
    */
   public static MacAddress getMacAddress(byte[] array, int offset) {
-    if (offset + MacAddress.SIZE_IN_BYTES > array.length) {
-      throw new IllegalArgumentException();
+    return getMacAddress(array, offset, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param array
+   * @param offset
+   * @param bo
+   * @return
+   */
+  public static MacAddress getMacAddress(
+    byte[] array, int offset, ByteOrder bo
+  ) {
+    if (array == null || bo == null) {
+      StringBuilder sb = new StringBuilder(40);
+      sb.append("array: ").append(array)
+        .append(" bo: ").append(bo);
+      throw new NullPointerException(sb.toString());
     }
-    return MacAddress.getByAddress(
-             getSubArray(array, offset, MacAddress.SIZE_IN_BYTES)
-           );
+    if (offset < 0 || offset + MacAddress.SIZE_IN_BYTES > array.length) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("array: ").append(toHexString(array, " "))
+        .append(" offset: ").append(offset)
+        .append(" bo: ").append(bo);
+      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    }
+
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return MacAddress.getByAddress(
+               reverse(getSubArray(array, offset, MacAddress.SIZE_IN_BYTES))
+             );
+    }
+    else {
+      return MacAddress.getByAddress(
+               getSubArray(array, offset, MacAddress.SIZE_IN_BYTES)
+             );
+    }
   }
 
   /**
@@ -244,7 +489,22 @@ public final class ByteArrays {
    * @return
    */
   public static byte[] toByteArray(MacAddress value) {
-    return value.getAddress();
+    return toByteArray(value, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param value
+   * @param bo
+   * @return
+   */
+  public static byte[] toByteArray(MacAddress value, ByteOrder bo) {
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return reverse(value.getAddress());
+    }
+    else {
+      return value.getAddress();
+    }
   }
 
   /**
@@ -254,19 +514,56 @@ public final class ByteArrays {
    * @return
    */
   public static Inet4Address getInet4Address(byte[] array, int offset) {
-    if (offset + INET4_ADDRESS_SIZE_IN_BYTES > array.length) {
-      throw new IllegalArgumentException();
+    return getInet4Address(array, offset, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param array
+   * @param offset
+   * @param bo
+   * @return
+   */
+  public static Inet4Address getInet4Address(
+    byte[] array, int offset, ByteOrder bo
+  ) {
+    if (array == null || bo == null) {
+      StringBuilder sb = new StringBuilder(40);
+      sb.append("array: ").append(array)
+        .append(" bo: ").append(bo);
+      throw new NullPointerException(sb.toString());
     }
+    if (offset < 0 || offset + INET4_ADDRESS_SIZE_IN_BYTES > array.length) {
+      StringBuilder sb = new StringBuilder(50);
+      sb.append("array: ").append(toHexString(array, " "))
+        .append(" offset: ").append(offset)
+        .append(" bo: ").append(bo);
+      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    }
+
     try {
-      return (Inet4Address)Inet4Address.getByAddress(
-                             getSubArray(
-                               array,
-                               offset,
-                               INET4_ADDRESS_SIZE_IN_BYTES
-                             )
-                           );
+      if (bo.equals(LITTLE_ENDIAN)) {
+        return (Inet4Address)Inet4Address.getByAddress(
+                 reverse(
+                   getSubArray(
+                     array,
+                     offset,
+                     INET4_ADDRESS_SIZE_IN_BYTES
+                   )
+                 )
+               );
+      }
+      else {
+        return (Inet4Address)Inet4Address.getByAddress(
+                 getSubArray(
+                   array,
+                   offset,
+                   INET4_ADDRESS_SIZE_IN_BYTES
+                 )
+               );
+      }
     } catch (UnknownHostException e) {
-      throw new AssertionError();
+      throw new AssertionError(e);
     }
   }
 
@@ -277,19 +574,56 @@ public final class ByteArrays {
    * @return
    */
   public static Inet6Address getInet6Address(byte[] array, int offset) {
-    if (offset + INET6_ADDRESS_SIZE_IN_BYTES > array.length) {
-      throw new IllegalArgumentException();
+    return getInet6Address(array, offset, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param array
+   * @param offset
+   * @param bo
+   * @return
+   */
+  public static Inet6Address getInet6Address(
+    byte[] array, int offset, ByteOrder bo
+  ) {
+    if (array == null || bo == null) {
+      StringBuilder sb = new StringBuilder(40);
+      sb.append("array: ").append(array)
+        .append(" bo: ").append(bo);
+      throw new NullPointerException(sb.toString());
     }
+    if (offset < 0 || offset + INET6_ADDRESS_SIZE_IN_BYTES > array.length) {
+      StringBuilder sb = new StringBuilder(50);
+      sb.append("array: ").append(toHexString(array, " "))
+        .append(" offset: ").append(offset)
+        .append(" bo: ").append(bo);
+      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    }
+
     try {
-      return (Inet6Address)Inet6Address.getByAddress(
-                             getSubArray(
-                               array,
-                               offset,
-                               INET6_ADDRESS_SIZE_IN_BYTES
-                             )
-                           );
+      if (bo.equals(LITTLE_ENDIAN)) {
+        return (Inet6Address)Inet6Address.getByAddress(
+                 reverse(
+                   getSubArray(
+                     array,
+                     offset,
+                     INET6_ADDRESS_SIZE_IN_BYTES
+                   )
+                 )
+               );
+      }
+      else {
+        return (Inet6Address)Inet6Address.getByAddress(
+                 getSubArray(
+                   array,
+                   offset,
+                   INET6_ADDRESS_SIZE_IN_BYTES
+                 )
+               );
+      }
     } catch (UnknownHostException e) {
-      throw new AssertionError();
+      throw new AssertionError(e);
     }
   }
 
@@ -299,7 +633,22 @@ public final class ByteArrays {
    * @return
    */
   public static byte[] toByteArray(InetAddress value) {
-    return value.getAddress();
+    return toByteArray(value, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param value
+   * @param bo
+   * @return
+   */
+  public static byte[] toByteArray(InetAddress value, ByteOrder bo) {
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return reverse(value.getAddress());
+    }
+    else {
+      return value.getAddress();
+    }
   }
 
   /**
@@ -310,6 +659,17 @@ public final class ByteArrays {
    * @return
    */
   public static byte[] getSubArray(byte[] array, int offset, int length) {
+    if (array == null) {
+      throw new NullPointerException("array may not be null");
+    }
+    if (offset < 0 || length < 0 || offset + length > array.length) {
+      StringBuilder sb = new StringBuilder(50);
+      sb.append("array: ").append(toHexString(array, " "))
+        .append(" offset: ").append(offset)
+        .append(" length: ").append(length);
+      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    }
+
     byte[] subArray = new byte[length];
     System.arraycopy(array, offset, subArray, 0, length);
     return subArray;
@@ -340,7 +700,11 @@ public final class ByteArrays {
     byte[] array, String separator, int offset, int length
   ) {
     if (offset < 0 || length < 0 || offset + length > array.length) {
-      throw new IllegalArgumentException();
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("array: ").append(toHexString(array, " "))
+        .append(" offset: ").append(offset)
+        .append(" length: ").append(length);
+      throw new ArrayIndexOutOfBoundsException(sb.toString());
     }
 
     StringBuffer buf = new StringBuffer();
@@ -365,7 +729,7 @@ public final class ByteArrays {
   public static short calcChecksum(byte[] data) {
     int sum = 0;
     for (int i = 0; i < data.length; i += SHORT_SIZE_IN_BYTES) {
-      sum += (0xFFFF) & ByteArrays.getShort(data, i);
+      sum += (0xFFFF) & getShort(data, i);
     }
 
     sum
@@ -418,8 +782,7 @@ public final class ByteArrays {
     }
     else {
       StringBuilder patternSb = new StringBuilder(60);
-      patternSb.append("\\A[0-9a-fA-F]")
-               .append("[0-9a-fA-F](")
+      patternSb.append("\\A[0-9a-fA-F][0-9a-fA-F](")
                .append(Pattern.quote(separator))
                .append("[0-9a-fA-F][0-9a-fA-F])*\\z");
       String patternString = patternSb.toString();

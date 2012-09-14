@@ -7,10 +7,13 @@
 
 package org.pcap4j.packet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import org.pcap4j.packet.factory.ClassifiedDataFactories;
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.packet.namednumber.IpV6OptionType;
 import org.pcap4j.util.ByteArrays;
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
 
@@ -20,80 +23,73 @@ import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
  */
 public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
+  private final Packet payload;
+
   /**
    *
    */
-  private static final long serialVersionUID = 2550533414788349771L;
+  private static final long serialVersionUID = 416178196599916582L;
 
-  private final IpV6ExtOptionHeader header;
-  private final Packet payload;
-
-  protected IpV6ExtOptionsPacket(byte[] rawData) {
-    this.header = new IpV6ExtOptionHeader(rawData);
-
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-
+  /**
+   *
+   * @param rawPayload
+   * @param number
+   */
+  protected IpV6ExtOptionsPacket(
+    byte[] rawPayload, IpNumber number
+  ) {
     this.payload
-      = PacketFactories.getPacketFactory(IpNumber.class)
-          .newPacket(rawPayload, header.getNextHeader());
+      = PacketFactories.getFactory(IpNumber.class)
+          .newPacket(rawPayload, number);
   }
 
+  /**
+   *
+   * @param builder
+   */
   protected IpV6ExtOptionsPacket(Builder builder) {
     if (
-         builder == null
-      || builder.nextHeader == null
-      || builder.options == null
-      || builder.payloadBuilder == null
-    ) {
-      throw new NullPointerException();
-    }
-    if (builder.options.size() == 0) {
-      throw new IllegalArgumentException();
-    }
+        builder == null
+     || builder.nextHeader == null
+     || builder.options == null
+     || builder.payloadBuilder == null
+   ) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("builder: ").append(builder)
+        .append(" builder.nextHeader: ").append(builder.nextHeader)
+        .append(" builder.options: ").append(builder.options)
+        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+      throw new NullPointerException(sb.toString());
+   }
+//   if (builder.options.size() == 0) {
+//     throw new IllegalArgumentException(
+//             "No option is invalid to IPv6 Options Header"
+//           );
+//   }
 
     this.payload = builder.payloadBuilder.build();
-    this.header = new IpV6ExtOptionHeader(builder);
   }
 
   @Override
-  public IpV6ExtOptionHeader getHeader() {
-    return header;
-  }
+  public abstract IpV6ExtOptionsHeader getHeader();
 
   @Override
   public Packet getPayload() {
     return payload;
   }
 
-  @Override
-  protected boolean verify() {
-    if (!(payload instanceof UdpPacket)) {
-      if (!payload.isValid()) {
-        return false;
-      }
-    }
-
-    return header.isValid();
-  }
-
-  protected abstract String getExactOptionName();
-
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public static abstract class Builder extends AbstractBuilder {
+  public static abstract class Builder extends AbstractBuilder
+  implements LengthBuilder<IpV6ExtOptionsPacket> {
 
     private IpNumber nextHeader;
     private byte hdrExtLen;
     private List<IpV6Option> options;
     private Packet.Builder payloadBuilder;
-    private boolean validateAtBuild = true;
+    private boolean correctLengthAtBuild;
 
     /**
      *
@@ -104,10 +100,10 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
      *
      * @param packet
      */
-    public Builder(IpV6ExtOptionsPacket packet) {
-      this.nextHeader = packet.header.nextHeader;
-      this.hdrExtLen = packet.header.hdrExtLen;
-      this.options = packet.header.options;
+    protected Builder(IpV6ExtOptionsPacket packet) {
+      this.nextHeader = packet.getHeader().nextHeader;
+      this.hdrExtLen = packet.getHeader().hdrExtLen;
+      this.options = packet.getHeader().options;
       this.payloadBuilder = packet.payload.getBuilder();
     }
 
@@ -152,13 +148,8 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
       return payloadBuilder;
     }
 
-    /**
-     *
-     * @param validateAtBuild
-     * @return
-     */
-    public Builder validateAtBuild(boolean validateAtBuild) {
-      this.validateAtBuild = validateAtBuild;
+    public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
+      this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
@@ -168,10 +159,10 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public final class IpV6ExtOptionHeader extends AbstractHeader {
+  public static abstract class IpV6ExtOptionsHeader extends AbstractHeader {
 
     /*
-     * 0                               16                              32
+     *  0                              16                            31
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      * |  Next Header  |  Hdr Ext Len  |                               |
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
@@ -204,14 +195,18 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
     private final byte hdrExtLen;
     private final List<IpV6Option> options;
 
-    private IpV6ExtOptionHeader(byte[] rawData) {
+    /**
+     *
+     * @param rawData
+     */
+    protected IpV6ExtOptionsHeader(byte[] rawData) {
       if (rawData.length < 2) {
         StringBuilder sb = new StringBuilder(110);
-        sb.append(
-            "The data length of IPv6 option header is must be more than 1. data: "
-           )
+        sb.append("The data length of ")
+          .append(getHeaderName())
+          .append(" is must be more than 1. data: ")
           .append(ByteArrays.toHexString(rawData, " "));
-        throw new IllegalPacketDataException(sb.toString());
+        throw new IllegalRawDataException(sb.toString());
       }
 
       this.nextHeader
@@ -220,33 +215,42 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
       this.hdrExtLen
         = ByteArrays.getByte(rawData, HDR_EXT_LEN_OFFSET);
 
-      int headerLength = (hdrExtLen & 0xFF + 1) * 8;
+      int headerLength = ((hdrExtLen & 0xFF) + 1) * 8;
       if (rawData.length < headerLength) {
         StringBuilder sb = new StringBuilder(110);
-        sb.append("The data is too short to build an IPv6 option header(")
+        sb.append("The data is too short to build an ")
+          .append(getHeaderName())
+          .append("(")
           .append(headerLength)
           .append(" bytes). data: ")
           .append(ByteArrays.toHexString(rawData, " "));
-        throw new IllegalPacketDataException(sb.toString());
+        throw new IllegalRawDataException(sb.toString());
       }
 
       this.options = new ArrayList<IpV6Option>();
 
       int currentOffset = OPTIONS_OFFSET;
       while (currentOffset < headerLength) {
-        IpV6Option newOne = IpV6Option.newInstance(
-                              ByteArrays.getSubArray(
-                                rawData,
-                                currentOffset,
-                                headerLength - currentOffset
-                              )
+        byte[] optRawData = ByteArrays.getSubArray(
+                              rawData,
+                              currentOffset,
+                              headerLength - currentOffset
                             );
+        IpV6OptionType type = IpV6OptionType.getInstance(optRawData[0]);
+        IpV6Option newOne
+          = ClassifiedDataFactories
+              .getFactory(IpV6Option.class, IpV6OptionType.class)
+                .newData(optRawData, type);
         options.add(newOne);
         currentOffset += newOne.length();
       }
     }
 
-    private IpV6ExtOptionHeader(Builder builder) {
+    /**
+     *
+     * @param builder
+     */
+    protected IpV6ExtOptionsHeader(Builder builder) {
       int optLength = 0;
       for (IpV6Option o: builder.options) {
         optLength += o.length();
@@ -270,7 +274,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
       this.nextHeader = builder.nextHeader;
       this.options = new ArrayList<IpV6Option>(builder.options);
 
-      if (builder.validateAtBuild) {
+      if (builder.correctLengthAtBuild) {
         this.hdrExtLen = (byte)((optLength + 2) / 8 - 1);
       }
       else {
@@ -307,12 +311,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
      * @return
      */
     public List<IpV6Option> getOptions() {
-      return Collections.unmodifiableList(options);
-    }
-
-    @Override
-    protected boolean verify() {
-      return length() / 8 - 1 == getHdrExtLenAsInt();
+      return new ArrayList<IpV6Option>(options);
     }
 
     @Override
@@ -340,9 +339,9 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[IPv6 ")
-        .append(IpV6ExtOptionsPacket.this.getExactOptionName())
-        .append(" Header (")
+      sb.append("[")
+        .append(getHeaderName())
+        .append(" (")
         .append(length())
         .append(" bytes)]")
         .append(ls);
@@ -365,6 +364,37 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
       return sb.toString();
     }
+
+    abstract protected String getHeaderName();
+
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.11
+   */
+  public interface IpV6Option extends Serializable {
+
+    // /* must implement if use DynamicIpV6OptionFactory */
+    // public static IpV6Option newInstance(byte[] rawData);
+
+    /**
+     *
+     * @return
+     */
+    public IpV6OptionType getType();
+
+    /**
+     *
+     * @return
+     */
+    public int length();
+
+    /**
+     *
+     * @return
+     */
+    public byte[] getRawData();
 
   }
 

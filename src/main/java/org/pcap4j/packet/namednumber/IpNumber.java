@@ -27,13 +27,13 @@ public final class IpNumber extends NamedNumber<Byte> {
   /**
    *
    */
-  public static final IpNumber HOPOPT
+  public static final IpNumber IPV6_HOPOPT
     = new IpNumber((byte)0, "IPv6 Hop-by-Hop Option");
 
   /**
    *
    */
-  public static final IpNumber ICMP_V4
+  public static final IpNumber ICMPV4
     = new IpNumber((byte)1, "ICMPv4");
 
   /**
@@ -45,7 +45,7 @@ public final class IpNumber extends NamedNumber<Byte> {
   /**
    *
    */
-  public static final IpNumber IP_V4
+  public static final IpNumber IPV4
     = new IpNumber((byte)4, "IPv4 encapsulation");
 
   /**
@@ -75,19 +75,19 @@ public final class IpNumber extends NamedNumber<Byte> {
   /**
    *
    */
-  public static final IpNumber IP_V6
+  public static final IpNumber IPV6
     = new IpNumber((byte)41, "IPv6 encapsulation");
 
   /**
    *
    */
-  public static final IpNumber IP_V6_ROUTE
+  public static final IpNumber IPV6_ROUTE
     = new IpNumber((byte)43, "Routing Header for IPv6");
 
   /**
    *
    */
-  public static final IpNumber IP_V6_FRAG
+  public static final IpNumber IPV6_FRAG
     = new IpNumber((byte)44, "Fragment Header for IPv6");
 
   /**
@@ -105,19 +105,19 @@ public final class IpNumber extends NamedNumber<Byte> {
   /**
    *
    */
-  public static final IpNumber ICMP_V6
+  public static final IpNumber ICMPV6
     = new IpNumber((byte)58, "ICMPv6");
 
   /**
    *
    */
-  public static final IpNumber IP_V6_NONXT
+  public static final IpNumber IPV6_NONXT
     = new IpNumber((byte)59, "No Next Header for IPv6");
 
   /**
    *
    */
-  public static final IpNumber IP_V6_OPTS
+  public static final IpNumber IPV6_DST_OPTS
     = new IpNumber((byte)60, "Destination Options for IPv6");
 
   /**
@@ -139,8 +139,8 @@ public final class IpNumber extends NamedNumber<Byte> {
     for (Field field: IpNumber.class.getFields()) {
       if (IpNumber.class.isAssignableFrom(field.getType())) {
         try {
-          IpNumber typeCode = (IpNumber)field.get(null);
-          registry.put(typeCode.value(), typeCode);
+          IpNumber f = (IpNumber)field.get(null);
+          registry.put(f.value(), f);
         } catch (IllegalArgumentException e) {
           throw new AssertionError(e);
         } catch (IllegalAccessException e) {
@@ -152,7 +152,12 @@ public final class IpNumber extends NamedNumber<Byte> {
     }
   }
 
-  private IpNumber(Byte value, String name) {
+  /**
+   *
+   * @param value
+   * @param name
+   */
+  public IpNumber(Byte value, String name) {
     super(value, name);
   }
 
@@ -168,6 +173,15 @@ public final class IpNumber extends NamedNumber<Byte> {
     else {
       return new IpNumber(value, "unknown");
     }
+  }
+
+  /**
+   *
+   * @param number
+   * @return
+   */
+  public static IpNumber register(IpNumber number) {
+    return registry.put(number.value(), number);
   }
 
   @Override

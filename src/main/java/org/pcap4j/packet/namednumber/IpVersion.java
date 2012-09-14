@@ -27,38 +27,38 @@ public final class IpVersion extends NamedNumber<Byte> {
   /**
    *
    */
-  public static final IpVersion IP_V4
+  public static final IpVersion IPV4
     = new IpVersion((byte)4, "IPv4");
 
   /**
    *
    */
   public static final IpVersion ST
-    = new IpVersion((byte)4, "ST Datagram Mode");
+    = new IpVersion((byte)5, "ST Datagram Mode");
 
   /**
    *
    */
-  public static final IpVersion IP_V6
+  public static final IpVersion IPV6
     = new IpVersion((byte)6, "IPv6");
 
   /**
    *
    */
-  public static final IpVersion TPIX
-    = new IpVersion((byte)4, "TP/IX: The Next Internet");
+  public static final IpVersion TP_IX
+    = new IpVersion((byte)7, "TP/IX: The Next Internet");
 
   /**
    *
    */
   public static final IpVersion PIP
-    = new IpVersion((byte)4, "The P Internet Protocol");
+    = new IpVersion((byte)8, "The P Internet Protocol");
 
   /**
    *
    */
   public static final IpVersion TUBA
-    = new IpVersion((byte)4, "TUBA");
+    = new IpVersion((byte)9, "TUBA");
 
   private static final Map<Byte, IpVersion> registry
     = new HashMap<Byte, IpVersion>();
@@ -67,8 +67,8 @@ public final class IpVersion extends NamedNumber<Byte> {
     for (Field field: IpVersion.class.getFields()) {
       if (IpVersion.class.isAssignableFrom(field.getType())) {
         try {
-          IpVersion typeCode = (IpVersion)field.get(null);
-          registry.put(typeCode.value(), typeCode);
+          IpVersion f = (IpVersion)field.get(null);
+          registry.put(f.value(), f);
         } catch (IllegalArgumentException e) {
           throw new AssertionError(e);
         } catch (IllegalAccessException e) {
@@ -80,8 +80,19 @@ public final class IpVersion extends NamedNumber<Byte> {
     }
   }
 
-  private IpVersion(Byte value, String name) {
+  /**
+   *
+   * @param value
+   * @param name
+   */
+  public IpVersion(Byte value, String name) {
     super(value, name);
+    if ((value & 0xF0) != 0) {
+      throw new IllegalArgumentException(
+              value + " is invalid value. "
+                +"Version field of IP header must be between 0 and 15"
+            );
+    }
   }
 
   /**
@@ -90,19 +101,21 @@ public final class IpVersion extends NamedNumber<Byte> {
    * @return
    */
   public static IpVersion getInstance(Byte value) {
-    if ((value & 0xF0) != 0) {
-      throw new IllegalArgumentException(
-              value + " is invalid value. "
-                +"Version field of IP header must be between 0 and 15"
-            );
-    }
-
     if (registry.containsKey(value)) {
       return registry.get(value);
     }
     else {
       return new IpVersion(value, "unknown");
     }
+  }
+
+  /**
+   *
+   * @param version
+   * @return
+   */
+  public static IpVersion register(IpVersion version) {
+    return registry.put(version.value(), version);
   }
 
   @Override

@@ -17,7 +17,7 @@ import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.bpf_program;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.PacketFactories;
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
@@ -42,16 +42,12 @@ public final class PcapHandle {
   private volatile boolean opening;
   private volatile String filteringExpression = "";
 
-  /**
-   *
-   * @param handle
-   */
-  public PcapHandle(Pointer handle) {
+  PcapHandle(Pointer handle, boolean opening) {
     this.dlt = DataLinkType.getInstance(
                  PcapLibrary.INSTANCE.pcap_datalink(handle)
                );
     this.handle = handle;
-    this.opening = true;
+    this.opening = opening;
   }
 
   /**
@@ -171,10 +167,11 @@ public final class PcapHandle {
       timestampsInts.set(header.ts.tv_sec.longValue());
       timestampsMicros.set(header.ts.tv_usec.intValue());
 
-      return PacketFactories.getPacketFactory(DataLinkType.class).newPacket(
-               packet.getByteArray(0, header.caplen),
-               dlt
-             );
+      return PacketFactories.getFactory(DataLinkType.class)
+               .newPacket(
+                  packet.getByteArray(0, header.caplen),
+                  dlt
+                );
     }
     else {
       return null;
@@ -219,10 +216,11 @@ public final class PcapHandle {
         timestampsInts.set(header.ts.tv_sec.longValue());
         timestampsMicros.set(header.ts.tv_usec.intValue());
 
-        return PacketFactories.getPacketFactory(DataLinkType.class).newPacket(
-                 dataP.getByteArray(0, header.caplen),
-                 dlt
-               );
+        return PacketFactories.getFactory(DataLinkType.class)
+                 .newPacket(
+                    dataP.getByteArray(0, header.caplen),
+                    dlt
+                  );
       case -1:
         throw new PcapNativeException(
                 "Error occured in pcap_next_ex(): " + getError()
@@ -296,7 +294,9 @@ public final class PcapHandle {
         logger.info("Broken.");
         throw new InterruptedException();
       default:
-        throw new AssertionError("Never get here");
+        throw new PcapNativeException(
+                "Unexpected error occured: " + getError()
+              );
     }
   }
 
@@ -325,10 +325,11 @@ public final class PcapHandle {
             timestampsMicros.set(header.ts.tv_usec.intValue());
 
             listener.gotPacket(
-              PacketFactories.getPacketFactory(DataLinkType.class).newPacket(
-                packet.getByteArray(0, header.caplen),
-                dlt
-              )
+              PacketFactories.getFactory(DataLinkType.class)
+                .newPacket(
+                   packet.getByteArray(0, header.caplen),
+                   dlt
+                 )
             );
           }
         }
@@ -339,7 +340,7 @@ public final class PcapHandle {
 
   /**
    *
-   * @param filePath "-" for stdout
+   * @param filePath "-" means stdout
    * @return
    * @throws PcapNativeException
    */
@@ -378,7 +379,7 @@ public final class PcapHandle {
       rc = PcapLibrary.INSTANCE.pcap_loop(
              handle,
              packetCount,
-             NativeMappings.get_pcap_dump(),
+             NativeMappings.PCAP_DUMP,
              dumper.getDumper()
            );
     }

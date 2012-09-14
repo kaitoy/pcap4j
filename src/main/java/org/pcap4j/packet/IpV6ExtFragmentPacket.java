@@ -9,6 +9,7 @@ package org.pcap4j.packet;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.util.ByteArrays;
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
@@ -48,9 +49,14 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
           rawData.length - header.length()
         );
 
-    this.payload
-      = PacketFactories.getPacketFactory(IpNumber.class)
-          .newPacket(rawPayload, header.getNextHeader());
+    if (header.m || header.fragmentOffset != 0) {
+      this.payload = FragmentedPacket.newPacket(rawPayload);
+    }
+    else {
+      this.payload
+        = PacketFactories.getFactory(IpNumber.class)
+            .newPacket(rawPayload, header.getNextHeader());
+    }
   }
 
   private IpV6ExtFragmentPacket(Builder builder) {
@@ -59,7 +65,11 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
       || builder.nextHeader == null
       || builder.payloadBuilder == null
     ) {
-      throw new NullPointerException();
+      StringBuilder sb = new StringBuilder();
+      sb.append("builder: ").append(builder)
+        .append(" builder.nextHeader: ").append(builder.nextHeader)
+        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+      throw new NullPointerException(sb.toString());
     }
 
     this.payload = builder.payloadBuilder.build();
@@ -74,17 +84,6 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
   @Override
   public Packet getPayload() {
     return payload;
-  }
-
-  @Override
-  protected boolean verify() {
-    if (!(payload instanceof UdpPacket)) {
-      if (!payload.isValid()) {
-        return false;
-      }
-    }
-
-    return header.isValid();
   }
 
   @Override
@@ -207,11 +206,11 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public final class IpV6ExtFragmentHeader extends AbstractHeader {
+  public static final class IpV6ExtFragmentHeader extends AbstractHeader {
 
 
     /*
-     * 0                               16                              32
+     *  0                              16                            31
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      * |  Next Header  |   Reserved    |      Fragment Offset    |Res|M|
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -258,7 +257,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
           .append(IPV6_EXT_FRAGMENT_HEADER_SIZE)
           .append(" bytes). data: ")
           .append(ByteArrays.toHexString(rawData, " "));
-        throw new IllegalPacketDataException(sb.toString());
+        throw new IllegalRawDataException(sb.toString());
       }
 
       this.nextHeader
@@ -269,7 +268,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
       short fragmentOffsetAndResAndM
         = ByteArrays.getShort(rawData, FRAGMENT_OFFSET_AND_RES_AND_M_OFFSET);
       this.fragmentOffset
-        = (short)((fragmentOffsetAndResAndM & 0xFFF8) >> 3);
+        = (short)(fragmentOffsetAndResAndM >>> 3);
       this.res
         = (byte)((fragmentOffsetAndResAndM & 0x0006) >> 1);
       this.m
@@ -326,14 +325,6 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
      *
      * @return
      */
-    public int getFragmentOffsetAsInt() {
-      return fragmentOffset & 0xFFFF;
-    }
-
-    /**
-     *
-     * @return
-     */
     public byte getRes() {
       return res;
     }
@@ -355,16 +346,13 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     }
 
     @Override
-    public boolean isValid() { return true; }
-
-    @Override
     protected List<byte[]> getRawFields() {
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(ByteArrays.toByteArray(nextHeader.value()));
       rawFields.add(ByteArrays.toByteArray(reserved));
       rawFields.add(
         ByteArrays.toByteArray(
-          (fragmentOffset << 3) | (res << 1) | (m ? 1 : 0)
+          (short)((fragmentOffset << 3) | (res << 1) | (m ? 1 : 0))
         )
       );
       rawFields.add(ByteArrays.toByteArray(identification));
@@ -392,7 +380,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
         .append(ByteArrays.toHexString(reserved, " "))
         .append(ls);
       sb.append("  Fragment Offset: ")
-        .append(getFragmentOffsetAsInt())
+        .append(fragmentOffset)
         .append(ls);
       sb.append("  Res: ")
         .append(ByteArrays.toHexString(res, " "))

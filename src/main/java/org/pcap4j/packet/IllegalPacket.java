@@ -54,9 +54,6 @@ public final class IllegalPacket extends AbstractPacket {
   }
 
   @Override
-  public boolean isValid() { return false; }
-
-  @Override
   public int length() { return rawData.length; }
 
   @Override

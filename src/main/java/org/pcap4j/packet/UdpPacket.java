@@ -14,6 +14,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.UdpPort;
 import org.pcap4j.util.ByteArrays;
@@ -39,35 +40,59 @@ public final class UdpPacket extends AbstractPacket {
   private UdpPacket(byte[] rawData) {
     this.header = new UdpHeader(rawData);
 
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
+    int payloadLength = header.getLengthAsInt() - header.length();
+    byte[] rawPayload;
+
+    if (payloadLength > rawData.length - header.length()) {
+      rawPayload
+        = ByteArrays.getSubArray(
           rawData,
-          this.header.length(),
-          this.header.getLengthAsInt() - this.header.length()
+          header.length(),
+          rawData.length - header.length()
         );
+    }
+    else {
+      rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+    }
 
     this.payload
-      = PacketFactories.getPacketFactory(UdpPort.class)
+      = PacketFactories.getFactory(UdpPort.class)
           .newPacket(rawPayload, header.getDstPort());
   }
 
   private UdpPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.payloadBuilder == null
-    ) {
-      throw new NullPointerException();
+    if (builder == null) {
+      throw new NullPointerException("builder must not be null");
+    }
+    if (builder.payloadBuilder == null) {
+      throw new NullPointerException("builder.payloadBuilder must not be null");
     }
 
-    if (
-         builder.validateAtBuild
-      && (builder.srcAddr == null || builder.dstAddr == null)
-    ) {
-      throw new NullPointerException();
+    if (builder.correctChecksumAtBuild) {
+      if (builder.srcAddr == null || builder.dstAddr == null) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("builder.srcAddr: ").append(builder.srcAddr)
+          .append(" builder.dstAddr: ").append(builder.dstAddr);
+        throw new NullPointerException(sb.toString());
+      }
+      if (!builder.srcAddr.getClass().isInstance(builder.dstAddr)) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("builder.srcAddr: ").append(builder.srcAddr)
+          .append(" builder.dstAddr: ").append(builder.dstAddr);
+        throw new IllegalArgumentException(sb.toString());
+      }
     }
 
     this.payload = builder.payloadBuilder.build();
-    this.header = new UdpHeader(builder, this);
+    this.header = new UdpHeader(
+                    builder,
+                    payload.getRawData()
+                  );
   }
 
   @Override
@@ -82,35 +107,35 @@ public final class UdpPacket extends AbstractPacket {
 
   /**
    *
-   */
-  @Deprecated
-  @Override
-  public boolean verify() {
-    return false;
-  }
-
-  /**
-   *
-   */
-  @Deprecated
-  @Override
-  public boolean isValid() {
-    return false;
-  }
-
-  /**
-   * Because the result of this method depends on srcAddr and dstAddr
-   * it will not be cached.
+   * checksum varification is necessary for IPv6(i.e. acceptZero must be false)
    *
    * @param srcAddr
    * @param dstAddr
+   * @param acceptZero
    * @return
    */
-  public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
-    if (!payload.isValid()) {
-      return false;
+  public boolean hasValidChecksum(
+    InetAddress srcAddr, InetAddress dstAddr, boolean acceptZero
+  ) {
+    if (srcAddr == null || dstAddr == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("srcAddr: ").append(srcAddr)
+        .append(" dstAddr: ").append(dstAddr);
+      throw new NullPointerException(sb.toString());
     }
-    return header.isValid(srcAddr, dstAddr);
+    if (!srcAddr.getClass().isInstance(dstAddr)) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("srcAddr: ").append(srcAddr)
+        .append(" dstAddr: ").append(dstAddr);
+      throw new IllegalArgumentException(sb.toString());
+    }
+
+    if (header.checksum == 0) {
+      if (acceptZero) { return true; }
+      else { return false; }
+    }
+    return header.calcChecksum(srcAddr, dstAddr, payload.getRawData())
+             == header.checksum;
   }
 
   @Override
@@ -122,7 +147,9 @@ public final class UdpPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class Builder extends AbstractBuilder {
+  public static final
+  class Builder extends AbstractBuilder
+  implements LengthBuilder<UdpPacket>, ChecksumBuilder<UdpPacket> {
 
     private UdpPort srcPort;
     private UdpPort dstPort;
@@ -131,7 +158,8 @@ public final class UdpPacket extends AbstractPacket {
     private Packet.Builder payloadBuilder;
     private InetAddress srcAddr;
     private InetAddress dstAddr;
-    private boolean validateAtBuild = true;
+    private boolean correctLengthAtBuild;
+    private boolean correctChecksumAtBuild;
 
     /**
      *
@@ -203,6 +231,8 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
+     * used for checksum calculation.
+     *
      * @param srcAddr
      * @return
      */
@@ -213,6 +243,12 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
+     * used for checksum calculation
+     * If the lower-layer packet is a IPv6 packet and
+     * the extention headers including a routing header,
+     * this parameter is that of the final destination.
+     * (i.e. the last element of the Routing header)
+     *
      * @param dstAddr
      * @return
      */
@@ -221,13 +257,13 @@ public final class UdpPacket extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @param validateAtBuild
-     * @return
-     */
-    public Builder validateAtBuild(boolean validateAtBuild) {
-      this.validateAtBuild = validateAtBuild;
+    public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
+      this.correctLengthAtBuild = correctLengthAtBuild;
+      return this;
+    }
+
+    public Builder correctChecksumAtBuild(boolean correctChecksumAtBuild) {
+      this.correctChecksumAtBuild = correctChecksumAtBuild;
       return this;
     }
 
@@ -242,37 +278,53 @@ public final class UdpPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public final class UdpHeader extends AbstractHeader {
+  public static final class UdpHeader extends AbstractHeader {
 
     /*
-     * 0                               16
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |           Src Port            |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |           Dst Port            |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |            Length             |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |           Checksum            |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *  0                              16                            31
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |           Src Port            |           Dst Port            |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |            Length             |           Checksum            |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      */
 
     /*
-     *          Pseudo Header
+     *                        IPv4 Pseudo Header
      *
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |         Src IP Address        |
-     * +                               +
-     * |                               |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |         Dst IP Address        |
-     * +                               +
-     * |                               |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |      PAD      | Protocol(UDP) |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |            Length             |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * 0                               16                            31
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |                       Src IP Address                          |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |                       Dst IP Address                          |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |      PAD      | Protocol(UDP) |            Length             |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *
+     *                      IPv6 Pseudo Header
+     *
+     *  0                              16                            31
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |                                                               |
+     * +                                                               +
+     * |                                                               |
+     * +                         Source Address                        +
+     * |                                                               |
+     * +                                                               +
+     * |                                                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |                                                               |
+     * +                                                               +
+     * |                                                               |
+     * +                      Destination Address                      +
+     * |                                                               |
+     * +                                                               +
+     * |                                                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |                   Upper-Layer Packet Length                   |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |                      zero                     |  Next Header  |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      */
 
     /**
@@ -314,7 +366,7 @@ public final class UdpPacket extends AbstractPacket {
           .append(UCP_HEADER_SIZE)
           .append(" bytes). data: ")
           .append(ByteArrays.toHexString(rawData, " "));
-        throw new IllegalPacketDataException(sb.toString());
+        throw new IllegalRawDataException(sb.toString());
       }
 
       this.srcPort
@@ -325,35 +377,46 @@ public final class UdpPacket extends AbstractPacket {
       this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET);
     }
 
-    private UdpHeader(Builder builder, UdpPacket host) {
+    private UdpHeader(Builder builder, byte[] payload) {
       this.srcPort = builder.srcPort;
       this.dstPort = builder.dstPort;
 
-      if (builder.validateAtBuild) {
-        this.length = (short)(host.payload.length() + length());
+      if (builder.correctLengthAtBuild) {
+        this.length = (short)(payload.length + length());
+      }
+      else {
+        this.length = builder.length;
+      }
 
-        // checksum calculation is necessary for IPv6
+      if (builder.correctChecksumAtBuild) {
         if (
-             builder.srcAddr instanceof Inet6Address
-          || PacketPropertiesLoader.getInstance()
-               .isEnabledUdpChecksumVaridation()
+          (
+            builder.srcAddr instanceof Inet4Address
+              && PacketPropertiesLoader.getInstance().udpV4CalcChecksum()
+          )
+          ||
+          (
+            builder.srcAddr instanceof Inet6Address
+              && PacketPropertiesLoader.getInstance().udpV6CalcChecksum()
+          )
         ) {
-          this.checksum = calcChecksum(builder.srcAddr, builder.dstAddr);
+          this.checksum = calcChecksum(builder.srcAddr, builder.dstAddr, payload);
         }
         else {
           this.checksum = (short)0;
         }
       }
       else {
-        this.length = builder.length;
         this.checksum = builder.checksum;
       }
     }
 
-    private short calcChecksum(InetAddress srcAddr, InetAddress dstAddr) {
+    private short calcChecksum(
+      InetAddress srcAddr, InetAddress dstAddr, byte[] payload
+    ) {
       byte[] data;
       int destPos;
-      int totalLength = UdpPacket.this.payload.length() + length();
+      int totalLength = payload.length + length();
       boolean lowerLayerIsIpV4 = srcAddr instanceof Inet4Address;
 
       int pseudoHeaderSize
@@ -369,14 +432,10 @@ public final class UdpPacket extends AbstractPacket {
         destPos = totalLength;
       }
 
-      // getRawData()だとchecksum field設定前にrawDataがキャッシュされてしまうので、
+      // getRawData()だとchecksum field設定前にrawDataがキャッシュされてしまう場合があるので、
       // 代わりにbuildRawData()を使う。
       System.arraycopy(buildRawData(), 0, data, 0, length());
-
-      System.arraycopy(
-        UdpPacket.this.payload.getRawData(), 0,
-        data, length(), UdpPacket.this.payload.length()
-      );
+      System.arraycopy(payload, 0, data, length(), payload.length);
 
       for (int i = 0; i < CHECKSUM_SIZE; i++) {
         data[CHECKSUM_OFFSET + i] = (byte)0;
@@ -385,22 +444,22 @@ public final class UdpPacket extends AbstractPacket {
       // pseudo header
       System.arraycopy(
         srcAddr.getAddress(), 0,
-        data, destPos, ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES
+        data, destPos, srcAddr.getAddress().length
       );
-      destPos += ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
+      destPos += srcAddr.getAddress().length;
 
       System.arraycopy(
         dstAddr.getAddress(), 0,
-        data, destPos, ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES
+        data, destPos, dstAddr.getAddress().length
       );
-      destPos += ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
+      destPos += dstAddr.getAddress().length;
 
       if (lowerLayerIsIpV4) {
         //data[destPos] = (byte)0;
         destPos++;
       }
       else {
-        destPos += 24;
+        destPos += 3;
       }
 
       data[destPos] = IpNumber.UDP.value();
@@ -453,56 +512,6 @@ public final class UdpPacket extends AbstractPacket {
      */
     public short getChecksum() {
       return checksum;
-    }
-
-    /**
-     *
-     */
-    @Deprecated
-    @Override
-    protected boolean verify() {
-      return false;
-    }
-
-    /**
-     *
-     */
-    @Deprecated
-    @Override
-    public boolean isValid() {
-      return false;
-    }
-
-    /**
-     * Because the result of this method depends on srcAddr and dstAddr
-     * it will not be cached.
-     *
-     * @param srcAddr
-     * @param dstAddr
-     * @return
-     */
-    public boolean isValid(InetAddress srcAddr, InetAddress dstAddr) {
-      if (UdpPacket.this.length() != getLengthAsInt()) { return false; }
-
-      boolean lowerLayerIsIpV6 = srcAddr instanceof Inet6Address;
-
-      // checksum varification is necessary for IPv6
-      if (
-           lowerLayerIsIpV6
-        || PacketPropertiesLoader.getInstance()
-             .isEnabledUdpChecksumVerification()
-      ) {
-        short cs = getChecksum();
-        if (lowerLayerIsIpV6) {
-          return calcChecksum(srcAddr, dstAddr) != cs;
-        }
-        else {
-          return cs == 0 ? true : calcChecksum(srcAddr, dstAddr) != cs;
-        }
-      }
-      else {
-        return true;
-      }
     }
 
     @Override

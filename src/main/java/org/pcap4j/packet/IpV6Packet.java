@@ -7,9 +7,13 @@
 
 package org.pcap4j.packet;
 
+import java.io.Serializable;
 import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.List;
+import org.pcap4j.packet.factory.IpV6FlowLabelFactories;
+import org.pcap4j.packet.factory.IpV6TrafficClassFactories;
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.util.ByteArrays;
@@ -44,15 +48,29 @@ public final class IpV6Packet extends AbstractPacket {
   private IpV6Packet(byte[] rawData) {
     this.header = new IpV6Header(rawData);
 
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
+    byte[] rawPayload;
+
+    if (
+      header.getPayloadLengthAsInt() > rawData.length - header.length()
+    ) {
+      rawPayload
+        = ByteArrays.getSubArray(
           rawData,
-          this.header.length(),
-          this.header.getPayloadLengthAsInt()
+          header.length(),
+          rawData.length - header.length()
         );
+    }
+    else {
+      rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            header.getPayloadLengthAsInt()
+          );
+    }
 
     this.payload
-      = PacketFactories.getPacketFactory(IpNumber.class)
+      = PacketFactories.getFactory(IpNumber.class)
           .newPacket(rawPayload, header.getNextHeader());
   }
 
@@ -60,20 +78,27 @@ public final class IpV6Packet extends AbstractPacket {
     if (
          builder == null
       || builder.version == null
+      || builder.trafficClass == null
+      || builder.flowLabel == null
       || builder.nextHeader == null
       || builder.srcAddr == null
       || builder.dstAddr == null
       || builder.payloadBuilder == null
     ) {
-      throw new NullPointerException();
+      StringBuilder sb = new StringBuilder();
+      sb.append("builder: ").append(builder)
+        .append(" builder.version: ").append(builder.version)
+        .append(" builder.trafficClass: ").append(builder.trafficClass)
+        .append(" builder.flowLabel: ").append(builder.flowLabel)
+        .append(" builder.nextHeader: ").append(builder.nextHeader)
+        .append(" builder.srcAddr: ").append(builder.srcAddr)
+        .append(" builder.dstAddr: ").append(builder.dstAddr)
+        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+      throw new NullPointerException(sb.toString());
     }
 
-    UdpPacket.Builder udpBuilder = builder.get(UdpPacket.Builder.class);
-    if (udpBuilder != null) {
-      udpBuilder.dstAddr(builder.dstAddr).srcAddr(builder.srcAddr);
-    }
     this.payload = builder.payloadBuilder.build();
-    this.header = new IpV6Header(builder, this);
+    this.header = new IpV6Header(builder, payload);
   }
 
   @Override
@@ -87,24 +112,6 @@ public final class IpV6Packet extends AbstractPacket {
   }
 
   @Override
-  protected boolean verify() {
-    if (!(payload instanceof UdpPacket)) {
-      if (!payload.isValid()) {
-        return false;
-      }
-    }
-
-    UdpPacket udpPacket = payload.get(UdpPacket.class);
-    if (udpPacket != null) {
-      if (!udpPacket.isValid(header.srcAddr, header.dstAddr)) {
-        return false;
-      }
-    }
-
-    return header.isValid();
-  }
-
-  @Override
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -113,18 +120,19 @@ public final class IpV6Packet extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public static final class Builder extends AbstractBuilder {
+  public static final
+  class Builder extends AbstractBuilder implements LengthBuilder<IpV6Packet> {
 
-    private IpVersion version = IpVersion.IP_V6;
-    private byte trafficClass = 0;
-    private int flowLabel = 0;
+    private IpVersion version;
+    private IpV6TrafficClass trafficClass;
+    private IpV6FlowLabel flowLabel;
     private short payloadLength;
     private IpNumber nextHeader;
     private byte hopLimit;
     private Inet6Address srcAddr;
     private Inet6Address dstAddr;
     private Packet.Builder payloadBuilder;
-    private boolean validateAtBuild = true;
+    private boolean correctLengthAtBuild;
 
     /**
      *
@@ -162,7 +170,7 @@ public final class IpV6Packet extends AbstractPacket {
      * @param trafficClass
      * @return
      */
-    public Builder trafficClass(byte trafficClass) {
+    public Builder trafficClass(IpV6TrafficClass trafficClass) {
       this.trafficClass = trafficClass;
       return this;
     }
@@ -172,7 +180,7 @@ public final class IpV6Packet extends AbstractPacket {
      * @param flowLabel
      * @return
      */
-    public Builder flowLabel(int flowLabel) {
+    public Builder flowLabel(IpV6FlowLabel flowLabel) {
       this.flowLabel = flowLabel;
       return this;
     }
@@ -238,13 +246,8 @@ public final class IpV6Packet extends AbstractPacket {
       return payloadBuilder;
     }
 
-    /**
-     *
-     * @param validateAtBuild
-     * @return
-     */
-    public Builder validateAtBuild(boolean validateAtBuild) {
-      this.validateAtBuild = validateAtBuild;
+    public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
+      this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
@@ -259,7 +262,7 @@ public final class IpV6Packet extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public final class IpV6Header extends AbstractHeader {
+  public static final class IpV6Header extends AbstractHeader {
 
     /*
      * 0                               16                              32
@@ -320,8 +323,8 @@ public final class IpV6Packet extends AbstractPacket {
       = DST_ADDR_OFFSET + DST_ADDR_SIZE;
 
     private final IpVersion version;
-    private final byte trafficClass;
-    private final int flowLabel;
+    private final IpV6TrafficClass trafficClass;
+    private final IpV6FlowLabel flowLabel;
     private final short payloadLength;
     private final IpNumber nextHeader;
     private final byte hopLimit;
@@ -335,7 +338,7 @@ public final class IpV6Packet extends AbstractPacket {
           .append(IPV6_HEADER_SIZE)
           .append(" bytes). data: ")
           .append(ByteArrays.toHexString(rawData, " "));
-        throw new IllegalPacketDataException(sb.toString());
+        throw new IllegalRawDataException(sb.toString());
       }
 
       int versionAndTrafficClassAndFlowLabel
@@ -346,11 +349,15 @@ public final class IpV6Packet extends AbstractPacket {
 
       this.version
         = IpVersion.getInstance(
-            (byte)((versionAndTrafficClassAndFlowLabel & 0xF0000000) >> 28)
+            (byte)(versionAndTrafficClassAndFlowLabel >>> 28)
           );
       this.trafficClass
-        = (byte)((versionAndTrafficClassAndFlowLabel & 0x0FF00000) >> 20);
-      this.flowLabel = versionAndTrafficClassAndFlowLabel & 0x000FFFFF;
+        = IpV6TrafficClassFactories.getFactory().newTrafficClass(
+            (byte)((versionAndTrafficClassAndFlowLabel & 0x0FF00000) >> 20)
+          );
+      this.flowLabel
+        = IpV6FlowLabelFactories.getFactory()
+            .newFlowLabel(versionAndTrafficClassAndFlowLabel & 0x000FFFFF);
       this.payloadLength
         = ByteArrays.getShort(rawData, PAYLOAD_LENGTH_OFFSET);
       this.nextHeader
@@ -364,13 +371,8 @@ public final class IpV6Packet extends AbstractPacket {
         = ByteArrays.getInet6Address(rawData, DST_ADDR_OFFSET);
     }
 
-    private IpV6Header(Builder builder, IpV6Packet host) {
-      if ((builder.flowLabel & 0xFFF00000) != 0) {
-        throw new IllegalArgumentException(
-                    "Invalid flowLabel: " + builder.flowLabel
-                  );
-      }
-
+    private IpV6Header(Builder builder, Packet payload) {
+      this.version = builder.version;
       this.trafficClass = builder.trafficClass;
       this.flowLabel = builder.flowLabel;
       this.nextHeader = builder.nextHeader;
@@ -378,12 +380,15 @@ public final class IpV6Packet extends AbstractPacket {
       this.srcAddr = builder.srcAddr;
       this.dstAddr = builder.dstAddr;
 
-      if (builder.validateAtBuild) {
-        this.version = IpVersion.IP_V6;
-        this.payloadLength = (short)(host.payload.length());
+      if (builder.correctLengthAtBuild) {
+        if (payload != null) {
+          this.payloadLength = (short)(payload.length());
+        }
+        else {
+          this.payloadLength = builder.payloadLength;
+        }
       }
       else {
-        this.version = builder.version;
         this.payloadLength = builder.payloadLength;
       }
     }
@@ -400,15 +405,7 @@ public final class IpV6Packet extends AbstractPacket {
      *
      * @return
      */
-    public int getVersionAsInt() {
-      return 0xFF & version.value();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public byte getTrafficClass() {
+    public IpV6TrafficClass getTrafficClass() {
       return trafficClass;
     }
 
@@ -416,7 +413,7 @@ public final class IpV6Packet extends AbstractPacket {
      *
      * @return
      */
-    public int getFlowLabel() {
+    public IpV6FlowLabel getFlowLabel() {
       return flowLabel;
     }
 
@@ -477,16 +474,11 @@ public final class IpV6Packet extends AbstractPacket {
     }
 
     @Override
-    protected boolean verify() {
-      return IpV6Packet.this.payload.length() == getPayloadLengthAsInt();
-    }
-
-    @Override
     protected List<byte[]> getRawFields() {
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(
         ByteArrays.toByteArray(
-          version.value() << 28 | trafficClass << 20 | flowLabel
+          version.value() << 28 | trafficClass.value() << 20 | flowLabel.value()
         )
       );
       rawFields.add(ByteArrays.toByteArray(payloadLength));
@@ -512,13 +504,13 @@ public final class IpV6Packet extends AbstractPacket {
         .append(" bytes)]")
         .append(ls);
       sb.append("  Version: ")
-        .append(getVersionAsInt())
+        .append(version)
         .append(ls);
       sb.append("  Traffic Class: ")
-        .append(getTrafficClass())
+        .append(trafficClass)
         .append(ls);
       sb.append("  Flow Label: ")
-        .append(getFlowLabel())
+        .append(flowLabel)
         .append(ls);
       sb.append("  Payload length: ")
         .append(getPayloadLengthAsInt())
@@ -539,6 +531,40 @@ public final class IpV6Packet extends AbstractPacket {
 
       return sb.toString();
     }
+
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.11
+   */
+  public interface IpV6TrafficClass extends Serializable {
+
+    // /* must implement if use DynamicIpV6TrafficClassFactory */
+    // public static IpV6TrafficClass newInstance(byte value);
+
+    /**
+     *
+     * @return
+     */
+    public byte value();
+
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.11
+   */
+  public interface IpV6FlowLabel extends Serializable {
+
+    // /* must implement if use DynamicIpV6FlowLabelFactory */
+    // public static IpV6FlowLabel newInstance(int value);
+
+    /**
+     *
+     * @return
+     */
+    public int value();
 
   }
 

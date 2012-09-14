@@ -23,12 +23,12 @@ public final class EtherType extends NamedNumber<Short> {
    */
   private static final long serialVersionUID = 7866667243677334444L;
 
-  //http://www.iana.org/assignments/ethernet-numbers
+  // http://www.iana.org/assignments/ieee-802-numbers
 
   /**
    *
    */
-  public static final EtherType IP_V4
+  public static final EtherType IPV4
     = new EtherType((short)0x0800, "IPv4");
 
   /**
@@ -58,7 +58,7 @@ public final class EtherType extends NamedNumber<Short> {
   /**
    *
    */
-  public static final EtherType IP_V6
+  public static final EtherType IPV6
     = new EtherType((short)0x86dd, "IPv6");
 
   /**
@@ -92,8 +92,8 @@ public final class EtherType extends NamedNumber<Short> {
     for (Field field: EtherType.class.getFields()) {
       if (EtherType.class.isAssignableFrom(field.getType())) {
         try {
-          EtherType typeCode = (EtherType)field.get(null);
-          registry.put(typeCode.value(), typeCode);
+          EtherType f = (EtherType)field.get(null);
+          registry.put(f.value(), f);
         } catch (IllegalArgumentException e) {
           throw new AssertionError(e);
         } catch (IllegalAccessException e) {
@@ -105,7 +105,12 @@ public final class EtherType extends NamedNumber<Short> {
     }
   }
 
-  private EtherType(Short value, String name) {
+  /**
+   *
+   * @param value
+   * @param name
+   */
+  public EtherType(Short value, String name) {
     super(value, name);
   }
 
@@ -121,6 +126,15 @@ public final class EtherType extends NamedNumber<Short> {
     else {
       return new EtherType(value, "unknown");
     }
+  }
+
+  /**
+   *
+   * @param type
+   * @return
+   */
+  public static EtherType register(EtherType type) {
+    return registry.put(type.value(), type);
   }
 
   /**

@@ -23,10 +23,6 @@ abstract class AbstractPcapAddress implements PcapAddress {
   private final InetAddress broadcastAddr;
   private final InetAddress dstAddr; // for point- to-point interface
 
-  /**
-   *
-   * @param pcapAddr
-   */
   protected AbstractPcapAddress(pcap_addr pcapAddr) {
     if (pcapAddr == null) {
       throw new NullPointerException();
@@ -65,39 +61,22 @@ abstract class AbstractPcapAddress implements PcapAddress {
     }
   }
 
-  /**
-   *
-   */
   public InetAddress getAddress() {
     return address;
   }
 
-  /**
-   *
-   */
   public InetAddress getNetmask() {
     return netmask;
   }
 
-  /**
-   *
-   */
   public InetAddress getBroadcastAddress() {
     return broadcastAddr;
   }
 
-  /**
-   *
-   */
   public InetAddress getDestinationAddress() {
     return dstAddr;
   }
 
-  /**
-   *
-   * @param sa
-   * @return
-   */
   protected abstract InetAddress ntoInetAddress(sockaddr sa);
 
   @Override

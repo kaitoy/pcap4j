@@ -11,19 +11,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import org.pcap4j.packet.AbstractPacket.AbstractBuilder;
-import org.pcap4j.packet.AnonymousPacket;
-import org.pcap4j.packet.IpV4Packet;
-import org.pcap4j.packet.PacketFactories;
 import org.pcap4j.packet.IpV4Packet.IpV4Header;
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
-import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.UnknownPacket;
+import org.pcap4j.packet.IpV4Packet;
+import org.pcap4j.packet.SimpleBuilder;
 
 /**
  * @author Kaito
  * @since pcap4j 0.9.9
  */
 public final class IpV4Helper {
+
+  private static Comparator<IpV4Packet> comparator = new ComparatorImpl();
 
   private IpV4Helper() { throw new AssertionError(); }
 
@@ -60,8 +61,10 @@ public final class IpV4Helper {
         b.moreFragmentFlag(true)
          .flagmentOffset((short)(srcPos / 8))
          .payloadBuilder(
-            new AnonymousPacket.Builder().rawData(fragmented_payload)
-          );
+            new UnknownPacket.Builder().rawData(fragmented_payload)
+          )
+         .correctChecksumAtBuild(true)
+         .correctLengthAtBuild(true);
         list.add(b.build());
 
         rest_length -= fragmented_payload.length;
@@ -77,8 +80,10 @@ public final class IpV4Helper {
         b.moreFragmentFlag(false)
          .flagmentOffset((short)(srcPos / 8))
          .payloadBuilder(
-            new AnonymousPacket.Builder().rawData(fragmented_payload)
-          );
+            new UnknownPacket.Builder().rawData(fragmented_payload)
+          )
+         .correctChecksumAtBuild(true)
+         .correctLengthAtBuild(true);
         list.add(b.build());
 
         break;
@@ -94,21 +99,13 @@ public final class IpV4Helper {
    * @return
    */
   public static IpV4Packet defragment(List<IpV4Packet> list) {
-    Collections.sort(
-      list,
-      new Comparator<IpV4Packet>()  {
-        public int compare(IpV4Packet p1, IpV4Packet p2) {
-          return p1.getHeader().getFlagmentOffsetAsInt()
-                   - p2.getHeader().getFlagmentOffsetAsInt();
-        }
-      }
-    );
+    Collections.sort(list, comparator);
 
     IpV4Header lastPacketHeader = list.get(list.size() - 1).getHeader();
     int payloadLength
-      = lastPacketHeader.getFlagmentOffsetAsInt() * 8
+      = lastPacketHeader.getFlagmentOffset() * 8
           + lastPacketHeader.getTotalLengthAsInt()
-          - lastPacketHeader.getIhlAsInt() * 4;
+          - lastPacketHeader.getIhl() * 4;
     if (payloadLength <= 0) {
       throw new IllegalArgumentException("Can't defragment: " + list);
     }
@@ -118,7 +115,9 @@ public final class IpV4Helper {
     try {
       for (IpV4Packet p: list) {
         byte[] rawPayload = p.getPayload().getRawData();
-        System.arraycopy(rawPayload, 0, defragmentedPayload, destPos, rawPayload.length);
+        System.arraycopy(
+          rawPayload, 0, defragmentedPayload, destPos, rawPayload.length
+        );
         destPos += rawPayload.length;
       }
     } catch (NullPointerException e) {
@@ -130,20 +129,28 @@ public final class IpV4Helper {
     }
 
     IpV4Packet.Builder b = list.get(0).getBuilder();
-    final IpNumber ipNumber = lastPacketHeader.getProtocol();
 
     b.moreFragmentFlag(false)
      .flagmentOffset((short)0)
      .payloadBuilder(
-        new AbstractBuilder() {
-          public Packet build() {
-            return PacketFactories.getPacketFactory(IpNumber.class)
-                     .newPacket(defragmentedPayload, ipNumber);
-          }
-        }
-      );
+        new SimpleBuilder(
+          PacketFactories.getFactory(IpNumber.class)
+            .newPacket(defragmentedPayload, list.get(0).getHeader().getProtocol())
+        )
+      )
+     .correctChecksumAtBuild(true)
+     .correctLengthAtBuild(true);
 
     return b.build();
+  }
+
+  private static final class ComparatorImpl implements Comparator<IpV4Packet> {
+
+    public int compare(IpV4Packet p1, IpV4Packet p2) {
+      return p1.getHeader().getFlagmentOffset()
+               - p2.getHeader().getFlagmentOffset();
+    }
+
   }
 
 }

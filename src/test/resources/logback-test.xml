@@ -8,7 +8,7 @@
   </appender>
   
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>test.log</file>
+    <file>test/test.log</file>
     <append>false</append>
     
     <encoder>
@@ -16,7 +16,7 @@
     </encoder>
   </appender>
   
-  <logger name="org.pcap4j.core" level="INFO" additivity="true">
+  <logger name="org.pcap4j.core" level="DEBUG" additivity="true">
     <appender-ref ref="CONSOLE" />
   </logger>
   

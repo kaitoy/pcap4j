@@ -23,16 +23,13 @@ import com.sun.jna.Pointer;
 public final class PcapDumper {
 
   private static final Logger logger = LoggerFactory.getLogger(PcapDumper.class);
+
   private final Pointer dumper;
   private final Object thisLock = new Object();
 
   private volatile boolean opening = true;
 
-  /**
-   *
-   * @param dumper
-   */
-  public PcapDumper(Pointer dumper) { this.dumper = dumper; }
+  PcapDumper(Pointer dumper) { this.dumper = dumper; }
 
   Pointer getDumper() { return dumper; }
 
@@ -45,15 +42,26 @@ public final class PcapDumper {
   /**
    *
    * @param packet
-   * @param timestampInts
+   */
+  public void dump(Packet packet) {
+    long cur = System.currentTimeMillis();
+    long timestampSec = cur / 1000L;
+    int timestampMicros = (int)((cur - timestampSec * 1000L) * 1000);
+    dump(packet, timestampSec, timestampMicros);
+  }
+
+  /**
+   *
+   * @param packet
+   * @param timestampSec
    * @param timestampMicros
    * @throws IllegalStateException
    */
-  public void dump(Packet packet, long timestampInts, int timestampMicros) {
-    if (timestampInts < 0) {
+  public void dump(Packet packet, long timestampSec, int timestampMicros) {
+    if (timestampSec < 0) {
       throw new IllegalArgumentException(
-              "timestampInts must be positive: "
-                + timestampInts
+              "timestampSec must be positive: "
+                + timestampSec
             );
     }
     if (timestampMicros < 0 || timestampMicros >= 1000000) {
@@ -69,7 +77,7 @@ public final class PcapDumper {
     pcap_pkthdr header = new pcap_pkthdr();
     header.len = header.caplen = packet.length();
     header.ts = new timeval();
-    header.ts.tv_sec = new NativeLong(timestampInts);
+    header.ts.tv_sec = new NativeLong(timestampSec);
     header.ts.tv_usec = new NativeLong(timestampMicros);
 
     synchronized (thisLock) {

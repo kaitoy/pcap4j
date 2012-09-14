@@ -1,0 +1,6 @@
+[ICMPv4 Timestamp Reply Header (16 bytes)]
+  Identifier: 1234
+  SequenceNumber: 4321
+  Originate Timestamp: 10
+  Receive Timestamp: 200
+  Transmit Timestamp: 3000

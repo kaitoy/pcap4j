@@ -22,6 +22,8 @@ public final class DataLinkType extends NamedNumber<Integer> {
    */
   private static final long serialVersionUID = -4299486028394578120L;
 
+  // pcap/bpf.h
+
   /**
    *
    */
@@ -65,8 +67,8 @@ public final class DataLinkType extends NamedNumber<Integer> {
     for (Field field: DataLinkType.class.getFields()) {
       if (DataLinkType.class.isAssignableFrom(field.getType())) {
         try {
-          DataLinkType typeCode = (DataLinkType)field.get(null);
-          registry.put(typeCode.value(), typeCode);
+          DataLinkType f = (DataLinkType)field.get(null);
+          registry.put(f.value(), f);
         } catch (IllegalArgumentException e) {
           throw new AssertionError(e);
         } catch (IllegalAccessException e) {
@@ -78,7 +80,12 @@ public final class DataLinkType extends NamedNumber<Integer> {
     }
   }
 
-  private DataLinkType(Integer value, String name) {
+  /**
+   *
+   * @param value
+   * @param name
+   */
+  public DataLinkType(Integer value, String name) {
     super(value, name);
   }
 
@@ -94,6 +101,15 @@ public final class DataLinkType extends NamedNumber<Integer> {
     else {
       return new DataLinkType(value, "unknown");
     }
+  }
+
+  /**
+   *
+   * @param type
+   * @return
+   */
+  public static DataLinkType register(DataLinkType type) {
+    return registry.put(type.value(), type);
   }
 
   /**

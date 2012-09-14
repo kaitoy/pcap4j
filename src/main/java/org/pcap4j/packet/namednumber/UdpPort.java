@@ -43,8 +43,8 @@ public final class UdpPort extends NamedNumber<Short> {
     for (Field field: UdpPort.class.getFields()) {
       if (UdpPort.class.isAssignableFrom(field.getType())) {
         try {
-          UdpPort typeCode = (UdpPort)field.get(null);
-          registry.put(typeCode.value(), typeCode);
+          UdpPort f = (UdpPort)field.get(null);
+          registry.put(f.value(), f);
         } catch (IllegalArgumentException e) {
           throw new AssertionError(e);
         } catch (IllegalAccessException e) {
@@ -57,7 +57,12 @@ public final class UdpPort extends NamedNumber<Short> {
 
   }
 
-  private UdpPort(Short value, String name) {
+  /**
+   *
+   * @param value
+   * @param name
+   */
+  public UdpPort(Short value, String name) {
     super(value, name);
   }
 
@@ -73,6 +78,15 @@ public final class UdpPort extends NamedNumber<Short> {
     else {
       return new UdpPort(value, "unknown");
     }
+  }
+
+  /**
+   *
+   * @param port
+   * @return
+   */
+  public static UdpPort register(UdpPort port) {
+    return registry.put(port.value(), port);
   }
 
   /**
