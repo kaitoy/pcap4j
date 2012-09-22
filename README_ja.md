@@ -9,7 +9,7 @@ Pcap4J
 ダウンロード
 ------------
 
-Pcap4J 0.9.11
+Pcap4J 0.9.12
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
@@ -139,7 +139,7 @@ Pcap4J is distributed under the MIT license.
 おまけ
 ------
 
-Pcap4J 0.9.11 を使ったSNMPネットワークシミュレータ、SNeO。
+Pcap4J 0.9.12 を使ったSNMPネットワークシミュレータ、SNeO。
 とりあえず置いておくだけ。
 今のところ商用でもなんでも無料で使用可。コピーも再配布も可。
 

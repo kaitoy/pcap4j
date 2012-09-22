@@ -9,7 +9,7 @@ and provides you Java-Oriented APIs.
 Download
 --------
 
-Pcap4J 0.9.11
+Pcap4J 0.9.12
 
 * [pcap4j.jar](/downloads/Kaitoy/pcap4j/pcap4j.jar)
 
@@ -127,7 +127,7 @@ Pcap4J is distributed under the MIT license.
 Extra
 -----
 
-SNeO: an SNMP Network Simulator using Pcap4J 0.9.11 is available below. The documents will come someday.
+SNeO: an SNMP Network Simulator using Pcap4J 0.9.12 is available below. The documents will come someday.
 You can use this version of SNeO in both personal and commercial for free. You can also copy and distribute it.
 
 SNeO 1.0.10

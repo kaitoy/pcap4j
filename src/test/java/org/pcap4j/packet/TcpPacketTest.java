@@ -342,6 +342,7 @@ public class TcpPacketTest {
   @Test
   public void testToString() throws Exception {
     logger.info(packet.toString());
+
     FileReader fr
       = new FileReader(
           "src/test/resources/" + getClass().getSimpleName() + ".log"
