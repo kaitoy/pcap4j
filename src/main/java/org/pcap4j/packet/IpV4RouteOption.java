@@ -163,7 +163,7 @@ abstract class IpV4RouteOption implements IpV4Option {
       .append(getType());
     sb.append("] [option-length: ")
       .append(getLengthAsInt());
-    sb.append(" byte] [pointer: ")
+    sb.append(" bytes] [pointer: ")
       .append(getPointerAsInt());
     sb.append("] [route data:");
     for (Inet4Address addr: routeData) {

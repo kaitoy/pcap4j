@@ -46,7 +46,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
   }
 
   private IpV4Rfc1349Tos(byte value) {
-    this.precedence = IpV4TosPrecedence.getInstance((byte)(value >>> 5));
+    this.precedence = IpV4TosPrecedence.getInstance((byte)((value & 0xE0) >> 5));
     this.tos = IpV4TosTos.getInstance((byte)(0x0F & (value >> 1)));
     this.mbz = (value & 0x01) != 0;
   }

@@ -49,7 +49,7 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
 
   private IpV4Rfc791Tos(byte value) {
 
-    this.precedence = IpV4TosPrecedence.getInstance((byte)(value >>> 5));
+    this.precedence = IpV4TosPrecedence.getInstance((byte)((value & 0xE0) >> 5));
     this.lowDelay = (value & 0x10) != 0;
     this.highThroughput = (value & 0x08) != 0;
     this.highReliability = (value & 0x04) != 0;

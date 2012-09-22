@@ -8,22 +8,22 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-import org.pcap4j.packet.IpV4Packet.IpV4Option;
-import org.pcap4j.packet.namednumber.IpV4OptionType;
+import org.pcap4j.packet.TcpPacket.TcpOption;
+import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.11
+ * @since pcap4j 0.9.12
  */
-public final class UnknownIpV4Option implements IpV4Option {
+public final class UnknownTcpOption implements TcpOption {
 
   /**
    *
    */
-  private static final long serialVersionUID = 5843622351774970021L;
+  private static final long serialVersionUID = -893085251311518110L;
 
-  private final IpV4OptionType type;
+  private final TcpOptionKind kind;
   private final byte length;
   private final byte[] data;
 
@@ -32,11 +32,11 @@ public final class UnknownIpV4Option implements IpV4Option {
    * @param rawData
    * @return
    */
-  public static UnknownIpV4Option newInstance(byte[] rawData) {
-    return new UnknownIpV4Option(rawData);
+  public static UnknownTcpOption newInstance(byte[] rawData) {
+    return new UnknownTcpOption(rawData);
   }
 
-  private UnknownIpV4Option(byte[] rawData) {
+  private UnknownTcpOption(byte[] rawData) {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }
@@ -47,26 +47,26 @@ public final class UnknownIpV4Option implements IpV4Option {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.type = IpV4OptionType.getInstance(rawData[0]);
+    this.kind = TcpOptionKind.getInstance(rawData[0]);
     this.length = rawData[1];
 
     this.data = ByteArrays.getSubArray(rawData, 2, length - 2);
   }
 
-  private UnknownIpV4Option(Builder builder) {
+  private UnknownTcpOption(Builder builder) {
     if (
          builder == null
-      || builder.type == null
+      || builder.kind == null
       || builder.data == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
-        .append(" builder.type: ").append(builder.type)
+        .append(" builder.kind: ").append(builder.kind)
         .append(" builder.data: ").append(builder.data);
       throw new NullPointerException(sb.toString());
     }
 
-    this.type = builder.type;
+    this.kind = builder.kind;
     this.data = new byte[builder.data.length];
     System.arraycopy(
       builder.data, 0, this.data, 0, builder.data.length
@@ -80,7 +80,7 @@ public final class UnknownIpV4Option implements IpV4Option {
     }
   }
 
-  public IpV4OptionType getType() { return type; }
+  public TcpOptionKind getKind() { return kind; }
 
   /**
    *
@@ -106,7 +106,7 @@ public final class UnknownIpV4Option implements IpV4Option {
 
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
-    rawData[0] = type.value();
+    rawData[0] = kind.value();
     rawData[1] = length;
     System.arraycopy(data, 0, rawData, 2, data.length);
     return rawData;
@@ -125,11 +125,11 @@ public final class UnknownIpV4Option implements IpV4Option {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[option-type: ")
-      .append(type)
-      .append("] [option-length: ")
+    sb.append("[Kind: ")
+      .append(kind)
+      .append("] [Length: ")
       .append(getLengthAsInt())
-      .append(" bytes] [option-data: 0x")
+      .append(" bytes] [Data: 0x")
       .append(ByteArrays.toHexString(data, ""))
       .append("]");
     return sb.toString();
@@ -152,9 +152,9 @@ public final class UnknownIpV4Option implements IpV4Option {
    * @since pcap4j 0.9.11
    */
   public static final class
-  Builder implements LengthBuilder<UnknownIpV4Option> {
+  Builder implements LengthBuilder<UnknownTcpOption> {
 
-    private IpV4OptionType type;
+    private TcpOptionKind kind;
     private byte length;
     private byte[] data;
     private boolean correctLengthAtBuild;
@@ -164,19 +164,19 @@ public final class UnknownIpV4Option implements IpV4Option {
      */
     public Builder() {}
 
-    private Builder(UnknownIpV4Option option) {
-      this.type = option.type;
+    private Builder(UnknownTcpOption option) {
+      this.kind = option.kind;
       this.length = option.length;
       this.data = option.data;
     }
 
     /**
      *
-     * @param type
+     * @param kind
      * @return
      */
-    public Builder type(IpV4OptionType type) {
-      this.type = type;
+    public Builder kind(TcpOptionKind kind) {
+      this.kind = kind;
       return this;
     }
 
@@ -205,8 +205,8 @@ public final class UnknownIpV4Option implements IpV4Option {
       return this;
     }
 
-    public UnknownIpV4Option build() {
-      return new UnknownIpV4Option(this);
+    public UnknownTcpOption build() {
+      return new UnknownTcpOption(this);
     }
 
   }

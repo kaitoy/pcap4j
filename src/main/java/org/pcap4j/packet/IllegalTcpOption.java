@@ -8,23 +8,22 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-import org.pcap4j.packet.IpV4Packet.IpV4Option;
-import org.pcap4j.packet.namednumber.IpV4OptionType;
+import org.pcap4j.packet.TcpPacket.TcpOption;
+import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.ByteArrays;
-
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.11
+ * @since pcap4j 0.9.12
  */
-public final class IllegalIpV4Option implements IpV4Option {
+public final class IllegalTcpOption implements TcpOption {
 
   /**
    *
    */
-  private static final long serialVersionUID = -5887663161675479542L;
+  private static final long serialVersionUID = 4128600756828920489L;
 
-  private final IpV4OptionType type;
+  private final TcpOptionKind kind;
   private final byte[] rawData;
 
   /**
@@ -32,11 +31,11 @@ public final class IllegalIpV4Option implements IpV4Option {
    * @param rawData
    * @return
    */
-  public static IllegalIpV4Option newInstance(byte[] rawData) {
-    return new IllegalIpV4Option(rawData);
+  public static IllegalTcpOption newInstance(byte[] rawData) {
+    return new IllegalTcpOption(rawData);
   }
 
-  private IllegalIpV4Option(byte[] rawData) {
+  private IllegalTcpOption(byte[] rawData) {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }
@@ -47,32 +46,32 @@ public final class IllegalIpV4Option implements IpV4Option {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.type = IpV4OptionType.getInstance(rawData[0]);
+    this.kind = TcpOptionKind.getInstance(rawData[0]);
     this.rawData = new byte[rawData.length];
     System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);
   }
 
-  private IllegalIpV4Option(Builder builder) {
+  private IllegalTcpOption(Builder builder) {
     if (
         builder == null
-     || builder.type == null
+     || builder.kind == null
      || builder.rawData == null
    ) {
      StringBuilder sb = new StringBuilder();
      sb.append("builder: ").append(builder)
-       .append(" builder.type: ").append(builder.type)
+       .append(" builder.kind: ").append(builder.kind)
        .append(" builder.rawData: ").append(builder.rawData);
      throw new NullPointerException(sb.toString());
    }
 
-   this.type = builder.type;
+   this.kind = builder.kind;
    this.rawData = new byte[builder.rawData.length];
    System.arraycopy(
      builder.rawData, 0, this.rawData, 0, builder.rawData.length
    );
   }
 
-  public IpV4OptionType getType() { return type; }
+  public TcpOptionKind getKind() { return kind; }
 
   public int length() { return rawData.length; }
 
@@ -93,8 +92,8 @@ public final class IllegalIpV4Option implements IpV4Option {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[option-type: ")
-      .append(type)
+    sb.append("[Kind: ")
+      .append(kind)
       .append("] [Illegal Raw Data: 0x")
       .append(ByteArrays.toHexString(rawData, ""))
       .append("]");
@@ -115,11 +114,11 @@ public final class IllegalIpV4Option implements IpV4Option {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 0.9.11
+   * @since pcap4j 0.9.12
    */
   public static final class Builder {
 
-    private IpV4OptionType type;
+    private TcpOptionKind kind;
     private byte[] rawData;
 
     /**
@@ -127,18 +126,18 @@ public final class IllegalIpV4Option implements IpV4Option {
      */
     public Builder() {}
 
-    private Builder(IllegalIpV4Option option) {
-      this.type = option.type;
+    private Builder(IllegalTcpOption option) {
+      this.kind = option.kind;
       this.rawData = option.rawData;
     }
 
     /**
      *
-     * @param type
+     * @param kind
      * @return
      */
-    public Builder type(IpV4OptionType type) {
-      this.type = type;
+    public Builder kind(TcpOptionKind kind) {
+      this.kind = kind;
       return this;
     }
 
@@ -156,8 +155,8 @@ public final class IllegalIpV4Option implements IpV4Option {
      *
      * @return
      */
-    public IllegalIpV4Option build() {
-      return new IllegalIpV4Option(this);
+    public IllegalTcpOption build() {
+      return new IllegalTcpOption(this);
     }
 
   }

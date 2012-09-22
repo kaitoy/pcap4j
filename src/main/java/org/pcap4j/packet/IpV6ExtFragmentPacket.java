@@ -268,7 +268,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
       short fragmentOffsetAndResAndM
         = ByteArrays.getShort(rawData, FRAGMENT_OFFSET_AND_RES_AND_M_OFFSET);
       this.fragmentOffset
-        = (short)(fragmentOffsetAndResAndM >>> 3);
+        = (short)((fragmentOffsetAndResAndM & 0xFFF8) >> 3);
       this.res
         = (byte)((fragmentOffsetAndResAndM & 0x0006) >> 1);
       this.m

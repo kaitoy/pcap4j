@@ -14,6 +14,7 @@ import org.pcap4j.packet.IpV6ExtOptionsPacket.IpV6Option;
 import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
 import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
 import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
+import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.factory.ClassifiedDataFactory;
 import org.pcap4j.packet.factory.DynamicIpV4TosFactory;
 import org.pcap4j.packet.factory.DynamicIpV6FlowLabelFactory;
@@ -28,6 +29,7 @@ import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
 import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
 import org.pcap4j.packet.namednumber.NamedNumber;
+import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.PropertiesLoader;
 
 /**
@@ -56,6 +58,20 @@ public final class PacketPropertiesLoader {
   public static final String IPV4_CALC_CHECKSUM_KEY
     = PacketPropertiesLoader.class.getPackage().getName()
         + ".ipv4.calcChecksumAtBuild";
+
+  /**
+   *
+   */
+  public static final String TCPV4_CALC_CHECKSUM_KEY
+    = PacketPropertiesLoader.class.getPackage().getName()
+        + ".tcpv4.calcChecksumAtBuild";
+
+  /**
+   *
+   */
+  public static final String TCPV6_CALC_CHECKSUM_KEY
+    = PacketPropertiesLoader.class.getPackage().getName()
+        + ".tcpv6.calcChecksumAtBuild";
 
   /**
    *
@@ -100,6 +116,18 @@ public final class PacketPropertiesLoader {
    */
   public static final String UNKNOWN_IPV4_OPTION_KEY
     = IPV4_OPTION_CLASS_KEY_BASE + "unknownNumber";
+
+  /**
+   *
+   */
+  public static final String TCP_OPTION_CLASS_KEY_BASE
+    = TcpOption.class.getName() + ".classFor.";
+
+  /**
+   *
+   */
+  public static final String UNKNOWN_TCP_OPTION_KEY
+    = TCP_OPTION_CLASS_KEY_BASE + "unknownNumber";
 
   /**
    *
@@ -224,6 +252,28 @@ public final class PacketPropertiesLoader {
    *
    * @return
    */
+  public boolean tcpV4CalcChecksum() {
+    return loader.getBoolean(
+             TCPV4_CALC_CHECKSUM_KEY,
+             Boolean.FALSE
+           ).booleanValue();
+  }
+
+  /**
+   *
+   * @return
+   */
+  public boolean tcpV6CalcChecksum() {
+    return loader.getBoolean(
+             TCPV6_CALC_CHECKSUM_KEY,
+             Boolean.FALSE
+           ).booleanValue();
+  }
+
+  /**
+   *
+   * @return
+   */
   public boolean udpV4CalcChecksum() {
     return loader.getBoolean(
              UDPV4_CALC_CHECKSUM_KEY,
@@ -244,7 +294,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @param clazz
+   * @param numberClass
    * @return
    */
   public Class<? extends PacketFactory> getPacketFactoryClass(
@@ -352,6 +402,34 @@ public final class PacketPropertiesLoader {
     return loader.<IpV4Option>getClass(
              UNKNOWN_IPV4_OPTION_KEY,
              UnknownIpV4Option.class
+           );
+  }
+
+  /**
+   *
+   * @param type
+   * @return
+   */
+  public Class<? extends TcpOption> getTcpOptionClass(TcpOptionKind type) {
+    StringBuilder sb = new StringBuilder(120);
+    sb.append(TCP_OPTION_CLASS_KEY_BASE)
+      .append(type.getClass().getName())
+      .append(".")
+      .append(type.valueAsString());
+    return loader.<TcpOption>getClass(
+             sb.toString(),
+             getUnknownTcpOptionClass()
+           );
+  }
+
+  /**
+   *
+   * @return
+   */
+  public Class<? extends TcpOption> getUnknownTcpOptionClass() {
+    return loader.<TcpOption>getClass(
+             UNKNOWN_TCP_OPTION_KEY,
+             UnknownTcpOption.class
            );
   }
 

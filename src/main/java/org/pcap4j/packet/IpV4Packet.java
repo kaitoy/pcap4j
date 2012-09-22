@@ -28,6 +28,8 @@ import static org.pcap4j.util.ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
  */
 public final class IpV4Packet extends AbstractPacket {
 
+  // http://tools.ietf.org/html/rfc791
+
   /**
    *
    */
@@ -141,9 +143,11 @@ public final class IpV4Packet extends AbstractPacket {
     private Inet4Address srcAddr;
     private Inet4Address dstAddr;
     private List<IpV4Option> options;
+    private byte[] padding;
     private Packet.Builder payloadBuilder;
     private boolean correctChecksumAtBuild;
     private boolean correctLengthAtBuild;
+    private boolean paddingAtBuild;
 
     /**
      *
@@ -170,6 +174,7 @@ public final class IpV4Packet extends AbstractPacket {
       this.srcAddr = packet.header.srcAddr;
       this.dstAddr = packet.header.dstAddr;
       this.options = packet.header.options;
+      this.padding = packet.header.padding;
       this.payloadBuilder = packet.payload.getBuilder();
     }
 
@@ -223,11 +228,21 @@ public final class IpV4Packet extends AbstractPacket {
       return this;
     }
 
+    /**
+     *
+     * @param reservedFlag
+     * @return
+     */
     public Builder reservedFlag(boolean reservedFlag) {
       this.reservedFlag = reservedFlag;
       return this;
     }
 
+    /**
+     *
+     * @param dontFragmentFlag
+     * @return
+     */
     public Builder dontFragmentFlag(boolean dontFragmentFlag) {
       this.dontFragmentFlag = dontFragmentFlag;
       return this;
@@ -313,6 +328,16 @@ public final class IpV4Packet extends AbstractPacket {
       return this;
     }
 
+    /**
+     *
+     * @param padding
+     * @return
+     */
+    public Builder padding(byte[] padding) {
+      this.padding = padding;
+      return this;
+    }
+
     @Override
     public Builder payloadBuilder(Packet.Builder payloadBuilder) {
       this.payloadBuilder = payloadBuilder;
@@ -331,6 +356,16 @@ public final class IpV4Packet extends AbstractPacket {
 
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
+      return this;
+    }
+
+    /**
+     *
+     * @param paddingAtBuild
+     * @return
+     */
+    public Builder paddingAtBuild(boolean paddingAtBuild) {
+      this.paddingAtBuild = paddingAtBuild;
       return this;
     }
 
@@ -429,7 +464,7 @@ public final class IpV4Packet extends AbstractPacket {
     private final Inet4Address srcAddr;
     private final Inet4Address dstAddr;
     private final List<IpV4Option> options;
-    // padding is included in options.
+    private final byte[] padding;
 
     private IpV4Header(byte[] rawData) {
       if (rawData.length < MIN_IPV4_HEADER_SIZE) {
@@ -445,7 +480,7 @@ public final class IpV4Packet extends AbstractPacket {
       byte versionAndIhl
         = ByteArrays.getByte(rawData, VERSION_AND_IHL_OFFSET);
       this.version = IpVersion.getInstance(
-                       (byte)(versionAndIhl >>> 4)
+                       (byte)((versionAndIhl & 0xF0) >> 4)
                      );
       this.ihl = (byte)(versionAndIhl & 0x0F);
 
@@ -500,7 +535,16 @@ public final class IpV4Packet extends AbstractPacket {
                  .newData(optRawData, type);
         options.add(newOne);
         currentOffset += newOne.length();
+
+        if (newOne.getType().equals(IpV4OptionType.END_OF_OPTION_LIST)) {
+          break;
+        }
       }
+
+      this.padding
+        = ByteArrays.getSubArray(
+            rawData, currentOffset, headerLength - currentOffset
+          );
     }
 
     private IpV4Header(Builder builder, Packet payload) {
@@ -526,6 +570,25 @@ public final class IpV4Packet extends AbstractPacket {
       }
       else {
         this.options = new ArrayList<IpV4Option>(0);
+      }
+
+      if (builder.paddingAtBuild) {
+        int mod = measureLengthWithoutPadding() % 4;
+        if (mod != 0) {
+          this.padding = new byte[4 - mod];
+        }
+        else {
+          this.padding = new byte[0];
+        }
+      }
+      else {
+        if (builder.padding != null) {
+          this.padding = new byte[builder.padding.length];
+          System.arraycopy(builder.padding, 0, padding, 0, padding.length);
+        }
+        else {
+          this.padding = new byte[0];
+        }
       }
 
       if (builder.correctLengthAtBuild) {
@@ -717,6 +780,16 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
+     * @return
+     */
+    public byte[] getPadding() {
+      byte[] copy = new byte[padding.length];
+      System.arraycopy(padding, 0, copy, 0, padding.length);
+      return copy;
+    }
+
+    /**
+     *
      * @param acceptZero
      * @return
      */
@@ -749,16 +822,21 @@ public final class IpV4Packet extends AbstractPacket {
       for (IpV4Option o: options) {
         rawFields.add(o.getRawData());
       }
+      rawFields.add(padding);
       return rawFields;
     }
 
-    @Override
-    protected int measureLength() {
+    private int measureLengthWithoutPadding() {
       int len = 0;
       for (IpV4Option o: options) {
         len += o.length();
       }
       return len + MIN_IPV4_HEADER_SIZE;
+    }
+
+    @Override
+    protected int measureLength() {
+      return measureLengthWithoutPadding() + padding.length;
     }
 
     @Override
@@ -823,6 +901,12 @@ public final class IpV4Packet extends AbstractPacket {
           .append(opt)
           .append(ls);
       }
+      if (padding.length != 0) {
+        sb.append("  Padding: 0x")
+          .append(ByteArrays.toHexString(padding, " "))
+          .append(ls);
+      }
+
       return sb.toString();
     }
 

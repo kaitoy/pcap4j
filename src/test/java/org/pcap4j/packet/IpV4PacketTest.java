@@ -66,6 +66,7 @@ public class IpV4PacketTest {
   private final Inet4Address srcAddr;
   private final Inet4Address dstAddr;
   private final List<IpV4Option> options = new ArrayList<IpV4Option>();
+  private final byte[] padding;
   private final IpV4Packet packet1;
   private final IpV4Packet packet2;
 
@@ -100,14 +101,15 @@ public class IpV4PacketTest {
     routeData.add((Inet4Address)Inet4Address.getByName("192.168.1.2"));
     IpV4LooseSourceRouteOption.Builder lsrrb = new IpV4LooseSourceRouteOption.Builder();
     lsrrb.pointer((byte)8)
-         .routeData(routeData);
+         .routeData(routeData)
+         .correctLengthAtBuild(true);
     this.options.add(lsrrb.build());
-
-    this.options.add(IpV4NoOperationOption.getInstance());
     this.options.add(IpV4NoOperationOption.getInstance());
     this.options.add(IpV4NoOperationOption.getInstance());
     this.options.add(IpV4NoOperationOption.getInstance());
     this.options.add(IpV4EndOfOptionList.getInstance());
+
+    this.padding = new byte[] { (byte)0xAA };
 
     UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
     unknownb.rawData(
@@ -144,8 +146,10 @@ public class IpV4PacketTest {
      .srcAddr(srcAddr)
      .dstAddr(dstAddr)
      .options(options)
+     .padding(padding)
      .correctChecksumAtBuild(false)
      .correctLengthAtBuild(false)
+     .paddingAtBuild(false)
      .payloadBuilder(
         new FragmentedPacket.Builder()
           .rawData(ByteArrays.getSubArray(rawPayload, 0, 8))
@@ -240,6 +244,8 @@ public class IpV4PacketTest {
       IpV4Option actual = iter.next();
       assertEquals(expected, actual);
     }
+
+    assertArrayEquals(padding, h.getPadding());
 
     IpV4Packet.Builder b = packet1.getBuilder();
     IpV4Packet p;
@@ -411,6 +417,7 @@ public class IpV4PacketTest {
          packet1.getBuilder()
            .correctChecksumAtBuild(true)
            .correctLengthAtBuild(true)
+           .paddingAtBuild(true)
        )
       .paddingAtBuild(true);
     EthernetPacket ep1 = eb.build();

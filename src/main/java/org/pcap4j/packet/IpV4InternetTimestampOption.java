@@ -88,7 +88,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     }
 
     this.pointer = rawData[2];
-    this.overflow = (byte)(rawData[3] >>> 4);
+    this.overflow = (byte)((rawData[3] & 0xF0) >> 4);
     this.flag
       = IpV4InternetTimestampOptionFlag.getInstance((byte)(rawData[3] & 0x0F));
     this.data
@@ -204,7 +204,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
       .append(getType());
     sb.append("] [option-length: ")
       .append(getLengthAsInt());
-    sb.append(" byte] [pointer: ")
+    sb.append(" bytes] [pointer: ")
       .append(getPointerAsInt());
     sb.append("] [overflow: ")
       .append(getOverflowAsInt());

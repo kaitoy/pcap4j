@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet.factory;
 
+import org.pcap4j.packet.TcpPacket;
 import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.ArpPacket;
 import org.pcap4j.packet.Dot1qVlanTagPacket;
@@ -92,6 +93,9 @@ public final class StaticPacketFactory implements PacketFactory {
         }
         else if (number.equals(IpNumber.ICMPV4)) {
           return IcmpV4CommonPacket.newPacket(rawData);
+        }
+        else if (number.equals(IpNumber.TCP)) {
+          return TcpPacket.newPacket(rawData);
         }
         else if (number.equals(IpNumber.IPV6_HOPOPT)) {
           return IpV6ExtHopByHopOptionsPacket.newPacket(rawData);

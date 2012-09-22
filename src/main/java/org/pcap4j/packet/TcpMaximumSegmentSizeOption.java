@@ -8,42 +8,42 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-import org.pcap4j.packet.IpV4Packet.IpV4Option;
-import org.pcap4j.packet.namednumber.IpV4OptionType;
+import org.pcap4j.packet.TcpPacket.TcpOption;
+import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.11
+ * @since pcap4j 0.9.12
  */
-public final class IpV4StreamIdOption implements IpV4Option {
+public final class TcpMaximumSegmentSizeOption implements TcpOption {
 
   /*
    *  +--------+--------+--------+--------+
-   *  |10001000|00000100|    Stream ID    |
+   *  |00000010|00000100|   max seg size  |
    *  +--------+--------+--------+--------+
-   *   Type=136 Length=4
+   *   Kind=2   Length=4
    */
 
   /**
    *
    */
-  private static final long serialVersionUID = -2067863811913941432L;
+  private static final long serialVersionUID = 7552907605220130850L;
 
-  private final IpV4OptionType type = IpV4OptionType.STREAM_ID;
+  private final TcpOptionKind kind = TcpOptionKind.MAXIMUM_SEGMENT_SIZE;
   private final byte length;
-  private final short streamId;
+  private final short maxSegSize;
 
   /**
    *
    * @param rawData
    * @return
    */
-  public static IpV4StreamIdOption newInstance(byte[] rawData) {
-    return new IpV4StreamIdOption(rawData);
+  public static TcpMaximumSegmentSizeOption newInstance(byte[] rawData) {
+    return new TcpMaximumSegmentSizeOption(rawData);
   }
 
-  private IpV4StreamIdOption(byte[] rawData) {
+  private TcpMaximumSegmentSizeOption(byte[] rawData) {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }
@@ -53,10 +53,10 @@ public final class IpV4StreamIdOption implements IpV4Option {
         .append(ByteArrays.toHexString(rawData, " "));
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[0] != getType().value()) {
+    if (rawData[0] != kind.value()) {
       StringBuilder sb = new StringBuilder(100);
-      sb.append("The type must be: ")
-        .append(getType().valueAsString())
+      sb.append("The kind must be: ")
+        .append(kind.valueAsString())
         .append(" rawData: ")
         .append(ByteArrays.toHexString(rawData, " "));
       throw new IllegalRawDataException(sb.toString());
@@ -68,15 +68,15 @@ public final class IpV4StreamIdOption implements IpV4Option {
     }
 
     this.length = rawData[1];
-    this.streamId = ByteArrays.getShort(rawData, 2);
+    this.maxSegSize = ByteArrays.getShort(rawData, 2);
   }
 
-  private IpV4StreamIdOption(Builder builder) {
+  private TcpMaximumSegmentSizeOption(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder: " + builder);
     }
 
-    this.streamId = builder.streamId;
+    this.maxSegSize = builder.maxSegSize;
 
     if (builder.correctLengthAtBuild) {
       this.length = (byte)length();
@@ -86,8 +86,8 @@ public final class IpV4StreamIdOption implements IpV4Option {
     }
   }
 
-  public IpV4OptionType getType() {
-    return type;
+  public TcpOptionKind getKind() {
+    return kind;
   }
 
   /**
@@ -106,22 +106,22 @@ public final class IpV4StreamIdOption implements IpV4Option {
    *
    * @return
    */
-  public short getStreamId() { return streamId; }
+  public short getMaxSegSize() { return maxSegSize; }
 
   /**
    *
    * @return
    */
-  public int getStreamIdAsInt() { return 0xFFFF & streamId; }
+  public int getMaxSegSizeAsInt() { return 0xFFFF & maxSegSize; }
 
   public int length() { return 4; }
 
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
-    rawData[0] = getType().value();
+    rawData[0] = kind.value();
     rawData[1] = length;
-    rawData[2] = (byte)(streamId >> 8);
-    rawData[3] = (byte)streamId;
+    rawData[2] = (byte)(maxSegSize >> 8);
+    rawData[3] = (byte)maxSegSize;
     return rawData;
   }
 
@@ -136,13 +136,13 @@ public final class IpV4StreamIdOption implements IpV4Option {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[option-type: ")
-      .append(getType());
-    sb.append("] [option-length: ")
+    sb.append("[Kind: ")
+      .append(kind);
+    sb.append("] Length: ")
       .append(getLengthAsInt());
-    sb.append(" bytes] [streamId: ")
-      .append(getStreamIdAsInt());
-    sb.append("]");
+    sb.append(" bytes] [Maximum Segment Size: ")
+      .append(getMaxSegSizeAsInt());
+    sb.append(" bytes]");
     return sb.toString();
   }
 
@@ -160,13 +160,13 @@ public final class IpV4StreamIdOption implements IpV4Option {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 0.9.11
+   * @since pcap4j 0.9.12
    */
   public static final class Builder
-  implements LengthBuilder<IpV4StreamIdOption> {
+  implements LengthBuilder<TcpMaximumSegmentSizeOption> {
 
     private byte length;
-    private short streamId;
+    private short maxSegSize;
     private boolean correctLengthAtBuild;
 
     /**
@@ -174,9 +174,9 @@ public final class IpV4StreamIdOption implements IpV4Option {
      */
     public Builder() {}
 
-    private Builder(IpV4StreamIdOption option) {
+    private Builder(TcpMaximumSegmentSizeOption option) {
       this.length = option.length;
-      this.streamId = option.streamId;
+      this.maxSegSize = option.maxSegSize;
     }
 
     /**
@@ -191,11 +191,11 @@ public final class IpV4StreamIdOption implements IpV4Option {
 
     /**
      *
-     * @param streamId
+     * @param maxSegSize
      * @return
      */
-    public Builder streamId(short streamId) {
-      this.streamId = streamId;
+    public Builder maxSegSize(short maxSegSize) {
+      this.maxSegSize = maxSegSize;
       return this;
     }
 
@@ -204,8 +204,8 @@ public final class IpV4StreamIdOption implements IpV4Option {
       return this;
     }
 
-    public IpV4StreamIdOption build() {
-      return new IpV4StreamIdOption(this);
+    public TcpMaximumSegmentSizeOption build() {
+      return new TcpMaximumSegmentSizeOption(this);
     }
 
   }

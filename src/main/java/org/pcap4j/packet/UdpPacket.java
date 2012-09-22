@@ -66,11 +66,18 @@ public final class UdpPacket extends AbstractPacket {
   }
 
   private UdpPacket(Builder builder) {
-    if (builder == null) {
-      throw new NullPointerException("builder must not be null");
-    }
-    if (builder.payloadBuilder == null) {
-      throw new NullPointerException("builder.payloadBuilder must not be null");
+    if (
+         builder == null
+      || builder.srcPort == null
+      || builder.dstPort == null
+      || builder.payloadBuilder == null
+    ) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("builder: ").append(builder)
+        .append(" builder.srcPort: ").append(builder.srcPort)
+        .append(" builder.dstPort: ").append(builder.dstPort)
+        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+      throw new NullPointerException(sb.toString());
     }
 
     if (builder.correctChecksumAtBuild) {

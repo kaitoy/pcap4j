@@ -11,12 +11,12 @@
   Header checksum: 0xeeee
   Source address: /192.0.2.1
   Destination address: /192.0.2.2
-  Option: [option-type: 131(Loose Source Routing)] [option-length: 0 byte] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
-  Option: [option-type: 1(No Operation)]
+  Option: [option-type: 131(Loose Source Routing)] [option-length: 11 bytes] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
   Option: [option-type: 1(No Operation)]
   Option: [option-type: 1(No Operation)]
   Option: [option-type: 1(No Operation)]
   Option: [option-type: 0(End of Option List)]
+  Padding: 0xaa
 [Fragmented data (8 bytes)]
   Hex stream: 00 a1 00 00 00 10 77 21
 [IPv4 Header (36 bytes)]
@@ -32,12 +32,12 @@
   Header checksum: 0xeeee
   Source address: /192.0.2.1
   Destination address: /192.0.2.2
-  Option: [option-type: 131(Loose Source Routing)] [option-length: 0 byte] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
-  Option: [option-type: 1(No Operation)]
+  Option: [option-type: 131(Loose Source Routing)] [option-length: 11 bytes] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
   Option: [option-type: 1(No Operation)]
   Option: [option-type: 1(No Operation)]
   Option: [option-type: 1(No Operation)]
   Option: [option-type: 0(End of Option List)]
+  Padding: 0xaa
 [Fragmented data (8 bytes)]
   Hex stream: 00 01 02 03 00 01 02 03
 [IPv4 Header (36 bytes)]
@@ -50,15 +50,15 @@
   Flagment offset: 0 (0 [bytes])
   TTL: 111
   Protocol: 17(UDP)
-  Header checksum: 0x613f
+  Header checksum: 0x618a
   Source address: /192.0.2.1
   Destination address: /192.0.2.2
-  Option: [option-type: 131(Loose Source Routing)] [option-length: 0 byte] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
-  Option: [option-type: 1(No Operation)]
+  Option: [option-type: 131(Loose Source Routing)] [option-length: 11 bytes] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
   Option: [option-type: 1(No Operation)]
   Option: [option-type: 1(No Operation)]
   Option: [option-type: 1(No Operation)]
   Option: [option-type: 0(End of Option List)]
+  Padding: 0xaa
 [UDP Header (8 bytes)]
   Source port: 161(SNMP)
   Destination port: 0(unknown)
