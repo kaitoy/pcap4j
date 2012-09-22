@@ -1,9 +1,9 @@
 Pcap4J
 ======
 
-Pcap4J is a packet capture library for Java. You can also craft packets and send them with it.
+Pcap4J is a Java library for capturing, crafting and sending packets.
 Pcap4J wraps a native packet capture library([libpcap](http://www.tcpdump.org/) or
-[WinPcap](http://www.winpcap.org/) via [JNA](https://github.com/twall/jna)
+[WinPcap](http://www.winpcap.org/)) via [JNA](https://github.com/twall/jna)
 and provides you Java-Oriented APIs.
 
 Download
@@ -34,7 +34,7 @@ Feature
   You can access the packet objects to obtain fields of packets.
   You can also craft packets objects as you like.
 * Sending packet objects to real network.
-* Implementations for Ethernet, IEEE802.1Q, ARP, IPv4(RFC791 and RFC1349), IPv6(RFC2460), ICMPv4(RFC792), and UDP.
+* Implementations for Ethernet, IEEE802.1Q, ARP, IPv4(RFC791 and RFC1349), IPv6(RFC2460), ICMPv4(RFC792), TCP(RFC793), and UDP.
 * All packet classes are serializable and thread-safe(practically immutable).
 * Pluggable packet classes.
 * Dumping and reading pcap-formatted files(e.g. capture file of Wireshark)
@@ -44,7 +44,7 @@ How to use
 ----------
 
 Documentation is in progress. You may know how to use Pcap4J from
-documents of libpcap(or WinPcap) and sample classes.
+the documents of libpcap(or WinPcap) and sample classes.
 The APIs are not stable yet and may be changed without announcement.
 This library works with J2SE 5.0+, libpcap 0.9.3+ or WinPcap 3.0+, jna, slf4j-api,
 and an implementation of logger.
