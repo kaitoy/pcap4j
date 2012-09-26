@@ -7,7 +7,6 @@
 
 package org.pcap4j.core;
 
-import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.core.NativeMappings.timeval;
 import org.pcap4j.packet.Packet;
@@ -84,7 +83,8 @@ public final class PcapDumper {
       if (!opening) {
         throw new IllegalStateException("Not opening.");
       }
-      PcapLibrary.INSTANCE.pcap_dump(dumper, header, packet.getRawData());
+      //PcapLibrary.INSTANCE.pcap_dump(dumper, header, packet.getRawData());
+      NativeMappings.pcap_dump(dumper, header, packet.getRawData());
     }
 
     if (logger.isDebugEnabled()) {
@@ -101,7 +101,8 @@ public final class PcapDumper {
         logger.warn("Already closed.");
         return;
       }
-      PcapLibrary.INSTANCE.pcap_dump_close(dumper);
+      // PcapLibrary.INSTANCE.pcap_dump_close(dumper);
+      NativeMappings.pcap_dump_close(dumper);
       opening = false;
     }
 

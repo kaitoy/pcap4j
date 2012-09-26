@@ -11,7 +11,6 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.pcap_if;
 import org.pcap4j.packet.namednumber.DataLinkType;
@@ -54,7 +53,8 @@ public final class Pcaps {
     PointerByReference alldevsPP = new PointerByReference();
     PcapErrbuf errbuf = new PcapErrbuf();
 
-    int rc = PcapLibrary.INSTANCE.pcap_findalldevs(alldevsPP, errbuf);
+    //int rc = PcapLibrary.INSTANCE.pcap_findalldevs(alldevsPP, errbuf);
+    int rc = NativeMappings.pcap_findalldevs(alldevsPP, errbuf);
     if (rc != 0) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("Return code: ")
@@ -80,7 +80,8 @@ public final class Pcaps {
       ifList.add(PcapNetworkInterface.newInstance(pif, true));
     }
 
-    PcapLibrary.INSTANCE.pcap_freealldevs(pcapIf.getPointer());
+    // PcapLibrary.INSTANCE.pcap_freealldevs(pcapIf.getPointer());
+    NativeMappings.pcap_freealldevs(pcapIf.getPointer());
 
     logger.info("{} NIF(s) found.", ifList.size());
     return ifList;
@@ -95,7 +96,7 @@ public final class Pcaps {
   public static PcapNetworkInterface getNifBy(
     InetAddress addr
   ) throws PcapNativeException {
-    List<PcapNetworkInterface> allDevs = Pcaps.findAllDevs();
+    List<PcapNetworkInterface> allDevs = findAllDevs();
 
     for (PcapNetworkInterface pif: allDevs) {
       for (PcapAddress paddr: pif.getAddresses()) {
@@ -117,7 +118,7 @@ public final class Pcaps {
   public static PcapNetworkInterface getNifBy(
     String name
   ) throws PcapNativeException {
-    List<PcapNetworkInterface> allDevs = Pcaps.findAllDevs();
+    List<PcapNetworkInterface> allDevs = findAllDevs();
 
     for (PcapNetworkInterface pif: allDevs) {
       if (pif.getName().equals(name)) {
@@ -135,7 +136,8 @@ public final class Pcaps {
    */
   public static String lookupDev() throws PcapNativeException {
     PcapErrbuf errbuf = new PcapErrbuf();
-    Pointer result = PcapLibrary.INSTANCE.pcap_lookupdev(errbuf);
+    // Pointer result = PcapLibrary.INSTANCE.pcap_lookupdev(errbuf);
+    Pointer result = NativeMappings.pcap_lookupdev(errbuf);
 
     if (result == null || errbuf.length() != 0) {
       throw new PcapNativeException(errbuf.toString());
@@ -154,8 +156,10 @@ public final class Pcaps {
     String filePath
   ) throws PcapNativeException {
     PcapErrbuf errbuf = new PcapErrbuf();
+//    Pointer handle
+//      = PcapLibrary.INSTANCE.pcap_open_offline(filePath, errbuf);
     Pointer handle
-      = PcapLibrary.INSTANCE.pcap_open_offline(filePath, errbuf);
+      = NativeMappings.pcap_open_offline(filePath, errbuf);
 
     if (handle == null || errbuf.length() != 0) {
       throw new PcapNativeException(errbuf.toString());
@@ -174,8 +178,10 @@ public final class Pcaps {
   public static PcapHandle openDead(
     DataLinkType dlt, int maxCaptureLength
   ) throws PcapNativeException {
+//    Pointer handle
+//      = PcapLibrary.INSTANCE.pcap_open_dead(dlt.value(), maxCaptureLength);
     Pointer handle
-      = PcapLibrary.INSTANCE.pcap_open_dead(dlt.value(), maxCaptureLength);
+      = NativeMappings.pcap_open_dead(dlt.value(), maxCaptureLength);
     if (handle == null) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("Failed to open a PcapHandle. dlt: ").append(dlt)

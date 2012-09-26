@@ -16,7 +16,6 @@ import org.pcap4j.core.NativeMappings.pcap_if;
 import org.pcap4j.core.NativeMappings.timeval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.sun.jna.NativeLong;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
@@ -160,14 +159,23 @@ public final class PcapNetworkInterface {
   ) throws PcapNativeException {
     PcapErrbuf errbuf = new PcapErrbuf();
 
+//    Pointer handle
+//      = PcapLibrary.INSTANCE.pcap_open_live(
+//          name,
+//          maxCaptureLength,
+//          mode.getValue(),
+//          timeoutMillis,
+//          errbuf
+//        );
     Pointer handle
-      = PcapLibrary.INSTANCE.pcap_open_live(
-          this.getName(),
+      = NativeMappings.pcap_open_live(
+          name,
           maxCaptureLength,
           mode.getValue(),
           timeoutMillis,
           errbuf
         );
+
     if (handle == null || errbuf.length() != 0) {
       throw new PcapNativeException(errbuf.toString());
     }
@@ -186,12 +194,18 @@ public final class PcapNetworkInterface {
                );
 
       if (rc < 0) {
+//        throw new PcapNativeException(
+//                "SBIOCSTIME: "
+//                  + PcapLibrary.INSTANCE.pcap_strerror(
+//                      NativeMappings.ERRNO_P.getInt(0)
+//                    ).getString(0)
+//              );
         throw new PcapNativeException(
-          "SBIOCSTIME: "
-            + PcapLibrary.INSTANCE.pcap_strerror(
-                NativeMappings.ERRNO_P.getInt(0)
-              ).getString(0)
-        );
+                "SBIOCSTIME: "
+                  + NativeMappings.pcap_strerror(
+                      NativeMappings.ERRNO_P.getInt(0)
+                    ).getString(0)
+              );
       }
     }
 

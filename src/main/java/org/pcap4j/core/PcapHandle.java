@@ -13,7 +13,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
-import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.bpf_program;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.packet.Packet;
@@ -43,12 +42,21 @@ public final class PcapHandle {
   private volatile String filteringExpression = "";
 
   PcapHandle(Pointer handle, boolean opening) {
+//    this.dlt = DataLinkType.getInstance(
+//                 PcapLibrary.INSTANCE.pcap_datalink(handle)
+//               );
     this.dlt = DataLinkType.getInstance(
-                 PcapLibrary.INSTANCE.pcap_datalink(handle)
+                 NativeMappings.pcap_datalink(handle)
                );
     this.handle = handle;
     this.opening = opening;
   }
+
+  /**
+   *
+   * @return
+   */
+  public DataLinkType getDlt() { return dlt; }
 
   /**
    *
@@ -124,7 +132,10 @@ public final class PcapHandle {
 
       bpf_program prog = new bpf_program();
       try {
-        int rc = PcapLibrary.INSTANCE.pcap_compile(
+//        int rc = PcapLibrary.INSTANCE.pcap_compile(
+//                   handle, prog, bpfExpression, mode.getValue(), mask
+//                 );
+        int rc = NativeMappings.pcap_compile(
                    handle, prog, bpfExpression, mode.getValue(), mask
                  );
         if (rc < 0) {
@@ -133,7 +144,8 @@ public final class PcapHandle {
                     );
         }
 
-        rc = PcapLibrary.INSTANCE.pcap_setfilter(handle, prog);
+        // rc = PcapLibrary.INSTANCE.pcap_setfilter(handle, prog);
+        rc = NativeMappings.pcap_setfilter(handle, prog);
         if (rc < 0) {
           throw new PcapNativeException(
                       "Error occured in pcap_setfilger: " + getError()
@@ -142,7 +154,8 @@ public final class PcapHandle {
 
         this.filteringExpression = bpfExpression;
       } finally {
-        PcapLibrary.INSTANCE.pcap_freecode(prog);
+        // PcapLibrary.INSTANCE.pcap_freecode(prog);
+        NativeMappings.pcap_freecode(prog);
       }
     }
   }
@@ -160,7 +173,8 @@ public final class PcapHandle {
       if (!opening) {
         throw new IllegalStateException("Not opening.");
       }
-      packet = PcapLibrary.INSTANCE.pcap_next(handle, header);
+      // packet = PcapLibrary.INSTANCE.pcap_next(handle, header);
+      packet = NativeMappings.pcap_next(handle, header);
     }
 
     if (packet != null) {
@@ -196,7 +210,8 @@ public final class PcapHandle {
       if (!opening) {
         throw new IllegalStateException("Not opening.");
       }
-      rc = PcapLibrary.INSTANCE.pcap_next_ex(handle, headerPP, dataPP);
+      // rc = PcapLibrary.INSTANCE.pcap_next_ex(handle, headerPP, dataPP);
+      rc = NativeMappings.pcap_next_ex(handle, headerPP, dataPP);
     }
 
     switch (rc) {
@@ -274,7 +289,13 @@ public final class PcapHandle {
       }
 
       logger.info("Start loop");
-      rc = PcapLibrary.INSTANCE.pcap_loop(
+//      rc = PcapLibrary.INSTANCE.pcap_loop(
+//             handle,
+//             packetCount,
+//             new GotPacketFuncExecutor(listener, dlt, executor),
+//             null
+//           );
+      rc = NativeMappings.pcap_loop(
              handle,
              packetCount,
              new GotPacketFuncExecutor(listener, dlt, executor),
@@ -348,7 +369,8 @@ public final class PcapHandle {
     Pointer dumper;
 
     synchronized (thisLock) {
-      dumper = PcapLibrary.INSTANCE.pcap_dump_open(handle, filePath);
+      // dumper = PcapLibrary.INSTANCE.pcap_dump_open(handle, filePath);
+      dumper = NativeMappings.pcap_dump_open(handle, filePath);
       if (dumper == null) {
         throw new PcapNativeException(getError());
       }
@@ -376,7 +398,13 @@ public final class PcapHandle {
       }
 
       logger.info("Start dump loop");
-      rc = PcapLibrary.INSTANCE.pcap_loop(
+//      rc = PcapLibrary.INSTANCE.pcap_loop(
+//             handle,
+//             packetCount,
+//             NativeMappings.PCAP_DUMP,
+//             dumper.getDumper()
+//           );
+      rc = NativeMappings.pcap_loop(
              handle,
              packetCount,
              NativeMappings.PCAP_DUMP,
@@ -405,7 +433,8 @@ public final class PcapHandle {
    */
   public void breakLoop() {
     logger.info("Break loop.");
-    PcapLibrary.INSTANCE.pcap_breakloop(handle);
+    // PcapLibrary.INSTANCE.pcap_breakloop(handle);
+    NativeMappings.pcap_breakloop(handle);
   }
 
   /**
@@ -425,7 +454,10 @@ public final class PcapHandle {
       if (!opening) {
         throw new IllegalStateException("Not opening.");
       }
-      rc = PcapLibrary.INSTANCE.pcap_sendpacket(
+//      rc = PcapLibrary.INSTANCE.pcap_sendpacket(
+//             handle, packet.getRawData(), packet.length()
+//           );
+      rc = NativeMappings.pcap_sendpacket(
              handle, packet.getRawData(), packet.length()
            );
     }
@@ -446,7 +478,8 @@ public final class PcapHandle {
         logger.warn("Already closed.");
         return;
       }
-      PcapLibrary.INSTANCE.pcap_close(handle);
+      // PcapLibrary.INSTANCE.pcap_close(handle);
+      NativeMappings.pcap_close(handle);
       opening = false;
     }
 
@@ -458,7 +491,8 @@ public final class PcapHandle {
    * @return
    */
   public String getError() {
-    return PcapLibrary.INSTANCE.pcap_geterr(handle).getString(0);
+    // return PcapLibrary.INSTANCE.pcap_geterr(handle).getString(0);
+    return NativeMappings.pcap_geterr(handle).getString(0);
   }
 
   @Override
@@ -468,6 +502,7 @@ public final class PcapHandle {
     sb.append("Link type: [").append(dlt)
       .append("] handle: [").append(handle)
       .append("] Opening: [").append(opening)
+      .append("] Filtering Expression: [").append(filteringExpression)
       .append("]");
 
     return sb.toString();
