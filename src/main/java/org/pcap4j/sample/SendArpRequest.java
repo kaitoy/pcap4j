@@ -27,7 +27,7 @@ public class SendArpRequest {
   private static final String COUNT_KEY
     = SendArpRequest.class.getName() + ".count";
   private static final int COUNT
-    = Integer.getInteger(COUNT_KEY, 3);
+    = Integer.getInteger(COUNT_KEY, 1);
 
   private static final String READ_TIMEOUT_KEY
     = SendArpRequest.class.getName() + ".readTimeout";
@@ -41,6 +41,8 @@ public class SendArpRequest {
 
   private static final MacAddress SRC_MAC_ADDR
     = MacAddress.getByName("fe:00:01:02:03:04");
+
+  private static MacAddress resolvedAddr;
 
   public static void main(String[] args) throws PcapNativeException {
     String strSrcIpAddress = "192.0.2.100"; // for InetAddress.getByName()
@@ -88,6 +90,12 @@ public class SendArpRequest {
       PacketListener listener
         = new PacketListener() {
             public void gotPacket(Packet packet) {
+              if (packet.contains(ArpPacket.class)) {
+                ArpPacket arp = packet.get(ArpPacket.class);
+                if (arp.getHeader().getOperation().equals(ArpOperation.REPLY)) {
+                  SendArpRequest.resolvedAddr = arp.getHeader().getSrcHardwareAddr();
+                }
+              }
               System.out.println(packet);
             }
           };
@@ -119,7 +127,9 @@ public class SendArpRequest {
                   .paddingAtBuild(true);
 
       for (int i = 0; i < COUNT; i++) {
-        sendHandle.sendPacket(etherBuilder.build());
+        Packet p = etherBuilder.build();
+        System.out.println(p);
+        sendHandle.sendPacket(p);
         try {
           Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -136,6 +146,8 @@ public class SendArpRequest {
       if (pool != null && !pool.isShutdown()) {
         pool.shutdown();
       }
+
+      System.out.println(strDstIpAddress + " was resolved to " + resolvedAddr);
     }
   }
 

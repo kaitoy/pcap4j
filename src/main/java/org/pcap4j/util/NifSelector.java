@@ -107,7 +107,7 @@ public class NifSelector {
   throws IOException {
     int nifIdx;
     while (true) {
-      write("Select a device number to capture packets, or enter 'q' to quite > ");
+      write("Select a device number to capture packets, or enter 'q' to quit > ");
 
       String input;
       if ((input = read()) == null) {
