@@ -1,0 +1,29 @@
+/* javadoc スタイルシート */
+
+/* 色やフォントなどのスタイル属性のデフォルト値を上書きするには、ここで定義します。 */
+
+/* ページのバックグラウンドの色 */
+body { background-color: #FFFFFF; color:#000000 }
+
+/* 見出し */
+h1 { font-size: 145% }
+
+/* テーブルの色 */
+.TableHeadingColor     { background: #CCCCFF; color:#000000 } /* 濃い藤色 */
+.TableSubHeadingColor  { background: #EEEEFF; color:#000000 } /* 薄い藤色 */
+.TableRowColor         { background: #FFFFFF; color:#000000 } /* 白 */
+
+/* 左側のフレームのリストに使用するフォント */
+.FrameTitleFont   { font-size: 100%; font-family: Helvetica, Arial, sans-serif; color:#000000 }
+.FrameHeadingFont { font-size:  90%; font-family: Helvetica, Arial, sans-serif; color:#000000 }
+.FrameItemFont    { font-size:  90%; font-family: Helvetica, Arial, sans-serif; color:#000000 }
+
+/* ナビゲーションバーのフォントと色 */
+.NavBarCell1    { background-color:#EEEEFF; color:#000000} /* 薄い藤色 */
+.NavBarCell1Rev { background-color:#00008B; color:#FFFFFF} /* 濃い青 */
+.NavBarFont1    { font-family: Arial, Helvetica, sans-serif; color:#000000;color:#000000;}
+.NavBarFont1Rev { font-family: Arial, Helvetica, sans-serif; color:#FFFFFF;color:#FFFFFF;}
+
+.NavBarCell2    { font-family: Arial, Helvetica, sans-serif; background-color:#FFFFFF; color:#000000}
+.NavBarCell3    { font-family: Arial, Helvetica, sans-serif; background-color:#FFFFFF; color:#000000}
+
