@@ -266,11 +266,11 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
    使用条件の条項に同意しますにチェックして「完了」。
    m2eのインストールが完了したらEclipseを再起動。
 3. Gitをインストール<br>
-   [Git[(http://git-scm.com/downloads)をダウンロードしてインストールする。
+   [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
    Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
 4. Pcap4Jのレポジトリのダウンロード<br>
    `git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-   3. をスキップした場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードする。
+   ステップ3をスキップした場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードする。
 5. プロジェクトのインポート<br>
   EclipseのGUIで、[ファイル]＞[インポート] を開き、
   「一般」の「既存プロジェクトをワークスペースへ」で 3. でダウンロードしたレポジトリ内のプロジェクトをインポートする。
@@ -279,7 +279,7 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
    [実行]＞[Maven package] か [実行]＞[Maven install] を実行する。
 
 因みに、M2Eは旧[m2eclipse](http://m2eclipse.sonatype.org/)。
-m2eclipseでビルドしたい場合は、2. をスキップして、4. でMavenプロジェクトの方をインポートすればよい。
+m2eclipseでビルドしたい場合は、ステップ2をスキップして、ステップ4でMavenプロジェクトの方をインポートすればよい。
 
 ライセンス
 ----------

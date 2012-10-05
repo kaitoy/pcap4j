@@ -268,10 +268,10 @@ The build procedure is the following.
    Click Next or Finish until beginning of the installation process.
    Once the installation process is finished, restart the Eclipse.
 3. Install Git<br>
-   Download [Git[(http://git-scm.com/downloads) and install it.
+   Download [Git](http://git-scm.com/downloads) and install it.
    This step is optional, you can skip this step.
 4. Clone the Pcap4J repository<br>
-   Execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`
+   Execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
    If you skipped the step 3, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master)
 5. Import the Eclipse project<br>
    In the Eclipse, select [File] > [Import]  to open the "Import" wizard.
