@@ -77,6 +77,8 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 * logback-core 1.0.1
 * logback-classic 1.0.1
 
+<br>
+
 #### pcapライブラリのロードについて ####
 デフォルトでは下記の条件でpcapライブラリを検索し、ロードする。
 
@@ -91,6 +93,112 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 
 * jna.library.path: サーチパスを指定する。
 * org.pcap4j.core.pcapLibName: ライブラリへのフルパスを指定する。
+
+<br>
+
+#### pcap API と Pcap4j API の対応 ####
+<table border="1">
+  <tr bgcolor="#cccccc" align=center>
+    <td>pcap API</td>
+    <td>Pcap4j API</td>
+  </tr>
+  <tr>
+    <td>int pcap_findalldevs(pcap_if_t **, char *)</td>
+    <td>static List&lt;PcapNetworkInterface&gt; org.pcap4j.core.Pcaps.findAllDevs()</td>
+  </tr>
+  <tr>
+    <td>void pcap_freealldevs(pcap_if_t *)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>char *pcap_lookupdev(char *)</td>
+    <td>static String org.pcap4j.core.Pcaps.lookupDev()</td>
+  </tr>
+  <tr>
+    <td>pcap_t *pcap_open_live(const char *, int, int, int, char *)</td>
+    <td>PcapHandle org.pcap4j.core.PcapNetworkInterface.openLive(int, PromiscuousMode, int)</td>
+  </tr>
+  <tr>
+    <td>pcap_t *pcap_open_dead(int, int)</td>
+    <td>static PcapHandle org.pcap4j.core.Pcaps.openDead(DataLinkType, int)</td>
+  </tr>
+  <tr>
+    <td>pcap_t *pcap_open_offline(const char *, char *)</td>
+    <td>static PcapHandle org.pcap4j.core.Pcaps.openOffline(String)</td>
+  </tr>
+  <tr>
+    <td>pcap_dumper_t *pcap_dump_open(pcap_t *, const char *)</td>
+    <td>PcapDumper org.pcap4j.core.PcapHandle.dumpOpen(String)</td>
+  </tr>
+  <tr>
+    <td rowspan="2">void pcap_dump(u_char *, const struct pcap_pkthdr *, const u_char *)</td>
+    <td>void org.pcap4j.core.PcapDumper.dump(Packet, long, int)</td>
+  </tr>
+  <tr>
+    <td>void org.pcap4j.core.PcapDumper.dump(Packet)</td>
+  </tr>
+  <tr>
+    <td>void pcap_dump_close(pcap_dumper_t *)</td>
+    <td>void org.pcap4j.core.PcapDumper.close()</td>
+  </tr>
+  <tr>
+    <td>u_char *pcap_next(pcap_t *, struct pcap_pkthdr *)</td>
+    <td>Packet org.pcap4j.core.PcapHandle.getNextPacket()</td>
+  </tr>
+  <tr>
+    <td>int pcap_next_ex(pcap_t *, struct pcap_pkthdr **, const u_char **)</td>
+    <td>Packet org.pcap4j.core.PcapHandle.getNextPacketEx()</td>
+  </tr>
+  <tr>
+    <td rowspan="3">int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</td>
+    <td>void org.pcap4j.core.PcapHandle.loop(int, PacketListener)</td>
+  </tr>
+  <tr>
+    <td>void org.pcap4j.core.PcapHandle.loop(int, PacketListener, Executor)</td>
+  </tr>
+  <tr>
+    <td>void org.pcap4j.core.PcapHandle.loop(int, PcapDumper)</td>
+  </tr>
+  <tr>
+    <td>void pcap_breakloop(pcap_t *)</td>
+    <td>void org.pcap4j.core.PcapHandle.breakLoop()</td>
+  </tr>
+  <tr>
+    <td>int pcap_compile(pcap_t *, struct bpf_program *, char *, int, bpf_u_int32)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td rowspan="2">int pcap_setfilter(pcap_t *, struct bpf_program *)</td>
+    <td>void org.pcap4j.core.PcapHandle.setFilter(String, BpfCompileMode, Inet4Address)</td>
+  </tr>
+  <tr>
+    <td>void org.pcap4j.core.PcapHandle.setFilter(String, BpfCompileMode)</td>
+  </tr>
+  <tr>
+    <td>void pcap_freecode(struct bpf_program *)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>int pcap_sendpacket(pcap_t *, const u_char *, int)</td>
+    <td>void org.pcap4j.core.PcapHandle.sendPacket(Packet)</td>
+  </tr>
+  <tr>
+    <td>void pcap_close(pcap_t *)</td>
+    <td>void org.pcap4j.core.PcapHandle.close()</td>
+  </tr>
+  <tr>
+    <td>int pcap_datalink(pcap_t *)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>char *pcap_geterr(pcap_t *)</td>
+    <td>String org.pcap4j.core.PcapHandle.getError()</td>
+  </tr>
+  <tr>
+    <td>char *pcap_strerror(int)</td>
+    <td></td>
+  </tr>
+</table>
 
 サンプル
 --------
@@ -186,7 +294,7 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
   ARPリクエストを送信してIPアドレスをMACアドレスに解決するサンプル。以下はLinuxで192.168.209.1を解決した実行例。
 
 
-        [root@localhost Desktop]# java -cp pcap4j.jar:jna-3.3.0.jar:slf4j-api-1.6.4.jar -Dorg.pcap4j.sample.Loop.count=2 org.pcap4j.sample.SendArpRequest 192.168.209.1
+        [root@localhost Desktop]# java -cp pcap4j.jar:jna-3.3.0.jar:slf4j-api-1.6.4.jar org.pcap4j.sample.SendArpRequest 192.168.209.1
         org.pcap4j.sample.SendArpRequest.count: 1
         org.pcap4j.sample.SendArpRequest.readTimeout: 10
         org.pcap4j.sample.SendArpRequest.maxCapLen: 65536

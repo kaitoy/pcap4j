@@ -8,7 +8,9 @@
 package org.pcap4j.core;
 
 import java.io.EOFException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
 import com.sun.jna.Pointer;
@@ -40,6 +42,16 @@ public final class PcapHandle {
 
   private volatile boolean opening;
   private volatile String filteringExpression = "";
+
+  private static final Inet4Address WILDCARD_MASK;
+
+  static {
+    try {
+      WILDCARD_MASK = (Inet4Address)InetAddress.getByName("0.0.0.0");
+    } catch (UnknownHostException e) {
+      throw new AssertionError("never get here");
+    }
+  }
 
   PcapHandle(Pointer handle, boolean opening) {
 //    this.dlt = DataLinkType.getInstance(
@@ -113,22 +125,29 @@ public final class PcapHandle {
    * @param netmask
    * @throws PcapNativeException
    * @throws IllegalStateException
+   * @throws NullPointerException
    */
   public void setFilter(
-    String bpfExpression, BpfCompileMode mode, InetAddress netmask
+    String bpfExpression, BpfCompileMode mode, Inet4Address netmask
   ) throws PcapNativeException {
+    if (
+         bpfExpression == null
+      || mode == null
+      || netmask == null
+    ) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("bpfExpression: ").append(bpfExpression)
+        .append(" mode: ").append(mode)
+        .append(" netmask: ").append(netmask);
+      throw new NullPointerException(sb.toString());
+    }
+
     synchronized (thisLock) {
       if (!opening) {
         throw new IllegalStateException("Not opening.");
       }
 
-      int mask;
-      if (netmask != null) {
-        mask = ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0);
-      }
-      else {
-        mask = 0;
-      }
+      int mask = ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0);
 
       bpf_program prog = new bpf_program();
       try {
@@ -158,6 +177,20 @@ public final class PcapHandle {
         NativeMappings.pcap_freecode(prog);
       }
     }
+  }
+
+  /**
+   *
+   * @param bpfExpression
+   * @param mode
+   * @throws PcapNativeException
+   * @throws IllegalStateException
+   * @throws NullPointerException
+   */
+  public void setFilter(
+    String bpfExpression, BpfCompileMode mode
+  ) throws PcapNativeException {
+    setFilter(bpfExpression, mode, WILDCARD_MASK);
   }
 
   /**

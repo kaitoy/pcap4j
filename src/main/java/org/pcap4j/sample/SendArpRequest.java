@@ -74,18 +74,12 @@ public class SendArpRequest {
     ExecutorService pool = Executors.newSingleThreadExecutor();
 
     try {
-      try {
-        handle.setFilter(
-          "arp and src host " + strDstIpAddress
-            + " and dst host " + strSrcIpAddress
-            + " and ether dst " + Pcaps.toBpfString(SRC_MAC_ADDR),
-          BpfCompileMode.OPTIMIZE,
-          InetAddress
-            .getByAddress(new byte[] {(byte)255, (byte)255, (byte)255, (byte)0})
-        );
-      } catch (UnknownHostException e) {
-        throw new AssertionError("Never get here.");
-      }
+      handle.setFilter(
+        "arp and src host " + strDstIpAddress
+          + " and dst host " + strSrcIpAddress
+          + " and ether dst " + Pcaps.toBpfString(SRC_MAC_ADDR),
+        BpfCompileMode.OPTIMIZE
+      );
 
       PacketListener listener
         = new PacketListener() {

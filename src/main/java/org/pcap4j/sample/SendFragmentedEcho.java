@@ -90,16 +90,10 @@ public class SendFragmentedEcho {
 
     MacAddress srcMacAddr = MacAddress.getByName(strSrcMacAddress, ":");
     try {
-      try {
-        handle.setFilter(
-          "icmp and ether dst " + Pcaps.toBpfString(srcMacAddr),
-          BpfCompileMode.OPTIMIZE,
-          InetAddress
-            .getByAddress(new byte[] {(byte)255, (byte)255, (byte)255, (byte)0})
-        );
-      } catch (UnknownHostException e) {
-        throw new AssertionError("Never get here.");
-      }
+      handle.setFilter(
+        "icmp and ether dst " + Pcaps.toBpfString(srcMacAddr),
+        BpfCompileMode.OPTIMIZE
+      );
 
       PacketListener listener
         = new PacketListener() {

@@ -94,17 +94,11 @@ public class IcmpV4ErrReplyer {
     final PcapHandle handle4send
       = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
 
-    try {
-      handle4capture.setFilter(
-        "(ether dst " + MAC_ADDR + ") or (arp and ether dst "
-          + Pcaps.toBpfString(MacAddress.ETHER_BROADCAST_ADDRESS) +")",
-        BpfCompileMode.OPTIMIZE,
-        InetAddress
-          .getByAddress(new byte[] {(byte)255, (byte)255, (byte)255, (byte)0})
-      );
-    } catch (UnknownHostException e) {
-      assert true; // never get here
-    }
+    handle4capture.setFilter(
+      "(ether dst " + MAC_ADDR + ") or (arp and ether dst "
+        + Pcaps.toBpfString(MacAddress.ETHER_BROADCAST_ADDRESS) +")",
+      BpfCompileMode.OPTIMIZE
+    );
 
     Packet.Builder tmp;
     if (type.equals(IcmpV4Type.DESTINATION_UNREACHABLE)) {

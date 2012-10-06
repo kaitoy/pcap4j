@@ -116,83 +116,105 @@ final class NativeMappings {
         );
 
     // int pcap_findalldevs(pcap_if_t **alldevsp, char *errbuf)
-    int pcap_findalldevs(PointerByReference alldevsp, PcapErrbuf errbuf);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    int pcap_findalldevs(PointerByReference alldevsp, PcapErrbuf errbuf);
     // TODO WinPcap: int pcap_findalldevs_ex(char *host, char *port, SOCKET sockctrl, struct pcap_rmtauth *auth, pcap_if_t **alldevs, char *errbuf)  リモートキャプチャ可
 
     // void  pcap_freealldevs (pcap_if_t *alldevsp)
-    void pcap_freealldevs(Pointer alldevsp);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    void pcap_freealldevs(Pointer alldevsp);
 
     // char *pcap_lookupdev(char *errbuf)
-    Pointer pcap_lookupdev(PcapErrbuf errbuf);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    Pointer pcap_lookupdev(PcapErrbuf errbuf);
 
     // pcap_t *pcap_open_live(
     //   const char *device, int snaplen, int promisc, int to_ms, char *errbuf
     // )
+    @Deprecated // Use direct mapped one instead.
     Pointer pcap_open_live(
       String device, int snaplen, int promisc, int to_ms, PcapErrbuf errbuf
-    );  // obsolete. Use direct mapped one instead.
+    );
 
-    // pcap_t *   pcap_open_dead (int linktype, int snaplen)
-    Pointer pcap_open_dead(int linktype, int snaplen);  // obsolete. Use direct mapped one instead.
+    // pcap_t *pcap_open_dead (int linktype, int snaplen)
+    @Deprecated // Use direct mapped one instead.
+    Pointer pcap_open_dead(int linktype, int snaplen);
 
     // pcap_t *pcap_open_offline(const char *fname, char *errbuf)
-    Pointer pcap_open_offline(String fname, PcapErrbuf errbuf);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    Pointer pcap_open_offline(String fname, PcapErrbuf errbuf);
 
     // TODO WinPcap: pcap_t *pcap_open(const char *source, int snaplen, int flags, int read_timeout, struct pcap_rmtauth *auth, char *errbuf)
 
     // pcap_dumper_t *pcap_dump_open(pcap_t *p, const char *fname)
-    Pointer pcap_dump_open(Pointer p, String fname);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    Pointer pcap_dump_open(Pointer p, String fname);
 
     // void pcap_dump(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
-    void pcap_dump(Pointer user, pcap_pkthdr header, byte[] packet);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    void pcap_dump(Pointer user, pcap_pkthdr header, byte[] packet);
 
-    // void  pcap_dump_close(pcap_dumper_t *p)
-    void pcap_dump_close(Pointer p);  // obsolete. Use direct mapped one instead.
+    // void pcap_dump_close(pcap_dumper_t *p)
+    @Deprecated // Use direct mapped one instead.
+    void pcap_dump_close(Pointer p);
 
     // TODO WinPcap: int pcap_live_dump(pcap_t *p, char *filename, int maxsize, int maxpacks)
 
     // u_char *pcap_next(pcap_t *p, struct pcap_pkthdr *h)
-    Pointer pcap_next(Pointer p, pcap_pkthdr h);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    Pointer pcap_next(Pointer p, pcap_pkthdr h);
 
     // int pcap_next_ex(pcap_t *p, struct pcap_pkthdr **h, const u_char **data)
-    int pcap_next_ex(Pointer p, PointerByReference h, PointerByReference data);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    int pcap_next_ex(Pointer p, PointerByReference h, PointerByReference data);
 
     // int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user)
-    int pcap_loop(Pointer p, int cnt, pcap_handler callback, Pointer user);  // obsolete. Use direct mapped one instead.
-    int pcap_loop(Pointer p, int cnt, Function callback, Pointer user);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    int pcap_loop(Pointer p, int cnt, pcap_handler callback, Pointer user);
+    @Deprecated // Use direct mapped one instead.
+    int pcap_loop(Pointer p, int cnt, Function callback, Pointer user);
     // openした時のタイムアウトを遵守しない
 
     // void pcap_breakloop(pcap_t *p)
-    void pcap_breakloop(Pointer p);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    void pcap_breakloop(Pointer p);
 
     // int pcap_compile(
     //   pcap_t *p, struct bpf_program *fp, char *str,
     //   int optimize, bpf_u_int32 netmask
     // )
+    @Deprecated // Use direct mapped one instead.
     int pcap_compile(
       Pointer p, bpf_program fp, String str, int optimize, int netmask
-    );  // obsolete. Use direct mapped one instead.
+    );
 
-    // int  pcap_setfilter (pcap_t *p, struct bpf_program *fp)
-    int pcap_setfilter(Pointer p, bpf_program fp);  // obsolete. Use direct mapped one instead.
+    // int pcap_setfilter(pcap_t *p, struct bpf_program *fp)
+    @Deprecated // Use direct mapped one instead.
+    int pcap_setfilter(Pointer p, bpf_program fp);
 
-    // void  pcap_freecode (struct bpf_program *fp)
-    void  pcap_freecode(bpf_program fp);  // obsolete. Use direct mapped one instead.
+    // void pcap_freecode(struct bpf_program *fp)
+    @Deprecated // Use direct mapped one instead.
+    void  pcap_freecode(bpf_program fp);
 
     // int pcap_sendpacket(pcap_t *p, const u_char *buf, int size)
-    int pcap_sendpacket(Pointer p, byte buf[], int size);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    int pcap_sendpacket(Pointer p, byte buf[], int size);
 
     // void pcap_close(pcap_t *p)
-    void pcap_close(Pointer p);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    void pcap_close(Pointer p);
 
     // int pcap_datalink(pcap_t *p)
-    int pcap_datalink(Pointer p);  // obsolete. Use direct mapped one instead.
+    @Deprecated // Use direct mapped one instead.
+    int pcap_datalink(Pointer p);
 
-    // char *  pcap_geterr (pcap_t *p)
-    Pointer pcap_geterr(Pointer p);  // obsolete. Use direct mapped one instead.
+    // char *pcap_geterr(pcap_t *p)
+    @Deprecated // Use direct mapped one instead.
+    Pointer pcap_geterr(Pointer p);
 
-    // char* pcap_strerror  (int errno)
-    Pointer pcap_strerror(int errno);  // obsolete. Use direct mapped one instead.
+    // char *pcap_strerror(int errno)
+    @Deprecated // Use direct mapped one instead.
+    Pointer pcap_strerror(int errno);
 
     // int strioctl(int fd, int cmd, int len, char *dp)
     int strioctl(int fd, int cmd, int len, Pointer dp);  // Can't map directly because not all OSs support this function.

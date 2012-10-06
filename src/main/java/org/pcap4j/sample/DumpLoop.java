@@ -1,8 +1,6 @@
 package org.pcap4j.sample;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import org.pcap4j.core.PcapDumper;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapHandle.BpfCompileMode;
@@ -58,16 +56,10 @@ public class DumpLoop {
     final PcapHandle handle
       = nif.openLive(MAX_CAP_LEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
 
-    try {
-      handle.setFilter(
-        filter,
-        BpfCompileMode.OPTIMIZE,
-        InetAddress
-          .getByAddress(new byte[] {(byte)255, (byte)255, (byte)255, (byte)0})
-      );
-    } catch (UnknownHostException e) {
-      assert true; // never get here
-    }
+    handle.setFilter(
+      filter,
+      BpfCompileMode.OPTIMIZE
+    );
 
     PcapDumper dumper = handle.dumpOpen(PCAP_FILE);
     try {

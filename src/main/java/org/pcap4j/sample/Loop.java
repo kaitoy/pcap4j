@@ -1,8 +1,6 @@
 package org.pcap4j.sample;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapHandle.BpfCompileMode;
@@ -56,16 +54,10 @@ public class Loop {
       = nif.openLive(MAX_CAP_LEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
 
     if (filter.length() != 0) {
-      try {
-        handle.setFilter(
-          filter,
-          BpfCompileMode.OPTIMIZE,
-          InetAddress
-            .getByAddress(new byte[] {(byte)255, (byte)255, (byte)255, (byte)0})
-        );
-      } catch (UnknownHostException e) {
-        assert true; // never get here
-      }
+      handle.setFilter(
+        filter,
+        BpfCompileMode.OPTIMIZE
+      );
     }
 
     PacketListener listener
