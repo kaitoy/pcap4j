@@ -464,7 +464,12 @@ public final class PcapHandle {
   }
 
   /**
+   * Breaks a loop which this handle is working on.
    *
+   * The loop may not be broken immediately on some OSes
+   * because of buffering or something.
+   * As a workaround, letting this capture some bogus packets
+   * after calling this method may work.
    */
   public void breakLoop() {
     logger.info("Break loop.");

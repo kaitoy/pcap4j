@@ -194,12 +194,12 @@ public final class Pcaps {
 
   /**
    *
-   * @param inetAddr
+   * @param inetAddr Inet4Address or Inet6Address
    * @return
    */
   public static String toBpfString (InetAddress inetAddr){
-    // TODO IPv6
-    return inetAddr.toString().replaceFirst("\\A.*/", "");
+    String strAddr = inetAddr.toString();
+    return strAddr.substring(strAddr.lastIndexOf("/") + 1);
   }
 
   /**
