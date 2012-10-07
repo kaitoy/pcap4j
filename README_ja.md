@@ -77,7 +77,6 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 * logback-core 1.0.1
 * logback-classic 1.0.1
 
-<br>
 
 #### pcapライブラリのロードについて ####
 デフォルトでは下記の条件でpcapライブラリを検索し、ロードする。
@@ -94,11 +93,10 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 * jna.library.path: サーチパスを指定する。
 * org.pcap4j.core.pcapLibName: ライブラリへのフルパスを指定する。
 
-<br>
 
 #### pcap API と Pcap4j API の対応 ####
 <table border="1">
-  <tr bgcolor="#cccccc" align=center>
+  <tr align=center>
     <td>pcap API</td>
     <td>Pcap4j API</td>
   </tr>

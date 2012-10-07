@@ -74,7 +74,6 @@ I'm using the following libraries for the test.
 * logback-core 1.0.1
 * logback-classic 1.0.1
 
-<br>
 
 #### About pcap library loading ####
 As the default, Pcap4j loads the pcap library on the following conditions.
@@ -92,11 +91,10 @@ You can use the following Java System Properties to change the default behavior.
 * jna.library.path: Specify the serch path
 * org.pcap4j.core.pcapLibName: Specify the full path of the pcap library
 
-<br>
 
 #### Mapping pcap API to Pcap4j API ####
 <table border="1">
-  <tr bgcolor="#cccccc" align=center>
+  <tr align=center>
     <td>pcap API</td>
     <td>Pcap4j API</td>
   </tr>

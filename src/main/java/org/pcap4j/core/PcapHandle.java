@@ -394,7 +394,9 @@ public final class PcapHandle {
 
   /**
    *
-   * @param filePath "-" means stdout
+   * @param filePath "-" means stdout.
+   *        The dlt of the PcapHandle which captured the packets you want to dump
+   *        must be the same as this dlt.
    * @return
    * @throws PcapNativeException
    */
