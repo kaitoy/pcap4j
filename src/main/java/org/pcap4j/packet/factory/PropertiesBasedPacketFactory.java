@@ -17,20 +17,21 @@ import org.pcap4j.packet.namednumber.NamedNumber;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.8
+ * @since pcap4j 0.9.14
  */
-public final class DynamicPacketFactory implements PacketFactory {
+public final class PropertiesBasedPacketFactory
+implements PacketFactory<NamedNumber<?>> {
 
-  private static final DynamicPacketFactory INSTANCE
-    = new DynamicPacketFactory();
+  private static final PropertiesBasedPacketFactory INSTANCE
+    = new PropertiesBasedPacketFactory();
 
-  private DynamicPacketFactory() {};
+  private PropertiesBasedPacketFactory() {};
 
   /**
    *
    * @return
    */
-  public static DynamicPacketFactory getInstance() { return INSTANCE; }
+  public static PropertiesBasedPacketFactory getInstance() { return INSTANCE; }
 
   public Packet newPacket(byte[] rawData, NamedNumber<?> number) {
     if (number == null) {
@@ -42,6 +43,11 @@ public final class DynamicPacketFactory implements PacketFactory {
     return newPacket(rawData, packetClass);
   }
 
+  /**
+   *
+   * @param rawData
+   * @return
+   */
   public Packet newPacket(byte[] rawData) {
     Class<? extends Packet> packetClass
       = PacketPropertiesLoader.getInstance().getUnknownPacketClass();
@@ -54,7 +60,9 @@ public final class DynamicPacketFactory implements PacketFactory {
    * @param packetClass
    * @return
    */
-  public Packet newPacket(byte[] rawData, Class<? extends Packet> packetClass) {
+  public Packet newPacket(
+    byte[] rawData, Class<? extends Packet> packetClass
+  ) {
     if (rawData == null || packetClass == null) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("rawData: ")

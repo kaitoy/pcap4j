@@ -9,44 +9,48 @@ package org.pcap4j.packet.factory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import org.pcap4j.packet.IllegalIpV6Option;
+import org.pcap4j.packet.IllegalIpV4InternetTimestampOptionData;
 import org.pcap4j.packet.IllegalRawDataException;
-import org.pcap4j.packet.IpV6ExtOptionsPacket.IpV6Option;
+import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;
 import org.pcap4j.packet.PacketPropertiesLoader;
-import org.pcap4j.packet.namednumber.IpV6OptionType;
+import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.11
+ * @since pcap4j 0.9.14
  */
 public final class
-DynamicIpV6OptionFactory
-implements ClassifiedDataFactory<IpV6Option, IpV6OptionType> {
+PropertiesBasedIpV4InternetTimestampDataFactory
+implements ClassifiedDataFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampOptionFlag> {
 
-  private static final DynamicIpV6OptionFactory INSTANCE
-    = new DynamicIpV6OptionFactory();
+  private static final PropertiesBasedIpV4InternetTimestampDataFactory INSTANCE
+    = new PropertiesBasedIpV4InternetTimestampDataFactory();
 
-  private DynamicIpV6OptionFactory() {}
+  private PropertiesBasedIpV4InternetTimestampDataFactory() {}
 
   /**
    *
    * @return
    */
-  public static DynamicIpV6OptionFactory getInstance() { return INSTANCE; }
+  public static PropertiesBasedIpV4InternetTimestampDataFactory getInstance() {
+    return INSTANCE;
+  }
 
-  public IpV6Option newData(byte[] rawData, IpV6OptionType number) {
-    if (number == null) {
-      throw new NullPointerException(" number: " + number);
+  public IpV4InternetTimestampOptionData newData(
+    byte[] rawData, IpV4InternetTimestampOptionFlag flag
+  ) {
+    if (flag == null) {
+      throw new NullPointerException("flag may not be null");
     }
 
-    Class<? extends IpV6Option> dataClass
-      = PacketPropertiesLoader.getInstance().getIpV6OptionClass(number);
+    Class<? extends IpV4InternetTimestampOptionData> dataClass
+      = PacketPropertiesLoader.getInstance().getIpV4InternetTimestampDataClass(flag);
     return newData(rawData, dataClass);
   }
 
-  public IpV6Option newData(byte[] rawData) {
-    Class<? extends IpV6Option> dataClass
-      = PacketPropertiesLoader.getInstance().getUnknownIpV6OptionClass();
+  public IpV4InternetTimestampOptionData newData(byte[] rawData) {
+    Class<? extends IpV4InternetTimestampOptionData> dataClass
+      = PacketPropertiesLoader.getInstance().getUnknownIpV4InternetTimestampDataClass();
     return newData(rawData, dataClass);
   }
 
@@ -56,7 +60,9 @@ implements ClassifiedDataFactory<IpV6Option, IpV6OptionType> {
    * @param dataClass
    * @return
    */
-  public IpV6Option newData(byte[] rawData, Class<? extends IpV6Option> dataClass) {
+  public IpV4InternetTimestampOptionData newData(
+    byte[] rawData, Class<? extends IpV4InternetTimestampOptionData> dataClass
+  ) {
     if (rawData == null || dataClass == null) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("rawData: ")
@@ -68,7 +74,7 @@ implements ClassifiedDataFactory<IpV6Option, IpV6OptionType> {
 
     try {
       Method newInstance = dataClass.getMethod("newInstance", byte[].class);
-      return (IpV6Option)newInstance.invoke(null, rawData);
+      return (IpV4InternetTimestampOptionData)newInstance.invoke(null, rawData);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -79,7 +85,7 @@ implements ClassifiedDataFactory<IpV6Option, IpV6OptionType> {
       throw new IllegalStateException(e);
     } catch (InvocationTargetException e) {
       if (e.getTargetException() instanceof IllegalRawDataException) {
-        return IllegalIpV6Option.newInstance(rawData);
+        return IllegalIpV4InternetTimestampOptionData.newInstance(rawData);
       }
       throw new IllegalStateException(e.getTargetException());
     }

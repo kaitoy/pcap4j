@@ -1,3 +1,5 @@
+[English](/kaitoy/pcap4j/blob/master/README.md)
+
 Pcap4J
 ======
 
@@ -51,18 +53,22 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 * UNIX
  * Solaris: 10
 
-他のアーキテクチャ/OSでも、JNAとlibpcapがサポートしていれば動く、と願う。
+他のアーキテクチャ/OSでも、JNAとlibpcapがサポートしていれば動く、と願う(FreeBSDはだめそう)。
 
 使い方
 ------
 
 JavaDocは[こちら](http://kaitoy.github.com/pcap4j/0.9.13/javadoc/)。
 
+他にも、以下のリンクから情報を得られる。
 
-他のドキュメントは作成中。
-[テストクラス](/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)や
-[サンプルクラス](/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)や
-[libpcapのドキュメント](http://www.tcpdump.org/pcap.html)を見ればなんとか使えるかも。
+* [libpcapのドキュメント](http://www.tcpdump.org/pcap.html)
+* [WinPcapのドキュメント](http://www.winpcap.org/docs/default.htm)
+* [Learn About Packet](/kaitoy/pcap4j/blob/master/www/Packet.md)
+* [Learn About Packet Factory](/kaitoy/pcap4j/blob/master/www/PacketFactory.md)
+* [テストクラス](/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)
+* [サンプルクラス](/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)
+
 まだAPIは固まってなく、こっそりと変更する可能性がある。
 J2SE 5.0以降で動く。
 UNIX系ならlibpcap (多分)0.9.3以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。
@@ -106,7 +112,7 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
   </tr>
   <tr>
     <td>void pcap_freealldevs(pcap_if_t *)</td>
-    <td></td>
+    <td>内部的mappingのみ</td>
   </tr>
   <tr>
     <td>char *pcap_lookupdev(char *)</td>
@@ -163,7 +169,7 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
   </tr>
   <tr>
     <td>int pcap_compile(pcap_t *, struct bpf_program *, char *, int, bpf_u_int32)</td>
-    <td></td>
+    <td>内部的mappingのみ</td>
   </tr>
   <tr>
     <td rowspan="2">int pcap_setfilter(pcap_t *, struct bpf_program *)</td>
@@ -174,7 +180,7 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
   </tr>
   <tr>
     <td>void pcap_freecode(struct bpf_program *)</td>
-    <td></td>
+    <td>内部的mappingのみ</td>
   </tr>
   <tr>
     <td>int pcap_sendpacket(pcap_t *, const u_char *, int)</td>
@@ -186,7 +192,7 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
   </tr>
   <tr>
     <td>int pcap_datalink(pcap_t *)</td>
-    <td></td>
+    <td>内部的mappingのみ</td>
   </tr>
   <tr>
     <td>char *pcap_geterr(pcap_t *)</td>
@@ -194,7 +200,7 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
   </tr>
   <tr>
     <td>char *pcap_strerror(int)</td>
-    <td></td>
+    <td>内部的mappingのみ</td>
   </tr>
 </table>
 
@@ -363,6 +369,8 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 
 ビルド手順は以下。
 
+0. WinPcap/libpcapインストール<br>
+  ビルド時に実行されるunit testで必要なので。
 1. Eclipseインストール<br>
   ダウンロードして解凍するだけ。
 2. M2Eインストール<br>

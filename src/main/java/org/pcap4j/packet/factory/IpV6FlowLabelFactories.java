@@ -17,6 +17,8 @@ import org.pcap4j.packet.PacketPropertiesLoader;
  */
 public final class IpV6FlowLabelFactories {
 
+  private static volatile IpV6FlowLabelFactory cache;
+
   private IpV6FlowLabelFactories() { throw new AssertionError(); }
 
   /**
@@ -25,12 +27,18 @@ public final class IpV6FlowLabelFactories {
    * @return
    */
   public static IpV6FlowLabelFactory getFactory() {
+    IpV6FlowLabelFactory cachedFactory = cache;
+    if (cachedFactory != null) {
+      return cachedFactory;
+    }
+
     Class<? extends IpV6FlowLabelFactory> factoryClass
       = (Class<? extends IpV6FlowLabelFactory>)PacketPropertiesLoader
           .getInstance().getIpV6FlowLabelFactoryClass();
     try {
       Method getInstance = factoryClass.getMethod("getInstance");
-      return (IpV6FlowLabelFactory)getInstance.invoke(null);
+      cache = (IpV6FlowLabelFactory)getInstance.invoke(null);
+      return cache;
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -42,6 +50,13 @@ public final class IpV6FlowLabelFactories {
     } catch (InvocationTargetException e) {
       throw new IllegalStateException(e.getTargetException());
     }
+  }
+
+  /**
+   *
+   */
+  public static void clearCache() {
+    cache = null;
   }
 
 }

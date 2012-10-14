@@ -14,20 +14,20 @@ import org.pcap4j.packet.PacketPropertiesLoader;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.11
+ * @since pcap4j 0.9.14
  */
-public final class DynamicIpV4TosFactory implements IpV4TosFactory {
+public final class PropertiesBasedIpV4TosFactory implements IpV4TosFactory {
 
-  private static final DynamicIpV4TosFactory INSTANCE
-    = new DynamicIpV4TosFactory();
+  private static final PropertiesBasedIpV4TosFactory INSTANCE
+    = new PropertiesBasedIpV4TosFactory();
 
-  private DynamicIpV4TosFactory() {}
+  private PropertiesBasedIpV4TosFactory() {}
 
   /**
    *
    * @return
    */
-  public static DynamicIpV4TosFactory getInstance() { return INSTANCE; }
+  public static PropertiesBasedIpV4TosFactory getInstance() { return INSTANCE; }
 
   public IpV4Tos newTos(byte value) {
     Class<? extends IpV4Tos> tosClass

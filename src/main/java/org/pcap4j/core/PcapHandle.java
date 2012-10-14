@@ -13,8 +13,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.PointerByReference;
 import org.pcap4j.core.NativeMappings.bpf_program;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.packet.Packet;
@@ -23,8 +21,14 @@ import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.sun.jna.Pointer;
+import com.sun.jna.ptr.PointerByReference;
 
 /**
+ * A wrapping class for struct pcap_t.
+ * On some OSes, such as Linux and Solaris, this class can't capture packets
+ * whose source and destination interface are the same.
+ *
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
@@ -281,6 +285,9 @@ public final class PcapHandle {
   }
 
   /**
+   * A wrapper method for "int pcap_loop(pcap_t *, int, pcap_handler, u_char *)".
+   * Once a packet is captured, listener.gotPacket(Packet) is called in the same thread,
+   * and this won't capture any other packets until the thread finishes.
    *
    * @param packetCount
    * @param listener
@@ -294,15 +301,15 @@ public final class PcapHandle {
     loop(
       packetCount,
       listener,
-      new Executor() {
-        public void execute(Runnable command) {
-          command.run();
-        }
-      }
+      SimpleExecutor.getInstance()
     );
   }
 
   /**
+   * A wrapper method for "int pcap_loop(pcap_t *, int, pcap_handler, u_char *)".
+   * Once a packet is captured, listener.gotPacket(Packet) is called via the executor.
+   * If listener.gotPacket(Packet) is expected to take a long time,
+   * this method should be used with proper executor instead of loop(int, PacketListener).
    *
    * @param packetCount
    * @param listener
@@ -354,7 +361,21 @@ public final class PcapHandle {
     }
   }
 
-  private class GotPacketFuncExecutor
+  private static final class SimpleExecutor implements Executor {
+
+    private SimpleExecutor() {}
+
+    private static final SimpleExecutor INSTANCE = new SimpleExecutor();
+
+    public static SimpleExecutor getInstance() { return INSTANCE; }
+
+    public void execute(Runnable command) {
+      command.run();
+    }
+
+  }
+
+  private final class GotPacketFuncExecutor
   implements NativeMappings.pcap_handler {
 
     private final DataLinkType dlt;

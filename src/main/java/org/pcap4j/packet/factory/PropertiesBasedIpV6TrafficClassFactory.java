@@ -9,30 +9,30 @@ package org.pcap4j.packet.factory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
+import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
 import org.pcap4j.packet.PacketPropertiesLoader;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.11
+ * @since pcap4j 0.9.14
  */
-public final class DynamicIpV6FlowLabelFactory implements IpV6FlowLabelFactory {
+public final class PropertiesBasedIpV6TrafficClassFactory implements IpV6TrafficClassFactory {
 
-  private static final DynamicIpV6FlowLabelFactory INSTANCE
-    = new DynamicIpV6FlowLabelFactory();
+  private static final PropertiesBasedIpV6TrafficClassFactory INSTANCE
+    = new PropertiesBasedIpV6TrafficClassFactory();
 
-  private DynamicIpV6FlowLabelFactory() {}
+  private PropertiesBasedIpV6TrafficClassFactory() {}
 
   /**
    *
    * @return
    */
-  public static DynamicIpV6FlowLabelFactory getInstance() { return INSTANCE; }
+  public static PropertiesBasedIpV6TrafficClassFactory getInstance() { return INSTANCE; }
 
-  public IpV6FlowLabel newFlowLabel(int value) {
-    Class<? extends IpV6FlowLabel> clazz
-      = PacketPropertiesLoader.getInstance().getIpV6FlowLabelClass();
-    return newFlowLabel(value, clazz);
+  public IpV6TrafficClass newTrafficClass(byte value) {
+    Class<? extends IpV6TrafficClass> clazz
+      = PacketPropertiesLoader.getInstance().getIpV6TrafficClassClass();
+    return newTrafficClass(value, clazz);
   }
 
   /**
@@ -41,16 +41,16 @@ public final class DynamicIpV6FlowLabelFactory implements IpV6FlowLabelFactory {
    * @param clazz
    * @return
    */
-  public IpV6FlowLabel newFlowLabel(
-    int value, Class<? extends IpV6FlowLabel> clazz
+  public IpV6TrafficClass newTrafficClass(
+    byte value, Class<? extends IpV6TrafficClass> clazz
   ) {
     if (clazz == null) {
       throw new NullPointerException("clazz may not be null");
     }
 
     try {
-      Method newInstance = clazz.getMethod("newInstance", int.class);
-      return (IpV6FlowLabel)newInstance.invoke(null, value);
+      Method newInstance = clazz.getMethod("newInstance", byte.class);
+      return (IpV6TrafficClass)newInstance.invoke(null, value);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {

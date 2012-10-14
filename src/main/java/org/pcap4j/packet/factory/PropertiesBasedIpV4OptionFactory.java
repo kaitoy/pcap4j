@@ -17,22 +17,22 @@ import org.pcap4j.packet.namednumber.IpV4OptionType;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.11
+ * @since pcap4j 0.9.14
  */
 public final class
-DynamicIpV4OptionFactory
+PropertiesBasedIpV4OptionFactory
 implements ClassifiedDataFactory<IpV4Option, IpV4OptionType> {
 
-  private static final DynamicIpV4OptionFactory INSTANCE
-    = new DynamicIpV4OptionFactory();
+  private static final PropertiesBasedIpV4OptionFactory INSTANCE
+    = new PropertiesBasedIpV4OptionFactory();
 
-  private DynamicIpV4OptionFactory() {}
+  private PropertiesBasedIpV4OptionFactory() {}
 
   /**
    *
    * @return
    */
-  public static DynamicIpV4OptionFactory getInstance() { return INSTANCE; }
+  public static PropertiesBasedIpV4OptionFactory getInstance() { return INSTANCE; }
 
   public IpV4Option newData(byte[] rawData, IpV4OptionType number) {
     if (number == null) {

@@ -1,3 +1,5 @@
+[Japanese](/kaitoy/pcap4j/blob/master/README_ja.md)
+
 Pcap4J
 ======
 
@@ -51,7 +53,7 @@ I tested Pcap4j on the following OSes with x86 processors.
 * UNIX
  * Solaris: 10
 
-I believe Pcap4j can run on the other OSes supported by both JNA and libpcap.
+I hope Pcap4j can run on the other OSes supported by both JNA and libpcap except FreeBSD.
 
 How to use
 ----------
@@ -59,11 +61,18 @@ How to use
 The JavaDoc is [here](http://kaitoy.github.com/pcap4j/0.9.13/javadoc/).
 
 
-The documentation is in progress. You may know how to use Pcap4J from
-[the documents of libpcap](http://www.tcpdump.org/pcap.html)(or WinPcap)
-and [sample classes](/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample).
-The APIs are not stable yet and may be changed without announcement.
-This library works with J2SE 5.0+, libpcap 0.9.3+ or WinPcap 3.0+, jna, slf4j-api,
+
+And the following resources will help you to learn how to use Pcap4j.
+
+* [Documents of libpcap](http://www.tcpdump.org/pcap.html)
+* [Documents of WinPcap](http://www.winpcap.org/docs/default.htm)
+* [Learn About Packet](/kaitoy/pcap4j/blob/master/www/Packet.md)
+* [Learn About Packet Factory](/kaitoy/pcap4j/blob/master/www/PacketFactory.md)
+* [Test Classes](/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)
+* [Sample Classes](/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)
+
+Pcap4j's APIs are not yet stable and may change without announcement.
+This library needs J2SE 5.0+, libpcap 0.9.3+ or WinPcap 3.0+, jna, slf4j-api,
 and an implementation of logger.
 I'm using the following libraries for the test.
 
@@ -104,7 +113,7 @@ You can use the following Java System Properties to change the default behavior.
   </tr>
   <tr>
     <td>void pcap_freealldevs(pcap_if_t *)</td>
-    <td></td>
+    <td>private mapping only</td>
   </tr>
   <tr>
     <td>char *pcap_lookupdev(char *)</td>
@@ -161,7 +170,7 @@ You can use the following Java System Properties to change the default behavior.
   </tr>
   <tr>
     <td>int pcap_compile(pcap_t *, struct bpf_program *, char *, int, bpf_u_int32)</td>
-    <td></td>
+    <td>private mapping only</td>
   </tr>
   <tr>
     <td rowspan="2">int pcap_setfilter(pcap_t *, struct bpf_program *)</td>
@@ -172,7 +181,7 @@ You can use the following Java System Properties to change the default behavior.
   </tr>
   <tr>
     <td>void pcap_freecode(struct bpf_program *)</td>
-    <td></td>
+    <td>private mapping only</td>
   </tr>
   <tr>
     <td>int pcap_sendpacket(pcap_t *, const u_char *, int)</td>
@@ -184,7 +193,7 @@ You can use the following Java System Properties to change the default behavior.
   </tr>
   <tr>
     <td>int pcap_datalink(pcap_t *)</td>
-    <td></td>
+    <td>private mapping only</td>
   </tr>
   <tr>
     <td>char *pcap_geterr(pcap_t *)</td>
@@ -192,7 +201,7 @@ You can use the following Java System Properties to change the default behavior.
   </tr>
   <tr>
     <td>char *pcap_strerror(int)</td>
-    <td></td>
+    <td>private mapping only</td>
   </tr>
 </table>
 
@@ -363,6 +372,8 @@ I'm developing Pcap4j in the following environment.
 
 The build procedure is the following.
 
+0. Install WinPcap/libpcap<br>
+   The pcap library is needed for the unit tests ran in the Build step.
 1. Setup Eclipse 3.7+<br>
    Install JDK, download a compressed Eclipse file from
    the [Eclipse Downloads Page](http://www.eclipse.org/downloads/), and decompress it.

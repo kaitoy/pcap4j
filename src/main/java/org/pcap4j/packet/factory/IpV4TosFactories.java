@@ -17,6 +17,8 @@ import org.pcap4j.packet.PacketPropertiesLoader;
  */
 public final class IpV4TosFactories {
 
+  private static volatile IpV4TosFactory cache;
+
   private IpV4TosFactories() { throw new AssertionError(); }
 
   /**
@@ -25,12 +27,18 @@ public final class IpV4TosFactories {
    * @return
    */
   public static IpV4TosFactory getFactory() {
+    IpV4TosFactory cachedFactory = cache;
+    if (cachedFactory != null) {
+      return cachedFactory;
+    }
+
     Class<? extends IpV4TosFactory> factoryClass
       = (Class<? extends IpV4TosFactory>)PacketPropertiesLoader.getInstance()
           .getIpV4TosFactoryClass();
     try {
       Method getInstance = factoryClass.getMethod("getInstance");
-      return (IpV4TosFactory)getInstance.invoke(null);
+      cache = (IpV4TosFactory)getInstance.invoke(null);
+      return cache;
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -42,6 +50,13 @@ public final class IpV4TosFactories {
     } catch (InvocationTargetException e) {
       throw new IllegalStateException(e.getTargetException());
     }
+  }
+
+  /**
+   *
+   */
+  public static void clearCache() {
+    cache = null;
   }
 
 }

@@ -16,14 +16,14 @@ import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
 import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.factory.ClassifiedDataFactory;
-import org.pcap4j.packet.factory.DynamicIpV4TosFactory;
-import org.pcap4j.packet.factory.DynamicIpV6FlowLabelFactory;
-import org.pcap4j.packet.factory.DynamicIpV6TrafficClassFactory;
 import org.pcap4j.packet.factory.IpV4TosFactory;
 import org.pcap4j.packet.factory.IpV6FlowLabelFactory;
 import org.pcap4j.packet.factory.IpV6TrafficClassFactory;
 import org.pcap4j.packet.factory.PacketFactory;
-import org.pcap4j.packet.factory.StaticPacketFactory;
+import org.pcap4j.packet.factory.PropertiesBasedIpV4TosFactory;
+import org.pcap4j.packet.factory.PropertiesBasedIpV6FlowLabelFactory;
+import org.pcap4j.packet.factory.PropertiesBasedIpV6TrafficClassFactory;
+import org.pcap4j.packet.factory.StaticUnknownPacketFactory;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
@@ -297,16 +297,15 @@ public final class PacketPropertiesLoader {
    * @param numberClass
    * @return
    */
-  public Class<? extends PacketFactory> getPacketFactoryClass(
-    Class<? extends NamedNumber<?>> numberClass
-  ) {
+  public Class<? extends PacketFactory<NamedNumber<?>>>
+  getPacketFactoryClass(Class<? extends NamedNumber<?>> numberClass) {
     StringBuilder sb = new StringBuilder(130);
     sb.append(PACKET_FACTORY_CLASS_KEY_BASE)
       .append(numberClass.getName())
       .append(".isMadeBy");
-    return loader.<PacketFactory>getClass(
+    return loader.<PacketFactory<NamedNumber<?>>>getClass(
              sb.toString(),
-             StaticPacketFactory.class
+             StaticUnknownPacketFactory.class
            );
   }
 
@@ -315,7 +314,8 @@ public final class PacketPropertiesLoader {
    * @param number
    * @return
    */
-  public <T extends NamedNumber<?>> Class<? extends Packet> getPacketClass(T number) {
+  public <T extends NamedNumber<?>>
+  Class<? extends Packet> getPacketClass(T number) {
     StringBuilder sb = new StringBuilder(110);
     sb.append(PACKET_CLASS_KEY_BASE)
       .append(number.getClass().getName())
@@ -528,7 +528,7 @@ public final class PacketPropertiesLoader {
   public Class<? extends IpV4TosFactory> getIpV4TosFactoryClass() {
     return loader.<IpV4TosFactory>getClass(
              IPV4_TOS_FACTORY_CLASS_KEY,
-             DynamicIpV4TosFactory.class
+             PropertiesBasedIpV4TosFactory.class
            );
   }
 
@@ -551,7 +551,7 @@ public final class PacketPropertiesLoader {
   getIpV6TrafficClassFactoryClass() {
     return loader.<IpV6TrafficClassFactory>getClass(
              IPV6_TRAFFIC_CLASS_FACTORY_CLASS_KEY,
-             DynamicIpV6TrafficClassFactory.class
+             PropertiesBasedIpV6TrafficClassFactory.class
            );
   }
 
@@ -574,7 +574,7 @@ public final class PacketPropertiesLoader {
   getIpV6FlowLabelFactoryClass() {
     return loader.<IpV6FlowLabelFactory>getClass(
              IPV6_FLOW_LABEL_FACTORY_CLASS_KEY,
-             DynamicIpV6FlowLabelFactory.class
+             PropertiesBasedIpV6FlowLabelFactory.class
            );
   }
 

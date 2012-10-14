@@ -80,14 +80,13 @@ public class NifSelector {
     int nifIdx = 0;
     for (PcapNetworkInterface nif: nifs) {
       sb.append("NIF[").append(nifIdx).append("]: ")
-                     .append(nif.getName()).append(LINE_SEPARATOR)
-                     .append("      : description: ")
-                     .append(nif.getDescription()).append(LINE_SEPARATOR);
-
+        .append(nif.getName()).append(LINE_SEPARATOR)
+        .append("      : description: ")
+        .append(nif.getDescription()).append(LINE_SEPARATOR);
 
       for (PcapAddress addr: nif.getAddresses()) {
         sb.append("      : address: ")
-                       .append(addr.getAddress()).append(LINE_SEPARATOR);
+          .append(addr.getAddress()).append(LINE_SEPARATOR);
       }
       nifIdx++;
     }

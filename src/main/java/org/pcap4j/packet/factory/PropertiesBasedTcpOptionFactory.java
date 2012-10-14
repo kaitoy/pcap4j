@@ -9,48 +9,44 @@ package org.pcap4j.packet.factory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import org.pcap4j.packet.IllegalIpV6RoutingData;
 import org.pcap4j.packet.IllegalRawDataException;
-import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
+import org.pcap4j.packet.IllegalTcpOption;
 import org.pcap4j.packet.PacketPropertiesLoader;
-import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
+import org.pcap4j.packet.TcpPacket.TcpOption;
+import org.pcap4j.packet.namednumber.TcpOptionKind;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.11
+ * @since pcap4j 0.9.14
  */
 public final class
-DynamicIpV6RoutingDataFactory
-implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
+PropertiesBasedTcpOptionFactory
+implements ClassifiedDataFactory<TcpOption, TcpOptionKind> {
 
-  private static final DynamicIpV6RoutingDataFactory INSTANCE
-    = new DynamicIpV6RoutingDataFactory();
+  private static final PropertiesBasedTcpOptionFactory INSTANCE
+    = new PropertiesBasedTcpOptionFactory();
 
-  private DynamicIpV6RoutingDataFactory() {}
+  private PropertiesBasedTcpOptionFactory() {}
 
   /**
    *
    * @return
    */
-  public static DynamicIpV6RoutingDataFactory getInstance() {
-    return INSTANCE;
-  }
+  public static PropertiesBasedTcpOptionFactory getInstance() { return INSTANCE; }
 
-  public IpV6RoutingData newData(
-    byte[] rawData, IpV6RoutingHeaderType type
-  ) {
-    if (type == null) {
-      throw new NullPointerException("type may not be null");
+  public TcpOption newData(byte[] rawData, TcpOptionKind number) {
+    if (number == null) {
+      throw new NullPointerException(" number: " + number);
     }
 
-    Class<? extends IpV6RoutingData> dataClass
-      = PacketPropertiesLoader.getInstance().getIpV6RoutingDataClass(type);
+    Class<? extends TcpOption> dataClass
+      = PacketPropertiesLoader.getInstance().getTcpOptionClass(number);
     return newData(rawData, dataClass);
   }
 
-  public IpV6RoutingData newData(byte[] rawData) {
-    Class<? extends IpV6RoutingData> dataClass
-      = PacketPropertiesLoader.getInstance().getUnknownIpV6RoutingDataClass();
+  public TcpOption newData(byte[] rawData) {
+    Class<? extends TcpOption> dataClass
+      = PacketPropertiesLoader.getInstance().getUnknownTcpOptionClass();
     return newData(rawData, dataClass);
   }
 
@@ -60,9 +56,7 @@ implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
    * @param dataClass
    * @return
    */
-  public IpV6RoutingData newData(
-    byte[] rawData, Class<? extends IpV6RoutingData> dataClass
-  ) {
+  public TcpOption newData(byte[] rawData, Class<? extends TcpOption> dataClass) {
     if (rawData == null || dataClass == null) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("rawData: ")
@@ -74,7 +68,7 @@ implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
 
     try {
       Method newInstance = dataClass.getMethod("newInstance", byte[].class);
-      return (IpV6RoutingData)newInstance.invoke(null, rawData);
+      return (TcpOption)newInstance.invoke(null, rawData);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -85,7 +79,7 @@ implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
       throw new IllegalStateException(e);
     } catch (InvocationTargetException e) {
       if (e.getTargetException() instanceof IllegalRawDataException) {
-        return IllegalIpV6RoutingData.newInstance(rawData);
+        return IllegalTcpOption.newInstance(rawData);
       }
       throw new IllegalStateException(e.getTargetException());
     }

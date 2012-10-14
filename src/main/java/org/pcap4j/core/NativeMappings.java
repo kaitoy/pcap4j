@@ -44,9 +44,9 @@ final class NativeMappings {
   static final int SBIOCSTIME = 0x4201;
 
   static final Pointer ERRNO_P
-    = Platform.isWindows() ?
-        null : NativeLibrary.getInstance(PCAP_LIB_NAME)
-                 .getGlobalVariableAddress("errno");
+    = Platform.isSolaris() ? NativeLibrary.getInstance(PCAP_LIB_NAME)
+                               .getGlobalVariableAddress("errno")
+                           : null;
 
   // pcap-int.h: struct pcap
   static int getFdFromPcapT(Pointer p) {

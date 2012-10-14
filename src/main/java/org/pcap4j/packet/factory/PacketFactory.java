@@ -14,7 +14,7 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @author Kaito Yamada
  * @since pcap4j 0.9.6
  */
-public interface PacketFactory {
+public interface PacketFactory<T extends NamedNumber<?>> {
 
   // /* must implement. called by PacketFactories. */
   // public static PacketFactory getInstance();
@@ -25,13 +25,6 @@ public interface PacketFactory {
    * @param number
    * @return
    */
-  public Packet newPacket(byte[] rawData, NamedNumber<?> number);
-
-  /**
-   *
-   * @param rawData
-   * @return
-   */
-  public Packet newPacket(byte[] rawData);
+  public Packet newPacket(byte[] rawData, T number);
 
 }
