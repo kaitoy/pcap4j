@@ -124,7 +124,7 @@ final class NativeMappings {
     // int pcap_findalldevs(pcap_if_t **alldevsp, char *errbuf)
     @Deprecated // Use direct mapped one instead.
     int pcap_findalldevs(PointerByReference alldevsp, PcapErrbuf errbuf);
-    // TODO WinPcap: int pcap_findalldevs_ex(char *host, char *port, SOCKET sockctrl, struct pcap_rmtauth *auth, pcap_if_t **alldevs, char *errbuf)  リモートキャプチャ可
+    // TODO WinPcap: int pcap_findalldevs_ex(char *host, char *port, SOCKET sockctrl, struct pcap_rmtauth *auth, pcap_if_t **alldevs, char *errbuf)
 
     // void  pcap_freealldevs (pcap_if_t *alldevsp)
     @Deprecated // Use direct mapped one instead.
@@ -179,7 +179,6 @@ final class NativeMappings {
     int pcap_loop(Pointer p, int cnt, pcap_handler callback, Pointer user);
     @Deprecated // Use direct mapped one instead.
     int pcap_loop(Pointer p, int cnt, Function callback, Pointer user);
-    // openした時のタイムアウトを遵守しない
 
     // void pcap_breakloop(pcap_t *p)
     @Deprecated // Use direct mapped one instead.
@@ -223,7 +222,7 @@ final class NativeMappings {
     Pointer pcap_strerror(int errno);
 
     // int strioctl(int fd, int cmd, int len, char *dp)
-    int strioctl(int fd, int cmd, int len, Pointer dp);  // Can't map directly because not all OSs support this function.
+    int strioctl(int fd, int cmd, int len, Pointer dp);  // Can't map directly because not all OSes support this function.
 
   }
 

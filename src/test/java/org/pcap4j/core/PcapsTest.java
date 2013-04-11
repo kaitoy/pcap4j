@@ -1,7 +1,6 @@
 package org.pcap4j.core;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -67,7 +66,7 @@ public class PcapsTest {
    */
   @Test
   public void testGetNifByInetAddress() {
-    // TODO fail("まだ実装されていません");
+    // TODO fail("not yet implemented");
   }
 
   /**
@@ -75,7 +74,7 @@ public class PcapsTest {
    */
   @Test
   public void testGetNifByString() {
-     // TODO fail("まだ実装されていません");
+     // TODO fail("not yet implemented");
   }
 
   /**
@@ -94,7 +93,7 @@ public class PcapsTest {
    */
   @Test
   public void testOpenOffline() {
-    // TODO fail("まだ実装されていません");
+    // TODO fail("not yet implemented");
   }
 
   /**
@@ -102,7 +101,7 @@ public class PcapsTest {
    */
   @Test
   public void testOpenDead() {
-    // TODO fail("まだ実装されていません");
+    // TODO fail("not yet implemented");
   }
 
   /**
@@ -110,7 +109,7 @@ public class PcapsTest {
    */
   @Test
   public void testToBpfStringInetAddress() {
-    // TODO fail("まだ実装されていません");
+    // TODO fail("not yet implemented");
   }
 
   /**
@@ -118,7 +117,7 @@ public class PcapsTest {
    */
   @Test
   public void testToBpfStringMacAddress() {
-    // TODO fail("まだ実装されていません");
+    // TODO fail("not yet implemented");
   }
 
 }
