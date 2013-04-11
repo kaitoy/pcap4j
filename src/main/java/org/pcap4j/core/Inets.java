@@ -9,6 +9,7 @@ package org.pcap4j.core;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.pcap4j.core.NativeMappings.in6_addr;
 import org.pcap4j.core.NativeMappings.in_addr;
@@ -49,7 +50,7 @@ final class Inets {
     }
 
     try {
-      return (Inet6Address)Inet6Address.getByAddress(in6.s6_addr);
+      return (Inet6Address)InetAddress.getByAddress(in6.s6_addr);
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }

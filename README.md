@@ -41,7 +41,7 @@ Features
 * Pluggable packet classes.
 * Dumping and reading pcap-formatted files(e.g. capture file of Wireshark)
 
-Supported Operating Systems 
+Supported Operating Systems
 ---------------------------
 
 I tested Pcap4j on the following OSes with x86 processors.
@@ -53,7 +53,9 @@ I tested Pcap4j on the following OSes with x86 processors.
 * UNIX
  * Solaris: 10
 
-I hope Pcap4j can run on the other OSes supported by both JNA and libpcap except FreeBSD.
+And tomute tested Pcap4j on Mac OS X. The report is [here](http://tomute.hateblo.jp/entry/2013/01/27/003209). Thank you, tomute!
+
+I hope Pcap4j can run on the other OSes supported by both JNA and libpcap.
 
 How to use
 ----------
@@ -85,7 +87,7 @@ I'm using the following libraries for the test.
 
 
 #### About pcap library loading ####
-As the default, Pcap4j loads the pcap library on the following conditions.
+By the default, Pcap4j loads the pcap library on the following conditions.
 
 * Windows
  * search path: The paths in the `PATH` environment variable.
@@ -405,7 +407,7 @@ License
 
 Pcap4J is distributed under the MIT license.
 
-    Copyright (c) 2011-2012 Kaito Yamada
+    Copyright (c) 2011-2013 Kaito Yamada
     All rights reserved.
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of

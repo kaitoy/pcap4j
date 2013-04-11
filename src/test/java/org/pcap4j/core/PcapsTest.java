@@ -63,7 +63,7 @@ public class PcapsTest {
   }
 
   /**
-   * {@link org.pcap4j.core.Pcaps#getNifBy(java.net.InetAddress)} のためのテスト・メソッド。
+   * {@link org.pcap4j.core.Pcaps#getNifByAddress(java.net.InetAddress)} のためのテスト・メソッド。
    */
   @Test
   public void testGetNifByInetAddress() {
@@ -71,7 +71,7 @@ public class PcapsTest {
   }
 
   /**
-   * {@link org.pcap4j.core.Pcaps#getNifBy(java.lang.String)} のためのテスト・メソッド。
+   * {@link org.pcap4j.core.Pcaps#getNifByName(java.lang.String)} のためのテスト・メソッド。
    */
   @Test
   public void testGetNifByString() {

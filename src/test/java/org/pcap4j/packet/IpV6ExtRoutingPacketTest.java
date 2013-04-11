@@ -1,8 +1,6 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,8 +68,8 @@ public class IpV6ExtRoutingPacketTest {
     }
 
     ArrayList<Inet6Address> addresses = new ArrayList<Inet6Address>(3);
-    addresses.add((Inet6Address)Inet6Address.getByName("abcd:ef::1:1:1"));
-    addresses.add((Inet6Address)Inet6Address.getByName("abcd:ef::2:2:2"));
+    addresses.add((Inet6Address)InetAddress.getByName("abcd:ef::1:1:1"));
+    addresses.add((Inet6Address)InetAddress.getByName("abcd:ef::2:2:2"));
     addresses.add(dstAddr);
     this.data = new IpV6RoutingSourceRouteData(54321, addresses);
 

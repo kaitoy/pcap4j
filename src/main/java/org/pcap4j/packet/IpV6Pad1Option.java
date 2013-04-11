@@ -84,6 +84,7 @@ public final class IpV6Pad1Option implements IpV6Option {
   }
 
   // Override deserializer to keep singleton
+  @SuppressWarnings("static-method")
   private Object readResolve() throws ObjectStreamException {
     return INSTANCE;
   }

@@ -93,7 +93,7 @@ public final class Pcaps {
    * @return
    * @throws PcapNativeException
    */
-  public static PcapNetworkInterface getNifBy(
+  public static PcapNetworkInterface getNifByAddress(
     InetAddress addr
   ) throws PcapNativeException {
     List<PcapNetworkInterface> allDevs = findAllDevs();
@@ -115,7 +115,7 @@ public final class Pcaps {
    * @return
    * @throws PcapNativeException
    */
-  public static PcapNetworkInterface getNifBy(
+  public static PcapNetworkInterface getNifByName(
     String name
   ) throws PcapNativeException {
     List<PcapNetworkInterface> allDevs = findAllDevs();

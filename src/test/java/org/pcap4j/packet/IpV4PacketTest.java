@@ -1,11 +1,6 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -97,8 +92,8 @@ public class IpV4PacketTest {
     }
 
     List<Inet4Address> routeData = new ArrayList<Inet4Address>();
-    routeData.add((Inet4Address)Inet4Address.getByName("192.168.1.1"));
-    routeData.add((Inet4Address)Inet4Address.getByName("192.168.1.2"));
+    routeData.add((Inet4Address)InetAddress.getByName("192.168.1.1"));
+    routeData.add((Inet4Address)InetAddress.getByName("192.168.1.2"));
     IpV4LooseSourceRouteOption.Builder lsrrb = new IpV4LooseSourceRouteOption.Builder();
     lsrrb.pointer((byte)8)
          .routeData(routeData)

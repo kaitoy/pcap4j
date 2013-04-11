@@ -7,15 +7,13 @@
 
 package org.pcap4j.util;
 
+import static java.nio.ByteOrder.*;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.util.regex.Pattern;
-import static java.nio.ByteOrder.LITTLE_ENDIAN;
-
-import org.pcap4j.util.MacAddress;
 
 /**
  * @author Kaito Yamada
@@ -543,7 +541,7 @@ public final class ByteArrays {
 
     try {
       if (bo.equals(LITTLE_ENDIAN)) {
-        return (Inet4Address)Inet4Address.getByAddress(
+        return (Inet4Address)InetAddress.getByAddress(
                  reverse(
                    getSubArray(
                      array,
@@ -554,7 +552,7 @@ public final class ByteArrays {
                );
       }
       else {
-        return (Inet4Address)Inet4Address.getByAddress(
+        return (Inet4Address)InetAddress.getByAddress(
                  getSubArray(
                    array,
                    offset,
@@ -603,7 +601,7 @@ public final class ByteArrays {
 
     try {
       if (bo.equals(LITTLE_ENDIAN)) {
-        return (Inet6Address)Inet6Address.getByAddress(
+        return (Inet6Address)InetAddress.getByAddress(
                  reverse(
                    getSubArray(
                      array,
@@ -614,7 +612,7 @@ public final class ByteArrays {
                );
       }
       else {
-        return (Inet6Address)Inet6Address.getByAddress(
+        return (Inet6Address)InetAddress.getByAddress(
                  getSubArray(
                    array,
                    offset,

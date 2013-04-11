@@ -1,4 +1,4 @@
-[English](/kaitoy/pcap4j/blob/master/README.md)
+[English](https://github.com/kaitoy/pcap4j)
 
 Pcap4J
 ======
@@ -52,6 +52,8 @@ x86プロセッサ上の以下のOSで動作することを確認した。
  * CentOS: 5
 * UNIX
  * Solaris: 10
+
+また、tomuteさんからMac OS Xで動いたとの[報告](http://tomute.hateblo.jp/entry/2013/01/27/003209)が。ありがとうございます。
 
 他のアーキテクチャ/OSでも、JNAとlibpcapがサポートしていれば動く、と願う(FreeBSDはだめそう)。
 
@@ -400,7 +402,7 @@ m2eclipseでビルドしたい場合は、ステップ2をスキップして、�
 
 Pcap4J is distributed under the MIT license.
 
-    Copyright (c) 2011-2012 Kaito Yamada
+    Copyright (c) 2011-2013 Kaito Yamada
     All rights reserved.
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of

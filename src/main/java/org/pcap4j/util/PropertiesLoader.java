@@ -27,8 +27,8 @@ public class PropertiesLoader {
     = LoggerFactory.getLogger(PropertiesLoader.class);
 
   private final String resourceName;
-  private final boolean givePriorityToSystemPropertiesOverPropertiesFile;
-  private final boolean useCache;
+  private final boolean systemPropertiesOverPropertiesFile;
+  private final boolean caching;
   private final Properties prop = new Properties();
 
   private final Map<String, Object> cache = new HashMap<String, Object>();
@@ -36,16 +36,17 @@ public class PropertiesLoader {
   /**
    *
    * @param resourceName
+   * @param systemPropertiesOverPropertiesFile
+   * @param caching
    */
   public PropertiesLoader(
     String resourceName,
-    boolean givePrioritySystemPropertiesThanPropertiesFile,
-    boolean useCache
+    boolean systemPropertiesOverPropertiesFile,
+    boolean caching
   ) {
     this.resourceName = resourceName;
-    this.givePriorityToSystemPropertiesOverPropertiesFile
-      = givePrioritySystemPropertiesThanPropertiesFile;
-    this.useCache = useCache;
+    this.systemPropertiesOverPropertiesFile = systemPropertiesOverPropertiesFile;
+    this.caching = caching;
 
     InputStream in
       = this.getClass().getClassLoader().getResourceAsStream(resourceName);
@@ -83,16 +84,16 @@ public class PropertiesLoader {
    *
    * @return
    */
-  public final boolean isGivingPriorityToSystemPropertiesOverPropertiesFile() {
-    return givePriorityToSystemPropertiesOverPropertiesFile;
+  public final boolean isSystemPropertiesOverPropertiesFile() {
+    return systemPropertiesOverPropertiesFile;
   }
 
   /**
    *
    * @return
    */
-  public final boolean isUsingCache() {
-    return useCache;
+  public final boolean isCaching() {
+    return caching;
   }
 
   /**
@@ -103,7 +104,7 @@ public class PropertiesLoader {
    */
   public String getString(String key, String defaultValue) {
     synchronized (cache) {
-      if (useCache && cache.containsKey(key)) {
+      if (caching && cache.containsKey(key)) {
         String cacheValue = ((String)cache.get(key));
         logger.debug(
           "[{}] Got {} from cache for {}",
@@ -114,7 +115,7 @@ public class PropertiesLoader {
 
       String value = null;
 
-      if (givePriorityToSystemPropertiesOverPropertiesFile) {
+      if (systemPropertiesOverPropertiesFile) {
         value = System.getProperty(key);
       }
 
@@ -141,7 +142,7 @@ public class PropertiesLoader {
         }
       }
 
-      if (useCache) {
+      if (caching) {
         cache.put(key, value);
       }
 
@@ -157,7 +158,7 @@ public class PropertiesLoader {
    */
   public int getInteger(String key, Integer defaultValue) {
     synchronized (cache) {
-      if (useCache && cache.containsKey(key)) {
+      if (caching && cache.containsKey(key)) {
         Integer cacheValue = (Integer)cache.get(key);
         logger.debug(
           "[{}] Got {} from cache for {}",
@@ -168,7 +169,7 @@ public class PropertiesLoader {
 
       Integer value = null;
 
-      if (givePriorityToSystemPropertiesOverPropertiesFile) {
+      if (systemPropertiesOverPropertiesFile) {
         value = Integer.getInteger(key);
       }
 
@@ -204,7 +205,7 @@ public class PropertiesLoader {
         }
       }
 
-      if (useCache) {
+      if (caching) {
         cache.put(key, value);
       }
 
@@ -220,7 +221,7 @@ public class PropertiesLoader {
    */
   public Boolean getBoolean(String key, Boolean defaultValue) {
     synchronized (cache) {
-      if (useCache && cache.containsKey(key)) {
+      if (caching && cache.containsKey(key)) {
         Boolean cacheValue = (Boolean)cache.get(key);
         logger.debug(
           "[{}] Got {} from cache for {}",
@@ -231,7 +232,7 @@ public class PropertiesLoader {
 
       Boolean value = null;
 
-      if (givePriorityToSystemPropertiesOverPropertiesFile) {
+      if (systemPropertiesOverPropertiesFile) {
         String strValue = System.getProperty(key);
 
         if (strValue != null) {
@@ -262,7 +263,7 @@ public class PropertiesLoader {
         }
       }
 
-      if (useCache) {
+      if (caching) {
         cache.put(key, value);
       }
 
@@ -278,7 +279,7 @@ public class PropertiesLoader {
    */
   public <T> Class<? extends T> getClass(String key, Class<? extends T> defaultValue) {
     synchronized (cache) {
-      if (useCache && cache.containsKey(key)) {
+      if (caching && cache.containsKey(key)) {
         @SuppressWarnings("unchecked")
         Class<? extends T> cacheValue = (Class<? extends T>)cache.get(key);
         logger.debug(
@@ -290,7 +291,7 @@ public class PropertiesLoader {
 
       Class<? extends T> value = null;
 
-      if (givePriorityToSystemPropertiesOverPropertiesFile) {
+      if (systemPropertiesOverPropertiesFile) {
         String strValue = System.getProperty(key);
 
         if (strValue != null) {
@@ -353,7 +354,7 @@ public class PropertiesLoader {
         }
       }
 
-      if (useCache) {
+      if (caching) {
         cache.put(key, value);
       }
 
@@ -369,7 +370,7 @@ public class PropertiesLoader {
    */
   public InetAddress getInetAddress(String key, InetAddress defaultValue) {
     synchronized (cache) {
-      if (useCache && cache.containsKey(key)) {
+      if (caching && cache.containsKey(key)) {
         InetAddress cacheValue = (InetAddress)cache.get(key);
         logger.debug(
           "[{}] Got {} from cache for {}",
@@ -380,7 +381,7 @@ public class PropertiesLoader {
 
       InetAddress value = null;
 
-      if (givePriorityToSystemPropertiesOverPropertiesFile) {
+      if (systemPropertiesOverPropertiesFile) {
         String strValue = System.getProperty(key);
 
         if (strValue != null) {
@@ -428,7 +429,7 @@ public class PropertiesLoader {
         }
       }
 
-      if (useCache) {
+      if (caching) {
         cache.put(key, value);
       }
 
