@@ -91,23 +91,7 @@
     </resources>
 
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <!-- <version>managed by the parent pom</version>  -->
-        <configuration>
-          <!--
-            If you try to do a release on Windows, a push
-            executed by the release plugin in a prepare phase
-            will hung because it will wait for a passphrase.
-            For now, there is no good workaround but a compromise:
-            Uncomment the following config not to push changes automatically.
-            <pushChanges>false</pushChanges>
-          -->
-        </configuration>
-      </plugin>
-
-      <plugin>
+       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
