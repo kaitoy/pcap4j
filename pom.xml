@@ -38,36 +38,6 @@
     <version>7</version>
   </parent>
 
-  <profiles>
-    <profile>
-      <id>release-sign-artifacts</id>
-      <activation>
-        <property>
-          <name>performRelease</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.4</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
   <dependencies>
     <dependency>
       <groupId>net.java.dev.jna</groupId>
@@ -110,6 +80,7 @@
         <includes>
           <include>**/*.properties</include>
         </includes>
+
       </resource>
       <resource>
         <directory>src/main/resources</directory>
@@ -120,6 +91,22 @@
     </resources>
 
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <!-- <version>managed by the parent pom</version>  -->
+        <configuration>
+          <!--
+            If you try to do a release on Windows, a push
+            executed by the release plugin in a prepare phase
+            will hung because it will wait for a passphrase.
+            For now, there is no good workaround but a compromise:
+            Uncomment the following config not to push changes automatically.
+            <pushChanges>false</pushChanges>
+          -->
+        </configuration>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -142,7 +129,8 @@
         <configuration>
           <encoding>UTF-8</encoding>
           <charset>UTF-8</charset>
-          <footer>Copyright 2011-2012 Kaito Yamada (Pcap4J.org)</footer>
+          <locale>en_US</locale>
+          <footer>Copyright 2011-2013 Kaito Yamada (Pcap4J.org)</footer>
           <windowtitle>${project.name} ${project.version}</windowtitle>
           <show>protected</show>
         </configuration>
