@@ -23,7 +23,6 @@ public final class IpV6FlowLabelFactories {
 
   /**
    *
-   * @param numberClass
    * @return IpV6FlowLabelFactory
    */
   public static IpV6FlowLabelFactory getFactory() {

@@ -139,7 +139,7 @@ public final class EtherType extends NamedNumber<Short> {
 
   /**
    *
-   * @return
+   * @return a string representation of this value.
    */
   @Override
   public String valueAsString() {

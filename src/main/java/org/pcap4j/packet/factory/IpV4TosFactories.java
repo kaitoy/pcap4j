@@ -23,7 +23,6 @@ public final class IpV4TosFactories {
 
   /**
    *
-   * @param numberClass
    * @return IpV4TosFactory
    */
   public static IpV4TosFactory getFactory() {
