@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada Yamada
+  _##  Copyright (C) 2011-2012  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -8,7 +8,6 @@
 package org.pcap4j.core;
 
 import java.net.InetAddress;
-
 import org.pcap4j.core.NativeMappings.pcap_addr;
 import org.pcap4j.core.NativeMappings.sockaddr;
 
