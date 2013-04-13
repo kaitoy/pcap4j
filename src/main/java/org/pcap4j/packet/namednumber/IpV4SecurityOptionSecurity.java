@@ -105,7 +105,7 @@ public final class IpV4SecurityOptionSecurity extends NamedNumber<Short> {
   /**
    *
    * @param value
-   * @return
+   * @return a IpV4SecurityOptionSecurity object.
    */
   public static IpV4SecurityOptionSecurity getInstance(Short value) {
     if (registry.containsKey(value)) {
@@ -119,7 +119,7 @@ public final class IpV4SecurityOptionSecurity extends NamedNumber<Short> {
   /**
    *
    * @param number
-   * @return
+   * @return a IpV4SecurityOptionSecurity object.
    */
   public static IpV4SecurityOptionSecurity register(
     IpV4SecurityOptionSecurity number

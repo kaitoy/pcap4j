@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.net.Inet6Address;
 import java.util.ArrayList;
@@ -17,10 +18,6 @@ import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.util.ByteArrays;
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.INET6_ADDRESS_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -39,7 +36,7 @@ public final class IpV6Packet extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV6Packet object.
    */
   public static IpV6Packet newPacket(byte[] rawData) {
     return new IpV6Packet(rawData);
@@ -158,7 +155,7 @@ public final class IpV6Packet extends AbstractPacket {
     /**
      *
      * @param version
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder version(IpVersion version) {
       this.version = version;
@@ -168,7 +165,7 @@ public final class IpV6Packet extends AbstractPacket {
     /**
      *
      * @param trafficClass
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder trafficClass(IpV6TrafficClass trafficClass) {
       this.trafficClass = trafficClass;
@@ -178,7 +175,7 @@ public final class IpV6Packet extends AbstractPacket {
     /**
      *
      * @param flowLabel
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder flowLabel(IpV6FlowLabel flowLabel) {
       this.flowLabel = flowLabel;
@@ -188,7 +185,7 @@ public final class IpV6Packet extends AbstractPacket {
     /**
      *
      * @param payloadLength
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder payloadLength(short payloadLength) {
       this.payloadLength = payloadLength;
@@ -198,7 +195,7 @@ public final class IpV6Packet extends AbstractPacket {
     /**
      *
      * @param nextHeader
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder nextHeader(IpNumber nextHeader) {
       this.nextHeader = nextHeader;
@@ -208,7 +205,7 @@ public final class IpV6Packet extends AbstractPacket {
     /**
      *
      * @param hopLimit
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder hopLimit(byte hopLimit) {
       this.hopLimit = hopLimit;
@@ -218,7 +215,7 @@ public final class IpV6Packet extends AbstractPacket {
     /**
      *
      * @param srcAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder srcAddr(Inet6Address srcAddr) {
       this.srcAddr = srcAddr;
@@ -228,7 +225,7 @@ public final class IpV6Packet extends AbstractPacket {
     /**
      *
      * @param dstAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder dstAddr(Inet6Address dstAddr) {
       this.dstAddr = dstAddr;
@@ -395,7 +392,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return version
      */
     public IpVersion getVersion() {
       return version;
@@ -403,7 +400,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return trafficClass
      */
     public IpV6TrafficClass getTrafficClass() {
       return trafficClass;
@@ -411,7 +408,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return flowLabel
      */
     public IpV6FlowLabel getFlowLabel() {
       return flowLabel;
@@ -419,7 +416,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return payloadLength
      */
     public short getPayloadLength() {
       return payloadLength;
@@ -427,7 +424,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return payloadLength
      */
     public int getPayloadLengthAsInt() {
       return 0xFFFF & payloadLength;
@@ -435,7 +432,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return nextHeader
      */
     public IpNumber getNextHeader() {
       return nextHeader;
@@ -443,7 +440,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return hopLimit
      */
     public byte getHopLimit() {
       return hopLimit;
@@ -451,7 +448,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return hopLimit
      */
     public int getHopLimitAsInt() {
       return 0xFF & hopLimit;
@@ -459,7 +456,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return srcAddr
      */
     public Inet6Address getSrcAddr() {
       return srcAddr;
@@ -467,7 +464,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return dstAddr
      */
     public Inet6Address getDstAddr() {
       return dstAddr;
@@ -545,7 +542,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return value
      */
     public byte value();
 
@@ -562,7 +559,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return value
      */
     public int value();
 

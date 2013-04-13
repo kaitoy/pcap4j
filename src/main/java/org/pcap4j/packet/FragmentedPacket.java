@@ -25,7 +25,7 @@ public final class FragmentedPacket extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new FragmentedPacket object.
    */
   public static FragmentedPacket newPacket(byte[] rawData) {
     return new FragmentedPacket(rawData);
@@ -91,7 +91,7 @@ public final class FragmentedPacket extends AbstractPacket {
     /**
      *
      * @param rawData
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {
       this.rawData = rawData;

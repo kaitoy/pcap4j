@@ -27,7 +27,7 @@ public final class UnknownIpV6RoutingData implements IpV6RoutingData {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new UnknownIpV6RoutingData object.
    */
   public static UnknownIpV6RoutingData newInstance(byte[] rawData) {
     return new UnknownIpV6RoutingData(rawData);

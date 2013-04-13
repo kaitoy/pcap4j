@@ -30,7 +30,7 @@ public final class UnknownTcpOption implements TcpOption {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new UnknownTcpOption object.
    */
   public static UnknownTcpOption newInstance(byte[] rawData) {
     return new UnknownTcpOption(rawData);
@@ -84,19 +84,19 @@ public final class UnknownTcpOption implements TcpOption {
 
   /**
    *
-   * @return
+   * @return length
    */
   public byte getLength() { return length; }
 
   /**
    *
-   * @return
+   * @return length
    */
   public int getLengthAsInt() { return 0xFF & length; }
 
   /**
    *
-   * @return
+   * @return data
    */
   public byte[] getData() {
     byte[] copy = new byte[data.length];
@@ -116,7 +116,7 @@ public final class UnknownTcpOption implements TcpOption {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() {
     return new Builder(this);
@@ -173,7 +173,7 @@ public final class UnknownTcpOption implements TcpOption {
     /**
      *
      * @param kind
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder kind(TcpOptionKind kind) {
       this.kind = kind;
@@ -183,7 +183,7 @@ public final class UnknownTcpOption implements TcpOption {
     /**
      *
      * @param length
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
       this.length = length;
@@ -193,7 +193,7 @@ public final class UnknownTcpOption implements TcpOption {
     /**
      *
      * @param data
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder data(byte[] data) {
       this.data = data;

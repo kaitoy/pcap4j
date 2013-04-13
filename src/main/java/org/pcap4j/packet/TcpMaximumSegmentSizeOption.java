@@ -37,7 +37,7 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new TcpMaximumSegmentSizeOption object.
    */
   public static TcpMaximumSegmentSizeOption newInstance(byte[] rawData) {
     return new TcpMaximumSegmentSizeOption(rawData);
@@ -92,25 +92,25 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
 
   /**
    *
-   * @return
+   * @return length
    */
   public byte getLength() { return length; }
 
   /**
    *
-   * @return
+   * @return length
    */
   public int getLengthAsInt() { return 0xFF & length; }
 
   /**
    *
-   * @return
+   * @return maxSegSize
    */
   public short getMaxSegSize() { return maxSegSize; }
 
   /**
    *
-   * @return
+   * @return maxSegSize
    */
   public int getMaxSegSizeAsInt() { return 0xFFFF & maxSegSize; }
 
@@ -127,7 +127,7 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() {
     return new Builder(this);
@@ -182,7 +182,7 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
     /**
      *
      * @param length
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
       this.length = length;
@@ -192,7 +192,7 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
     /**
      *
      * @param maxSegSize
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder maxSegSize(short maxSegSize) {
       this.maxSegSize = maxSegSize;

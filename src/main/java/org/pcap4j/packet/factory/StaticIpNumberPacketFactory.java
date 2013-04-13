@@ -34,7 +34,7 @@ implements PacketFactory<IpNumber> {
 
   /**
    *
-   * @return
+   * @return the singleton instance of StaticIpNumberPacketFactory.
    */
   public static StaticIpNumberPacketFactory getInstance() {
     return INSTANCE;

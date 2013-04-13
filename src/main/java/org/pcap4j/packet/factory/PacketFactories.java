@@ -29,7 +29,7 @@ public final class PacketFactories {
   /**
    *
    * @param numberClass
-   * @return
+   * @return PacketFactory
    */
   public static PacketFactory<NamedNumber<?>> getFactory(
     Class<? extends NamedNumber<?>> numberClass

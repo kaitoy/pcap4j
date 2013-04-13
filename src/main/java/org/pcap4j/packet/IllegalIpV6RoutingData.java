@@ -27,7 +27,7 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IllegalIpV6RoutingData object.
    */
   public static IllegalIpV6RoutingData newInstance(byte[] rawData) {
     return new IllegalIpV6RoutingData(rawData);

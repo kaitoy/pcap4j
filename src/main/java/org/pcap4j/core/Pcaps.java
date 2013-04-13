@@ -17,7 +17,6 @@ import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -45,7 +44,7 @@ public final class Pcaps {
 
   /**
    *
-   * @return
+   * @return a list of PcapNetworkInterfaces.
    * @throws PcapNativeException
    */
   public static
@@ -90,7 +89,7 @@ public final class Pcaps {
   /**
    *
    * @param addr
-   * @return
+   * @return a PcapNetworkInterface.
    * @throws PcapNativeException
    */
   public static PcapNetworkInterface getNifByAddress(
@@ -112,7 +111,7 @@ public final class Pcaps {
   /**
    *
    * @param name
-   * @return
+   * @return a PcapNetworkInterface.
    * @throws PcapNativeException
    */
   public static PcapNetworkInterface getNifByName(
@@ -131,7 +130,7 @@ public final class Pcaps {
 
   /**
    *
-   * @return
+   * @return a name of a network interface.
    * @throws PcapNativeException
    */
   public static String lookupDev() throws PcapNativeException {
@@ -149,7 +148,7 @@ public final class Pcaps {
   /**
    *
    * @param filePath "-" means stdin
-   * @return
+   * @return a PcapHandle
    * @throws PcapNativeException
    */
   public static PcapHandle openOffline(
@@ -172,7 +171,7 @@ public final class Pcaps {
    *
    * @param dlt
    * @param maxCaptureLength
-   * @return
+   * @return a PcapHandle.
    * @throws PcapNativeException
    */
   public static PcapHandle openDead(
@@ -195,7 +194,7 @@ public final class Pcaps {
   /**
    *
    * @param inetAddr Inet4Address or Inet6Address
-   * @return
+   * @return a string representation of an InetAddress for BPF.
    */
   public static String toBpfString (InetAddress inetAddr){
     String strAddr = inetAddr.toString();
@@ -205,7 +204,7 @@ public final class Pcaps {
   /**
    *
    * @param macAddr
-   * @return
+   * @return a string representation of a MAC address for BPF.
    */
   public static String toBpfString(MacAddress macAddr) {
     StringBuffer buf = new StringBuffer();

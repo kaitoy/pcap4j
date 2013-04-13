@@ -28,7 +28,7 @@ implements PacketFactory<DataLinkType> {
 
   /**
    *
-   * @return
+   * @return the singleton instance of StaticDataLinkTypePacketFactory.
    */
   public static StaticDataLinkTypePacketFactory getInstance() {
     return INSTANCE;

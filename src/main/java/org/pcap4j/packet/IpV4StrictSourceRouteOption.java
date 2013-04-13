@@ -30,7 +30,7 @@ public final class IpV4StrictSourceRouteOption extends IpV4RouteOption {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV4StrictSourceRouteOption object.
    */
   public static IpV4StrictSourceRouteOption newInstance(byte[] rawData) {
     return new IpV4StrictSourceRouteOption(rawData);
@@ -50,7 +50,7 @@ public final class IpV4StrictSourceRouteOption extends IpV4RouteOption {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() {
     return new Builder(this);
@@ -74,7 +74,7 @@ public final class IpV4StrictSourceRouteOption extends IpV4RouteOption {
 
     /**
      *
-     * @return
+     * @return a new IpV4StrictSourceRouteOption object.
      */
     public IpV4StrictSourceRouteOption build() {
       return new IpV4StrictSourceRouteOption(this);

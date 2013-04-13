@@ -98,7 +98,7 @@ public final class IpVersion extends NamedNumber<Byte> {
   /**
    *
    * @param value
-   * @return
+   * @return a IpVersion object.
    */
   public static IpVersion getInstance(Byte value) {
     if (registry.containsKey(value)) {
@@ -112,7 +112,7 @@ public final class IpVersion extends NamedNumber<Byte> {
   /**
    *
    * @param version
-   * @return
+   * @return a IpVersion object.
    */
   public static IpVersion register(IpVersion version) {
     return registry.put(version.value(), version);

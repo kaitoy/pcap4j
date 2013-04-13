@@ -140,7 +140,7 @@ public final class IcmpV4Type extends NamedNumber<Byte> {
   /**
    *
    * @param value
-   * @return
+   * @return a IcmpV4Type object.
    */
   public static IcmpV4Type getInstance(Byte value) {
     if (registry.containsKey(value)) {
@@ -154,7 +154,7 @@ public final class IcmpV4Type extends NamedNumber<Byte> {
   /**
    *
    * @param type
-   * @return
+   * @return a IcmpV4Type object.
    */
   public static IcmpV4Type register(IcmpV4Type type) {
     return registry.put(type.value(), type);

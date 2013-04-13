@@ -64,7 +64,7 @@ public final class ByteArrays {
   /**
    *
    * @param array
-   * @return
+   * @return a new array containing specified array's elements in reverse order.
    */
   public static byte[] reverse(byte[] array) {
     byte[] rarray = new byte[array.length];
@@ -78,7 +78,7 @@ public final class ByteArrays {
    *
    * @param array
    * @param offset
-   * @return
+   * @return byte value.
    */
   public static byte getByte(byte[] array, int offset) {
     if (array == null) {
@@ -96,7 +96,7 @@ public final class ByteArrays {
   /**
    *
    * @param value
-   * @return
+   * @return byte array
    */
   public static byte[] toByteArray(byte value) {
     return new byte[] { value };
@@ -106,7 +106,7 @@ public final class ByteArrays {
    *
    * @param value
    * @param separator
-   * @return
+   * @return hex string
    */
   public static String toHexString(byte value, String separator) {
     return toHexString(toByteArray(value), separator);
@@ -116,7 +116,7 @@ public final class ByteArrays {
    *
    * @param array
    * @param offset
-   * @return
+   * @return short value
    */
   public static short getShort(byte[] array, int offset) {
     return getShort(array, offset, ByteOrder.BIG_ENDIAN);
@@ -127,7 +127,7 @@ public final class ByteArrays {
    * @param array
    * @param offset
    * @param bo
-   * @return
+   * @return short value
    */
   public static short getShort(byte[] array, int offset, ByteOrder bo) {
     if (array == null || bo == null) {
@@ -161,7 +161,7 @@ public final class ByteArrays {
   /**
    *
    * @param value
-   * @return
+   * @return byte array
    */
   public static byte[] toByteArray(short value) {
     return toByteArray(value, ByteOrder.BIG_ENDIAN);
@@ -171,7 +171,7 @@ public final class ByteArrays {
    *
    * @param value
    * @param bo
-   * @return
+   * @return byte array
    */
   public static byte[] toByteArray(short value, ByteOrder bo) {
     if (bo.equals(LITTLE_ENDIAN)) {
@@ -192,7 +192,7 @@ public final class ByteArrays {
    *
    * @param value
    * @param separator
-   * @return
+   * @return hex string
    */
   public static String toHexString(short value, String separator) {
     return toHexString(value, separator, ByteOrder.BIG_ENDIAN);
@@ -203,7 +203,7 @@ public final class ByteArrays {
    * @param value
    * @param separator
    * @param bo
-   * @return
+   * @return hex string
    */
   public static String toHexString(short value, String separator, ByteOrder bo) {
     return toHexString(toByteArray(value, bo), separator);
@@ -213,7 +213,7 @@ public final class ByteArrays {
    *
    * @param array
    * @param offset
-   * @return
+   * @return int value.
    */
   public static int getInt(byte[] array, int offset) {
     return getInt(array, offset, ByteOrder.BIG_ENDIAN);
@@ -224,7 +224,7 @@ public final class ByteArrays {
    * @param array
    * @param offset
    * @param bo
-   * @return
+   * @return int value.
    */
   public static int getInt(byte[] array, int offset, ByteOrder bo) {
     if (array == null || bo == null) {
@@ -262,7 +262,7 @@ public final class ByteArrays {
   /**
    *
    * @param value
-   * @return
+   * @return byte array
    */
   public static byte[] toByteArray(int value) {
     return toByteArray(value, ByteOrder.BIG_ENDIAN);
@@ -272,7 +272,7 @@ public final class ByteArrays {
    *
    * @param value
    * @param bo
-   * @return
+   * @return byte array
    */
   public static byte[] toByteArray(int value, ByteOrder bo) {
     if (bo.equals(LITTLE_ENDIAN)) {
@@ -297,7 +297,7 @@ public final class ByteArrays {
    *
    * @param value
    * @param separator
-   * @return
+   * @return hex string
    */
   public static String toHexString(int value, String separator) {
     return toHexString(value, separator, ByteOrder.BIG_ENDIAN);
@@ -308,7 +308,7 @@ public final class ByteArrays {
    * @param value
    * @param separator
    * @param bo
-   * @return
+   * @return hex string
    */
   public static String toHexString(int value, String separator, ByteOrder bo) {
     return toHexString(toByteArray(value, bo), separator);
@@ -318,7 +318,7 @@ public final class ByteArrays {
    *
    * @param array
    * @param offset
-   * @return
+   * @return long value
    */
   public static long getLong(byte[] array, int offset) {
     return getLong(array, offset, ByteOrder.BIG_ENDIAN);
@@ -329,7 +329,7 @@ public final class ByteArrays {
    * @param array
    * @param offset
    * @param bo
-   * @return
+   * @return long value
    */
   public static long getLong(byte[] array, int offset, ByteOrder bo) {
     if (array == null || bo == null) {
@@ -375,7 +375,7 @@ public final class ByteArrays {
   /**
    *
    * @param value
-   * @return
+   * @return byte array
    */
   public static byte[] toByteArray(long value) {
     return toByteArray(value, ByteOrder.BIG_ENDIAN);
@@ -385,7 +385,7 @@ public final class ByteArrays {
    *
    * @param value
    * @param bo
-   * @return
+   * @return byte array
    */
   public static byte[] toByteArray(long value, ByteOrder bo) {
     if (bo.equals(LITTLE_ENDIAN)) {
@@ -418,7 +418,7 @@ public final class ByteArrays {
    *
    * @param value
    * @param separator
-   * @return
+   * @return hex string
    */
   public static String toHexString(long value, String separator) {
     return toHexString(value, separator, ByteOrder.BIG_ENDIAN);
@@ -429,7 +429,7 @@ public final class ByteArrays {
    * @param value
    * @param separator
    * @param bo
-   * @return
+   * @return hex string
    */
   public static String toHexString(long value, String separator, ByteOrder bo) {
     return toHexString(toByteArray(value, bo), separator);
@@ -439,7 +439,7 @@ public final class ByteArrays {
    *
    * @param array
    * @param offset
-   * @return
+   * @return a new MacAddress object.
    */
   public static MacAddress getMacAddress(byte[] array, int offset) {
     return getMacAddress(array, offset, ByteOrder.BIG_ENDIAN);
@@ -450,7 +450,7 @@ public final class ByteArrays {
    * @param array
    * @param offset
    * @param bo
-   * @return
+   * @return a new MacAddress object.
    */
   public static MacAddress getMacAddress(
     byte[] array, int offset, ByteOrder bo
@@ -484,7 +484,7 @@ public final class ByteArrays {
   /**
    *
    * @param value
-   * @return
+   * @return byte array
    */
   public static byte[] toByteArray(MacAddress value) {
     return toByteArray(value, ByteOrder.BIG_ENDIAN);
@@ -494,7 +494,7 @@ public final class ByteArrays {
    *
    * @param value
    * @param bo
-   * @return
+   * @return byte array
    */
   public static byte[] toByteArray(MacAddress value, ByteOrder bo) {
     if (bo.equals(LITTLE_ENDIAN)) {
@@ -509,7 +509,7 @@ public final class ByteArrays {
    *
    * @param array
    * @param offset
-   * @return
+   * @return a new Inet4Address object.
    */
   public static Inet4Address getInet4Address(byte[] array, int offset) {
     return getInet4Address(array, offset, ByteOrder.BIG_ENDIAN);
@@ -520,7 +520,7 @@ public final class ByteArrays {
    * @param array
    * @param offset
    * @param bo
-   * @return
+   * @return a new Inet4Address object.
    */
   public static Inet4Address getInet4Address(
     byte[] array, int offset, ByteOrder bo
@@ -569,7 +569,7 @@ public final class ByteArrays {
    *
    * @param array
    * @param offset
-   * @return
+   * @return a new Inet6Address object.
    */
   public static Inet6Address getInet6Address(byte[] array, int offset) {
     return getInet6Address(array, offset, ByteOrder.BIG_ENDIAN);
@@ -580,7 +580,7 @@ public final class ByteArrays {
    * @param array
    * @param offset
    * @param bo
-   * @return
+   * @return a new Inet6Address object.
    */
   public static Inet6Address getInet6Address(
     byte[] array, int offset, ByteOrder bo
@@ -628,7 +628,7 @@ public final class ByteArrays {
   /**
    *
    * @param value
-   * @return
+   * @return byte array
    */
   public static byte[] toByteArray(InetAddress value) {
     return toByteArray(value, ByteOrder.BIG_ENDIAN);
@@ -638,7 +638,7 @@ public final class ByteArrays {
    *
    * @param value
    * @param bo
-   * @return
+   * @return byte array
    */
   public static byte[] toByteArray(InetAddress value, ByteOrder bo) {
     if (bo.equals(LITTLE_ENDIAN)) {
@@ -654,7 +654,7 @@ public final class ByteArrays {
    * @param array
    * @param offset
    * @param length
-   * @return
+   * @return sub array
    */
   public static byte[] getSubArray(byte[] array, int offset, int length) {
     if (array == null) {
@@ -677,7 +677,7 @@ public final class ByteArrays {
    *
    * @param array
    * @param separator
-   * @return
+   * @return hex string
    */
   public static String toHexString(byte[] array, String separator) {
     StringBuffer buf = new StringBuffer();
@@ -694,6 +694,14 @@ public final class ByteArrays {
     return buf.toString();
   }
 
+  /**
+   *
+   * @param array
+   * @param separator
+   * @param offset
+   * @param length
+   * @return hex string
+   */
   public static String toHexString(
     byte[] array, String separator, int offset, int length
   ) {
@@ -722,7 +730,7 @@ public final class ByteArrays {
   /**
    *
    * @param data
-   * @return
+   * @return checksum
    */
   public static short calcChecksum(byte[] data) {
     int sum = 0;
@@ -744,7 +752,7 @@ public final class ByteArrays {
    *
    * @param hexString
    * @param separator
-   * @return
+   * @return a new byte array.
    */
   public static byte[] parseByteArray(String hexString, String separator) {
     if (

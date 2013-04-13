@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.*;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,8 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;
 import org.pcap4j.util.ByteArrays;
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -48,7 +47,7 @@ implements IpV4InternetTimestampOptionData {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV4InternetTimestampOptionAddressPrespecified object.
    */
   public static IpV4InternetTimestampOptionAddressPrespecified newInstance(
     byte[] rawData
@@ -106,13 +105,13 @@ implements IpV4InternetTimestampOptionData {
 
   /**
    *
-   * @return
+   * @return address
    */
   public Inet4Address getAddress() { return address; }
 
   /**
    *
-   * @return
+   * @return timestamps
    */
   public List<Integer> getTimestamps() {
     return new ArrayList<Integer>(timestamps);

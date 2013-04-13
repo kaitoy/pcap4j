@@ -74,7 +74,7 @@ public final class TcpOptionKind extends NamedNumber<Byte> {
   /**
    *
    * @param value
-   * @return
+   * @return a TcpOptionKind object.
    */
   public static TcpOptionKind getInstance(Byte value) {
     if (registry.containsKey(value)) {
@@ -88,7 +88,7 @@ public final class TcpOptionKind extends NamedNumber<Byte> {
   /**
    *
    * @param type
-   * @return
+   * @return a TcpOptionKind object.
    */
   public static TcpOptionKind register(TcpOptionKind type) {
     return registry.put(type.value(), type);

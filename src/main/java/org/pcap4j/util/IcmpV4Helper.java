@@ -23,7 +23,7 @@ public final class IcmpV4Helper {
   /**
    *
    * @param packet IPv4 Packet
-   * @return
+   * @return a new Packet object.
    */
   public static Packet makePacketForInvokingPacketField(Packet packet) {
     if (

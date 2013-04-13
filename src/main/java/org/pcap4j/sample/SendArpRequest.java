@@ -5,16 +5,16 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PacketListener;
+import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapHandle.BpfCompileMode;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.core.Pcaps;
-import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.ArpPacket;
 import org.pcap4j.packet.EthernetPacket;
+import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.ArpHardwareType;
 import org.pcap4j.packet.namednumber.ArpOperation;
 import org.pcap4j.packet.namednumber.EtherType;
@@ -131,10 +131,10 @@ public class SendArpRequest {
         }
       }
     } finally {
-      if (handle != null && handle.isOpening()) {
+      if (handle != null && handle.isOpen()) {
         handle.close();
       }
-      if (sendHandle != null && sendHandle.isOpening()) {
+      if (sendHandle != null && sendHandle.isOpen()) {
         sendHandle.close();
       }
       if (pool != null && !pool.isShutdown()) {

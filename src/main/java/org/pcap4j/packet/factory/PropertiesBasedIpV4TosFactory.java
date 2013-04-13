@@ -25,7 +25,7 @@ public final class PropertiesBasedIpV4TosFactory implements IpV4TosFactory {
 
   /**
    *
-   * @return
+   * @return the singleton instance of PropertiesBasedIpV4TosFactory
    */
   public static PropertiesBasedIpV4TosFactory getInstance() { return INSTANCE; }
 
@@ -39,7 +39,7 @@ public final class PropertiesBasedIpV4TosFactory implements IpV4TosFactory {
    *
    * @param value
    * @param tosClass
-   * @return
+   * @return a new IpV4Tos object.
    */
   public IpV4Tos newTos(byte value, Class<? extends IpV4Tos> tosClass) {
     if (tosClass == null) {

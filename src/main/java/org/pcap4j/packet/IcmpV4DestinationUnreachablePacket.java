@@ -23,7 +23,7 @@ public final class IcmpV4DestinationUnreachablePacket extends IcmpV4UnusedPacket
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IcmpV4DestinationUnreachablePacket object.
    */
   public static IcmpV4DestinationUnreachablePacket newPacket(byte[] rawData) {
     return new IcmpV4DestinationUnreachablePacket(rawData);

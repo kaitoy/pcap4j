@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
@@ -31,7 +31,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new Dot1qVlanTagPacket object.
    * @throws PacketException
    */
   public static Dot1qVlanTagPacket newPacket(byte[] rawData){
@@ -113,7 +113,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
     /**
      *
      * @param priority
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder priority(byte priority) {
       this.priority = priority;
@@ -124,7 +124,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
      * true: 1, false: 0
      *
      * @param cfi
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder cfi(boolean cfi) {
       this.cfi = cfi;
@@ -134,7 +134,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
     /**
      *
      * @param vid
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder vid(short vid) {
       this.vid = vid;
@@ -144,7 +144,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
     /**
      *
      * @param type
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder type(EtherType type) {
       this.type = type;
@@ -243,7 +243,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return priority
      */
     public byte getPriority() {
       return priority;
@@ -252,7 +252,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
     /**
      * true: 1, false: 0
      *
-     * @return
+     * @return cfi
      */
     public boolean getCfi() {
       return cfi;
@@ -260,7 +260,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return vid
      */
     public short getVid() {
       return vid;
@@ -268,7 +268,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return vid
      */
     public int getVidAsInt() {
       return 0x0FFF & vid;
@@ -276,7 +276,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return type
      */
     public EtherType getType() {
       return type;

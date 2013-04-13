@@ -85,7 +85,7 @@ public final class IpV4InternetTimestampOptionFlag extends NamedNumber<Byte> {
   /**
    *
    * @param value
-   * @return
+   * @return a IpV4InternetTimestampOptionFlag object.
    */
   public static IpV4InternetTimestampOptionFlag getInstance(Byte value) {
     if (registry.containsKey(value)) {
@@ -99,7 +99,7 @@ public final class IpV4InternetTimestampOptionFlag extends NamedNumber<Byte> {
   /**
    *
    * @param flag
-   * @return
+   * @return a IpV4InternetTimestampOptionFlag object.
    */
   public static IpV4InternetTimestampOptionFlag register(
     IpV4InternetTimestampOptionFlag flag

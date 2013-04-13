@@ -20,52 +20,53 @@ public interface Packet extends Iterable<Packet>, Serializable {
 
   /**
    *
-   * @return
+   * @return Header
    */
   public Header getHeader();
 
   /**
    *
-   * @return
+   * @return payload
    */
   public Packet getPayload();
 
   /**
    *
-   * @return
+   * @return length
    */
   public int length();
 
   /**
    *
-   * @return
+   * @return raw data
    */
   public byte[] getRawData();
 
   /**
    *
    * @param clazz
-   * @return
+   * @return packet
    */
   public <T extends Packet> T get(Class<T> clazz);
 
   /**
    *
    * @param clazz
-   * @return
+   * @return packet
    */
   public Packet getOuterOf(Class<? extends Packet> clazz);
 
   /**
    *
    * @param clazz
-   * @return
+   * @return true if the packet represented by this object includes a packet
+   *         represented by specified class; false otherwise.
    */
   public <T extends Packet> boolean contains(Class<T> clazz);
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder();
 
@@ -78,31 +79,33 @@ public interface Packet extends Iterable<Packet>, Serializable {
     /**
      *
      * @param clazz
-     * @return
+     * @return this Builder object for method chaining.
      */
     public <T extends Builder> T get(Class<T> clazz);
 
     /**
      *
      * @param clazz
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder getOuterOf(Class<? extends Builder> clazz);
 
     /**
-     * setter
+     *
+     * @param payloadBuilder
+     * @return this Builder object for method chaining.
      */
     public Builder payloadBuilder(Builder payloadBuilder);
 
     /**
      *
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder getPayloadBuilder();
 
     /**
      *
-     * @return
+     * @return a new Packet object.
      */
     public Packet build();
 
@@ -116,13 +119,13 @@ public interface Packet extends Iterable<Packet>, Serializable {
 
     /**
      *
-     * @return
+     * @return length
      */
     public int length();
 
     /**
      *
-     * @return
+     * @return raw data
      */
     public byte[] getRawData();
 

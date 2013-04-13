@@ -27,7 +27,7 @@ public final class UnknownIpV4InternetTimestampData implements IpV4InternetTimes
   /**
    *
    * @param rawData
-   * @return
+   * @return a new UnknownIpV4InternetTimestampData object.
    */
   public static UnknownIpV4InternetTimestampData newInstance(byte[] rawData) {
     return new UnknownIpV4InternetTimestampData(rawData);

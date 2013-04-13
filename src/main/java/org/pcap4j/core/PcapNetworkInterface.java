@@ -78,7 +78,7 @@ public final class PcapNetworkInterface {
 
   /**
    *
-   * @return
+   * @return name
    */
   public String getName() {
     return name;
@@ -86,7 +86,7 @@ public final class PcapNetworkInterface {
 
   /**
    *
-   * @return
+   * @return description
    */
   public String getDescription() {
     return description;
@@ -94,7 +94,7 @@ public final class PcapNetworkInterface {
 
   /**
    *
-   * @return
+   * @return addresses
    */
   public List<PcapAddress> getAddresses() {
     return new ArrayList<PcapAddress>(addresses);
@@ -102,7 +102,8 @@ public final class PcapNetworkInterface {
 
   /**
    *
-   * @return
+   * @return true if the network interface represented by this object
+   *         is a loop back interface; false otherwise.
    */
   public boolean isLoopBack() {
     return loopBack;
@@ -110,7 +111,8 @@ public final class PcapNetworkInterface {
 
   /**
    *
-   * @return
+   * @return true if the network interface represented by this object
+   *         is a local interface; false otherwise.
    */
   public boolean isLocal() {
     return local;
@@ -133,7 +135,7 @@ public final class PcapNetworkInterface {
 
     /**
      *
-     * @return
+     * @return value
      */
     public int getValue() {
       return value;
@@ -151,7 +153,7 @@ public final class PcapNetworkInterface {
    *        0 means disable buffering on Solaris.
    *        0 means infinite on the other OSs.
    *        1 through 9 means infinite on Solaris.
-   * @return
+   * @return an opened PcapHandle.
    * @throws PcapNativeException
    */
   public PcapHandle openLive(

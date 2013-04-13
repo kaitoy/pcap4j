@@ -64,7 +64,7 @@ public final class IpV4SecurityOptionHandlingRestrictions extends NamedNumber<Sh
   /**
    *
    * @param value
-   * @return
+   * @return a IpV4SecurityOptionHandlingRestrictions object.
    */
   public static IpV4SecurityOptionHandlingRestrictions getInstance(
     Short value
@@ -80,7 +80,7 @@ public final class IpV4SecurityOptionHandlingRestrictions extends NamedNumber<Sh
   /**
    *
    * @param number
-   * @return
+   * @return a IpV4SecurityOptionHandlingRestrictions object.
    */
   public static IpV4SecurityOptionHandlingRestrictions register(
     IpV4SecurityOptionHandlingRestrictions number

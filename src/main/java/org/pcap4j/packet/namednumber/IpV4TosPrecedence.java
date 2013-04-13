@@ -110,7 +110,7 @@ public final class IpV4TosPrecedence extends NamedNumber<Byte> {
   /**
    *
    * @param value
-   * @return
+   * @return a IpV4TosPrecedence object.
    */
   public static IpV4TosPrecedence getInstance(Byte value) {
     if (registry.containsKey(value)) {
@@ -124,7 +124,7 @@ public final class IpV4TosPrecedence extends NamedNumber<Byte> {
   /**
    *
    * @param precedence
-   * @return
+   * @return a IpV4TosPrecedence object.
    */
   public static IpV4TosPrecedence register(IpV4TosPrecedence precedence) {
     return registry.put(precedence.value(), precedence);

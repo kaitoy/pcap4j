@@ -25,7 +25,7 @@ implements PacketFactory<NamedNumber<?>> {
 
   /**
    *
-   * @return
+   * @return the singleton instance of StaticUnknownPacketFactory.
    */
   public static StaticUnknownPacketFactory getInstance() { return INSTANCE; }
 

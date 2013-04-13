@@ -123,7 +123,7 @@ public final class Oui extends NamedNumber<Integer> {
   /**
    *
    * @param value
-   * @return
+   * @return a Oui object.
    */
   public static Oui getInstance(Integer value) {
     if (registry.containsKey(value)) {
@@ -137,7 +137,7 @@ public final class Oui extends NamedNumber<Integer> {
   /**
    *
    * @param value
-   * @return
+   * @return a Oui object.
    */
   public static Oui getInstance(byte[] value) {
     if (value.length != 3) {
@@ -153,7 +153,7 @@ public final class Oui extends NamedNumber<Integer> {
   /**
    *
    * @param version
-   * @return
+   * @return a Oui object.
    */
   public static Oui register(Oui version) {
     return registry.put(version.value(), version);
@@ -169,7 +169,7 @@ public final class Oui extends NamedNumber<Integer> {
 
   /**
    *
-   * @return
+   * @return a byte array representation of this value.
    */
   public byte[] valueAsByteArray() {
     return ByteArrays.getSubArray(ByteArrays.toByteArray(value()), 1, 3);

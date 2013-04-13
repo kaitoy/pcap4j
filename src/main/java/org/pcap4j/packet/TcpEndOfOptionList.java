@@ -40,14 +40,14 @@ public final class TcpEndOfOptionList implements TcpOption {
 
   /**
    *
-   * @return
+   * @return the singleton instance of TcpEndOfOptionList.
    */
   public static TcpEndOfOptionList getInstance() { return INSTANCE; }
 
   /**
    *
    * @param rawData
-   * @return
+   * @return the singleton instance of TcpEndOfOptionList.
    */
   public static TcpEndOfOptionList newInstance(byte[] rawData) {
     if (rawData == null) {

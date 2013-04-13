@@ -21,7 +21,7 @@ public interface IpV6FlowLabelFactory {
   /**
    *
    * @param value
-   * @return
+   * @return a new IpV6FlowLabel object.
    */
   public IpV6FlowLabel newFlowLabel(int value);
 

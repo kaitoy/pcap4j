@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.util.ByteArrays;
@@ -56,7 +56,7 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
     /**
      *
      * @param identifier
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder identifier(short identifier) {
       this.identifier = identifier;
@@ -66,7 +66,7 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
     /**
      *
      * @param sequenceNumber
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder sequenceNumber(short sequenceNumber) {
       this.sequenceNumber = sequenceNumber;
@@ -135,7 +135,7 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return identifier
      */
     public short getIdentifier() {
       return identifier;
@@ -143,7 +143,7 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return identifier
      */
     public int getIdentifierAsInt() {
       return identifier & 0xFFFF;
@@ -151,7 +151,7 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return sequenceNumber
      */
     public short getSequenceNumber() {
       return sequenceNumber;
@@ -159,7 +159,7 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return sequenceNumber
      */
     public int getSequenceNumberAsInt() {
       return sequenceNumber & 0xFFFF;

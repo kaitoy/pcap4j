@@ -39,7 +39,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
   /**
    *
    * @param value
-   * @return
+   * @return a new IpV4Rfc1349Tos object.
    */
   public static IpV4Rfc1349Tos newInstance(byte value) {
     return new IpV4Rfc1349Tos(value);
@@ -71,19 +71,19 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
 
   /**
    *
-   * @return
+   * @return precedence
    */
   public IpV4TosPrecedence getPrecedence() { return precedence; }
 
   /**
    *
-   * @return
+   * @return tos
    */
   public IpV4TosTos getTos() { return tos; }
 
   /**
    *
-   * @return
+   * @return mbz
    */
   public boolean mbz() { return mbz; }
 
@@ -98,7 +98,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() { return new Builder(this); }
 
@@ -150,7 +150,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
     /**
      *
      * @param precedence
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder precedence(IpV4TosPrecedence precedence) {
       this.precedence = precedence;
@@ -160,7 +160,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
     /**
      *
      * @param tos
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder tos(IpV4TosTos tos) {
       this.tos = tos;
@@ -170,7 +170,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
     /**
      *
      * @param mbz
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder mbz(boolean mbz) {
       this.mbz = mbz;
@@ -179,7 +179,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
 
     /**
      *
-     * @return
+     * @return a new IpV4Rfc1349Tos object.
      */
     public IpV4Rfc1349Tos build() {
       return new IpV4Rfc1349Tos(this);

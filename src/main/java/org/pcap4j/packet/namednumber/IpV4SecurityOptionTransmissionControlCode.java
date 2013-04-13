@@ -72,7 +72,7 @@ IpV4SecurityOptionTransmissionControlCode extends NamedNumber<Integer> {
   /**
    *
    * @param value
-   * @return
+   * @return a IpV4SecurityOptionTransmissionControlCode object.
    */
   public static IpV4SecurityOptionTransmissionControlCode getInstance(
     Integer value
@@ -88,7 +88,7 @@ IpV4SecurityOptionTransmissionControlCode extends NamedNumber<Integer> {
   /**
    *
    * @param number
-   * @return
+   * @return a IpV4SecurityOptionTransmissionControlCode object.
    */
   public static IpV4SecurityOptionTransmissionControlCode register(
     IpV4SecurityOptionTransmissionControlCode number

@@ -26,7 +26,7 @@ public final class IcmpV4EchoPacket extends IcmpIdentifiablePacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IcmpV4EchoPacket object
    */
   public static IcmpV4EchoPacket newPacket(byte[] rawData) {
     return new IcmpV4EchoPacket(rawData);

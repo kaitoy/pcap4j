@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.*;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +16,6 @@ import org.pcap4j.packet.namednumber.ArpOperation;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -35,7 +33,7 @@ public final class ArpPacket extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new ArpPacket object.
    */
   public static ArpPacket newPacket(byte[] rawData) {
     return new ArpPacket(rawData);
@@ -121,7 +119,7 @@ public final class ArpPacket extends AbstractPacket {
     /**
      *
      * @param hardwareType
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder hardwareType(ArpHardwareType hardwareType) {
       this.hardwareType = hardwareType;
@@ -131,7 +129,7 @@ public final class ArpPacket extends AbstractPacket {
     /**
      *
      * @param protocolType
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder protocolType(EtherType protocolType) {
       this.protocolType = protocolType;
@@ -141,7 +139,7 @@ public final class ArpPacket extends AbstractPacket {
     /**
      *
      * @param hardwareLength
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder hardwareLength(byte hardwareLength) {
       this.hardwareLength = hardwareLength;
@@ -151,7 +149,7 @@ public final class ArpPacket extends AbstractPacket {
     /**
      *
      * @param protocolLength
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder protocolLength(byte protocolLength) {
       this.protocolLength = protocolLength;
@@ -161,7 +159,7 @@ public final class ArpPacket extends AbstractPacket {
     /**
      *
      * @param operation
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder operation(ArpOperation operation) {
       this.operation = operation;
@@ -171,7 +169,7 @@ public final class ArpPacket extends AbstractPacket {
     /**
      *
      * @param srcHardwareAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder srcHardwareAddr(MacAddress srcHardwareAddr) {
       this.srcHardwareAddr = srcHardwareAddr;
@@ -181,7 +179,7 @@ public final class ArpPacket extends AbstractPacket {
     /**
      *
      * @param srcProtocolAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder srcProtocolAddr(InetAddress srcProtocolAddr) {
       this.srcProtocolAddr = srcProtocolAddr;
@@ -191,7 +189,7 @@ public final class ArpPacket extends AbstractPacket {
     /**
      *
      * @param dstHardwareAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder dstHardwareAddr(MacAddress dstHardwareAddr) {
       this.dstHardwareAddr = dstHardwareAddr;
@@ -201,7 +199,7 @@ public final class ArpPacket extends AbstractPacket {
     /**
      *
      * @param dstProtocolAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder dstProtocolAddr(InetAddress dstProtocolAddr) {
       this.dstProtocolAddr = dstProtocolAddr;
@@ -356,7 +354,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return hardwareType
      */
     public ArpHardwareType getHardwareType() {
       return hardwareType;
@@ -364,7 +362,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return protocolType
      */
     public EtherType getProtocolType() {
       return protocolType;
@@ -372,7 +370,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return hardwareLength
      */
     public byte getHardwareLength() {
       return hardwareLength;
@@ -380,7 +378,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return hardwareLength
      */
     public int getHardwareLengthAsInt() {
       return 0xFF & hardwareLength;
@@ -388,7 +386,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return protocolLength
      */
     public byte getProtocolLength() {
       return protocolLength;
@@ -396,7 +394,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return protocolLength
      */
     public int getProtocolLengthAsInt() {
       return 0xFF & protocolLength;
@@ -404,7 +402,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return operation
      */
     public ArpOperation getOperation() {
       return operation;
@@ -412,7 +410,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return srcHardwareAddr
      */
     public MacAddress getSrcHardwareAddr() {
       return srcHardwareAddr;
@@ -420,7 +418,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return srcProtocolAddr
      */
     public InetAddress getSrcProtocolAddr() {
       return srcProtocolAddr;
@@ -428,7 +426,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return dstHardwareAddr
      */
     public MacAddress getDstHardwareAddr() {
       return dstHardwareAddr;
@@ -436,7 +434,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return dstProtocolAddr
      */
     public InetAddress getDstProtocolAddr() {
       return dstProtocolAddr;

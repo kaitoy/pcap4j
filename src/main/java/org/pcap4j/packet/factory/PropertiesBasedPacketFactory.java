@@ -29,7 +29,7 @@ implements PacketFactory<NamedNumber<?>> {
 
   /**
    *
-   * @return
+   * @return the singleton instance of PropertiesBasedPacketFactory.
    */
   public static PropertiesBasedPacketFactory getInstance() { return INSTANCE; }
 
@@ -46,7 +46,7 @@ implements PacketFactory<NamedNumber<?>> {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new Packet object.
    */
   public Packet newPacket(byte[] rawData) {
     Class<? extends Packet> packetClass
@@ -58,7 +58,7 @@ implements PacketFactory<NamedNumber<?>> {
    *
    * @param rawData
    * @param packetClass
-   * @return
+   * @return a new Packet object.
    */
   public Packet newPacket(
     byte[] rawData, Class<? extends Packet> packetClass

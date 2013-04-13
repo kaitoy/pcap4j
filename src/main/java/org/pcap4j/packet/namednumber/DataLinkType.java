@@ -92,7 +92,7 @@ public final class DataLinkType extends NamedNumber<Integer> {
   /**
    *
    * @param value
-   * @return
+   * @return a DataLinkType object.
    */
   public static DataLinkType getInstance(Integer value) {
     if (registry.containsKey(value)) {
@@ -106,7 +106,7 @@ public final class DataLinkType extends NamedNumber<Integer> {
   /**
    *
    * @param type
-   * @return
+   * @return a DataLinkType object.
    */
   public static DataLinkType register(DataLinkType type) {
     return registry.put(type.value(), type);

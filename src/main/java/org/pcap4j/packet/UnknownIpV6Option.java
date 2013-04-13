@@ -31,7 +31,7 @@ public final class UnknownIpV6Option implements IpV6Option {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new UnknownIpV6Option object.
    */
   public static UnknownIpV6Option newInstance(byte[] rawData) {
     return new UnknownIpV6Option(rawData);
@@ -84,19 +84,19 @@ public final class UnknownIpV6Option implements IpV6Option {
 
   /**
    *
-   * @return
+   * @return dataLen
    */
   public byte getDataLen() { return dataLen; }
 
   /**
    *
-   * @return
+   * @return dataLen
    */
   public int getDataLenAsInt() { return 0xFF & dataLen; }
 
   /**
    *
-   * @return
+   * @return data
    */
   public byte[] getData() {
     byte[] copy = new byte[data.length];
@@ -116,7 +116,7 @@ public final class UnknownIpV6Option implements IpV6Option {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() { return new Builder(this); }
 
@@ -171,7 +171,7 @@ public final class UnknownIpV6Option implements IpV6Option {
     /**
      *
      * @param type
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder type(IpV6OptionType type) {
       this.type = type;
@@ -181,7 +181,7 @@ public final class UnknownIpV6Option implements IpV6Option {
     /**
      *
      * @param dataLen
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder dataLen(byte dataLen) {
       this.dataLen = dataLen;
@@ -191,7 +191,7 @@ public final class UnknownIpV6Option implements IpV6Option {
     /**
      *
      * @param data
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder data(byte[] data) {
       this.data = data;

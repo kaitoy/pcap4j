@@ -24,7 +24,7 @@ public final class IpV6TrafficClassFactories {
   /**
    *
    * @param numberClass
-   * @return
+   * @return IpV6TrafficClassFactory
    */
   public static IpV6TrafficClassFactory getFactory() {
     IpV6TrafficClassFactory cachedFactory = cache;

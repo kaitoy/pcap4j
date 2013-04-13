@@ -26,7 +26,7 @@ public final class PcapDumper {
   private final Pointer dumper;
   private final Object thisLock = new Object();
 
-  private volatile boolean opening = true;
+  private volatile boolean open = true;
 
   PcapDumper(Pointer dumper) { this.dumper = dumper; }
 
@@ -34,9 +34,9 @@ public final class PcapDumper {
 
   /**
    *
-   * @return
+   * @return true if this PcapDumper is open; false otherwise.
    */
-  public boolean isOpening() { return opening; }
+  public boolean isOpen() { return open; }
 
   /**
    *
@@ -80,8 +80,8 @@ public final class PcapDumper {
     header.ts.tv_usec = new NativeLong(timestampMicros);
 
     synchronized (thisLock) {
-      if (!opening) {
-        throw new IllegalStateException("Not opening.");
+      if (!open) {
+        throw new IllegalStateException("Not openng.");
       }
       //PcapLibrary.INSTANCE.pcap_dump(dumper, header, packet.getRawData());
       NativeMappings.pcap_dump(dumper, header, packet.getRawData());
@@ -97,13 +97,13 @@ public final class PcapDumper {
    */
   public void close() {
     synchronized (thisLock) {
-      if (!opening) {
+      if (!open) {
         logger.warn("Already closed.");
         return;
       }
       // PcapLibrary.INSTANCE.pcap_dump_close(dumper);
       NativeMappings.pcap_dump_close(dumper);
-      opening = false;
+      open = false;
     }
 
     logger.info("Closed.");

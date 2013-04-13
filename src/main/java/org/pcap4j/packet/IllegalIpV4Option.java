@@ -30,7 +30,7 @@ public final class IllegalIpV4Option implements IpV4Option {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IllegalIpV4Option object
    */
   public static IllegalIpV4Option newInstance(byte[] rawData) {
     return new IllegalIpV4Option(rawData);
@@ -84,7 +84,7 @@ public final class IllegalIpV4Option implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() {
     return new Builder(this);
@@ -135,7 +135,7 @@ public final class IllegalIpV4Option implements IpV4Option {
     /**
      *
      * @param type
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder type(IpV4OptionType type) {
       this.type = type;
@@ -145,7 +145,7 @@ public final class IllegalIpV4Option implements IpV4Option {
     /**
      *
      * @param rawData
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {
       this.rawData = rawData;
@@ -154,7 +154,7 @@ public final class IllegalIpV4Option implements IpV4Option {
 
     /**
      *
-     * @return
+     * @return a new IllegalIpV4Option object.
      */
     public IllegalIpV4Option build() {
       return new IllegalIpV4Option(this);

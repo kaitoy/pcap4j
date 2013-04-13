@@ -44,7 +44,7 @@ public final class PcapHandle {
   private final ThreadLocal<Integer> timestampsMicros
     = new ThreadLocal<Integer>();
 
-  private volatile boolean opening;
+  private volatile boolean open;
   private volatile String filteringExpression = "";
 
   private static final Inet4Address WILDCARD_MASK;
@@ -57,7 +57,7 @@ public final class PcapHandle {
     }
   }
 
-  PcapHandle(Pointer handle, boolean opening) {
+  PcapHandle(Pointer handle, boolean open) {
 //    this.dlt = DataLinkType.getInstance(
 //                 PcapLibrary.INSTANCE.pcap_datalink(handle)
 //               );
@@ -65,36 +65,37 @@ public final class PcapHandle {
                  NativeMappings.pcap_datalink(handle)
                );
     this.handle = handle;
-    this.opening = opening;
+    this.open = open;
   }
 
   /**
    *
-   * @return
+   * @return the Data Link Type of this PcapHandle
    */
   public DataLinkType getDlt() { return dlt; }
 
   /**
    *
-   * @return
+   * @return true if this PcapHandle is open; false otherwise.
    */
-  public boolean isOpening() { return opening; }
+  public boolean isOpen() { return open; }
 
   /**
    *
-   * @return
+   * @return the filtering expression of this PcapHandle
    */
   public String getFilteringExpression() {return filteringExpression; }
 
   /**
    *
-   * @return
+   * @return an integer part of a timestamp of a packet captured in a current thread.
    */
   public Long getTimestampInts() { return timestampsInts.get(); }
 
   /**
    *
-   * @return
+   * @return a fraction part of a timestamp of a packet captured in a current thread.
+   *         The value represents the number of microseconds.
    */
   public Integer getTimestampMicros() { return timestampsMicros.get(); }
 
@@ -115,7 +116,7 @@ public final class PcapHandle {
 
     /**
      *
-     * @return
+     * @return value
      */
     public int getValue() {
       return value;
@@ -147,8 +148,8 @@ public final class PcapHandle {
     }
 
     synchronized (thisLock) {
-      if (!opening) {
-        throw new IllegalStateException("Not opening.");
+      if (!open) {
+        throw new IllegalStateException("Not open.");
       }
 
       int mask = ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0);
@@ -199,7 +200,7 @@ public final class PcapHandle {
 
   /**
    *
-   * @return
+   * @return a captured packet.
    * @throws IllegalStateException
    */
   public Packet getNextPacket() {
@@ -207,8 +208,8 @@ public final class PcapHandle {
     Pointer packet;
 
     synchronized (thisLock) {
-      if (!opening) {
-        throw new IllegalStateException("Not opening.");
+      if (!open) {
+        throw new IllegalStateException("Not open.");
       }
       // packet = PcapLibrary.INSTANCE.pcap_next(handle, header);
       packet = NativeMappings.pcap_next(handle, header);
@@ -231,7 +232,7 @@ public final class PcapHandle {
 
   /**
    *
-   * @return
+   * @return a captured packet.
    * @throws PcapNativeException
    * @throws EOFException
    * @throws TimeoutException
@@ -244,8 +245,8 @@ public final class PcapHandle {
     int rc;
 
     synchronized (thisLock) {
-      if (!opening) {
-        throw new IllegalStateException("Not opening.");
+      if (!open) {
+        throw new IllegalStateException("Not open.");
       }
       // rc = PcapLibrary.INSTANCE.pcap_next_ex(handle, headerPP, dataPP);
       rc = NativeMappings.pcap_next_ex(handle, headerPP, dataPP);
@@ -324,8 +325,8 @@ public final class PcapHandle {
     int rc;
 
     synchronized (thisLock) {
-      if (!opening) {
-        throw new IllegalStateException("Not opening.");
+      if (!open) {
+        throw new IllegalStateException("Not open.");
       }
 
       logger.info("Start loop");
@@ -418,7 +419,7 @@ public final class PcapHandle {
    * @param filePath "-" means stdout.
    *        The dlt of the PcapHandle which captured the packets you want to dump
    *        must be the same as this dlt.
-   * @return
+   * @return an opened PcapDumper.
    * @throws PcapNativeException
    */
   public PcapDumper dumpOpen(String filePath) throws PcapNativeException {
@@ -449,8 +450,8 @@ public final class PcapHandle {
     int rc;
 
     synchronized (thisLock) {
-      if (!opening) {
-        throw new IllegalStateException("Not opening.");
+      if (!open) {
+        throw new IllegalStateException("Not open.");
       }
 
       logger.info("Start dump loop");
@@ -512,8 +513,8 @@ public final class PcapHandle {
 
     int rc;
     synchronized (thisLock) {
-      if (!opening) {
-        throw new IllegalStateException("Not opening.");
+      if (!open) {
+        throw new IllegalStateException("Not open.");
       }
 //      rc = PcapLibrary.INSTANCE.pcap_sendpacket(
 //             handle, packet.getRawData(), packet.length()
@@ -535,13 +536,13 @@ public final class PcapHandle {
    */
   public void close() {
     synchronized (thisLock) {
-      if (!opening) {
+      if (!open) {
         logger.warn("Already closed.");
         return;
       }
       // PcapLibrary.INSTANCE.pcap_close(handle);
       NativeMappings.pcap_close(handle);
-      opening = false;
+      open = false;
     }
 
     logger.info("Closed.");
@@ -549,7 +550,7 @@ public final class PcapHandle {
 
   /**
    *
-   * @return
+   * @return an error message.
    */
   public String getError() {
     // return PcapLibrary.INSTANCE.pcap_geterr(handle).getString(0);
@@ -562,7 +563,7 @@ public final class PcapHandle {
 
     sb.append("Link type: [").append(dlt)
       .append("] handle: [").append(handle)
-      .append("] Opening: [").append(opening)
+      .append("] Open: [").append(open)
       .append("] Filtering Expression: [").append(filteringExpression)
       .append("]");
 

@@ -39,14 +39,14 @@ public final class IpV4EndOfOptionList implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return the singleton instance of IpV4EndOfOptionList.
    */
   public static IpV4EndOfOptionList getInstance() { return INSTANCE; }
 
   /**
    *
    * @param rawData
-   * @return
+   * @return the singleton instance of IpV4EndOfOptionList.
    */
   public static IpV4EndOfOptionList newInstance(byte[] rawData) {
     if (rawData == null) {

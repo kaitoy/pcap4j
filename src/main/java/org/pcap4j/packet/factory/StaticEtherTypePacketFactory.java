@@ -31,7 +31,7 @@ implements PacketFactory<EtherType> {
 
   /**
    *
-   * @return
+   * @return the singleton instance of StaticEtherTypePacketFactory.
    */
   public static StaticEtherTypePacketFactory getInstance() {
     return INSTANCE;

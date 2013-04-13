@@ -25,7 +25,7 @@ public final class IllegalPacket extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IllegalPacket object.
    */
   public static IllegalPacket newPacket(byte[] rawData) {
     return new IllegalPacket(rawData);
@@ -90,7 +90,7 @@ public final class IllegalPacket extends AbstractPacket {
     /**
      *
      * @param rawData
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {
       this.rawData = rawData;

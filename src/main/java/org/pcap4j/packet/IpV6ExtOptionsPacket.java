@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,6 @@ import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
 import org.pcap4j.util.ByteArrays;
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -110,7 +110,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
     /**
      *
      * @param nextHeader
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder nextHeader(IpNumber nextHeader) {
       this.nextHeader = nextHeader;
@@ -120,7 +120,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
     /**
      *
      * @param hdrExtLen
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder hdrExtLen(byte hdrExtLen) {
       this.hdrExtLen = hdrExtLen;
@@ -130,7 +130,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
     /**
      *
      * @param options
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder options(List<IpV6Option> options) {
       this.options = options;
@@ -284,7 +284,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return nextHeader
      */
     public IpNumber getNextHeader() {
       return nextHeader;
@@ -292,7 +292,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return hdrExtLen
      */
     public byte getHdrExtLen() {
       return hdrExtLen;
@@ -300,7 +300,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return hdrExtLen
      */
     public int getHdrExtLenAsInt() {
       return (int)(0xFF & hdrExtLen);
@@ -308,7 +308,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return options
      */
     public List<IpV6Option> getOptions() {
       return new ArrayList<IpV6Option>(options);
@@ -380,19 +380,19 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return type
      */
     public IpV6OptionType getType();
 
     /**
      *
-     * @return
+     * @return length
      */
     public int length();
 
     /**
      *
-     * @return
+     * @return raw data
      */
     public byte[] getRawData();
 

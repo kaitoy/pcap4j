@@ -23,7 +23,7 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4UnusedPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IcmpV4TimeExceededPacket object.
    */
   public static IcmpV4TimeExceededPacket newPacket(byte[] rawData) {
     return new IcmpV4TimeExceededPacket(rawData);

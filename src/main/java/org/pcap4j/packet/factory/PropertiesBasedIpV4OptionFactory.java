@@ -30,7 +30,7 @@ implements ClassifiedDataFactory<IpV4Option, IpV4OptionType> {
 
   /**
    *
-   * @return
+   * @return the singleton instance of PropertiesBasedIpV4OptionFactory.
    */
   public static PropertiesBasedIpV4OptionFactory getInstance() { return INSTANCE; }
 
@@ -54,7 +54,7 @@ implements ClassifiedDataFactory<IpV4Option, IpV4OptionType> {
    *
    * @param rawData
    * @param dataClass
-   * @return
+   * @return a new IpV4Option object.
    */
   public IpV4Option newData(byte[] rawData, Class<? extends IpV4Option> dataClass) {
     if (rawData == null || dataClass == null) {

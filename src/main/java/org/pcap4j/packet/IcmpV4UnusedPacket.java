@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
@@ -76,7 +76,7 @@ abstract class IcmpV4UnusedPacket extends AbstractPacket {
     /**
      *
      * @param unused
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder unused(int unused) {
       this.unused = unused;
@@ -86,7 +86,7 @@ abstract class IcmpV4UnusedPacket extends AbstractPacket {
     /**
      *
      * @param invokingPacket
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder invokingPacket(Packet invokingPacket) {
       this.invokingPacket = invokingPacket;
@@ -187,13 +187,13 @@ abstract class IcmpV4UnusedPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return unused
      */
     public int getUnused() { return unused; }
 
     /**
      *
-     * @return
+     * @return invokingPacket
      */
     public Packet getInvokingPacket() { return invokingPacket; }
 

@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.util.Arrays;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
@@ -132,49 +132,49 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return length
    */
   public byte getLength() { return length; }
 
   /**
    *
-   * @return
+   * @return length
    */
   public int getLengthAsInt() { return 0xFF & length; }
 
   /**
    *
-   * @return
+   * @return pointer
    */
   public byte getPointer() { return pointer; }
 
   /**
    *
-   * @return
+   * @return pointer
    */
   public int getPointerAsInt() { return 0xFF & pointer; }
 
   /**
    *
-   * @return
+   * @return overflow
    */
   public byte getOverflow() { return overflow; }
 
   /**
    *
-   * @return
+   * @return overflow
    */
   public int getOverflowAsInt() { return 0xFF & overflow; }
 
   /**
    *
-   * @return
+   * @return flag
    */
   public IpV4InternetTimestampOptionFlag getFlag() { return flag; }
 
   /**
    *
-   * @return
+   * @return data
    */
   public IpV4InternetTimestampOptionData getData() { return data; }
 
@@ -193,7 +193,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() { return new Builder(this); }
 
@@ -258,7 +258,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     /**
      *
      * @param length
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
       this.length = length;
@@ -268,7 +268,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     /**
      *
      * @param pointer
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder pointer(byte pointer) {
       this.pointer = pointer;
@@ -278,7 +278,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     /**
      *
      * @param overflow
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder overflow(byte overflow) {
       this.overflow = overflow;
@@ -288,7 +288,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     /**
      *
      * @param flag
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder flag(IpV4InternetTimestampOptionFlag flag) {
       this.flag = flag;
@@ -298,7 +298,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     /**
      *
      * @param data
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder data(IpV4InternetTimestampOptionData data) {
       this.data = data;
@@ -327,17 +327,16 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
 
     /**
      *
-     * @return
+     * @return length
      */
     public int length();
 
     /**
      *
-     * @return
+     * @return raw data
      */
     public byte[] getRawData();
 
   }
-
 
 }

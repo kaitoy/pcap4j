@@ -29,7 +29,7 @@ public final class ClassifiedDataFactories {
   /**
    *
    * @param numberClass
-   * @return
+   * @return a ClassifiedDataFactory object.
    */
   public static <T, N extends NamedNumber<?>> ClassifiedDataFactory<T, N>
   getFactory(

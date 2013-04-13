@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.net.Inet4Address;
 import java.util.ArrayList;
@@ -18,9 +19,6 @@ import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.util.ByteArrays;
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -41,7 +39,7 @@ public final class IpV4Packet extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV4Packet object.
    */
   public static IpV4Packet newPacket(byte[] rawData) {
     return new IpV4Packet(rawData);
@@ -181,7 +179,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param version
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder version(IpVersion version) {
       this.version = version;
@@ -191,7 +189,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param ihl
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder ihl(byte ihl) {
       this.ihl = ihl;
@@ -201,7 +199,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param tos
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder tos(IpV4Tos tos) {
       this.tos = tos;
@@ -211,7 +209,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param totalLength
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder totalLength(short totalLength) {
       this.totalLength = totalLength;
@@ -221,7 +219,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param identification
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder identification(short identification) {
       this.identification = identification;
@@ -231,7 +229,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param reservedFlag
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder reservedFlag(boolean reservedFlag) {
       this.reservedFlag = reservedFlag;
@@ -241,7 +239,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param dontFragmentFlag
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder dontFragmentFlag(boolean dontFragmentFlag) {
       this.dontFragmentFlag = dontFragmentFlag;
@@ -251,7 +249,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param moreFragmentFlag
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder moreFragmentFlag(boolean moreFragmentFlag) {
       this.moreFragmentFlag = moreFragmentFlag;
@@ -261,7 +259,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param flagmentOffset
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder flagmentOffset(short flagmentOffset) {
       this.flagmentOffset = flagmentOffset;
@@ -271,7 +269,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param ttl
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder ttl(byte ttl) {
       this.ttl = ttl;
@@ -281,7 +279,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param protocol
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder protocol(IpNumber protocol) {
       this.protocol = protocol;
@@ -291,7 +289,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param headerChecksum
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder headerChecksum(short headerChecksum) {
       this.headerChecksum = headerChecksum;
@@ -301,7 +299,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param srcAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder srcAddr(Inet4Address srcAddr) {
       this.srcAddr = srcAddr;
@@ -311,7 +309,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param dstAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder dstAddr(Inet4Address dstAddr) {
       this.dstAddr = dstAddr;
@@ -321,7 +319,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param options
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder options(List<IpV4Option> options) {
       this.options = options;
@@ -331,7 +329,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param padding
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder padding(byte[] padding) {
       this.padding = padding;
@@ -362,7 +360,7 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param paddingAtBuild
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder paddingAtBuild(boolean paddingAtBuild) {
       this.paddingAtBuild = paddingAtBuild;
@@ -636,7 +634,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return version
      */
     public IpVersion getVersion() {
       return version;
@@ -644,7 +642,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return ihl
      */
     public byte getIhl() {
       return ihl;
@@ -652,7 +650,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return tos
      */
     public IpV4Tos getTos() {
       return tos;
@@ -660,7 +658,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return totalLength
      */
     public short getTotalLength() {
       return totalLength;
@@ -668,7 +666,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return totalLength
      */
     public int getTotalLengthAsInt() {
       return 0xFFFF & totalLength;
@@ -676,7 +674,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return identification
      */
     public short getIdentification() {
       return identification;
@@ -684,7 +682,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return identification
      */
     public int getIdentificationAsInt() {
       return 0xFFFF & identification;
@@ -692,7 +690,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return reservedFlag
      */
     public boolean getReservedFlag() {
       return reservedFlag;
@@ -700,7 +698,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return dontFragmentFlag
      */
     public boolean getDontFragmentFlag() {
       return dontFragmentFlag;
@@ -708,7 +706,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return moreFragmentFlag
      */
     public boolean getMoreFragmentFlag() {
       return moreFragmentFlag;
@@ -716,7 +714,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return flagmentOffset
      */
     public short getFlagmentOffset() {
       return flagmentOffset;
@@ -724,7 +722,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return ttl
      */
     public byte getTtl() {
       return ttl;
@@ -732,7 +730,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return ttl
      */
     public int getTtlAsInt() {
       return 0xFF & ttl;
@@ -740,7 +738,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return protocol
      */
     public IpNumber getProtocol() {
       return protocol;
@@ -748,7 +746,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return headerChecksum
      */
     public short getHeaderChecksum() {
       return headerChecksum;
@@ -756,7 +754,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return srcAddr
      */
     public Inet4Address getSrcAddr() {
       return srcAddr;
@@ -764,7 +762,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return dstAddr
      */
     public Inet4Address getDstAddr() {
       return dstAddr;
@@ -772,7 +770,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return options
      */
     public List<IpV4Option> getOptions() {
       return new ArrayList<IpV4Option>(options);
@@ -780,7 +778,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return padding
      */
     public byte[] getPadding() {
       byte[] copy = new byte[padding.length];
@@ -791,7 +789,8 @@ public final class IpV4Packet extends AbstractPacket {
     /**
      *
      * @param acceptZero
-     * @return
+     * @return true if the packet represented by this object has a valid checksum;
+     *         false otherwise.
      */
     public boolean hasValidChecksum(boolean acceptZero) {
       if (headerChecksum == 0) {
@@ -923,19 +922,19 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return type
      */
     public IpV4OptionType getType();
 
     /**
      *
-     * @return
+     * @return length
      */
     public int length();
 
     /**
      *
-     * @return
+     * @return raw data
      */
     public byte[] getRawData();
 
@@ -952,7 +951,7 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return value
      */
     public byte value();
 

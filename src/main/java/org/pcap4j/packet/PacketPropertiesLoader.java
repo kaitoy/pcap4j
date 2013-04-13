@@ -220,7 +220,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return the singleton instance of PacketPropertiesLoader.
    */
   public static PacketPropertiesLoader getInstance() {
     return INSTANCE;
@@ -228,7 +228,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a value of the property.
    */
   public boolean icmpV4CalcChecksum() {
     return loader.getBoolean(
@@ -239,7 +239,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a value of the property.
    */
   public boolean ipV4CalcChecksum() {
     return loader.getBoolean(
@@ -250,7 +250,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a value of the property.
    */
   public boolean tcpV4CalcChecksum() {
     return loader.getBoolean(
@@ -261,7 +261,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a value of the property.
    */
   public boolean tcpV6CalcChecksum() {
     return loader.getBoolean(
@@ -272,7 +272,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a value of the property.
    */
   public boolean udpV4CalcChecksum() {
     return loader.getBoolean(
@@ -283,7 +283,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a value of the property.
    */
   public boolean udpV6CalcChecksum() {
     return loader.getBoolean(
@@ -295,7 +295,7 @@ public final class PacketPropertiesLoader {
   /**
    *
    * @param numberClass
-   * @return
+   * @return a class which implements PacketFactory for a specified class.
    */
   public Class<? extends PacketFactory<NamedNumber<?>>>
   getPacketFactoryClass(Class<? extends NamedNumber<?>> numberClass) {
@@ -312,7 +312,7 @@ public final class PacketPropertiesLoader {
   /**
    *
    * @param number
-   * @return
+   * @return a class which implements Packet for a specified NamedNumber.
    */
   public <T extends NamedNumber<?>>
   Class<? extends Packet> getPacketClass(T number) {
@@ -329,7 +329,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements Packet for an unknown packet.
    */
   public Class<? extends Packet> getUnknownPacketClass() {
     return loader.<Packet>getClass(
@@ -342,7 +342,8 @@ public final class PacketPropertiesLoader {
    *
    * @param targetClass
    * @param numberClass
-   * @return
+   * @return a class which implements ClassifiedDataFactory
+   *         for specified classes.
    */
   public Class<? extends ClassifiedDataFactory<?, ?>>
   getClassifiedDataFactoryClass(
@@ -380,7 +381,7 @@ public final class PacketPropertiesLoader {
   /**
    *
    * @param type
-   * @return
+   * @return a class which implements IpV4Option for a specified type.
    */
   public Class<? extends IpV4Option> getIpV4OptionClass(IpV4OptionType type) {
     StringBuilder sb = new StringBuilder(120);
@@ -396,7 +397,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements IpV4Option for an unknown type.
    */
   public Class<? extends IpV4Option> getUnknownIpV4OptionClass() {
     return loader.<IpV4Option>getClass(
@@ -408,7 +409,7 @@ public final class PacketPropertiesLoader {
   /**
    *
    * @param type
-   * @return
+   * @return a class which implements TcpOption for a specified type.
    */
   public Class<? extends TcpOption> getTcpOptionClass(TcpOptionKind type) {
     StringBuilder sb = new StringBuilder(120);
@@ -424,7 +425,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements TcpOption for an unknown type.
    */
   public Class<? extends TcpOption> getUnknownTcpOptionClass() {
     return loader.<TcpOption>getClass(
@@ -436,7 +437,8 @@ public final class PacketPropertiesLoader {
   /**
    *
    * @param flag
-   * @return
+   * @return a class which implements IpV4InternetTimestampOptionData
+   *         for a specified flag.
    */
   public Class<? extends IpV4InternetTimestampOptionData>
   getIpV4InternetTimestampDataClass(IpV4InternetTimestampOptionFlag flag) {
@@ -453,7 +455,8 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements IpV4InternetTimestampOptionData
+   *         for an unknown flag.
    */
   public Class<? extends IpV4InternetTimestampOptionData>
   getUnknownIpV4InternetTimestampDataClass() {
@@ -466,7 +469,7 @@ public final class PacketPropertiesLoader {
   /**
    *
    * @param type
-   * @return
+   * @return a class which implements IpV6Option for a specified type.
    */
   public Class<? extends IpV6Option> getIpV6OptionClass(IpV6OptionType type) {
     StringBuilder sb = new StringBuilder(120);
@@ -482,7 +485,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements IpV6Option for an unknown type.
    */
   public Class<? extends IpV6Option> getUnknownIpV6OptionClass() {
     return loader.<IpV6Option>getClass(
@@ -494,7 +497,7 @@ public final class PacketPropertiesLoader {
   /**
    *
    * @param type
-   * @return
+   * @return a class which implements IpV6RoutingData for a specified type.
    */
   public Class<? extends IpV6RoutingData> getIpV6RoutingDataClass(
     IpV6RoutingHeaderType type
@@ -512,7 +515,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements IpV6RoutingData for an unknown type.
    */
   public Class<? extends IpV6RoutingData> getUnknownIpV6RoutingDataClass() {
     return loader.<IpV6RoutingData>getClass(
@@ -523,7 +526,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements IpV4TosFactory.
    */
   public Class<? extends IpV4TosFactory> getIpV4TosFactoryClass() {
     return loader.<IpV4TosFactory>getClass(
@@ -534,7 +537,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements IpV4Tos.
    */
   public Class<? extends IpV4Tos> getIpV4TosClass() {
     return loader.<IpV4Tos>getClass(
@@ -545,7 +548,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements IpV6TrafficClassFactory.
    */
   public Class<? extends IpV6TrafficClassFactory>
   getIpV6TrafficClassFactoryClass() {
@@ -557,7 +560,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements IpV6TrafficClass.
    */
   public Class<? extends IpV6TrafficClass> getIpV6TrafficClassClass() {
     return loader.<IpV6TrafficClass>getClass(
@@ -568,7 +571,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements IpV6FlowLabelFactory.
    */
   public Class<? extends IpV6FlowLabelFactory>
   getIpV6FlowLabelFactoryClass() {
@@ -580,7 +583,7 @@ public final class PacketPropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a class which implements IpV6FlowLabel.
    */
   public Class<? extends IpV6FlowLabel> getIpV6FlowLabelClass() {
     return loader.<IpV6FlowLabel>getClass(

@@ -30,7 +30,7 @@ public final class UnknownIpV4Option implements IpV4Option {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new UnknownIpV4Option object.
    */
   public static UnknownIpV4Option newInstance(byte[] rawData) {
     return new UnknownIpV4Option(rawData);
@@ -84,19 +84,19 @@ public final class UnknownIpV4Option implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return length
    */
   public byte getLength() { return length; }
 
   /**
    *
-   * @return
+   * @return length
    */
   public int getLengthAsInt() { return 0xFF & length; }
 
   /**
    *
-   * @return
+   * @return data
    */
   public byte[] getData() {
     byte[] copy = new byte[data.length];
@@ -116,7 +116,7 @@ public final class UnknownIpV4Option implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() {
     return new Builder(this);
@@ -173,7 +173,7 @@ public final class UnknownIpV4Option implements IpV4Option {
     /**
      *
      * @param type
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder type(IpV4OptionType type) {
       this.type = type;
@@ -183,7 +183,7 @@ public final class UnknownIpV4Option implements IpV4Option {
     /**
      *
      * @param length
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
       this.length = length;
@@ -193,7 +193,7 @@ public final class UnknownIpV4Option implements IpV4Option {
     /**
      *
      * @param data
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder data(byte[] data) {
       this.data = data;

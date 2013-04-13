@@ -33,7 +33,7 @@ public final class SimpleBuilder extends AbstractBuilder {
   /**
    *
    * @param packet
-   * @return
+   * @return SimpleBuilder
    */
   public SimpleBuilder packet(Packet packet) {
     this.packet = packet;

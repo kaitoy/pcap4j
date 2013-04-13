@@ -37,7 +37,7 @@ implements Comparable<T>, Serializable {
 
   /**
    *
-   * @return
+   * @return value
    */
   public T value() {
     return value;
@@ -45,7 +45,7 @@ implements Comparable<T>, Serializable {
 
   /**
    *
-   * @return
+   * @return name
    */
   public String name() {
     return name;
@@ -53,7 +53,7 @@ implements Comparable<T>, Serializable {
 
   /**
    *
-   * @return
+   * @return a string representation of this value.
    */
   public String valueAsString() {
     return value.toString();

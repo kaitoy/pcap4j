@@ -7,8 +7,7 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
-
+import static org.pcap4j.util.ByteArrays.*;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -119,7 +118,8 @@ public final class UdpPacket extends AbstractPacket {
    * @param srcAddr
    * @param dstAddr
    * @param acceptZero
-   * @return
+   * @return true if the packet represented by this object has a valid checksum;
+   *         false otherwise.
    */
   public boolean hasValidChecksum(
     InetAddress srcAddr, InetAddress dstAddr, boolean acceptZero
@@ -188,7 +188,7 @@ public final class UdpPacket extends AbstractPacket {
     /**
      *
      * @param srcPort
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder srcPort(UdpPort srcPort) {
       this.srcPort = srcPort;
@@ -198,7 +198,7 @@ public final class UdpPacket extends AbstractPacket {
     /**
      *
      * @param dstPort
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder dstPort(UdpPort dstPort) {
       this.dstPort = dstPort;
@@ -208,7 +208,7 @@ public final class UdpPacket extends AbstractPacket {
     /**
      *
      * @param length
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder length(short length) {
       this.length = length;
@@ -218,7 +218,7 @@ public final class UdpPacket extends AbstractPacket {
     /**
      *
      * @param checksum
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder checksum(short checksum) {
       this.checksum = checksum;
@@ -241,7 +241,7 @@ public final class UdpPacket extends AbstractPacket {
      * used for checksum calculation.
      *
      * @param srcAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder srcAddr(InetAddress srcAddr) {
       this.srcAddr = srcAddr;
@@ -257,7 +257,7 @@ public final class UdpPacket extends AbstractPacket {
      * (i.e. the last element of the Routing header)
      *
      * @param dstAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder dstAddr(InetAddress dstAddr) {
       this.dstAddr = dstAddr;
@@ -483,7 +483,7 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return srcPort
      */
     public UdpPort getSrcPort() {
       return srcPort;
@@ -491,7 +491,7 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return dstPort
      */
     public UdpPort getDstPort() {
       return dstPort;
@@ -499,7 +499,7 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return length
      */
     public short getLength() {
       return length;
@@ -507,7 +507,7 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return length
      */
     public int getLengthAsInt() {
       return (int)(0xFFFF & length);
@@ -515,7 +515,7 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return checksum
      */
     public short getChecksum() {
       return checksum;

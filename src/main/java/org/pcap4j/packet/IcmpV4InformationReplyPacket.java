@@ -23,7 +23,7 @@ public final class IcmpV4InformationReplyPacket extends IcmpIdentifiablePacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IcmpV4InformationReplyPacket object.
    */
   public static IcmpV4InformationReplyPacket newPacket(byte[] rawData) {
     return new IcmpV4InformationReplyPacket(rawData);

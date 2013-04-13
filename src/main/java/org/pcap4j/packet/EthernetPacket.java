@@ -7,14 +7,13 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 /**
  * This Class handles from DA to data.
@@ -44,7 +43,7 @@ public final class EthernetPacket extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new EthernetPacket object.
    * @throws PacketException
    */
   public static EthernetPacket newPacket(byte[] rawData) {
@@ -131,7 +130,7 @@ public final class EthernetPacket extends AbstractPacket {
 
   /**
    *
-   * @return
+   * @return pad
    */
   public byte[] getPad() {
     byte[] copy = new byte[pad.length];
@@ -214,7 +213,7 @@ public final class EthernetPacket extends AbstractPacket {
     /**
      *
      * @param dstAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder dstAddr(MacAddress dstAddr) {
       this.dstAddr = dstAddr;
@@ -224,7 +223,7 @@ public final class EthernetPacket extends AbstractPacket {
     /**
      *
      * @param srcAddr
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder srcAddr(MacAddress srcAddr) {
       this.srcAddr = srcAddr;
@@ -234,7 +233,7 @@ public final class EthernetPacket extends AbstractPacket {
     /**
      *
      * @param type
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder type(EtherType type) {
       this.type = type;
@@ -255,7 +254,7 @@ public final class EthernetPacket extends AbstractPacket {
     /**
      *
      * @param pad
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder pad(byte[] pad) {
       this.pad = pad;
@@ -265,7 +264,7 @@ public final class EthernetPacket extends AbstractPacket {
     /**
      *
      * @param paddingAtBuild
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder paddingAtBuild(boolean paddingAtBuild) {
       this.paddingAtBuild = paddingAtBuild;
@@ -345,7 +344,7 @@ public final class EthernetPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return dstAddr
      */
     public MacAddress getDstAddr() {
       return dstAddr;
@@ -353,7 +352,7 @@ public final class EthernetPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return srcAddr
      */
     public MacAddress getSrcAddr() {
       return srcAddr;
@@ -361,7 +360,7 @@ public final class EthernetPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return type
      */
     public EtherType getType() {
       return type;

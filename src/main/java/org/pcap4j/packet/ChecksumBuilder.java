@@ -16,7 +16,7 @@ public interface ChecksumBuilder<T> {
   /**
    *
    * @param correctChecksumAtBuild
-   * @return
+   * @return ChecksumBuilder
    */
   public ChecksumBuilder<T> correctChecksumAtBuild(
     boolean correctChecksumAtBuild

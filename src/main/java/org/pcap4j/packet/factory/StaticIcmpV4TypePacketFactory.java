@@ -38,7 +38,7 @@ implements PacketFactory<IcmpV4Type> {
 
   /**
    *
-   * @return
+   * @return the singleton instance of StaticIcmpV4TypePacketFactory.
    */
   public static StaticIcmpV4TypePacketFactory getInstance() {
     return INSTANCE;

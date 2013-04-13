@@ -21,7 +21,7 @@ public interface IpV4TosFactory {
   /**
    *
    * @param value
-   * @return
+   * @return a new IpV4Tos object.
    */
   public IpV4Tos newTos(byte value);
 

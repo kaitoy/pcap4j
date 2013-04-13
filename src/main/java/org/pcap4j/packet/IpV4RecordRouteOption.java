@@ -30,7 +30,7 @@ public final class IpV4RecordRouteOption extends IpV4RouteOption {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV4RecordRouteOption object.
    */
   public static IpV4RecordRouteOption newInstance(byte[] rawData) {
     return new IpV4RecordRouteOption(rawData);
@@ -50,7 +50,7 @@ public final class IpV4RecordRouteOption extends IpV4RouteOption {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() {
     return new Builder(this);
@@ -74,7 +74,7 @@ public final class IpV4RecordRouteOption extends IpV4RouteOption {
 
     /**
      *
-     * @return
+     * @return a new IpV4RecordRouteOption object.
      */
     public IpV4RecordRouteOption build() {
       return new IpV4RecordRouteOption(this);

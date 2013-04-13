@@ -26,6 +26,7 @@ public final class IpV6SimpleFlowLabel implements IpV6FlowLabel {
   /**
    *
    * @param value
+   * @return a new IpV6SimpleFlowLabel object.
    */
   public static IpV6SimpleFlowLabel newInstance(int value) {
     return new IpV6SimpleFlowLabel(value);

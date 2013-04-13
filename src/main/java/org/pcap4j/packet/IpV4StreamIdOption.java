@@ -37,7 +37,7 @@ public final class IpV4StreamIdOption implements IpV4Option {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV4StreamIdOption object.
    */
   public static IpV4StreamIdOption newInstance(byte[] rawData) {
     return new IpV4StreamIdOption(rawData);
@@ -92,25 +92,25 @@ public final class IpV4StreamIdOption implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return length
    */
   public byte getLength() { return length; }
 
   /**
    *
-   * @return
+   * @return length
    */
   public int getLengthAsInt() { return 0xFF & length; }
 
   /**
    *
-   * @return
+   * @return streamId
    */
   public short getStreamId() { return streamId; }
 
   /**
    *
-   * @return
+   * @return streamId
    */
   public int getStreamIdAsInt() { return 0xFFFF & streamId; }
 
@@ -127,7 +127,7 @@ public final class IpV4StreamIdOption implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() {
     return new Builder(this);
@@ -182,7 +182,7 @@ public final class IpV4StreamIdOption implements IpV4Option {
     /**
      *
      * @param length
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
       this.length = length;
@@ -192,7 +192,7 @@ public final class IpV4StreamIdOption implements IpV4Option {
     /**
      *
      * @param streamId
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder streamId(short streamId) {
       this.streamId = streamId;

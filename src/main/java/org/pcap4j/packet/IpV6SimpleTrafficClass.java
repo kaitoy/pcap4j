@@ -26,6 +26,7 @@ public final class IpV6SimpleTrafficClass implements IpV6TrafficClass {
   /**
    *
    * @param value
+   * @return a new IpV6SimpleTrafficClass object.
    */
   public static IpV6SimpleTrafficClass newInstance(byte value) {
     return new IpV6SimpleTrafficClass(value);

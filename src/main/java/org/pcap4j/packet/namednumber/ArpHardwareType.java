@@ -80,7 +80,7 @@ public final class ArpHardwareType extends NamedNumber<Short> {
   /**
    *
    * @param value
-   * @return
+   * @return a ArpHardwareType object.
    */
   public static ArpHardwareType getInstance(Short value) {
     if (registry.containsKey(value)) {
@@ -94,7 +94,7 @@ public final class ArpHardwareType extends NamedNumber<Short> {
   /**
    *
    * @param type
-   * @return
+   * @return a ArpHardwareType object.
    */
   public static ArpHardwareType register(ArpHardwareType type) {
     return registry.put(type.value(), type);

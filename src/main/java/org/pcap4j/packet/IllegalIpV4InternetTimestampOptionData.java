@@ -27,7 +27,7 @@ public final class IllegalIpV4InternetTimestampOptionData implements IpV4Interne
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IllegalIpV4InternetTimestampOptionData object.
    */
   public static IllegalIpV4InternetTimestampOptionData newInstance(byte[] rawData) {
     return new IllegalIpV4InternetTimestampOptionData(rawData);

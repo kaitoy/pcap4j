@@ -98,7 +98,7 @@ public final class IpV4TosTos extends NamedNumber<Byte> {
   /**
    *
    * @param value
-   * @return
+   * @return a IpV4TosTos object.
    */
   public static IpV4TosTos getInstance(Byte value) {
     if (registry.containsKey(value)) {
@@ -112,7 +112,7 @@ public final class IpV4TosTos extends NamedNumber<Byte> {
   /**
    *
    * @param tos
-   * @return
+   * @return a IpV4TosTos object.
    */
   public static IpV4TosTos register(IpV4TosTos tos) {
     return registry.put(tos.value(), tos);

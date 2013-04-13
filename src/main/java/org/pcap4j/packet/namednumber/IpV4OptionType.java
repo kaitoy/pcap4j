@@ -127,26 +127,27 @@ public final class IpV4OptionType extends NamedNumber<Byte> {
 
   /**
    *
-   * @return
+   * @return true if the copied flag of the packet represented by this object is true;
+   *         false otherwise.
    */
   public boolean isCopied() { return copied; }
 
   /**
    *
-   * @return
+   * @return optionClass
    */
   public IpV4OptionClass getOptionClass() { return optionClass; }
 
   /**
    *
-   * @return
+   * @return number
    */
   public byte getNumber() { return number; }
 
   /**
    *
    * @param value
-   * @return
+   * @return a IpV4OptionType object.
    */
   public static IpV4OptionType getInstance(Byte value) {
     if (registry.containsKey(value)) {
@@ -160,7 +161,7 @@ public final class IpV4OptionType extends NamedNumber<Byte> {
   /**
    *
    * @param type
-   * @return
+   * @return a IpV4OptionType object.
    */
   public static IpV4OptionType register(IpV4OptionType type) {
     return registry.put(type.value(), type);
@@ -211,7 +212,7 @@ public final class IpV4OptionType extends NamedNumber<Byte> {
 
     /**
      *
-     * @return
+     * @return value
      */
     public int getValue() {
       return value;

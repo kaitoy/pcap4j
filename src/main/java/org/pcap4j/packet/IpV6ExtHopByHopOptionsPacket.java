@@ -27,7 +27,7 @@ public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV6ExtHopByHopOptionsPacket object.
    */
   public static IpV6ExtHopByHopOptionsPacket newPacket(byte[] rawData) {
     IpV6ExtHopByHopOptionsHeader optHeader

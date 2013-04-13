@@ -7,14 +7,12 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.util.ByteArrays;
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -33,7 +31,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV6ExtFragmentPacket object.
    */
   public static IpV6ExtFragmentPacket newPacket(byte[] rawData) {
     return new IpV6ExtFragmentPacket(rawData);
@@ -127,7 +125,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     /**
      *
      * @param nextHeader
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder nextHeader(IpNumber nextHeader) {
       this.nextHeader = nextHeader;
@@ -137,7 +135,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     /**
      *
      * @param reserved
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder reserved(byte reserved) {
       this.reserved = reserved;
@@ -147,7 +145,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     /**
      *
      * @param fragmentOffset
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder fragmentOffset(short fragmentOffset) {
       this.fragmentOffset = fragmentOffset;
@@ -157,7 +155,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     /**
      *
      * @param res
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder res(byte res) {
       this.res = res;
@@ -167,7 +165,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     /**
      *
      * @param m
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder m(boolean m) {
       this.m = m;
@@ -177,7 +175,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     /**
      *
      * @param identification
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder identification(int identification) {
       this.identification = identification;
@@ -299,7 +297,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return nextHeader
      */
     public IpNumber getNextHeader() {
       return nextHeader;
@@ -307,7 +305,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return reserved
      */
     public byte getReserved() {
       return reserved;
@@ -315,7 +313,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return fragmentOffset
      */
     public short getFragmentOffset() {
       return fragmentOffset;
@@ -323,7 +321,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return res
      */
     public byte getRes() {
       return res;
@@ -331,7 +329,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return m
      */
     public boolean getM() {
       return m;
@@ -339,7 +337,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return identification
      */
     public int getIdentification() {
       return identification;

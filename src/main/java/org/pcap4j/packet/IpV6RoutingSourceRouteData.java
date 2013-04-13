@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.*;
 import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,8 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
 import org.pcap4j.util.ByteArrays;
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.INET6_ADDRESS_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -34,7 +33,7 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV6RoutingSourceRouteData object.
    */
   public static IpV6RoutingSourceRouteData newInstance(byte[] rawData) {
     return new IpV6RoutingSourceRouteData(rawData);

@@ -25,7 +25,7 @@ public final class PropertiesBasedIpV6TrafficClassFactory implements IpV6Traffic
 
   /**
    *
-   * @return
+   * @return the singleton instance of PropertiesBasedIpV6TrafficClassFactory.
    */
   public static PropertiesBasedIpV6TrafficClassFactory getInstance() { return INSTANCE; }
 
@@ -39,7 +39,7 @@ public final class PropertiesBasedIpV6TrafficClassFactory implements IpV6Traffic
    *
    * @param value
    * @param clazz
-   * @return
+   * @return a new IpV6TrafficClass object.
    */
   public IpV6TrafficClass newTrafficClass(
     byte value, Class<? extends IpV6TrafficClass> clazz

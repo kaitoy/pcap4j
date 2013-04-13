@@ -16,7 +16,7 @@ public interface LengthBuilder<T> {
   /**
    *
    * @param correctLengthAtBuild
-   * @return
+   * @return LengthBuilder
    */
   public LengthBuilder<T> correctLengthAtBuild(
     boolean correctLengthAtBuild
@@ -24,7 +24,7 @@ public interface LengthBuilder<T> {
 
   /**
    *
-   * @return
+   * @return a new object.
    */
   public T build();
 

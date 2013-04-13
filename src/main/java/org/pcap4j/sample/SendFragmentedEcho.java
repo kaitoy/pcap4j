@@ -6,24 +6,24 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PacketListener;
+import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapHandle.BpfCompileMode;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.AbstractPacket.AbstractBuilder;
+import org.pcap4j.packet.EthernetPacket;
+import org.pcap4j.packet.IcmpV4CommonPacket;
 import org.pcap4j.packet.IcmpV4EchoPacket;
+import org.pcap4j.packet.IpV4Packet;
 import org.pcap4j.packet.IpV4Rfc791Tos;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.UnknownPacket;
-import org.pcap4j.packet.EthernetPacket;
-import org.pcap4j.packet.IcmpV4CommonPacket;
-import org.pcap4j.packet.IpV4Packet;
 import org.pcap4j.packet.namednumber.EtherType;
-import org.pcap4j.packet.namednumber.IcmpV4Type;
 import org.pcap4j.packet.namednumber.IcmpV4Code;
+import org.pcap4j.packet.namednumber.IcmpV4Type;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.util.IpV4Helper;
@@ -179,14 +179,14 @@ public class SendFragmentedEcho {
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
-      if (handle != null && handle.isOpening()) {
+      if (handle != null && handle.isOpen()) {
         handle.breakLoop();
         try {
           Thread.sleep(1000);
         } catch (InterruptedException e) {}
         handle.close();
       }
-      if (sendHandle != null && sendHandle.isOpening()) {
+      if (sendHandle != null && sendHandle.isOpen()) {
         sendHandle.close();
       }
       if (pool != null && !pool.isShutdown()) {

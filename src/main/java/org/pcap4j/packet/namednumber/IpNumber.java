@@ -164,7 +164,7 @@ public final class IpNumber extends NamedNumber<Byte> {
   /**
    *
    * @param value
-   * @return
+   * @return a IpNumber object.
    */
   public static IpNumber getInstance(Byte value) {
     if (registry.containsKey(value)) {
@@ -178,7 +178,7 @@ public final class IpNumber extends NamedNumber<Byte> {
   /**
    *
    * @param number
-   * @return
+   * @return a IpNumber object.
    */
   public static IpNumber register(IpNumber number) {
     return registry.put(number.value(), number);

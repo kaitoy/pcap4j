@@ -25,7 +25,7 @@ public final class UnknownPacket extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new UnknownPacket object.
    */
   public static UnknownPacket newPacket(byte[] rawData) {
     return new UnknownPacket(rawData);
@@ -91,7 +91,7 @@ public final class UnknownPacket extends AbstractPacket {
     /**
      *
      * @param rawData
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {
       this.rawData = rawData;

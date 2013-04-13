@@ -64,7 +64,7 @@ public class PropertiesLoader {
 
   /**
    *
-   * @return
+   * @return resource name
    */
   public final String getResourceName() {
     return resourceName;
@@ -72,7 +72,8 @@ public class PropertiesLoader {
 
   /**
    *
-   * @return
+   * @return a new Properties object containing properties
+   *         loaded by this object.
    */
   public final Properties getProp() {
     Properties copy = new Properties();
@@ -82,7 +83,8 @@ public class PropertiesLoader {
 
   /**
    *
-   * @return
+   * @return true if this object gives priority to the system properties
+   *         over the properties loaded by this object; false otherwise.
    */
   public final boolean isSystemPropertiesOverPropertiesFile() {
     return systemPropertiesOverPropertiesFile;
@@ -90,7 +92,8 @@ public class PropertiesLoader {
 
   /**
    *
-   * @return
+   * @return true if this object is caching values of properties;
+   *         false otherwise.
    */
   public final boolean isCaching() {
     return caching;
@@ -100,7 +103,7 @@ public class PropertiesLoader {
    *
    * @param key
    * @param defaultValue
-   * @return
+   * @return a string value with a specified key value.
    */
   public String getString(String key, String defaultValue) {
     synchronized (cache) {
@@ -154,7 +157,7 @@ public class PropertiesLoader {
    *
    * @param key
    * @param defaultValue
-   * @return
+   * @return an int value representing a string with the specified key value.
    */
   public int getInteger(String key, Integer defaultValue) {
     synchronized (cache) {
@@ -217,7 +220,8 @@ public class PropertiesLoader {
    *
    * @param key
    * @param defaultValue
-   * @return
+   * @return a Boolean object representing a string
+   *         with the specified key value.
    */
   public Boolean getBoolean(String key, Boolean defaultValue) {
     synchronized (cache) {
@@ -275,9 +279,11 @@ public class PropertiesLoader {
    *
    * @param key
    * @param defaultValue
-   * @return
+   * @return a Class object representing a string with the specified key value.
    */
-  public <T> Class<? extends T> getClass(String key, Class<? extends T> defaultValue) {
+  public <T> Class<? extends T> getClass(
+    String key, Class<? extends T> defaultValue
+  ) {
     synchronized (cache) {
       if (caching && cache.containsKey(key)) {
         @SuppressWarnings("unchecked")
@@ -366,7 +372,8 @@ public class PropertiesLoader {
    *
    * @param key
    * @param defaultValue
-   * @return
+   * @return an InetAddress object representing a string
+   *         with the specified key value.
    */
   public InetAddress getInetAddress(String key, InetAddress defaultValue) {
     synchronized (cache) {

@@ -48,7 +48,7 @@ public final class MacAddress implements Serializable {
   /**
    *
    * @param address
-   * @return
+   * @return a new MacAddress object.
    */
   public static MacAddress getByAddress(byte[] address) {
     if (address.length != SIZE_IN_BYTES) {
@@ -66,7 +66,7 @@ public final class MacAddress implements Serializable {
   /**
    *
    * @param name
-   * @return
+   * @return a new MacAddress object.
    */
   public static MacAddress getByName(String name) {
     Matcher m = HEX_PATTERN.matcher(name);
@@ -78,7 +78,7 @@ public final class MacAddress implements Serializable {
    *
    * @param name
    * @param separator
-   * @return
+   * @return a new MacAddress object.
    */
   public static MacAddress getByName(String name, String separator) {
     return getByAddress(ByteArrays.parseByteArray(name, separator));
@@ -86,7 +86,7 @@ public final class MacAddress implements Serializable {
 
   /**
    *
-   * @return
+   * @return address
    */
   public byte[] getAddress() {
     byte[] copy = new byte[address.length];
@@ -96,7 +96,7 @@ public final class MacAddress implements Serializable {
 
   /**
    *
-   * @return
+   * @return OUI
    */
   public Oui getOui() {
     return Oui.getInstance(ByteArrays.getInt(address, 0) >>> 8);
@@ -104,7 +104,8 @@ public final class MacAddress implements Serializable {
 
   /**
    *
-   * @return
+   * @return true if the MAC address represented by this object is
+   *         a unicast address; otherwise false.
    */
   public boolean isUnicast() {
     return (address[0] & 1) == 0;
@@ -112,7 +113,8 @@ public final class MacAddress implements Serializable {
 
   /**
    *
-   * @return
+   * @return true if the MAC address represented by this object is
+   *         a globally unique address; otherwise false.
    */
   public boolean isGloballyUnique() {
     return (address[0] & 2) == 0;
@@ -120,7 +122,7 @@ public final class MacAddress implements Serializable {
 
   /**
    *
-   * @return
+   * @return length
    */
   public int length() {
     return address.length;

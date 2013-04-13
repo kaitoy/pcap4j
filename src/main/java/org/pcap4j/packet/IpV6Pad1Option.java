@@ -39,14 +39,14 @@ public final class IpV6Pad1Option implements IpV6Option {
 
   /**
    *
-   * @return
+   * @return the singleton instance of IpV6Pad1Option.
    */
   public static IpV6Pad1Option getInstance() { return INSTANCE; }
 
   /**
    *
    * @param rawData
-   * @return
+   * @return the singleton instance of IpV6Pad1Option.
    */
   public static IpV6Pad1Option newInstance(byte[] rawData) {
     if (rawData == null) {

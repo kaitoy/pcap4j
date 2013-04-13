@@ -17,25 +17,25 @@ public interface PcapAddress {
 
   /**
    *
-   * @return
+   * @return address
    */
   public InetAddress getAddress();
 
   /**
    *
-   * @return
+   * @return netmask
    */
   public InetAddress getNetmask();
 
   /**
    *
-   * @return
+   * @return broadcast address
    */
   public InetAddress getBroadcastAddress();
 
   /**
    *
-   * @return
+   * @return destination address
    */
   public InetAddress getDestinationAddress();
 

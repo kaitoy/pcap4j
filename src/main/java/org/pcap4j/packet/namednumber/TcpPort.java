@@ -69,7 +69,7 @@ public final class TcpPort extends NamedNumber<Short> {
   /**
    *
    * @param value
-   * @return
+   * @return a TcpPort object.
    */
   public static TcpPort getInstance(Short value) {
     if (registry.containsKey(value)) {
@@ -83,7 +83,7 @@ public final class TcpPort extends NamedNumber<Short> {
   /**
    *
    * @param port
-   * @return
+   * @return a TcpPort object.
    */
   public static TcpPort register(TcpPort port) {
     return registry.put(port.value(), port);
@@ -91,7 +91,7 @@ public final class TcpPort extends NamedNumber<Short> {
 
   /**
    *
-   * @return
+   * @return a string representation of this value.
    */
   @Override
   public String valueAsString() {

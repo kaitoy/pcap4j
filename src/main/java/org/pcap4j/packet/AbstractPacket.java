@@ -83,7 +83,7 @@ public abstract class AbstractPacket implements Packet {
 
   /**
    *
-   * @return
+   * @return length
    */
   protected int measureLength() {
     int length = 0;
@@ -104,7 +104,7 @@ public abstract class AbstractPacket implements Packet {
 
   /**
    *
-   * @return
+   * @return row data
    */
   protected byte[] buildRawData() {
     byte[] rd = new byte[length()];
@@ -166,7 +166,7 @@ public abstract class AbstractPacket implements Packet {
 
   /**
    *
-   * @return
+   * @return a hex string representation of the object.
    */
   protected String buildHexString() {
     return ByteArrays.toHexString(getRawData(), " ");
@@ -174,7 +174,7 @@ public abstract class AbstractPacket implements Packet {
 
   /**
    *
-   * @return
+   * @return a hex string representation of the object.
    */
  public String toHexString() {
    return hexStringCache.getValue();
@@ -182,7 +182,7 @@ public abstract class AbstractPacket implements Packet {
 
  /**
   *
-  * @return
+  * @return a string representation of the object.
   */
   protected String buildString() {
     StringBuilder sb = new StringBuilder();
@@ -233,7 +233,7 @@ public abstract class AbstractPacket implements Packet {
 
   /**
    *
-   * @return
+   * @return a hash code value for the object.
    */
   protected int calcHashCode() {
     return Arrays.hashCode(getRawData());
@@ -348,7 +348,7 @@ public abstract class AbstractPacket implements Packet {
 
     /**
      *
-     * @return
+     * @return length
      */
     protected int measureLength() {
       int length = 0;
@@ -364,7 +364,7 @@ public abstract class AbstractPacket implements Packet {
 
     /**
      *
-     * @return
+     * @return raw data
      */
     protected byte[] buildRawData() {
       List<byte[]> rawFields = getRawFields();
@@ -397,7 +397,7 @@ public abstract class AbstractPacket implements Packet {
 
     /**
      *
-     * @return
+     * @return a hex string representation of the object.
      */
     protected String buildHexString() {
       return ByteArrays.toHexString(getRawData(), ":");
@@ -409,7 +409,7 @@ public abstract class AbstractPacket implements Packet {
 
     /**
      *
-     * @return
+     * @return a string representation of the object.
      */
     protected String buildString() {
       return toHexString();
@@ -429,7 +429,7 @@ public abstract class AbstractPacket implements Packet {
 
     /**
      *
-     * @return
+     * @return a hash code value for the object.
      */
     protected int calcHashCode() {
       return Arrays.hashCode(getRawData());

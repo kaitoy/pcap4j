@@ -24,7 +24,7 @@ public final class IpV6FlowLabelFactories {
   /**
    *
    * @param numberClass
-   * @return
+   * @return IpV6FlowLabelFactory
    */
   public static IpV6FlowLabelFactory getFactory() {
     IpV6FlowLabelFactory cachedFactory = cache;

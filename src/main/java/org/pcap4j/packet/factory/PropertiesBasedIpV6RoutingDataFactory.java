@@ -30,7 +30,7 @@ implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
 
   /**
    *
-   * @return
+   * @return the singleton instance of PropertiesBasedIpV6RoutingDataFactory.
    */
   public static PropertiesBasedIpV6RoutingDataFactory getInstance() {
     return INSTANCE;
@@ -58,7 +58,7 @@ implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
    *
    * @param rawData
    * @param dataClass
-   * @return
+   * @return a new IpV6RoutingData object.
    */
   public IpV6RoutingData newData(
     byte[] rawData, Class<? extends IpV6RoutingData> dataClass

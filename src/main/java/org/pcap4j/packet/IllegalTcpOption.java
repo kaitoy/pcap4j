@@ -29,7 +29,7 @@ public final class IllegalTcpOption implements TcpOption {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IllegalTcpOption object.
    */
   public static IllegalTcpOption newInstance(byte[] rawData) {
     return new IllegalTcpOption(rawData);
@@ -83,7 +83,7 @@ public final class IllegalTcpOption implements TcpOption {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() {
     return new Builder(this);
@@ -134,7 +134,7 @@ public final class IllegalTcpOption implements TcpOption {
     /**
      *
      * @param kind
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder kind(TcpOptionKind kind) {
       this.kind = kind;
@@ -144,7 +144,7 @@ public final class IllegalTcpOption implements TcpOption {
     /**
      *
      * @param rawData
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {
       this.rawData = rawData;
@@ -153,7 +153,7 @@ public final class IllegalTcpOption implements TcpOption {
 
     /**
      *
-     * @return
+     * @return a new IllegalTcpOption object.
      */
     public IllegalTcpOption build() {
       return new IllegalTcpOption(this);

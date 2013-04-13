@@ -39,14 +39,14 @@ public final class IpV4NoOperationOption implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return the singleton instance of IpV4NoOperationOption.
    */
   public static IpV4NoOperationOption getInstance() { return INSTANCE; }
 
   /**
    *
    * @param rawData
-   * @return
+   * @return the singleton instance of IpV4NoOperationOption.
    */
   public static IpV4NoOperationOption newInstance(byte[] rawData) {
     if (rawData == null) {

@@ -40,14 +40,14 @@ public final class TcpNoOperationOption implements TcpOption {
 
   /**
    *
-   * @return
+   * @return the singleton instance of TcpNoOperationOption.
    */
   public static TcpNoOperationOption getInstance() { return INSTANCE; }
 
   /**
    *
    * @param rawData
-   * @return
+   * @return the singleton instance of TcpNoOperationOption.
    */
   public static TcpNoOperationOption newInstance(byte[] rawData) {
     if (rawData == null) {
@@ -66,7 +66,7 @@ public final class TcpNoOperationOption implements TcpOption {
         .append(ByteArrays.toHexString(rawData, " "));
       throw new IllegalRawDataException(sb.toString());
     }
-    return getInstance();
+    return INSTANCE;
   }
 
   public TcpOptionKind getKind() { return kind; }

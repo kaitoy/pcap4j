@@ -33,7 +33,6 @@ public final class BuilderIterator implements Iterator<Builder> {
   }
 
   /**
-   * @return
    * @throws NoSuchElementException
    */
   public Builder next() {

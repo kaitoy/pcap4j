@@ -22,14 +22,14 @@ public interface ClassifiedDataFactory <T, N extends NamedNumber<?>>{
    *
    * @param rawData
    * @param number
-   * @return
+   * @return a new data object.
    */
   public T newData(byte[] rawData, N number);
 
   /**
    *
    * @param rawData
-   * @return
+   * @return a new data object.
    */
   public T newData(byte[] rawData);
 

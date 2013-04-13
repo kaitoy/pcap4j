@@ -88,7 +88,7 @@ public final class IpV6OptionType extends NamedNumber<Byte> {
   /**
    *
    * @param value
-   * @return
+   * @return a IpV6OptionType object.
    */
   public static IpV6OptionType getInstance(Byte value) {
     if (registry.containsKey(value)) {
@@ -102,7 +102,7 @@ public final class IpV6OptionType extends NamedNumber<Byte> {
   /**
    *
    * @param type
-   * @return
+   * @return a IpV6OptionType object.
    */
   public static IpV6OptionType register(IpV6OptionType type) {
     return registry.put(type.value(), type);
@@ -169,7 +169,7 @@ public final class IpV6OptionType extends NamedNumber<Byte> {
 
     /**
      *
-     * @return
+     * @return value
      */
     public int getValue() {
       return value;

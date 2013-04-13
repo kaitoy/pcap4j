@@ -30,7 +30,7 @@ implements ClassifiedDataFactory<TcpOption, TcpOptionKind> {
 
   /**
    *
-   * @return
+   * @return the singleton instance of PropertiesBasedTcpOptionFactory.
    */
   public static PropertiesBasedTcpOptionFactory getInstance() { return INSTANCE; }
 
@@ -54,7 +54,7 @@ implements ClassifiedDataFactory<TcpOption, TcpOptionKind> {
    *
    * @param rawData
    * @param dataClass
-   * @return
+   * @return a new TcpOption object.
    */
   public TcpOption newData(byte[] rawData, Class<? extends TcpOption> dataClass) {
     if (rawData == null || dataClass == null) {

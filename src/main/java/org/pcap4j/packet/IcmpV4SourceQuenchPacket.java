@@ -23,7 +23,7 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4UnusedPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IcmpV4SourceQuenchPacket object.
    */
   public static IcmpV4SourceQuenchPacket newPacket(byte[] rawData) {
     return new IcmpV4SourceQuenchPacket(rawData);

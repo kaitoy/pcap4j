@@ -27,7 +27,7 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV6ExtDestinationOptionsPacket object.
    */
   public static IpV6ExtDestinationOptionsPacket newPacket(byte[] rawData) {
     IpV6ExtDestinationOptionsHeader optHeader

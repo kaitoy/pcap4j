@@ -1,7 +1,6 @@
 package org.pcap4j.core;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -58,7 +57,7 @@ public class PcapNetworkInterfaceTest {
         .openLive(55555, PromiscuousMode.PROMISCUOUS, 100);
 
     assertNotNull(handle);
-    assertTrue(handle.isOpening());
+    assertTrue(handle.isOpen());
 
     logger.info(handle.toString());
   }

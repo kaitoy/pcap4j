@@ -23,7 +23,7 @@ public final class IcmpV4InformationRequestPacket extends IcmpIdentifiablePacket
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IcmpV4InformationRequestPacket object.
    */
   public static IcmpV4InformationRequestPacket newPacket(byte[] rawData) {
     return new IcmpV4InformationRequestPacket(rawData);

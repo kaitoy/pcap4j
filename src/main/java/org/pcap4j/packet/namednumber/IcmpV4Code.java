@@ -307,7 +307,7 @@ public final class IcmpV4Code extends NamedNumber<Byte> {
    *
    * @param type
    * @param value
-   * @return
+   * @return a IcmpV4Code object.
    */
   public static IcmpV4Code getInstance(Byte type, Byte value) {
     if (registry.containsKey(type) && registry.get(type).containsKey(value)) {
@@ -322,7 +322,7 @@ public final class IcmpV4Code extends NamedNumber<Byte> {
    *
    * @param type
    * @param code
-   * @return
+   * @return a IcmpV4Code object.
    */
   public static IcmpV4Code register(IcmpV4Type type, IcmpV4Code code) {
     if (registry.containsKey(type.value())) {

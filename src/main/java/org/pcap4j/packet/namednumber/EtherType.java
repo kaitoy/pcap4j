@@ -117,7 +117,7 @@ public final class EtherType extends NamedNumber<Short> {
   /**
    *
    * @param value
-   * @return
+   * @return a EtherType object.
    */
   public static EtherType getInstance(Short value) {
     if (registry.containsKey(value)) {
@@ -131,7 +131,7 @@ public final class EtherType extends NamedNumber<Short> {
   /**
    *
    * @param type
-   * @return
+   * @return a EtherType object.
    */
   public static EtherType register(EtherType type) {
     return registry.put(type.value(), type);

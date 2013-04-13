@@ -26,7 +26,8 @@ public class NifSelector {
 
   /**
    *
-   * @return
+   * @return a PcapNetworkInterface object which represents
+   *         a selected network interface.
    * @throws IOException
    */
   public
@@ -59,7 +60,7 @@ public class NifSelector {
 
   /**
    *
-   * @return
+   * @return string
    * @throws IOException
    */
   protected String read() throws IOException {
@@ -98,7 +99,8 @@ public class NifSelector {
   /**
    *
    * @param nifs
-   * @return
+   * @return a PcapNetworkInterface object which represents
+   *         a selected network interface.
    * @throws IOException
    */
   protected

@@ -7,13 +7,12 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
-import org.pcap4j.packet.namednumber.IcmpV4Type;
 import org.pcap4j.packet.namednumber.IcmpV4Code;
+import org.pcap4j.packet.namednumber.IcmpV4Type;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -33,7 +32,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IcmpV4CommonPacket object.
    */
   public static IcmpV4CommonPacket newPacket(byte[] rawData) {
     return new IcmpV4CommonPacket(rawData);
@@ -94,7 +93,8 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
   /**
    *
    * @param acceptZero
-   * @return
+   * @return true if the packet represented by this object has a valid checksum;
+   *         false otherwise.
    */
   public boolean hasValidChecksum(boolean acceptZero) {
     if (header.checksum == 0) {
@@ -133,7 +133,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     /**
      *
      * @param type
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder type(IcmpV4Type type) {
       this.type = type;
@@ -143,7 +143,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     /**
      *
      * @param code
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder code(IcmpV4Code code) {
       this.code = code;
@@ -153,7 +153,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     /**
      *
      * @param checksum
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder checksum(short checksum) {
       this.checksum = checksum;
@@ -288,7 +288,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return type
      */
     public IcmpV4Type getType() {
       return type;
@@ -296,7 +296,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return code
      */
     public IcmpV4Code getCode() {
       return code;
@@ -304,7 +304,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return checksum
      */
     public short getChecksum() {
       return checksum;

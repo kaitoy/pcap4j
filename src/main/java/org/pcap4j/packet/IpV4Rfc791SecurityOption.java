@@ -50,7 +50,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV4Rfc791SecurityOption object.
    */
   public static IpV4Rfc791SecurityOption newInstance(byte[] rawData) {
     return new IpV4Rfc791SecurityOption(rawData);
@@ -117,25 +117,25 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return length
    */
   public byte getLength() { return length; }
 
   /**
    *
-   * @return
+   * @return length
    */
   public int getLengthAsInt() { return 0xFF & length; }
 
   /**
    *
-   * @return
+   * @return security
    */
   public IpV4SecurityOptionSecurity getSecurity() { return security; }
 
   /**
    *
-   * @return
+   * @return compartments
    */
   public IpV4SecurityOptionCompartments getCompartments() {
     return compartments;
@@ -143,7 +143,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return handlingRestrictions
    */
   public IpV4SecurityOptionHandlingRestrictions getHandlingRestrictions() {
     return handlingRestrictions;
@@ -151,7 +151,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return tcc
    */
   public IpV4SecurityOptionTransmissionControlCode getTcc() { return tcc; }
 
@@ -175,7 +175,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public Builder getBuilder() { return new Builder(this); }
 
@@ -240,7 +240,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
     /**
      *
      * @param length
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
       this.length = length;
@@ -250,7 +250,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
     /**
      *
      * @param security
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder security(IpV4SecurityOptionSecurity security) {
       this.security = security;
@@ -260,7 +260,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
     /**
      *
      * @param compartments
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder compartments(IpV4SecurityOptionCompartments compartments) {
       this.compartments = compartments;
@@ -270,7 +270,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
     /**
      *
      * @param handlingRestrictions
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder handlingRestrictions(
       IpV4SecurityOptionHandlingRestrictions handlingRestrictions
@@ -282,7 +282,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
     /**
      *
      * @param tcc
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder tcc(IpV4SecurityOptionTransmissionControlCode tcc) {
       this.tcc = tcc;
@@ -294,6 +294,9 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
       return this;
     }
 
+    /**
+     * @return a new IpV4Rfc791SecurityOption object.
+     */
     public IpV4Rfc791SecurityOption build() {
       return new IpV4Rfc791SecurityOption(this);
     }

@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import org.pcap4j.packet.IpV4Packet;
 import org.pcap4j.packet.IpV4Packet.IpV4Header;
+import org.pcap4j.packet.SimpleBuilder;
+import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
-import org.pcap4j.packet.UnknownPacket;
-import org.pcap4j.packet.IpV4Packet;
-import org.pcap4j.packet.SimpleBuilder;
 
 /**
  * @author Kaito
@@ -32,7 +32,7 @@ public final class IpV4Helper {
    *
    * @param packet
    * @param mtu
-   * @return
+   * @return a list containing fragmented packets.
    */
   public static List<IpV4Packet> fragment(IpV4Packet packet, int mtu) {
     List<IpV4Packet> list = new ArrayList<IpV4Packet>();
@@ -96,7 +96,7 @@ public final class IpV4Helper {
   /**
    *
    * @param list
-   * @return
+   * @return a defragmented packet.
    */
   public static IpV4Packet defragment(List<IpV4Packet> list) {
     Collections.sort(list, comparator);

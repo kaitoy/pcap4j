@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.*;
 import java.util.List;
 import org.pcap4j.util.ByteArrays;
 
@@ -27,7 +27,7 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IcmpV4TimestampReplyPacket object.
    */
   public static IcmpV4TimestampReplyPacket newPacket(byte[] rawData) {
     return new IcmpV4TimestampReplyPacket(rawData);
@@ -90,7 +90,7 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
     /**
      *
      * @param originateTimestamp
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder originateTimestamp(int originateTimestamp) {
       this.originateTimestamp = originateTimestamp;
@@ -100,7 +100,7 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
     /**
      *
      * @param receiveTimestamp
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder receiveTimestamp(int receiveTimestamp) {
       this.receiveTimestamp = receiveTimestamp;
@@ -110,7 +110,7 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
     /**
      *
      * @param transmitTimestamp
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder transmitTimestamp(int transmitTimestamp) {
       this.transmitTimestamp = transmitTimestamp;
@@ -198,7 +198,7 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
 
     /**
      *
-     * @return
+     * @return originateTimestamp
      */
     public int getOriginateTimestamp() {
       return originateTimestamp;
@@ -206,7 +206,7 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
 
     /**
      *
-     * @return
+     * @return receiveTimestamp
      */
     public int getReceiveTimestamp() {
       return receiveTimestamp;
@@ -214,7 +214,7 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
 
     /**
      *
-     * @return
+     * @return transmitTimestamp
      */
     public int getTransmitTimestamp() {
       return transmitTimestamp;

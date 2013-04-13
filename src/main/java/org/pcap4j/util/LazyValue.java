@@ -34,7 +34,7 @@ public final class LazyValue<T1> implements Serializable {
 
   /**
    *
-   * @return
+   * @return value
    */
   public T1 getValue() {
     T1 result = value;
@@ -57,8 +57,18 @@ public final class LazyValue<T1> implements Serializable {
     out.defaultWriteObject();
   }
 
+  /**
+   *
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.6
+   * @param <T2>
+   */
   public interface BuildValueCommand<T2> {
 
+    /**
+     *
+     * @return value
+     */
     public T2 buildValue();
 
   }

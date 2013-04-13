@@ -75,7 +75,7 @@ public final class IpV6RoutingHeaderType extends NamedNumber<Byte> {
   /**
    *
    * @param value
-   * @return
+   * @return a IpV6RoutingHeaderType object.
    */
   public static IpV6RoutingHeaderType getInstance(Byte value) {
     if (registry.containsKey(value)) {
@@ -89,7 +89,7 @@ public final class IpV6RoutingHeaderType extends NamedNumber<Byte> {
   /**
    *
    * @param number
-   * @return
+   * @return a IpV6RoutingHeaderType object.
    */
   public static IpV6RoutingHeaderType register(IpV6RoutingHeaderType number) {
     return registry.put(number.value(), number);

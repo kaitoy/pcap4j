@@ -38,7 +38,7 @@ public final class IpV6PadNOption implements IpV6Option {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV6PadNOption object.
    */
   public static IpV6PadNOption newInstance(byte[] rawData) {
     return new IpV6PadNOption(rawData);
@@ -95,19 +95,19 @@ public final class IpV6PadNOption implements IpV6Option {
 
   /**
    *
-   * @return
+   * @return dataLen
    */
   public byte getDataLen() { return dataLen; }
 
   /**
    *
-   * @return
+   * @return dataLen
    */
   public int getDataLenAsInt() { return 0xFF & dataLen; }
 
   /**
    *
-   * @return
+   * @return data
    */
   public byte[] getData() {
     byte[] copy = new byte[data.length];
@@ -125,6 +125,10 @@ public final class IpV6PadNOption implements IpV6Option {
     return rawData;
   }
 
+  /**
+   *
+   * @return a new Builder object populated with this object's fields.
+   */
   public Builder getBuilder() { return new Builder(this); }
 
   @Override
@@ -172,7 +176,7 @@ public final class IpV6PadNOption implements IpV6Option {
     /**
      *
      * @param dataLen
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder dataLen(byte dataLen) {
       this.dataLen = dataLen;
@@ -182,7 +186,7 @@ public final class IpV6PadNOption implements IpV6Option {
     /**
      *
      * @param data
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder data(byte[] data) {
       this.data = data;

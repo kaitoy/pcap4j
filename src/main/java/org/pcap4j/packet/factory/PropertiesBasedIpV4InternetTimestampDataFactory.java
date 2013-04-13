@@ -30,7 +30,7 @@ implements ClassifiedDataFactory<IpV4InternetTimestampOptionData, IpV4InternetTi
 
   /**
    *
-   * @return
+   * @return the singleton instance of PropertiesBasedIpV4InternetTimestampDataFactory.
    */
   public static PropertiesBasedIpV4InternetTimestampDataFactory getInstance() {
     return INSTANCE;
@@ -58,7 +58,7 @@ implements ClassifiedDataFactory<IpV4InternetTimestampOptionData, IpV4InternetTi
    *
    * @param rawData
    * @param dataClass
-   * @return
+   * @return a new IpV4InternetTimestampOptionData object.
    */
   public IpV4InternetTimestampOptionData newData(
     byte[] rawData, Class<? extends IpV4InternetTimestampOptionData> dataClass

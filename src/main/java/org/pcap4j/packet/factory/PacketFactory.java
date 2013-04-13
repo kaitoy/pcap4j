@@ -23,7 +23,7 @@ public interface PacketFactory<T extends NamedNumber<?>> {
    *
    * @param rawData
    * @param number
-   * @return
+   * @return a new Packet object.
    */
   public Packet newPacket(byte[] rawData, T number);
 

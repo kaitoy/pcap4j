@@ -21,7 +21,7 @@ public interface IpV6TrafficClassFactory {
   /**
    *
    * @param value
-   * @return
+   * @return a new IpV6TrafficClass object.
    */
   public IpV6TrafficClass newTrafficClass(byte value);
 

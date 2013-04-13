@@ -32,7 +32,6 @@ public final class PacketIterator implements Iterator<Packet> {
   }
 
   /**
-   * @return
    * @throws NoSuchElementException
    */
   public Packet next() {

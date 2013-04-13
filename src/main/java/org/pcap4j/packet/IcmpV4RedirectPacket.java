@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.*;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public final class IcmpV4RedirectPacket extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IcmpV4RedirectPacket object.
    */
   public static IcmpV4RedirectPacket newPacket(byte[] rawData) {
     return new IcmpV4RedirectPacket(rawData);
@@ -89,7 +89,7 @@ public final class IcmpV4RedirectPacket extends AbstractPacket {
     /**
      *
      * @param gatewayInternetAddress
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder gatewayInternetAddress(Inet4Address gatewayInternetAddress) {
       this.gatewayInternetAddress = gatewayInternetAddress;
@@ -99,7 +99,7 @@ public final class IcmpV4RedirectPacket extends AbstractPacket {
     /**
      *
      * @param invokingPacket
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder invokingPacket(Packet invokingPacket) {
       this.invokingPacket = invokingPacket;
@@ -199,7 +199,7 @@ public final class IcmpV4RedirectPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return gatewayInternetAddress
      */
     public Inet4Address getGatewayInternetAddress() {
       return gatewayInternetAddress;
@@ -207,7 +207,7 @@ public final class IcmpV4RedirectPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return invokingPacket
      */
     public Packet getInvokingPacket() { return invokingPacket; }
 

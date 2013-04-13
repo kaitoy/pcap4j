@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,6 @@ import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
 import org.pcap4j.util.ByteArrays;
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -34,7 +34,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IpV6ExtRoutingPacket object.
    */
   public static IpV6ExtRoutingPacket newPacket(byte[] rawData) {
     return new IpV6ExtRoutingPacket(rawData);
@@ -126,7 +126,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
     /**
      *
      * @param nextHeader
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder nextHeader(IpNumber nextHeader) {
       this.nextHeader = nextHeader;
@@ -136,7 +136,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
     /**
      *
      * @param hdrExtLen
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder hdrExtLen(byte hdrExtLen) {
       this.hdrExtLen = hdrExtLen;
@@ -146,7 +146,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
     /**
      *
      * @param routingType
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder routingType(IpV6RoutingHeaderType routingType) {
       this.routingType = routingType;
@@ -156,7 +156,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
     /**
      *
      * @param segmentsLeft
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder segmentsLeft(byte segmentsLeft) {
       this.segmentsLeft = segmentsLeft;
@@ -166,7 +166,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
     /**
      *
      * @param data
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder data(IpV6RoutingData data) {
       this.data = data;
@@ -318,43 +318,43 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return nextHeader
      */
     public IpNumber getNextHeader() { return nextHeader; }
 
     /**
      *
-     * @return
+     * @return hdrExtLen
      */
     public byte getHdrExtLen() { return hdrExtLen; }
 
     /**
      *
-     * @return
+     * @return hdrExtLen
      */
     public int getHdrExtLenAsInt() { return (int)(0xFF & hdrExtLen); }
 
     /**
      *
-     * @return
+     * @return routingType
      */
     public IpV6RoutingHeaderType getRoutingType() { return routingType; }
 
     /**
      *
-     * @return
+     * @return segmentsLeft
      */
     public byte getSegmentsLeft() { return segmentsLeft; }
 
     /**
      *
-     * @return
+     * @return segmentsLeft
      */
     public int getSegmentsLeftAsInt() { return segmentsLeft & 0xFF; }
 
     /**
      *
-     * @return
+     * @return data
      */
     public IpV6RoutingData getData() { return data; }
 
@@ -416,13 +416,13 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return length
      */
     public int length();
 
     /**
      *
-     * @return
+     * @return raw data
      */
     public byte[] getRawData();
 

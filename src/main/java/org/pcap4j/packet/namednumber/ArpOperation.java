@@ -68,7 +68,7 @@ public final class ArpOperation extends NamedNumber<Short> {
   /**
    *
    * @param value
-   * @return
+   * @return a ArpOperation object.
    */
   public static ArpOperation getInstance(Short value) {
     if (registry.containsKey(value)) {
@@ -82,7 +82,7 @@ public final class ArpOperation extends NamedNumber<Short> {
   /**
    *
    * @param operation
-   * @return
+   * @return a ArpOperation object.
    */
   public static ArpOperation register(ArpOperation operation) {
     return registry.put(operation.value(), operation);

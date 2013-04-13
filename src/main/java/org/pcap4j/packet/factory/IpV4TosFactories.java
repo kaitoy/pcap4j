@@ -24,7 +24,7 @@ public final class IpV4TosFactories {
   /**
    *
    * @param numberClass
-   * @return
+   * @return IpV4TosFactory
    */
   public static IpV4TosFactory getFactory() {
     IpV4TosFactory cachedFactory = cache;

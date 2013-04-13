@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
@@ -31,7 +31,7 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
   /**
    *
    * @param rawData
-   * @return
+   * @return a new IcmpV4ParameterProblemPacket object
    */
   public static IcmpV4ParameterProblemPacket newPacket(byte[] rawData) {
     return new IcmpV4ParameterProblemPacket(rawData);
@@ -85,7 +85,7 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
     /**
      *
      * @param pointer
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder pointer(byte pointer) {
       this.pointer = pointer;
@@ -95,7 +95,7 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
     /**
      *
      * @param unused
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder unused(int unused) {
       this.unused = unused;
@@ -105,7 +105,7 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
     /**
      *
      * @param invokingPacket
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder invokingPacket(Packet invokingPacket) {
       this.invokingPacket = invokingPacket;
@@ -216,25 +216,25 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
 
     /**
      *
-     * @return
+     * @return pointer
      */
     public byte getPointer() { return pointer; }
 
     /**
      *
-     * @return
+     * @return pointer
      */
     public int getPointerAsInt() { return pointer & 0xFF; }
 
     /**
      *
-     * @return
+     * @return unused
      */
     public int getUnused() { return unused; }
 
     /**
      *
-     * @return
+     * @return invokingPacket
      */
     public Packet getInvokingPacket() { return invokingPacket; }
 

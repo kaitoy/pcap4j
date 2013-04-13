@@ -63,7 +63,7 @@ public final class IpV4SecurityOptionCompartments extends NamedNumber<Short> {
   /**
    *
    * @param value
-   * @return
+   * @return a IpV4SecurityOptionCompartments object.
    */
   public static IpV4SecurityOptionCompartments getInstance(Short value) {
     if (registry.containsKey(value)) {
@@ -77,7 +77,7 @@ public final class IpV4SecurityOptionCompartments extends NamedNumber<Short> {
   /**
    *
    * @param number
-   * @return
+   * @return a IpV4SecurityOptionCompartments object.
    */
   public static IpV4SecurityOptionCompartments register(
     IpV4SecurityOptionCompartments number

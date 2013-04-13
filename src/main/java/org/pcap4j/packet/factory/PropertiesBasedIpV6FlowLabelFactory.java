@@ -25,7 +25,7 @@ public final class PropertiesBasedIpV6FlowLabelFactory implements IpV6FlowLabelF
 
   /**
    *
-   * @return
+   * @return the singleton instance of PropertiesBasedIpV6FlowLabelFactory.
    */
   public static PropertiesBasedIpV6FlowLabelFactory getInstance() { return INSTANCE; }
 
@@ -39,7 +39,7 @@ public final class PropertiesBasedIpV6FlowLabelFactory implements IpV6FlowLabelF
    *
    * @param value
    * @param clazz
-   * @return
+   * @return a new IpV6FlowLabel object.
    */
   public IpV6FlowLabel newFlowLabel(
     int value, Class<? extends IpV6FlowLabel> clazz

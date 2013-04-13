@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.*;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,6 @@ import java.util.List;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.util.ByteArrays;
-import static org.pcap4j.util.ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -100,31 +100,31 @@ abstract class IpV4RouteOption implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return length
    */
   public byte getLength() { return length; }
 
   /**
    *
-   * @return
+   * @return length
    */
   public int getLengthAsInt() { return 0xFF & length; }
 
   /**
    *
-   * @return
+   * @return pointer
    */
   public byte getPointer() { return pointer; }
 
   /**
    *
-   * @return
+   * @return pointer
    */
   public int getPointerAsInt() { return 0xFF & pointer; }
 
   /**
    *
-   * @return
+   * @return routeData
    */
   public List<Inet4Address> getRouteData() {
     return new ArrayList<Inet4Address>(routeData);
@@ -152,7 +152,7 @@ abstract class IpV4RouteOption implements IpV4Option {
 
   /**
    *
-   * @return
+   * @return a new Builder object populated with this object's fields.
    */
   public abstract Builder<? extends IpV4RouteOption> getBuilder();
 
@@ -212,7 +212,7 @@ abstract class IpV4RouteOption implements IpV4Option {
     /**
      *
      * @param length
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder<T> length(byte length) {
       this.length = length;
@@ -222,7 +222,7 @@ abstract class IpV4RouteOption implements IpV4Option {
     /**
      *
      * @param pointer
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder<T> pointer(byte pointer) {
       this.pointer = pointer;
@@ -232,7 +232,7 @@ abstract class IpV4RouteOption implements IpV4Option {
     /**
      *
      * @param routeData
-     * @return
+     * @return this Builder object for method chaining.
      */
     public Builder<T> routeData(List<Inet4Address> routeData) {
       this.routeData = routeData;
@@ -244,10 +244,6 @@ abstract class IpV4RouteOption implements IpV4Option {
       return this;
     }
 
-    /**
-     *
-     * @return
-     */
     public abstract T build();
 
   }
