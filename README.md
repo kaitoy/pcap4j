@@ -11,13 +11,19 @@ and provides you Java-Oriented APIs.
 Download
 --------
 
-Pcap4J 0.9.13
+Pcap4J is now available on the Maven Central Repository.
+
+Pcap4J 0.9.13 (last version distributed from this page)
 
 * [pcap4j.jar](/downloads/kaitoy/pcap4j/pcap4j.jar)
 
+Pcap4J 0.9.14 (latest version on Maven Central Repository)
+
+* [pcap4j.jar](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/0.9.14/pcap4j-0.9.14.jar)
+
 Why Pcap4J was born
 --------
-I have been developing an SNMP network simulator(SNeO, downloadable below) by Java.
+I have been developing an SNMP network simulator(SNeO, available at the link below) by Java.
 During the development, I got need to capture packets, and I found that the pcap API is useful for it.
 Although there are some implementations of pcap API; libpcap for UNIX and WinPcap for Windows,
 because they are both native libraries, a Java wrapper library is necessary in order to use them for SNeO.
@@ -60,9 +66,9 @@ I hope Pcap4j can run on the other OSes supported by both JNA and libpcap.
 How to use
 ----------
 
-The JavaDoc is [here](http://kaitoy.github.com/pcap4j/0.9.13/javadoc/).
-
-
+The latest JavaDoc is [here](http://kaitoy.github.com/pcap4j/javadoc/latest/en).
+Each version's JavaDoc is on the [Maven Central Repository](http://search.maven.org/#search|ga|1|a%3A%22pcap4j%22).
+The version 0.9.13's JavaDoc is [here](http://kaitoy.github.com/pcap4j/javadoc/0.9.13/en).
 
 And the following resources will help you to learn how to use Pcap4j.
 
@@ -80,7 +86,7 @@ I'm using the following libraries for the test.
 
 * libpcap 1.1.1
 * WinPcap 4.1.2
-* jna 3.3.0
+* jna 3.5.2
 * slf4j-api 1.6.4
 * logback-core 1.0.1
 * logback-classic 1.0.1
@@ -206,6 +212,26 @@ You can use the following Java System Properties to change the default behavior.
     <td>private mapping only</td>
   </tr>
 </table>
+
+
+#### How to use in a Maven project ####
+Add a dependency to the pom.xml as like below:
+
+      <project xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                            http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        ...
+        <dependencies>
+          <dependency>
+            <groupId>org.pcap4j</groupId>
+            <artifactId>pcap4j</artifactId>
+            <version>0.9.14</version>
+          </dependency>
+             ...
+        </dependencies>
+        ...
+      </project>
 
 Samples
 --------
@@ -371,8 +397,9 @@ I'm developing Pcap4j in the following environment.
 
 * [Eclipse](http://www.eclipse.org/) Java EE IDE for Web Developers Indigo Service Release 1([Pleiades](http://mergedoc.sourceforge.jp/) All in One 3.7.1.v20110924)
 * [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
+* [Apache Maven](http://maven.apache.org/) 3.0.5
 
-The build procedure is the following.
+The build procedure using Eclipse is the following.
 
 0. Install WinPcap/libpcap<br>
    The pcap library is needed for the unit tests ran in the Build step.
@@ -391,7 +418,7 @@ The build procedure is the following.
    This step is optional, you can skip this step.
 4. Clone the Pcap4J repository<br>
    Execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
-   If you skipped the step 3, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master)
+   If you skipped the step 3, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
 5. Import the Eclipse project<br>
    In the Eclipse, select [File] > [Import]  to open the "Import" wizard.
    Select [General] > [Existing Projects into Workspace] and
@@ -401,6 +428,24 @@ The build procedure is the following.
 
 For your information, M2E was formerly called [m2eclipse](http://m2eclipse.sonatype.org/).
 If you want to build Pcap4j with m2eclipse, skip the step 2 and import the maven project instead of the eclipse project in the step 4.
+
+The build procedure using Maven command line is the following.
+
+0. Install WinPcap/libpcap<br>
+   The pcap library is needed for the unit tests ran in the Build step.
+1. Install JDK1.5+<br>
+   Set the environment variable JAVA_HOME properly.
+2. Install Maven<br>
+   The newer the better. Add the path of the Maven bin directory to the environment variable PATH.
+3. Install Git<br>
+   Download [Git](http://git-scm.com/downloads) and install it.
+   This step is optional, you can skip this step.
+4. Clone the Pcap4J repository<br>
+   Execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
+   If you skipped the step 3, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
+5. Build<br>
+   Open a command prompt, `cd` to the project root directory(i.e. the same directory as the pom.xml in the directory created in the step 4),
+   and execute `mvn install`.
 
 License
 -------
@@ -426,9 +471,9 @@ Pcap4J is distributed under the MIT license.
 Extra
 -----
 
-SNeO: an SNMP Network Simulator using Pcap4J 0.9.13 is available below. The documents will come someday.
-You can use this version of SNeO in both personal and commercial for free. You can also copy and distribute it.
+SNeO: An SNMP Network Simulator using Pcap4J 0.9.14 is available at the link below. The documents will come someday.
+You can use SNeO in both personal and commercial for free. You can also copy and redistribute it with no restriction.
 
-SNeO 1.0.11
+SNeO 1.0.12
 
-* [sneo.jar](/downloads/Kaitoy/pcap4j/sneo.jar)
+* [sneo.jar](http://www.pcap4j.org/artifacts/sneo.jar)

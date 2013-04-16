@@ -11,9 +11,15 @@ Pcap4J
 ダウンロード
 ------------
 
-Pcap4J 0.9.13
+Maven Central Repositoryからダウンロードできるようになりました。
+
+Pcap4J 0.9.13 (このページから配布する最後のバージョン)
 
 * [pcap4j.jar](/downloads/kaitoy/pcap4j/pcap4j.jar)
+
+Pcap4J 0.9.14 (Maven Central Repositoryにある最新バージョン)
+
+* [pcap4j.jar](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/0.9.14/pcap4j-0.9.14.jar)
 
 開発経緯
 --------
@@ -60,7 +66,9 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 使い方
 ------
 
-JavaDocは[こちら](http://kaitoy.github.com/pcap4j/0.9.13/javadoc/)。
+最新のJavaDocは[こちら](http://kaitoy.github.com/pcap4j/javadoc/latest/en)。
+各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|a%3A%22pcap4j%22)からダウンロードできる。
+0.9.13のJavaDocは[こちら](http://kaitoy.github.com/pcap4j/javadoc/0.9.13/en)。
 
 他にも、以下のリンクから情報を得られる。
 
@@ -71,7 +79,6 @@ JavaDocは[こちら](http://kaitoy.github.com/pcap4j/0.9.13/javadoc/)。
 * [テストクラス](/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)
 * [サンプルクラス](/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)
 
-まだAPIは固まってなく、こっそりと変更する可能性がある。
 J2SE 5.0以降で動く。
 UNIX系ならlibpcap (多分)0.9.3以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。
 jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。
@@ -80,7 +87,7 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 
 * libpcap 1.1.1
 * WinPcap 4.1.2
-* jna 3.3.0
+* jna 3.5.2
 * slf4j-api 1.6.4
 * logback-core 1.0.1
 * logback-classic 1.0.1
@@ -205,6 +212,26 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
     <td>内部的mappingのみ</td>
   </tr>
 </table>
+
+
+#### Mavenプロジェクトでの使用方法 ####
+pom.xmlに以下のような記述を追加する。
+
+      <project xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                            http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        ...
+        <dependencies>
+          <dependency>
+            <groupId>org.pcap4j</groupId>
+            <artifactId>pcap4j</artifactId>
+            <version>0.9.14</version>
+          </dependency>
+             ...
+        </dependencies>
+        ...
+      </project>
 
 サンプル
 --------
@@ -368,8 +395,9 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 
 * [Eclipse](http://www.eclipse.org/) Java EE IDE for Web Developers Indigo Service Release 1([Pleiades](http://mergedoc.sourceforge.jp/) All in One 3.7.1.v20110924)
 * [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
+* [Apache Maven](http://maven.apache.org/) 3.0.5
 
-ビルド手順は以下。
+Eclipseからのビルド手順は以下。
 
 0. WinPcap/libpcapインストール<br>
   ビルド時に実行されるunit testで必要なので。
@@ -386,7 +414,7 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
    Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
 4. Pcap4Jのレポジトリのダウンロード<br>
    `git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-   ステップ3をスキップした場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードする。
+   ステップ3をスキップした場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
 5. プロジェクトのインポート<br>
   EclipseのGUIで、[ファイル]＞[インポート] を開き、
   「一般」の「既存プロジェクトをワークスペースへ」で 3. でダウンロードしたレポジトリ内のプロジェクトをインポートする。
@@ -396,6 +424,23 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 
 因みに、M2Eは旧[m2eclipse](http://m2eclipse.sonatype.org/)。
 m2eclipseでビルドしたい場合は、ステップ2をスキップして、ステップ4でMavenプロジェクトの方をインポートすればよい。
+
+Mavenコマンドを直接実行するビルド手順は以下。
+
+0. WinPcap/libpcapインストール<br>
+  ビルド時に実行されるunit testで必要なので。
+1. JDK1.5+インストール<br>
+  JAVA_HOMEを設定する。
+2. Mavenインストール<br>
+  新しめのがいいかも。PATHを設定する。
+3. Gitをインストール<br>
+   [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
+   Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
+4. Pcap4Jのレポジトリのダウンロード<br>
+   `git clone git@github.com:kaitoy/pcap4j.git` を実行する。
+   ステップ3をスキップした場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
+5. ビルド<br>
+  プロジェクトのルートディレクトリ(ステップ4でできたディレクトリ内のpom.xmlのあるところ)に`cd`して、`mvn install` を実行する。
 
 ライセンス
 ----------
@@ -432,10 +477,10 @@ Pcap4J is distributed under the MIT license.
 おまけ
 ------
 
-Pcap4J 0.9.13 を使ったSNMPネットワークシミュレータ、SNeO。
+Pcap4J 0.9.14 を使ったSNMPネットワークシミュレータ、SNeO。
 とりあえず置いておくだけ。
-今のところ商用でもなんでも無料で使用可。コピーも再配布も可。
+商用でもなんでも無料で使用可。コピーも再配布も可。
 
-SNeO 1.0.11
+SNeO 1.0.12
 
-* [sneo.jar](/downloads/Kaitoy/pcap4j/sneo.jar)
+* [sneo.jar](http://www.pcap4j.org/artifacts/sneo.jar)
