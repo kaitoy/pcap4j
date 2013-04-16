@@ -1,4 +1,4 @@
-[Japanese](/kaitoy/pcap4j/blob/master/README_ja.md)
+[Japanese](/README_ja.md)
 
 Pcap4J
 ======
@@ -15,11 +15,11 @@ Pcap4J is now available on the Maven Central Repository.
 
 Pcap4J 0.9.13 (last version distributed from this page)
 
-* [pcap4j.jar](/downloads/kaitoy/pcap4j/pcap4j.jar)
+* [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
 
 Pcap4J 0.9.14 (latest version on Maven Central Repository)
 
-* [pcap4j.jar](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/0.9.14/pcap4j-0.9.14.jar)
+* [pcap4j-0.9.14.jar](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/0.9.14/pcap4j-0.9.14.jar)
 
 Why Pcap4J was born
 --------
@@ -74,10 +74,10 @@ And the following resources will help you to learn how to use Pcap4j.
 
 * [Documents of libpcap](http://www.tcpdump.org/pcap.html)
 * [Documents of WinPcap](http://www.winpcap.org/docs/default.htm)
-* [Learn About Packet](/kaitoy/pcap4j/blob/master/www/Packet.md)
-* [Learn About Packet Factory](/kaitoy/pcap4j/blob/master/www/PacketFactory.md)
-* [Test Classes](/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)
-* [Sample Classes](/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)
+* [Learn About Packet](/www/Packet.md)
+* [Learn About Packet Factory](/www/PacketFactory.md)
+* [Test Classes](https://github.com/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)
+* [Sample Classes](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)
 
 Pcap4j's APIs are not yet stable and may change without announcement.
 This library needs J2SE 5.0+, libpcap 0.9.3+ or WinPcap 3.0+, jna, slf4j-api,
@@ -236,7 +236,7 @@ Add a dependency to the pom.xml as like below:
 Samples
 --------
 
-* [org.pcap4j.sample.Loop](/kaitoy/pcap4j/blob/master/src/main/java/org/pcap4j/sample/Loop.java)<br>
+* [org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample/Loop.java)<br>
   A sample which captures packets and dumps them.
   In the following box, you can see an example of running this sample to capture two ICMP packets via eth2 on Linux.
 
@@ -323,7 +323,7 @@ Samples
         [data (32 bytes)]
           Hex stream: 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 61 62 63 64 65 66 67 68 69
 
-* [org.pcap4j.sample.SendArpRequest](/kaitoy/pcap4j/blob/master/src/main/java/org/pcap4j/sample/SendArpRequest.java)<br>
+* [org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample/SendArpRequest.java)<br>
   A sample which sends ARP request and resolves an IP address to a MAC address.
   In the following box, you can see an example of running this sample to resolve 192.168.209.1 on Linux.
 

@@ -15,11 +15,11 @@ Maven Central Repositoryからダウンロードできるようになりまし�
 
 Pcap4J 0.9.13 (このページから配布する最後のバージョン)
 
-* [pcap4j.jar](/downloads/kaitoy/pcap4j/pcap4j.jar)
+* [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
 
 Pcap4J 0.9.14 (Maven Central Repositoryにある最新バージョン)
 
-* [pcap4j.jar](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/0.9.14/pcap4j-0.9.14.jar)
+* [pcap4j-0.9.14.jar](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/0.9.14/pcap4j-0.9.14.jar)
 
 開発経緯
 --------
@@ -74,10 +74,10 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 
 * [libpcapのドキュメント](http://www.tcpdump.org/pcap.html)
 * [WinPcapのドキュメント](http://www.winpcap.org/docs/default.htm)
-* [Learn About Packet](/kaitoy/pcap4j/blob/master/www/Packet.md)
-* [Learn About Packet Factory](/kaitoy/pcap4j/blob/master/www/PacketFactory.md)
-* [テストクラス](/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)
-* [サンプルクラス](/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)
+* [Learn About Packet](/www/Packet.md)
+* [Learn About Packet Factory](/www/PacketFactory.md)
+* [テストクラス](https://github.com/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)
+* [サンプルクラス](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)
 
 J2SE 5.0以降で動く。
 UNIX系ならlibpcap (多分)0.9.3以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。
@@ -236,7 +236,7 @@ pom.xmlに以下のような記述を追加する。
 サンプル
 --------
 
-* [org.pcap4j.sample.Loop](/kaitoy/pcap4j/blob/master/src/main/java/org/pcap4j/sample/Loop.java)<br>
+* [org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample/Loop.java)<br>
   パケットをキャプチャーしてダンプするサンプル。以下はLinuxでeth2からICMPパケットを2つキャプチャーした実行例。
 
 
@@ -323,7 +323,7 @@ pom.xmlに以下のような記述を追加する。
           Hex stream: 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 61 62 63 64 65 66 67 68 69
 
 
-* [org.pcap4j.sample.SendArpRequest](/kaitoy/pcap4j/blob/master/src/main/java/org/pcap4j/sample/SendArpRequest.java)<br>
+* [org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample/SendArpRequest.java)<br>
   ARPリクエストを送信してIPアドレスをMACアドレスに解決するサンプル。以下はLinuxで192.168.209.1を解決した実行例。
 
 
