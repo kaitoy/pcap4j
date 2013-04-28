@@ -1,5 +1,7 @@
 [Japanese](/README_ja.md)
 
+<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/tree/master/www/images/pcap4jlogo.png" style="width: 667px; height: 217px;" />
+
 Pcap4J
 ======
 
