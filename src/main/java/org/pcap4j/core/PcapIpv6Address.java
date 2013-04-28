@@ -14,16 +14,16 @@ import org.pcap4j.core.NativeMappings.sockaddr_in6;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.1
+ * @since pcap4j 0.9.15
  */
-public final class PcapIpv6Address extends AbstractPcapAddress {
+public final class PcapIpV6Address extends AbstractPcapAddress {
 
-  private PcapIpv6Address(pcap_addr pcapAddr) {
+  private PcapIpV6Address(pcap_addr pcapAddr) {
     super(pcapAddr);
   }
 
-  static PcapIpv6Address newInstance(pcap_addr pcapAddr) {
-    return new PcapIpv6Address(pcapAddr);
+  static PcapIpV6Address newInstance(pcap_addr pcapAddr) {
+    return new PcapIpV6Address(pcapAddr);
   }
 
   @Override
