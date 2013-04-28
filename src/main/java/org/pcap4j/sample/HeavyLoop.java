@@ -12,8 +12,18 @@ import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
 
+/**
+ *
+ * @author Kaito
+ *
+ */
 public class HeavyLoop {
 
+  /**
+   *
+   * @param args
+   * @throws PcapNativeException
+   */
   public static void main(String[] args) throws PcapNativeException {
     PcapNetworkInterface nif;
     try {

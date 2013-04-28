@@ -10,6 +10,7 @@ package org.pcap4j.packet;
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
+ * @param <T>
  */
 public interface LengthBuilder<T> {
 

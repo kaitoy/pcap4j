@@ -33,6 +33,11 @@ implements PacketFactory<NamedNumber<?>> {
     return newPacket(rawData);
   }
 
+  /**
+   *
+   * @param rawData
+   * @return a new Packet object.
+   */
   public Packet newPacket(byte[] rawData) {
     return UnknownPacket.newPacket(rawData);
   }

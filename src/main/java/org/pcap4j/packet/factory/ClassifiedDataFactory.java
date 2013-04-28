@@ -12,6 +12,8 @@ import org.pcap4j.packet.namednumber.NamedNumber;
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
+ * @param <T>
+ * @param <N>
  */
 public interface ClassifiedDataFactory <T, N extends NamedNumber<?>>{
 

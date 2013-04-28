@@ -37,6 +37,11 @@ public final class TcpPacket extends AbstractPacket {
   private final TcpHeader header;
   private final Packet payload;
 
+  /**
+   *
+   * @param rawData
+   * @return a new TcpPacket object.
+   */
   public static TcpPacket newPacket(byte[] rawData) {
     return new TcpPacket(rawData);
   }

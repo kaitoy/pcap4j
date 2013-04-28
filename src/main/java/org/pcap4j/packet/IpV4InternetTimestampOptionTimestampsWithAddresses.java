@@ -185,6 +185,11 @@ implements IpV4InternetTimestampOptionData {
     private final Inet4Address address;
     private final Integer timestamp;
 
+    /**
+     *
+     * @param address
+     * @param timestamp
+     */
     public TimestampWithAddress(Inet4Address address, Integer timestamp) {
       if (address == null) {
         throw new NullPointerException("address may not be null");

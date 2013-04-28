@@ -105,7 +105,15 @@ public final class PcapHandle {
    * @version pcap4j 0.9.1
    */
   public static enum BpfCompileMode {
+
+    /**
+     *
+     */
     OPTIMIZE(1),
+
+    /**
+     *
+     */
     NONOPTIMIZE(0);
 
     private final int value;

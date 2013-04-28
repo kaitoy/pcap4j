@@ -28,6 +28,7 @@ public final class ClassifiedDataFactories {
 
   /**
    *
+   * @param targetClass
    * @param numberClass
    * @return a ClassifiedDataFactory object.
    */

@@ -12,6 +12,7 @@ import java.io.Serializable;
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
+ * @param <T>
  */
 public
 abstract class NamedNumber<T extends Number>

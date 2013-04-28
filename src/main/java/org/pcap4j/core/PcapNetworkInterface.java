@@ -124,7 +124,15 @@ public final class PcapNetworkInterface {
    * @version pcap4j 0.9.1
    */
   public enum PromiscuousMode {
+
+    /**
+     *
+     */
     PROMISCUOUS(1),
+
+    /**
+     *
+     */
     NONPROMISCUOUS(0);
 
     private final int value;

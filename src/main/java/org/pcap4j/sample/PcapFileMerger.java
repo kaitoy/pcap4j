@@ -6,8 +6,18 @@ import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.Packet;
 
+/**
+ *
+ * @author Kaito
+ *
+ */
 public class PcapFileMerger {
 
+  /**
+   *
+   * @param args
+   * @throws PcapNativeException
+   */
   public static void main(String[] args) throws PcapNativeException {
     // args: pcap file list
 

@@ -8,6 +8,11 @@ import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.Packet;
 
+/**
+ *
+ * @author Kaito
+ *
+ */
 public class ReadPacketFile {
 
   private static final int COUNT = 5;
@@ -17,6 +22,11 @@ public class ReadPacketFile {
   private static final String PCAP_FILE
     = System.getProperty(PCAP_FILE_KEY, "src/main/resources/echoAndEchoReply.pcap");
 
+  /**
+   *
+   * @param args
+   * @throws PcapNativeException
+   */
   public static void main(String[] args) throws PcapNativeException {
     PcapHandle handle = Pcaps.openOffline(PCAP_FILE);
 

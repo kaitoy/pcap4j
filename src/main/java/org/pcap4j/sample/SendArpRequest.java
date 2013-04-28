@@ -22,6 +22,11 @@ import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
 
+/**
+ *
+ * @author Kaito
+ *
+ */
 public class SendArpRequest {
 
   private static final String COUNT_KEY
@@ -44,6 +49,11 @@ public class SendArpRequest {
 
   private static MacAddress resolvedAddr;
 
+  /**
+   *
+   * @param args
+   * @throws PcapNativeException
+   */
   public static void main(String[] args) throws PcapNativeException {
     String strSrcIpAddress = "192.0.2.100"; // for InetAddress.getByName()
     String strDstIpAddress = args[0]; // for InetAddress.getByName()

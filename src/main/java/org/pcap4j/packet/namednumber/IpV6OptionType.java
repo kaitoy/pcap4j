@@ -118,14 +118,28 @@ public final class IpV6OptionType extends NamedNumber<Byte> {
     return value().compareTo(o);
   }
 
+  /**
+   *
+   * @return identifier
+   */
   public IpV6OptionTypeIdentifier getIdentifier() {
     return identifier;
   }
 
+  /**
+   *
+   * @return true if the option data of the packet represented by this object
+   *         is changable; false otherwise.
+   */
   public boolean optionDataIsChangable() {
     return (value() & 0x20) != 0;
   }
 
+  /**
+   *
+   * @author Kaito
+   * @since pcap4j 0.9.10
+   */
   public static enum IpV6OptionTypeIdentifier {
 
     /*

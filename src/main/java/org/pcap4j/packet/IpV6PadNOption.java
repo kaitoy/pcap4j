@@ -156,6 +156,11 @@ public final class IpV6PadNOption implements IpV6Option {
     return Arrays.hashCode(getRawData());
   }
 
+  /**
+   *
+   * @author Kaito
+   * @since pcap4j 0.9.10
+   */
   public static final class
   Builder implements LengthBuilder<IpV6PadNOption> {
 

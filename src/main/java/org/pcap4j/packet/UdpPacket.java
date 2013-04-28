@@ -32,6 +32,10 @@ public final class UdpPacket extends AbstractPacket {
   private final UdpHeader header;
   private final Packet payload;
 
+  /**
+   * @param rawData
+   * @return a new UdpPacket object.
+   */
   public static UdpPacket newPacket(byte[] rawData) {
     return new UdpPacket(rawData);
   }

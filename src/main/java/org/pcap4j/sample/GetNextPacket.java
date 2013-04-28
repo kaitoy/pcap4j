@@ -10,6 +10,11 @@ import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
 
+/**
+ *
+ * @author Kaito
+ *
+ */
 public class GetNextPacket {
 
   private static final String COUNT_KEY
@@ -27,6 +32,11 @@ public class GetNextPacket {
   private static final int MAX_CAP_LEN
     = Integer.getInteger(MAX_CAP_LEN_KEY, 65536); // [bytes]
 
+  /**
+   *
+   * @param args
+   * @throws PcapNativeException
+   */
   public static void main(String[] args) throws PcapNativeException {
     String filter = args.length != 0 ? args[0] : "";
 

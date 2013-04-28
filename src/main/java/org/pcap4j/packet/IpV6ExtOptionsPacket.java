@@ -365,6 +365,10 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    /**
+     *
+     * @return header name
+     */
     abstract protected String getHeaderName();
 
   }

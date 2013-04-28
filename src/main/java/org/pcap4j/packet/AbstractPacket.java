@@ -31,6 +31,9 @@ public abstract class AbstractPacket implements Packet {
   private final LazyValue<String> stringCache;
   private final LazyValue<Integer> hashCodeCache;
 
+  /**
+   *
+   */
   public AbstractPacket() {
     this.lengthCache
     = new LazyValue<Integer>(
@@ -301,6 +304,9 @@ public abstract class AbstractPacket implements Packet {
     private final LazyValue<String> stringCache;
     private final LazyValue<Integer> hashCodeCache;
 
+    /**
+     *
+     */
     protected AbstractHeader() {
       this.lengthCache
         = new LazyValue<Integer>(
@@ -344,6 +350,10 @@ public abstract class AbstractPacket implements Packet {
           );
     }
 
+    /**
+     *
+     * @return a list containing the raw fields.
+     */
     protected abstract List<byte[]> getRawFields();
 
     /**
@@ -403,6 +413,10 @@ public abstract class AbstractPacket implements Packet {
       return ByteArrays.toHexString(getRawData(), ":");
     }
 
+    /**
+     *
+     * @return a hex string representation of the object.
+     */
     public String toHexString() {
       return hexStringCache.getValue();
     }

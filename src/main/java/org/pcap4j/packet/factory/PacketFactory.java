@@ -13,6 +13,7 @@ import org.pcap4j.packet.namednumber.NamedNumber;
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.6
+ * @param <T>
  */
 public interface PacketFactory<T extends NamedNumber<?>> {
 

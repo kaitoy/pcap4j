@@ -10,6 +10,7 @@ package org.pcap4j.packet;
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
+ * @param <T>
  */
 public interface ChecksumBuilder<T> {
 
@@ -22,6 +23,10 @@ public interface ChecksumBuilder<T> {
     boolean correctChecksumAtBuild
   );
 
+  /**
+   *
+   * @return a new ChecksumBuilder object.
+   */
   public T build();
 
 }

@@ -48,6 +48,11 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
   private final IpV4InternetTimestampOptionFlag flag;
   private final IpV4InternetTimestampOptionData data;
 
+  /**
+   *
+   * @param rawData
+   * @return a new IpV4InternetTimestampOption object.
+   */
   public static IpV4InternetTimestampOption newInstance(byte[] rawData) {
     return new IpV4InternetTimestampOption(rawData);
   }

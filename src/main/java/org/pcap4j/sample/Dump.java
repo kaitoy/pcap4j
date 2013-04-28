@@ -10,6 +10,11 @@ import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
 
+/**
+ *
+ * @author Kaito
+ *
+ */
 public class Dump {
 
   private static final String COUNT_KEY
@@ -32,6 +37,11 @@ public class Dump {
   private static final String PCAP_FILE
     = System.getProperty(PCAP_FILE_KEY, "Dump.pcap");
 
+  /**
+   *
+   * @param args
+   * @throws PcapNativeException
+   */
   public static void main(String[] args) throws PcapNativeException {
     String filter = args.length != 0 ? args[0] : "";
 
