@@ -137,9 +137,9 @@ public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
      */
     private static final long serialVersionUID = -3903426584619413207L;
 
-    protected IpV6ExtHopByHopOptionsHeader(byte[] rawData) { super(rawData); }
+    private IpV6ExtHopByHopOptionsHeader(byte[] rawData) { super(rawData); }
 
-    protected IpV6ExtHopByHopOptionsHeader(Builder builder) { super(builder); }
+    private IpV6ExtHopByHopOptionsHeader(Builder builder) { super(builder); }
 
     @Override
     protected String getHeaderName() {
