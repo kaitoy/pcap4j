@@ -1,6 +1,6 @@
 [English](https://github.com/kaitoy/pcap4j)
 
-<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/pcap4jlogo.png" style="width: 667px; height: 217px;" />
+<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/pcap4jlogo.png" height="217" width="667" />
 
 Pcap4J
 ======
