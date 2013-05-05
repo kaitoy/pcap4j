@@ -27,9 +27,9 @@ Pcap4J 0.9.14 (Maven Central Repositoryにある最新バージョン)
 --------
 
 SNMPネットワークシミュレータをJavaで作っていて、ICMPをいじるためにパケットキャプチャをしたくなったが、
-Raw Socketやデータリンクアクセスを使って自力でやるのは大変そうなので pcap APIを使うことに。
+Raw Socketやデータリンクアクセスを使って自力でやるのは大変そうなので [pcap](http://ja.wikipedia.org/wiki/Pcap)を使うことに。
 
-pcap APIの実装は、UNIX系にはlibpcap、WindowsにはWinPcapがあるが、いずれもネイティブライブラリ。
+pcapの実装は、UNIX系にはlibpcap、WindowsにはWinPcapがあるが、いずれもネイティブライブラリ。
 これらのJavaラッパは[jpcap](http://jpcap.sourceforge.net/)や[jNetPcap](http://jnetpcap.com/)が既にあるが、
 これらはパケットキャプチャに特化していて、パケット作成・送信がしにくいような気がした。
 
@@ -45,9 +45,9 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 * 手動でパケットオブジェクトを組み立てることもできる。
 * パケットオブジェクトを現実のパケットに変換してネットワークに送信できる。
 * Ethernet、IEEE802.1Q、ARP、IPv4(RFC791、RFC1349)、IPv6(RFC2460)、ICMPv4(RFC792)、TCP(RFC793)、UDPに対応。
-* 各パケットクラスはシリアライズに対応。スレッドセーフ(実質的に不変)。
+* 各ビルトインパケットクラスはシリアライズに対応。スレッドセーフ(実質的に不変)。
 * ライブラリをいじらずに、対応プロトコルをユーザが追加できる。
-* pcap APIのダンプファイル(Wiresharkのcapture fileなど)の読み込み、書き込み。
+* pcapのダンプファイル(Wiresharkのcapture fileなど)の読み込み、書き込み。
 
 対応OS
 ------
@@ -76,6 +76,7 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 
 * [libpcapのドキュメント](http://www.tcpdump.org/pcap.html)
 * [WinPcapのドキュメント](http://www.winpcap.org/docs/default.htm)
+* [pcap API と Pcap4j API の対応](/www/api_mappings.md)
 * [Learn About Packet](/www/Packet.md)
 * [Learn About Packet Factory](/www/PacketFactory.md)
 * [テストクラス](https://github.com/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)
@@ -111,111 +112,6 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 * org.pcap4j.core.pcapLibName: ライブラリへのフルパスを指定する。
 
 
-#### pcap API と Pcap4j API の対応 ####
-<table border="1">
-  <tr align=center>
-    <td>pcap API</td>
-    <td>Pcap4j API</td>
-  </tr>
-  <tr>
-    <td>int pcap_findalldevs(pcap_if_t **, char *)</td>
-    <td>static List&lt;PcapNetworkInterface&gt; org.pcap4j.core.Pcaps.findAllDevs()</td>
-  </tr>
-  <tr>
-    <td>void pcap_freealldevs(pcap_if_t *)</td>
-    <td>内部的mappingのみ</td>
-  </tr>
-  <tr>
-    <td>char *pcap_lookupdev(char *)</td>
-    <td>static String org.pcap4j.core.Pcaps.lookupDev()</td>
-  </tr>
-  <tr>
-    <td>pcap_t *pcap_open_live(const char *, int, int, int, char *)</td>
-    <td>PcapHandle org.pcap4j.core.PcapNetworkInterface.openLive(int, PromiscuousMode, int)</td>
-  </tr>
-  <tr>
-    <td>pcap_t *pcap_open_dead(int, int)</td>
-    <td>static PcapHandle org.pcap4j.core.Pcaps.openDead(DataLinkType, int)</td>
-  </tr>
-  <tr>
-    <td>pcap_t *pcap_open_offline(const char *, char *)</td>
-    <td>static PcapHandle org.pcap4j.core.Pcaps.openOffline(String)</td>
-  </tr>
-  <tr>
-    <td>pcap_dumper_t *pcap_dump_open(pcap_t *, const char *)</td>
-    <td>PcapDumper org.pcap4j.core.PcapHandle.dumpOpen(String)</td>
-  </tr>
-  <tr>
-    <td rowspan="2">void pcap_dump(u_char *, const struct pcap_pkthdr *, const u_char *)</td>
-    <td>void org.pcap4j.core.PcapDumper.dump(Packet, long, int)</td>
-  </tr>
-  <tr>
-    <td>void org.pcap4j.core.PcapDumper.dump(Packet)</td>
-  </tr>
-  <tr>
-    <td>void pcap_dump_close(pcap_dumper_t *)</td>
-    <td>void org.pcap4j.core.PcapDumper.close()</td>
-  </tr>
-  <tr>
-    <td>u_char *pcap_next(pcap_t *, struct pcap_pkthdr *)</td>
-    <td>Packet org.pcap4j.core.PcapHandle.getNextPacket()</td>
-  </tr>
-  <tr>
-    <td>int pcap_next_ex(pcap_t *, struct pcap_pkthdr **, const u_char **)</td>
-    <td>Packet org.pcap4j.core.PcapHandle.getNextPacketEx()</td>
-  </tr>
-  <tr>
-    <td rowspan="3">int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</td>
-    <td>void org.pcap4j.core.PcapHandle.loop(int, PacketListener)</td>
-  </tr>
-  <tr>
-    <td>void org.pcap4j.core.PcapHandle.loop(int, PacketListener, Executor)</td>
-  </tr>
-  <tr>
-    <td>void org.pcap4j.core.PcapHandle.loop(int, PcapDumper)</td>
-  </tr>
-  <tr>
-    <td>void pcap_breakloop(pcap_t *)</td>
-    <td>void org.pcap4j.core.PcapHandle.breakLoop()</td>
-  </tr>
-  <tr>
-    <td>int pcap_compile(pcap_t *, struct bpf_program *, char *, int, bpf_u_int32)</td>
-    <td>内部的mappingのみ</td>
-  </tr>
-  <tr>
-    <td rowspan="2">int pcap_setfilter(pcap_t *, struct bpf_program *)</td>
-    <td>void org.pcap4j.core.PcapHandle.setFilter(String, BpfCompileMode, Inet4Address)</td>
-  </tr>
-  <tr>
-    <td>void org.pcap4j.core.PcapHandle.setFilter(String, BpfCompileMode)</td>
-  </tr>
-  <tr>
-    <td>void pcap_freecode(struct bpf_program *)</td>
-    <td>内部的mappingのみ</td>
-  </tr>
-  <tr>
-    <td>int pcap_sendpacket(pcap_t *, const u_char *, int)</td>
-    <td>void org.pcap4j.core.PcapHandle.sendPacket(Packet)</td>
-  </tr>
-  <tr>
-    <td>void pcap_close(pcap_t *)</td>
-    <td>void org.pcap4j.core.PcapHandle.close()</td>
-  </tr>
-  <tr>
-    <td>int pcap_datalink(pcap_t *)</td>
-    <td>内部的mappingのみ</td>
-  </tr>
-  <tr>
-    <td>char *pcap_geterr(pcap_t *)</td>
-    <td>String org.pcap4j.core.PcapHandle.getError()</td>
-  </tr>
-  <tr>
-    <td>char *pcap_strerror(int)</td>
-    <td>内部的mappingのみ</td>
-  </tr>
-</table>
-
-
 #### Mavenプロジェクトでの使用方法 ####
 pom.xmlに以下のような記述を追加する。
 
@@ -235,161 +131,13 @@ pom.xmlに以下のような記述を追加する。
         ...
       </project>
 
-サンプル
---------
 
-* [org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample/Loop.java)<br>
-  パケットをキャプチャーしてダンプするサンプル。以下はLinuxでeth2からICMPパケットを2つキャプチャーした実行例。
+実行例
+------
 
+* [org.pcap4j.sample.Loop](/www/sample_Loop_ja.md)
+* [org.pcap4j.sample.SendArpRequest](/www/sample_SendArpRequest_ja.md)
 
-        [root@localhost Desktop]# java -cp pcap4j.jar:jna-3.3.0.jar:slf4j-api-1.6.4.jar -Dorg.pcap4j.sample.Loop.count=2 org.pcap4j.sample.Loop icmp
-        org.pcap4j.sample.Loop.count: 2
-        org.pcap4j.sample.Loop.readTimeout: 10
-        org.pcap4j.sample.Loop.maxCapLen: 65536
-
-
-        SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
-        SLF4J: Defaulting to no-operation (NOP) logger implementation
-        SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
-        NIF[0]: eth0
-              : description: null
-              : address: /192.168.209.128
-        NIF[1]: eth1
-              : description: null
-              : address: /192.168.76.128
-        NIF[2]: eth2
-              : description: null
-              : address: /192.168.2.109
-        NIF[3]: any
-              : description: Pseudo-device that captures on all interfaces
-        NIF[4]: lo
-              : description: null
-              : address: /127.0.0.1
-
-        Select a device number to capture packets, or enter 'q' to quit > 2
-        eth2(null)
-        2012-10-05 03:48:51.881454
-        [Ethernet Header (14 bytes)]
-          Destination address: 00:0c:29:02:65:62
-          Source address: 04:7d:7b:4c:2f:0a
-          Type: 0x0800(IPv4)
-        [IPv4 Header (20 bytes)]
-          Version: 4(IPv4)
-          IHL: 5 (20 [bytes])
-          TOS: [precedence: 0(Routine)] [tos: 0(Default)] [mbz: 0]
-          Total length: 60 [bytes]
-          Identification: 3340
-          Flags: (Reserved, Don't Fragment, More Fragment) = (false, false, false)
-          Flagment offset: 0 (0 [bytes])
-          TTL: 128
-          Protocol: 1(ICMPv4)
-          Header checksum: 0xa792
-          Source address: /192.168.2.101
-          Destination address: /192.168.2.109
-        [ICMP Common Header (4 bytes)]
-          Type: 8(Echo)
-          Code: 0(No Code)
-          Checksum: 0x4c53
-        [ICMPv4 Echo Header (4 bytes)]
-          Identifier: 256
-          SequenceNumber: 9
-        [data (32 bytes)]
-          Hex stream: 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 61 62 63 64 65 66 67 68 69
-
-        2012-10-05 03:48:51.979233
-        [Ethernet Header (14 bytes)]
-          Destination address: 04:7d:7b:4c:2f:0a
-          Source address: 00:0c:29:02:65:62
-          Type: 0x0800(IPv4)
-        [IPv4 Header (20 bytes)]
-          Version: 4(IPv4)
-          IHL: 5 (20 [bytes])
-          TOS: [precedence: 0(Routine)] [tos: 0(Default)] [mbz: 0]
-          Total length: 60 [bytes]
-          Identification: 19161
-          Flags: (Reserved, Don't Fragment, More Fragment) = (false, false, false)
-          Flagment offset: 0 (0 [bytes])
-          TTL: 64
-          Protocol: 1(ICMPv4)
-          Header checksum: 0xa9c5
-          Source address: /192.168.2.109
-          Destination address: /192.168.2.101
-        [ICMP Common Header (4 bytes)]
-          Type: 0(Echo Reply)
-          Code: 0(No Code)
-          Checksum: 0x5453
-        [ICMPv4 Echo Reply Header (4 bytes)]
-          Identifier: 256
-          SequenceNumber: 9
-        [data (32 bytes)]
-          Hex stream: 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 61 62 63 64 65 66 67 68 69
-
-
-* [org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample/SendArpRequest.java)<br>
-  ARPリクエストを送信してIPアドレスをMACアドレスに解決するサンプル。以下はLinuxで192.168.209.1を解決した実行例。
-
-
-        [root@localhost Desktop]# java -cp pcap4j.jar:jna-3.3.0.jar:slf4j-api-1.6.4.jar org.pcap4j.sample.SendArpRequest 192.168.209.1
-        org.pcap4j.sample.SendArpRequest.count: 1
-        org.pcap4j.sample.SendArpRequest.readTimeout: 10
-        org.pcap4j.sample.SendArpRequest.maxCapLen: 65536
-
-
-        SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
-        SLF4J: Defaulting to no-operation (NOP) logger implementation
-        SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
-        NIF[0]: eth0
-              : description: null
-              : address: /192.168.209.128
-        NIF[1]: eth1
-              : description: null
-              : address: /192.168.76.128
-        NIF[2]: eth2
-              : description: null
-              : address: /192.168.2.109
-        NIF[3]: any
-              : description: Pseudo-device that captures on all interfaces
-        NIF[4]: lo
-              : description: null
-              : address: /127.0.0.1
-
-        Select a device number to capture packets, or enter 'q' to quit > 0
-        eth0(null)
-        [Ethernet Header (14 bytes)]
-          Destination address: ff:ff:ff:ff:ff:ff
-          Source address: fe:00:01:02:03:04
-          Type: 0x0806(ARP)
-        [ARP Header (28 bytes)]
-          Hardware type: 1(Ethernet(10Mb))
-          Protocol type: 0x0800(IPv4)
-          Hardware length: 6 [bytes]
-          Protocol length: 4 [bytes]
-          Operation: 1(REQUEST)
-          Source hardware address: fe:00:01:02:03:04
-          Source protocol address: /192.0.2.100
-          Destination hardware address: ff:ff:ff:ff:ff:ff
-          Destination protocol address: /192.168.209.1
-        [Ethernet Pad (18 bytes)]
-          Hex stream: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-
-        [Ethernet Header (14 bytes)]
-          Destination address: fe:00:01:02:03:04
-          Source address: 00:50:56:c0:00:08
-          Type: 0x0806(ARP)
-        [ARP Header (28 bytes)]
-          Hardware type: 1(Ethernet(10Mb))
-          Protocol type: 0x0800(IPv4)
-          Hardware length: 6 [bytes]
-          Protocol length: 4 [bytes]
-          Operation: 2(REPLY)
-          Source hardware address: 00:50:56:c0:00:08
-          Source protocol address: /192.168.209.1
-          Destination hardware address: fe:00:01:02:03:04
-          Destination protocol address: /192.0.2.100
-        [Ethernet Pad (18 bytes)]
-          Hex stream: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-
-        192.168.209.1 was resolved to 00:50:56:c0:00:08
 
 ビルド
 ------
