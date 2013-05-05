@@ -1,7 +1,7 @@
 Packet Factory
 ==============
 
-Packet Construction Flow
+Packet Object Construction Flow
 ------------------------
 
 * ![PropertiesBasedPacketFactory](/www/images/propertiesBasedPacketFactory.png)
