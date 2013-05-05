@@ -81,12 +81,14 @@
         <includes>
           <include>**/*.properties</include>
         </includes>
+        <filtering>false</filtering>
       </resource>
       <resource>
         <directory>src/main/resources</directory>
         <includes>
           <include>**/*.pcap</include>
         </includes>
+        <filtering>false</filtering>
       </resource>
     </resources>
 
@@ -125,6 +127,9 @@
         <version>2.6</version>
         <configuration>
           <encoding>UTF-8</encoding>
+          <nonFilteredFileExtensions>
+            <nonFilteredFileExtension>pcap</nonFilteredFileExtension>
+          </nonFilteredFileExtensions>
         </configuration>
       </plugin>
       <plugin>
