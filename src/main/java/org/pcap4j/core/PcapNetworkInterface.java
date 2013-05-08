@@ -48,10 +48,10 @@ public final class PcapNetworkInterface {
     ) {
      switch (pcapAddr.addr.sa_family) {
        case Inets.AF_INET:
-         addresses.add(PcapIpV4Address.newInstance(pcapAddr));
+         addresses.add(PcapIpv4Address.newInstance(pcapAddr));
          break;
        case Inets.AF_INET6:
-         addresses.add(PcapIpV6Address.newInstance(pcapAddr));
+         addresses.add(PcapIpv6Address.newInstance(pcapAddr));
          break;
        default:
          logger.warn(
