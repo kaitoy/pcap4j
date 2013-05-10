@@ -103,10 +103,14 @@ By default, Pcap4j loads the pcap library on the following conditions:
  * search path: The search paths of shared libraries configured on the OS.
    (e.g. The paths in the `LD_LIBRARY_PATH` environment variable)
  * file name: libpcap.so
+* Mac OS X
+ * search path: The search paths of shared libraries configured on the OS.
+   (e.g. The paths in the `DYLD_LIBRARY_PATH` environment variable)
+ * file name: libpcap.dylib
 
 You can use the following Java system properties to change the default behavior.
 
-* jna.library.path: Specify the serch path
+* jna.library.path: Specify the search path
 * org.pcap4j.core.pcapLibName: Specify the full path of the pcap library
 
 

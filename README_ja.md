@@ -105,7 +105,10 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 * Linux/UNIX
  * サーチパス: OSに設定された共有ライブラリのサーチパス。例えば環境変数`LD_LIBRARY_PATH`に含まれるパス。
  * ファイル名: libpcap.so
-
+* Mac OS X
+ * サーチパス: OSに設定された共有ライブラリのサーチパス。例えば環境変数`DYLD_LIBRARY_PATH`に含まれるパス。
+ * ファイル名: libpcap.dylib
+ 
 カスタマイズのために、以下のJavaのシステムプロパティが使える。
 
 * jna.library.path: サーチパスを指定する。
