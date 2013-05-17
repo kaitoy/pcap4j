@@ -2,7 +2,7 @@ Packet Factory
 ==============
 
 Packet Object Construction Flow
-------------------------
+-------------------------------
 
-* ![PropertiesBasedPacketFactory](/www/images/propertiesBasedPacketFactory.png)
-
+* PropertiesBasedPacketFactory
+<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/propertiesBasedPacketFactory.png" />
