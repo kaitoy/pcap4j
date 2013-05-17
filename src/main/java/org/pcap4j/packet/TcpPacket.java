@@ -1036,7 +1036,7 @@ public final class TcpPacket extends AbstractPacket {
    */
   public interface TcpOption extends Serializable {
 
-    // /* must implement if use DynamicTcpOptionFactory */
+    // /* must implement if use PropertiesBasedTcpOptionFactory */
     // public static TcpOption newInstance(byte[] rawData);
 
     /**

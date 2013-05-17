@@ -537,7 +537,7 @@ public final class IpV6Packet extends AbstractPacket {
    */
   public interface IpV6TrafficClass extends Serializable {
 
-    // /* must implement if use DynamicIpV6TrafficClassFactory */
+    // /* must implement if use PropertiesBasedIpV6TrafficClassFactory */
     // public static IpV6TrafficClass newInstance(byte value);
 
     /**
@@ -554,7 +554,7 @@ public final class IpV6Packet extends AbstractPacket {
    */
   public interface IpV6FlowLabel extends Serializable {
 
-    // /* must implement if use DynamicIpV6FlowLabelFactory */
+    // /* must implement if use PropertiesBasedIpV6FlowLabelFactory */
     // public static IpV6FlowLabel newInstance(int value);
 
     /**

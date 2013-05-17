@@ -379,7 +379,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
    */
   public interface IpV6Option extends Serializable {
 
-    // /* must implement if use DynamicIpV6OptionFactory */
+    // /* must implement if use PropertiesBasedIpV6OptionFactory */
     // public static IpV6Option newInstance(byte[] rawData);
 
     /**

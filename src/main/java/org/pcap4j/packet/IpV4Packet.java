@@ -917,7 +917,7 @@ public final class IpV4Packet extends AbstractPacket {
    */
   public interface IpV4Option extends Serializable {
 
-    // /* must implement if use DynamicIpV4OptionFactory */
+    // /* must implement if use PropertiesBasedIpV4OptionFactory */
     // public static IpV4Option newInstance(byte[] rawData);
 
     /**
@@ -946,7 +946,7 @@ public final class IpV4Packet extends AbstractPacket {
    */
   public interface IpV4Tos extends Serializable {
 
-    // /* must implement if use DynamicIpV4TosFactory */
+    // /* must implement if use PropertiesBasedIpV4TosFactory */
     // public static IpV4Tos newInstance(byte value);
 
     /**

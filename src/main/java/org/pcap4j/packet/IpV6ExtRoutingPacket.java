@@ -411,7 +411,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
    */
   public interface IpV6RoutingData extends Serializable {
 
-    // /* must implement if use DynamicIpV6RoutingDataFactory */
+    // /* must implement if use PropertiesBasedIpV6RoutingDataFactory */
     // public static IpV6RoutingData newInstance(byte[] rawData);
 
     /**

@@ -327,7 +327,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
    */
   public static interface IpV4InternetTimestampOptionData extends Serializable {
 
-    // /* must implement if use DynamicIpV4InternetTimestampDataFactory */
+    // /* must implement if use PropertiesBasedIpV4InternetTimestampDataFactory */
     // public static IpV4InternetTimestampData newInstance(byte[] rawData);
 
     /**

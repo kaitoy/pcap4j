@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 public interface Packet extends Iterable<Packet>, Serializable {
 
-  // /* must implement if use DynamicPacketFactory */
+  // /* must implement if use PropertiesBasedPacketFactory */
   // public static Packet newPacket(byte[] rawData);
 
   /**
