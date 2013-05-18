@@ -50,42 +50,49 @@ public final class PacketPropertiesLoader {
    */
   public static final String ICMPV4_CALC_CHECKSUM_KEY
     = PacketPropertiesLoader.class.getPackage().getName()
-        + ".icmpv4.calcChecksumAtBuild";
+        + ".icmpV4.calcChecksumAtBuild";
+
+  /**
+   *
+   */
+  public static final String ICMPV6_CALC_CHECKSUM_KEY
+    = PacketPropertiesLoader.class.getPackage().getName()
+        + ".icmpV6.calcChecksumAtBuild";
 
   /**
    *
    */
   public static final String IPV4_CALC_CHECKSUM_KEY
     = PacketPropertiesLoader.class.getPackage().getName()
-        + ".ipv4.calcChecksumAtBuild";
+        + ".ipV4.calcChecksumAtBuild";
 
   /**
    *
    */
   public static final String TCPV4_CALC_CHECKSUM_KEY
     = PacketPropertiesLoader.class.getPackage().getName()
-        + ".tcpv4.calcChecksumAtBuild";
+        + ".tcpV4.calcChecksumAtBuild";
 
   /**
    *
    */
   public static final String TCPV6_CALC_CHECKSUM_KEY
     = PacketPropertiesLoader.class.getPackage().getName()
-        + ".tcpv6.calcChecksumAtBuild";
+        + ".tcpV6.calcChecksumAtBuild";
 
   /**
    *
    */
   public static final String UDPV4_CALC_CHECKSUM_KEY
     = PacketPropertiesLoader.class.getPackage().getName()
-        + ".udpv4.calcChecksumAtBuild";
+        + ".udpV4.calcChecksumAtBuild";
 
   /**
    *
    */
   public static final String UDPV6_CALC_CHECKSUM_KEY
     = PacketPropertiesLoader.class.getPackage().getName()
-        + ".udpv6.calcChecksumAtBuild";
+        + ".udpV6.calcChecksumAtBuild";
 
   /**
    *
@@ -233,6 +240,17 @@ public final class PacketPropertiesLoader {
   public boolean icmpV4CalcChecksum() {
     return loader.getBoolean(
              ICMPV4_CALC_CHECKSUM_KEY,
+             Boolean.FALSE
+           ).booleanValue();
+  }
+
+  /**
+   *
+   * @return a value of the property.
+   */
+  public boolean icmpV6CalcChecksum() {
+    return loader.getBoolean(
+             ICMPV6_CALC_CHECKSUM_KEY,
              Boolean.FALSE
            ).booleanValue();
   }

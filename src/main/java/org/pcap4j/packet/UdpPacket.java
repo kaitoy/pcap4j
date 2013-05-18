@@ -362,8 +362,8 @@ public final class UdpPacket extends AbstractPacket {
     private static final int UCP_HEADER_SIZE
       = CHECKSUM_OFFSET + CHECKSUM_SIZE;
 
-    private static final int IP_V4_PSEUDO_HEADER_SIZE = 12;
-    private static final int IP_V6_PSEUDO_HEADER_SIZE = 40;
+    private static final int IPV4_PSEUDO_HEADER_SIZE = 12;
+    private static final int IPV6_PSEUDO_HEADER_SIZE = 40;
 
     private final UdpPort srcPort;
     private final UdpPort dstPort;
@@ -431,8 +431,8 @@ public final class UdpPacket extends AbstractPacket {
       boolean lowerLayerIsIpV4 = srcAddr instanceof Inet4Address;
 
       int pseudoHeaderSize
-        = lowerLayerIsIpV4 ? IP_V4_PSEUDO_HEADER_SIZE
-                           : IP_V6_PSEUDO_HEADER_SIZE;
+        = lowerLayerIsIpV4 ? IPV4_PSEUDO_HEADER_SIZE
+                           : IPV6_PSEUDO_HEADER_SIZE;
 
       if ((totalLength % 2) != 0) {
         data = new byte[totalLength + 1 + pseudoHeaderSize];
