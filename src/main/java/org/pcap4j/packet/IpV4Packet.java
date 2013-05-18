@@ -621,8 +621,9 @@ public final class IpV4Packet extends AbstractPacket {
     }
 
     private short calcHeaderChecksum() {
-      // getRawData()だとchecksum field設定前にrawDataがキャッシュされてしまうので、
-      // 代わりにbuildRawData()を使う。
+      // If call getRawData() here, rawData will be cached with
+      // an invalid checksum in some cases.
+      // To avoid it, use buildRawData() instead.
       byte[] data = buildRawData();
 
       for (int i = 0; i < HEADER_CHECKSUM_SIZE; i++) {

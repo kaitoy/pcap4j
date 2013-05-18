@@ -443,8 +443,9 @@ public final class UdpPacket extends AbstractPacket {
         destPos = totalLength;
       }
 
-      // getRawData()だとchecksum field設定前にrawDataがキャッシュされてしまう場合があるので、
-      // 代わりにbuildRawData()を使う。
+      // If call getRawData() here, rawData will be cached with
+      // an invalid checksum in some cases.
+      // To avoid it, use buildRawData() instead.
       System.arraycopy(buildRawData(), 0, data, 0, length());
       System.arraycopy(payload, 0, data, length(), payload.length);
 
