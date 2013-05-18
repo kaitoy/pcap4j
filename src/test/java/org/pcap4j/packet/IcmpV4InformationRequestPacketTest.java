@@ -32,10 +32,7 @@ import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Kaito
- *
- */
+@SuppressWarnings("javadoc")
 public class IcmpV4InformationRequestPacketTest {
 
   private static final Logger logger
@@ -56,9 +53,6 @@ public class IcmpV4InformationRequestPacketTest {
     this.packet = b.build();
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -66,23 +60,14 @@ public class IcmpV4InformationRequestPacketTest {
     );
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @Before
   public void setUp() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @After
   public void tearDown() throws Exception {
     logger.info(
@@ -90,18 +75,12 @@ public class IcmpV4InformationRequestPacketTest {
     );
   }
 
-  /**
-   * {@link org.pcap4j.packet.IcmpV4InformationRequestPacket#getBuilder()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetBuilder() {
     IcmpV4InformationRequestPacket.Builder b = packet.getBuilder();
     assertEquals(packet, b.build());
   }
 
-  /**
-   * {@link org.pcap4j.packet.IcmpV4InformationRequestPacket#newPacket(byte[])} のためのテスト・メソッド。
-   */
   @Test
   public void testNewPacket() {
     IcmpV4InformationRequestPacket p
@@ -109,9 +88,6 @@ public class IcmpV4InformationRequestPacketTest {
     assertEquals(packet, p);
   }
 
-  /**
-   * {@link org.pcap4j.packet.IcmpV4InformationRequestPacket#getHeader()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetHeader() {
     IcmpV4InformationRequestHeader h = packet.getHeader();
@@ -152,17 +128,11 @@ public class IcmpV4InformationRequestPacketTest {
     assertEquals((short)-32768, (short)p.getHeader().getSequenceNumberAsInt());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#length()} のためのテスト・メソッド。
-   */
   @Test
   public void testLength() {
     assertEquals(packet.getRawData().length, packet.length());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#toString()} のためのテスト・メソッド。
-   */
   @Test
   public void testToString() throws Exception {
     FileReader fr

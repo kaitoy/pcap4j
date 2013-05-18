@@ -39,10 +39,7 @@ import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Kaito
- *
- */
+@SuppressWarnings("javadoc")
 public class TcpPacketTest {
 
   private static final Logger logger
@@ -137,9 +134,6 @@ public class TcpPacketTest {
     this.packet = b.build();
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -147,23 +141,14 @@ public class TcpPacketTest {
     );
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @Before
   public void setUp() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @After
   public void tearDown() throws Exception {
     logger.info(
@@ -171,27 +156,18 @@ public class TcpPacketTest {
     );
   }
 
-  /**
-   * {@link org.pcap4j.packet.TcpPacket#getBuilder()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetBuilder() {
     TcpPacket.Builder builder = packet.getBuilder();
     assertEquals(packet, builder.build());
   }
 
-  /**
-   * {@link org.pcap4j.packet.TcpPacket#newPacket(byte[])} のためのテスト・メソッド。
-   */
   @Test
   public void testNewPacket() {
     TcpPacket p = TcpPacket.newPacket(packet.getRawData());
     assertEquals(packet, p);
   }
 
-  /**
-   * {@link org.pcap4j.packet.TcpPacket#getHeader()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetHeader() {
     TcpHeader h = packet.getHeader();
@@ -328,17 +304,11 @@ public class TcpPacketTest {
     assertTrue(p.hasValidChecksum(srcAddr, dstAddr, true));
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#length()} のためのテスト・メソッド。
-   */
   @Test
   public void testLength() {
     assertEquals(packet.getRawData().length, packet.length());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#toString()} のためのテスト・メソッド。
-   */
   @Test
   public void testToString() throws Exception {
     logger.info(packet.toString());

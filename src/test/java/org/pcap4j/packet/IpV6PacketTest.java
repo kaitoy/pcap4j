@@ -34,10 +34,7 @@ import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Kaito
- *
- */
+@SuppressWarnings("javadoc")
 public class IpV6PacketTest {
 
   private static final Logger logger
@@ -95,9 +92,6 @@ public class IpV6PacketTest {
     this.packet = b.build();
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -105,23 +99,14 @@ public class IpV6PacketTest {
     );
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @Before
   public void setUp() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @After
   public void tearDown() throws Exception {
     logger.info(
@@ -129,27 +114,18 @@ public class IpV6PacketTest {
     );
   }
 
-  /**
-   * {@link org.pcap4j.packet.IpV6Packet#getBuilder()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetBuilder() {
     IpV6Packet.Builder builder = packet.getBuilder();
     assertEquals(packet, builder.build());
   }
 
-  /**
-   * {@link org.pcap4j.packet.IpV6Packet#newPacket(byte[])} のためのテスト・メソッド。
-   */
   @Test
   public void testNewPacket() {
     IpV6Packet p = IpV6Packet.newPacket(packet.getRawData());
     assertEquals(packet, p);
   }
 
-  /**
-   * {@link org.pcap4j.packet.IpV6Packet#getHeader()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetHeader() {
     IpV6Header h = packet.getHeader();
@@ -190,17 +166,11 @@ public class IpV6PacketTest {
     assertEquals((byte)-128, (byte)p.getHeader().getHopLimitAsInt());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#length()} のためのテスト・メソッド。
-   */
   @Test
   public void testLength() {
     assertEquals(packet.getRawData().length, packet.length());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#toString()} のためのテスト・メソッド。
-   */
   @Test
   public void testToString() throws Exception {
     FileReader fr

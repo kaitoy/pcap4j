@@ -36,10 +36,7 @@ import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Kaito
- *
- */
+@SuppressWarnings("javadoc")
 public class IcmpV4RedirectPacketTest {
 
   private static final Logger logger
@@ -105,9 +102,6 @@ public class IcmpV4RedirectPacketTest {
     this.packet = b.build();
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -115,23 +109,14 @@ public class IcmpV4RedirectPacketTest {
     );
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @Before
   public void setUp() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @After
   public void tearDown() throws Exception {
     logger.info(
@@ -139,18 +124,12 @@ public class IcmpV4RedirectPacketTest {
     );
   }
 
-  /**
-   * {@link org.pcap4j.packet.IcmpV4RedirectPacket#getBuilder()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetBuilder() {
     IcmpV4RedirectPacket.Builder builder = packet.getBuilder();
     assertEquals(packet, builder.build());
   }
 
-  /**
-   * {@link org.pcap4j.packet.IcmpV4RedirectPacket#newPacket(byte[])} のためのテスト・メソッド。
-   */
   @Test
   public void testNewPacket() {
     IcmpV4RedirectPacket p = IcmpV4RedirectPacket.newPacket(packet.getRawData());
@@ -164,26 +143,17 @@ public class IcmpV4RedirectPacketTest {
     assertFalse(p.getHeader().getInvokingPacket().contains(IllegalPacket.class));
   }
 
-  /**
-   * {@link org.pcap4j.packet.IcmpV4RedirectPacket#getHeader()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetHeader() {
     IcmpV4RedirectHeader h = packet.getHeader();
     assertEquals(gatewayInternetAddress, h.getGatewayInternetAddress());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#length()} のためのテスト・メソッド。
-   */
   @Test
   public void testLength() {
     assertEquals(packet.getRawData().length, packet.length());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#toString()} のためのテスト・メソッド。
-   */
   @Test
   public void testToString() throws Exception {
     FileReader fr

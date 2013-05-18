@@ -1,8 +1,6 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,10 +29,7 @@ import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Kaito
- *
- */
+@SuppressWarnings("javadoc")
 public class ArpPacketTest {
 
   private static final Logger logger
@@ -85,9 +80,6 @@ public class ArpPacketTest {
     this.packet = ab.build();
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -95,9 +87,6 @@ public class ArpPacketTest {
     );
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
     logger.info(
@@ -105,15 +94,9 @@ public class ArpPacketTest {
     );
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @Before
   public void setUp() throws Exception {}
 
-  /**
-   * @throws java.lang.Exception
-   */
   @After
   public void tearDown() throws Exception {
     logger.info(
@@ -170,36 +153,23 @@ public class ArpPacketTest {
     assertEquals((byte)-128, (byte)p.getHeader().getProtocolLengthAsInt());
   }
 
-  /**
-   * {@link org.pcap4j.packet.ArpPacket#getBuilder()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetBuilder() {
     ArpPacket.Builder ab = packet.getBuilder();
     assertEquals(packet, ab.build());
   }
 
-  /**
-   * {@link org.pcap4j.packet.ArpPacket#newPacket(byte[])} のためのテスト・メソッド。
-   */
   @Test
   public void testNewPacket() {
     ArpPacket p = ArpPacket.newPacket(packet.getRawData());
     assertEquals(packet, p);
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#length()} のためのテスト・メソッド。
-   */
   @Test
   public void testLength() {
     assertEquals(packet.getRawData().length, packet.length());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#toString()} のためのテスト・メソッド。
-   * @throws Exception
-   */
   @Test
   public void testToString() throws Exception {
     FileReader fr

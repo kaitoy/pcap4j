@@ -33,10 +33,7 @@ import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Kaito
- *
- */
+@SuppressWarnings("javadoc")
 public class IpV6ExtFragmentPacketTest {
 
   private static final Logger logger
@@ -117,9 +114,6 @@ public class IpV6ExtFragmentPacketTest {
     this.packet2 = b.build();
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -127,23 +121,14 @@ public class IpV6ExtFragmentPacketTest {
     );
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @Before
   public void setUp() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @After
   public void tearDown() throws Exception {
     logger.info(
@@ -151,18 +136,12 @@ public class IpV6ExtFragmentPacketTest {
     );
   }
 
-  /**
-   * {@link org.pcap4j.packet.IpV6ExtFragmentPacket#getBuilder()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetBuilder() {
     IpV6ExtFragmentPacket.Builder builder = packet1.getBuilder();
     assertEquals(packet1, builder.build());
   }
 
-  /**
-   * {@link org.pcap4j.packet.IpV6ExtFragmentPacket#newPacket(byte[])} のためのテスト・メソッド。
-   */
   @Test
   public void testNewPacket() {
     IpV6ExtFragmentPacket p
@@ -170,9 +149,6 @@ public class IpV6ExtFragmentPacketTest {
     assertEquals(packet1, p);
   }
 
-  /**
-   * {@link org.pcap4j.packet.IpV6ExtFragmentPacket#getHeader()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetHeader() {
     IpV6ExtFragmentHeader h = packet1.getHeader();
@@ -184,17 +160,11 @@ public class IpV6ExtFragmentPacketTest {
     assertEquals(identification, h.getIdentification());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#length()} のためのテスト・メソッド。
-   */
   @Test
   public void testLength() {
     assertEquals(packet1.getRawData().length, packet1.length());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#toString()} のためのテスト・メソッド。
-   */
   @Test
   public void testToString() throws Exception {
     FileReader fr

@@ -31,44 +31,25 @@ import org.pcap4j.util.IpV4Helper;
 import org.pcap4j.util.MacAddress;
 
 
-/**
- * @author Kaito
- *
- */
+@SuppressWarnings("javadoc")
 public class IpV4HelperTest {
 
-  /**
-   * @throws java.lang.Exception
-   */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @Before
   public void setUp() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @After
   public void tearDown() throws Exception {
   }
 
-  /**
-   * {@link org.pcap4j.util.IpV4Helper#fragment(org.pcap4j.packet.IpV4Packet, int)},
-   * {@link org.pcap4j.util.IpV4Helper#defragment(java.util.List)} のためのテスト・メソッド。
-   */
   @Test
   public void testFragmentDefragment() throws Exception {
     String dumpFile = "test/" + this.getClass().getSimpleName() + ".pcap";

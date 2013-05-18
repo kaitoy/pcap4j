@@ -35,10 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/**
- * @author Kaito
- *
- */
+@SuppressWarnings("javadoc")
 public class IcmpV4CommonPacketTest {
 
   private static final Logger logger
@@ -71,9 +68,6 @@ public class IcmpV4CommonPacketTest {
     this.packet = b.build();
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -81,23 +75,14 @@ public class IcmpV4CommonPacketTest {
     );
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @Before
   public void setUp() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @After
   public void tearDown() throws Exception {
     logger.info(
@@ -105,27 +90,18 @@ public class IcmpV4CommonPacketTest {
     );
   }
 
-  /**
-   * {@link org.pcap4j.packet.IcmpV4CommonPacket#getBuilder()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetBuilder() {
     IcmpV4CommonPacket.Builder b = packet.getBuilder();
     assertEquals(packet, b.build());
   }
 
-  /**
-   * {@link org.pcap4j.packet.IcmpV4CommonPacket#newPacket(byte[])} のためのテスト・メソッド。
-   */
   @Test
   public void testNewPacket() {
     IcmpV4CommonPacket p = IcmpV4CommonPacket.newPacket(packet.getRawData());
     assertEquals(packet, p);
   }
 
-  /**
-   * {@link org.pcap4j.packet.IcmpV4CommonPacket#getHeader()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetHeader() {
     IcmpV4CommonHeader h = packet.getHeader();
@@ -154,17 +130,11 @@ public class IcmpV4CommonPacketTest {
     assertTrue(p.hasValidChecksum(true));
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#length()} のためのテスト・メソッド。
-   */
   @Test
   public void testLength() {
     assertEquals(packet.getRawData().length, packet.length());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#toString()} のためのテスト・メソッド。
-   */
   @Test
   public void testToString() throws Exception {
     FileReader fr

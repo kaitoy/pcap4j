@@ -10,46 +10,28 @@ import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Kaito
- *
- */
+@SuppressWarnings("javadoc")
 public class PcapNetworkInterfaceTest {
 
   private static final Logger logger
     = LoggerFactory.getLogger(PcapNetworkInterfaceTest.class);
 
-  /**
-   * @throws java.lang.Exception
-   */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @Before
   public void setUp() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @After
   public void tearDown() throws Exception {
   }
 
-  /**
-   * {@link org.pcap4j.core.PcapNetworkInterface#openLive(int, org.pcap4j.core.PcapNetworkInterface.PromiscuousMode, int)} のためのテスト・メソッド。
-   */
   @Test
   public void testOpenLive() throws Exception {
     PcapHandle handle =

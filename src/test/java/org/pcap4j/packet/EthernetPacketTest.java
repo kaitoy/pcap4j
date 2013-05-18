@@ -38,10 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/**
- * @author Kaito
- *
- */
+@SuppressWarnings("javadoc")
 public class EthernetPacketTest {
 
   private static final Logger logger
@@ -99,9 +96,6 @@ public class EthernetPacketTest {
     this.packet = eb.build();
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -109,23 +103,14 @@ public class EthernetPacketTest {
     );
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @Before
   public void setUp() throws Exception {
   }
 
-  /**
-   * @throws java.lang.Exception
-   */
   @After
   public void tearDown() throws Exception {
     logger.info(
@@ -133,27 +118,18 @@ public class EthernetPacketTest {
     );
   }
 
-  /**
-   * {@link org.pcap4j.packet.EthernetPacket#getBuilder()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetBuilder() {
     EthernetPacket.Builder b = packet.getBuilder();
     assertEquals(packet, b.build());
   }
 
-  /**
-   * {@link org.pcap4j.packet.EthernetPacket#newPacket(byte[])} のためのテスト・メソッド。
-   */
   @Test
   public void testNewPacket() {
     EthernetPacket p = EthernetPacket.newPacket(packet.getRawData());
     assertEquals(packet, p);
   }
 
-  /**
-   * {@link org.pcap4j.packet.EthernetPacket#getHeader()} のためのテスト・メソッド。
-   */
   @Test
   public void testGetHeader() {
     EthernetHeader h = packet.getHeader();
@@ -163,17 +139,11 @@ public class EthernetPacketTest {
     assertArrayEquals(pad, packet.getPad());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#length()} のためのテスト・メソッド。
-   */
   @Test
   public void testLength() {
     assertEquals(packet.getRawData().length, packet.length());
   }
 
-  /**
-   * {@link org.pcap4j.packet.AbstractPacket#toString()} のためのテスト・メソッド。
-   */
   @Test
   public void testToString() throws Exception {
     FileReader fr
