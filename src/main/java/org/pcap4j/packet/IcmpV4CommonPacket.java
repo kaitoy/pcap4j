@@ -330,7 +330,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[ICMP Common Header (")
+      sb.append("[ICMPv4 Common Header (")
         .append(length())
         .append(" bytes)]")
         .append(ls);
