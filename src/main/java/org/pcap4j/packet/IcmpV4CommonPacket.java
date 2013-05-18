@@ -216,7 +216,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
       = CODE_OFFSET + CODE_SIZE;
     private static final int CHECKSUM_SIZE
       = SHORT_SIZE_IN_BYTES;
-    private static final int ICMP_COMMON_HEADER_SIZE
+    private static final int ICMP_V4_COMMON_HEADER_SIZE
       = CHECKSUM_OFFSET + CHECKSUM_SIZE;
 
     private final IcmpV4Type type;
@@ -224,10 +224,10 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     private final short checksum;
 
     private IcmpV4CommonHeader(byte[] rawData) {
-      if (rawData.length < ICMP_COMMON_HEADER_SIZE) {
+      if (rawData.length < ICMP_V4_COMMON_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 common header(")
-          .append(ICMP_COMMON_HEADER_SIZE)
+          .append(ICMP_V4_COMMON_HEADER_SIZE)
           .append(" bytes). data: ")
           .append(ByteArrays.toHexString(rawData, " "));
         throw new IllegalRawDataException(sb.toString());
@@ -321,7 +321,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
 
     @Override
     public int length() {
-      return ICMP_COMMON_HEADER_SIZE;
+      return ICMP_V4_COMMON_HEADER_SIZE;
     }
 
     @Override
