@@ -7,6 +7,8 @@
 
 package org.pcap4j.packet.factory;
 
+import org.pcap4j.packet.IcmpV6EchoReplyPacket;
+import org.pcap4j.packet.IcmpV6EchoRequestPacket;
 import org.pcap4j.packet.IllegalPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
@@ -44,12 +46,12 @@ implements PacketFactory<IcmpV6Type> {
     }
 
     try {
-//      if (number.equals(IcmpV6Type.ECHO_REQUEST)) {
-//        return IcmpV6EchoRequestPacket.newPacket(rawData);
-//      }
-//      else if (number.equals(IcmpV6Type.ECHO_REPLY)) {
-//        return IcmpV6EchoReplyPacket.newPacket(rawData);
-//      }
+      if (number.equals(IcmpV6Type.ECHO_REQUEST)) {
+        return IcmpV6EchoRequestPacket.newPacket(rawData);
+      }
+      else if (number.equals(IcmpV6Type.ECHO_REPLY)) {
+        return IcmpV6EchoReplyPacket.newPacket(rawData);
+      }
     } catch (IllegalRawDataException e) {
       return IllegalPacket.newPacket(rawData);
     }
