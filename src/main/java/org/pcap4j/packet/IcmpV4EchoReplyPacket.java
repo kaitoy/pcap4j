@@ -109,9 +109,6 @@ public final class IcmpV4EchoReplyPacket extends IcmpIdentifiablePacket {
       return this;
     }
 
-    /**
-     *  return
-     */
     @Override
     public Packet.Builder getPayloadBuilder() {
       return payloadBuilder;
