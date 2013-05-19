@@ -14,7 +14,7 @@
   Header checksum: 0xd276
   Source address: /192.0.2.2
   Destination address: /192.0.2.1
-[ICMP Common Header (4 bytes)]
+[ICMPv4 Common Header (4 bytes)]
   Type: 8(Echo)
   Code: 0(No Code)
   Checksum: 0xf590
