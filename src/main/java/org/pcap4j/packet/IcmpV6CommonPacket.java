@@ -358,7 +358,7 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
 
       destPos += 3;
 
-      data[destPos] = IpNumber.UDP.value();
+      data[destPos] = IpNumber.ICMPV6.value();
       destPos++;
 
       System.arraycopy(
