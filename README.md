@@ -81,6 +81,7 @@ And the following resources will help you to learn how to use Pcap4j.
 * [Learn About Packet Factory](/www/PacketFactory.md)
 * [Test Classes](https://github.com/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)
 * [Sample Classes](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)
+* [How to add protocol support](/www/HowToAddProtocolSupport.md)
 
 Pcap4j needs J2SE 5.0+, libpcap 0.9.3+ or WinPcap 3.0+, jna, slf4j-api, and an implementation of logger for slf4j.
 I'm using the following libraries for the test.

@@ -81,6 +81,7 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 * [Learn About Packet Factory](/www/PacketFactory.md)
 * [テストクラス](https://github.com/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)
 * [サンプルクラス](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)
+* [サポートプロトコル追加方法](/www/HowToAddProtocolSupport.md)
 
 J2SE 5.0以降で動く。
 UNIX系ならlibpcap (多分)0.9.3以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。
