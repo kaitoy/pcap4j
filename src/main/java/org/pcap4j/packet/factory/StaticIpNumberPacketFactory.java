@@ -8,6 +8,7 @@
 package org.pcap4j.packet.factory;
 
 import org.pcap4j.packet.IcmpV4CommonPacket;
+import org.pcap4j.packet.IcmpV6CommonPacket;
 import org.pcap4j.packet.IllegalPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV6ExtDestinationOptionsPacket;
@@ -56,6 +57,9 @@ implements PacketFactory<IpNumber> {
       }
       else if (number.equals(IpNumber.ICMPV4)) {
         return IcmpV4CommonPacket.newPacket(rawData);
+      }
+      else if (number.equals(IpNumber.ICMPV6)) {
+        return IcmpV6CommonPacket.newPacket(rawData);
       }
       else if (number.equals(IpNumber.TCP)) {
         return TcpPacket.newPacket(rawData);
