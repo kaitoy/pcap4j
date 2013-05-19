@@ -129,11 +129,10 @@ public final class IcmpV4RedirectPacket extends AbstractPacket {
      *
      */
 
-
     /**
      *
      */
-    private static final long serialVersionUID = -46332865818101803L;
+    private static final long serialVersionUID = 5236093878631799797L;
 
     private static final int GATEWAY_INTERNET_ADDRESS_OFFSET
       = 0;

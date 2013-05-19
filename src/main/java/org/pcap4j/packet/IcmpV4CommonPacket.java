@@ -202,7 +202,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     /**
      *
      */
-    private static final long serialVersionUID = 752307079936231186L;
+    private static final long serialVersionUID = 504881105187659087L;
 
     private static final int TYPE_OFFSET
       = 0;

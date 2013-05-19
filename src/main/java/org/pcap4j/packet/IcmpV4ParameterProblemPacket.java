@@ -138,7 +138,7 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
     /**
      *
      */
-    private static final long serialVersionUID = 5262923124352587894L;
+    private static final long serialVersionUID = -3611806305150108973L;
 
     private static final int POINTER_AND_UNUSED_OFFSET
       = 0;

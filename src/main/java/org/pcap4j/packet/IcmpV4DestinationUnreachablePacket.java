@@ -93,7 +93,7 @@ public final class IcmpV4DestinationUnreachablePacket extends IcmpV4UnusedPacket
     /**
      *
      */
-    private static final long serialVersionUID = 5107806272393291695L;
+    private static final long serialVersionUID = -1582230511452370852L;
 
     private IcmpV4DestinationUnreachableHeader(byte[] rawData) {
       super(rawData);
