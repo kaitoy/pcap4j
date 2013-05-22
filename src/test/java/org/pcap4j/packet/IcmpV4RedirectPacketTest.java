@@ -1,10 +1,6 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -96,7 +92,7 @@ public class IcmpV4RedirectPacketTest {
     IcmpV4RedirectPacket.Builder b
       = new IcmpV4RedirectPacket.Builder();
     b.gatewayInternetAddress(gatewayInternetAddress)
-     .invokingPacket(
+     .payload(
         IcmpV4Helper.makePacketForInvokingPacketField(ipv4b.build())
       );
     this.packet = b.build();
@@ -135,12 +131,12 @@ public class IcmpV4RedirectPacketTest {
     IcmpV4RedirectPacket p = IcmpV4RedirectPacket.newPacket(packet.getRawData());
     assertEquals(packet, p);
 
-    assertTrue(p.getHeader().getInvokingPacket().contains(IpV4Packet.class));
-    assertTrue(p.getHeader().getInvokingPacket().contains(IcmpV4CommonPacket.class));
-    assertTrue(p.getHeader().getInvokingPacket().contains(IcmpV4EchoPacket.class));
-    assertTrue(p.getHeader().getInvokingPacket().contains(UnknownPacket.class));
-    assertEquals(p.getHeader().getInvokingPacket().get(UnknownPacket.class).length(), 0);
-    assertFalse(p.getHeader().getInvokingPacket().contains(IllegalPacket.class));
+    assertTrue(p.getPayload().contains(IpV4Packet.class));
+    assertTrue(p.getPayload().contains(IcmpV4CommonPacket.class));
+    assertTrue(p.getPayload().contains(IcmpV4EchoPacket.class));
+    assertTrue(p.getPayload().contains(UnknownPacket.class));
+    assertEquals(p.getPayload().get(UnknownPacket.class).length(), 0);
+    assertFalse(p.getPayload().contains(IllegalPacket.class));
   }
 
   @Test

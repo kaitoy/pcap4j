@@ -150,17 +150,17 @@ public class IcmpV4ErrReplyer {
           public void gotPacket(Packet packet) {
             if (packet.contains(IcmpV4EchoPacket.class)) {
               if (type.equals(IcmpV4Type.DESTINATION_UNREACHABLE)) {
-                ((IcmpV4DestinationUnreachablePacket.Builder)icmpV4errb).invokingPacket(
+                ((IcmpV4DestinationUnreachablePacket.Builder)icmpV4errb).payload(
                   IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
                 );
               }
               else if (type.equals(IcmpV4Type.TIME_EXCEEDED)) {
-                ((IcmpV4TimeExceededPacket.Builder)icmpV4errb).invokingPacket(
+                ((IcmpV4TimeExceededPacket.Builder)icmpV4errb).payload(
                   IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
                 );
               }
               else if (type.equals(IcmpV4Type.PARAMETER_PROBLEM)) {
-                ((IcmpV4ParameterProblemPacket.Builder)icmpV4errb).invokingPacket(
+                ((IcmpV4ParameterProblemPacket.Builder)icmpV4errb).payload(
                   IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
                 );
               }

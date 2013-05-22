@@ -1,6 +1,5 @@
-[ICMPv4 Redirect Header (32 bytes)]
+[ICMPv4 Redirect Header (4 bytes)]
   Gateway Internet Address: /192.0.2.254
-  Invoking Packet: {
 [IPv4 Header (20 bytes)]
   Version: 4(IPv4)
   IHL: 5 (20 [bytes])
@@ -23,4 +22,3 @@
   SequenceNumber: 10
 [data (0 bytes)]
   Hex stream: 
-}

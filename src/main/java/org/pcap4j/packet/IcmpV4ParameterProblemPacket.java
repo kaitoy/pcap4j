@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2013  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -10,21 +10,18 @@ package org.pcap4j.packet;
 import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.pcap4j.packet.factory.PacketFactories;
-import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
-import org.pcap4j.util.IcmpV4Helper;
 
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
-public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
+public final class IcmpV4ParameterProblemPacket extends IcmpV4InvokingPacketPacket {
 
   /**
    *
    */
-  private static final long serialVersionUID = -5827054648461879177L;
+  private static final long serialVersionUID = 5369176981310492220L;
 
   private final IcmpV4ParameterProblemHeader header;
 
@@ -34,24 +31,26 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
    * @return a new IcmpV4ParameterProblemPacket object
    */
   public static IcmpV4ParameterProblemPacket newPacket(byte[] rawData) {
-    return new IcmpV4ParameterProblemPacket(rawData);
+    IcmpV4ParameterProblemHeader header
+      = new IcmpV4ParameterProblemHeader(rawData);
+    byte[] rawPayload
+      = ByteArrays.getSubArray(
+          rawData,
+          header.length(),
+          rawData.length - header.length()
+        );
+    return new IcmpV4ParameterProblemPacket(header, rawPayload);
   }
 
-  private IcmpV4ParameterProblemPacket(byte[] rawData) {
-    this.header = new IcmpV4ParameterProblemHeader(rawData);
+  private IcmpV4ParameterProblemPacket(
+    IcmpV4ParameterProblemHeader header, byte[] rawData
+  ) {
+    super(rawData);
+    this.header = header;
   }
 
   private IcmpV4ParameterProblemPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.invokingPacket == null
-    ) {
-      StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.ipV4Packet: ").append(builder.invokingPacket);
-      throw new NullPointerException(sb.toString());
-    }
-
+    super(builder);
     this.header = new IcmpV4ParameterProblemHeader(builder);
   }
 
@@ -65,11 +64,11 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  public static final class Builder extends AbstractBuilder {
+  public static final class Builder
+  extends org.pcap4j.packet.IcmpV4InvokingPacketPacket.Builder {
 
     private byte pointer;
     private int unused;
-    private Packet invokingPacket;
 
     /**
      *
@@ -77,9 +76,9 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
     public Builder() {}
 
     private Builder(IcmpV4ParameterProblemPacket packet) {
+      super(packet);
       this.pointer = packet.header.pointer;
       this.unused = packet.header.unused;
-      this.invokingPacket = packet.header.invokingPacket;
     }
 
     /**
@@ -102,13 +101,9 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
       return this;
     }
 
-    /**
-     *
-     * @param invokingPacket
-     * @return this Builder object for method chaining.
-     */
-    public Builder invokingPacket(Packet invokingPacket) {
-      this.invokingPacket = invokingPacket;
+    @Override
+    public Builder payload(Packet payload) {
+      super.payload(payload);
       return this;
     }
 
@@ -130,35 +125,32 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      * |    Pointer    |                   unused                      |
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |IPv4 Header + 64 bits of Original Data Datagram(invokingPacket)|
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      *
      */
 
     /**
      *
      */
-    private static final long serialVersionUID = -3611806305150108973L;
+    private static final long serialVersionUID = 7946304491624744071L;
 
     private static final int POINTER_AND_UNUSED_OFFSET
       = 0;
     private static final int POINTER_AND_UNUSED_SIZE
       = INT_SIZE_IN_BYTES;
-    private static final int INVOKING_PACKET_OFFSET
+    private static final int ICMPV4_PARAMETER_PROBLEM_HEADER_SIZE
       = POINTER_AND_UNUSED_OFFSET + POINTER_AND_UNUSED_SIZE;
 
     private final byte pointer;
     private final int unused;
-    private final Packet invokingPacket; // Internet Header + 64 bits of Original Data Datagram
 
     private IcmpV4ParameterProblemHeader(byte[] rawData) {
-      if (rawData.length < INVOKING_PACKET_OFFSET) {
+      if (rawData.length < ICMPV4_PARAMETER_PROBLEM_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append(
              "The data is too short to build"
                + " an ICMPv4 Parameter Problem Header("
            )
-          .append(INVOKING_PACKET_OFFSET)
+          .append(ICMPV4_PARAMETER_PROBLEM_HEADER_SIZE)
           .append(" bytes). data: ")
           .append(ByteArrays.toHexString(rawData, " "));
         throw new IllegalRawDataException(sb.toString());
@@ -168,40 +160,6 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
         = ByteArrays.getInt(rawData, POINTER_AND_UNUSED_OFFSET);
       this.pointer = (byte)(pointerAndUnused >>> 24);
       this.unused = pointerAndUnused & 0x00FFFFFF;
-
-      Packet p = PacketFactories.getFactory(EtherType.class)
-                   .newPacket(
-                      ByteArrays.getSubArray(
-                        rawData,
-                        INVOKING_PACKET_OFFSET,
-                        rawData.length - POINTER_AND_UNUSED_SIZE
-                      ),
-                      EtherType.IPV4
-                    );
-
-      if (p instanceof IllegalPacket) {
-        this.invokingPacket = p;
-        return;
-      }
-      else if (p.contains(IllegalPacket.class)) {
-        Packet.Builder builder = p.getBuilder();
-        builder.getOuterOf(IllegalPacket.Builder.class)
-          .payloadBuilder(
-             new UnknownPacket.Builder()
-               .rawData(p.get(IllegalPacket.class).getRawData())
-           );
-        for (Packet.Builder b: builder) {
-          if (b instanceof LengthBuilder) {
-            ((LengthBuilder<?>)b).correctLengthAtBuild(false);
-          }
-          if (b instanceof ChecksumBuilder) {
-            ((ChecksumBuilder<?>)b).correctChecksumAtBuild(false);
-          }
-        }
-        p = builder.build();
-      }
-
-      this.invokingPacket = IcmpV4Helper.makePacketForInvokingPacketField(p);
     }
 
     private IcmpV4ParameterProblemHeader(Builder builder) {
@@ -211,7 +169,6 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
 
       this.pointer = builder.pointer;
       this.unused = builder.unused;
-      this.invokingPacket = builder.invokingPacket;
     }
 
     /**
@@ -232,17 +189,10 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
      */
     public int getUnused() { return unused; }
 
-    /**
-     *
-     * @return invokingPacket
-     */
-    public Packet getInvokingPacket() { return invokingPacket; }
-
     @Override
     protected List<byte[]> getRawFields() {
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(ByteArrays.toByteArray(pointer << 24 | unused));
-      rawFields.add(invokingPacket.getRawData());
       return rawFields;
     }
 
@@ -260,10 +210,6 @@ public final class IcmpV4ParameterProblemPacket extends AbstractPacket {
         .append(ls);
       sb.append("  Unused: ")
         .append(unused)
-        .append(ls);
-      sb.append("  Invoking Packet: {").append(ls)
-        .append(invokingPacket)
-        .append("}")
         .append(ls);
 
       return sb.toString();

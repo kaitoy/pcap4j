@@ -7,16 +7,21 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.*;
+import java.util.ArrayList;
+import java.util.List;
+import org.pcap4j.util.ByteArrays;
+
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
-public final class IcmpV4SourceQuenchPacket extends IcmpV4UnusedPacket {
+public final class IcmpV4SourceQuenchPacket extends IcmpV4InvokingPacketPacket {
 
   /**
    *
    */
-  private static final long serialVersionUID = 4236818486389644290L;
+  private static final long serialVersionUID = 5977981249980504735L;
 
   private final IcmpV4SourceQuenchHeader header;
 
@@ -26,11 +31,19 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4UnusedPacket {
    * @return a new IcmpV4SourceQuenchPacket object.
    */
   public static IcmpV4SourceQuenchPacket newPacket(byte[] rawData) {
-    return new IcmpV4SourceQuenchPacket(rawData);
+    IcmpV4SourceQuenchHeader header = new IcmpV4SourceQuenchHeader(rawData);
+    byte[] rawPayload
+      = ByteArrays.getSubArray(
+          rawData,
+          header.length(),
+          rawData.length - header.length()
+        );
+    return new IcmpV4SourceQuenchPacket(header, rawPayload);
   }
 
-  private IcmpV4SourceQuenchPacket(byte[] rawData) {
-    this.header = new IcmpV4SourceQuenchHeader(rawData);
+  private IcmpV4SourceQuenchPacket(IcmpV4SourceQuenchHeader header, byte[] rawData) {
+    super(rawData);
+    this.header = header;
   }
 
   private IcmpV4SourceQuenchPacket(Builder builder) {
@@ -53,7 +66,9 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4UnusedPacket {
    * @since pcap4j 0.9.11
    */
   public static
-  final class Builder extends org.pcap4j.packet.IcmpV4UnusedPacket.Builder {
+  final class Builder extends org.pcap4j.packet.IcmpV4InvokingPacketPacket.Builder {
+
+    private int unused;
 
     /**
      *
@@ -62,11 +77,22 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4UnusedPacket {
 
     private Builder(IcmpV4SourceQuenchPacket packet) {
       super(packet);
+      this.unused = packet.getHeader().unused;
+    }
+
+    /**
+     *
+     * @param unused
+     * @return this Builder object for method chaining.
+     */
+    public Builder unused(int unused) {
+      this.unused = unused;
+      return this;
     }
 
     @Override
-    public Builder unused(int unused) {
-      super.unused(unused);
+    public Builder payload(Packet payload) {
+      super.payload(payload);
       return this;
     }
 
@@ -81,15 +107,12 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4UnusedPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  public static
-  final class IcmpV4SourceQuenchHeader extends IcmpUnusedHeader {
+  public static final class IcmpV4SourceQuenchHeader extends AbstractHeader {
 
     /*
      *   0                            15                              31
      *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      *  |                             unused                            |
-     *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     *  |IPv4 Header + 64 bits of Original Data Datagram(invokingPacket)|
      *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      *
      */
@@ -97,19 +120,61 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4UnusedPacket {
     /**
      *
      */
-    private static final long serialVersionUID = 1951530440617099199L;
+    private static final long serialVersionUID = -3569475573220386469L;
+
+    private static final int UNUSED_OFFSET
+      = 0;
+    private static final int UNUSED_SIZE
+      = INT_SIZE_IN_BYTES;
+    private static final int ICMPV4_SOURCE_QUENCH_HEADER_SIZE
+      = UNUSED_OFFSET + UNUSED_SIZE;
+
+    private final int unused;
 
     private IcmpV4SourceQuenchHeader(byte[] rawData) {
-      super(rawData);
+      if (rawData.length < ICMPV4_SOURCE_QUENCH_HEADER_SIZE) {
+        StringBuilder sb = new StringBuilder(80);
+        sb.append("The data is too short to build an ICMPv4 Source Quench Header(")
+          .append(ICMPV4_SOURCE_QUENCH_HEADER_SIZE)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "));
+        throw new IllegalRawDataException(sb.toString());
+      }
+
+      this.unused
+        = ByteArrays.getInt(rawData, UNUSED_OFFSET);
     }
 
     private IcmpV4SourceQuenchHeader(Builder builder) {
-      super(builder);
+      this.unused = builder.unused;
+    }
+
+    /**
+     *
+     * @return unused
+     */
+    public int getUnused() { return unused; }
+
+    @Override
+    protected List<byte[]> getRawFields() {
+      List<byte[]> rawFields = new ArrayList<byte[]>();
+      rawFields.add(ByteArrays.toByteArray(unused));
+      return rawFields;
     }
 
     @Override
-    protected String getHeaderName() {
-      return "ICMPv4 Source Quench Header";
+    protected String buildString() {
+      StringBuilder sb = new StringBuilder();
+      String ls = System.getProperty("line.separator");
+
+      sb.append("[ICMPv4 Source Quench Header (")
+        .append(length())
+        .append(" bytes)]")
+        .append(ls);
+      sb.append("  Unused: ")
+        .append(unused)
+        .append(ls);
+      return sb.toString();
     }
 
   }

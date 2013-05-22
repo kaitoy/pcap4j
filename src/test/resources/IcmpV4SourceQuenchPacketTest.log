@@ -1,6 +1,5 @@
-[ICMPv4 Source Quench Header (32 bytes)]
+[ICMPv4 Source Quench Header (4 bytes)]
   Unused: 12345
-  Invoking Packet: {
 [IPv4 Header (20 bytes)]
   Version: 4(IPv4)
   IHL: 5 (20 [bytes])
@@ -23,4 +22,3 @@
   SequenceNumber: 10
 [data (0 bytes)]
   Hex stream: 
-}

@@ -1,7 +1,6 @@
-[ICMPv4 Parameter Problem Header (32 bytes)]
+[ICMPv4 Parameter Problem Header (4 bytes)]
   Pointer: 123
   Unused: 321
-  Invoking Packet: {
 [IPv4 Header (20 bytes)]
   Version: 4(IPv4)
   IHL: 5 (20 [bytes])
@@ -24,4 +23,3 @@
   SequenceNumber: 10
 [data (0 bytes)]
   Hex stream: 
-}
