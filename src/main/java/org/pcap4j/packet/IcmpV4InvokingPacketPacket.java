@@ -75,7 +75,7 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
-        .append(" builder.ipV4Packet: ").append(builder.payload);
+        .append(" builder.payload: ").append(builder.payload);
       throw new NullPointerException(sb.toString());
     }
 
