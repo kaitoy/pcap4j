@@ -7,8 +7,12 @@
 
 package org.pcap4j.packet.factory;
 
+import org.pcap4j.packet.IcmpV6DestinationUnreachablePacket;
 import org.pcap4j.packet.IcmpV6EchoReplyPacket;
 import org.pcap4j.packet.IcmpV6EchoRequestPacket;
+import org.pcap4j.packet.IcmpV6PacketTooBigPacket;
+import org.pcap4j.packet.IcmpV6ParameterProblemPacket;
+import org.pcap4j.packet.IcmpV6TimeExceededPacket;
 import org.pcap4j.packet.IllegalPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
@@ -46,7 +50,19 @@ implements PacketFactory<IcmpV6Type> {
     }
 
     try {
-      if (number.equals(IcmpV6Type.ECHO_REQUEST)) {
+      if (number.equals(IcmpV6Type.DESTINATION_UNREACHABLE)) {
+        return IcmpV6DestinationUnreachablePacket.newPacket(rawData);
+      }
+      else if (number.equals(IcmpV6Type.PACKET_TOO_BIG)) {
+        return IcmpV6PacketTooBigPacket.newPacket(rawData);
+      }
+      else if (number.equals(IcmpV6Type.TIME_EXCEEDED)) {
+        return IcmpV6TimeExceededPacket.newPacket(rawData);
+      }
+      else if (number.equals(IcmpV6Type.PARAMETER_PROBLEM)) {
+        return IcmpV6ParameterProblemPacket.newPacket(rawData);
+      }
+      else if (number.equals(IcmpV6Type.ECHO_REQUEST)) {
         return IcmpV6EchoRequestPacket.newPacket(rawData);
       }
       else if (number.equals(IcmpV6Type.ECHO_REPLY)) {

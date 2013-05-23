@@ -1,0 +1,20 @@
+[ICMPv6 Destination Unreachable Header (4 bytes)]
+  Unused: 12345
+[IPv6 Header (40 bytes)]
+  Version: 6(IPv6)
+  Traffic Class: 0x12
+  Flow Label: 0x12345
+  Payload length: 11 [bytes]
+  Next Header: 58(ICMPv6)
+  Hop Limit: 100
+  Source address: /aa:bb:cc:0:0:3:2:1
+  Destination address: /aa:bb:cc:0:0:3:2:2
+[ICMPv6 Common Header (4 bytes)]
+  Type: 128(Echo Request)
+  Code: 0(No Code)
+  Checksum: 0x78dc
+[ICMPv6 Echo Request Header (4 bytes)]
+  Identifier: 100
+  SequenceNumber: 10
+[data (3 bytes)]
+  Hex stream: 00 01 02
