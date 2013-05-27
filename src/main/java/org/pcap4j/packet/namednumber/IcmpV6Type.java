@@ -28,67 +28,67 @@ public final class IcmpV6Type extends NamedNumber<Byte> {
    *
    */
   public static final IcmpV6Type DESTINATION_UNREACHABLE
-    = new IcmpV6Type((byte)0x01, "Destination Unreachable");
+    = new IcmpV6Type((byte)1, "Destination Unreachable");
 
   /**
    *
    */
   public static final IcmpV6Type PACKET_TOO_BIG
-    = new IcmpV6Type((byte)0x02, "Packet Too Big");
+    = new IcmpV6Type((byte)2, "Packet Too Big");
 
   /**
    *
    */
   public static final IcmpV6Type TIME_EXCEEDED
-    = new IcmpV6Type((byte)0x03, "Time Exceeded");
+    = new IcmpV6Type((byte)3, "Time Exceeded");
 
   /**
    *
    */
   public static final IcmpV6Type PARAMETER_PROBLEM
-    = new IcmpV6Type((byte)0x04, "Parameter Problem");
+    = new IcmpV6Type((byte)4, "Parameter Problem");
 
   /**
    *
    */
   public static final IcmpV6Type ECHO_REQUEST
-    = new IcmpV6Type((byte)0x80, "Echo Request");
+    = new IcmpV6Type((byte)128, "Echo Request");
 
   /**
    *
    */
   public static final IcmpV6Type ECHO_REPLY
-    = new IcmpV6Type((byte)0x81, "Echo Reply");
+    = new IcmpV6Type((byte)129, "Echo Reply");
 
   /**
    *
    */
   public static final IcmpV6Type ROUTER_SOLICITATION
-    = new IcmpV6Type((byte)0x85, "Router Solicitation");
+    = new IcmpV6Type((byte)133, "Router Solicitation");
 
   /**
    *
    */
   public static final IcmpV6Type ROUTER_ADVERTISEMENT
-    = new IcmpV6Type((byte)0x86, "Router Advertisement");
+    = new IcmpV6Type((byte)134, "Router Advertisement");
 
   /**
    *
    */
   public static final IcmpV6Type NEIGHBOR_SOLICITATION
-    = new IcmpV6Type((byte)0x87, "Neighbor Solicitation");
+    = new IcmpV6Type((byte)135, "Neighbor Solicitation");
 
   /**
    *
    */
   public static final IcmpV6Type NEIGHBOR_ADVERTISEMENT
-    = new IcmpV6Type((byte)0x88, "Neighbor Advertisement");
+    = new IcmpV6Type((byte)136, "Neighbor Advertisement");
 
   /**
    *
    */
   public static final IcmpV6Type REDIRECT
-    = new IcmpV6Type((byte)0x89, "Redirect");
+    = new IcmpV6Type((byte)137, "Redirect");
 
   private static final Map<Byte, IcmpV6Type> registry
     = new HashMap<Byte, IcmpV6Type>();
