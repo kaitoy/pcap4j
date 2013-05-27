@@ -174,6 +174,11 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
     }
 
     @Override
+    public int length() {
+      return ICMPV4_REDIRECT_HEADER_SIZE;
+    }
+
+    @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");

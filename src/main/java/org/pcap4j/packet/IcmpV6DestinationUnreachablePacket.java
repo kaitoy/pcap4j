@@ -167,6 +167,11 @@ extends IcmpV6InvokingPacketPacket {
     }
 
     @Override
+    public int length() {
+      return ICMPV6_DESTINATION_UNREACHABLE_HEADER_SIZE;
+    }
+
+    @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");

@@ -197,6 +197,11 @@ public final class IcmpV4ParameterProblemPacket extends IcmpV4InvokingPacketPack
     }
 
     @Override
+    public int length() {
+      return ICMPV4_PARAMETER_PROBLEM_HEADER_SIZE;
+    }
+
+    @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
