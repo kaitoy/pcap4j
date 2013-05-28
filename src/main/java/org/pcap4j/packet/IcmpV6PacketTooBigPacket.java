@@ -158,6 +158,12 @@ extends IcmpV6InvokingPacketPacket {
      */
     public int getMtu() { return mtu; }
 
+    /**
+     *
+     * @return mtu
+     */
+    public long getMtuAsLong() { return mtu & 0xFFFFFFFFL; }
+
     @Override
     protected List<byte[]> getRawFields() {
       List<byte[]> rawFields = new ArrayList<byte[]>();

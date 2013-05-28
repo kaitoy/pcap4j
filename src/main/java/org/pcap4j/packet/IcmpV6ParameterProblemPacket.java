@@ -158,6 +158,12 @@ extends IcmpV6InvokingPacketPacket {
      */
     public int getPointer() { return pointer; }
 
+    /**
+     *
+     * @return pointer
+     */
+    public long getPointerAsLong() { return pointer & 0xFFFFFFFFL; }
+
     @Override
     protected List<byte[]> getRawFields() {
       List<byte[]> rawFields = new ArrayList<byte[]>();

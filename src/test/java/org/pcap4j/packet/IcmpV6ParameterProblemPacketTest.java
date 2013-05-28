@@ -131,6 +131,25 @@ public class IcmpV6ParameterProblemPacketTest {
   public void testGetHeader() {
     IcmpV6ParameterProblemHeader h = packet.getHeader();
     assertEquals(pointer, h.getPointer());
+
+    IcmpV6ParameterProblemPacket.Builder b = packet.getBuilder();
+    IcmpV6ParameterProblemPacket p;
+
+    b.pointer(0);
+    p = b.build();
+    assertEquals(0, (int)p.getHeader().getPointerAsLong());
+
+    b.pointer(2147483647);
+    p = b.build();
+    assertEquals(2147483647, (int)p.getHeader().getPointerAsLong());
+
+    b.pointer(-1);
+    p = b.build();
+    assertEquals(-1, (int)p.getHeader().getPointerAsLong());
+
+    b.pointer(-2147483648);
+    p = b.build();
+    assertEquals(-2147483648, (int)p.getHeader().getPointerAsLong());
   }
 
   @Test

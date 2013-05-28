@@ -131,6 +131,25 @@ public class IcmpV6PacketTooBigPacketTest {
   public void testGetHeader() {
     IcmpV6PacketTooBigHeader h = packet.getHeader();
     assertEquals(mtu, h.getMtu());
+
+    IcmpV6PacketTooBigPacket.Builder b = packet.getBuilder();
+    IcmpV6PacketTooBigPacket p;
+
+    b.mtu(0);
+    p = b.build();
+    assertEquals(0, (int)p.getHeader().getMtuAsLong());
+
+    b.mtu(2147483647);
+    p = b.build();
+    assertEquals(2147483647, (int)p.getHeader().getMtuAsLong());
+
+    b.mtu(-1);
+    p = b.build();
+    assertEquals(-1, (int)p.getHeader().getMtuAsLong());
+
+    b.mtu(-2147483648);
+    p = b.build();
+    assertEquals(-2147483648, (int)p.getHeader().getMtuAsLong());
   }
 
   @Test
