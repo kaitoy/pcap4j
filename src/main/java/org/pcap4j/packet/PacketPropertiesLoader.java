@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.IpV4Packet.IpV4Tos;
@@ -26,6 +27,7 @@ import org.pcap4j.packet.factory.PropertiesBasedIpV6TrafficClassFactory;
 import org.pcap4j.packet.factory.StaticUnknownPacketFactory;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
+import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
 import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
 import org.pcap4j.packet.namednumber.NamedNumber;
@@ -171,6 +173,18 @@ public final class PacketPropertiesLoader {
    */
   public static final String UNKNOWN_IPV6_ROUTING_DATA_KEY
     = IPV6_OPTION_CLASS_KEY_BASE + "unknownNumber";
+
+  /**
+   *
+   */
+  public static final String IPV6_NEIGHBOR_DISCOVERY_OPTION_CLASS_KEY_BASE
+    = IpV6NeighborDiscoveryOption.class.getName() + ".classFor.";
+
+  /**
+   *
+   */
+  public static final String UNKNOWN_IPV6_NEIGHBOR_DISCOVERY_OPTION_KEY
+    = IPV6_NEIGHBOR_DISCOVERY_OPTION_CLASS_KEY_BASE + "unknownNumber";
 
   /**
    *
@@ -539,6 +553,36 @@ public final class PacketPropertiesLoader {
     return loader.<IpV6RoutingData>getClass(
              UNKNOWN_IPV6_ROUTING_DATA_KEY,
              UnknownIpV6RoutingData.class
+           );
+  }
+
+  /**
+   *
+   * @param type
+   * @return a class which implements IpV6NeighborDiscoveryOption for a specified type.
+   */
+  public Class<? extends IpV6NeighborDiscoveryOption>
+  getIpV6NeighborDiscoveryOptionClass(IpV6NeighborDiscoveryOptionType type) {
+    StringBuilder sb = new StringBuilder(120);
+    sb.append(IPV6_NEIGHBOR_DISCOVERY_OPTION_CLASS_KEY_BASE)
+      .append(type.getClass().getName())
+      .append(".")
+      .append(type.valueAsString());
+    return loader.<IpV6NeighborDiscoveryOption>getClass(
+             sb.toString(),
+             getUnknownIpV6NeighborDiscoveryOptionClass()
+           );
+  }
+
+  /**
+   *
+   * @return a class which implements IpV6NeighborDiscoveryOption for an unknown type.
+   */
+  public Class<? extends IpV6NeighborDiscoveryOption>
+  getUnknownIpV6NeighborDiscoveryOptionClass() {
+    return loader.<IpV6NeighborDiscoveryOption>getClass(
+             UNKNOWN_IPV6_NEIGHBOR_DISCOVERY_OPTION_KEY,
+             UnknownIpV6NeighborDiscoveryOption.class
            );
   }
 

@@ -19,11 +19,25 @@ public final class IcmpV4Helper {
 
   /**
    *
-   * @param packet IPv4 Packet
+   * @param packet an IPv4 Packet
    * @return a new Packet object.
    */
   public static Packet makePacketForInvokingPacketField(Packet packet) {
-    return IcmpV6Helper.makePacketForInvokingPacketField(packet, 8);
+    if (
+         packet == null
+      || packet.getHeader() == null
+      || packet.getPayload() == null
+    ) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("packet: ").append(packet)
+        .append(" packet.getHeader(): ").append(packet.getHeader())
+        .append(" packet.getPayload(): ").append(packet.getPayload());
+      throw new NullPointerException(sb.toString());
+    }
+
+    return IcmpV6Helper.makePacketForInvokingPacketField(
+             packet, 8 + packet.getHeader().length()
+           );
   }
 
 }

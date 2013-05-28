@@ -10,8 +10,13 @@ package org.pcap4j.packet.factory;
 import org.pcap4j.packet.IcmpV6DestinationUnreachablePacket;
 import org.pcap4j.packet.IcmpV6EchoReplyPacket;
 import org.pcap4j.packet.IcmpV6EchoRequestPacket;
+import org.pcap4j.packet.IcmpV6NeighborAdvertisementPacket;
+import org.pcap4j.packet.IcmpV6NeighborSolicitationPacket;
 import org.pcap4j.packet.IcmpV6PacketTooBigPacket;
 import org.pcap4j.packet.IcmpV6ParameterProblemPacket;
+import org.pcap4j.packet.IcmpV6RedirectPacket;
+import org.pcap4j.packet.IcmpV6RouterAdvertisementPacket;
+import org.pcap4j.packet.IcmpV6RouterSolicitationPacket;
 import org.pcap4j.packet.IcmpV6TimeExceededPacket;
 import org.pcap4j.packet.IllegalPacket;
 import org.pcap4j.packet.IllegalRawDataException;
@@ -67,6 +72,21 @@ implements PacketFactory<IcmpV6Type> {
       }
       else if (number.equals(IcmpV6Type.ECHO_REPLY)) {
         return IcmpV6EchoReplyPacket.newPacket(rawData);
+      }
+      else if (number.equals(IcmpV6Type.ROUTER_SOLICITATION)) {
+        return IcmpV6RouterSolicitationPacket.newPacket(rawData);
+      }
+      else if (number.equals(IcmpV6Type.ROUTER_ADVERTISEMENT)) {
+        return IcmpV6RouterAdvertisementPacket.newPacket(rawData);
+      }
+      else if (number.equals(IcmpV6Type.NEIGHBOR_SOLICITATION)) {
+        return IcmpV6NeighborSolicitationPacket.newPacket(rawData);
+      }
+      else if (number.equals(IcmpV6Type.NEIGHBOR_ADVERTISEMENT)) {
+        return IcmpV6NeighborAdvertisementPacket.newPacket(rawData);
+      }
+      else if (number.equals(IcmpV6Type.REDIRECT)) {
+        return IcmpV6RedirectPacket.newPacket(rawData);
       }
     } catch (IllegalRawDataException e) {
       return IllegalPacket.newPacket(rawData);

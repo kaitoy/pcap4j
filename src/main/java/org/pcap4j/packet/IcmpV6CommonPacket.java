@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+import java.io.Serializable;
 import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IcmpV6Code;
 import org.pcap4j.packet.namednumber.IcmpV6Type;
 import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -429,6 +431,35 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
 
       return sb.toString();
     }
+
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 0.9.15
+   */
+  public interface IpV6NeighborDiscoveryOption extends Serializable {
+
+    // /* must implement if use PropertiesBasedIpV6NeighborDiscoveryOptionFactory */
+    // public static IpV6NeighborDiscoveryOption newInstance(byte[] rawData);
+
+    /**
+     *
+     * @return type
+     */
+    public IpV6NeighborDiscoveryOptionType getType();
+
+    /**
+     *
+     * @return length
+     */
+    public int length();
+
+    /**
+     *
+     * @return raw data
+     */
+    public byte[] getRawData();
 
   }
 

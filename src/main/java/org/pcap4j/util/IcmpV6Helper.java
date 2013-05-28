@@ -22,27 +22,29 @@ public final class IcmpV6Helper {
 
   /**
    *
-   * @param packet IPv6 Packet
-   * @param size size of the invoking packet in bytes
-   * @return a new Packet object.
+   * @param packet an IPv6 Packet
+   * @param size the target size in bytes. (i.e. MTU - <IPv6 header(s) size> - <ICMPv6 header size>)
+   * @return a new IPv6 packet object.
    */
   public static Packet makePacketForInvokingPacketField(Packet packet, int size) {
     if (
          packet == null
+      || packet.getHeader() == null
       || packet.getPayload() == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("packet: ").append(packet)
+        .append(" packet.getHeader(): ").append(packet.getHeader())
         .append(" packet.getPayload(): ").append(packet.getPayload());
       throw new NullPointerException(sb.toString());
     }
 
-    if (packet.getPayload().length() <= size) {
+    if (packet.length() <= size) {
       return packet;
     }
 
-    int length = 0;
-    int prelength = 0;
+    int length = packet.getHeader().length();
+    int prelength = length;
     int pos = 0;
     Packet last = null;
     for (Packet p: packet.getPayload()) {
@@ -86,6 +88,22 @@ public final class IcmpV6Helper {
     }
 
     return resultBuilder.build();
+  }
+
+  /**
+   *
+   * @param packet an IPv6 Packet
+   * @param size the target size in bytes. (i.e. MTU - <IPv6 header(s) size> - <ICMPv6 header size> - <IPv6 ND option(s) size>)
+   * @return a new IPv6 packet object.
+   */
+  public static Packet makePacketForRedirectHeaderOption(Packet packet, int size) {
+    if (packet.length() > size) {
+      return makePacketForInvokingPacketField(packet, size - size % 8);
+    }
+    else {
+      int length = packet.length();
+      return makePacketForInvokingPacketField(packet, length - length % 8);
+    }
   }
 
 }

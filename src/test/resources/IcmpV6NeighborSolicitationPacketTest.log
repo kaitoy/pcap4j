@@ -1,0 +1,4 @@
+[ICMPv6 Neighbor Solicitation Header (28 bytes)]
+  Reserved: 123454321
+  Target Address: /fe80:0:0:0:aaaa:bbbb:0:0
+  Option: [Type: 1(Source Link-Layer Address)] [Length: 1 (8 bytes)] [linkLayerAddress: ff 00 00 01 02 03]

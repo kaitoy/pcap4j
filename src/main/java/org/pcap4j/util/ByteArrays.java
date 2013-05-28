@@ -676,6 +676,19 @@ public final class ByteArrays {
   /**
    *
    * @param array
+   * @param offset
+   * @return sub array
+   */
+  public static byte[] getSubArray(byte[] array, int offset) {
+    if (array == null) {
+      throw new NullPointerException("array may not be null");
+    }
+    return getSubArray(array, offset, array.length - offset);
+  }
+
+  /**
+   *
+   * @param array
    * @param separator
    * @return hex string
    */
@@ -818,6 +831,17 @@ public final class ByteArrays {
     }
 
     return array;
+  }
+
+  /**
+   *
+   * @param array
+   * @return a clone of array
+   */
+  public static byte[] clone(byte[] array) {
+    byte[] clone = new byte[array.length];
+    System.arraycopy(array, 0, clone, 0, array.length);
+    return clone;
   }
 
 }

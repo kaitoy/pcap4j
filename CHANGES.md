@@ -1,7 +1,7 @@
 Next Release
 ============
 ### New Features ###
-* Add ICMPv6(RFC4443, RFC4861) support. (ongoing)
+* Add ICMPv6(RFC4443, RFC4861) support.
 
 ### Bug Fixes ###
 * [Issues#7](https://github.com/kaitoy/pcap4j/issues/7): Fix invalid properties in packet.properties. - [@kaitoy](https://github.com/kaitoy)
