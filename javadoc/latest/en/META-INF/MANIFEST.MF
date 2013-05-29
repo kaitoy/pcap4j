@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Built-By: Kaito
-Build-Jdk: 1.6.0_34
+Build-Jdk: 1.7.0_17
 Created-By: Apache Maven
 Archiver-Version: Plexus Archiver
 
