@@ -44,7 +44,7 @@ Features
   You can get/set each field of a packet header via the Java object converted from the packet.
   You can also craft a packet object from scratch.
 * Sending packet objects to a real network.
-* Supported protocols: Ethernet, IEEE802.1Q, ARP, IPv4(RFC791 and RFC1349), IPv6(RFC2460), ICMPv4(RFC792), TCP(RFC793), and UDP.
+* Supported protocols: Ethernet, IEEE802.1Q, ARP, IPv4(RFC791 and RFC1349), IPv6(RFC2460), ICMPv4(RFC792), ICMPv6(RFC4443, RFC4861), TCP(RFC793), and UDP.
 * All built-in packet classes are serializable and thread-safe(practically immutable).
 * You can add a protocol support without modifying Pcap4J library itself.
 * Dumping and reading pcap-formatted files(e.g. a capture file of Wireshark).
