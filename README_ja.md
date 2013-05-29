@@ -19,9 +19,9 @@ Pcap4J 0.9.13 (このページから配布する最後のバージョン)
 
 * [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
 
-Pcap4J 0.9.14 (Maven Central Repositoryにある最新バージョン)
+Pcap4J 0.9.15 (Maven Central Repositoryにある最新バージョン)
 
-* [pcap4j-0.9.14.jar](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/0.9.14/pcap4j-0.9.14.jar)
+* [pcap4j-0.9.15.jar](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/0.9.15/pcap4j-0.9.15.jar)
 
 開発経緯
 --------
@@ -128,7 +128,7 @@ pom.xmlに以下のような記述を追加する。
           <dependency>
             <groupId>org.pcap4j</groupId>
             <artifactId>pcap4j</artifactId>
-            <version>0.9.14</version>
+            <version>0.9.15</version>
           </dependency>
              ...
         </dependencies>
@@ -231,7 +231,7 @@ Pcap4J is distributed under the MIT license.
 おまけ
 ------
 
-Pcap4J 0.9.14 を使ったSNMPネットワークシミュレータ、SNeO。
+Pcap4J 0.9.15 を使ったSNMPネットワークシミュレータ、SNeO。
 とりあえず置いておくだけ。
 商用でもなんでも無料で使用可。コピーも再配布も可。
 
