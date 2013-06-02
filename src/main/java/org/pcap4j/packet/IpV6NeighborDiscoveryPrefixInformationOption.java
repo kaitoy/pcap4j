@@ -300,6 +300,7 @@ implements IpV6NeighborDiscoveryOption {
     byte[] rawData = new byte[length()];
     rawData[TYPE_OFFSET] = getType().value();
     rawData[LENGTH_OFFSET] = length;
+    rawData[PREFIX_LENGTH_OFFSET] = prefixLength;
     rawData[L_A_RESERVED1_OFFSET] = (byte)(0x3F & reserved1);
     if (onLinkFlag) {
       rawData[L_A_RESERVED1_OFFSET] |= 1 << 7;
