@@ -3,6 +3,7 @@ Next Release
 ### New Features ###
 
 ### Bug Fixes ###
+* Fix org.pcap4j.packet.IpV6NeighborDiscoveryPrefixInformationOption#getRawData() to return correct prefixLength.
 
 ### Other Changes ###
 
