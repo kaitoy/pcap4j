@@ -1,6 +1,7 @@
 Next Release
 ============
 ### New Features ###
+* Add Ubuntu support.
 
 ### Bug Fixes ###
 * Fix org.pcap4j.packet.IpV6NeighborDiscoveryPrefixInformationOption#getRawData() to return correct prefixLength.

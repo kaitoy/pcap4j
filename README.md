@@ -58,6 +58,7 @@ I tested Pcap4j on the following OSes with x86 processors.
 * Linux
  * RHEL: 5 and 6
  * CentOS: 5
+ * Ubuntu: 13
 * UNIX
  * Solaris: 10
 
@@ -93,6 +94,7 @@ I'm using the following libraries for the test.
 * logback-core 1.0.1
 * logback-classic 1.0.1
 
+Run Pcap4J with administrator/root privileges.
 
 #### About pcap library loading ####
 By default, Pcap4j loads the pcap library on the following conditions:
@@ -150,7 +152,7 @@ I'm developing Pcap4j in the following environment.
 * [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
 * [Apache Maven](http://maven.apache.org/) 3.0.5
 
-The build procedure using Eclipse is the following.
+The build procedure using Eclipse is the following:
 
 0. Install WinPcap/libpcap<br>
    The pcap library is needed for the unit tests ran in the Build step.
@@ -175,12 +177,13 @@ The build procedure using Eclipse is the following.
    Select [General] > [Existing Projects into Workspace] and
    follow the wizard to import the project in the Pcap4J repository.
 6. Build<br>
-   Right-click the Pcap4J project in the Project Explorer of Eclipse and select [Run as] > [Maven install]
+   Right-click the Pcap4J project in the Project Explorer of Eclipse and select [Run as] > [Maven install].
+   Note administrator/root privileges are needed for the unit tests.
 
 For your information, M2E was formerly called [m2eclipse](http://m2eclipse.sonatype.org/).
 If you want to build Pcap4j with m2eclipse, skip the step 2 and import the maven project instead of the eclipse project in the step 4.
 
-The build procedure using Maven command line is the following.
+The build procedure using Maven command line is the following:
 
 0. Install WinPcap/libpcap<br>
    The pcap library is needed for the unit tests ran in the Build step.
@@ -197,6 +200,7 @@ The build procedure using Maven command line is the following.
 5. Build<br>
    Open a command prompt, `cd` to the project root directory(i.e. the same directory as the pom.xml in the directory created in the step 4),
    and execute `mvn install`.
+   Note administrator/root privileges are needed for the unit tests.
 
 License
 -------

@@ -58,6 +58,7 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 * Linux
  * RHEL: 5 and 6
  * CentOS: 5
+ * Ubuntu: 13
 * UNIX
  * Solaris: 10
 
@@ -83,7 +84,7 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 * [サンプルクラス](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)
 * [サポートプロトコル追加方法](/www/HowToAddProtocolSupport.md)
 
-J2SE 5.0以降で動く。
+J2SE 5.0以降で動く。管理者権限で実行する必要がある。
 UNIX系ならlibpcap (多分)0.9.3以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。
 jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。
 
@@ -175,6 +176,7 @@ Eclipseからのビルド手順は以下。
 6. ビルド<br>
    EclipseのGUIのプロジェクト・エクスプローラーで、Pcap4Jのプロジェクトを右クリックして、
    [実行]＞[Maven package] か [実行]＞[Maven install] を実行する。
+   unit testを通すためにはAdministrator/root権限が必要。
 
 因みに、M2Eは旧[m2eclipse](http://m2eclipse.sonatype.org/)。
 m2eclipseでビルドしたい場合は、ステップ2をスキップして、ステップ4でMavenプロジェクトの方をインポートすればよい。
@@ -195,6 +197,7 @@ Mavenコマンドを直接実行するビルド手順は以下。
    ステップ3をスキップした場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
 5. ビルド<br>
   プロジェクトのルートディレクトリ(ステップ4でできたディレクトリ内のpom.xmlのあるところ)に`cd`して、`mvn install` を実行する。
+  unit testを通すためにはAdministrator/root権限が必要。
 
 ライセンス
 ----------
