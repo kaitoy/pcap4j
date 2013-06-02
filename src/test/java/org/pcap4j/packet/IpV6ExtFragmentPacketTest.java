@@ -1,22 +1,14 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.StringReader;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pcap4j.core.PcapDumper;
@@ -34,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("javadoc")
-public class IpV6ExtFragmentPacketTest {
+public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
 
   private static final Logger logger
     = LoggerFactory.getLogger(IpV6ExtFragmentPacketTest.class);
@@ -61,9 +53,9 @@ public class IpV6ExtFragmentPacketTest {
 
     try {
       srcAddr
-        = (Inet6Address)InetAddress.getByName("aa:bb:cc::3:2:1");
+        = (Inet6Address)InetAddress.getByName("2001:db8::3:2:1");
       dstAddr
-        = (Inet6Address)InetAddress.getByName("aa:bb:cc::3:2:2");
+        = (Inet6Address)InetAddress.getByName("2001:db8::3:2:2");
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
@@ -114,6 +106,16 @@ public class IpV6ExtFragmentPacketTest {
     this.packet2 = b.build();
   }
 
+  @Override
+  protected Packet getPacket() {
+    return packet1;
+  }
+
+  @Override
+  protected Packet getWholePacket() {
+    throw new UnsupportedOperationException();
+  }
+
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -123,23 +125,6 @@ public class IpV6ExtFragmentPacketTest {
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-  }
-
-  @Before
-  public void setUp() throws Exception {
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    logger.info(
-      "=================================================="
-    );
-  }
-
-  @Test
-  public void testGetBuilder() {
-    IpV6ExtFragmentPacket.Builder builder = packet1.getBuilder();
-    assertEquals(packet1, builder.build());
   }
 
   @Test
@@ -161,11 +146,7 @@ public class IpV6ExtFragmentPacketTest {
   }
 
   @Test
-  public void testLength() {
-    assertEquals(packet1.getRawData().length, packet1.length());
-  }
-
-  @Test
+  @Override
   public void testToString() throws Exception {
     FileReader fr
       = new FileReader(
@@ -199,6 +180,7 @@ public class IpV6ExtFragmentPacketTest {
   }
 
   @Test
+  @Override
   public void testDump() throws Exception {
     String dumpFile = "test/" + this.getClass().getSimpleName() + ".pcap";
 
@@ -243,40 +225,6 @@ public class IpV6ExtFragmentPacketTest {
           "src/test/resources/" + getClass().getSimpleName() + ".pcap"
         );
     FileInputStream in2 = new FileInputStream(dumpFile);
-
-    byte[] buffer1 = new byte[100];
-    byte[] buffer2 = new byte[100];
-    int size;
-    while ((size = in1.read(buffer1)) != -1) {
-      assertEquals(size, in2.read(buffer2));
-      assertArrayEquals(buffer1, buffer2);
-    }
-
-    in1.close();
-    in2.close();
-  }
-
-  @Test
-  public void testWriteRead() throws Exception {
-    String objFile = "test/" + this.getClass().getSimpleName() + ".obj";
-
-    ObjectOutputStream oos
-      = new ObjectOutputStream(
-          new FileOutputStream(new File(objFile))
-        );
-    oos.writeObject(packet1);
-    oos.close();
-
-    ObjectInputStream ois
-      = new ObjectInputStream(new FileInputStream(new File(objFile)));
-    assertEquals(packet1, ois.readObject());
-    ois.close();
-
-    FileInputStream in1
-      = new FileInputStream(
-          "src/test/resources/" + getClass().getSimpleName() + ".obj"
-        );
-    FileInputStream in2 = new FileInputStream(objFile);
 
     byte[] buffer1 = new byte[100];
     byte[] buffer2 = new byte[100];

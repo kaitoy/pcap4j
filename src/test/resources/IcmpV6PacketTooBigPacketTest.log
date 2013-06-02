@@ -7,12 +7,12 @@
   Payload length: 11 [bytes]
   Next Header: 58(ICMPv6)
   Hop Limit: 100
-  Source address: /aa:bb:cc:0:0:3:2:1
-  Destination address: /aa:bb:cc:0:0:3:2:2
+  Source address: /2001:db8:0:0:0:3:2:1
+  Destination address: /2001:db8:0:0:0:3:2:2
 [ICMPv6 Common Header (4 bytes)]
   Type: 128(Echo Request)
   Code: 0(No Code)
-  Checksum: 0x78dc
+  Checksum: 0x21cc
 [ICMPv6 Echo Request Header (4 bytes)]
   Identifier: 100
   SequenceNumber: 10

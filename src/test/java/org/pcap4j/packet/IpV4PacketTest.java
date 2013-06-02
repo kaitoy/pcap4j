@@ -2,12 +2,8 @@ package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.StringReader;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -15,9 +11,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pcap4j.core.PcapDumper;
@@ -38,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("javadoc")
-public class IpV4PacketTest {
+public class IpV4PacketTest extends AbstractPacketTest {
 
   private static final Logger logger
     = LoggerFactory.getLogger(IpV4PacketTest.class);
@@ -157,6 +151,16 @@ public class IpV4PacketTest {
     this.packet2 = b.build();
   }
 
+  @Override
+  protected Packet getPacket() {
+    return packet1;
+  }
+
+  @Override
+  protected Packet getWholePacket() {
+    throw new UnsupportedOperationException();
+  }
+
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -166,23 +170,6 @@ public class IpV4PacketTest {
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-  }
-
-  @Before
-  public void setUp() throws Exception {
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    logger.info(
-      "=================================================="
-    );
-  }
-
-  @Test
-  public void testGetBuilder() {
-    IpV4Packet.Builder b = packet1.getBuilder();
-    assertEquals(packet1, b.build());
   }
 
   @Test
@@ -325,6 +312,7 @@ public class IpV4PacketTest {
   }
 
   @Test
+  @Override
   public void testToString() throws Exception {
     FileReader fr
       = new FileReader(
@@ -371,6 +359,7 @@ public class IpV4PacketTest {
   }
 
   @Test
+  @Override
   public void testDump() throws Exception {
     String dumpFile = "test/" + this.getClass().getSimpleName() + ".pcap";
 
@@ -412,40 +401,6 @@ public class IpV4PacketTest {
           "src/test/resources/" + getClass().getSimpleName() + ".pcap"
         );
     FileInputStream in2 = new FileInputStream(dumpFile);
-
-    byte[] buffer1 = new byte[100];
-    byte[] buffer2 = new byte[100];
-    int size;
-    while ((size = in1.read(buffer1)) != -1) {
-      assertEquals(size, in2.read(buffer2));
-      assertArrayEquals(buffer1, buffer2);
-    }
-
-    in1.close();
-    in2.close();
-  }
-
-  @Test
-  public void testWriteRead() throws Exception {
-    String objFile = "test/" +  this.getClass().getSimpleName() + ".obj";
-
-    ObjectOutputStream oos
-      = new ObjectOutputStream(
-          new FileOutputStream(new File(objFile))
-        );
-    oos.writeObject(packet1);
-    oos.close();
-
-    ObjectInputStream ois
-      = new ObjectInputStream(new FileInputStream(new File(objFile)));
-    assertEquals(packet1, ois.readObject());
-    ois.close();
-
-    FileInputStream in1
-      = new FileInputStream(
-          "src/test/resources/" + getClass().getSimpleName() + ".obj"
-        );
-    FileInputStream in2 = new FileInputStream(objFile);
 
     byte[] buffer1 = new byte[100];
     byte[] buffer2 = new byte[100];

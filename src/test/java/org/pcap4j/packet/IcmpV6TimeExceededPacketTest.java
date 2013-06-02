@@ -1,27 +1,13 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StringReader;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.pcap4j.core.PcapDumper;
-import org.pcap4j.core.PcapHandle;
-import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.IcmpV6TimeExceededPacket.IcmpV6TimeExceededHeader;
-import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IcmpV6Code;
 import org.pcap4j.packet.namednumber.IcmpV6Type;
@@ -32,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("javadoc")
-public class IcmpV6TimeExceededPacketTest {
+public class IcmpV6TimeExceededPacketTest extends AbstractPacketTest {
 
   private static final Logger logger
     = LoggerFactory.getLogger(IcmpV6TimeExceededPacketTest.class);
@@ -54,8 +40,8 @@ public class IcmpV6TimeExceededPacketTest {
     Inet6Address srcAddr;
     Inet6Address dstAddr;
     try {
-      srcAddr = (Inet6Address)InetAddress.getByName("aa:bb:cc::3:2:1");
-      dstAddr = (Inet6Address)InetAddress.getByName("aa:bb:cc::3:2:2");
+      srcAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:1");
+      dstAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:2");
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
@@ -85,91 +71,18 @@ public class IcmpV6TimeExceededPacketTest {
     this.packet = b.build();
   }
 
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-    logger.info(
-      "########## " + IcmpV6TimeExceededPacketTest.class.getSimpleName() + " START ##########"
-    );
+  @Override
+  protected Packet getPacket() {
+    return packet;
   }
 
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
-
-  @Before
-  public void setUp() throws Exception {
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    logger.info(
-      "=================================================="
-    );
-  }
-
-  @Test
-  public void testGetBuilder() {
-    IcmpV6TimeExceededPacket.Builder builder = packet.getBuilder();
-    assertEquals(packet, builder.build());
-  }
-
-  @Test
-  public void testNewPacket() {
-    IcmpV6TimeExceededPacket p
-      = IcmpV6TimeExceededPacket.newPacket(packet.getRawData());
-    assertEquals(packet, p);
-
-    assertTrue(p.getPayload().contains(IpV6Packet.class));
-    assertTrue(p.getPayload().contains(IcmpV6CommonPacket.class));
-    assertTrue(p.getPayload().contains(IcmpV6EchoRequestPacket.class));
-    assertTrue(p.getPayload().contains(UnknownPacket.class));
-    assertEquals(p.getPayload().get(UnknownPacket.class).length(), 3);
-    assertFalse(p.getPayload().contains(IllegalPacket.class));
-  }
-
-  @Test
-  public void testGetHeader() {
-    IcmpV6TimeExceededHeader h = packet.getHeader();
-    assertEquals(unused, h.getUnused());
-  }
-
-  @Test
-  public void testLength() {
-    assertEquals(packet.getRawData().length, packet.length());
-  }
-
-  @Test
-  public void testToString() throws Exception {
-    FileReader fr
-      = new FileReader(
-          "src/test/resources/" + getClass().getSimpleName() + ".log"
-        );
-    BufferedReader fbr = new BufferedReader(fr);
-    StringReader sr = new StringReader(packet.toString());
-    BufferedReader sbr = new BufferedReader(sr);
-
-    String line;
-    while ((line = fbr.readLine()) != null) {
-      assertEquals(line, sbr.readLine());
-    }
-
-    assertNull(sbr.readLine());
-
-    fbr.close();
-    fr.close();
-    sr.close();
-    sbr.close();
-  }
-
-  @Test
-  public void testDump() throws Exception {
-    String dumpFile = "test/" + this.getClass().getSimpleName() + ".pcap";
-
+  @Override
+  protected Packet getWholePacket() {
     Inet6Address srcAddr;
     Inet6Address dstAddr;
     try {
-      srcAddr = (Inet6Address)InetAddress.getByName("aa:bb:cc::3:2:2");
-      dstAddr = (Inet6Address)InetAddress.getByName("aa:bb:cc::3:2:1");
+      srcAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:2");
+      dstAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:1");
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
@@ -198,68 +111,38 @@ public class IcmpV6TimeExceededPacketTest {
       .type(EtherType.IPV6)
       .payloadBuilder(ipv6b)
       .paddingAtBuild(true);
-    EthernetPacket ep = eb.build();
+    return eb.build();
+  }
 
-    PcapHandle handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
-    PcapDumper dumper = handle.dumpOpen(dumpFile);
-    dumper.dump(ep, 0, 0);
-    dumper.close();
-    handle.close();
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception {
+    logger.info(
+      "########## " + IcmpV6TimeExceededPacketTest.class.getSimpleName() + " START ##########"
+    );
+  }
 
-    PcapHandle reader = Pcaps.openOffline(dumpFile);
-    assertEquals(ep, reader.getNextPacket());
-    reader.close();
-
-    FileInputStream in1
-      = new FileInputStream(
-          "src/test/resources/" + getClass().getSimpleName() + ".pcap"
-        );
-    FileInputStream in2 = new FileInputStream(dumpFile);
-
-    byte[] buffer1 = new byte[100];
-    byte[] buffer2 = new byte[100];
-    int size;
-    while ((size = in1.read(buffer1)) != -1) {
-      assertEquals(size, in2.read(buffer2));
-      assertArrayEquals(buffer1, buffer2);
-    }
-
-    in1.close();
-    in2.close();
+  @AfterClass
+  public static void tearDownAfterClass() throws Exception {
   }
 
   @Test
-  public void testWriteRead() throws Exception {
-    String objFile = "test/" + this.getClass().getSimpleName() + ".obj";
+  public void testNewPacket() {
+    IcmpV6TimeExceededPacket p
+      = IcmpV6TimeExceededPacket.newPacket(packet.getRawData());
+    assertEquals(packet, p);
 
-    ObjectOutputStream oos
-      = new ObjectOutputStream(
-          new FileOutputStream(new File(objFile))
-        );
-    oos.writeObject(packet);
-    oos.close();
+    assertTrue(p.getPayload().contains(IpV6Packet.class));
+    assertTrue(p.getPayload().contains(IcmpV6CommonPacket.class));
+    assertTrue(p.getPayload().contains(IcmpV6EchoRequestPacket.class));
+    assertTrue(p.getPayload().contains(UnknownPacket.class));
+    assertEquals(p.getPayload().get(UnknownPacket.class).length(), 3);
+    assertFalse(p.getPayload().contains(IllegalPacket.class));
+  }
 
-    ObjectInputStream ois
-      = new ObjectInputStream(new FileInputStream(new File(objFile)));
-    assertEquals(packet, ois.readObject());
-    ois.close();
-
-    FileInputStream in1
-      = new FileInputStream(
-          "src/test/resources/" + getClass().getSimpleName() + ".obj"
-        );
-    FileInputStream in2 = new FileInputStream(objFile);
-
-    byte[] buffer1 = new byte[100];
-    byte[] buffer2 = new byte[100];
-    int size;
-    while ((size = in1.read(buffer1)) != -1) {
-      assertEquals(size, in2.read(buffer2));
-      assertArrayEquals(buffer1, buffer2);
-    }
-
-    in1.close();
-    in2.close();
+  @Test
+  public void testGetHeader() {
+    IcmpV6TimeExceededHeader h = packet.getHeader();
+    assertEquals(unused, h.getUnused());
   }
 
 }

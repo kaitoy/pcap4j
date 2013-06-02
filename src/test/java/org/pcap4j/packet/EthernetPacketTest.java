@@ -6,31 +6,15 @@
 */
 package org.pcap4j.packet;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StringReader;
+import static org.junit.Assert.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.pcap4j.core.PcapDumper;
-import org.pcap4j.core.PcapHandle;
-import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.EthernetPacket.EthernetHeader;
 import org.pcap4j.packet.namednumber.ArpHardwareType;
 import org.pcap4j.packet.namednumber.ArpOperation;
-import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
@@ -39,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 
 @SuppressWarnings("javadoc")
-public class EthernetPacketTest {
+public class EthernetPacketTest extends AbstractPacketTest {
 
   private static final Logger logger
     = LoggerFactory.getLogger(EthernetPacketTest.class);
@@ -96,6 +80,16 @@ public class EthernetPacketTest {
     this.packet = eb.build();
   }
 
+  @Override
+  protected Packet getPacket() {
+    return packet;
+  }
+
+  @Override
+  protected Packet getWholePacket() {
+    return packet;
+  }
+
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -105,23 +99,6 @@ public class EthernetPacketTest {
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-  }
-
-  @Before
-  public void setUp() throws Exception {
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    logger.info(
-      "=================================================="
-    );
-  }
-
-  @Test
-  public void testGetBuilder() {
-    EthernetPacket.Builder b = packet.getBuilder();
-    assertEquals(packet, b.build());
   }
 
   @Test
@@ -137,100 +114,6 @@ public class EthernetPacketTest {
     assertEquals(srcAddr, h.getSrcAddr());
     assertEquals(type, h.getType());
     assertArrayEquals(pad, packet.getPad());
-  }
-
-  @Test
-  public void testLength() {
-    assertEquals(packet.getRawData().length, packet.length());
-  }
-
-  @Test
-  public void testToString() throws Exception {
-    FileReader fr
-      = new FileReader(
-          "src/test/resources/" + getClass().getSimpleName() + ".log"
-        );
-    BufferedReader fbr = new BufferedReader(fr);
-    StringReader sr = new StringReader(packet.toString());
-    BufferedReader sbr = new BufferedReader(sr);
-
-    String line;
-    while ((line = fbr.readLine()) != null) {
-      assertEquals(line, sbr.readLine());
-    }
-
-    assertNull(sbr.readLine());
-
-    fbr.close();
-    fr.close();
-    sr.close();
-    sbr.close();
-  }
-
-  @Test
-  public void testDump() throws Exception {
-    String dumpFile = "test/" + this.getClass().getSimpleName() + ".pcap";
-
-    PcapHandle handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
-    PcapDumper dumper = handle.dumpOpen(dumpFile);
-    dumper.dump(packet, 0, 0);
-    dumper.close();
-    handle.close();
-
-    PcapHandle reader = Pcaps.openOffline(dumpFile);
-    assertEquals(packet, reader.getNextPacket());
-    reader.close();
-
-    FileInputStream in1
-      = new FileInputStream(
-          "src/test/resources/" + getClass().getSimpleName() + ".pcap"
-        );
-    FileInputStream in2 = new FileInputStream(dumpFile);
-
-    byte[] buffer1 = new byte[100];
-    byte[] buffer2 = new byte[100];
-    int size;
-    while ((size = in1.read(buffer1)) != -1) {
-      assertEquals(size, in2.read(buffer2));
-      assertArrayEquals(buffer1, buffer2);
-    }
-
-    in1.close();
-    in2.close();
-  }
-
-  @Test
-  public void testWriteRead() throws Exception {
-    String objFile = "test/" + this.getClass().getSimpleName() + ".obj";
-
-    ObjectOutputStream oos
-      = new ObjectOutputStream(
-          new FileOutputStream(new File(objFile))
-        );
-    oos.writeObject(packet);
-    oos.close();
-
-    ObjectInputStream ois
-      = new ObjectInputStream(new FileInputStream(new File(objFile)));
-    assertEquals(packet, ois.readObject());
-    ois.close();
-
-    FileInputStream in1
-      = new FileInputStream(
-          "src/test/resources/" + getClass().getSimpleName() + ".obj"
-        );
-    FileInputStream in2 = new FileInputStream(objFile);
-
-    byte[] buffer1 = new byte[100];
-    byte[] buffer2 = new byte[100];
-    int size;
-    while ((size = in1.read(buffer1)) != -1) {
-      assertEquals(size, in2.read(buffer2));
-      assertArrayEquals(buffer1, buffer2);
-    }
-
-    in1.close();
-    in2.close();
   }
 
 }

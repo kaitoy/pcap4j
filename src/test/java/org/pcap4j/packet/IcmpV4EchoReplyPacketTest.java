@@ -1,28 +1,13 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNull;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StringReader;
+import static org.junit.Assert.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import org.junit.After;
+import java.net.UnknownHostException;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.pcap4j.core.PcapDumper;
-import org.pcap4j.core.PcapHandle;
-import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.IcmpV4EchoReplyPacket.IcmpV4EchoReplyHeader;
-import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IcmpV4Code;
 import org.pcap4j.packet.namednumber.IcmpV4Type;
@@ -33,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("javadoc")
-public class IcmpV4EchoReplyPacketTest {
+public class IcmpV4EchoReplyPacketTest extends AbstractPacketTest {
 
   private static final Logger logger
     = LoggerFactory.getLogger(IcmpV4EchoReplyPacketTest.class);
@@ -56,6 +41,49 @@ public class IcmpV4EchoReplyPacketTest {
     this.packet = b.build();
   }
 
+  @Override
+  protected Packet getPacket() {
+    return packet;
+  }
+
+  @Override
+  protected Packet getWholePacket() throws UnknownHostException {
+    IcmpV4CommonPacket.Builder icmpV4b = new IcmpV4CommonPacket.Builder();
+    icmpV4b.type(IcmpV4Type.ECHO_REPLY)
+           .code(IcmpV4Code.NO_CODE)
+           .payloadBuilder(new SimpleBuilder(packet))
+           .correctChecksumAtBuild(true)
+           ;
+
+    IpV4Packet.Builder ipv4b = new IpV4Packet.Builder();
+    ipv4b.version(IpVersion.IPV4)
+         .tos(IpV4Rfc791Tos.newInstance((byte)0))
+         .identification((short)100)
+         .ttl((byte)100)
+         .protocol(IpNumber.ICMPV4)
+         .srcAddr(
+            (Inet4Address)InetAddress.getByAddress(
+              new byte[] { (byte)192, (byte)0, (byte)2, (byte)1 }
+            )
+          )
+        .dstAddr(
+           (Inet4Address)InetAddress.getByAddress(
+             new byte[] { (byte)192, (byte)0, (byte)2, (byte)2 }
+           )
+         )
+        .payloadBuilder(icmpV4b)
+        .correctChecksumAtBuild(true)
+        .correctLengthAtBuild(true);
+
+    EthernetPacket.Builder eb = new EthernetPacket.Builder();
+    eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
+      .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+      .type(EtherType.IPV4)
+      .payloadBuilder(ipv4b)
+      .paddingAtBuild(true);
+    return eb.build();
+  }
+
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
@@ -65,23 +93,6 @@ public class IcmpV4EchoReplyPacketTest {
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-  }
-
-  @Before
-  public void setUp() throws Exception {
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    logger.info(
-      "=================================================="
-    );
-  }
-
-  @Test
-  public void testGetBuilder() {
-    IcmpV4EchoReplyPacket.Builder b = packet.getBuilder();
-    assertEquals(packet, b.build());
   }
 
   @Test
@@ -129,135 +140,6 @@ public class IcmpV4EchoReplyPacketTest {
     p = b.build();
     assertEquals((short)-32768, (short)p.getHeader().getIdentifierAsInt());
     assertEquals((short)-32768, (short)p.getHeader().getSequenceNumberAsInt());
-  }
-
-  @Test
-  public void testLength() {
-    assertEquals(packet.getRawData().length, packet.length());
-  }
-
-  @Test
-  public void testToString() throws Exception {
-    FileReader fr
-      = new FileReader(
-          "src/test/resources/" + getClass().getSimpleName() + ".log"
-        );
-    BufferedReader fbr = new BufferedReader(fr);
-    StringReader sr = new StringReader(packet.toString());
-    BufferedReader sbr = new BufferedReader(sr);
-
-    String line;
-    while ((line = fbr.readLine()) != null) {
-      assertEquals(line, sbr.readLine());
-    }
-
-    assertNull(sbr.readLine());
-
-    fbr.close();
-    fr.close();
-    sr.close();
-    sbr.close();
-  }
-
-  @Test
-  public void testDump() throws Exception {
-    String dumpFile = "test/" + this.getClass().getSimpleName() + ".pcap";
-
-    IcmpV4CommonPacket.Builder icmpV4b = new IcmpV4CommonPacket.Builder();
-    icmpV4b.type(IcmpV4Type.ECHO_REPLY)
-           .code(IcmpV4Code.NO_CODE)
-           .payloadBuilder(new SimpleBuilder(packet))
-           .correctChecksumAtBuild(true)
-           ;
-
-    IpV4Packet.Builder ipv4b = new IpV4Packet.Builder();
-    ipv4b.version(IpVersion.IPV4)
-         .tos(IpV4Rfc791Tos.newInstance((byte)0))
-         .identification((short)100)
-         .ttl((byte)100)
-         .protocol(IpNumber.ICMPV4)
-         .srcAddr(
-            (Inet4Address)InetAddress.getByAddress(
-              new byte[] { (byte)192, (byte)0, (byte)2, (byte)1 }
-            )
-          )
-        .dstAddr(
-           (Inet4Address)InetAddress.getByAddress(
-             new byte[] { (byte)192, (byte)0, (byte)2, (byte)2 }
-           )
-         )
-        .payloadBuilder(icmpV4b)
-        .correctChecksumAtBuild(true)
-        .correctLengthAtBuild(true);
-
-    EthernetPacket.Builder eb = new EthernetPacket.Builder();
-    eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
-      .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-      .type(EtherType.IPV4)
-      .payloadBuilder(ipv4b)
-      .paddingAtBuild(true);
-    EthernetPacket ep = eb.build();
-
-    PcapHandle handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
-    PcapDumper dumper = handle.dumpOpen(dumpFile);
-    dumper.dump(ep, 0, 0);
-    dumper.close();
-    handle.close();
-
-    PcapHandle reader = Pcaps.openOffline(dumpFile);
-    assertEquals(ep, reader.getNextPacket());
-    reader.close();
-
-    FileInputStream in1
-      = new FileInputStream(
-          "src/test/resources/" + getClass().getSimpleName() + ".pcap"
-        );
-    FileInputStream in2 = new FileInputStream(dumpFile);
-
-    byte[] buffer1 = new byte[100];
-    byte[] buffer2 = new byte[100];
-    int size;
-    while ((size = in1.read(buffer1)) != -1) {
-      assertEquals(size, in2.read(buffer2));
-      assertArrayEquals(buffer1, buffer2);
-    }
-
-    in1.close();
-    in2.close();
-  }
-
-  @Test
-  public void testWriteRead() throws Exception {
-    String objFile = "test/" + this.getClass().getSimpleName() + ".obj";
-
-    ObjectOutputStream oos
-      = new ObjectOutputStream(
-          new FileOutputStream(new File(objFile))
-        );
-    oos.writeObject(packet);
-    oos.close();
-
-    ObjectInputStream ois
-      = new ObjectInputStream(new FileInputStream(new File(objFile)));
-    assertEquals(packet, ois.readObject());
-    ois.close();
-
-    FileInputStream in1
-      = new FileInputStream(
-          "src/test/resources/" + getClass().getSimpleName() + ".obj"
-        );
-    FileInputStream in2 = new FileInputStream(objFile);
-
-    byte[] buffer1 = new byte[100];
-    byte[] buffer2 = new byte[100];
-    int size;
-    while ((size = in1.read(buffer1)) != -1) {
-      assertEquals(size, in2.read(buffer2));
-      assertArrayEquals(buffer1, buffer2);
-    }
-
-    in1.close();
-    in2.close();
   }
 
 }

@@ -3,5 +3,5 @@
   Solicited flag: false
   Override flag: true
   Reserved: 123454321
-  Target Address: /fe80:0:0:0:aaaa:bbbb:0:0
+  Target Address: /2001:db8:0:0:aaaa:bbbb:0:0
   Option: [Type: 2(Target Link-Layer Address)] [Length: 1 (8 bytes)] [linkLayerAddress: ff 00 00 ff ee dd]

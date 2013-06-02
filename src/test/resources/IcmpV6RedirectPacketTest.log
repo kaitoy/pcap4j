@@ -1,7 +1,7 @@
 [ICMPv6 Redirect Header (100 bytes)]
   Reserved: 123454321
-  Target Address: /fe80:0:0:0:aaaa:bbbb:0:1
-  Destination Address: /fe80:0:0:0:aaaa:bbbb:0:254
+  Target Address: /2001:db8:0:0:aaaa:bbbb:0:1
+  Destination Address: /2001:db8:0:0:aaaa:bbbb:0:254
   Option: [Type: 2(Target Link-Layer Address)] [Length: 1 (8 bytes)] [linkLayerAddress: ff 00 00 01 02 03]
   Option: [Type: 4(Redirected Header)] [Length: 7 (56 bytes)] [Reserved: 00 11 22 33 44 55] [IP header + data: {[IPv6 Header (40 bytes)]
   Version: 6(IPv6)
@@ -10,12 +10,12 @@
   Payload length: 11 [bytes]
   Next Header: 58(ICMPv6)
   Hop Limit: 100
-  Source address: /aa:bb:cc:0:0:3:2:1
-  Destination address: /aa:bb:cc:0:0:3:2:2
+  Source address: /2001:db8:0:0:0:3:2:1
+  Destination address: /2001:db8:0:0:0:3:2:2
 [ICMPv6 Common Header (4 bytes)]
   Type: 128(Echo Request)
   Code: 0(No Code)
-  Checksum: 0x78dc
+  Checksum: 0x21cc
 [ICMPv6 Echo Request Header (4 bytes)]
   Identifier: 100
   SequenceNumber: 10

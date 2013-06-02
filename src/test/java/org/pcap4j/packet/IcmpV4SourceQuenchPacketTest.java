@@ -1,27 +1,13 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StringReader;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.pcap4j.core.PcapDumper;
-import org.pcap4j.core.PcapHandle;
-import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.IcmpV4SourceQuenchPacket.IcmpV4SourceQuenchHeader;
-import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IcmpV4Code;
 import org.pcap4j.packet.namednumber.IcmpV4Type;
@@ -33,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("javadoc")
-public class IcmpV4SourceQuenchPacketTest {
+public class IcmpV4SourceQuenchPacketTest extends AbstractPacketTest {
 
   private static final Logger logger
     = LoggerFactory.getLogger(IcmpV4SourceQuenchPacketTest.class);
@@ -91,86 +77,13 @@ public class IcmpV4SourceQuenchPacketTest {
     this.packet = b.build();
   }
 
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-    logger.info(
-      "########## " + IcmpV4SourceQuenchPacketTest.class.getSimpleName() + " START ##########"
-    );
+  @Override
+  protected Packet getPacket() {
+    return packet;
   }
 
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
-
-  @Before
-  public void setUp() throws Exception {
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    logger.info(
-      "=================================================="
-    );
-  }
-
-  @Test
-  public void testGetBuilder() {
-    IcmpV4SourceQuenchPacket.Builder builder = packet.getBuilder();
-    assertEquals(packet, builder.build());
-  }
-
-  @Test
-  public void testNewPacket() {
-    IcmpV4SourceQuenchPacket p
-      = IcmpV4SourceQuenchPacket.newPacket(packet.getRawData());
-    assertEquals(packet, p);
-
-    assertTrue(p.getPayload().contains(IpV4Packet.class));
-    assertTrue(p.getPayload().contains(IcmpV4CommonPacket.class));
-    assertTrue(p.getPayload().contains(IcmpV4EchoPacket.class));
-    assertTrue(p.getPayload().contains(UnknownPacket.class));
-    assertEquals(p.getPayload().get(UnknownPacket.class).length(), 0);
-    assertFalse(p.getPayload().contains(IllegalPacket.class));
-  }
-
-  @Test
-  public void testGetHeader() {
-    IcmpV4SourceQuenchHeader h = packet.getHeader();
-    assertEquals(unused, h.getUnused());
-  }
-
-  @Test
-  public void testLength() {
-    assertEquals(packet.getRawData().length, packet.length());
-  }
-
-  @Test
-  public void testToString() throws Exception {
-    FileReader fr
-      = new FileReader(
-          "src/test/resources/" + getClass().getSimpleName() + ".log"
-        );
-    BufferedReader fbr = new BufferedReader(fr);
-    StringReader sr = new StringReader(packet.toString());
-    BufferedReader sbr = new BufferedReader(sr);
-
-    String line;
-    while ((line = fbr.readLine()) != null) {
-      assertEquals(line, sbr.readLine());
-    }
-
-    assertNull(sbr.readLine());
-
-    fbr.close();
-    fr.close();
-    sr.close();
-    sbr.close();
-  }
-
-  @Test
-  public void testDump() throws Exception {
-    String dumpFile = "test/" + this.getClass().getSimpleName() + ".pcap";
-
+  @Override
+  protected Packet getWholePacket() throws UnknownHostException {
     IcmpV4CommonPacket.Builder icmpV4b = new IcmpV4CommonPacket.Builder();
     icmpV4b.type(IcmpV4Type.SOURCE_QUENCH)
            .code(IcmpV4Code.NO_CODE)
@@ -203,68 +116,38 @@ public class IcmpV4SourceQuenchPacketTest {
       .type(EtherType.IPV4)
       .payloadBuilder(ipv4b)
       .paddingAtBuild(true);
-    EthernetPacket ep = eb.build();
+    return eb.build();
+  }
 
-    PcapHandle handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
-    PcapDumper dumper = handle.dumpOpen(dumpFile);
-    dumper.dump(ep, 0, 0);
-    dumper.close();
-    handle.close();
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception {
+    logger.info(
+      "########## " + IcmpV4SourceQuenchPacketTest.class.getSimpleName() + " START ##########"
+    );
+  }
 
-    PcapHandle reader = Pcaps.openOffline(dumpFile);
-    assertEquals(ep, reader.getNextPacket());
-    reader.close();
-
-    FileInputStream in1
-      = new FileInputStream(
-          "src/test/resources/" + getClass().getSimpleName() + ".pcap"
-        );
-    FileInputStream in2 = new FileInputStream(dumpFile);
-
-    byte[] buffer1 = new byte[100];
-    byte[] buffer2 = new byte[100];
-    int size;
-    while ((size = in1.read(buffer1)) != -1) {
-      assertEquals(size, in2.read(buffer2));
-      assertArrayEquals(buffer1, buffer2);
-    }
-
-    in1.close();
-    in2.close();
+  @AfterClass
+  public static void tearDownAfterClass() throws Exception {
   }
 
   @Test
-  public void testWriteRead() throws Exception {
-    String objFile = "test/" + this.getClass().getSimpleName() + ".obj";
+  public void testNewPacket() {
+    IcmpV4SourceQuenchPacket p
+      = IcmpV4SourceQuenchPacket.newPacket(packet.getRawData());
+    assertEquals(packet, p);
 
-    ObjectOutputStream oos
-      = new ObjectOutputStream(
-          new FileOutputStream(new File(objFile))
-        );
-    oos.writeObject(packet);
-    oos.close();
+    assertTrue(p.getPayload().contains(IpV4Packet.class));
+    assertTrue(p.getPayload().contains(IcmpV4CommonPacket.class));
+    assertTrue(p.getPayload().contains(IcmpV4EchoPacket.class));
+    assertTrue(p.getPayload().contains(UnknownPacket.class));
+    assertEquals(p.getPayload().get(UnknownPacket.class).length(), 0);
+    assertFalse(p.getPayload().contains(IllegalPacket.class));
+  }
 
-    ObjectInputStream ois
-      = new ObjectInputStream(new FileInputStream(new File(objFile)));
-    assertEquals(packet, ois.readObject());
-    ois.close();
-
-    FileInputStream in1
-      = new FileInputStream(
-          "src/test/resources/" + getClass().getSimpleName() + ".obj"
-        );
-    FileInputStream in2 = new FileInputStream(objFile);
-
-    byte[] buffer1 = new byte[100];
-    byte[] buffer2 = new byte[100];
-    int size;
-    while ((size = in1.read(buffer1)) != -1) {
-      assertEquals(size, in2.read(buffer2));
-      assertArrayEquals(buffer1, buffer2);
-    }
-
-    in1.close();
-    in2.close();
+  @Test
+  public void testGetHeader() {
+    IcmpV4SourceQuenchHeader h = packet.getHeader();
+    assertEquals(unused, h.getUnused());
   }
 
 }
