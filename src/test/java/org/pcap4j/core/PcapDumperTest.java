@@ -85,6 +85,7 @@ public class PcapDumperTest {
   @Test
   public void testDump() throws Exception {
     dumper.dump(packet);
+    dumper.flush();
     assertTrue(dumpFile.exists());
     assertTrue(dumpFile.length() >= packet.length());
   }
