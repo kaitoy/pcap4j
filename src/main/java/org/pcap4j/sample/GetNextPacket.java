@@ -2,8 +2,8 @@ package org.pcap4j.sample;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.PcapHandle;
-import org.pcap4j.core.PcapHandle.BpfCompileMode;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;

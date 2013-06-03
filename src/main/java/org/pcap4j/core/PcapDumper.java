@@ -81,7 +81,7 @@ public final class PcapDumper {
 
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not openng.");
+        throw new IllegalStateException("Not open.");
       }
       //PcapLibrary.INSTANCE.pcap_dump(dumper, header, packet.getRawData());
       NativeMappings.pcap_dump(dumper, header, packet.getRawData());
@@ -90,6 +90,44 @@ public final class PcapDumper {
     if (logger.isDebugEnabled()) {
       logger.debug("Dumped a packet: " + packet);
     }
+  }
+
+  /**
+   * @throws PcapNativeException
+   */
+  public void flush() throws PcapNativeException {
+    int rc;
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+      rc = NativeMappings.pcap_dump_flush(dumper);
+    }
+
+    if (rc < 0) {
+      throw new PcapNativeException("Failed to flush.");
+    }
+  }
+
+  /**
+   * @return the file position for a "savefile".
+   * @throws PcapNativeException
+   */
+  public long ftell() throws PcapNativeException {
+    NativeLong nposition;
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+      nposition = NativeMappings.pcap_dump_ftell(dumper);
+    }
+
+    long position = nposition.longValue();
+    if (position < 0) {
+      throw new PcapNativeException("Failed to get the file position.");
+    }
+
+    return position;
   }
 
   /**

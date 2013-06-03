@@ -19,6 +19,10 @@ Mapping between pcap API and Pcap4j API
     <td>static String org.pcap4j.core.Pcaps.lookupDev()</td>
   </tr>
   <tr>
+    <td>int pcap_lookupnet(char *, bpf_u_int32 *, bpf_u_int32 *, char *)</td>
+    <td>static Inet4NetworkAddress org.pcap4j.core.Pcaps.lookupNet(String)</td>
+  </tr>
+  <tr>
     <td>pcap_t *pcap_open_live(const char *, int, int, int, char *)</td>
     <td>PcapHandle org.pcap4j.core.PcapNetworkInterface.openLive(int, PromiscuousMode, int)</td>
   </tr>
@@ -31,6 +35,14 @@ Mapping between pcap API and Pcap4j API
     <td>static PcapHandle org.pcap4j.core.Pcaps.openOffline(String)</td>
   </tr>
   <tr>
+    <td>int pcap_setnonblock(pcap_t *, int, char *)</td>
+    <td>void org.pcap4j.core.PcapHandle.setBlockingMode(BlockingMode)</td>
+  </tr>
+  <tr>
+    <td>int pcap_getnonblock(pcap_t *, char *)</td>
+    <td>BlockingMode org.pcap4j.core.PcapHandle.getBlockingMode()</td>
+  </tr>
+  <tr>
     <td>pcap_dumper_t *pcap_dump_open(pcap_t *, const char *)</td>
     <td>PcapDumper org.pcap4j.core.PcapHandle.dumpOpen(String)</td>
   </tr>
@@ -40,6 +52,14 @@ Mapping between pcap API and Pcap4j API
   </tr>
   <tr>
     <td>void org.pcap4j.core.PcapDumper.dump(Packet)</td>
+  </tr>
+  <tr>
+    <td>int pcap_dump_flush(pcap_dumper_t *)</td>
+    <td>void org.pcap4j.core.PcapDumper.flush()</td>
+  </tr>
+  <tr>
+    <td>long pcap_dump_ftell(pcap_dumper_t *)</td>
+    <td>long org.pcap4j.core.PcapDumper.ftell()</td>
   </tr>
   <tr>
     <td>void pcap_dump_close(pcap_dumper_t *)</td>
@@ -68,19 +88,33 @@ Mapping between pcap API and Pcap4j API
     <td>void org.pcap4j.core.PcapHandle.breakLoop()</td>
   </tr>
   <tr>
-    <td>int pcap_compile(pcap_t *, struct bpf_program *, char *, int, bpf_u_int32)</td>
-    <td>private mapping only</td>
+    <td rowspan="2">int pcap_dispatch(pcap_t *, int, pcap_handler, u_char *)</td>
+    <td>int org.pcap4j.core.PcapHandle.dispatch(int, PacketListener)</td>
   </tr>
   <tr>
-    <td rowspan="2">int pcap_setfilter(pcap_t *, struct bpf_program *)</td>
+    <td>int org.pcap4j.core.PcapHandle.dispatch(int, PacketListener, Executor)</td>
+  </tr>
+  <tr>
+    <td>int pcap_compile(pcap_t *, struct bpf_program *, char *, int, bpf_u_int32)</td>
+    <td>BpfProgram org.pcap4j.core.PcapHandle.compileFilter(String, BpfCompileMode, Inet4Address)</td>
+  </tr>
+  <tr>
+    <td>int pcap_compile_nopcap(int, int, struct bpf_program *, char *, int, bpf_u_int32)</td>
+    <td>BpfProgram org.pcap4j.core.Pcaps.compileFilter(int, DataLinkType, String, BpfCompileMode, Inet4Address)</td>
+  </tr>
+  <tr>
+    <td rowspan="3">int pcap_setfilter(pcap_t *, struct bpf_program *)</td>
     <td>void org.pcap4j.core.PcapHandle.setFilter(String, BpfCompileMode, Inet4Address)</td>
   </tr>
   <tr>
     <td>void org.pcap4j.core.PcapHandle.setFilter(String, BpfCompileMode)</td>
   </tr>
   <tr>
+    <td>void org.pcap4j.core.PcapHandle.setFilter(BpfProgram)</td>
+  </tr>
+  <tr>
     <td>void pcap_freecode(struct bpf_program *)</td>
-    <td>private mapping only</td>
+    <td>void org.pcap4j.core.BpfProgram.free()</td>
   </tr>
   <tr>
     <td>int pcap_sendpacket(pcap_t *, const u_char *, int)</td>
@@ -92,7 +126,57 @@ Mapping between pcap API and Pcap4j API
   </tr>
   <tr>
     <td>int pcap_datalink(pcap_t *)</td>
+    <td>DataLinkType org.pcap4j.core.PcapHandle.getDlt()</td>
+  </tr>
+  <tr>
+    <td>int pcap_list_datalinks(pcap_t *, int **)</td>
+    <td>List<DataLinkType> org.pcap4j.core.PcapHandle.listDatalinks()</td>
+  </tr>
+  <tr>
+    <td>void pcap_free_datalinks(int *)</td>
     <td>private mapping only</td>
+  </tr>
+  <tr>
+    <td>int pcap_set_datalink(pcap_t *, int)</td>
+    <td>void org.pcap4j.core.PcapHandle.setDlt(DataLinkType)</td>
+  </tr>
+  <tr>
+    <td>int pcap_datalink_name_to_val(const char *)</td>
+    <td>DataLinkType org.pcap4j.core.Pcaps.dataLinkNameToVal(String)</td>
+  </tr>
+  <tr>
+    <td rowspan="2">const char* pcap_datalink_val_to_name(int)</td>
+    <td>String org.pcap4j.core.Pcaps.dataLinkTypeToName(DataLinkType)</td>
+  </tr>
+  <tr>
+    <td>String org.pcap4j.core.Pcaps.dataLinkValToName(int)</td>
+  </tr>
+  <tr>
+    <td rowspan="2">const char* pcap_datalink_val_to_description(int)</td>
+    <td>String org.pcap4j.core.Pcaps.dataLinkTypeToDescription(DataLinkType)</td>
+  </tr>
+  <tr>
+    <td>String org.pcap4j.core.Pcaps.dataLinkValToDescription(int)</td>
+  </tr>
+  <tr>
+    <td>int pcap_snapshot(pcap_t *)</td>
+    <td>int org.pcap4j.core.PcapHandle.getSnapshot()</td>
+  </tr>
+  <tr>
+    <td>int pcap_is_swapped(pcap_t *)</td>
+    <td>SwappedType org.pcap4j.core.PcapHandle.isSwapped()</td>
+  </tr>
+  <tr>
+    <td>int pcap_major_version(pcap_t *)</td>
+    <td>int org.pcap4j.core.PcapHandle.getMajorVersion()</td>
+  </tr>
+  <tr>
+    <td>int pcap_minor_version(pcap_t *)</td>
+    <td>int org.pcap4j.core.PcapHandle.getMinorVersion()</td>
+  </tr>
+  <tr>
+    <td>int pcap_stats(pcap_t *, struct pcap_stat *)</td>
+    <td>PcapStat org.pcap4j.core.PcapHandle.getStat()</td>
   </tr>
   <tr>
     <td>char *pcap_geterr(pcap_t *)</td>
@@ -100,6 +184,10 @@ Mapping between pcap API and Pcap4j API
   </tr>
   <tr>
     <td>char *pcap_strerror(int)</td>
-    <td>private mapping only</td>
+    <td>String org.pcap4j.core.Pcaps.strError(int)</td>
+  </tr>
+  <tr>
+    <td>const char * pcap_lib_version(void)</td>
+    <td>String org.pcap4j.core.Pcaps.libVersion()</td>
   </tr>
 </table>

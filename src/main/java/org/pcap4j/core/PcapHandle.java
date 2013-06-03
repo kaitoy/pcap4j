@@ -11,16 +11,23 @@ import java.io.EOFException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
+import org.pcap4j.core.BpfProgram.BpfCompileMode;
+import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.bpf_program;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
+import org.pcap4j.core.NativeMappings.pcap_stat;
+import org.pcap4j.core.NativeMappings.win_pcap_stat;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -36,7 +43,7 @@ public final class PcapHandle {
 
   private static final Logger logger = LoggerFactory.getLogger(PcapHandle.class);
 
-  private final DataLinkType dlt;
+  private volatile DataLinkType dlt;
   private final Pointer handle;
   private final Object thisLock = new Object();
   private final ThreadLocal<Long> timestampsInts
@@ -58,14 +65,15 @@ public final class PcapHandle {
   }
 
   PcapHandle(Pointer handle, boolean open) {
-//    this.dlt = DataLinkType.getInstance(
-//                 PcapLibrary.INSTANCE.pcap_datalink(handle)
-//               );
-    this.dlt = DataLinkType.getInstance(
-                 NativeMappings.pcap_datalink(handle)
-               );
     this.handle = handle;
+    this.dlt = getDltByNative();
     this.open = open;
+  }
+
+  DataLinkType getDltByNative() {
+    return DataLinkType.getInstance(
+             NativeMappings.pcap_datalink(handle)
+           );
   }
 
   /**
@@ -73,6 +81,26 @@ public final class PcapHandle {
    * @return the Data Link Type of this PcapHandle
    */
   public DataLinkType getDlt() { return dlt; }
+
+  /**
+   * @param dlt a {@link org.pcap4j.packet.namednumber.DataLinkType DataLinkType}
+   *        object to set
+   * @throws PcapNativeException
+   */
+  public void setDlt(DataLinkType dlt) throws PcapNativeException {
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+
+      int rc = NativeMappings.pcap_set_datalink(handle, dlt.value());
+      if (rc < 0) {
+        throw new PcapNativeException(getError());
+      }
+
+      this.dlt = dlt;
+    }
+  }
 
   /**
    *
@@ -101,24 +129,43 @@ public final class PcapHandle {
 
   /**
    *
-   * @author Kaito Yamada
-   * @version pcap4j 0.9.1
+   * @return the dimension of the packet portion (in bytes) that is delivered to the application.
    */
-  public static enum BpfCompileMode {
+  public int getSnapshot() {
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+
+      return NativeMappings.pcap_snapshot(handle);
+    }
+  }
+
+  /**
+   *
+   * @author Kaito Yamada
+   * @version pcap4j 0.9.16
+   */
+  public static enum SwappedType {
 
     /**
      *
      */
-    OPTIMIZE(1),
+    NOT_SWAPPED(0),
 
     /**
      *
      */
-    NONOPTIMIZE(0);
+    SWAPPED(1),
+
+    /**
+     *
+     */
+    MAYBE_SWAPPED(2);
 
     private final int value;
 
-    private BpfCompileMode(int value) {
+    private SwappedType(int value) {
       this.value = value;
     }
 
@@ -129,6 +176,104 @@ public final class PcapHandle {
     public int getValue() {
       return value;
     }
+  }
+
+  /**
+   *
+   * @return a {@link org.pcap4j.core.SwappedType SwappedType} object.
+   */
+  public SwappedType isSwapped() {
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+
+      int rc = NativeMappings.pcap_is_swapped(handle);
+      switch (rc) {
+        case 0:
+          return SwappedType.NOT_SWAPPED;
+        case 1:
+          return SwappedType.SWAPPED;
+        case 2:
+          return SwappedType.MAYBE_SWAPPED;
+        default:
+          logger.warn("pcap_snapshot returned an unexpected code: " + rc);
+          return SwappedType.MAYBE_SWAPPED;
+      }
+    }
+  }
+
+  /**
+   *
+   * @return the major version number of the pcap library used to write the savefile.
+   */
+  public int getMajorVersion() {
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+
+      return NativeMappings.pcap_major_version(handle);
+    }
+  }
+
+  /**
+   *
+   * @return the minor version number of the pcap library used to write the savefile.
+   */
+  public int getMinorVersion() {
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+
+      return NativeMappings.pcap_minor_version(handle);
+    }
+  }
+
+  /**
+   *
+   * @param snaplen
+   * @param dlt
+   * @param bpfExpression
+   * @param mode
+   * @param netmask
+   * @return a {@link org.pcap4j.core.BpfProgram BpfProgram} object.
+   * @throws PcapNativeException
+   */
+  public BpfProgram compileFilter(
+    String bpfExpression, BpfCompileMode mode, Inet4Address netmask
+  ) throws PcapNativeException {
+    if (
+         bpfExpression == null
+      || mode == null
+      || netmask == null
+    ) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("bpfExpression: ").append(bpfExpression)
+        .append(" mode: ").append(mode)
+        .append(" netmask: ").append(netmask);
+      throw new NullPointerException(sb.toString());
+    }
+
+    bpf_program prog = new bpf_program();
+    int rc;
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+
+      rc = NativeMappings.pcap_compile(
+             handle, prog, bpfExpression, mode.getValue(),
+             ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0)
+           );
+    }
+
+    if (rc < 0) {
+      throw new PcapNativeException(getError());
+    }
+
+    return new BpfProgram(prog, bpfExpression);
   }
 
   /**
@@ -204,6 +349,116 @@ public final class PcapHandle {
     String bpfExpression, BpfCompileMode mode
   ) throws PcapNativeException {
     setFilter(bpfExpression, mode, WILDCARD_MASK);
+  }
+
+  /**
+   *
+   * @param prog
+   * @throws PcapNativeException
+   */
+  public void setFilter(BpfProgram prog) throws PcapNativeException {
+    if (prog == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("prog: ").append(prog);
+      throw new NullPointerException(sb.toString());
+    }
+
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+
+      int rc = NativeMappings.pcap_setfilter(handle, prog.getProgram());
+      if (rc < 0) {
+        throw new PcapNativeException("Failed to set filter: " + getError());
+      }
+
+      this.filteringExpression = prog.getExpression();
+    }
+  }
+
+  /**
+   *
+   * @author Kaito Yamada
+   * @version pcap4j 0.9.15
+   */
+  public static enum BlockingMode {
+
+    /**
+     *
+     */
+    BLOCKING(0),
+
+    /**
+     *
+     */
+    NONBLOCKING(1);
+
+    private final int value;
+
+    private BlockingMode(int value) {
+      this.value = value;
+    }
+
+    /**
+     *
+     * @return value
+     */
+    public int getValue() {
+      return value;
+    }
+  }
+
+  /**
+   *
+   * @param mode
+   * @throws PcapNativeException
+   */
+  public void setBlockingMode(BlockingMode mode) throws PcapNativeException {
+    if (mode == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append(" mode: ").append(mode);
+      throw new NullPointerException(sb.toString());
+    }
+
+    PcapErrbuf errbuf = new PcapErrbuf();
+    int rc;
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+      rc = NativeMappings.pcap_setnonblock(handle, mode.getValue(), errbuf);
+    }
+
+    if (rc < 0) {
+      throw new PcapNativeException(errbuf.toString());
+    }
+  }
+
+  /**
+   *
+   * @return blocking mode
+   * @throws PcapNativeException
+   */
+  public BlockingMode getBlockingMode() throws PcapNativeException {
+    PcapErrbuf errbuf = new PcapErrbuf();
+    int rc;
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+      rc = NativeMappings.pcap_getnonblock(handle, errbuf);
+    }
+
+    if (rc == 0) {
+      return BlockingMode.BLOCKING;
+    }
+    else if (rc > 0) {
+      return BlockingMode.NONBLOCKING;
+    }
+    else {
+      throw new PcapNativeException(errbuf.toString());
+    }
   }
 
   /**
@@ -330,8 +585,14 @@ public final class PcapHandle {
   public void loop(
     int packetCount, PacketListener listener, Executor executor
   ) throws PcapNativeException, InterruptedException {
-    int rc;
+    if (listener == null || executor == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("listener: ").append(listener)
+        .append(" executor: ").append(executor);
+      throw new NullPointerException(sb.toString());
+    }
 
+    int rc;
     synchronized (thisLock) {
       if (!open) {
         throw new IllegalStateException("Not open.");
@@ -368,6 +629,79 @@ public final class PcapHandle {
                 "Unexpected error occured: " + getError()
               );
     }
+  }
+
+  /**
+   *
+   * @param packetCount
+   * @param listener
+   * @return the number of captured packets.
+   * @throws PcapNativeException
+   * @throws InterruptedException
+   */
+  public int dispatch(
+    int packetCount, PacketListener listener
+  ) throws PcapNativeException, InterruptedException {
+    return dispatch(
+             packetCount,
+             listener,
+             SimpleExecutor.getInstance()
+           );
+  }
+
+  /**
+   *
+   * @param packetCount
+   * @param listener
+   * @param executor
+   * @return the number of captured packets.
+   * @throws PcapNativeException
+   * @throws InterruptedException
+   */
+  public int dispatch(
+    int packetCount, PacketListener listener, Executor executor
+  ) throws PcapNativeException, InterruptedException {
+    if (listener == null || executor == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("listener: ").append(listener)
+        .append(" executor: ").append(executor);
+      throw new NullPointerException(sb.toString());
+    }
+
+    int rc;
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+
+      logger.info("Start dispatch");
+      rc = NativeMappings.pcap_dispatch(
+             handle,
+             packetCount,
+             new GotPacketFuncExecutor(listener, dlt, executor),
+             null
+           );
+
+    }
+
+    if (rc < 0) {
+      switch (rc) {
+        case -1:
+          throw new PcapNativeException(
+                  "Error occured: " + getError()
+                );
+        case -2:
+          logger.info("Broken.");
+          throw new InterruptedException();
+        default:
+          throw new PcapNativeException(
+                  "Unexpected error occured: " + getError()
+                );
+      }
+    }
+
+    logger.info("Finish dispatch.");
+    return rc;
   }
 
   private static final class SimpleExecutor implements Executor {
@@ -554,6 +888,62 @@ public final class PcapHandle {
     }
 
     logger.info("Closed.");
+  }
+
+  /**
+   *
+   * @return a {@link org.pcap4j.core.PcapStat PcapStat} object.
+   * @throws PcapNativeException
+   */
+  public PcapStat getStat() throws PcapNativeException {
+    pcap_stat ps;
+    if (Platform.isWindows()) {
+      ps = new win_pcap_stat();
+    } else {
+      ps = new pcap_stat();
+    }
+
+    int rc;
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+      rc = NativeMappings.pcap_stats(handle, ps);
+    }
+
+    if (rc < 0) {
+      throw new PcapNativeException(getError());
+    }
+
+    return new PcapStat(ps);
+  }
+
+  /**
+   * @return a list of {@link org.pcap4j.packet.namednumber.DataLinkType DataLinkType}
+   * @throws PcapNativeException
+   */
+  public List<DataLinkType> listDatalinks() throws PcapNativeException {
+    PointerByReference dltBufPP = new PointerByReference();
+    int rc;
+    synchronized (thisLock) {
+      if (!open) {
+        throw new IllegalStateException("Not open.");
+      }
+      rc = NativeMappings.pcap_list_datalinks(handle, dltBufPP);
+    }
+
+    if (rc < 0) {
+      throw new PcapNativeException(getError());
+    }
+
+    Pointer dltBufP = dltBufPP.getValue();
+    List<DataLinkType> list = new ArrayList<DataLinkType>(rc);
+    for (int i = 0; i < rc; i++) {
+      list.add(DataLinkType.getInstance(dltBufP.getInt(Pointer.SIZE * i)));
+    }
+
+    NativeMappings.pcap_free_datalinks(dltBufP);
+    return list;
   }
 
   /**

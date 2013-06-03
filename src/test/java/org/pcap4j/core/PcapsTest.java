@@ -7,6 +7,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.pcap4j.packet.namednumber.DataLinkType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +70,63 @@ public class PcapsTest {
   @Test
   public void testOpenDead() {
     // TODO fail("not yet implemented");
+  }
+
+  @Test
+  public void testDataLinkNameToVal() throws Exception {
+    DataLinkType dlt = Pcaps.dataLinkNameToVal("EN10MB");
+    assertEquals(DataLinkType.EN10MB, dlt);
+
+    dlt = Pcaps.dataLinkNameToVal("PPP");
+    assertEquals(DataLinkType.PPP, dlt);
+  }
+
+  @Test
+  public void testDataLinkTypeToName() throws Exception {
+    String name = Pcaps.dataLinkTypeToName(DataLinkType.EN10MB);
+    logger.info(DataLinkType.EN10MB + " name: " + name);
+    assertNotNull(name);
+    assertFalse(name.length() == 0);
+  }
+
+  @Test
+  public void testDataLinkValToName() throws Exception {
+    String name = Pcaps.dataLinkValToName(DataLinkType.PPP.value());
+    logger.info(DataLinkType.PPP + " name: " + name);
+    assertNotNull(name);
+    assertFalse(name.length() == 0);
+  }
+
+  @Test
+  public void testDataLinkTypeToDescription() throws Exception {
+    String descr = Pcaps.dataLinkTypeToDescription(DataLinkType.EN10MB);
+    logger.info(DataLinkType.EN10MB + " descr: " + descr);
+    assertNotNull(descr);
+    assertFalse(descr.length() == 0);
+  }
+
+  @Test
+  public void testDataLinkValToDescription() throws Exception {
+    String descr = Pcaps.dataLinkValToDescription(DataLinkType.PPP.value());
+    logger.info(DataLinkType.PPP + " descr: " + descr);
+    assertNotNull(descr);
+    assertFalse(descr.length() == 0);
+  }
+
+  @Test
+  public void testStrError() throws Exception {
+    String err = Pcaps.strError(1);
+    logger.info("err: " + err);
+    assertNotNull(err);
+    assertFalse(err.length() == 0);
+  }
+
+  @Test
+  public void testLibVersion() throws Exception {
+    String ver = Pcaps.libVersion();
+    logger.info("ver: " + ver);
+    assertNotNull(ver);
+    assertFalse(ver.length() == 0);
   }
 
   @Test

@@ -1,12 +1,22 @@
 Next Release
 ============
 ### New Features ###
+* Add pcap APIs support: pcap_setnonblock, pcap_getnonblock, lookupNet, dispatch, pcap_compile_nopcap,
+                         pcap_compile, pcap_freecode, pcap_snapshot, pcap_is_swapped, pcap_major_version,
+                         pcap_minor_version, pcap_stats, pcap_dump_ftell, pcap_list_datalinks,
+                         pcap_free_datalinks, pcap_set_datalink, pcap_datalink_name_to_val,
+                         pcap_datalink_val_to_name, pcap_datalink_val_to_description, pcap_strerror,
+                         pcap_lib_version, pcap_dump_flush
 * Add Ubuntu support.
 
 ### Bug Fixes ###
 * Fix org.pcap4j.packet.IpV6NeighborDiscoveryPrefixInformationOption#getRawData() to return correct prefixLength.
 
 ### Other Changes ###
+* Change a package of class: org.pcap4j.core.PcapHandle.BpfCompileMode -> org.pcap4j.core.BpfProgram.BpfCompileMode
+* Change method names
+ * org.pcap4j.core.Pcaps.getNifByName(String) -> org.pcap4j.core.Pcaps.getDevByName(String)
+ * org.pcap4j.core.Pcaps.getNifByAddress(InetAddress) -> org.pcap4j.core.Pcaps.getDevByAddress(InetAddress)
 
 Release 0.9.15 (29-May-2013)
 ============

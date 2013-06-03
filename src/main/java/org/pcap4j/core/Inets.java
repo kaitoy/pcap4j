@@ -34,12 +34,12 @@ final class Inets {
     if (in == null) {
       return null;
     }
+    return itoInetAddress(in.s_addr);
+  }
 
+  static Inet4Address itoInetAddress(int i) {
     return ByteArrays.getInet4Address(
-             ByteArrays.toByteArray(
-               in.s_addr,
-               NativeMappings.NATIVE_BYTE_ORDER
-             ),
+             ByteArrays.toByteArray(i, NativeMappings.NATIVE_BYTE_ORDER),
              0
            );
   }

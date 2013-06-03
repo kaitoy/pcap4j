@@ -7,17 +7,23 @@
 
 package org.pcap4j.core;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
+import org.pcap4j.core.NativeMappings.bpf_program;
 import org.pcap4j.core.NativeMappings.pcap_if;
 import org.pcap4j.packet.namednumber.DataLinkType;
+import org.pcap4j.util.ByteArrays;
+import org.pcap4j.util.Inet4NetworkAddress;
 import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.sun.jna.Pointer;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
@@ -92,7 +98,7 @@ public final class Pcaps {
    * @return a PcapNetworkInterface.
    * @throws PcapNativeException
    */
-  public static PcapNetworkInterface getNifByAddress(
+  public static PcapNetworkInterface getDevByAddress(
     InetAddress addr
   ) throws PcapNativeException {
     List<PcapNetworkInterface> allDevs = findAllDevs();
@@ -114,7 +120,7 @@ public final class Pcaps {
    * @return a PcapNetworkInterface.
    * @throws PcapNativeException
    */
-  public static PcapNetworkInterface getNifByName(
+  public static PcapNetworkInterface getDevByName(
     String name
   ) throws PcapNativeException {
     List<PcapNetworkInterface> allDevs = findAllDevs();
@@ -143,6 +149,38 @@ public final class Pcaps {
     }
 
     return result.getString(0, true);
+  }
+
+  /**
+   *
+   * @param devName
+   * @return an {@link org.pcap4j.util.Inet4NetworkAddress Inet4NetworkAddress} object.
+   * @throws PcapNativeException
+   */
+  public static Inet4NetworkAddress lookupNet(
+    String devName
+  ) throws PcapNativeException {
+    if (devName == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("devName: ").append(devName);
+      throw new NullPointerException(sb.toString());
+    }
+
+    PcapErrbuf errbuf = new PcapErrbuf();
+    IntByReference netp = new IntByReference();
+    IntByReference maskp = new IntByReference();
+    int rc = NativeMappings.pcap_lookupnet(devName, netp, maskp, errbuf);
+
+    if (rc < 0) {
+      throw new PcapNativeException(errbuf.toString());
+    }
+
+    int net = netp.getValue();
+    int mask = maskp.getValue();
+
+    return new Inet4NetworkAddress(
+                 Inets.itoInetAddress(net), Inets.itoInetAddress(mask)
+               );
   }
 
   /**
@@ -193,10 +231,156 @@ public final class Pcaps {
 
   /**
    *
+   * @param snaplen
+   * @param dlt
+   * @param bpfExpression
+   * @param mode
+   * @param netmask
+   * @return a {@link org.pcap4j.core.BpfProgram BpfProgram} object.
+   * @throws PcapNativeException
+   */
+  public static BpfProgram compileFilter(
+    int snaplen, DataLinkType dlt, String bpfExpression,
+    BpfCompileMode mode, Inet4Address netmask
+  ) throws PcapNativeException {
+    if (
+         dlt == null
+      || bpfExpression == null
+      || mode == null
+      || netmask == null
+    ) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("dlt: ").append(dlt)
+        .append(" bpfExpression: ").append(bpfExpression)
+        .append(" mode: ").append(mode)
+        .append(" netmask: ").append(netmask);
+      throw new NullPointerException(sb.toString());
+    }
+
+    bpf_program prog = new bpf_program();
+    int rc = NativeMappings.pcap_compile_nopcap(
+               snaplen, dlt.value(), prog, bpfExpression, mode.getValue(),
+               ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0)
+             );
+    if (rc < 0) {
+      throw new PcapNativeException(
+                  "Failed to compile the BPF expression: " + bpfExpression
+                );
+    }
+    return new BpfProgram(prog, bpfExpression);
+  }
+
+  /**
+   * @param name a data link type name, which is a DLT_ name with the DLT_ removed.
+   * @return a {@link org.pcap4j.packet.namednumber.DataLinkType DataLinkType} object.
+   * @throws PcapNativeException
+   */
+  public static DataLinkType dataLinkNameToVal(
+    String name
+  ) throws PcapNativeException {
+    if (name == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("name: ").append(name);
+      throw new NullPointerException(sb.toString());
+    }
+
+    int rc = NativeMappings.pcap_datalink_name_to_val(name);
+    if (rc < 0) {
+      throw new PcapNativeException(
+                  "Failed to convert the data link name to the value: " + name
+                );
+    }
+    return DataLinkType.getInstance(rc);
+  }
+
+  /**
+   * @param dlt
+   * @return data link type name
+   * @throws PcapNativeException
+   */
+  public static String dataLinkTypeToName(
+    DataLinkType dlt
+  ) throws PcapNativeException {
+    if (dlt == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("dlt: ").append(dlt);
+      throw new NullPointerException(sb.toString());
+    }
+    return dataLinkValToName(dlt.value());
+  }
+
+  /**
+   * @param dataLinkVal
+   * @return data link type name
+   * @throws PcapNativeException
+   */
+  public static String dataLinkValToName(
+    int dataLinkVal
+  ) throws PcapNativeException {
+    String name = NativeMappings.pcap_datalink_val_to_name(dataLinkVal);
+    if (name == null) {
+      throw new PcapNativeException(
+                  "Failed to convert the data link value to the name: " + dataLinkVal
+                );
+    }
+    return name;
+  }
+
+  /**
+   * @param dlt
+   * @return a short description of that data link type.
+   * @throws PcapNativeException
+   */
+  public static String dataLinkTypeToDescription(
+    DataLinkType dlt
+  ) throws PcapNativeException {
+    if (dlt == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("dlt: ").append(dlt);
+      throw new NullPointerException(sb.toString());
+    }
+    return dataLinkValToDescription(dlt.value());
+  }
+
+  /**
+   * @param dataLinkVal
+   * @return a short description of that data link type.
+   * @throws PcapNativeException
+   */
+  public static String dataLinkValToDescription(
+    int dataLinkVal
+  ) throws PcapNativeException {
+    String descr = NativeMappings.pcap_datalink_val_to_description(dataLinkVal);
+    if (descr == null) {
+      throw new PcapNativeException(
+                  "Failed to convert the data link value to the description: " + dataLinkVal
+                );
+    }
+    return descr;
+  }
+
+  /**
+   * @param error
+   * @return an error message.
+   */
+  public static String strError(int error) {
+    return NativeMappings.pcap_strerror(error).getString(0);
+  }
+
+  /**
+   * @return a string giving information about the version of the libpcap library being used;
+   *         note that it contains more information than just a version number.
+   */
+  public static String libVersion() {
+    return NativeMappings.pcap_lib_version();
+  }
+
+  /**
+   *
    * @param inetAddr Inet4Address or Inet6Address
    * @return a string representation of an InetAddress for BPF.
    */
-  public static String toBpfString (InetAddress inetAddr){
+  public static String toBpfString(InetAddress inetAddr){
     String strAddr = inetAddr.toString();
     return strAddr.substring(strAddr.lastIndexOf("/") + 1);
   }

@@ -19,6 +19,7 @@ import com.sun.jna.NativeLong;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
@@ -65,53 +66,148 @@ final class NativeMappings {
   }
 
   // direct mappings
+
+  // int pcap_findalldevs(pcap_if_t **alldevsp, char *errbuf)
   static native int pcap_findalldevs(PointerByReference alldevsp, PcapErrbuf errbuf);
 
+  // TODO WinPcap: int pcap_findalldevs_ex(char *host, char *port, SOCKET sockctrl, struct pcap_rmtauth *auth, pcap_if_t **alldevs, char *errbuf)
+
+  // void  pcap_freealldevs (pcap_if_t *alldevsp)
   static native void pcap_freealldevs(Pointer alldevsp);
 
+  // char *pcap_lookupdev(char *errbuf)
   static native Pointer pcap_lookupdev(PcapErrbuf errbuf);
 
+  // int pcap_lookupnet(char *device, bpf_u_int32 *netp, bpf_u_int32 *maskp, char *errbuf)
+  static native int pcap_lookupnet(String device, IntByReference netp, IntByReference maskp, PcapErrbuf errbuf);
+
+  // pcap_t *pcap_open_live(
+  //   const char *device, int snaplen, int promisc, int to_ms, char *errbuf
+  // )
   static native  Pointer pcap_open_live(
     String device, int snaplen, int promisc, int to_ms, PcapErrbuf errbuf
   );
 
+  // pcap_t *pcap_open_dead (int linktype, int snaplen)
   static native Pointer pcap_open_dead(int linktype, int snaplen);
 
+  // pcap_t *pcap_open_offline(const char *fname, char *errbuf)
   static native Pointer pcap_open_offline(String fname, PcapErrbuf errbuf);
 
+  // TODO WinPcap: pcap_t *pcap_open(const char *source, int snaplen, int flags, int read_timeout, struct pcap_rmtauth *auth, char *errbuf)
+
+  // int pcap_setnonblock(pcap_t *p, int nonblock, char *errbuf)
+  static native int pcap_setnonblock(Pointer p, int nonblock, PcapErrbuf errbuf);
+
+  // int pcap_getnonblock(pcap_t *p, char *errbuf)
+  static native int pcap_getnonblock(Pointer p, PcapErrbuf errbuf);
+
+  // pcap_dumper_t *pcap_dump_open(pcap_t *p, const char *fname)
   static native Pointer pcap_dump_open(Pointer p, String fname);
 
+  // void pcap_dump(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
   static native void pcap_dump(Pointer user, pcap_pkthdr header, byte[] packet);
 
+  // int pcap_dump_flush(pcap_dumper_t *p)
+  static native int pcap_dump_flush(Pointer p);
+
+  // long pcap_dump_ftell(pcap_dumper_t *)
+  static native NativeLong pcap_dump_ftell(Pointer dumper);
+
+  // void pcap_dump_close(pcap_dumper_t *p)
   static native void pcap_dump_close(Pointer p);
 
+  // TODO WinPcap: int pcap_live_dump(pcap_t *p, char *filename, int maxsize, int maxpacks)
+
+  // int pcap_dispatch(pcap_t *p, int cnt, pcap_handler callback, u_char *user)
+  static native int pcap_dispatch(Pointer p, int cnt, pcap_handler callback, Pointer user);
+
+  // u_char *pcap_next(pcap_t *p, struct pcap_pkthdr *h)
   static native Pointer pcap_next(Pointer p, pcap_pkthdr h);
 
+  // int pcap_next_ex(pcap_t *p, struct pcap_pkthdr **h, const u_char **data)
   static native int pcap_next_ex(Pointer p, PointerByReference h, PointerByReference data);
 
+  // int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user)
   static native int pcap_loop(Pointer p, int cnt, pcap_handler callback, Pointer user);
-
   static native int pcap_loop(Pointer p, int cnt, Function callback, Pointer user);
 
+  // void pcap_breakloop(pcap_t *p)
   static native void pcap_breakloop(Pointer p);
 
+  // int pcap_compile(
+  //   pcap_t *p, struct bpf_program *fp, char *str,
+  //   int optimize, bpf_u_int32 netmask
+  // )
   static native int pcap_compile(
     Pointer p, bpf_program fp, String str, int optimize, int netmask
   );
 
+  // int pcap_compile_nopcap(
+  //   int snaplen_arg, int linktype_arg, struct bpf_program *program, char *buf,
+  //   int optimize, bpf_u_int32 mask
+  // )
+  static native int pcap_compile_nopcap(
+    int snaplen_arg, int linktype_arg, bpf_program fp, String buf,
+    int optimize, int mask
+  );
+
+  // int pcap_setfilter(pcap_t *p, struct bpf_program *fp)
   static native int pcap_setfilter(Pointer p, bpf_program fp);
 
+  // void pcap_freecode(struct bpf_program *fp)
   static native void  pcap_freecode(bpf_program fp);
 
+  // int pcap_sendpacket(pcap_t *p, const u_char *buf, int size)
   static native int pcap_sendpacket(Pointer p, byte buf[], int size);
 
+  // void pcap_close(pcap_t *p)
   static native void pcap_close(Pointer p);
 
+  // int pcap_datalink(pcap_t *p)
   static native int pcap_datalink(Pointer p);
 
+  // int pcap_list_datalinks(pcap_t *p, int **dlt_buf)
+  static native int pcap_list_datalinks(Pointer p, PointerByReference dlt_buf);
+
+  // void pcap_free_datalinks(int *dlt_list)
+  static native void pcap_free_datalinks(Pointer dlt_list);
+
+  // int pcap_set_datalink(pcap_t *p, int dlt)
+  static native int pcap_set_datalink(Pointer p, int dlt);
+
+  // int pcap_datalink_name_to_val(const char *name)
+  static native int pcap_datalink_name_to_val(String name);
+
+  // const char * pcap_datalink_val_to_name(int dlt)
+  static native String pcap_datalink_val_to_name(int dlt);
+
+  // const char* pcap_datalink_val_to_description(int dlt)
+  static native String pcap_datalink_val_to_description(int dlt);
+
+  // int pcap_snapshot(pcap_t *p)
+  static native int pcap_snapshot(Pointer p);
+
+  // int pcap_is_swapped(pcap_t *p)
+  static native int pcap_is_swapped(Pointer p);
+
+  // int pcap_major_version(pcap_t *p)
+  static native int pcap_major_version(Pointer p);
+
+  // int pcap_minor_version(pcap_t *p)
+  static native int pcap_minor_version(Pointer p);
+
+  // int pcap_stats(pcap_t *p, struct pcap_stat *ps)
+  static native int pcap_stats(Pointer p, pcap_stat ps);
+
+  // char *pcap_geterr(pcap_t *p)
   static native Pointer pcap_geterr(Pointer p);
 
+  // char *pcap_strerror(int errno)
   static native Pointer pcap_strerror(int errno);
+
+  // const char * pcap_lib_version(void)
+  static native String pcap_lib_version();
 
   // interface mappings
   interface PcapLibrary extends Library {
@@ -124,7 +220,6 @@ final class NativeMappings {
     // int pcap_findalldevs(pcap_if_t **alldevsp, char *errbuf)
     @Deprecated // Use direct mapped one instead.
     int pcap_findalldevs(PointerByReference alldevsp, PcapErrbuf errbuf);
-    // TODO WinPcap: int pcap_findalldevs_ex(char *host, char *port, SOCKET sockctrl, struct pcap_rmtauth *auth, pcap_if_t **alldevs, char *errbuf)
 
     // void  pcap_freealldevs (pcap_if_t *alldevsp)
     @Deprecated // Use direct mapped one instead.
@@ -150,8 +245,6 @@ final class NativeMappings {
     @Deprecated // Use direct mapped one instead.
     Pointer pcap_open_offline(String fname, PcapErrbuf errbuf);
 
-    // TODO WinPcap: pcap_t *pcap_open(const char *source, int snaplen, int flags, int read_timeout, struct pcap_rmtauth *auth, char *errbuf)
-
     // pcap_dumper_t *pcap_dump_open(pcap_t *p, const char *fname)
     @Deprecated // Use direct mapped one instead.
     Pointer pcap_dump_open(Pointer p, String fname);
@@ -163,8 +256,6 @@ final class NativeMappings {
     // void pcap_dump_close(pcap_dumper_t *p)
     @Deprecated // Use direct mapped one instead.
     void pcap_dump_close(Pointer p);
-
-    // TODO WinPcap: int pcap_live_dump(pcap_t *p, char *filename, int maxsize, int maxpacks)
 
     // u_char *pcap_next(pcap_t *p, struct pcap_pkthdr *h)
     @Deprecated // Use direct mapped one instead.
@@ -494,6 +585,51 @@ final class NativeMappings {
       list.add("jt");
       list.add("jf");
       list.add("k");
+      return list;
+    }
+
+  };
+
+  public static class pcap_stat extends Structure {
+
+    public int ps_recv; // u_int
+    public int ps_drop; // u_int
+    public int ps_ifdrop; // u_int
+
+    public pcap_stat() {}
+
+    public static
+    class ByReference
+    extends pcap_stat implements Structure.ByReference {}
+
+    @Override
+    protected List<String> getFieldOrder() {
+      List<String> list = new ArrayList<String>();
+      list.add("ps_recv");
+      list.add("ps_drop");
+      list.add("ps_ifdrop");
+      return list;
+    }
+
+  };
+
+  public static class win_pcap_stat extends pcap_stat {
+
+    public int bs_capt; // u_int
+
+    public win_pcap_stat() {}
+
+    public static
+    class ByReference
+    extends win_pcap_stat implements Structure.ByReference {}
+
+    @Override
+    protected List<String> getFieldOrder() {
+      List<String> list = new ArrayList<String>();
+      list.add("ps_recv");
+      list.add("ps_drop");
+      list.add("ps_ifdrop");
+      list.add("bs_capt");
       return list;
     }
 

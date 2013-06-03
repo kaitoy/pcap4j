@@ -2,14 +2,16 @@ package org.pcap4j.sample;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.PacketListener;
 import org.pcap4j.core.PcapHandle;
-import org.pcap4j.core.PcapHandle.BpfCompileMode;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
+import org.pcap4j.core.PcapStat;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
+import com.sun.jna.Platform;
 
 /**
  *
@@ -85,6 +87,14 @@ public class Loop {
       handle.loop(COUNT, listener);
     } catch (InterruptedException e) {
       e.printStackTrace();
+    }
+
+    PcapStat ps = handle.getStat();
+    System.out.println("ps_recv: " + ps.getNumPacketsReceived());
+    System.out.println("ps_drop: " + ps.getNumPacketsDropped());
+    System.out.println("ps_ifdrop: " + ps.getNumPacketsDroppedByIf());
+    if (Platform.isWindows()) {
+      System.out.println("bs_capt: " + ps.getNumPacketsCaptured());
     }
 
     handle.close();
