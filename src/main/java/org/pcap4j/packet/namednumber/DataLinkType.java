@@ -60,6 +60,12 @@ public final class DataLinkType extends NamedNumber<Integer> {
   public static final DataLinkType IEEE802_11
     = new DataLinkType(105, "Wireless"); // IEEE 802.11 wireless
 
+  /**
+   *
+   */
+  public static final DataLinkType DOCSIS
+    = new DataLinkType(143, "DOCSIS"); // DOCSIS
+
   private static final Map<Integer, DataLinkType> registry
     = new HashMap<Integer, DataLinkType>();
 
