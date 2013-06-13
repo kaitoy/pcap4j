@@ -24,7 +24,7 @@
       <outputDirectory>/</outputDirectory>
       <includes>
         <include>README*</include>
-        <include>License</include>
+        <include>LICENSE</include>
         <include>CHANGES.md</include>
       </includes>
     </fileSet>
