@@ -51,7 +51,7 @@ public final class PcapHandle {
   private final ThreadLocal<Integer> timestampsMicros
     = new ThreadLocal<Integer>();
 
-  private volatile boolean open;
+  private volatile boolean open = true;
   private volatile String filteringExpression = "";
 
   private static final Inet4Address WILDCARD_MASK;
@@ -64,10 +64,9 @@ public final class PcapHandle {
     }
   }
 
-  PcapHandle(Pointer handle, boolean open) {
+  PcapHandle(Pointer handle) {
     this.handle = handle;
     this.dlt = getDltByNative();
-    this.open = open;
   }
 
   DataLinkType getDltByNative() {

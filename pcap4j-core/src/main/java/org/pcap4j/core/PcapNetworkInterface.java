@@ -219,7 +219,7 @@ public final class PcapNetworkInterface {
       }
     }
 
-    return new PcapHandle(handle, true);
+    return new PcapHandle(handle);
   }
 
   @Override

@@ -13,6 +13,7 @@ Next Release
 ### Bug Fixes ###
 * Fix org.pcap4j.packet.IpV6NeighborDiscoveryPrefixInformationOption#getRawData() to return correct prefixLength.
 * Fix invalid properties for IPv4 Internet TimestampOption.
+* Fix org.pcap4j.core.Pcaps.openDead() to return opened PcapHandle.
 
 ### Other Changes ###
 * Change to a multi-module project.

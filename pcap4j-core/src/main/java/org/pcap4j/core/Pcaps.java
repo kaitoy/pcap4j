@@ -202,7 +202,7 @@ public final class Pcaps {
       throw new PcapNativeException(errbuf.toString());
     }
 
-    return new PcapHandle(handle, true);
+    return new PcapHandle(handle);
   }
 
   /**
@@ -226,7 +226,7 @@ public final class Pcaps {
       throw new PcapNativeException(sb.toString());
     }
 
-    return new PcapHandle(handle, false);
+    return new PcapHandle(handle);
   }
 
   /**
