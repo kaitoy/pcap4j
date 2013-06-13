@@ -109,7 +109,7 @@ public final class PcapDumper {
     }
 
     if (rc < 0) {
-      throw new PcapNativeException("Failed to flush.");
+      throw new PcapNativeException("Failed to flush.", rc);
     }
   }
 

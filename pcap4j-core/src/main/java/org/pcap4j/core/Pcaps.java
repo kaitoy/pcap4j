@@ -66,7 +66,7 @@ public final class Pcaps {
         .append(rc)
         .append(", Message: ")
         .append(errbuf);
-      throw new PcapNativeException(sb.toString());
+      throw new PcapNativeException(sb.toString(), rc);
     }
     if (errbuf.length() != 0) {
       logger.warn("{}", errbuf);
@@ -172,7 +172,7 @@ public final class Pcaps {
     int rc = NativeMappings.pcap_lookupnet(devName, netp, maskp, errbuf);
 
     if (rc < 0) {
-      throw new PcapNativeException(errbuf.toString());
+      throw new PcapNativeException(errbuf.toString(), rc);
     }
 
     int net = netp.getValue();
@@ -264,7 +264,8 @@ public final class Pcaps {
              );
     if (rc < 0) {
       throw new PcapNativeException(
-                  "Failed to compile the BPF expression: " + bpfExpression
+                  "Failed to compile the BPF expression: " + bpfExpression,
+                  rc
                 );
     }
     return new BpfProgram(prog, bpfExpression);
@@ -287,7 +288,8 @@ public final class Pcaps {
     int rc = NativeMappings.pcap_datalink_name_to_val(name);
     if (rc < 0) {
       throw new PcapNativeException(
-                  "Failed to convert the data link name to the value: " + name
+                  "Failed to convert the data link name to the value: " + name,
+                  rc
                 );
     }
     return DataLinkType.getInstance(rc);

@@ -96,7 +96,7 @@ public final class PcapHandle {
 
       int rc = NativeMappings.pcap_set_datalink(handle, dlt.value());
       if (rc < 0) {
-        throw new PcapNativeException(getError());
+        throw new PcapNativeException(getError(), rc);
       }
 
       this.dlt = dlt;
@@ -276,7 +276,7 @@ public final class PcapHandle {
     }
 
     if (rc < 0) {
-      throw new PcapNativeException(getError());
+      throw new PcapNativeException(getError(), rc);
     }
 
     return new BpfProgram(prog, bpfExpression);
@@ -323,7 +323,8 @@ public final class PcapHandle {
                  );
         if (rc < 0) {
           throw new PcapNativeException(
-                      "Error occured in pcap_compile: " + getError()
+                      "Error occured in pcap_compile: " + getError(),
+                      rc
                     );
         }
 
@@ -331,7 +332,8 @@ public final class PcapHandle {
         rc = NativeMappings.pcap_setfilter(handle, prog);
         if (rc < 0) {
           throw new PcapNativeException(
-                      "Error occured in pcap_setfilger: " + getError()
+                      "Error occured in pcap_setfilger: " + getError(),
+                      rc
                     );
         }
 
@@ -379,7 +381,7 @@ public final class PcapHandle {
 
       int rc = NativeMappings.pcap_setfilter(handle, prog.getProgram());
       if (rc < 0) {
-        throw new PcapNativeException("Failed to set filter: " + getError());
+        throw new PcapNativeException("Failed to set filter: " + getError(), rc);
       }
 
       this.filteringExpression = prog.getExpression();
@@ -443,7 +445,7 @@ public final class PcapHandle {
     }
 
     if (rc < 0) {
-      throw new PcapNativeException(errbuf.toString());
+      throw new PcapNativeException(errbuf.toString(), rc);
     }
   }
 
@@ -470,7 +472,7 @@ public final class PcapHandle {
       return BlockingMode.NONBLOCKING;
     }
     else {
-      throw new PcapNativeException(errbuf.toString());
+      throw new PcapNativeException(errbuf.toString(), rc);
     }
   }
 
@@ -552,12 +554,14 @@ public final class PcapHandle {
                   );
       case -1:
         throw new PcapNativeException(
-                "Error occured in pcap_next_ex(): " + getError()
+                "Error occured in pcap_next_ex(): " + getError(), rc
               );
       case -2:
         throw new EOFException();
       default:
-        throw new AssertionError("Never get here.");
+        throw new PcapNativeException(
+                "Unexpected error occured: " + getError(), rc
+              );
     }
   }
 
@@ -632,14 +636,14 @@ public final class PcapHandle {
         break;
       case -1:
         throw new PcapNativeException(
-                "Error occured: " + getError()
+                "Error occured: " + getError(), rc
               );
       case -2:
         logger.info("Broken.");
         throw new InterruptedException();
       default:
         throw new PcapNativeException(
-                "Unexpected error occured: " + getError()
+                "Unexpected error occured: " + getError(), rc
               );
     }
   }
@@ -703,14 +707,16 @@ public final class PcapHandle {
       switch (rc) {
         case -1:
           throw new PcapNativeException(
-                  "Error occured: " + getError()
+                  "Error occured: " + getError(),
+                  rc
                 );
         case -2:
           logger.info("Broken.");
           throw new InterruptedException();
         default:
           throw new PcapNativeException(
-                  "Unexpected error occured: " + getError()
+                  "Unexpected error occured: " + getError(),
+                  rc
                 );
       }
     }
@@ -832,13 +838,15 @@ public final class PcapHandle {
         break;
       case -1:
         throw new PcapNativeException(
-                "Error occured: " + getError()
+                "Error occured: " + getError(), rc
               );
       case -2:
         logger.info("Broken.");
         throw new InterruptedException();
       default:
-        throw new AssertionError("Never get here");
+        throw new PcapNativeException(
+                "Unexpected error occured: " + getError(), rc
+              );
     }
   }
 
@@ -883,7 +891,8 @@ public final class PcapHandle {
 
     if (rc < 0) {
       throw new PcapNativeException(
-              "Error occured in pcap_sendpacket(): " + getError()
+              "Error occured in pcap_sendpacket(): " + getError(),
+              rc
             );
     }
   }
@@ -928,7 +937,7 @@ public final class PcapHandle {
     }
 
     if (rc < 0) {
-      throw new PcapNativeException(getError());
+      throw new PcapNativeException(getError(), rc);
     }
 
     return new PcapStat(ps);
@@ -951,7 +960,7 @@ public final class PcapHandle {
     }
 
     if (rc < 0) {
-      throw new PcapNativeException(getError());
+      throw new PcapNativeException(getError(), rc);
     }
 
     Pointer dltBufP = dltBufPP.getValue();

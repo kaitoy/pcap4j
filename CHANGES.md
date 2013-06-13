@@ -8,6 +8,7 @@ Next Release
                          pcap_datalink_val_to_name, pcap_datalink_val_to_description, pcap_strerror,
                          pcap_lib_version, pcap_dump_flush
 * Add Ubuntu support.
+* Add getReturnCode method to PcapNativeException.
 
 ### Bug Fixes ###
 * Fix org.pcap4j.packet.IpV6NeighborDiscoveryPrefixInformationOption#getRawData() to return correct prefixLength.
