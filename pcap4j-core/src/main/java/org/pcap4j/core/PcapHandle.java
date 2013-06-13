@@ -86,11 +86,12 @@ public final class PcapHandle {
    * @param dlt a {@link org.pcap4j.packet.namednumber.DataLinkType DataLinkType}
    *        object to set
    * @throws PcapNativeException
+   * @throws NotOpenException
    */
-  public void setDlt(DataLinkType dlt) throws PcapNativeException {
+  public void setDlt(DataLinkType dlt) throws PcapNativeException, NotOpenException {
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 
       int rc = NativeMappings.pcap_set_datalink(handle, dlt.value());
@@ -130,11 +131,12 @@ public final class PcapHandle {
   /**
    *
    * @return the dimension of the packet portion (in bytes) that is delivered to the application.
+   * @throws NotOpenException
    */
-  public int getSnapshot() {
+  public int getSnapshot() throws NotOpenException {
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 
       return NativeMappings.pcap_snapshot(handle);
@@ -181,11 +183,12 @@ public final class PcapHandle {
   /**
    *
    * @return a {@link org.pcap4j.core.SwappedType SwappedType} object.
+   * @throws NotOpenException
    */
-  public SwappedType isSwapped() {
+  public SwappedType isSwapped() throws NotOpenException {
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 
       int rc = NativeMappings.pcap_is_swapped(handle);
@@ -206,11 +209,12 @@ public final class PcapHandle {
   /**
    *
    * @return the major version number of the pcap library used to write the savefile.
+   * @throws NotOpenException
    */
-  public int getMajorVersion() {
+  public int getMajorVersion() throws NotOpenException {
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 
       return NativeMappings.pcap_major_version(handle);
@@ -220,11 +224,12 @@ public final class PcapHandle {
   /**
    *
    * @return the minor version number of the pcap library used to write the savefile.
+   * @throws NotOpenException
    */
-  public int getMinorVersion() {
+  public int getMinorVersion() throws NotOpenException {
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 
       return NativeMappings.pcap_minor_version(handle);
@@ -240,10 +245,11 @@ public final class PcapHandle {
    * @param netmask
    * @return a {@link org.pcap4j.core.BpfProgram BpfProgram} object.
    * @throws PcapNativeException
+   * @throws NotOpenException
    */
   public BpfProgram compileFilter(
     String bpfExpression, BpfCompileMode mode, Inet4Address netmask
-  ) throws PcapNativeException {
+  ) throws PcapNativeException, NotOpenException {
     if (
          bpfExpression == null
       || mode == null
@@ -260,7 +266,7 @@ public final class PcapHandle {
     int rc;
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 
       rc = NativeMappings.pcap_compile(
@@ -282,12 +288,12 @@ public final class PcapHandle {
    * @param mode
    * @param netmask
    * @throws PcapNativeException
-   * @throws IllegalStateException
+   * @throws NotOpenException
    * @throws NullPointerException
    */
   public void setFilter(
     String bpfExpression, BpfCompileMode mode, Inet4Address netmask
-  ) throws PcapNativeException {
+  ) throws PcapNativeException, NotOpenException {
     if (
          bpfExpression == null
       || mode == null
@@ -302,7 +308,7 @@ public final class PcapHandle {
 
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 
       int mask = ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0);
@@ -342,12 +348,12 @@ public final class PcapHandle {
    * @param bpfExpression
    * @param mode
    * @throws PcapNativeException
-   * @throws IllegalStateException
+   * @throws NotOpenException
    * @throws NullPointerException
    */
   public void setFilter(
     String bpfExpression, BpfCompileMode mode
-  ) throws PcapNativeException {
+  ) throws PcapNativeException, NotOpenException {
     setFilter(bpfExpression, mode, WILDCARD_MASK);
   }
 
@@ -355,8 +361,11 @@ public final class PcapHandle {
    *
    * @param prog
    * @throws PcapNativeException
+   * @throws NotOpenException
    */
-  public void setFilter(BpfProgram prog) throws PcapNativeException {
+  public void setFilter(
+    BpfProgram prog
+  ) throws PcapNativeException, NotOpenException {
     if (prog == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("prog: ").append(prog);
@@ -365,7 +374,7 @@ public final class PcapHandle {
 
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 
       int rc = NativeMappings.pcap_setfilter(handle, prog.getProgram());
@@ -413,8 +422,11 @@ public final class PcapHandle {
    *
    * @param mode
    * @throws PcapNativeException
+   * @throws NotOpenException
    */
-  public void setBlockingMode(BlockingMode mode) throws PcapNativeException {
+  public void setBlockingMode(
+    BlockingMode mode
+  ) throws PcapNativeException, NotOpenException {
     if (mode == null) {
       StringBuilder sb = new StringBuilder();
       sb.append(" mode: ").append(mode);
@@ -425,7 +437,7 @@ public final class PcapHandle {
     int rc;
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
       rc = NativeMappings.pcap_setnonblock(handle, mode.getValue(), errbuf);
     }
@@ -439,13 +451,14 @@ public final class PcapHandle {
    *
    * @return blocking mode
    * @throws PcapNativeException
+   * @throws NotOpenException
    */
-  public BlockingMode getBlockingMode() throws PcapNativeException {
+  public BlockingMode getBlockingMode() throws PcapNativeException, NotOpenException {
     PcapErrbuf errbuf = new PcapErrbuf();
     int rc;
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
       rc = NativeMappings.pcap_getnonblock(handle, errbuf);
     }
@@ -464,15 +477,15 @@ public final class PcapHandle {
   /**
    *
    * @return a captured packet.
-   * @throws IllegalStateException
+   * @throws NotOpenException
    */
-  public Packet getNextPacket() {
+  public Packet getNextPacket() throws NotOpenException {
     pcap_pkthdr header = new pcap_pkthdr();
     Pointer packet;
 
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
       // packet = PcapLibrary.INSTANCE.pcap_next(handle, header);
       packet = NativeMappings.pcap_next(handle, header);
@@ -499,17 +512,17 @@ public final class PcapHandle {
    * @throws PcapNativeException
    * @throws EOFException
    * @throws TimeoutException
-   * @throws IllegalStateException
+   * @throws NotOpenException
    */
   public Packet getNextPacketEx()
-  throws PcapNativeException, EOFException, TimeoutException {
+  throws PcapNativeException, EOFException, TimeoutException, NotOpenException {
     PointerByReference headerPP = new PointerByReference();
     PointerByReference dataPP = new PointerByReference();
     int rc;
 
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
       // rc = PcapLibrary.INSTANCE.pcap_next_ex(handle, headerPP, dataPP);
       rc = NativeMappings.pcap_next_ex(handle, headerPP, dataPP);
@@ -557,11 +570,11 @@ public final class PcapHandle {
    * @param listener
    * @throws PcapNativeException
    * @throws InterruptedException
-   * @throws IllegalStateException
+   * @throws NotOpenException
    */
   public void loop(
     int packetCount, PacketListener listener
-  ) throws PcapNativeException, InterruptedException {
+  ) throws PcapNativeException, InterruptedException, NotOpenException {
     loop(
       packetCount,
       listener,
@@ -580,11 +593,11 @@ public final class PcapHandle {
    * @param executor
    * @throws PcapNativeException
    * @throws InterruptedException
-   * @throws IllegalStateException
+   * @throws NotOpenException
    */
   public void loop(
     int packetCount, PacketListener listener, Executor executor
-  ) throws PcapNativeException, InterruptedException {
+  ) throws PcapNativeException, InterruptedException, NotOpenException {
     if (listener == null || executor == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("listener: ").append(listener)
@@ -595,7 +608,7 @@ public final class PcapHandle {
     int rc;
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 
       logger.info("Start loop");
@@ -638,10 +651,11 @@ public final class PcapHandle {
    * @return the number of captured packets.
    * @throws PcapNativeException
    * @throws InterruptedException
+   * @throws NotOpenException
    */
   public int dispatch(
     int packetCount, PacketListener listener
-  ) throws PcapNativeException, InterruptedException {
+  ) throws PcapNativeException, InterruptedException, NotOpenException {
     return dispatch(
              packetCount,
              listener,
@@ -657,10 +671,11 @@ public final class PcapHandle {
    * @return the number of captured packets.
    * @throws PcapNativeException
    * @throws InterruptedException
+   * @throws NotOpenException
    */
   public int dispatch(
     int packetCount, PacketListener listener, Executor executor
-  ) throws PcapNativeException, InterruptedException {
+  ) throws PcapNativeException, InterruptedException, NotOpenException {
     if (listener == null || executor == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("listener: ").append(listener)
@@ -671,7 +686,7 @@ public final class PcapHandle {
     int rc;
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 
       logger.info("Start dispatch");
@@ -784,16 +799,16 @@ public final class PcapHandle {
    * @param dumper
    * @throws PcapNativeException
    * @throws InterruptedException
-   * @throws IllegalStateException
+   * @throws NotOpenException
    */
   public
   void loop(int packetCount, PcapDumper dumper)
-  throws PcapNativeException, InterruptedException {
+  throws PcapNativeException, InterruptedException, NotOpenException {
     int rc;
 
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 
       logger.info("Start dump loop");
@@ -845,10 +860,10 @@ public final class PcapHandle {
    *
    * @param packet
    * @throws PcapNativeException
+   * @throws NotOpenException
    * @throws NullPointerException
-   * @throws IllegalStateException
    */
-  public void sendPacket(Packet packet) throws PcapNativeException {
+  public void sendPacket(Packet packet) throws PcapNativeException, NotOpenException {
     if (packet == null) {
       throw new NullPointerException("packet may not be null");
     }
@@ -856,7 +871,7 @@ public final class PcapHandle {
     int rc;
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
 //      rc = PcapLibrary.INSTANCE.pcap_sendpacket(
 //             handle, packet.getRawData(), packet.length()
@@ -894,8 +909,9 @@ public final class PcapHandle {
    *
    * @return a {@link org.pcap4j.core.PcapStat PcapStat} object.
    * @throws PcapNativeException
+   * @throws NotOpenException
    */
-  public PcapStat getStat() throws PcapNativeException {
+  public PcapStat getStat() throws PcapNativeException, NotOpenException {
     pcap_stat ps;
     if (Platform.isWindows()) {
       ps = new win_pcap_stat();
@@ -906,7 +922,7 @@ public final class PcapHandle {
     int rc;
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
       rc = NativeMappings.pcap_stats(handle, ps);
     }
@@ -921,13 +937,15 @@ public final class PcapHandle {
   /**
    * @return a list of {@link org.pcap4j.packet.namednumber.DataLinkType DataLinkType}
    * @throws PcapNativeException
+   * @throws NotOpenException
    */
-  public List<DataLinkType> listDatalinks() throws PcapNativeException {
+  public List<DataLinkType> listDatalinks()
+  throws PcapNativeException, NotOpenException {
     PointerByReference dltBufPP = new PointerByReference();
     int rc;
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
       rc = NativeMappings.pcap_list_datalinks(handle, dltBufPP);
     }

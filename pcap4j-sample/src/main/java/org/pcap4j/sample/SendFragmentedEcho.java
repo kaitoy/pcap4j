@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
+import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
@@ -30,11 +31,6 @@ import org.pcap4j.util.IpV4Helper;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
 
-/**
- *
- * @author Kaito
- *
- */
 public class SendFragmentedEcho {
 
   private static final String COUNT_KEY
@@ -62,11 +58,6 @@ public class SendFragmentedEcho {
   private static final int MTU
     = Integer.getInteger(MTU_KEY, 1403); // [bytes]
 
-  /**
-   *
-   * @param args
-   * @throws PcapNativeException
-   */
   public static void main(String[] args) throws PcapNativeException {
     String strSrcIpAddress = args[0]; // for InetAddress.getByName()
     String strSrcMacAddress = args[1]; // e.g. 12:34:56:ab:cd:ef
@@ -220,7 +211,10 @@ public class SendFragmentedEcho {
         handle.loop(-1, listener);
       } catch (PcapNativeException e) {
         e.printStackTrace();
-      } catch (InterruptedException e) {}
+      } catch (InterruptedException e) {
+      } catch (NotOpenException e) {
+        e.printStackTrace();
+      }
     }
 
   }

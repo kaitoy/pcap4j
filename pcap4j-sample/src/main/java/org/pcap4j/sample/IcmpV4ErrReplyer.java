@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
+import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
@@ -35,21 +36,11 @@ import org.pcap4j.util.IcmpV4Helper;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
 
-/**
- *
- * @author Kaito
- *
- */
 public class IcmpV4ErrReplyer {
 
   private static MacAddress MAC_ADDR = MacAddress.getByName("fe:00:00:00:00:01");
 
-  /**
-   *
-   * @param args
-   * @throws PcapNativeException
-   */
-  public static void main(String[] args) throws PcapNativeException {
+  public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String strAddress = args[0];
     String strType = args[1]; // 3(DESTINATION_UNREACHABLE) or 11(TIME_EXCEEDED) or 12(PARAMETER_PROBLEM)
     String strCode = args[2];
@@ -174,6 +165,8 @@ public class IcmpV4ErrReplyer {
                 handle4send.sendPacket(eb.build());
               } catch (PcapNativeException e) {
                 e.printStackTrace();
+              } catch (NotOpenException e) {
+                e.printStackTrace();
               }
             }
             else if (packet.contains(ArpPacket.class)) {
@@ -203,6 +196,8 @@ public class IcmpV4ErrReplyer {
                 handle4send.sendPacket(eb.build());
               } catch (PcapNativeException e) {
                 e.printStackTrace();
+              } catch (NotOpenException e) {
+                e.printStackTrace();
               }
             }
           }
@@ -218,6 +213,8 @@ public class IcmpV4ErrReplyer {
             } catch (PcapNativeException e) {
               e.printStackTrace();
             } catch (InterruptedException e) {
+              break;
+            } catch (NotOpenException e) {
               break;
             }
           }

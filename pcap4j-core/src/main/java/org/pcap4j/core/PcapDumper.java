@@ -41,8 +41,9 @@ public final class PcapDumper {
   /**
    *
    * @param packet
+   * @throws NotOpenException
    */
-  public void dump(Packet packet) {
+  public void dump(Packet packet) throws NotOpenException {
     long cur = System.currentTimeMillis();
     long timestampSec = cur / 1000L;
     int timestampMicros = (int)((cur - timestampSec * 1000L) * 1000);
@@ -54,9 +55,11 @@ public final class PcapDumper {
    * @param packet
    * @param timestampSec
    * @param timestampMicros
-   * @throws IllegalStateException
+   * @throws NotOpenException
    */
-  public void dump(Packet packet, long timestampSec, int timestampMicros) {
+  public void dump(
+    Packet packet, long timestampSec, int timestampMicros
+  ) throws NotOpenException {
     if (timestampSec < 0) {
       throw new IllegalArgumentException(
               "timestampSec must be positive: "
@@ -81,7 +84,7 @@ public final class PcapDumper {
 
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
       //PcapLibrary.INSTANCE.pcap_dump(dumper, header, packet.getRawData());
       NativeMappings.pcap_dump(dumper, header, packet.getRawData());
@@ -94,12 +97,13 @@ public final class PcapDumper {
 
   /**
    * @throws PcapNativeException
+   * @throws NotOpenException
    */
-  public void flush() throws PcapNativeException {
+  public void flush() throws PcapNativeException, NotOpenException {
     int rc;
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
       rc = NativeMappings.pcap_dump_flush(dumper);
     }
@@ -112,12 +116,13 @@ public final class PcapDumper {
   /**
    * @return the file position for a "savefile".
    * @throws PcapNativeException
+   * @throws NotOpenException
    */
-  public long ftell() throws PcapNativeException {
+  public long ftell() throws PcapNativeException, NotOpenException {
     NativeLong nposition;
     synchronized (thisLock) {
       if (!open) {
-        throw new IllegalStateException("Not open.");
+        throw new NotOpenException();
       }
       nposition = NativeMappings.pcap_dump_ftell(dumper);
     }

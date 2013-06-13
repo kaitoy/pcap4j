@@ -3,6 +3,7 @@ package org.pcap4j.sample;
 import java.io.IOException;
 import java.sql.Timestamp;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
+import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
@@ -10,11 +11,6 @@ import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
 
-/**
- *
- * @author Kaito
- *
- */
 public class GetNextPacket {
 
   private static final String COUNT_KEY
@@ -32,12 +28,7 @@ public class GetNextPacket {
   private static final int MAX_CAP_LEN
     = Integer.getInteger(MAX_CAP_LEN_KEY, 65536); // [bytes]
 
-  /**
-   *
-   * @param args
-   * @throws PcapNativeException
-   */
-  public static void main(String[] args) throws PcapNativeException {
+  public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String filter = args.length != 0 ? args[0] : "";
 
     System.out.println(COUNT_KEY + ": " + COUNT);

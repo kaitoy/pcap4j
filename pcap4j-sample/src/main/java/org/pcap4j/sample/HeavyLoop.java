@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
@@ -12,19 +13,9 @@ import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
 
-/**
- *
- * @author Kaito
- *
- */
 public class HeavyLoop {
 
-  /**
-   *
-   * @param args
-   * @throws PcapNativeException
-   */
-  public static void main(String[] args) throws PcapNativeException {
+  public static void main(String[] args) throws PcapNativeException, NotOpenException {
     PcapNetworkInterface nif;
     try {
       nif = new NifSelector().selectNetworkInterface();

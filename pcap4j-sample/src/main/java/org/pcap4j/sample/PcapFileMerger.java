@@ -1,24 +1,15 @@
 package org.pcap4j.sample;
 
+import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapDumper;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.Packet;
 
-/**
- *
- * @author Kaito
- *
- */
 public class PcapFileMerger {
 
-  /**
-   *
-   * @param args
-   * @throws PcapNativeException
-   */
-  public static void main(String[] args) throws PcapNativeException {
+  public static void main(String[] args) throws PcapNativeException, NotOpenException {
     // args: pcap file list
 
     PcapDumper dumper = null;

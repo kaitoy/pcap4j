@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
+import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.Pcaps;
@@ -14,11 +15,6 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.SimpleBuilder;
 import org.pcap4j.util.IpV4Helper;
 
-/**
- *
- * @author Kaito
- *
- */
 public class DefragmentEcho {
 
   private static final String PCAP_FILE_KEY
@@ -26,12 +22,7 @@ public class DefragmentEcho {
   private static final String PCAP_FILE
     = System.getProperty(PCAP_FILE_KEY, "src/main/resources/flagmentedEcho.pcap");
 
-  /**
-   *
-   * @param args
-   * @throws PcapNativeException
-   */
-  public static void main(String[] args) throws PcapNativeException {
+  public static void main(String[] args) throws PcapNativeException, NotOpenException {
     PcapHandle handle = Pcaps.openOffline(PCAP_FILE);
 
     Map<Short, List<IpV4Packet>> ipV4Packets

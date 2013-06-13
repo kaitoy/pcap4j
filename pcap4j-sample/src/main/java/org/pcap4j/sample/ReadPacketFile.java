@@ -3,16 +3,12 @@ package org.pcap4j.sample;
 import java.io.EOFException;
 import java.sql.Timestamp;
 import java.util.concurrent.TimeoutException;
+import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.Packet;
 
-/**
- *
- * @author Kaito
- *
- */
 public class ReadPacketFile {
 
   private static final int COUNT = 5;
@@ -22,12 +18,7 @@ public class ReadPacketFile {
   private static final String PCAP_FILE
     = System.getProperty(PCAP_FILE_KEY, "src/main/resources/echoAndEchoReply.pcap");
 
-  /**
-   *
-   * @param args
-   * @throws PcapNativeException
-   */
-  public static void main(String[] args) throws PcapNativeException {
+  public static void main(String[] args) throws PcapNativeException, NotOpenException {
     PcapHandle handle = Pcaps.openOffline(PCAP_FILE);
 
     for (int i = 0; i < COUNT; i++) {

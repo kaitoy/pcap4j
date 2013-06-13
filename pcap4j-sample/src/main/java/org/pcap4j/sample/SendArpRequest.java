@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
+import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
@@ -22,11 +23,6 @@ import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
 
-/**
- *
- * @author Kaito
- *
- */
 public class SendArpRequest {
 
   private static final String COUNT_KEY
@@ -53,8 +49,9 @@ public class SendArpRequest {
    *
    * @param args
    * @throws PcapNativeException
+   * @throws NotOpenException
    */
-  public static void main(String[] args) throws PcapNativeException {
+  public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String strSrcIpAddress = "192.0.2.100"; // for InetAddress.getByName()
     String strDstIpAddress = args[0]; // for InetAddress.getByName()
 
@@ -171,6 +168,8 @@ public class SendArpRequest {
       } catch (PcapNativeException e) {
         e.printStackTrace();
       } catch (InterruptedException e) {
+        e.printStackTrace();
+      } catch (NotOpenException e) {
         e.printStackTrace();
       }
     }

@@ -11,7 +11,7 @@ package org.pcap4j.core;
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */
-public final class PcapHandleNotOpenException extends Exception {
+public final class NotOpenException extends Exception {
 
   /**
    *
@@ -21,7 +21,7 @@ public final class PcapHandleNotOpenException extends Exception {
   /**
    *
    */
-  public PcapHandleNotOpenException() {
+  public NotOpenException() {
     super();
   }
 
@@ -29,7 +29,7 @@ public final class PcapHandleNotOpenException extends Exception {
    *
    * @param message
    */
-  public PcapHandleNotOpenException(String message){
+  public NotOpenException(String message){
     super(message);
   }
 

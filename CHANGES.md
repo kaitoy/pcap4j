@@ -15,6 +15,7 @@ Next Release
 
 ### Other Changes ###
 * Change to a multi-module project.
+* Modify org.pcap4j.core.PcapHandle and org.pcap4j.core.PcapDumper to throw NotOpenException instead of IllegalStateException.
 * Change a package of class: org.pcap4j.core.PcapHandle.BpfCompileMode -> org.pcap4j.core.BpfProgram.BpfCompileMode
 * Change class names:
  * org.pcap4j.packet.UnknownIpV4InternetTimestampData -> org.pcap4j.packet.UnknownIpV4InternetTimestampOptionData
