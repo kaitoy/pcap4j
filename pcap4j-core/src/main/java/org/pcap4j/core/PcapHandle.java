@@ -88,6 +88,10 @@ public final class PcapHandle {
    * @throws NotOpenException
    */
   public void setDlt(DataLinkType dlt) throws PcapNativeException, NotOpenException {
+    if (dlt == null) {
+      throw new NullPointerException("dlt must not be null.");
+    }
+
     synchronized (thisLock) {
       if (!open) {
         throw new NotOpenException();
@@ -785,8 +789,11 @@ public final class PcapHandle {
    * @throws PcapNativeException
    */
   public PcapDumper dumpOpen(String filePath) throws PcapNativeException {
-    Pointer dumper;
+    if (filePath == null) {
+      throw new NullPointerException("filePath must not be null.");
+    }
 
+    Pointer dumper;
     synchronized (thisLock) {
       // dumper = PcapLibrary.INSTANCE.pcap_dump_open(handle, filePath);
       dumper = NativeMappings.pcap_dump_open(handle, filePath);
@@ -809,8 +816,11 @@ public final class PcapHandle {
   public
   void loop(int packetCount, PcapDumper dumper)
   throws PcapNativeException, InterruptedException, NotOpenException {
-    int rc;
+    if (dumper == null) {
+      throw new NullPointerException("dumper must not be null.");
+    }
 
+    int rc;
     synchronized (thisLock) {
       if (!open) {
         throw new NotOpenException();

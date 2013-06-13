@@ -101,8 +101,13 @@ public final class Pcaps {
   public static PcapNetworkInterface getDevByAddress(
     InetAddress addr
   ) throws PcapNativeException {
-    List<PcapNetworkInterface> allDevs = findAllDevs();
+    if (addr == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("addr: ").append(addr);
+      throw new NullPointerException(sb.toString());
+    }
 
+    List<PcapNetworkInterface> allDevs = findAllDevs();
     for (PcapNetworkInterface pif: allDevs) {
       for (PcapAddress paddr: pif.getAddresses()) {
         if (paddr.getAddress().equals(addr)) {
@@ -123,8 +128,13 @@ public final class Pcaps {
   public static PcapNetworkInterface getDevByName(
     String name
   ) throws PcapNativeException {
-    List<PcapNetworkInterface> allDevs = findAllDevs();
+    if (name == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("name: ").append(name);
+      throw new NullPointerException(sb.toString());
+    }
 
+    List<PcapNetworkInterface> allDevs = findAllDevs();
     for (PcapNetworkInterface pif: allDevs) {
       if (pif.getName().equals(name)) {
         return pif;
@@ -192,6 +202,12 @@ public final class Pcaps {
   public static PcapHandle openOffline(
     String filePath
   ) throws PcapNativeException {
+    if (filePath == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("filePath: ").append(filePath);
+      throw new NullPointerException(sb.toString());
+    }
+
     PcapErrbuf errbuf = new PcapErrbuf();
 //    Pointer handle
 //      = PcapLibrary.INSTANCE.pcap_open_offline(filePath, errbuf);
@@ -215,6 +231,12 @@ public final class Pcaps {
   public static PcapHandle openDead(
     DataLinkType dlt, int maxCaptureLength
   ) throws PcapNativeException {
+    if (dlt == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("dlt: ").append(dlt);
+      throw new NullPointerException(sb.toString());
+    }
+
 //    Pointer handle
 //      = PcapLibrary.INSTANCE.pcap_open_dead(dlt.value(), maxCaptureLength);
     Pointer handle
@@ -383,6 +405,12 @@ public final class Pcaps {
    * @return a string representation of an InetAddress for BPF.
    */
   public static String toBpfString(InetAddress inetAddr){
+    if (inetAddr == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("inetAddr: ").append(inetAddr);
+      throw new NullPointerException(sb.toString());
+    }
+
     String strAddr = inetAddr.toString();
     return strAddr.substring(strAddr.lastIndexOf("/") + 1);
   }
@@ -393,6 +421,12 @@ public final class Pcaps {
    * @return a string representation of a MAC address for BPF.
    */
   public static String toBpfString(MacAddress macAddr) {
+    if (macAddr == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("macAddr: ").append(macAddr);
+      throw new NullPointerException(sb.toString());
+    }
+
     StringBuffer buf = new StringBuffer();
     byte[] address = macAddr.getAddress();
 

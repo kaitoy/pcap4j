@@ -167,6 +167,12 @@ public final class PcapNetworkInterface {
   public PcapHandle openLive(
     int maxCaptureLength, PromiscuousMode mode, int timeoutMillis
   ) throws PcapNativeException {
+    if (mode == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("mode: ").append(mode);
+      throw new NullPointerException(sb.toString());
+    }
+
     PcapErrbuf errbuf = new PcapErrbuf();
 
 //    Pointer handle
