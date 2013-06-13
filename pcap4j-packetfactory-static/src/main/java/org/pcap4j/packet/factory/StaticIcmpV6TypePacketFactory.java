@@ -18,10 +18,7 @@ import org.pcap4j.packet.IcmpV6RedirectPacket;
 import org.pcap4j.packet.IcmpV6RouterAdvertisementPacket;
 import org.pcap4j.packet.IcmpV6RouterSolicitationPacket;
 import org.pcap4j.packet.IcmpV6TimeExceededPacket;
-import org.pcap4j.packet.IllegalPacket;
-import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.IcmpV6Type;
 
 /**
@@ -29,12 +26,101 @@ import org.pcap4j.packet.namednumber.IcmpV6Type;
  * @since pcap4j 0.9.15
  */
 public final class StaticIcmpV6TypePacketFactory
-implements PacketFactory<IcmpV6Type> {
+extends AbstractStaticPacketFactory<IcmpV6Type> {
 
   private static final StaticIcmpV6TypePacketFactory INSTANCE
     = new StaticIcmpV6TypePacketFactory();
 
-  private StaticIcmpV6TypePacketFactory() {};
+  private StaticIcmpV6TypePacketFactory() {
+    instantiaters.put(
+      IcmpV6Type.DESTINATION_UNREACHABLE, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(byte[] rawData) {
+          return IcmpV6DestinationUnreachablePacket.newPacket(rawData);
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.PACKET_TOO_BIG, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(byte[] rawData) {
+          return IcmpV6PacketTooBigPacket.newPacket(rawData);
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.TIME_EXCEEDED, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(byte[] rawData) {
+          return IcmpV6TimeExceededPacket.newPacket(rawData);
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.PARAMETER_PROBLEM, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(byte[] rawData) {
+          return IcmpV6ParameterProblemPacket.newPacket(rawData);
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.ECHO_REQUEST, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(byte[] rawData) {
+          return IcmpV6EchoRequestPacket.newPacket(rawData);
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.ECHO_REPLY, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(byte[] rawData) {
+          return IcmpV6EchoReplyPacket.newPacket(rawData);
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.ROUTER_SOLICITATION, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(byte[] rawData) {
+          return IcmpV6RouterSolicitationPacket.newPacket(rawData);
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.ROUTER_ADVERTISEMENT, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(byte[] rawData) {
+          return IcmpV6RouterAdvertisementPacket.newPacket(rawData);
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.NEIGHBOR_SOLICITATION, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(byte[] rawData) {
+          return IcmpV6NeighborSolicitationPacket.newPacket(rawData);
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.NEIGHBOR_ADVERTISEMENT, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(byte[] rawData) {
+          return IcmpV6NeighborAdvertisementPacket.newPacket(rawData);
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.REDIRECT, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(byte[] rawData) {
+          return IcmpV6RedirectPacket.newPacket(rawData);
+        }
+      }
+    );
+  };
 
   /**
    *
@@ -42,57 +128,6 @@ implements PacketFactory<IcmpV6Type> {
    */
   public static StaticIcmpV6TypePacketFactory getInstance() {
     return INSTANCE;
-  }
-
-  public Packet newPacket(byte[] rawData, IcmpV6Type number) {
-    if (rawData == null || number == null) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" number: ")
-        .append(number);
-      throw new NullPointerException(sb.toString());
-    }
-
-    try {
-      if (number.equals(IcmpV6Type.DESTINATION_UNREACHABLE)) {
-        return IcmpV6DestinationUnreachablePacket.newPacket(rawData);
-      }
-      else if (number.equals(IcmpV6Type.PACKET_TOO_BIG)) {
-        return IcmpV6PacketTooBigPacket.newPacket(rawData);
-      }
-      else if (number.equals(IcmpV6Type.TIME_EXCEEDED)) {
-        return IcmpV6TimeExceededPacket.newPacket(rawData);
-      }
-      else if (number.equals(IcmpV6Type.PARAMETER_PROBLEM)) {
-        return IcmpV6ParameterProblemPacket.newPacket(rawData);
-      }
-      else if (number.equals(IcmpV6Type.ECHO_REQUEST)) {
-        return IcmpV6EchoRequestPacket.newPacket(rawData);
-      }
-      else if (number.equals(IcmpV6Type.ECHO_REPLY)) {
-        return IcmpV6EchoReplyPacket.newPacket(rawData);
-      }
-      else if (number.equals(IcmpV6Type.ROUTER_SOLICITATION)) {
-        return IcmpV6RouterSolicitationPacket.newPacket(rawData);
-      }
-      else if (number.equals(IcmpV6Type.ROUTER_ADVERTISEMENT)) {
-        return IcmpV6RouterAdvertisementPacket.newPacket(rawData);
-      }
-      else if (number.equals(IcmpV6Type.NEIGHBOR_SOLICITATION)) {
-        return IcmpV6NeighborSolicitationPacket.newPacket(rawData);
-      }
-      else if (number.equals(IcmpV6Type.NEIGHBOR_ADVERTISEMENT)) {
-        return IcmpV6NeighborAdvertisementPacket.newPacket(rawData);
-      }
-      else if (number.equals(IcmpV6Type.REDIRECT)) {
-        return IcmpV6RedirectPacket.newPacket(rawData);
-      }
-    } catch (IllegalRawDataException e) {
-      return IllegalPacket.newPacket(rawData);
-    }
-
-    return UnknownPacket.newPacket(rawData);
   }
 
 }
