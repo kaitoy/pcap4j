@@ -11,12 +11,24 @@ Next Release
 
 ### Bug Fixes ###
 * Fix org.pcap4j.packet.IpV6NeighborDiscoveryPrefixInformationOption#getRawData() to return correct prefixLength.
+* Fix invalid properties for IPv4 Internet TimestampOption.
 
 ### Other Changes ###
+* Change to a multi-module project.
 * Change a package of class: org.pcap4j.core.PcapHandle.BpfCompileMode -> org.pcap4j.core.BpfProgram.BpfCompileMode
-* Change method names
+* Change class names:
+ * org.pcap4j.packet.UnknownIpV4InternetTimestampData -> org.pcap4j.packet.UnknownIpV4InternetTimestampOptionData
+ * org.pcap4j.packet.factory.PropertiesBasedIpV4InternetTimestampDataFactory -> org.pcap4j.packet.factory.PropertiesBasedIpV4InternetTimestampOptionDataFactory
+* Change method names:
  * org.pcap4j.core.Pcaps.getNifByName(String) -> org.pcap4j.core.Pcaps.getDevByName(String)
  * org.pcap4j.core.Pcaps.getNifByAddress(InetAddress) -> org.pcap4j.core.Pcaps.getDevByAddress(InetAddress)
+* Delete obsolete classes:
+ * org.pcap4j.packet.factory.IpV4TosFactories
+ * org.pcap4j.packet.factory.IpV4TosFactory
+ * org.pcap4j.packet.factory.IpV6FlowLabelFactories
+ * org.pcap4j.packet.factory.IpV6FlowLabelFactory
+ * org.pcap4j.packet.factory.IpV6TrafficClassFactories
+ * org.pcap4j.packet.factory.IpV6TrafficClassFactory
 
 Release 0.9.15 (29-May-2013)
 ============
@@ -27,17 +39,17 @@ Release 0.9.15 (29-May-2013)
 * [Issues#7](https://github.com/kaitoy/pcap4j/issues/7): Fix invalid properties in packet.properties. - [@kaitoy](https://github.com/kaitoy)
 
 ### Other Changes ###
-* Change class names
+* Change class names:
  * org.pcap4j.core.PcapIpv4Address -> org.pcap4j.core.PcapIpV4Address
  * org.pcap4j.core.PcapIpv6Address -> org.pcap4j.core.PcapIpV6Address
-* Change property names
+* Change property names:
  * org.pcap4j.packet.icmpv4.calcChecksumAtBuild -> org.pcap4j.packet.icmpV4.calcChecksumAtBuild
  * org.pcap4j.packet.ipv4.calcChecksumAtBuild -> org.pcap4j.packet.ipV4.calcChecksumAtBuild
  * org.pcap4j.packet.tcpv4.calcChecksumAtBuild -> org.pcap4j.packet.tcpV4.calcChecksumAtBuild
  * org.pcap4j.packet.udpv4.calcChecksumAtBuild -> org.pcap4j.packet.udpV4.calcChecksumAtBuild
  * org.pcap4j.packet.tcpv6.calcChecksumAtBuild -> org.pcap4j.packet.tcpV6.calcChecksumAtBuild
  * org.pcap4j.packet.udpv6.calcChecksumAtBuild -> org.pcap4j.packet.udpV6.calcChecksumAtBuild
-* Change serialization formats
+* Change serialization formats:
  * org.pcap4j.packet.IcmpV4CommonPacket
  * org.pcap4j.packet.IcmpV4CommonPacket.IcmpV4CommonHeader
  * org.pcap4j.packet.IcmpV4DestinationUnreachablePacket
@@ -50,7 +62,7 @@ Release 0.9.15 (29-May-2013)
  * org.pcap4j.packet.IcmpV4SourceQuenchPacket.IcmpV4SourceQuenchHeader
  * org.pcap4j.packet.IcmpV4TimeExceededPacket
  * org.pcap4j.packet.IcmpV4TimeExceededPacket.IcmpV4TimeExceededHeader
-* Move invoking packet from header to payload
+* Move invoking packet from header to payload:
  * org.pcap4j.packet.IcmpV4DestinationUnreachablePacket
  * org.pcap4j.packet.IcmpV4ParameterProblemPacket
  * org.pcap4j.packet.IcmpV4RedirectPacket
