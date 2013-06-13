@@ -15,6 +15,7 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.SimpleBuilder;
 import org.pcap4j.util.IpV4Helper;
 
+@SuppressWarnings("javadoc")
 public class DefragmentEcho {
 
   private static final String PCAP_FILE_KEY

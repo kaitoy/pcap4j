@@ -9,6 +9,7 @@ import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.Packet;
 
+@SuppressWarnings("javadoc")
 public class ReadPacketFile {
 
   private static final int COUNT = 5;

@@ -31,6 +31,7 @@ import org.pcap4j.util.IpV4Helper;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
 
+@SuppressWarnings("javadoc")
 public class SendFragmentedEcho {
 
   private static final String COUNT_KEY

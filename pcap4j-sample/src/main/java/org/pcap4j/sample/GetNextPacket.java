@@ -11,6 +11,7 @@ import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
 
+@SuppressWarnings("javadoc")
 public class GetNextPacket {
 
   private static final String COUNT_KEY

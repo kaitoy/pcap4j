@@ -14,6 +14,7 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
 import com.sun.jna.Platform;
 
+@SuppressWarnings("javadoc")
 public class Loop {
 
   private static final String COUNT_KEY

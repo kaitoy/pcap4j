@@ -23,6 +23,7 @@ import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
 
+@SuppressWarnings("javadoc")
 public class SendArpRequest {
 
   private static final String COUNT_KEY

@@ -36,6 +36,7 @@ import org.pcap4j.util.IcmpV4Helper;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
 
+@SuppressWarnings("javadoc")
 public class IcmpV4ErrReplyer {
 
   private static MacAddress MAC_ADDR = MacAddress.getByName("fe:00:00:00:00:01");
