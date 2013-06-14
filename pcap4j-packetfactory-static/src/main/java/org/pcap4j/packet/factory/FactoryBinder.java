@@ -17,6 +17,7 @@ import org.pcap4j.packet.IpV6ExtOptionsPacket.IpV6Option;
 import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
 import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
 import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
+import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.EtherType;
@@ -35,10 +36,10 @@ final class FactoryBinder {
 
   private static final FactoryBinder INSTANCE = new FactoryBinder();
 
-  private final Map<Class<? extends NamedNumber<?>>, PacketFactory<?>> packetFactories
-    = new HashMap<Class<? extends NamedNumber<?>>, PacketFactory<?>>();
-  private final Map<Class<?>, ClassifiedDataFactory<?, ?>> classifiedDataFactories
-    = new HashMap<Class<?>, ClassifiedDataFactory<?, ?>>();
+  private final Map<Class<? extends NamedNumber<?>>, PacketFactory<?, ?>> packetFactories
+    = new HashMap<Class<? extends NamedNumber<?>>, PacketFactory<?, ?>>();
+  private final Map<Class<?>, PacketFactory<?, ?>> packetpPieceFactories
+    = new HashMap<Class<?>, PacketFactory<?, ?>>();
 
   private FactoryBinder() {
     packetFactories.put(DataLinkType.class, StaticDataLinkTypePacketFactory.getInstance());
@@ -49,39 +50,39 @@ final class FactoryBinder {
     packetFactories.put(TcpPort.class, StaticTcpPortPacketFactory.getInstance());
     packetFactories.put(UdpPort.class, StaticUdpPortPacketFactory.getInstance());
 
-    classifiedDataFactories.put(
+    packetpPieceFactories.put(
       IpV4Option.class,
       StaticIpV4OptionFactory.getInstance()
     );
-    classifiedDataFactories.put(
+    packetpPieceFactories.put(
       IpV4InternetTimestampOption.class,
       StaticIpV4InternetTimestampOptionDataFactory.getInstance()
     );
-    classifiedDataFactories.put(
+    packetpPieceFactories.put(
       TcpOption.class,
       StaticTcpOptionFactory.getInstance()
     );
-    classifiedDataFactories.put(
+    packetpPieceFactories.put(
       IpV6Option.class,
       StaticIpV6OptionFactory.getInstance()
     );
-    classifiedDataFactories.put(
+    packetpPieceFactories.put(
       IpV6RoutingData.class,
       StaticIpV6RoutingDataFactory.getInstance()
     );
-    classifiedDataFactories.put(
+    packetpPieceFactories.put(
       IpV6NeighborDiscoveryOption.class,
       StaticIpV6NeighborDiscoveryOptionFactory.getInstance()
     );
-    classifiedDataFactories.put(
+    packetpPieceFactories.put(
       IpV4Tos.class,
       StaticIpV4TosFactory.getInstance()
     );
-    classifiedDataFactories.put(
+    packetpPieceFactories.put(
       IpV6TrafficClass.class,
       StaticIpV6TrafficClassFactory.getInstance()
     );
-    classifiedDataFactories.put(
+    packetpPieceFactories.put(
       IpV6FlowLabel.class,
       StaticIpV6FlowLabelFactory.getInstance()
     );
@@ -90,18 +91,14 @@ final class FactoryBinder {
   public static FactoryBinder getInstance() { return INSTANCE; }
 
   @SuppressWarnings("unchecked")
-  public PacketFactory<NamedNumber<?>> getFactory(
-    Class<? extends NamedNumber<?>> numberClass
-  ) {
-    return (PacketFactory<NamedNumber<?>>)packetFactories.get(numberClass);
-  }
-
-  @SuppressWarnings("unchecked")
-  public <T, N extends NamedNumber<?>> ClassifiedDataFactory<T, N>
+  public <T, N extends NamedNumber<?>> PacketFactory<T, N>
   getFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {
-    return (ClassifiedDataFactory<T, N>)classifiedDataFactories.get(targetClass);
+    if (Packet.class.isAssignableFrom(targetClass)) {
+      return (PacketFactory<T, N>)packetFactories.get(numberClass);
+    }
+    return (PacketFactory<T, N>)packetpPieceFactories.get(targetClass);
   }
 
 }

@@ -53,8 +53,8 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
         );
 
     this.payload
-      = PacketFactories.getFactory(IcmpV6Type.class)
-          .newPacket(rawPayload, header.getType());
+      = PacketFactories.getFactory(Packet.class, IcmpV6Type.class)
+          .newInstance(rawPayload, header.getType());
   }
 
   private IcmpV6CommonPacket(Builder builder) {

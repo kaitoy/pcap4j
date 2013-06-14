@@ -20,7 +20,7 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.14
  */
 public final class PropertiesBasedIpV6TrafficClassFactory
-implements ClassifiedDataFactory<IpV6TrafficClass, NA> {
+implements PacketFactory<IpV6TrafficClass, NA> {
 
   private static final PropertiesBasedIpV6TrafficClassFactory INSTANCE
     = new PropertiesBasedIpV6TrafficClassFactory();
@@ -33,14 +33,14 @@ implements ClassifiedDataFactory<IpV6TrafficClass, NA> {
    */
   public static PropertiesBasedIpV6TrafficClassFactory getInstance() { return INSTANCE; }
 
-  public IpV6TrafficClass newData(byte[] rawData, NA number) {
-    return newData(rawData);
+  public IpV6TrafficClass newInstance(byte[] rawData, NA number) {
+    return newInstance(rawData);
   }
 
-  public IpV6TrafficClass newData(byte[] rawData) {
+  public IpV6TrafficClass newInstance(byte[] rawData) {
     Class<? extends IpV6TrafficClass> clazz
       = PacketFactoryPropertiesLoader.getInstance().getIpV6TrafficClassClass();
-    return newData(rawData, clazz);
+    return newInstance(rawData, clazz);
   }
 
   /**
@@ -49,7 +49,7 @@ implements ClassifiedDataFactory<IpV6TrafficClass, NA> {
    * @param clazz
    * @return a new IpV6TrafficClass object.
    */
-  public IpV6TrafficClass newData(
+  public IpV6TrafficClass newInstance(
     byte[] rawData, Class<? extends IpV6TrafficClass> clazz
   ) {
     if (rawData == null || clazz == null) {

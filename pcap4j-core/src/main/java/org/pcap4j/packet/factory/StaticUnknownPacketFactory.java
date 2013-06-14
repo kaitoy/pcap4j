@@ -16,7 +16,7 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @since pcap4j 0.9.14
  */
 public final class StaticUnknownPacketFactory
-implements PacketFactory<NamedNumber<?>> {
+implements PacketFactory<Packet, NamedNumber<?>> {
 
   private static final StaticUnknownPacketFactory INSTANCE
     = new StaticUnknownPacketFactory();
@@ -29,16 +29,11 @@ implements PacketFactory<NamedNumber<?>> {
    */
   public static StaticUnknownPacketFactory getInstance() { return INSTANCE; }
 
-  public Packet newPacket(byte[] rawData, NamedNumber<?> number) {
-    return newPacket(rawData);
+  public Packet newInstance(byte[] rawData, NamedNumber<?> number) {
+    return newInstance(rawData);
   }
 
-  /**
-   *
-   * @param rawData
-   * @return a new Packet object.
-   */
-  public Packet newPacket(byte[] rawData) {
+  public Packet newInstance(byte[] rawData) {
     return UnknownPacket.newPacket(rawData);
   }
 

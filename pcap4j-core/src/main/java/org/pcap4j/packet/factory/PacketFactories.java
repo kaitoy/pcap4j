@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.6
+ * @since pcap4j 0.9.11
  */
 public final class PacketFactories {
 
@@ -38,22 +38,27 @@ public final class PacketFactories {
 
   /**
    *
+   * @param targetClass
    * @param numberClass
-   * @return PacketFactory
+   * @return a {@link org.pcap4j.packet.factory.PacketFactory PacketFactory} object.
    */
-  public static PacketFactory<NamedNumber<?>> getFactory(
-    Class<? extends NamedNumber<?>> numberClass
+  public static <T, N extends NamedNumber<?>> PacketFactory<T, N> getFactory(
+    Class<T> targetClass, Class<N> numberClass
   ) {
-    if (numberClass == null) {
-      throw new NullPointerException("numberClass: " + numberClass);
+    if (numberClass == null || targetClass == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("numberClass: ").append(numberClass)
+        .append(" targetClass: ").append(targetClass);
+      throw new NullPointerException(sb.toString());
     }
 
     if (FACTORY_BINDER != null) {
-      return FACTORY_BINDER.getFactory(numberClass);
+      return FACTORY_BINDER.getFactory(targetClass, numberClass);
     }
     else {
-      return SimpleFactoryBinder.getInstance().getFactory(numberClass);
+      return SimpleFactoryBinder.getInstance().getFactory(targetClass, numberClass);
     }
+
   }
 
 }

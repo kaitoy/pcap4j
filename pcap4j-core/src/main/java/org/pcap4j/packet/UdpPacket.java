@@ -64,8 +64,8 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     this.payload
-      = PacketFactories.getFactory(UdpPort.class)
-          .newPacket(rawPayload, header.getDstPort());
+      = PacketFactories.getFactory(Packet.class, UdpPort.class)
+          .newInstance(rawPayload, header.getDstPort());
   }
 
   private UdpPacket(Builder builder) {

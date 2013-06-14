@@ -107,8 +107,8 @@ implements IpV6NeighborDiscoveryOption {
     this.reserved
       = ByteArrays.getSubArray(rawData, RESERVED_OFFSET, RESERVED_SIZE);
 
-    Packet p = PacketFactories.getFactory(EtherType.class)
-                 .newPacket(
+    Packet p = PacketFactories.getFactory(Packet.class, EtherType.class)
+                 .newInstance(
                     ByteArrays.getSubArray(rawData, IP_HEADER_OFFSET),
                     EtherType.IPV6
                   );

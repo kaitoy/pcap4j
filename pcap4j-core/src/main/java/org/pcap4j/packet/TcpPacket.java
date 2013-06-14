@@ -14,7 +14,6 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-import org.pcap4j.packet.factory.ClassifiedDataFactories;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
@@ -57,8 +56,8 @@ public final class TcpPacket extends AbstractPacket {
         );
 
     this.payload
-      = PacketFactories.getFactory(TcpPort.class)
-          .newPacket(rawPayload, header.getDstPort());
+      = PacketFactories.getFactory(Packet.class, TcpPort.class)
+          .newInstance(rawPayload, header.getDstPort());
   }
 
   private TcpPacket(Builder builder) {
@@ -627,9 +626,9 @@ public final class TcpPacket extends AbstractPacket {
                             );
         TcpOptionKind kind = TcpOptionKind.getInstance(optRawData[0]);
         TcpOption newOne
-          = ClassifiedDataFactories
+          = PacketFactories
               .getFactory(TcpOption.class, TcpOptionKind.class)
-                 .newData(optRawData, kind);
+                 .newInstance(optRawData, kind);
         options.add(newOne);
         currentOffset += newOne.length();
 

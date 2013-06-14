@@ -19,7 +19,7 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @since pcap4j 0.9.14
  */
 public final class PropertiesBasedPacketFactory
-implements PacketFactory<NamedNumber<?>> {
+implements PacketFactory<Packet, NamedNumber<?>> {
 
   private static final PropertiesBasedPacketFactory INSTANCE
     = new PropertiesBasedPacketFactory();
@@ -32,25 +32,21 @@ implements PacketFactory<NamedNumber<?>> {
    */
   public static PropertiesBasedPacketFactory getInstance() { return INSTANCE; }
 
-  public Packet newPacket(byte[] rawData, NamedNumber<?> number) {
+
+  public Packet newInstance(byte[] rawData, NamedNumber<?> number) {
     if (number == null) {
       throw new NullPointerException(" number: " + number);
     }
 
     Class<? extends Packet> packetClass
       = PacketFactoryPropertiesLoader.getInstance().getPacketClass(number);
-    return newPacket(rawData, packetClass);
+    return newInstance(rawData, packetClass);
   }
 
-  /**
-   *
-   * @param rawData
-   * @return a new Packet object.
-   */
-  public Packet newPacket(byte[] rawData) {
+  public Packet newInstance(byte[] rawData) {
     Class<? extends Packet> packetClass
       = PacketFactoryPropertiesLoader.getInstance().getUnknownPacketClass();
-    return newPacket(rawData, packetClass);
+    return newInstance(rawData, packetClass);
   }
 
   /**
@@ -59,7 +55,7 @@ implements PacketFactory<NamedNumber<?>> {
    * @param packetClass
    * @return a new Packet object.
    */
-  public Packet newPacket(
+  public Packet newInstance(
     byte[] rawData, Class<? extends Packet> packetClass
   ) {
     if (rawData == null || packetClass == null) {

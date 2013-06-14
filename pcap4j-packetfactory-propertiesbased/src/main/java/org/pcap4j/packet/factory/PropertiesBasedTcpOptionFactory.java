@@ -20,7 +20,7 @@ import org.pcap4j.packet.namednumber.TcpOptionKind;
  */
 public final class
 PropertiesBasedTcpOptionFactory
-implements ClassifiedDataFactory<TcpOption, TcpOptionKind> {
+implements PacketFactory<TcpOption, TcpOptionKind> {
 
   private static final PropertiesBasedTcpOptionFactory INSTANCE
     = new PropertiesBasedTcpOptionFactory();
@@ -33,20 +33,20 @@ implements ClassifiedDataFactory<TcpOption, TcpOptionKind> {
    */
   public static PropertiesBasedTcpOptionFactory getInstance() { return INSTANCE; }
 
-  public TcpOption newData(byte[] rawData, TcpOptionKind number) {
+  public TcpOption newInstance(byte[] rawData, TcpOptionKind number) {
     if (number == null) {
       throw new NullPointerException(" number: " + number);
     }
 
     Class<? extends TcpOption> dataClass
       = PacketFactoryPropertiesLoader.getInstance().getTcpOptionClass(number);
-    return newData(rawData, dataClass);
+    return newInstance(rawData, dataClass);
   }
 
-  public TcpOption newData(byte[] rawData) {
+  public TcpOption newInstance(byte[] rawData) {
     Class<? extends TcpOption> dataClass
       = PacketFactoryPropertiesLoader.getInstance().getUnknownTcpOptionClass();
-    return newData(rawData, dataClass);
+    return newInstance(rawData, dataClass);
   }
 
   /**
@@ -55,7 +55,7 @@ implements ClassifiedDataFactory<TcpOption, TcpOptionKind> {
    * @param dataClass
    * @return a new TcpOption object.
    */
-  public TcpOption newData(byte[] rawData, Class<? extends TcpOption> dataClass) {
+  public TcpOption newInstance(byte[] rawData, Class<? extends TcpOption> dataClass) {
     if (rawData == null || dataClass == null) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("rawData: ")

@@ -28,7 +28,7 @@ import org.pcap4j.packet.namednumber.IpV4OptionType;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV4OptionFactory
-implements ClassifiedDataFactory<IpV4Option, IpV4OptionType> {
+implements PacketFactory<IpV4Option, IpV4OptionType> {
 
   private static final StaticIpV4OptionFactory INSTANCE
     = new StaticIpV4OptionFactory();
@@ -110,7 +110,7 @@ implements ClassifiedDataFactory<IpV4Option, IpV4OptionType> {
     return INSTANCE;
   }
 
-  public IpV4Option newData(byte[] rawData, IpV4OptionType number) {
+  public IpV4Option newInstance(byte[] rawData, IpV4OptionType number) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
       sb.append("rawData: ")
@@ -132,7 +132,7 @@ implements ClassifiedDataFactory<IpV4Option, IpV4OptionType> {
     return UnknownIpV4Option.newInstance(rawData);
   }
 
-  public IpV4Option newData(byte[] rawData) {
+  public IpV4Option newInstance(byte[] rawData) {
     return UnknownIpV4Option.newInstance(rawData);
   }
 

@@ -23,7 +23,7 @@ import org.pcap4j.packet.namednumber.TcpOptionKind;
  * @since pcap4j 0.9.16
  */
 public final class StaticTcpOptionFactory
-implements ClassifiedDataFactory<TcpOption, TcpOptionKind> {
+implements PacketFactory<TcpOption, TcpOptionKind> {
 
   private static final StaticTcpOptionFactory INSTANCE
     = new StaticTcpOptionFactory();
@@ -65,7 +65,7 @@ implements ClassifiedDataFactory<TcpOption, TcpOptionKind> {
     return INSTANCE;
   }
 
-  public TcpOption newData(
+  public TcpOption newInstance(
     byte[] rawData, TcpOptionKind number
   ) {
     if (rawData == null || number == null) {
@@ -89,7 +89,7 @@ implements ClassifiedDataFactory<TcpOption, TcpOptionKind> {
     return UnknownTcpOption.newInstance(rawData);
   }
 
-  public TcpOption newData(byte[] rawData) {
+  public TcpOption newInstance(byte[] rawData) {
     return UnknownTcpOption.newInstance(rawData);
   }
 

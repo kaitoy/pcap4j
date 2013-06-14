@@ -21,14 +21,7 @@ final class FactoryBinder {
 
   public static FactoryBinder getInstance() { return INSTANCE; }
 
-  public PacketFactory<NamedNumber<?>> getFactory(
-    Class<? extends NamedNumber<?>> numberClass
-  ) {
-    throw new UnsupportedOperationException("This code is never included in pcap4j-core.jar.");
-  }
-
-  public <T, N extends NamedNumber<?>> ClassifiedDataFactory<T, N>
-  getFactory(
+  public <T, N extends NamedNumber<?>> PacketFactory<T, N> getFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {
     throw new UnsupportedOperationException("This code is never included in pcap4j-core.jar.");

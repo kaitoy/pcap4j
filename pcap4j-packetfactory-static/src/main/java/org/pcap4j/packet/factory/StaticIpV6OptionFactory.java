@@ -22,7 +22,7 @@ import org.pcap4j.packet.namednumber.IpV6OptionType;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6OptionFactory
-implements ClassifiedDataFactory<IpV6Option, IpV6OptionType> {
+implements PacketFactory<IpV6Option, IpV6OptionType> {
 
   private static final StaticIpV6OptionFactory INSTANCE
     = new StaticIpV6OptionFactory();
@@ -56,7 +56,7 @@ implements ClassifiedDataFactory<IpV6Option, IpV6OptionType> {
     return INSTANCE;
   }
 
-  public IpV6Option newData(
+  public IpV6Option newInstance(
     byte[] rawData, IpV6OptionType number
   ) {
     if (rawData == null || number == null) {
@@ -80,7 +80,7 @@ implements ClassifiedDataFactory<IpV6Option, IpV6OptionType> {
     return UnknownIpV6Option.newInstance(rawData);
   }
 
-  public IpV6Option newData(byte[] rawData) {
+  public IpV6Option newInstance(byte[] rawData) {
     return UnknownIpV6Option.newInstance(rawData);
   }
 

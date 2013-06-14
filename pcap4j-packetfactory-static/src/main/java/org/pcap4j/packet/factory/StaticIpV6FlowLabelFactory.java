@@ -19,7 +19,7 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6FlowLabelFactory
-implements ClassifiedDataFactory<IpV6FlowLabel, NA> {
+implements PacketFactory<IpV6FlowLabel, NA> {
 
   private static final StaticIpV6FlowLabelFactory INSTANCE
     = new StaticIpV6FlowLabelFactory();
@@ -32,11 +32,11 @@ implements ClassifiedDataFactory<IpV6FlowLabel, NA> {
     return INSTANCE;
   }
 
-  public IpV6FlowLabel newData(byte[] rawData, NA number) {
-    return newData(rawData);
+  public IpV6FlowLabel newInstance(byte[] rawData, NA number) {
+    return newInstance(rawData);
   }
 
-  public IpV6FlowLabel newData(byte[] rawData) {
+  public IpV6FlowLabel newInstance(byte[] rawData) {
     if (rawData == null) {
       StringBuilder sb = new StringBuilder(40);
       sb.append("rawData: ")

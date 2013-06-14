@@ -49,8 +49,8 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
         );
 
     this.payload
-      = PacketFactories.getFactory(IcmpV4Type.class)
-        .newPacket(rawPayload, header.getType());
+      = PacketFactories.getFactory(Packet.class, IcmpV4Type.class)
+          .newInstance(rawPayload, header.getType());
   }
 
   private IcmpV4CommonPacket(Builder builder) {

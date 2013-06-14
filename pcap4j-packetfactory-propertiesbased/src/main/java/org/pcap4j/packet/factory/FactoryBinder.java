@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.NamedNumber;
 
 /**
@@ -21,42 +22,39 @@ final class FactoryBinder {
 
   private static final FactoryBinder INSTANCE = new FactoryBinder();
 
-  private final Map<CacheKey, ClassifiedDataFactory<?, ?>> cache
-    = new ConcurrentHashMap<CacheKey, ClassifiedDataFactory<?, ?>>();
+  private final Map<CacheKey, PacketFactory<?, ?>> cache
+    = new ConcurrentHashMap<CacheKey, PacketFactory<?, ?>>();
 
   public static FactoryBinder getInstance() { return INSTANCE; }
 
-  public PacketFactory<NamedNumber<?>> getFactory(
-    Class<? extends NamedNumber<?>> numberClass
-  ) {
-    return PropertiesBasedPacketFactory.getInstance();
-  }
-
-  public <T, N extends NamedNumber<?>> ClassifiedDataFactory<T, N>
-  getFactory(
+  public <T, N extends NamedNumber<?>> PacketFactory<T, N> getFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {
+    if (Packet.class.isAssignableFrom(targetClass)) {
+      @SuppressWarnings("unchecked")
+      PacketFactory<T, N> factory
+        = (PacketFactory<T, N>)PropertiesBasedPacketFactory.getInstance();
+      return factory;
+    }
+
     CacheKey key = new CacheKey(targetClass, numberClass);
 
     @SuppressWarnings("unchecked")
-    ClassifiedDataFactory<T, N> cachedFactory
-      = (ClassifiedDataFactory<T, N>)cache.get(key);
+    PacketFactory<T, N> cachedFactory = (PacketFactory<T, N>)cache.get(key);
     if (cachedFactory != null) {
       return cachedFactory;
     }
 
     @SuppressWarnings("unchecked")
-    Class<? extends ClassifiedDataFactory<T, N>> factoryClass
-      = (Class<? extends ClassifiedDataFactory<T, N>>)PacketFactoryPropertiesLoader
-          .getInstance()
-            .getClassifiedDataFactoryClass(targetClass, numberClass);
+    Class<? extends PacketFactory<T, N>> factoryClass
+      = (Class<? extends PacketFactory<T, N>>)PacketFactoryPropertiesLoader
+          .getInstance().getPacketFactoryClass(targetClass, numberClass);
 
     try {
       Method getInstance = factoryClass.getMethod("getInstance");
 
       @SuppressWarnings("unchecked")
-      ClassifiedDataFactory<T, N> factory
-        = (ClassifiedDataFactory<T, N>)getInstance.invoke(null);
+      PacketFactory<T, N> factory = (PacketFactory<T, N>)getInstance.invoke(null);
       cache.put(key, factory);
       return factory;
     } catch (SecurityException e) {

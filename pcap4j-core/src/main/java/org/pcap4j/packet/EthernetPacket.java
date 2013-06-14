@@ -61,8 +61,8 @@ public final class EthernetPacket extends AbstractPacket {
         );
 
     this.payload
-      = PacketFactories.getFactory(EtherType.class)
-          .newPacket(rawPayload, header.getType());
+      = PacketFactories.getFactory(Packet.class, EtherType.class)
+          .newInstance(rawPayload, header.getType());
 
     if (rawPayload.length > payload.length()) {
       this.pad

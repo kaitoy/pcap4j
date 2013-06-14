@@ -16,7 +16,7 @@ Next Release
 * Fix org.pcap4j.core.Pcaps.openDead() to return opened PcapHandle.
 
 ### Other Changes ###
-* Change to a multi-module project.
+* [Issues#3](https://github.com/kaitoy/pcap4j/issues/3): Change to a multi-module project.
 * Modify org.pcap4j.core.PcapHandle and org.pcap4j.core.PcapDumper to throw NotOpenException instead of IllegalStateException.
 * Change a package of class: org.pcap4j.core.PcapHandle.BpfCompileMode -> org.pcap4j.core.BpfProgram.BpfCompileMode
 * Change class names:
@@ -32,6 +32,8 @@ Next Release
  * org.pcap4j.packet.factory.IpV6FlowLabelFactory
  * org.pcap4j.packet.factory.IpV6TrafficClassFactories
  * org.pcap4j.packet.factory.IpV6TrafficClassFactory
+ * org.pcap4j.packet.factory.ClassifiedDataFactories
+ * org.pcap4j.packet.factory.ClassifiedDataFactoriy
 
 Release 0.9.15 (29-May-2013)
 ============

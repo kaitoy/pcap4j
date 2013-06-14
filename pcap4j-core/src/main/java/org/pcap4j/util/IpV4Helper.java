@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 import org.pcap4j.packet.IpV4Packet;
 import org.pcap4j.packet.IpV4Packet.IpV4Header;
+import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.SimpleBuilder;
 import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.factory.PacketFactories;
@@ -134,8 +135,8 @@ public final class IpV4Helper {
      .flagmentOffset((short)0)
      .payloadBuilder(
         new SimpleBuilder(
-          PacketFactories.getFactory(IpNumber.class)
-            .newPacket(defragmentedPayload, list.get(0).getHeader().getProtocol())
+          PacketFactories.getFactory(Packet.class, IpNumber.class)
+            .newInstance(defragmentedPayload, list.get(0).getHeader().getProtocol())
         )
       )
      .correctChecksumAtBuild(true)

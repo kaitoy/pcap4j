@@ -19,13 +19,13 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */
-public abstract class AbstractStaticPacketFactory<T extends NamedNumber<?>>
-implements PacketFactory<T> {
+public abstract class AbstractStaticPacketFactory<N extends NamedNumber<?>>
+implements PacketFactory<Packet, N> {
 
-  protected final Map<T, PacketInstantiater> instantiaters
-    = new HashMap<T, PacketInstantiater>();
+  protected final Map<N, PacketInstantiater> instantiaters
+    = new HashMap<N, PacketInstantiater>();
 
-  public Packet newPacket(byte[] rawData, T number) {
+  public Packet newInstance(byte[] rawData, N number) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
       sb.append("rawData: ")
@@ -47,6 +47,8 @@ implements PacketFactory<T> {
     return UnknownPacket.newPacket(rawData);
   }
 
-
+  public Packet newInstance(byte[] rawData) {
+    return UnknownPacket.newPacket(rawData);
+  }
 
 }

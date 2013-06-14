@@ -52,8 +52,8 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     }
     else {
       this.payload
-        = PacketFactories.getFactory(IpNumber.class)
-            .newPacket(rawPayload, header.getNextHeader());
+        = PacketFactories.getFactory(Packet.class, IpNumber.class)
+            .newInstance(rawPayload, header.getNextHeader());
     }
   }
 

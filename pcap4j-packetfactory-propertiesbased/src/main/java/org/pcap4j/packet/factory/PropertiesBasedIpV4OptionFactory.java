@@ -20,7 +20,7 @@ import org.pcap4j.packet.namednumber.IpV4OptionType;
  */
 public final class
 PropertiesBasedIpV4OptionFactory
-implements ClassifiedDataFactory<IpV4Option, IpV4OptionType> {
+implements PacketFactory<IpV4Option, IpV4OptionType> {
 
   private static final PropertiesBasedIpV4OptionFactory INSTANCE
     = new PropertiesBasedIpV4OptionFactory();
@@ -33,20 +33,20 @@ implements ClassifiedDataFactory<IpV4Option, IpV4OptionType> {
    */
   public static PropertiesBasedIpV4OptionFactory getInstance() { return INSTANCE; }
 
-  public IpV4Option newData(byte[] rawData, IpV4OptionType number) {
+  public IpV4Option newInstance(byte[] rawData, IpV4OptionType number) {
     if (number == null) {
       throw new NullPointerException(" number: " + number);
     }
 
     Class<? extends IpV4Option> dataClass
       = PacketFactoryPropertiesLoader.getInstance().getIpV4OptionClass(number);
-    return newData(rawData, dataClass);
+    return newInstance(rawData, dataClass);
   }
 
-  public IpV4Option newData(byte[] rawData) {
+  public IpV4Option newInstance(byte[] rawData) {
     Class<? extends IpV4Option> dataClass
       = PacketFactoryPropertiesLoader.getInstance().getUnknownIpV4OptionClass();
-    return newData(rawData, dataClass);
+    return newInstance(rawData, dataClass);
   }
 
   /**
@@ -55,7 +55,7 @@ implements ClassifiedDataFactory<IpV4Option, IpV4OptionType> {
    * @param dataClass
    * @return a new IpV4Option object.
    */
-  public IpV4Option newData(byte[] rawData, Class<? extends IpV4Option> dataClass) {
+  public IpV4Option newInstance(byte[] rawData, Class<? extends IpV4Option> dataClass) {
     if (rawData == null || dataClass == null) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("rawData: ")

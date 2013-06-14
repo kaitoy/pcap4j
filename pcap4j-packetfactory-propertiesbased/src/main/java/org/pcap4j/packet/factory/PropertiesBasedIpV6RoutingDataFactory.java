@@ -20,7 +20,7 @@ import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
  */
 public final class
 PropertiesBasedIpV6RoutingDataFactory
-implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
+implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
 
   private static final PropertiesBasedIpV6RoutingDataFactory INSTANCE
     = new PropertiesBasedIpV6RoutingDataFactory();
@@ -35,7 +35,7 @@ implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
     return INSTANCE;
   }
 
-  public IpV6RoutingData newData(
+  public IpV6RoutingData newInstance(
     byte[] rawData, IpV6RoutingHeaderType type
   ) {
     if (type == null) {
@@ -44,13 +44,13 @@ implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
 
     Class<? extends IpV6RoutingData> dataClass
       = PacketFactoryPropertiesLoader.getInstance().getIpV6RoutingDataClass(type);
-    return newData(rawData, dataClass);
+    return newInstance(rawData, dataClass);
   }
 
-  public IpV6RoutingData newData(byte[] rawData) {
+  public IpV6RoutingData newInstance(byte[] rawData) {
     Class<? extends IpV6RoutingData> dataClass
       = PacketFactoryPropertiesLoader.getInstance().getUnknownIpV6RoutingDataClass();
-    return newData(rawData, dataClass);
+    return newInstance(rawData, dataClass);
   }
 
   /**
@@ -59,7 +59,7 @@ implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
    * @param dataClass
    * @return a new IpV6RoutingData object.
    */
-  public IpV6RoutingData newData(
+  public IpV6RoutingData newInstance(
     byte[] rawData, Class<? extends IpV6RoutingData> dataClass
   ) {
     if (rawData == null || dataClass == null) {

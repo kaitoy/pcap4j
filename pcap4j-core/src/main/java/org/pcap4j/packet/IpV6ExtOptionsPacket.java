@@ -11,7 +11,6 @@ import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.pcap4j.packet.factory.ClassifiedDataFactories;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
@@ -39,8 +38,8 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
     byte[] rawPayload, IpNumber number
   ) {
     this.payload
-      = PacketFactories.getFactory(IpNumber.class)
-          .newPacket(rawPayload, number);
+      = PacketFactories.getFactory(Packet.class, IpNumber.class)
+          .newInstance(rawPayload, number);
   }
 
   /**
@@ -238,9 +237,9 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
                             );
         IpV6OptionType type = IpV6OptionType.getInstance(optRawData[0]);
         IpV6Option newOne
-          = ClassifiedDataFactories
+          = PacketFactories
               .getFactory(IpV6Option.class, IpV6OptionType.class)
-                .newData(optRawData, type);
+                .newInstance(optRawData, type);
         options.add(newOne);
         currentOffset += newOne.length();
       }

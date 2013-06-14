@@ -19,7 +19,7 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6TrafficClassFactory
-implements ClassifiedDataFactory<IpV6TrafficClass, NA> {
+implements PacketFactory<IpV6TrafficClass, NA> {
 
   private static final StaticIpV6TrafficClassFactory INSTANCE
     = new StaticIpV6TrafficClassFactory();
@@ -32,11 +32,11 @@ implements ClassifiedDataFactory<IpV6TrafficClass, NA> {
     return INSTANCE;
   }
 
-  public IpV6TrafficClass newData(byte[] rawData, NA number) {
-    return newData(rawData);
+  public IpV6TrafficClass newInstance(byte[] rawData, NA number) {
+    return newInstance(rawData);
   }
 
-  public IpV6TrafficClass newData(byte[] rawData) {
+  public IpV6TrafficClass newInstance(byte[] rawData) {
     if (rawData == null) {
       StringBuilder sb = new StringBuilder(40);
       sb.append("rawData: ")

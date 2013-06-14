@@ -35,8 +35,8 @@ abstract class IcmpV6InvokingPacketPacket extends AbstractPacket {
    * @param rawData
    */
   protected IcmpV6InvokingPacketPacket(byte[] rawData) {
-    Packet p = PacketFactories.getFactory(EtherType.class)
-                 .newPacket(rawData, EtherType.IPV6);
+    Packet p = PacketFactories.getFactory(Packet.class, EtherType.class)
+                 .newInstance(rawData, EtherType.IPV6);
 
     if (p instanceof IllegalPacket) {
       this.payload = p;

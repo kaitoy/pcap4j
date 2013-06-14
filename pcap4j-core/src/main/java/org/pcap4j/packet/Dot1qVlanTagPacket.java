@@ -49,8 +49,8 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
         );
 
     this.payload
-      = PacketFactories.getFactory(EtherType.class)
-          .newPacket(rawPayload, header.getType());
+      = PacketFactories.getFactory(Packet.class, EtherType.class)
+          .newInstance(rawPayload, header.getType());
   }
 
   private Dot1qVlanTagPacket(Builder builder) {

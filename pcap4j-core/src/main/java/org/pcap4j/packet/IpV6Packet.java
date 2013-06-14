@@ -12,7 +12,6 @@ import java.io.Serializable;
 import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.List;
-import org.pcap4j.packet.factory.ClassifiedDataFactories;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
@@ -67,8 +66,8 @@ public final class IpV6Packet extends AbstractPacket {
     }
 
     this.payload
-      = PacketFactories.getFactory(IpNumber.class)
-          .newPacket(rawPayload, header.getNextHeader());
+      = PacketFactories.getFactory(Packet.class, IpNumber.class)
+          .newInstance(rawPayload, header.getNextHeader());
   }
 
   private IpV6Packet(Builder builder) {
@@ -349,17 +348,17 @@ public final class IpV6Packet extends AbstractPacket {
             (byte)(versionAndTrafficClassAndFlowLabel >>> 28)
           );
       this.trafficClass
-        = ClassifiedDataFactories.getFactory(
+        = PacketFactories.getFactory(
             IpV6TrafficClass.class, NA.class
-          ).newData(
+          ).newInstance(
               new byte[] {
                 (byte)((versionAndTrafficClassAndFlowLabel & 0x0FF00000) >> 20)
               }
             );
       this.flowLabel
-        = ClassifiedDataFactories.getFactory(
+        = PacketFactories.getFactory(
             IpV6FlowLabel.class, NA.class
-          ).newData(
+          ).newInstance(
               ByteArrays.toByteArray(versionAndTrafficClassAndFlowLabel & 0x000FFFFF)
             );
       this.payloadLength

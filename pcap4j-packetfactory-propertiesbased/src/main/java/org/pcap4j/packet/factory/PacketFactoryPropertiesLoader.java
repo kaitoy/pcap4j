@@ -39,22 +39,16 @@ import org.pcap4j.util.PropertiesLoader;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.1
+ * @since pcap4j 0.9.16
  */
 public final class PacketFactoryPropertiesLoader {
 
   /**
    *
    */
-  public static final String PACKET_PROPERTIES_PATH_KEY
+  public static final String PACKET_FACTORY_PROPERTIES_PATH_KEY
     = PacketFactoryPropertiesLoader.class.getPackage().getName()
         + ".properties";
-
-  /**
-   *
-   */
-  public static final String PACKET_FACTORY_CLASS_KEY_BASE
-    = Packet.class.getName() + ".classifiedBy.";
 
   /**
    *
@@ -164,7 +158,7 @@ public final class PacketFactoryPropertiesLoader {
   private PropertiesLoader loader
     = new PropertiesLoader(
         System.getProperty(
-          PACKET_PROPERTIES_PATH_KEY,
+          PACKET_FACTORY_PROPERTIES_PATH_KEY,
           PacketFactoryPropertiesLoader.class.getPackage().getName()
             .replace('.', '/') + "/packet-factory.properties"
         ),
@@ -184,28 +178,10 @@ public final class PacketFactoryPropertiesLoader {
 
   /**
    *
-   * @param numberClass
-   * @return a class which implements PacketFactory for a specified class.
-   */
-  public Class<? extends PacketFactory<NamedNumber<?>>>
-  getPacketFactoryClass(Class<? extends NamedNumber<?>> numberClass) {
-    StringBuilder sb = new StringBuilder(130);
-    sb.append(PACKET_FACTORY_CLASS_KEY_BASE)
-      .append(numberClass.getName())
-      .append(".isMadeBy");
-    return loader.<PacketFactory<NamedNumber<?>>>getClass(
-             sb.toString(),
-             StaticUnknownPacketFactory.class
-           );
-  }
-
-  /**
-   *
    * @param number
    * @return a class which implements Packet for a specified NamedNumber.
    */
-  public <T extends NamedNumber<?>>
-  Class<? extends Packet> getPacketClass(T number) {
+  public <T extends NamedNumber<?>> Class<? extends Packet> getPacketClass(T number) {
     StringBuilder sb = new StringBuilder(110);
     sb.append(PACKET_CLASS_KEY_BASE)
       .append(number.getClass().getName())
@@ -232,11 +208,11 @@ public final class PacketFactoryPropertiesLoader {
    *
    * @param targetClass
    * @param numberClass
-   * @return a class which implements ClassifiedDataFactory
+   * @return a class which implements
+   *         {@link org.pcap4j.packet.factory.PacketFactory PacketFactory}
    *         for specified classes.
    */
-  public Class<? extends ClassifiedDataFactory<?, ?>>
-  getClassifiedDataFactoryClass(
+  public Class<? extends PacketFactory<?, ?>> getPacketFactoryClass(
     Class<?> targetClass, Class<? extends NamedNumber<?>> numberClass
   ) {
     StringBuilder sb = new StringBuilder(200);
@@ -248,7 +224,7 @@ public final class PacketFactoryPropertiesLoader {
     sb.append(".isMadeBy");
     String key = sb.toString();
 
-    Class<? extends ClassifiedDataFactory<?, ?>> factory
+    Class<? extends PacketFactory<?, ?>> factory
       = loader.getClass(
           key,
           null

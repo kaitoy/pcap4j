@@ -21,7 +21,7 @@ import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6RoutingDataFactory
-implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
+implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
 
   private static final StaticIpV6RoutingDataFactory INSTANCE
     = new StaticIpV6RoutingDataFactory();
@@ -47,7 +47,7 @@ implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
     return INSTANCE;
   }
 
-  public IpV6RoutingData newData(
+  public IpV6RoutingData newInstance(
     byte[] rawData, IpV6RoutingHeaderType number
   ) {
     if (rawData == null || number == null) {
@@ -71,7 +71,7 @@ implements ClassifiedDataFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
     return UnknownIpV6RoutingData.newInstance(rawData);
   }
 
-  public IpV6RoutingData newData(byte[] rawData) {
+  public IpV6RoutingData newInstance(byte[] rawData) {
     return UnknownIpV6RoutingData.newInstance(rawData);
   }
 

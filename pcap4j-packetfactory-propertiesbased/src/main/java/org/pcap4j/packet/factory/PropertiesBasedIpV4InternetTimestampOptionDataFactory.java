@@ -20,7 +20,7 @@ import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
  */
 public final class
 PropertiesBasedIpV4InternetTimestampOptionDataFactory
-implements ClassifiedDataFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampOptionFlag> {
+implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampOptionFlag> {
 
   private static final PropertiesBasedIpV4InternetTimestampOptionDataFactory INSTANCE
     = new PropertiesBasedIpV4InternetTimestampOptionDataFactory();
@@ -35,7 +35,7 @@ implements ClassifiedDataFactory<IpV4InternetTimestampOptionData, IpV4InternetTi
     return INSTANCE;
   }
 
-  public IpV4InternetTimestampOptionData newData(
+  public IpV4InternetTimestampOptionData newInstance(
     byte[] rawData, IpV4InternetTimestampOptionFlag flag
   ) {
     if (flag == null) {
@@ -44,13 +44,13 @@ implements ClassifiedDataFactory<IpV4InternetTimestampOptionData, IpV4InternetTi
 
     Class<? extends IpV4InternetTimestampOptionData> dataClass
       = PacketFactoryPropertiesLoader.getInstance().getIpV4InternetTimestampDataClass(flag);
-    return newData(rawData, dataClass);
+    return newInstance(rawData, dataClass);
   }
 
-  public IpV4InternetTimestampOptionData newData(byte[] rawData) {
+  public IpV4InternetTimestampOptionData newInstance(byte[] rawData) {
     Class<? extends IpV4InternetTimestampOptionData> dataClass
       = PacketFactoryPropertiesLoader.getInstance().getUnknownIpV4InternetTimestampDataClass();
-    return newData(rawData, dataClass);
+    return newInstance(rawData, dataClass);
   }
 
   /**
@@ -59,7 +59,7 @@ implements ClassifiedDataFactory<IpV4InternetTimestampOptionData, IpV4InternetTi
    * @param dataClass
    * @return a new IpV4InternetTimestampOptionData object.
    */
-  public IpV4InternetTimestampOptionData newData(
+  public IpV4InternetTimestampOptionData newInstance(
     byte[] rawData, Class<? extends IpV4InternetTimestampOptionData> dataClass
   ) {
     if (rawData == null || dataClass == null) {

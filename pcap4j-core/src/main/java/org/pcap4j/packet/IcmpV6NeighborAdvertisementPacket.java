@@ -12,7 +12,7 @@ import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
-import org.pcap4j.packet.factory.ClassifiedDataFactories;
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 import org.pcap4j.util.ByteArrays;
 
@@ -238,11 +238,11 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
         IpV6NeighborDiscoveryOptionType type
           = IpV6NeighborDiscoveryOptionType.getInstance(optRawData[0]);
         IpV6NeighborDiscoveryOption newOne
-          = ClassifiedDataFactories
+          = PacketFactories
               .getFactory(
                  IpV6NeighborDiscoveryOption.class,
                  IpV6NeighborDiscoveryOptionType.class
-               ).newData(optRawData, type);
+               ).newInstance(optRawData, type);
         options.add(newOne);
         currentOffset += newOne.length();
       }

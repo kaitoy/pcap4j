@@ -20,7 +20,7 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.14
  */
 public final class PropertiesBasedIpV4TosFactory
-implements ClassifiedDataFactory<IpV4Tos, NA> {
+implements PacketFactory<IpV4Tos, NA> {
 
   private static final PropertiesBasedIpV4TosFactory INSTANCE
     = new PropertiesBasedIpV4TosFactory();
@@ -33,14 +33,14 @@ implements ClassifiedDataFactory<IpV4Tos, NA> {
    */
   public static PropertiesBasedIpV4TosFactory getInstance() { return INSTANCE; }
 
-  public IpV4Tos newData(byte[] rawData, NA number) {
-    return newData(rawData);
+  public IpV4Tos newInstance(byte[] rawData, NA number) {
+    return newInstance(rawData);
   }
 
-  public IpV4Tos newData(byte[] rawData) {
+  public IpV4Tos newInstance(byte[] rawData) {
     Class<? extends IpV4Tos> tosClass
       = PacketFactoryPropertiesLoader.getInstance().getIpV4TosClass();
-    return newData(rawData, tosClass);
+    return newInstance(rawData, tosClass);
   }
 
   /**
@@ -49,7 +49,7 @@ implements ClassifiedDataFactory<IpV4Tos, NA> {
    * @param tosClass
    * @return a new IpV4Tos object.
    */
-  public IpV4Tos newData(byte[] rawData, Class<? extends IpV4Tos> tosClass) {
+  public IpV4Tos newInstance(byte[] rawData, Class<? extends IpV4Tos> tosClass) {
     if (rawData == null || tosClass == null) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("rawData: ")

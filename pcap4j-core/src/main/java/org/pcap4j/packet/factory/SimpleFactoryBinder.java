@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet.factory;
 
+import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.NamedNumber;
 
 /**
@@ -21,17 +22,18 @@ final class SimpleFactoryBinder {
 
   public static SimpleFactoryBinder getInstance() { return INSTANCE; }
 
-  public PacketFactory<NamedNumber<?>> getFactory(
-    Class<? extends NamedNumber<?>> numberClass
-  ) {
-    return StaticUnknownPacketFactory.getInstance();
-  }
-
-  public <T, N extends NamedNumber<?>> ClassifiedDataFactory<T, N>
-  getFactory(
+  @SuppressWarnings("unchecked")
+  public <T, N extends NamedNumber<?>> PacketFactory<T, N> getFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {
-    throw new UnsupportedOperationException("This should be never used.");
+    if (Packet.class.isAssignableFrom(targetClass)) {
+      return (PacketFactory<T, N>)StaticUnknownPacketFactory.getInstance();
+    } else {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("targetClass: ").append(targetClass)
+        .append(" numberClass: ").append(numberClass);
+      throw new IllegalArgumentException(sb.toString());
+    }
   }
 
 }

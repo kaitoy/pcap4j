@@ -12,7 +12,6 @@ import java.io.Serializable;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
-import org.pcap4j.packet.factory.ClassifiedDataFactories;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
@@ -73,8 +72,8 @@ public final class IpV4Packet extends AbstractPacket {
     }
     else {
       this.payload
-        = PacketFactories.getFactory(IpNumber.class)
-            .newPacket(rawPayload, header.getProtocol());
+        = PacketFactories.getFactory(Packet.class, IpNumber.class)
+            .newInstance(rawPayload, header.getProtocol());
     }
   }
 
@@ -483,9 +482,9 @@ public final class IpV4Packet extends AbstractPacket {
       this.ihl = (byte)(versionAndIhl & 0x0F);
 
       this.tos
-        = ClassifiedDataFactories.getFactory(
+        = PacketFactories.getFactory(
             IpV4Tos.class, NA.class
-          ).newData(ByteArrays.getSubArray(rawData, TOS_OFFSET, BYTE_SIZE_IN_BYTES));
+          ).newInstance(ByteArrays.getSubArray(rawData, TOS_OFFSET, BYTE_SIZE_IN_BYTES));
       this.totalLength
         = ByteArrays.getShort(rawData, TOTAL_LENGTH_OFFSET);
       this.identification
@@ -530,9 +529,9 @@ public final class IpV4Packet extends AbstractPacket {
                             );
         IpV4OptionType type = IpV4OptionType.getInstance(optRawData[0]);
         IpV4Option newOne
-          = ClassifiedDataFactories
+          = PacketFactories
               .getFactory(IpV4Option.class, IpV4OptionType.class)
-                 .newData(optRawData, type);
+                 .newInstance(optRawData, type);
         options.add(newOne);
         currentOffset += newOne.length();
 

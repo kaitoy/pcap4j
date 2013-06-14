@@ -25,7 +25,7 @@ import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6NeighborDiscoveryOptionFactory
-implements ClassifiedDataFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptionType> {
+implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptionType> {
 
   private static final StaticIpV6NeighborDiscoveryOptionFactory INSTANCE
     = new StaticIpV6NeighborDiscoveryOptionFactory();
@@ -83,7 +83,7 @@ implements ClassifiedDataFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscov
     return INSTANCE;
   }
 
-  public IpV6NeighborDiscoveryOption newData(
+  public IpV6NeighborDiscoveryOption newInstance(
     byte[] rawData, IpV6NeighborDiscoveryOptionType number
   ) {
     if (rawData == null || number == null) {
@@ -107,7 +107,7 @@ implements ClassifiedDataFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscov
     return UnknownIpV6NeighborDiscoveryOption.newInstance(rawData);
   }
 
-  public IpV6NeighborDiscoveryOption newData(byte[] rawData) {
+  public IpV6NeighborDiscoveryOption newInstance(byte[] rawData) {
     return UnknownIpV6NeighborDiscoveryOption.newInstance(rawData);
   }
 

@@ -11,7 +11,6 @@ import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.pcap4j.packet.factory.ClassifiedDataFactories;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
@@ -51,8 +50,8 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
         );
 
     this.payload
-      = PacketFactories.getFactory(IpNumber.class)
-          .newPacket(rawPayload, header.getNextHeader());
+      = PacketFactories.getFactory(Packet.class, IpNumber.class)
+          .newInstance(rawPayload, header.getNextHeader());
   }
 
   private IpV6ExtRoutingPacket(Builder builder) {
@@ -279,9 +278,9 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
       this.segmentsLeft
         = ByteArrays.getByte(rawData, SEGMENTS_LEFT_OFFSET);
       this.data
-        = ClassifiedDataFactories
+        = PacketFactories
             .getFactory(IpV6RoutingData.class, IpV6RoutingHeaderType.class)
-              .newData(
+              .newInstance(
                  ByteArrays.getSubArray(
                    rawData, TYPE_SPECIFIC_DATA_OFFSET, headerLength - 4
                  ),

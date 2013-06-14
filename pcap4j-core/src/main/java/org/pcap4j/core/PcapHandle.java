@@ -500,8 +500,8 @@ public final class PcapHandle {
       timestampsInts.set(header.ts.tv_sec.longValue());
       timestampsMicros.set(header.ts.tv_usec.intValue());
 
-      return PacketFactories.getFactory(DataLinkType.class)
-               .newPacket(
+      return PacketFactories.getFactory(Packet.class, DataLinkType.class)
+               .newInstance(
                   packet.getByteArray(0, header.caplen),
                   dlt
                 );
@@ -550,8 +550,8 @@ public final class PcapHandle {
         timestampsInts.set(header.ts.tv_sec.longValue());
         timestampsMicros.set(header.ts.tv_usec.intValue());
 
-        return PacketFactories.getFactory(DataLinkType.class)
-                 .newPacket(
+        return PacketFactories.getFactory(Packet.class, DataLinkType.class)
+                 .newInstance(
                     dataP.getByteArray(0, header.caplen),
                     dlt
                   );
@@ -767,8 +767,8 @@ public final class PcapHandle {
             timestampsMicros.set(header.ts.tv_usec.intValue());
 
             listener.gotPacket(
-              PacketFactories.getFactory(DataLinkType.class)
-                .newPacket(
+              PacketFactories.getFactory(Packet.class, DataLinkType.class)
+                .newInstance(
                    packet.getByteArray(0, header.caplen),
                    dlt
                  )

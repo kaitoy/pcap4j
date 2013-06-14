@@ -11,7 +11,7 @@ import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.util.Arrays;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
-import org.pcap4j.packet.factory.ClassifiedDataFactories;
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.util.ByteArrays;
@@ -97,11 +97,11 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     this.flag
       = IpV4InternetTimestampOptionFlag.getInstance((byte)(rawData[3] & 0x0F));
     this.data
-      = ClassifiedDataFactories
+      = PacketFactories
           .getFactory(
              IpV4InternetTimestampOptionData.class,
              IpV4InternetTimestampOptionFlag.class
-           ).newData(
+           ).newInstance(
                ByteArrays.getSubArray(rawData, 4, length),
                flag
              );

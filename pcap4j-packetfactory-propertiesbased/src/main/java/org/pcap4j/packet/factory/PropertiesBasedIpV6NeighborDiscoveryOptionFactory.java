@@ -20,7 +20,7 @@ import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
  */
 public final class
 PropertiesBasedIpV6NeighborDiscoveryOptionFactory
-implements ClassifiedDataFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptionType> {
+implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptionType> {
 
   private static final PropertiesBasedIpV6NeighborDiscoveryOptionFactory INSTANCE
     = new PropertiesBasedIpV6NeighborDiscoveryOptionFactory();
@@ -35,7 +35,7 @@ implements ClassifiedDataFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscov
     return INSTANCE;
   }
 
-  public IpV6NeighborDiscoveryOption newData(
+  public IpV6NeighborDiscoveryOption newInstance(
     byte[] rawData, IpV6NeighborDiscoveryOptionType type
   ) {
     if (type == null) {
@@ -44,13 +44,13 @@ implements ClassifiedDataFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscov
 
     Class<? extends IpV6NeighborDiscoveryOption> dataClass
       = PacketFactoryPropertiesLoader.getInstance().getIpV6NeighborDiscoveryOptionClass(type);
-    return newData(rawData, dataClass);
+    return newInstance(rawData, dataClass);
   }
 
-  public IpV6NeighborDiscoveryOption newData(byte[] rawData) {
+  public IpV6NeighborDiscoveryOption newInstance(byte[] rawData) {
     Class<? extends IpV6NeighborDiscoveryOption> dataClass
       = PacketFactoryPropertiesLoader.getInstance().getUnknownIpV6NeighborDiscoveryOptionClass();
-    return newData(rawData, dataClass);
+    return newInstance(rawData, dataClass);
   }
 
   /**
@@ -59,7 +59,7 @@ implements ClassifiedDataFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscov
    * @param dataClass
    * @return a new IpV6NeighborDiscoveryOption object.
    */
-  public IpV6NeighborDiscoveryOption newData(
+  public IpV6NeighborDiscoveryOption newInstance(
     byte[] rawData, Class<? extends IpV6NeighborDiscoveryOption> dataClass
   ) {
     if (rawData == null || dataClass == null) {

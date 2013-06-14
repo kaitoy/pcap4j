@@ -23,7 +23,7 @@ import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV4InternetTimestampOptionDataFactory
-implements ClassifiedDataFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampOptionFlag> {
+implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampOptionFlag> {
 
   private static final StaticIpV4InternetTimestampOptionDataFactory INSTANCE
     = new StaticIpV4InternetTimestampOptionDataFactory();
@@ -65,7 +65,7 @@ implements ClassifiedDataFactory<IpV4InternetTimestampOptionData, IpV4InternetTi
     return INSTANCE;
   }
 
-  public IpV4InternetTimestampOptionData newData(
+  public IpV4InternetTimestampOptionData newInstance(
     byte[] rawData, IpV4InternetTimestampOptionFlag number
   ) {
     if (rawData == null || number == null) {
@@ -89,7 +89,7 @@ implements ClassifiedDataFactory<IpV4InternetTimestampOptionData, IpV4InternetTi
     return UnknownIpV4InternetTimestampOptionData.newInstance(rawData);
   }
 
-  public IpV4InternetTimestampOptionData newData(byte[] rawData) {
+  public IpV4InternetTimestampOptionData newInstance(byte[] rawData) {
     return UnknownIpV4InternetTimestampOptionData.newInstance(rawData);
   }
 
