@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pcap4j</groupId>
   <artifactId>pcap4j</artifactId>
-  <version>0.9.16-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Pcap4J</name>
   <description>A Java library for capturing, crafting and sending packets.</description>
