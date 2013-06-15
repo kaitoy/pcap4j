@@ -2,13 +2,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
   <id>src</id>
-  
+
   <formats>
     <format>zip</format>
   </formats>
-  
+
   <includeBaseDirectory>false</includeBaseDirectory>
-  
+
   <dependencySets>
     <dependencySet>
       <useProjectArtifact>false</useProjectArtifact>
@@ -17,10 +17,10 @@
       <useTransitiveDependencies>false</useTransitiveDependencies>
     </dependencySet>
   </dependencySets>
-  
+
   <fileSets>
     <fileSet>
-      <directory>${project.basedir}/..</directory>
+      <directory>${project.parent.basedir}</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
         <include>README*</include>
@@ -29,7 +29,14 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>${project.basedir}/..</directory>
+      <directory>${project.parent.build.directory}</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>*-javadoc.jar</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>${project.parent.basedir}</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
         <include>**/src/**</include>

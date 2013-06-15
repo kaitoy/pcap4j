@@ -68,7 +68,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <build>
     <pluginManagement>
       <plugins>
@@ -162,6 +162,22 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>aggregate-jar</id>
+            <goals>
+              <goal>aggregate-jar</goal>
+            </goals>
+            <phase>install</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
   <properties>
