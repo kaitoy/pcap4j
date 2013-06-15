@@ -82,8 +82,11 @@
               target/test-classes
             </org.pcap4j.packet.AbstractPacketTest.resourceDir>
             <org.pcap4j.packet.AbstractPacketTest.tmpDir>
-              test <!-- this directory is made by logback -->
+              target/test
             </org.pcap4j.packet.AbstractPacketTest.tmpDir>
+            <org.pcap4j.core.PcapDumperTest.tmpDir>
+              target/test
+            </org.pcap4j.core.PcapDumperTest.tmpDir>
           </systemPropertyVariables>
         </configuration>
       </plugin>

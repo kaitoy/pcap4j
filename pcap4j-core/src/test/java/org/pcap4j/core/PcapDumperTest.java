@@ -2,6 +2,7 @@ package org.pcap4j.core;
 
 import static org.junit.Assert.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -26,11 +27,15 @@ public class PcapDumperTest {
   private static final Logger logger
     = LoggerFactory.getLogger(PcapDumperTest.class);
 
-  private static final File dumpFile
-    = new File("test/" + PcapDumperTest.class.getSimpleName() + ".pcap");
+  private static final String TMP_DIR_PROP
+    = PcapDumperTest.class.getName() + ".tmpDir";
+
+  private String tmpDirPath;
+  private File dumpFile;
   private static final Packet packet;
   private PcapHandle handle;
   private PcapDumper dumper;
+
 
   static {
     try {
@@ -66,6 +71,18 @@ public class PcapDumperTest {
 
   @Before
   public void setUp() throws Exception {
+    tmpDirPath  = System.getProperty(TMP_DIR_PROP, "testdata");
+
+    File tmpDir = new File(tmpDirPath);
+    if (!tmpDir.exists()) {
+      if (!tmpDir.mkdirs()) {
+        throw new IOException("Failed to make a test diectory: " + tmpDirPath);
+      }
+    }
+
+    dumpFile
+      = new File(tmpDirPath + "/" + PcapDumperTest.class.getSimpleName() + ".pcap");
+
     dumpFile.delete();
     handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
     dumper = handle.dumpOpen(dumpFile.getAbsolutePath());

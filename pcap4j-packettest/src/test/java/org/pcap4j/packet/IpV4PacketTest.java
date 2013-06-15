@@ -317,7 +317,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
     FileReader fr
       = new FileReader(
           new StringBuilder()
-            .append(resourceDir).append("/")
+            .append(resourceDirPath).append("/")
             .append(getClass().getSimpleName()).append(".log")
             .toString()
         );
@@ -365,7 +365,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
   @Override
   public void testDump() throws Exception {
     String dumpFile = new StringBuilder()
-                        .append(tmpDir).append("/")
+                        .append(tmpDirPath).append("/")
                         .append(getClass().getSimpleName()).append(".pcap")
                         .toString();
 
@@ -405,7 +405,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
     FileInputStream in1
       = new FileInputStream(
           new StringBuilder()
-            .append(resourceDir).append("/")
+            .append(resourceDirPath).append("/")
             .append(getClass().getSimpleName()).append(".pcap")
             .toString()
         );

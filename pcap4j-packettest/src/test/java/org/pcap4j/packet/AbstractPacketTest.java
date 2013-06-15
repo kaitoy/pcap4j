@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
@@ -25,16 +26,27 @@ public abstract class AbstractPacketTest {
   private static final Logger logger
     = LoggerFactory.getLogger(AbstractPacketTest.class);
 
+  private static final String RESOURCE_DIR_PROP
+    = AbstractPacketTest.class.getName() + ".resourceDir";
+  private static final String TMP_DIR_PROP
+    = AbstractPacketTest.class.getName() + ".tmpDir";
+
   private String originalLineSeparator;
-  protected String resourceDir;
-  protected String tmpDir;
+  protected String resourceDirPath;
+  protected String tmpDirPath;
 
   @Before
   public void setUp() throws Exception {
     originalLineSeparator = System.setProperty("line.separator", "\r\n");
-    resourceDir
-      = System.getProperty(AbstractPacketTest.class.getName() + ".resourceDir");
-    tmpDir  = System.getProperty(AbstractPacketTest.class.getName() + ".tmpDir");
+    resourceDirPath = System.getProperty(RESOURCE_DIR_PROP, "src/test/resources");
+    tmpDirPath  = System.getProperty(TMP_DIR_PROP, "testdata");
+
+    File tmpDir = new File(tmpDirPath);
+    if (!tmpDir.exists()) {
+      if (!tmpDir.mkdirs()) {
+        throw new IOException("Failed to make a test diectory: " + tmpDirPath);
+      }
+    }
   }
 
   @After
@@ -65,7 +77,7 @@ public abstract class AbstractPacketTest {
     FileReader fr
       = new FileReader(
           new StringBuilder()
-            .append(resourceDir).append("/")
+            .append(resourceDirPath).append("/")
             .append(getClass().getSimpleName()).append(".log")
             .toString()
         );
@@ -89,7 +101,7 @@ public abstract class AbstractPacketTest {
   @Test
   public void testDump() throws Exception {
     String dumpFile = new StringBuilder()
-                        .append(tmpDir).append("/")
+                        .append(tmpDirPath).append("/")
                         .append(getClass().getSimpleName()).append(".pcap")
                         .toString();
     Packet p = getWholePacket();
@@ -107,7 +119,7 @@ public abstract class AbstractPacketTest {
     FileInputStream in1
       = new FileInputStream(
           new StringBuilder()
-            .append(resourceDir).append("/")
+            .append(resourceDirPath).append("/")
             .append(getClass().getSimpleName()).append(".pcap")
             .toString()
         );
@@ -128,7 +140,7 @@ public abstract class AbstractPacketTest {
   @Test
   public void testWriteRead() throws Exception {
     String objFile = new StringBuilder()
-                       .append(tmpDir).append("/")
+                       .append(tmpDirPath).append("/")
                        .append(getClass().getSimpleName()).append(".obj")
                        .toString();
 
@@ -149,7 +161,7 @@ public abstract class AbstractPacketTest {
           new FileInputStream(
             new File(
               new StringBuilder()
-                .append(resourceDir).append("/")
+                .append(resourceDirPath).append("/")
                 .append(getClass().getSimpleName()).append(".obj")
                 .toString()
             )
