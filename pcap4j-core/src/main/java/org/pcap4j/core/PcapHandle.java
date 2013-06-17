@@ -185,7 +185,7 @@ public final class PcapHandle {
 
   /**
    *
-   * @return a {@link org.pcap4j.core.SwappedType SwappedType} object.
+   * @return a {@link org.pcap4j.core.PcapHandle.SwappedType SwappedType} object.
    * @throws NotOpenException
    */
   public SwappedType isSwapped() throws NotOpenException {
@@ -241,8 +241,6 @@ public final class PcapHandle {
 
   /**
    *
-   * @param snaplen
-   * @param dlt
    * @param bpfExpression
    * @param mode
    * @param netmask
