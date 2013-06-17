@@ -13,13 +13,13 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */
-final class FactoryBinder {
+final class PacketFactoryBinder {
 
-  private static final FactoryBinder INSTANCE = new FactoryBinder();
+  private static final PacketFactoryBinder INSTANCE = new PacketFactoryBinder();
 
-  private FactoryBinder() {}
+  private PacketFactoryBinder() {}
 
-  public static FactoryBinder getInstance() { return INSTANCE; }
+  public static PacketFactoryBinder getInstance() { return INSTANCE; }
 
   public <T, N extends NamedNumber<?>> PacketFactory<T, N> getPacketFactory(
     Class<T> targetClass, Class<N> numberClass

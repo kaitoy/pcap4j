@@ -19,12 +19,12 @@ public final class PacketFactories {
 
   private static final Logger logger
     = LoggerFactory.getLogger(PacketFactories.class);
-  private static final FactoryBinder FACTORY_BINDER;
+  private static final PacketFactoryBinder FACTORY_BINDER;
 
   static {
-    FactoryBinder factoryBinder = null;
+    PacketFactoryBinder factoryBinder = null;
     try {
-      factoryBinder = FactoryBinder.getInstance();
+      factoryBinder = PacketFactoryBinder.getInstance();
       logger.info("Succeeded in FactoryBinder.getInstance()");
     } catch (NoClassDefFoundError e) {
       logger.warn(e.getMessage());
@@ -56,7 +56,7 @@ public final class PacketFactories {
       return FACTORY_BINDER.getPacketFactory(targetClass, numberClass);
     }
     else {
-      return SimpleFactoryBinder.getInstance().getPacketFactory(targetClass, numberClass);
+      return SimplePacketFactoryBinder.getInstance().getPacketFactory(targetClass, numberClass);
     }
 
   }
