@@ -53,10 +53,10 @@ public final class PacketFactories {
     }
 
     if (FACTORY_BINDER != null) {
-      return FACTORY_BINDER.getFactory(targetClass, numberClass);
+      return FACTORY_BINDER.getPacketFactory(targetClass, numberClass);
     }
     else {
-      return SimpleFactoryBinder.getInstance().getFactory(targetClass, numberClass);
+      return SimpleFactoryBinder.getInstance().getPacketFactory(targetClass, numberClass);
     }
 
   }

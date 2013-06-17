@@ -27,7 +27,7 @@ final class FactoryBinder {
 
   public static FactoryBinder getInstance() { return INSTANCE; }
 
-  public <T, N extends NamedNumber<?>> PacketFactory<T, N> getFactory(
+  public <T, N extends NamedNumber<?>> PacketFactory<T, N> getPacketFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {
     if (Packet.class.isAssignableFrom(targetClass)) {
