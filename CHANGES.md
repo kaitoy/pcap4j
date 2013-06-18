@@ -1,4 +1,4 @@
-Next Release
+Release 1.0.0 (17-Jun-2013)
 ============
 ### New Features ###
 * Add pcap APIs support: pcap_setnonblock, pcap_getnonblock, lookupNet, dispatch, pcap_compile_nopcap,
@@ -9,6 +9,7 @@ Next Release
                          pcap_lib_version, pcap_dump_flush
 * Add Ubuntu support.
 * Add getReturnCode method to PcapNativeException.
+* [Issues#3](https://github.com/kaitoy/pcap4j/issues/3): Change to a multi-module project.
 
 ### Bug Fixes ###
 * Fix org.pcap4j.packet.IpV6NeighborDiscoveryPrefixInformationOption#getRawData() to return correct prefixLength.
@@ -16,7 +17,6 @@ Next Release
 * Fix org.pcap4j.core.Pcaps.openDead() to return opened PcapHandle.
 
 ### Other Changes ###
-* [Issues#3](https://github.com/kaitoy/pcap4j/issues/3): Change to a multi-module project.
 * Modify org.pcap4j.core.PcapHandle and org.pcap4j.core.PcapDumper to throw NotOpenException instead of IllegalStateException.
 * Change a package of class: org.pcap4j.core.PcapHandle.BpfCompileMode -> org.pcap4j.core.BpfProgram.BpfCompileMode
 * Change class names:

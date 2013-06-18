@@ -3,7 +3,7 @@ ARPリクエストを送信してIPアドレスをMACアドレスに解決するサンプルクラス。
 以下はLinuxで192.168.209.1を解決する実行例。
 
 
-      [root@localhost Desktop]# java -cp pcap4j.jar:jna-3.3.0.jar:slf4j-api-1.6.4.jar org.pcap4j.sample.SendArpRequest 192.168.209.1
+      [root@localhost Desktop]# java -cp pcap4j-core.jar:pcap4j-packetfactory-static.jar:pcap4j-sample.jar:jna-3.5.2.jar:slf4j-api-1.6.4.jar org.pcap4j.sample.SendArpRequest 192.168.209.1
       org.pcap4j.sample.SendArpRequest.count: 1
       org.pcap4j.sample.SendArpRequest.readTimeout: 10
       org.pcap4j.sample.SendArpRequest.maxCapLen: 65536

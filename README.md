@@ -19,9 +19,9 @@ Pcap4J 0.9.13 (last version distributed from this page)
 
 * [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
 
-Pcap4J 0.9.15 (latest version on Maven Central Repository)
+Pcap4J 1.0.0 (latest version on Maven Central Repository)
 
-* [pcap4j-0.9.15.jar](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/0.9.15/pcap4j-0.9.15.jar)
+* [pcap4j-distribution-1.0.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.0.0/pcap4j-distribution-1.0.0-src.zip)
 
 Why Pcap4J was born
 --------
@@ -128,8 +128,13 @@ Add a dependency to the pom.xml as like below:
         <dependencies>
           <dependency>
             <groupId>org.pcap4j</groupId>
-            <artifactId>pcap4j</artifactId>
-            <version>0.9.15</version>
+            <artifactId>pcap4j-core</artifactId>
+            <version>1.0.0</version>
+          </dependency>
+          <dependency>
+            <groupId>org.pcap4j</groupId>
+            <artifactId>pcap4j-packetfactory-static</artifactId>
+            <version>1.0.0</version>
           </dependency>
              ...
         </dependencies>
@@ -175,9 +180,9 @@ The build procedure using Eclipse is the following:
 5. Import the Eclipse project<br>
    In the Eclipse, select [File] > [Import]  to open the "Import" wizard.
    Select [General] > [Existing Projects into Workspace] and
-   follow the wizard to import the project in the Pcap4J repository.
+   follow the wizard to import the all projects in the Pcap4J repository.
 6. Build<br>
-   Right-click the Pcap4J project in the Project Explorer of Eclipse and select [Run as] > [Maven install].
+   Right-click the parent project in the Project Explorer of Eclipse and select [Run as] > [Maven install].
    Note administrator/root privileges are needed for the unit tests.
 
 For your information, M2E was formerly called [m2eclipse](http://m2eclipse.sonatype.org/).
@@ -226,9 +231,9 @@ Pcap4J is distributed under the MIT license.
 Extra
 -----
 
-SNeO: An SNMP Network Simulator using Pcap4J 0.9.15 is available at the link below. The documents will come someday.
+SNeO: An SNMP Network Simulator using Pcap4J 1.0.0 is available at the link below. The documents will come someday.
 You can use SNeO in both personal and commercial for free. You can also copy and redistribute it with no restriction.
 
-SNeO 1.0.12
+SNeO 1.1.0
 
 * [sneo.jar](http://www.pcap4j.org/artifacts/sneo.jar)

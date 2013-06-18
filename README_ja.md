@@ -19,9 +19,9 @@ Pcap4J 0.9.13 (このページから配布する最後のバージョン)
 
 * [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
 
-Pcap4J 0.9.15 (Maven Central Repositoryにある最新バージョン)
+Pcap4J 1.0.0 (Maven Central Repositoryにある最新バージョン)
 
-* [pcap4j-0.9.15.jar](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/0.9.15/pcap4j-0.9.15.jar)
+* [pcap4j-distribution-1.0.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.0.0/pcap4j-distribution-1.0.0-src.zip)
 
 開発経緯
 --------
@@ -128,8 +128,13 @@ pom.xmlに以下のような記述を追加する。
         <dependencies>
           <dependency>
             <groupId>org.pcap4j</groupId>
-            <artifactId>pcap4j</artifactId>
-            <version>0.9.15</version>
+            <artifactId>pcap4j-core</artifactId>
+            <version>1.0.0</version>
+          </dependency>
+          <dependency>
+            <groupId>org.pcap4j</groupId>
+            <artifactId>pcap4j-packetfactory-static</artifactId>
+            <version>1.0.0</version>
           </dependency>
              ...
         </dependencies>
@@ -172,9 +177,9 @@ Eclipseからのビルド手順は以下。
    ステップ3をスキップした場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
 5. プロジェクトのインポート<br>
   EclipseのGUIで、[ファイル]＞[インポート] を開き、
-  「一般」の「既存プロジェクトをワークスペースへ」で 3. でダウンロードしたレポジトリ内のプロジェクトをインポートする。
+  「一般」の「既存プロジェクトをワークスペースへ」で 3. でダウンロードしたレポジトリ内の全プロジェクトをインポートする。
 6. ビルド<br>
-   EclipseのGUIのプロジェクト・エクスプローラーで、Pcap4Jのプロジェクトを右クリックして、
+   EclipseのGUIのプロジェクト・エクスプローラーで、Pcap4Jの親プロジェクトを右クリックして、
    [実行]＞[Maven package] か [実行]＞[Maven install] を実行する。
    unit testを通すためにはAdministrator/root権限が必要。
 
@@ -234,10 +239,10 @@ Pcap4J is distributed under the MIT license.
 おまけ
 ------
 
-Pcap4J 0.9.15 を使ったSNMPネットワークシミュレータ、SNeO。
+Pcap4J 1.0.0 を使ったSNMPネットワークシミュレータ、SNeO。
 とりあえず置いておくだけ。
 商用でもなんでも無料で使用可。コピーも再配布も可。
 
-SNeO 1.0.12
+SNeO 1.1.0
 
 * [sneo.jar](http://www.pcap4j.org/artifacts/sneo.jar)

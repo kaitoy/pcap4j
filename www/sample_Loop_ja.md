@@ -3,7 +3,7 @@
 以下はLinuxでeth2からICMPパケットを2つキャプチャーした実行例。
 
 
-      [root@localhost Desktop]# java -cp pcap4j.jar:jna-3.3.0.jar:slf4j-api-1.6.4.jar -Dorg.pcap4j.sample.Loop.count=2 org.pcap4j.sample.Loop icmp
+      [root@localhost Desktop]# java -cp pcap4j-core.jar:pcap4j-packetfactory-static.jar:pcap4j-sample.jar:jna-3.5.2.jar:slf4j-api-1.6.4.jar -Dorg.pcap4j.sample.Loop.count=2 org.pcap4j.sample.Loop icmp
       org.pcap4j.sample.Loop.count: 2
       org.pcap4j.sample.Loop.readTimeout: 10
       org.pcap4j.sample.Loop.maxCapLen: 65536
