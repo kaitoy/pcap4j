@@ -11,14 +11,13 @@
   <parent>
     <groupId>org.pcap4j</groupId>
     <artifactId>pcap4j</artifactId>
-    <version>0.9.16-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-core</artifactId>
-      <version>${project.version}</version>
     </dependency>
   </dependencies>
 
