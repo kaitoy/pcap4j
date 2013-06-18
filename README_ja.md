@@ -80,8 +80,8 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 * [pcap API と Pcap4j API の対応](/www/api_mappings.md)
 * [Learn About Packet](/www/Packet.md)
 * [Learn About Packet Factory](/www/PacketFactory.md)
-* [テストクラス](https://github.com/kaitoy/pcap4j/tree/master/src/test/java/org/pcap4j/packet)
-* [サンプルクラス](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample)
+* [テストクラス](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-packettest/src/test/java/org/pcap4j/packet)
+* [サンプルクラス](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample)
 * [サポートプロトコル追加方法](/www/HowToAddProtocolSupport.md)
 
 J2SE 5.0以降で動く。管理者権限で実行する必要がある。

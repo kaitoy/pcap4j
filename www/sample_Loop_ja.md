@@ -1,4 +1,4 @@
-[org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample/Loop.java)は
+[org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample/Loop.java)は
 パケットをキャプチャーしてダンプするサンプルクラス。
 以下はLinuxでeth2からICMPパケットを2つキャプチャーした実行例。
 

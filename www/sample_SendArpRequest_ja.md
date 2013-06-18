@@ -1,4 +1,4 @@
-[org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample/SendArpRequest.java)は
+[org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample/SendArpRequest.java)は
 ARPリクエストを送信してIPアドレスをMACアドレスに解決するサンプルクラス。
 以下はLinuxで192.168.209.1を解決する実行例。
 

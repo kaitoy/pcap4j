@@ -12,7 +12,7 @@ How to add a protocol support
           return new YourPacket(rawData);
         }
 
-  With this static factory method, you can use [PropertiesBasedPacketFactory](/www/Packet.md#properties_based_packet_factory) for the packet class.
+  With this static factory method, you can use [PropertiesBasedPacketFactory](/www/PacketFactory.md#properties_based_packet_factory) for the packet class.
 
   To write a packet class, you need to write also a header class and builder class.
   The header class must implements org.pcap4j.packet.Packet.Header or extends org.pcap4j.packet.AbstractPacket.AbstractHeader.
@@ -24,7 +24,7 @@ How to add a protocol support
   * Building its builder object in the getBuilder method.
 
 2. Configure packet factory<br>
-  There are some ways to configure packet factory for your packet class. You'll see some examples using [PropertiesBasedPacketFactory](/www/Packet.md#properties_based_packet_factory) here.
+  There are some ways to configure packet factory for your packet class. You'll see some examples using [PropertiesBasedPacketFactory](/www/PacketFactory.md#properties_based_packet_factory) here.
   If your packet class represents a protocol over TCP and the port number is 1234,
   modify `jar:file:/path/to/pcap4j-packetfactory-propertiesbased.jar!/org/pcap4j/packet/factory/packet-factory.properties` as below:
 
@@ -44,5 +44,5 @@ How to add a protocol support
   Note system properties always take precedence over properties in packet-factory.properties.
 
   There is another way to do the same thing. If a system property org.pcap4j.packet.factory.properties is set,
-  Pcap4J will load the file the property specifies using java.lang.ClassLoader#getResourceAsStream method and
+  Pcap4J will load the file specified by the property using java.lang.ClassLoader#getResourceAsStream method and
   use it instead of packet-factory.properties in pcap4j-packetfactory-propertiesbased.jar.

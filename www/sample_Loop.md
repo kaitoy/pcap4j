@@ -1,4 +1,4 @@
-[org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/tree/master/src/main/java/org/pcap4j/sample/Loop.java) is
+[org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample/Loop.java) is
 a sample class which captures packets and dumps them.
 In the following example, this sample is executed on Linux to capture two ICMP packets via eth2.
 
