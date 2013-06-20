@@ -1,4 +1,4 @@
-Release 1.0.0 (17-Jun-2013)
+Release 1.0.0 (19-Jun-2013)
 ============
 ### New Features ###
 * Add pcap APIs support: pcap_setnonblock, pcap_getnonblock, lookupNet, dispatch, pcap_compile_nopcap,
