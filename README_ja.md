@@ -21,7 +21,8 @@ Pcap4J 0.9.13 (このページから配布する最後のバージョン)
 
 Pcap4J 1.0.0 (Maven Central Repositoryにある最新バージョン)
 
-* [pcap4j-distribution-1.0.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.0.0/pcap4j-distribution-1.0.0-src.zip)
+* ソースなし: [pcap4j-distribution-1.0.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.0.0/pcap4j-distribution-1.0.0-bin.zip)
+* ソース入り: [pcap4j-distribution-1.0.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.0.0/pcap4j-distribution-1.0.0-src.zip)
 
 開発経緯
 --------

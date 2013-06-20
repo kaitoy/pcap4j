@@ -21,7 +21,8 @@ Pcap4J 0.9.13 (last version distributed from this page)
 
 Pcap4J 1.0.0 (latest version on Maven Central Repository)
 
-* [pcap4j-distribution-1.0.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.0.0/pcap4j-distribution-1.0.0-src.zip)
+* without source: [pcap4j-distribution-1.0.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.0.0/pcap4j-distribution-1.0.0-bin.zip)
+* with    source: [pcap4j-distribution-1.0.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.0.0/pcap4j-distribution-1.0.0-src.zip)
 
 Why Pcap4J was born
 --------
