@@ -200,6 +200,9 @@
               <goal>aggregate-jar</goal>
             </goals>
             <phase>install</phase>
+            <configuration>
+              <jarOutputDirectory>${basedir}</jarOutputDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>
