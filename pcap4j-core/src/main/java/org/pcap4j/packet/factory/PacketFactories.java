@@ -27,9 +27,9 @@ public final class PacketFactories {
       factoryBinder = PacketFactoryBinder.getInstance();
       logger.info("Succeeded in FactoryBinder.getInstance()");
     } catch (NoClassDefFoundError e) {
-      logger.warn(e.getMessage());
+      logger.warn(NoClassDefFoundError.class.getName() + ":" + e.getMessage());
     } catch (NoSuchMethodError e) {
-      logger.warn(e.getMessage());
+      logger.warn(NoSuchMethodError.class.getName() + ":" + e.getMessage());
     }
     FACTORY_BINDER = factoryBinder;
   }
