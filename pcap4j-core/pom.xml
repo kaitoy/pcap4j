@@ -59,7 +59,7 @@
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <excludes>
-            <exclude>**/FactoryBinder.class</exclude>
+            <exclude>**/PacketFactoryBinder.class</exclude>
           </excludes>
         </configuration>
       </plugin>
