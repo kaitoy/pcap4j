@@ -238,3 +238,5 @@ You can use SNeO in both personal and commercial for free. You can also copy and
 SNeO 1.1.0
 
 * [sneo.jar](http://www.pcap4j.org/artifacts/sneo.jar)
+
+SNeO is also hosted on Github: https://github.com/kaitoy/sneo

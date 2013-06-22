@@ -247,3 +247,5 @@ Pcap4J 1.0.0 を使ったSNMPネットワークシミュレータ、SNeO。
 SNeO 1.1.0
 
 * [sneo.jar](http://www.pcap4j.org/artifacts/sneo.jar)
+
+SNeOもGithubに公開しました: https://github.com/kaitoy/sneo
