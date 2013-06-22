@@ -71,7 +71,7 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 ------
 
 最新のJavaDocは[こちら](http://kaitoy.github.com/pcap4j/javadoc/latest/en)。
-各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|a%3A%22pcap4j%22)からダウンロードできる。
+各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22)からダウンロードできる。
 0.9.13のJavaDocは[こちら](http://kaitoy.github.com/pcap4j/javadoc/0.9.13/en)。
 
 他にも、以下のリンクから情報を得られる。

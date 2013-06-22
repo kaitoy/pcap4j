@@ -71,7 +71,7 @@ How to use
 ----------
 
 The latest JavaDoc is [here](http://kaitoy.github.com/pcap4j/javadoc/latest/en).
-Each version's JavaDoc is on the [Maven Central Repository](http://search.maven.org/#search|ga|1|a%3A%22pcap4j%22).
+Each version's JavaDoc is on the [Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22).
 The version 0.9.13's JavaDoc is [here](http://kaitoy.github.com/pcap4j/javadoc/0.9.13/en).
 
 And the following resources will help you to learn how to use Pcap4j.
