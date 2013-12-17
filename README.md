@@ -232,11 +232,5 @@ Pcap4J is distributed under the MIT license.
 Extra
 -----
 
-SNeO: An SNMP Network Simulator using Pcap4J 1.0.0 is available at the link below. The documents will come someday.
-You can use SNeO in both personal and commercial for free. You can also copy and redistribute it with no restriction.
+An SNMP Network Simulator using Pcap4J; SNeO is also hosted on Github: https://github.com/kaitoy/sneo
 
-SNeO 1.1.0
-
-* [sneo.jar](http://www.pcap4j.org/artifacts/sneo.jar)
-
-SNeO is also hosted on Github: https://github.com/kaitoy/sneo
