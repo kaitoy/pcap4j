@@ -242,20 +242,16 @@ public final class ByteArrays {
     }
 
     if (bo.equals(LITTLE_ENDIAN)) {
-      return (int)(
-                 ((       array[offset + 3]) << (BYTE_SIZE_IN_BITS * 3))
-               | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
-               | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
-               | ((0xFF & array[offset    ])                           )
-             );
+      return ((       array[offset + 3]) << (BYTE_SIZE_IN_BITS * 3))
+        | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
+        | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
+        | ((0xFF & array[offset    ])                           );
     }
     else {
-      return (int)(
-                 ((       array[offset    ]) << (BYTE_SIZE_IN_BITS * 3))
-               | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 2))
-               | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 1))
-               | ((0xFF & array[offset + 3])                           )
-             );
+      return ((       array[offset    ]) << (BYTE_SIZE_IN_BITS * 3))
+        | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 2))
+        | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 1))
+        | ((0xFF & array[offset + 3])                           );
     }
   }
 
@@ -347,28 +343,24 @@ public final class ByteArrays {
     }
 
     if (bo.equals(LITTLE_ENDIAN)) {
-      return (long)(
-                 ((        (long)array[offset + 7]) << (BYTE_SIZE_IN_BITS * 7))
-               | ((0xFFL & (long)array[offset + 6]) << (BYTE_SIZE_IN_BITS * 6))
-               | ((0xFFL & (long)array[offset + 5]) << (BYTE_SIZE_IN_BITS * 5))
-               | ((0xFFL & (long)array[offset + 4]) << (BYTE_SIZE_IN_BITS * 4))
-               | ((0xFFL & (long)array[offset + 3]) << (BYTE_SIZE_IN_BITS * 3))
-               | ((0xFFL & (long)array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
-               | ((0xFFL & (long)array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
-               | ((0xFFL & (long)array[offset    ])                           )
-             );
+      return ((        (long)array[offset + 7]) << (BYTE_SIZE_IN_BITS * 7))
+        | ((0xFFL & array[offset + 6]) << (BYTE_SIZE_IN_BITS * 6))
+        | ((0xFFL & array[offset + 5]) << (BYTE_SIZE_IN_BITS * 5))
+        | ((0xFFL & array[offset + 4]) << (BYTE_SIZE_IN_BITS * 4))
+        | ((0xFFL & array[offset + 3]) << (BYTE_SIZE_IN_BITS * 3))
+        | ((0xFFL & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
+        | ((0xFFL & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
+        | ((0xFFL & array[offset    ])                           );
     }
     else {
-      return (long)(
-                 ((        (long)array[offset    ]) << (BYTE_SIZE_IN_BITS * 7))
-               | ((0xFFL & (long)array[offset + 1]) << (BYTE_SIZE_IN_BITS * 6))
-               | ((0xFFL & (long)array[offset + 2]) << (BYTE_SIZE_IN_BITS * 5))
-               | ((0xFFL & (long)array[offset + 3]) << (BYTE_SIZE_IN_BITS * 4))
-               | ((0xFFL & (long)array[offset + 4]) << (BYTE_SIZE_IN_BITS * 3))
-               | ((0xFFL & (long)array[offset + 5]) << (BYTE_SIZE_IN_BITS * 2))
-               | ((0xFFL & (long)array[offset + 6]) << (BYTE_SIZE_IN_BITS * 1))
-               | ((0xFFL & (long)array[offset + 7])                           )
-             );
+      return ((        (long)array[offset    ]) << (BYTE_SIZE_IN_BITS * 7))
+        | ((0xFFL & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 6))
+        | ((0xFFL & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 5))
+        | ((0xFFL & array[offset + 3]) << (BYTE_SIZE_IN_BITS * 4))
+        | ((0xFFL & array[offset + 4]) << (BYTE_SIZE_IN_BITS * 3))
+        | ((0xFFL & array[offset + 5]) << (BYTE_SIZE_IN_BITS * 2))
+        | ((0xFFL & array[offset + 6]) << (BYTE_SIZE_IN_BITS * 1))
+        | ((0xFFL & array[offset + 7])                           );
     }
   }
 
