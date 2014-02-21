@@ -369,7 +369,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
     }
 
     @Override
-    public int measureLength() { return data.length() + 4; }
+    public int calcLength() { return data.length() + 4; }
 
     @Override
     protected String buildString() {

@@ -1,5 +1,17 @@
+Next
+====
+### New Features ###
+* Add SSH2 support.
+
+### Bug Fixes ###
+
+
+### Other Changes ###
+* Change org.pcap4j.packet.AbstractPacket.measureLength() to org.pcap4j.packet.AbstractPacket.calcLength()
+* Change org.pcap4j.packet.AbstractPacket.AbstractHeader.measureLength() to org.pcap4j.packet.AbstractPacket.AbstractHeader.calcLength()
+
 Release 1.0.0 (20-Jun-2013)
-============
+===========================
 ### New Features ###
 * Add pcap APIs support: pcap_setnonblock, pcap_getnonblock, lookupNet, dispatch, pcap_compile_nopcap,
                          pcap_compile, pcap_freecode, pcap_snapshot, pcap_is_swapped, pcap_major_version,
@@ -36,7 +48,7 @@ Release 1.0.0 (20-Jun-2013)
  * org.pcap4j.packet.factory.ClassifiedDataFactoriy
 
 Release 0.9.15 (29-May-2013)
-============
+============================
 ### New Features ###
 * Add ICMPv6(RFC4443, RFC4861) support.
 
@@ -75,7 +87,7 @@ Release 0.9.15 (29-May-2013)
  * org.pcap4j.packet.IcmpV4TimeExceededPacket
  
 Release 0.9.14 (13-Apr-2013)
-=====================
+============================
 ### New Features ###
 * The first release to the Maven Central Repository.
 * [Issues#4](https://github.com/kaitoy/pcap4j/issues/4): JNA 3.5+ Support. - [@kaitoy](https://github.com/kaitoy)

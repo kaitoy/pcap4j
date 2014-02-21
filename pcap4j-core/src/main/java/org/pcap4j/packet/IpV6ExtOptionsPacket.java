@@ -325,7 +325,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
     }
 
     @Override
-    public int measureLength() {
+    public int calcLength() {
       int optLength = 0;
       for (IpV6Option o: options) {
         optLength += o.length();

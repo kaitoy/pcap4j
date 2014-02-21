@@ -39,7 +39,7 @@ public abstract class AbstractPacket implements Packet {
     = new LazyValue<Integer>(
         new BuildValueCommand<Integer>() {
           public Integer buildValue() {
-            return measureLength();
+            return calcLength();
           }
         }
       );
@@ -88,7 +88,7 @@ public abstract class AbstractPacket implements Packet {
    *
    * @return length
    */
-  protected int measureLength() {
+  protected int calcLength() {
     int length = 0;
 
     if (getHeader() != null) {
@@ -312,7 +312,7 @@ public abstract class AbstractPacket implements Packet {
         = new LazyValue<Integer>(
             new BuildValueCommand<Integer>() {
               public Integer buildValue() {
-                return measureLength();
+                return calcLength();
               }
             }
           );
@@ -360,7 +360,7 @@ public abstract class AbstractPacket implements Packet {
      *
      * @return length
      */
-    protected int measureLength() {
+    protected int calcLength() {
       int length = 0;
       for (byte[] rawField: getRawFields()) {
         length += rawField.length;

@@ -209,7 +209,7 @@ public final class IcmpV6RouterSolicitationPacket extends AbstractPacket {
     }
 
     @Override
-    protected int measureLength() {
+    protected int calcLength() {
       int len = 0;
       for (IpV6NeighborDiscoveryOption o: options) {
         len += o.length();

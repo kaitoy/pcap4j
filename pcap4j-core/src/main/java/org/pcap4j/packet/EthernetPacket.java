@@ -139,8 +139,8 @@ public final class EthernetPacket extends AbstractPacket {
   }
 
   @Override
-  protected int measureLength() {
-    int length = super.measureLength();
+  protected int calcLength() {
+    int length = super.calcLength();
     length += pad.length;
     return length;
   }

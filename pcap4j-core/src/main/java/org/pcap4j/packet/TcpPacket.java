@@ -953,7 +953,7 @@ public final class TcpPacket extends AbstractPacket {
     }
 
     @Override
-    protected int measureLength() {
+    protected int calcLength() {
       return measureLengthWithoutPadding() + padding.length;
     }
 
