@@ -326,7 +326,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
       if (!Ssh2MessageNumber.getInstance(rawData[0]).equals(Ssh2MessageNumber.SSH_MSG_KEXINIT)) {
         StringBuilder sb = new StringBuilder(120);
-        sb.append("The data is not a KEX init message. data: ")
+        sb.append("The data is not an SSH2 KEX init message. data: ")
           .append(new String(rawData));
         throw new IllegalRawDataException(sb.toString());
       }

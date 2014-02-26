@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -17,7 +18,25 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.0.1
  */
-public final class Ssh2NameList {
+public final class Ssh2NameList implements Serializable {
+
+  /*
+   * http://www.ietf.org/rfc/rfc4251.txt
+   *
+   * A string containing a comma-separated list of names.  A name-list
+   * is represented as a uint32 containing its length (number of bytes
+   * that follow) followed by a comma-separated list of zero or more
+   * names.  A name MUST have a non-zero length, and it MUST NOT
+   * contain a comma (",").  As this is a list of names, all of the
+   * elements contained are names and MUST be in US-ASCII.
+   * Terminating null characters MUST NOT be used, neither
+   * for the individual names, nor for the list as a whole.
+   */
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = 8625201821104360377L;
 
   private final int length;
   private final List<String> list;

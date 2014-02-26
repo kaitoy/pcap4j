@@ -112,7 +112,7 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
 
       if (!Ssh2MessageNumber.getInstance(rawData[0]).equals(Ssh2MessageNumber.SSH_MSG_KEXINIT)) {
         StringBuilder sb = new StringBuilder(120);
-        sb.append("The data is not a New Keys message. data: ")
+        sb.append("The data is not an SSH2 New Keys message. data: ")
           .append(new String(rawData));
         throw new IllegalRawDataException(sb.toString());
       }

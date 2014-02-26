@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import java.io.Serializable;
 import org.pcap4j.util.ByteArrays;
 
 
@@ -14,7 +15,21 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.0.1
  */
-public final class Ssh2Boolean {
+public final class Ssh2Boolean implements Serializable {
+
+  /*
+   * http://www.ietf.org/rfc/rfc4251.txt
+   *
+   * A boolean value is stored as a single byte.  The value 0
+   * represents FALSE, and the value 1 represents TRUE.  All non-zero
+   * values MUST be interpreted as TRUE; however, applications MUST NOT
+   * store values other than 0 and 1.
+   */
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = 951415749644317915L;
 
   /**
    *
