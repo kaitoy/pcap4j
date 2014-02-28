@@ -29,8 +29,8 @@ abstract class AbstractPcapAddress implements PcapAddress {
 
     this.address = ntoInetAddress(pcapAddr.addr);
 
-    if (pcapAddr.netmask != null && pcapAddr.netmask.sa_family != Inets.AF_UNSPEC) {
-      if (pcapAddr.addr.sa_family != pcapAddr.netmask.sa_family) {
+    if (pcapAddr.netmask != null && pcapAddr.netmask.getSaFamily() != Inets.AF_UNSPEC) {
+      if (pcapAddr.addr.getSaFamily() != pcapAddr.netmask.getSaFamily()) {
         throw new AssertionError();
       }
       this.netmask = ntoInetAddress(pcapAddr.netmask);
@@ -39,8 +39,8 @@ abstract class AbstractPcapAddress implements PcapAddress {
       this.netmask = null;
     }
 
-    if (pcapAddr.broadaddr != null && pcapAddr.broadaddr.sa_family != Inets.AF_UNSPEC) {
-      if (pcapAddr.addr.sa_family != pcapAddr.broadaddr.sa_family) {
+    if (pcapAddr.broadaddr != null && pcapAddr.broadaddr.getSaFamily() != Inets.AF_UNSPEC) {
+      if (pcapAddr.addr.getSaFamily() != pcapAddr.broadaddr.getSaFamily()) {
         throw new AssertionError();
       }
       this.broadcastAddr = ntoInetAddress(pcapAddr.broadaddr);
@@ -49,8 +49,8 @@ abstract class AbstractPcapAddress implements PcapAddress {
       this.broadcastAddr = null;
     }
 
-    if (pcapAddr.dstaddr != null && pcapAddr.dstaddr.sa_family != Inets.AF_UNSPEC) {
-      if (pcapAddr.addr.sa_family != pcapAddr.dstaddr.sa_family) {
+    if (pcapAddr.dstaddr != null && pcapAddr.dstaddr.getSaFamily() != Inets.AF_UNSPEC) {
+      if (pcapAddr.addr.getSaFamily() != pcapAddr.dstaddr.getSaFamily()) {
         throw new AssertionError();
       }
       this.dstAddr = ntoInetAddress(pcapAddr.dstaddr);

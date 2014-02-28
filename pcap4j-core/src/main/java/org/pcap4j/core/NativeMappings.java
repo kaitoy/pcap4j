@@ -10,6 +10,7 @@ package org.pcap4j.core;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.sun.jna.Callback;
 import com.sun.jna.Function;
 import com.sun.jna.Library;
@@ -388,10 +389,9 @@ final class NativeMappings {
     }
 
   }
-
-  // TODO sockaddr has another field on FreeBSD
+  
   public static class sockaddr extends Structure {
-
+    
     public short sa_family; // u_short
     public byte[] sa_data = new byte[14];  // char[14]
 
@@ -413,6 +413,34 @@ final class NativeMappings {
       list.add("sa_family");
       list.add("sa_data");
       return list;
+    }
+    
+    short getSaFamily() {
+      if (isWindowsType()) {
+        return sa_family;
+      }
+      else {
+        if (NATIVE_BYTE_ORDER.equals(ByteOrder.BIG_ENDIAN)) {
+          return (short)(0xFF & sa_family);
+        }
+        else {
+          return (short)(0xFF & (sa_family >> 8));
+        }
+      }
+    }
+    
+    static boolean isWindowsType() {
+      if (
+           Platform.isMac()
+        || Platform.isFreeBSD()
+        || Platform.isOpenBSD() 
+        || Platform.iskFreeBSD()
+      ) {
+        return false;
+      }
+      else {
+        return true;
+      }
     }
 
   }
@@ -441,10 +469,25 @@ final class NativeMappings {
       list.add("sin_zero");
       return list;
     }
+    
+    short getSaFamily() {
+      if (sockaddr.isWindowsType()) {
+        return sin_family;
+      }
+      else {
+        if (NATIVE_BYTE_ORDER.equals(ByteOrder.BIG_ENDIAN)) {
+          return (short)(0xFF & sin_family);
+        }
+        else {
+          return (short)(0xFF & (sin_family >> 8));
+        }
+      }
+    }
 
   }
 
   public static class in_addr extends Structure {
+    
     public int s_addr; // in_addr_t = uint32_t
 
     public in_addr() {}
@@ -483,6 +526,20 @@ final class NativeMappings {
       list.add("sin6_addr");
       list.add("sin6_scope_id");
       return list;
+    }
+    
+    short getSaFamily() {
+      if (sockaddr.isWindowsType()) {
+        return sin6_family;
+      }
+      else {
+        if (NATIVE_BYTE_ORDER.equals(ByteOrder.BIG_ENDIAN)) {
+          return (short)(0xFF & sin6_family);
+        }
+        else {
+          return (short)(0xFF & (sin6_family >> 8));
+        }
+      }
     }
 
   }

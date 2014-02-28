@@ -9,6 +9,7 @@ package org.pcap4j.core;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.pcap_addr;
@@ -16,6 +17,7 @@ import org.pcap4j.core.NativeMappings.pcap_if;
 import org.pcap4j.core.NativeMappings.timeval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.sun.jna.NativeLong;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
@@ -46,19 +48,20 @@ public final class PcapNetworkInterface {
       pcapAddr != null;
       pcapAddr = pcapAddr.next
     ) {
-     switch (pcapAddr.addr.sa_family) {
-       case Inets.AF_INET:
-         addresses.add(PcapIpV4Address.newInstance(pcapAddr));
-         break;
-       case Inets.AF_INET6:
-         addresses.add(PcapIpV6Address.newInstance(pcapAddr));
-         break;
-       default:
-         logger.warn(
-           "{} is not supported address family. Ignore it.",
-           pcapAddr.addr.sa_family
-         );
-         break;
+      short sa_family = pcapAddr.addr.getSaFamily();
+      switch (sa_family) {
+        case Inets.AF_INET:
+          addresses.add(PcapIpV4Address.newInstance(pcapAddr));
+          break;
+        case Inets.AF_INET6:
+          addresses.add(PcapIpV6Address.newInstance(pcapAddr));
+          break;
+        default:
+          logger.warn(
+            "{} is not supported address family. Ignore it.",
+            sa_family
+          );
+          break;
       }
     }
 
