@@ -81,9 +81,17 @@ public class NifSelector {
     int nifIdx = 0;
     for (PcapNetworkInterface nif: nifs) {
       sb.append("NIF[").append(nifIdx).append("]: ")
-        .append(nif.getName()).append(LINE_SEPARATOR)
-        .append("      : description: ")
-        .append(nif.getDescription()).append(LINE_SEPARATOR);
+        .append(nif.getName()).append(LINE_SEPARATOR);
+
+      if (nif.getDescription() != null) {
+        sb.append("      : description: ")
+          .append(nif.getDescription()).append(LINE_SEPARATOR);
+      }
+
+      for (LinkLayerAddress addr: nif.getLinkLayerAddresses()) {
+        sb.append("      : link layer address: ")
+          .append(addr).append(LINE_SEPARATOR);
+      }
 
       for (PcapAddress addr: nif.getAddresses()) {
         sb.append("      : address: ")

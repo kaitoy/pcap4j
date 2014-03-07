@@ -10,7 +10,6 @@ package org.pcap4j.core;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.sun.jna.Callback;
 import com.sun.jna.Function;
 import com.sun.jna.Library;
@@ -389,9 +388,9 @@ final class NativeMappings {
     }
 
   }
-  
+
   public static class sockaddr extends Structure {
-    
+
     public short sa_family; // u_short
     public byte[] sa_data = new byte[14];  // char[14]
 
@@ -414,7 +413,7 @@ final class NativeMappings {
       list.add("sa_data");
       return list;
     }
-    
+
     short getSaFamily() {
       if (isWindowsType()) {
         return sa_family;
@@ -428,12 +427,12 @@ final class NativeMappings {
         }
       }
     }
-    
+
     static boolean isWindowsType() {
       if (
            Platform.isMac()
         || Platform.isFreeBSD()
-        || Platform.isOpenBSD() 
+        || Platform.isOpenBSD()
         || Platform.iskFreeBSD()
       ) {
         return false;
@@ -469,7 +468,7 @@ final class NativeMappings {
       list.add("sin_zero");
       return list;
     }
-    
+
     short getSaFamily() {
       if (sockaddr.isWindowsType()) {
         return sin_family;
@@ -487,7 +486,7 @@ final class NativeMappings {
   }
 
   public static class in_addr extends Structure {
-    
+
     public int s_addr; // in_addr_t = uint32_t
 
     public in_addr() {}
@@ -527,7 +526,7 @@ final class NativeMappings {
       list.add("sin6_scope_id");
       return list;
     }
-    
+
     short getSaFamily() {
       if (sockaddr.isWindowsType()) {
         return sin6_family;
@@ -555,6 +554,96 @@ final class NativeMappings {
       List<String> list = new ArrayList<String>();
       list.add("s6_addr");
       return list;
+    }
+
+  }
+
+  // Linux specific
+  public static class sockaddr_ll extends Structure {
+
+    public short sll_family; // unsigned short
+    public short sll_protocol; // __be16
+    public int sll_ifindex; // int
+    public short sll_hatype;; // unsigned short
+    public byte sll_pkttype; // unsigned char
+    public byte sll_halen; // unsigned char
+    public byte[] sll_addr = new byte[8]; // unsigned char[8]
+
+    public sockaddr_ll() {}
+
+    public sockaddr_ll(Pointer p) {
+      super();
+      useMemory(p, 0);
+      read();
+    }
+
+    @Override
+    protected List<String> getFieldOrder() {
+      List<String> list = new ArrayList<String>();
+      list.add("sll_family");
+      list.add("sll_protocol");
+      list.add("sll_ifindex");
+      list.add("sll_hatype");
+      list.add("sll_pkttype");
+      list.add("sll_halen");
+      list.add("sll_addr");
+      return list;
+    }
+
+    short getSaFamily() {
+      if (sockaddr.isWindowsType()) {
+        return sll_family;
+      }
+      else {
+        if (NATIVE_BYTE_ORDER.equals(ByteOrder.BIG_ENDIAN)) {
+          return (short)(0xFF & sll_family);
+        }
+        else {
+          return (short)(0xFF & (sll_family >> 8));
+        }
+      }
+    }
+
+  }
+
+  // Mac OS X and BSD specific
+  public static class sockaddr_dl extends Structure {
+
+    public byte sdl_len; // u_char
+    public byte sdl_family; // u_char
+    public short sdl_index; // u_short
+    public byte sdl_type; // u_char
+    public byte sdl_nlen;; // u_char
+    public byte sdl_alen; // u_char
+    public byte sdl_slen; // u_char
+    public byte[] sdl_data = new byte[46]; // unsigned char[46]
+                                           // minimum work area, can be larger;
+                                           // contains both if name and ll address
+
+    public sockaddr_dl() {}
+
+    public sockaddr_dl(Pointer p) {
+      super();
+      useMemory(p, 0);
+      read();
+    }
+
+    @Override
+    protected List<String> getFieldOrder() {
+      List<String> list = new ArrayList<String>();
+      list.add("sdl_len");
+      list.add("sdl_family");
+      list.add("sdl_index");
+      list.add("sdl_type");
+      list.add("sdl_nlen");
+      list.add("sdl_alen");
+      list.add("sdl_slen");
+      list.add("sdl_data");
+      return list;
+    }
+
+    byte[] getAddress() {
+      return getPointer().getByteArray(8 + (0xFF & sdl_nlen), 0xFF & sdl_alen);
     }
 
   }

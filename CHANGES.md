@@ -5,10 +5,22 @@ Next
 
 ### Bug Fixes ###
 
+### Other Changes ###
+
+Release 1.1.0 (7-Mar-2014)
+==========================
+### New Features ###
+* Add FreeBSD support.
+* Mac address discovery on Linux, Mac OS X, and FreeBSD.
+* Add properties; org.pcap4j.af.inet, org.pcap4j.af.inet6, org.pcap4j.af.packet and org.pcap4j.af.link to specify address family numbers.
+
+### Bug Fixes ###
+* Correct IP address discovery on Mac OS X.
 
 ### Other Changes ###
 * Change org.pcap4j.packet.AbstractPacket.measureLength() to org.pcap4j.packet.AbstractPacket.calcLength()
 * Change org.pcap4j.packet.AbstractPacket.AbstractHeader.measureLength() to org.pcap4j.packet.AbstractPacket.AbstractHeader.calcLength()
+* Change the return value of org.pcap4j.util.PropertiesLoader#getInteger() from int to Integer.
 
 Release 1.0.0 (20-Jun-2013)
 ===========================

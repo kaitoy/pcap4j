@@ -20,7 +20,7 @@ abstract class AbstractPcapAddress implements PcapAddress {
   private final InetAddress address;
   private final InetAddress netmask;
   private final InetAddress broadcastAddr;
-  private final InetAddress dstAddr; // for point- to-point interface
+  private final InetAddress dstAddr; // for point-to-point interface
 
   protected AbstractPcapAddress(pcap_addr pcapAddr) {
     if (pcapAddr == null) {

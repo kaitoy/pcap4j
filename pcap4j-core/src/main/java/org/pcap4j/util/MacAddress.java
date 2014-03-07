@@ -1,30 +1,25 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.util;
 
-import java.io.Serializable;
-import java.util.Arrays;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.pcap4j.packet.namednumber.Oui;
 
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class MacAddress implements Serializable {
+public final class MacAddress extends LinkLayerAddress {
 
   /**
    *
    */
-  private static final long serialVersionUID = 751211532491344621L;
-
-  private static final Pattern HEX_PATTERN = Pattern.compile("([^0-9a-fA-F])");
+  private static final long serialVersionUID = -8222662646993989547L;
 
   /**
    *
@@ -41,9 +36,7 @@ public final class MacAddress implements Serializable {
    */
   public static final int SIZE_IN_BYTES = 6;
 
-  private final byte[] address;
-
-  private MacAddress(byte[] address) { this.address = address; }
+  private MacAddress(byte[] address) { super(address); }
 
   /**
    *
@@ -58,9 +51,7 @@ public final class MacAddress implements Serializable {
                 + SIZE_IN_BYTES
             );
     }
-    byte[] copy = new byte[address.length];
-    System.arraycopy(address, 0, copy, 0, copy.length);
-    return new MacAddress(copy);
+    return new MacAddress(ByteArrays.clone(address));
   }
 
   /**
@@ -69,7 +60,7 @@ public final class MacAddress implements Serializable {
    * @return a new MacAddress object.
    */
   public static MacAddress getByName(String name) {
-    Matcher m = HEX_PATTERN.matcher(name);
+    Matcher m = HEX_SEPARATOR_PATTERN.matcher(name);
     m.find();
     return getByName(name, m.group(1));
   }
@@ -86,20 +77,10 @@ public final class MacAddress implements Serializable {
 
   /**
    *
-   * @return address
-   */
-  public byte[] getAddress() {
-    byte[] copy = new byte[address.length];
-    System.arraycopy(address, 0, copy, 0, copy.length);
-    return copy;
-  }
-
-  /**
-   *
    * @return OUI
    */
   public Oui getOui() {
-    return Oui.getInstance(ByteArrays.getInt(address, 0) >>> 8);
+    return Oui.getInstance(ByteArrays.getInt(getAddress(), 0) >>> 8);
   }
 
   /**
@@ -108,7 +89,7 @@ public final class MacAddress implements Serializable {
    *         a unicast address; otherwise false.
    */
   public boolean isUnicast() {
-    return (address[0] & 1) == 0;
+    return (getAddress()[0] & 1) == 0;
   }
 
   /**
@@ -117,39 +98,7 @@ public final class MacAddress implements Serializable {
    *         a globally unique address; otherwise false.
    */
   public boolean isGloballyUnique() {
-    return (address[0] & 2) == 0;
-  }
-
-  /**
-   *
-   * @return length
-   */
-  public int length() {
-    return address.length;
-  }
-
-  @Override
-  public String toString() {
-    StringBuffer sb = new StringBuffer();
-    for (byte b: address) {
-      sb.append(String.format("%02x", b))
-        .append(":");
-    }
-    sb.deleteCharAt(sb.length() - 1);
-
-    return sb.toString();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!(obj instanceof MacAddress)) { return false; }
-    return Arrays.equals(((MacAddress)obj).getAddress(), address);
-  }
-
-  @Override
-  public int hashCode() {
-    return Arrays.hashCode(address);
+    return (getAddress()[0] & 2) == 0;
   }
 
 }

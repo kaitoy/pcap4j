@@ -62,6 +62,7 @@ I tested Pcap4j on the following OSes with x86 processors.
  * Ubuntu: 13
 * UNIX
  * Solaris: 10
+ * FreeBSD: 10
 
 And tomute tested Pcap4j on Mac OS X. The report is [here](http://tomute.hateblo.jp/entry/2013/01/27/003209). Thank you, tomute!
 

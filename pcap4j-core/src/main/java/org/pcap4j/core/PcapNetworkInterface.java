@@ -9,15 +9,18 @@ package org.pcap4j.core;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.pcap_addr;
 import org.pcap4j.core.NativeMappings.pcap_if;
+import org.pcap4j.core.NativeMappings.sockaddr_dl;
+import org.pcap4j.core.NativeMappings.sockaddr_ll;
 import org.pcap4j.core.NativeMappings.timeval;
+import org.pcap4j.util.ByteArrays;
+import org.pcap4j.util.LinkLayerAddress;
+import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.sun.jna.NativeLong;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
@@ -36,6 +39,7 @@ public final class PcapNetworkInterface {
   private final String name;
   private final String description;
   private final List<PcapAddress> addresses = new ArrayList<PcapAddress>();
+  private final List<LinkLayerAddress> linkLayerAddresses = new ArrayList<LinkLayerAddress>();
   private final boolean loopBack;
   private final boolean local;
 
@@ -49,19 +53,51 @@ public final class PcapNetworkInterface {
       pcapAddr = pcapAddr.next
     ) {
       short sa_family = pcapAddr.addr.getSaFamily();
-      switch (sa_family) {
-        case Inets.AF_INET:
-          addresses.add(PcapIpV4Address.newInstance(pcapAddr));
-          break;
-        case Inets.AF_INET6:
-          addresses.add(PcapIpV6Address.newInstance(pcapAddr));
-          break;
-        default:
+      if (sa_family == Inets.AF_INET) {
+        addresses.add(PcapIpV4Address.newInstance(pcapAddr));
+      }
+      else if (sa_family == Inets.AF_INET6) {
+        addresses.add(PcapIpV6Address.newInstance(pcapAddr));
+      }
+      else {
+        if (Platform.isLinux() && sa_family == Inets.AF_PACKET) {
+          sockaddr_ll sll = new sockaddr_ll(pcapAddr.addr.getPointer());
+          byte[] addr = sll.sll_addr;
+          int addrLength = sll.sll_halen & 0xFF;
+          if (addrLength == 6) {
+            linkLayerAddresses.add(ByteArrays.getMacAddress(addr, 0));
+          }
+          else if (addr.length == 0) {
+            continue;
+          }
+          else {
+            linkLayerAddresses.add(
+              LinkLayerAddress.getByAddress(ByteArrays.getSubArray(addr, 0, addrLength))
+            );
+          }
+        }
+        else if (
+             (Platform.isMac() || Platform.isFreeBSD() || Platform.isOpenBSD()) || Platform.iskFreeBSD()
+          && sa_family == Inets.AF_LINK
+        ) {
+          sockaddr_dl sdl = new sockaddr_dl(pcapAddr.addr.getPointer());
+          byte[] addr = sdl.getAddress();
+          if (addr.length == 6) {
+            linkLayerAddresses.add(MacAddress.getByAddress(addr));
+          }
+          else if (addr.length == 0) {
+            continue;
+          }
+          else {
+            linkLayerAddresses.add(LinkLayerAddress.getByAddress(addr));
+          }
+        }
+        else {
           logger.warn(
             "{} is not supported address family. Ignore it.",
             sa_family
           );
-          break;
+        }
       }
     }
 
@@ -97,10 +133,18 @@ public final class PcapNetworkInterface {
 
   /**
    *
-   * @return addresses
+   * @return inet addresses
    */
   public List<PcapAddress> getAddresses() {
     return new ArrayList<PcapAddress>(addresses);
+  }
+
+  /**
+   *
+   * @return link layer addresses
+   */
+  public ArrayList<LinkLayerAddress> getLinkLayerAddresses() {
+    return new ArrayList<LinkLayerAddress>(linkLayerAddresses);
   }
 
   /**

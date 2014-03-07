@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -103,7 +104,7 @@ public class PropertiesLoader {
    *
    * @param key
    * @param defaultValue
-   * @return a string value with a specified key value.
+   * @return a value got from a specified key.
    */
   public String getString(String key, String defaultValue) {
     synchronized (cache) {
@@ -157,9 +158,9 @@ public class PropertiesLoader {
    *
    * @param key
    * @param defaultValue
-   * @return an int value representing a string with the specified key value.
+   * @return an Integer object converted from a value got from a specified key.
    */
-  public int getInteger(String key, Integer defaultValue) {
+  public Integer getInteger(String key, Integer defaultValue) {
     synchronized (cache) {
       if (caching && cache.containsKey(key)) {
         Integer cacheValue = (Integer)cache.get(key);
@@ -220,8 +221,7 @@ public class PropertiesLoader {
    *
    * @param key
    * @param defaultValue
-   * @return a Boolean object representing a string
-   *         with the specified key value.
+   * @return a Boolean object converted from a value got from a specified key.
    */
   public Boolean getBoolean(String key, Boolean defaultValue) {
     synchronized (cache) {
@@ -279,7 +279,7 @@ public class PropertiesLoader {
    *
    * @param key
    * @param defaultValue
-   * @return a Class object representing a string with the specified key value.
+   * @return a Class object converted from a value got from a specified key.
    */
   public <T> Class<? extends T> getClass(
     String key, Class<? extends T> defaultValue
@@ -372,8 +372,7 @@ public class PropertiesLoader {
    *
    * @param key
    * @param defaultValue
-   * @return an InetAddress object representing a string
-   *         with the specified key value.
+   * @return an InetAddress object converted from a value got from a specified key.
    */
   public InetAddress getInetAddress(String key, InetAddress defaultValue) {
     synchronized (cache) {
@@ -394,17 +393,16 @@ public class PropertiesLoader {
         if (strValue != null) {
           try {
             value = InetAddress.getByName(strValue);
+            logger.info(
+              "[System properties] Got \"{}\" means {} for {}",
+              new Object[] {strValue, value, key}
+            );
           } catch (UnknownHostException e) {
             logger.error(
               "[System properties] Got Invalid value: {} for {}, ignore it.",
                 strValue, key
             );
           }
-
-          logger.info(
-            "[System properties] Got \"{}\" means {} for {}",
-            new Object[] {strValue, value, key}
-          );
         }
       }
 
@@ -414,6 +412,10 @@ public class PropertiesLoader {
         if (strValue != null) {
           try {
             value = InetAddress.getByName(strValue);
+            logger.info(
+              "[{}] Got\"{}\" means {} for {}",
+              new Object[] {resourceName, strValue, value, key}
+            );
           } catch (UnknownHostException e) {
             logger.warn(
               "[{}] {} is invalid for {}, use default value: {}",
@@ -421,16 +423,93 @@ public class PropertiesLoader {
             );
             value = defaultValue;
           }
-
-          logger.info(
-            "[{}] Got\"{}\" means {} for {}",
-            new Object[] {resourceName, strValue, value, key}
-          );
         }
         else {
           logger.warn(
             "[{}] Could not get value for {}, use default value: {}",
             new Object[] {resourceName, key, defaultValue}
+          );
+          value = defaultValue;
+        }
+      }
+
+      if (caching) {
+        cache.put(key, value);
+      }
+
+      return value;
+    }
+  }
+
+  /**
+   *
+   * @param key
+   * @param defaultValue
+   * @return an int array converted from a value got from a specified key.
+   */
+  public int[] getIntArray(String key, int[] defaultValue) {
+    synchronized (cache) {
+      if (caching && cache.containsKey(key)) {
+        int[] cacheValue = (int[])cache.get(key);
+        logger.debug(
+          "[{}] Got {} from cache for {}",
+          new Object[] {resourceName, Arrays.toString(cacheValue), key}
+        );
+
+        return cacheValue.clone();
+      }
+
+      int[] value = null;
+
+      if (systemPropertiesOverPropertiesFile) {
+        String csv = System.getProperty(key);
+
+        if (csv != null) {
+          try {
+            String[] strInts = csv.split(",");
+            value = new int[strInts.length];
+            for (int i = 0; i < strInts.length; i++) {
+              value[i] = Integer.parseInt(strInts[i]);
+            }
+            logger.info(
+              "[System properties] Got \"{}\" means {} for {}",
+              new Object[] {csv, Arrays.toString(value), key}
+            );
+          } catch (NumberFormatException e) {
+            logger.error(
+              "[System properties] Got Invalid value: {} for {}, ignore it.",
+              csv, key
+            );
+          }
+        }
+      }
+
+      if (value == null) {
+        String csv = prop.getProperty(key);
+
+        if (csv != null) {
+          try {
+            String[] strInts = csv.split(",");
+            value = new int[strInts.length];
+            for (int i = 0; i < strInts.length; i++) {
+              value[i] = Integer.parseInt(strInts[i]);
+            }
+            logger.info(
+              "[{}] Got\"{}\" means {} for {}",
+              new Object[] {resourceName, csv, Arrays.toString(value), key}
+            );
+          } catch (NumberFormatException e) {
+            logger.warn(
+              "[{}] {} is invalid for {}, use default value: {}",
+              new Object[] {resourceName, csv, key, Arrays.toString(defaultValue)}
+            );
+            value = defaultValue;
+          }
+        }
+        else {
+          logger.warn(
+            "[{}] Could not get value for {}, use default value: {}",
+            new Object[] {resourceName, key, Arrays.toString(defaultValue)}
           );
           value = defaultValue;
         }

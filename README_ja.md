@@ -62,6 +62,7 @@ x86プロセッサ上の以下のOSで動作することを確認した。
  * Ubuntu: 13
 * UNIX
  * Solaris: 10
+ * FreeBSD: 10
 
 また、tomuteさんからMac OS Xで動いたとの[報告](http://tomute.hateblo.jp/entry/2013/01/27/003209)が。ありがとうございます。
 
