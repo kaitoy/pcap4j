@@ -19,10 +19,10 @@ Pcap4J 0.9.13 (last version distributed from this page)
 
 * [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
 
-Pcap4J 1.0.0 (latest version on Maven Central Repository)
+Pcap4J 1.1.0 (latest version on Maven Central Repository)
 
-* without source: [pcap4j-distribution-1.0.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.0.0/pcap4j-distribution-1.0.0-bin.zip)
-* with    source: [pcap4j-distribution-1.0.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.0.0/pcap4j-distribution-1.0.0-src.zip)
+* without source: [pcap4j-distribution-1.1.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.1.0/pcap4j-distribution-1.1.0-bin.zip)
+* with    source: [pcap4j-distribution-1.1.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.1.0/pcap4j-distribution-1.1.0-src.zip)
 
 Why Pcap4J was born
 --------
@@ -131,12 +131,12 @@ Add a dependency to the pom.xml as like below:
           <dependency>
             <groupId>org.pcap4j</groupId>
             <artifactId>pcap4j-core</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
           </dependency>
           <dependency>
             <groupId>org.pcap4j</groupId>
             <artifactId>pcap4j-packetfactory-static</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
           </dependency>
              ...
         </dependencies>
