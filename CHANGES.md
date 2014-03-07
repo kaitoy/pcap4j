@@ -21,6 +21,8 @@ Release 1.1.0 (7-Mar-2014)
 * Change org.pcap4j.packet.AbstractPacket.measureLength() to org.pcap4j.packet.AbstractPacket.calcLength()
 * Change org.pcap4j.packet.AbstractPacket.AbstractHeader.measureLength() to org.pcap4j.packet.AbstractPacket.AbstractHeader.calcLength()
 * Change the return value of org.pcap4j.util.PropertiesLoader#getInteger() from int to Integer.
+* Change serialization formats:
+ * org.pcap4j.util.MacAddress
 
 Release 1.0.0 (20-Jun-2013)
 ===========================
