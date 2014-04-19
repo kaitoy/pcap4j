@@ -1,11 +1,13 @@
-Next
-====
+Future
+======
 ### New Features ###
 * Add SSH2 support.
+* Upgrade JNA to 4.10.
 
 ### Bug Fixes ###
 
 ### Other Changes ###
+* Required Java version changes from 5 to 6.
 
 Release 1.1.0 (7-Mar-2014)
 ==========================

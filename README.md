@@ -86,7 +86,8 @@ And the following resources will help you to learn how to use Pcap4j.
 * [Sample Classes](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample)
 * [How to add protocol support](/www/HowToAddProtocolSupport.md)
 
-Pcap4j needs J2SE 5.0+, libpcap 0.9.3+ or WinPcap 3.0+, jna, slf4j-api, and an implementation of logger for slf4j.
+Pcap4j 1.1.0 or older needs J2SE 5.0+. Pcap4j 1.2.0 or older needs J2SE 6.0+.
+And also libpcap 0.9.3+ or WinPcap 3.0+, jna, slf4j-api, and an implementation of logger for slf4j are required.
 I'm using the following libraries for the test.
 
 * libpcap 1.1.1

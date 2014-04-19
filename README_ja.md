@@ -86,7 +86,7 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 * [サンプルクラス](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample)
 * [サポートプロトコル追加方法](/www/HowToAddProtocolSupport.md)
 
-J2SE 5.0以降で動く。管理者権限で実行する必要がある。
+1.1.0以前のはJ2SE 5.0以降で動く。1.2.0以降のはJ2SE 6.0以降で動く。管理者権限で実行する必要がある。
 UNIX系ならlibpcap (多分)0.9.3以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。
 jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。
 
