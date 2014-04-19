@@ -44,12 +44,12 @@ public final class PcapIpV6Address extends AbstractPcapAddress {
 
   @Override
   public Inet6Address getBroadcastAddress() {
-    return getBroadcastAddress();
+    return (Inet6Address)super.getBroadcastAddress();
   }
 
   @Override
   public Inet6Address getDestinationAddress() {
-    return getDestinationAddress();
+    return (Inet6Address)super.getDestinationAddress();
   }
 
 }
