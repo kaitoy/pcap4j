@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -17,6 +17,8 @@ import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.packet.namednumber.NA;
 import org.pcap4j.util.ByteArrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kaito Yamada
@@ -28,6 +30,8 @@ public final class IpV6Packet extends AbstractPacket {
    *
    */
   private static final long serialVersionUID = 1837307843939979665L;
+
+  private static final Logger logger = LoggerFactory.getLogger(IpV6Packet.class);
 
   private final IpV6Header header;
   private final Packet payload;
@@ -44,24 +48,31 @@ public final class IpV6Packet extends AbstractPacket {
   private IpV6Packet(byte[] rawData) {
     this.header = new IpV6Header(rawData);
 
-    byte[] rawPayload;
+    int remainingRawDataLength = rawData.length - header.length();
+    int payloadLength;
+    if (header.getPayloadLengthAsInt() == 0) {
+      logger.debug("Total Length is 0. Assuming segmentation offload to be working.");
+      payloadLength = remainingRawDataLength;
+    }
+    else {
+      payloadLength = header.getPayloadLengthAsInt();
+    }
 
-    if (
-      header.getPayloadLengthAsInt() > rawData.length - header.length()
-    ) {
+    byte[] rawPayload;
+    if (payloadLength > remainingRawDataLength) {
       rawPayload
         = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
+            rawData,
+            header.length(),
+            remainingRawDataLength
+          );
     }
     else {
       rawPayload
         = ByteArrays.getSubArray(
             rawData,
             header.length(),
-            header.getPayloadLengthAsInt()
+            payloadLength
           );
     }
 

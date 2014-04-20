@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -18,6 +18,8 @@ import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.packet.namednumber.NA;
 import org.pcap4j.util.ByteArrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kaito Yamada
@@ -31,6 +33,8 @@ public final class IpV4Packet extends AbstractPacket {
    *
    */
   private static final long serialVersionUID = -3907669810080927342L;
+
+  private static final Logger logger = LoggerFactory.getLogger(IpV4Packet.class);
 
   private final IpV4Header header;
   private final Packet payload;
@@ -47,16 +51,25 @@ public final class IpV4Packet extends AbstractPacket {
   private IpV4Packet(byte[] rawData) {
     this.header = new IpV4Header(rawData);
 
-    int payloadLength = header.getTotalLengthAsInt() - header.length();
-    byte[] rawPayload;
+    int remainingRawDataLength = rawData.length - header.length();
+    int totalLength = header.getTotalLengthAsInt();
+    int payloadLength;
+    if (totalLength == 0) {
+      logger.debug("Total Length is 0. Assuming segmentation offload to be working.");
+      payloadLength = remainingRawDataLength;
+    }
+    else {
+      payloadLength = totalLength - header.length();
+    }
 
-    if (payloadLength > rawData.length - header.length()) {
+    byte[] rawPayload;
+    if (payloadLength > remainingRawDataLength) {
       rawPayload
         = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
+            rawData,
+            header.length(),
+            remainingRawDataLength
+          );
     }
     else {
       rawPayload
