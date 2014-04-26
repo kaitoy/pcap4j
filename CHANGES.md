@@ -5,6 +5,7 @@ Future
 * Upgrade JNA to 4.10.
 
 ### Bug Fixes ###
+* Required libpcap version changed from 0.9.3 to 1.0.0.
 
 ### Other Changes ###
 * Required Java version changes from 5 to 6.
