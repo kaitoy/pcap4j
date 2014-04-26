@@ -158,7 +158,7 @@ public final class Pcaps {
       throw new PcapNativeException(errbuf.toString());
     }
 
-    return result.getString(0, true);
+    return result.getWideString(0);
   }
 
   /**
