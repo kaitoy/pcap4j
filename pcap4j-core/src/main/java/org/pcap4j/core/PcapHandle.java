@@ -17,10 +17,12 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
+import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.bpf_program;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.core.NativeMappings.pcap_stat;
 import org.pcap4j.core.NativeMappings.win_pcap_stat;
+import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.DataLinkType;
@@ -69,6 +71,61 @@ public final class PcapHandle {
     this.dlt = getDltByNative();
   }
 
+  private PcapHandle(Builder builder) throws PcapNativeException {
+    PcapErrbuf errbuf = new PcapErrbuf();
+    this.handle
+      = NativeMappings.pcap_create(
+          builder.deviceName,
+          errbuf
+        );
+    if (handle == null || errbuf.length() != 0) {
+      throw new PcapNativeException(errbuf.toString());
+    }
+
+    if (builder.isSnaplenSet) {
+      int rc = NativeMappings.pcap_set_snaplen(handle, builder.snaplen);
+      if (rc != 0) {
+        throw new PcapNativeException(getError(), rc);
+      }
+    }
+    if (builder.promiscuousMode != null) {
+      int rc = NativeMappings.pcap_set_promisc(handle, builder.promiscuousMode.getValue());
+      if (rc != 0) {
+        throw new PcapNativeException(getError(), rc);
+      }
+    }
+    if (builder.isRfmonSet) {
+      try {
+        int rc = PcapLibrary.INSTANCE.pcap_set_rfmon(handle, builder.rfmon ? 1 : 0);
+        if (rc != 0) {
+          throw new PcapNativeException(getError(), rc);
+        }
+      } catch (UnsatisfiedLinkError e) {
+        logger.error("Failed to instantiate PcapHandle object.", e);
+        throw new PcapNativeException("Monitor mode is not supported on this platform.");
+      }
+    }
+    if (builder.isTimeoutMillisSet) {
+      int rc = NativeMappings.pcap_set_timeout(handle, builder.timeoutMillis);
+      if (rc != 0) {
+        throw new PcapNativeException(getError(), rc);
+      }
+    }
+    if (builder.isBufferSizeSet) {
+      int rc = NativeMappings.pcap_set_buffer_size(handle, builder.bufferSize);
+      if (rc != 0) {
+        throw new PcapNativeException(getError(), rc);
+      }
+    }
+
+    int rc = NativeMappings.pcap_activate(handle);
+    if (rc < 0) {
+      throw new PcapNativeException(getError(), rc);
+    }
+
+    this.dlt = getDltByNative();
+  }
+
   DataLinkType getDltByNative() {
     return DataLinkType.getInstance(
              NativeMappings.pcap_datalink(handle)
@@ -108,7 +165,8 @@ public final class PcapHandle {
 
   /**
    *
-   * @return true if this PcapHandle is open; false otherwise.
+   * @return true if this PcapHandle object is open (i.e. not yet closed by {@link #close() close()});
+   *         false otherwise.
    */
   public boolean isOpen() { return open; }
 
@@ -316,9 +374,6 @@ public final class PcapHandle {
 
       bpf_program prog = new bpf_program();
       try {
-//        int rc = PcapLibrary.INSTANCE.pcap_compile(
-//                   handle, prog, bpfExpression, mode.getValue(), mask
-//                 );
         int rc = NativeMappings.pcap_compile(
                    handle, prog, bpfExpression, mode.getValue(), mask
                  );
@@ -329,7 +384,6 @@ public final class PcapHandle {
                     );
         }
 
-        // rc = PcapLibrary.INSTANCE.pcap_setfilter(handle, prog);
         rc = NativeMappings.pcap_setfilter(handle, prog);
         if (rc < 0) {
           throw new PcapNativeException(
@@ -340,7 +394,6 @@ public final class PcapHandle {
 
         this.filteringExpression = bpfExpression;
       } finally {
-        // PcapLibrary.INSTANCE.pcap_freecode(prog);
         NativeMappings.pcap_freecode(prog);
       }
     }
@@ -490,7 +543,6 @@ public final class PcapHandle {
       if (!open) {
         throw new NotOpenException();
       }
-      // packet = PcapLibrary.INSTANCE.pcap_next(handle, header);
       packet = NativeMappings.pcap_next(handle, header);
     }
 
@@ -527,7 +579,6 @@ public final class PcapHandle {
       if (!open) {
         throw new NotOpenException();
       }
-      // rc = PcapLibrary.INSTANCE.pcap_next_ex(handle, headerPP, dataPP);
       rc = NativeMappings.pcap_next_ex(handle, headerPP, dataPP);
     }
 
@@ -617,12 +668,6 @@ public final class PcapHandle {
       }
 
       logger.info("Start loop");
-//      rc = PcapLibrary.INSTANCE.pcap_loop(
-//             handle,
-//             packetCount,
-//             new GotPacketFuncExecutor(listener, dlt, executor),
-//             null
-//           );
       rc = NativeMappings.pcap_loop(
              handle,
              packetCount,
@@ -793,7 +838,6 @@ public final class PcapHandle {
 
     Pointer dumper;
     synchronized (thisLock) {
-      // dumper = PcapLibrary.INSTANCE.pcap_dump_open(handle, filePath);
       dumper = NativeMappings.pcap_dump_open(handle, filePath);
       if (dumper == null) {
         throw new PcapNativeException(getError());
@@ -825,12 +869,6 @@ public final class PcapHandle {
       }
 
       logger.info("Start dump loop");
-//      rc = PcapLibrary.INSTANCE.pcap_loop(
-//             handle,
-//             packetCount,
-//             NativeMappings.PCAP_DUMP,
-//             dumper.getDumper()
-//           );
       rc = NativeMappings.pcap_loop(
              handle,
              packetCount,
@@ -867,7 +905,6 @@ public final class PcapHandle {
    */
   public void breakLoop() {
     logger.info("Break loop.");
-    // PcapLibrary.INSTANCE.pcap_breakloop(handle);
     NativeMappings.pcap_breakloop(handle);
   }
 
@@ -888,9 +925,6 @@ public final class PcapHandle {
       if (!open) {
         throw new NotOpenException();
       }
-//      rc = PcapLibrary.INSTANCE.pcap_sendpacket(
-//             handle, packet.getRawData(), packet.length()
-//           );
       rc = NativeMappings.pcap_sendpacket(
              handle, packet.getRawData(), packet.length()
            );
@@ -905,7 +939,7 @@ public final class PcapHandle {
   }
 
   /**
-   *
+   * Closes this PcapHandle.
    */
   public void close() {
     synchronized (thisLock) {
@@ -913,7 +947,6 @@ public final class PcapHandle {
         logger.warn("Already closed.");
         return;
       }
-      // PcapLibrary.INSTANCE.pcap_close(handle);
       NativeMappings.pcap_close(handle);
       open = false;
     }
@@ -985,7 +1018,6 @@ public final class PcapHandle {
    * @return an error message.
    */
   public String getError() {
-    // return PcapLibrary.INSTANCE.pcap_geterr(handle).getString(0);
     return NativeMappings.pcap_geterr(handle).getString(0);
   }
 
@@ -1000,6 +1032,101 @@ public final class PcapHandle {
       .append("]");
 
     return sb.toString();
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 1.2.0
+   */
+  public static final class Builder {
+
+    private final String deviceName;
+    private int snaplen;
+    private boolean isSnaplenSet = false;
+    private PromiscuousMode promiscuousMode = null;
+    private boolean rfmon;
+    private boolean isRfmonSet = false;
+    private int timeoutMillis;
+    private boolean isTimeoutMillisSet = false;
+    private int bufferSize;
+    private boolean isBufferSizeSet = false;
+
+    /**
+     *
+     * @param deviceName A value {@link PcapNetworkInterface#getName()} returns.
+     */
+    public Builder(String deviceName) {
+      if (deviceName == null || deviceName.length() == 0) {
+        throw new IllegalArgumentException("deviceName: " + deviceName);
+      }
+      this.deviceName = deviceName;
+    }
+
+    /**
+     * @param snaplen Snapshot length, which is the number of bytes captured for each packet.
+     * @return this Builder object for method chaining.
+     */
+    public Builder snaplen(int snaplen) {
+      this.snaplen = snaplen;
+      this.isSnaplenSet = true;
+      return this;
+    }
+
+    /**
+     * @param promiscuousMode
+     * @return this Builder object for method chaining.
+     */
+    public Builder promiscuousMode(PromiscuousMode promiscuousMode) {
+      this.promiscuousMode = promiscuousMode;
+      return this;
+    }
+
+    /**
+     * @param rfmon Whether monitor mode should be set on a PcapHandle
+     *              when it is built. If true, monitor mode will be set,
+     *              otherwise not be set.
+     * @return this Builder object for method chaining.
+     */
+    public Builder rfmon(boolean rfmon) {
+      this.rfmon = rfmon;
+      this.isRfmonSet = true;
+      return this;
+    }
+
+    /**
+     * @param timeoutMillis Read timeout. Most OSs buffer packets.
+     *        The OSs pass the packets to Pcap4j after the buffer gets full
+     *        or the read timeout expires.
+     *        Must be non-negative. May be ignored by some OSs.
+     *        0 means disable buffering on Solaris.
+     *        0 means infinite on the other OSs.
+     *        1 through 9 means infinite on Solaris.
+     * @return this Builder object for method chaining.
+     */
+    public Builder timeoutMillis(int timeoutMillis) {
+      this.timeoutMillis = timeoutMillis;
+      this.isTimeoutMillisSet = true;
+      return this;
+    }
+
+    /**
+     * @param bufferSize The buffer size, which is in units of bytes.
+     * @return this Builder object for method chaining.
+     */
+    public Builder bufferSize(int bufferSize) {
+      this.bufferSize = bufferSize;
+      this.isBufferSizeSet = true;
+      return this;
+    }
+
+    /**
+     * @return a new PcapHandle object.
+     * @throws PcapNativeException
+     */
+    public PcapHandle build() throws PcapNativeException {
+      return new PcapHandle(this);
+    }
+
   }
 
 }

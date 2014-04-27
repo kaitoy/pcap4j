@@ -8,8 +8,10 @@ import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
+import org.pcap4j.core.PcapStat;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
+import com.sun.jna.Platform;
 
 @SuppressWarnings("javadoc")
 public class GetNextPacket {
@@ -24,17 +26,23 @@ public class GetNextPacket {
   private static final int READ_TIMEOUT
     = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
 
-  private static final String MAX_CAP_LEN_KEY
-    = GetNextPacket.class.getName() + ".maxCapLen";
-  private static final int MAX_CAP_LEN
-    = Integer.getInteger(MAX_CAP_LEN_KEY, 65536); // [bytes]
+  private static final String SNAPLEN_KEY
+    = GetNextPacket.class.getName() + ".snaplen";
+  private static final int SNAPLEN
+    = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
+
+  private static final String BUFFER_SIZE_KEY
+    = GetNextPacket.class.getName() + ".bufferSize";
+  private static final int BUFFER_SIZE
+    = Integer.getInteger(BUFFER_SIZE_KEY, 1 * 1024 * 1024); // [bytes]
 
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String filter = args.length != 0 ? args[0] : "";
 
     System.out.println(COUNT_KEY + ": " + COUNT);
     System.out.println(READ_TIMEOUT_KEY + ": " + READ_TIMEOUT);
-    System.out.println(MAX_CAP_LEN_KEY + ": " + MAX_CAP_LEN);
+    System.out.println(SNAPLEN_KEY + ": " + SNAPLEN);
+    System.out.println(BUFFER_SIZE_KEY + ": " + BUFFER_SIZE);
     System.out.println("\n");
 
     PcapNetworkInterface nif;
@@ -52,7 +60,12 @@ public class GetNextPacket {
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
     PcapHandle handle
-      = nif.openLive(MAX_CAP_LEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+      = new PcapHandle.Builder(nif.getName())
+          .snaplen(SNAPLEN)
+          .promiscuousMode(PromiscuousMode.PROMISCUOUS)
+          .timeoutMillis(READ_TIMEOUT)
+          .bufferSize(BUFFER_SIZE)
+          .build();
 
     handle.setFilter(
       filter,
@@ -76,6 +89,14 @@ public class GetNextPacket {
           break;
         }
       }
+    }
+
+    PcapStat ps = handle.getStat();
+    System.out.println("ps_recv: " + ps.getNumPacketsReceived());
+    System.out.println("ps_drop: " + ps.getNumPacketsDropped());
+    System.out.println("ps_ifdrop: " + ps.getNumPacketsDroppedByIf());
+    if (Platform.isWindows()) {
+      System.out.println("bs_capt: " + ps.getNumPacketsCaptured());
     }
 
     handle.close();

@@ -86,7 +86,6 @@ public final class PcapDumper {
       if (!open) {
         throw new NotOpenException();
       }
-      //PcapLibrary.INSTANCE.pcap_dump(dumper, header, packet.getRawData());
       NativeMappings.pcap_dump(dumper, header, packet.getRawData());
     }
 
@@ -144,7 +143,6 @@ public final class PcapDumper {
         logger.warn("Already closed.");
         return;
       }
-      // PcapLibrary.INSTANCE.pcap_dump_close(dumper);
       NativeMappings.pcap_dump_close(dumper);
       open = false;
     }

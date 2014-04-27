@@ -24,10 +24,10 @@ public class Dump {
   private static final int READ_TIMEOUT
     = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
 
-  private static final String MAX_CAP_LEN_KEY
-    = Dump.class.getName() + ".maxCapLen";
-  private static final int MAX_CAP_LEN
-    = Integer.getInteger(MAX_CAP_LEN_KEY, 65536); // [bytes]
+  private static final String SNAPLEN_KEY
+    = Dump.class.getName() + ".snaplen";
+  private static final int SNAPLEN
+    = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
 
   private static final String PCAP_FILE_KEY
     = Dump.class.getName() + ".pcapFile";
@@ -39,7 +39,7 @@ public class Dump {
 
     System.out.println(COUNT_KEY + ": " + COUNT);
     System.out.println(READ_TIMEOUT_KEY + ": " + READ_TIMEOUT);
-    System.out.println(MAX_CAP_LEN_KEY + ": " + MAX_CAP_LEN);
+    System.out.println(SNAPLEN_KEY + ": " + SNAPLEN);
     System.out.println("\n");
 
     PcapNetworkInterface nif;
@@ -57,7 +57,7 @@ public class Dump {
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
     PcapHandle handle
-      = nif.openLive(MAX_CAP_LEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+      = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
 
     handle.setFilter(
       filter,

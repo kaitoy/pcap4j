@@ -199,7 +199,7 @@ public final class PcapNetworkInterface {
 
   /**
    *
-   * @param maxCaptureLength
+   * @param snaplen Snapshot length, which is the number of bytes captured for each packet.
    * @param mode
    * @param timeoutMillis Read timeout. Most OSs buffer packets.
    *        The OSs pass the packets to Pcap4j after the buffer gets full
@@ -208,11 +208,11 @@ public final class PcapNetworkInterface {
    *        0 means disable buffering on Solaris.
    *        0 means infinite on the other OSs.
    *        1 through 9 means infinite on Solaris.
-   * @return an opened PcapHandle.
+   * @return a new PcapHandle object.
    * @throws PcapNativeException
    */
   public PcapHandle openLive(
-    int maxCaptureLength, PromiscuousMode mode, int timeoutMillis
+    int snaplen, PromiscuousMode mode, int timeoutMillis
   ) throws PcapNativeException {
     if (mode == null) {
       StringBuilder sb = new StringBuilder();
@@ -221,24 +221,14 @@ public final class PcapNetworkInterface {
     }
 
     PcapErrbuf errbuf = new PcapErrbuf();
-
-//    Pointer handle
-//      = PcapLibrary.INSTANCE.pcap_open_live(
-//          name,
-//          maxCaptureLength,
-//          mode.getValue(),
-//          timeoutMillis,
-//          errbuf
-//        );
     Pointer handle
       = NativeMappings.pcap_open_live(
           name,
-          maxCaptureLength,
+          snaplen,
           mode.getValue(),
           timeoutMillis,
           errbuf
         );
-
     if (handle == null || errbuf.length() != 0) {
       throw new PcapNativeException(errbuf.toString());
     }
@@ -257,12 +247,6 @@ public final class PcapNetworkInterface {
                );
 
       if (rc < 0) {
-//        throw new PcapNativeException(
-//                "SBIOCSTIME: "
-//                  + PcapLibrary.INSTANCE.pcap_strerror(
-//                      NativeMappings.ERRNO_P.getInt(0)
-//                    ).getString(0)
-//              );
         throw new PcapNativeException(
                 "SBIOCSTIME: "
                   + NativeMappings.pcap_strerror(

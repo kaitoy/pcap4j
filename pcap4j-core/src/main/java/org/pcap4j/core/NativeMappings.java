@@ -209,6 +209,24 @@ final class NativeMappings {
   // const char * pcap_lib_version(void)
   static native String pcap_lib_version();
 
+  // pcap_t *pcap_create (const char *device, char *ebuf)
+  static native Pointer pcap_create(String device, PcapErrbuf ebuf);
+
+  // int pcap_set_snaplen(pcap_t *p, int snaplen)
+  static native int pcap_set_snaplen(Pointer p, int snaplen);
+
+  // int pcap_set_promisc(pcap_t *p, int promisc)
+  static native int pcap_set_promisc(Pointer p, int promisc);
+
+  // int pcap_set_timeout(pcap_t *p, int timeout_ms)
+  static native int pcap_set_timeout(Pointer p, int timeout_ms);
+
+  // int pcap_set_buffer_size(pcap_t *p, int buffer_size)
+  static native int pcap_set_buffer_size(Pointer p, int buffer_size);
+
+  // int pcap_activate(pcap_t *p)
+  static native int pcap_activate(Pointer p);
+
   // interface mappings
   interface PcapLibrary extends Library {
     static final PcapLibrary INSTANCE
@@ -311,6 +329,9 @@ final class NativeMappings {
     // char *pcap_strerror(int errno)
     @Deprecated // Use direct mapped one instead.
     Pointer pcap_strerror(int errno);
+
+    // int pcap_set_rfmon(pcap_t *p, int rfmon)
+    int pcap_set_rfmon(Pointer p, int rfmon);
 
     // int strioctl(int fd, int cmd, int len, char *dp)
     int strioctl(int fd, int cmd, int len, Pointer dp);  // Can't map directly because not all OSes support this function.

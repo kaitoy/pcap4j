@@ -58,7 +58,6 @@ public final class Pcaps {
     PointerByReference alldevsPP = new PointerByReference();
     PcapErrbuf errbuf = new PcapErrbuf();
 
-    //int rc = PcapLibrary.INSTANCE.pcap_findalldevs(alldevsPP, errbuf);
     int rc = NativeMappings.pcap_findalldevs(alldevsPP, errbuf);
     if (rc != 0) {
       StringBuilder sb = new StringBuilder(50);
@@ -85,7 +84,6 @@ public final class Pcaps {
       ifList.add(PcapNetworkInterface.newInstance(pif, true));
     }
 
-    // PcapLibrary.INSTANCE.pcap_freealldevs(pcapIf.getPointer());
     NativeMappings.pcap_freealldevs(pcapIf.getPointer());
 
     logger.info("{} NIF(s) found.", ifList.size());
@@ -151,7 +149,6 @@ public final class Pcaps {
    */
   public static String lookupDev() throws PcapNativeException {
     PcapErrbuf errbuf = new PcapErrbuf();
-    // Pointer result = PcapLibrary.INSTANCE.pcap_lookupdev(errbuf);
     Pointer result = NativeMappings.pcap_lookupdev(errbuf);
 
     if (result == null || errbuf.length() != 0) {
@@ -196,7 +193,7 @@ public final class Pcaps {
   /**
    *
    * @param filePath "-" means stdin
-   * @return a PcapHandle
+   * @return a new PcapHandle object.
    * @throws PcapNativeException
    */
   public static PcapHandle openOffline(
@@ -209,8 +206,6 @@ public final class Pcaps {
     }
 
     PcapErrbuf errbuf = new PcapErrbuf();
-//    Pointer handle
-//      = PcapLibrary.INSTANCE.pcap_open_offline(filePath, errbuf);
     Pointer handle
       = NativeMappings.pcap_open_offline(filePath, errbuf);
 
@@ -224,12 +219,12 @@ public final class Pcaps {
   /**
    *
    * @param dlt
-   * @param maxCaptureLength
-   * @return a PcapHandle.
+   * @param snaplen Snapshot length, which is the number of bytes captured for each packet.
+   * @return a new PcapHandle object.
    * @throws PcapNativeException
    */
   public static PcapHandle openDead(
-    DataLinkType dlt, int maxCaptureLength
+    DataLinkType dlt, int snaplen
   ) throws PcapNativeException {
     if (dlt == null) {
       StringBuilder sb = new StringBuilder();
@@ -237,14 +232,12 @@ public final class Pcaps {
       throw new NullPointerException(sb.toString());
     }
 
-//    Pointer handle
-//      = PcapLibrary.INSTANCE.pcap_open_dead(dlt.value(), maxCaptureLength);
     Pointer handle
-      = NativeMappings.pcap_open_dead(dlt.value(), maxCaptureLength);
+      = NativeMappings.pcap_open_dead(dlt.value(), snaplen);
     if (handle == null) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("Failed to open a PcapHandle. dlt: ").append(dlt)
-        .append(" maxCaptureLength: ").append(maxCaptureLength);
+        .append(" snaplen: ").append(snaplen);
       throw new PcapNativeException(sb.toString());
     }
 
