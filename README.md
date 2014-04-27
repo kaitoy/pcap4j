@@ -15,14 +15,13 @@ Download
 
 Pcap4J is now available on the Maven Central Repository.
 
-Pcap4J 0.9.13 (last version distributed from this page)
-
-* [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
-
-Pcap4J 1.1.0 (latest version on Maven Central Repository)
-
-* without source: [pcap4j-distribution-1.1.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.1.0/pcap4j-distribution-1.1.0-bin.zip)
-* with    source: [pcap4j-distribution-1.1.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.1.0/pcap4j-distribution-1.1.0-src.zip)
+* Pcap4J 0.9.13 (last version distributed from this page)
+ * [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
+* Pcap4J 1.1.0 (latest version on Maven Central Repository)
+ * without source: [pcap4j-distribution-1.1.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.1.0/pcap4j-distribution-1.1.0-bin.zip)
+ * with    source: [pcap4j-distribution-1.1.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.1.0/pcap4j-distribution-1.1.0-src.zip)
+* Snapshot builds
+ * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
 
 Why Pcap4J was born
 --------
