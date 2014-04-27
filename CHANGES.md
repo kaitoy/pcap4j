@@ -3,9 +3,10 @@ Future
 ### New Features ###
 * Add SSH2 support.
 * Upgrade JNA to 4.10.
+* Add PcapHandle.Builder, which internally uses pcap_create, pcap_set_snaplen, pcap_set_promisc, pcap_set_rfmon, pcap_set_timeout, pcap_set_buffer_size, and pcap_activate.
 
 ### Bug Fixes ###
-* Required libpcap version changed from 0.9.3 to 1.0.0.
+* Change required libpcap version from 0.9.3 to 1.0.0.
 
 ### Other Changes ###
 * Required Java version changes from 5 to 6.

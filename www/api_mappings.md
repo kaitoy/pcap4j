@@ -190,4 +190,32 @@ Mapping between pcap API and Pcap4j API
     <td>const char * pcap_lib_version(void)</td>
     <td>String org.pcap4j.core.Pcaps.libVersion()</td>
   </tr>
+  <tr>
+    <td>pcap_t *pcap_create (const char *, char *)</td>
+    <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
+  </tr>
+  <tr>
+    <td>int pcap_set_snaplen(pcap_t *, int)</td>
+    <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
+  </tr>
+  <tr>
+    <td>int pcap_set_promisc(pcap_t *, int)</td>
+    <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
+  </tr>
+  <tr>
+    <td>int pcap_set_rfmon(pcap_t *, int)</td>
+    <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
+  </tr>
+  <tr>
+    <td>int pcap_set_timeout(pcap_t *, int)</td>
+    <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
+  </tr>
+  <tr>
+    <td>int pcap_set_buffer_size(pcap_t *, int)</td>
+    <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
+  </tr>
+  <tr>
+    <td>int pcap_activate(pcap_t *)</td>
+    <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
+  </tr>
 </table>

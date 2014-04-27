@@ -202,12 +202,12 @@ public final class PcapNetworkInterface {
    * @param snaplen Snapshot length, which is the number of bytes captured for each packet.
    * @param mode
    * @param timeoutMillis Read timeout. Most OSs buffer packets.
-   *        The OSs pass the packets to Pcap4j after the buffer gets full
-   *        or the read timeout expires.
-   *        Must be non-negative. May be ignored by some OSs.
-   *        0 means disable buffering on Solaris.
-   *        0 means infinite on the other OSs.
-   *        1 through 9 means infinite on Solaris.
+   *                      The OSs pass the packets to Pcap4j after the buffer gets full
+   *                      or the read timeout expires.
+   *                      Must be non-negative. May be ignored by some OSs.
+   *                      0 means disable buffering on Solaris.
+   *                      0 means infinite on the other OSs.
+   *                      1 through 9 means infinite on Solaris.
    * @return a new PcapHandle object.
    * @throws PcapNativeException
    */

@@ -1064,6 +1064,8 @@ public final class PcapHandle {
 
     /**
      * @param snaplen Snapshot length, which is the number of bytes captured for each packet.
+     *                If this method isn't called, the platform's default snaplen will be applied
+     *                at {@link #build()}.
      * @return this Builder object for method chaining.
      */
     public Builder snaplen(int snaplen) {
@@ -1073,7 +1075,10 @@ public final class PcapHandle {
     }
 
     /**
-     * @param promiscuousMode
+     * @param promiscuousMode Promiscuous mode.
+     *                        If this method isn't called,
+     *                        the platform's default mode will be used
+     *                        at {@link #build()}.
      * @return this Builder object for method chaining.
      */
     public Builder promiscuousMode(PromiscuousMode promiscuousMode) {
@@ -1084,7 +1089,12 @@ public final class PcapHandle {
     /**
      * @param rfmon Whether monitor mode should be set on a PcapHandle
      *              when it is built. If true, monitor mode will be set,
-     *              otherwise not be set.
+     *              otherwise it will not be set.
+     *              Some platforms don't support setting monitor mode.
+     *              Calling this method on such platforms may cause PcapNativeException
+     *              at {@link #build()}.
+     *              If this method isn't called, the platform's default mode will be applied
+     *              at {@link #build()} (if supported).
      * @return this Builder object for method chaining.
      */
     public Builder rfmon(boolean rfmon) {
@@ -1095,12 +1105,14 @@ public final class PcapHandle {
 
     /**
      * @param timeoutMillis Read timeout. Most OSs buffer packets.
-     *        The OSs pass the packets to Pcap4j after the buffer gets full
-     *        or the read timeout expires.
-     *        Must be non-negative. May be ignored by some OSs.
-     *        0 means disable buffering on Solaris.
-     *        0 means infinite on the other OSs.
-     *        1 through 9 means infinite on Solaris.
+     *                      The OSs pass the packets to Pcap4j after the buffer gets full
+     *                      or the read timeout expires.
+     *                      Must be non-negative. May be ignored by some OSs.
+     *                      0 means disable buffering on Solaris.
+     *                      0 means infinite on the other OSs.
+     *                      1 through 9 means infinite on Solaris.
+     *                      If this method isn't called, the platform's default timeout will be applied
+     *                      at {@link #build()}.
      * @return this Builder object for method chaining.
      */
     public Builder timeoutMillis(int timeoutMillis) {
@@ -1111,6 +1123,9 @@ public final class PcapHandle {
 
     /**
      * @param bufferSize The buffer size, which is in units of bytes.
+     *                   If this method isn't called,
+     *                   the platform's default buffer size will be applied
+     *                   at {@link #build()}.
      * @return this Builder object for method chaining.
      */
     public Builder bufferSize(int bufferSize) {
