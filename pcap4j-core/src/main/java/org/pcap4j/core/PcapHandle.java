@@ -803,16 +803,19 @@ public final class PcapHandle {
     public void got_packet(
       Pointer args, final pcap_pkthdr header, final Pointer packet
     ) {
+      final long tvs = header.ts.tv_sec.longValue();
+      final int tvus = header.ts.tv_usec.intValue();
+      final byte[] ba = packet.getByteArray(0, header.caplen);
+
       executor.execute(
         new Runnable() {
           public void run() {
-            timestampsInts.set(header.ts.tv_sec.longValue());
-            timestampsMicros.set(header.ts.tv_usec.intValue());
-
+            timestampsInts.set(tvs);
+            timestampsMicros.set(tvus);
             listener.gotPacket(
               PacketFactories.getFactory(Packet.class, DataLinkType.class)
                 .newInstance(
-                   packet.getByteArray(0, header.caplen),
+                   ba,
                    dlt
                  )
             );
