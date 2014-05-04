@@ -3,10 +3,12 @@ Future
 ### New Features ###
 * Add SSH2 support.
 * Upgrade JNA to 4.10.
-* Add PcapHandle.Builder, which internally uses pcap_create, pcap_set_snaplen, pcap_set_promisc, pcap_set_rfmon, pcap_set_timeout, pcap_set_buffer_size, and pcap_activate.
+* [Issues#17](https://github.com/kaitoy/pcap4j/issues/17): Add PcapHandle.Builder, which internally uses pcap_create, pcap_set_snaplen, pcap_set_promisc, pcap_set_rfmon, pcap_set_timeout, pcap_set_buffer_size, and pcap_activate.
+* [Issues#15](https://github.com/kaitoy/pcap4j/issues/15): TSO support.
 
 ### Bug Fixes ###
-* Change required libpcap version from 0.9.3 to 1.0.0.
+* Change required libpcap version from 0.9.3 to 1.0.0 to solve [Issues#16](https://github.com/kaitoy/pcap4j/issues/16).
+* [Issues#14](https://github.com/kaitoy/pcap4j/issues/14): Fix some getters of Inet4Address and Inet6Address which cause endless recursion --> stack overflow.
 
 ### Other Changes ###
 * Required Java version changes from 5 to 6.
@@ -14,12 +16,12 @@ Future
 Release 1.1.0 (7-Mar-2014)
 ==========================
 ### New Features ###
-* Add FreeBSD support.
+* [Issues#2](https://github.com/kaitoy/pcap4j/issues/2): Add FreeBSD support.
 * Mac address discovery on Linux, Mac OS X, and FreeBSD.
 * Add properties; org.pcap4j.af.inet, org.pcap4j.af.inet6, org.pcap4j.af.packet and org.pcap4j.af.link to specify address family numbers.
 
 ### Bug Fixes ###
-* Correct IP address discovery on Mac OS X.
+* [Issues#11](https://github.com/kaitoy/pcap4j/issues/11): Correct IP address discovery on Mac OS X.
 
 ### Other Changes ###
 * Change org.pcap4j.packet.AbstractPacket.measureLength() to org.pcap4j.packet.AbstractPacket.calcLength()
@@ -37,7 +39,7 @@ Release 1.0.0 (20-Jun-2013)
                          pcap_free_datalinks, pcap_set_datalink, pcap_datalink_name_to_val,
                          pcap_datalink_val_to_name, pcap_datalink_val_to_description, pcap_strerror,
                          pcap_lib_version, pcap_dump_flush
-* Add Ubuntu support.
+* [Issues#10](https://github.com/kaitoy/pcap4j/issues/10): Add Ubuntu support.
 * Add getReturnCode method to PcapNativeException.
 * [Issues#3](https://github.com/kaitoy/pcap4j/issues/3): Change to a multi-module project.
 
