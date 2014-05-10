@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -190,8 +191,13 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
         throw new IllegalRawDataException(sb.toString());
       }
 
-      String data = new String(rawData);
-      String[] lines = data.split("\r\n");
+      String data;
+      try {
+        data = new String(rawData, "UTF-8");
+      } catch (UnsupportedEncodingException e) {
+        throw new AssertionError("Never get here.");
+      }
+      String[] lines = data.split("\r\n", -1);
       this.messages = new ArrayList<String>();
       int versionIdx = -1;
       for (int i = 0; i < lines.length; i++) {
@@ -205,13 +211,13 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
       if (versionIdx == -1) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data doesn't include the version string. data: ")
-          .append(new String(rawData));
+          .append(data);
         throw new IllegalRawDataException(sb.toString());
       }
       if (lines.length < versionIdx + 2) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The version string must be terminated by CR LF. data: ")
-          .append(new String(rawData));
+          .append(data);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -220,7 +226,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
       if (hyphenIdx == -1) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data must start with SSH-protoversion-softwareversion. data: ")
-          .append(new String(rawData));
+          .append(data);
         throw new IllegalRawDataException(sb.toString());
       }
 
