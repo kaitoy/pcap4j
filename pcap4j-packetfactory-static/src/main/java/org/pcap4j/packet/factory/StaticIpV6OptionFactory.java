@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -33,7 +33,7 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
     instantiaters.put(
       IpV6OptionType.PAD1, new Instantiater() {
         @Override
-        public IpV6Option newInstance(byte[] rawData) {
+        public IpV6Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV6Pad1Option.newInstance(rawData);
         }
       }
@@ -41,7 +41,7 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
     instantiaters.put(
       IpV6OptionType.PADN, new Instantiater() {
         @Override
-        public IpV6Option newInstance(byte[] rawData) {
+        public IpV6Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV6PadNOption.newInstance(rawData);
         }
       }
@@ -77,16 +77,20 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
       return IllegalIpV6Option.newInstance(rawData);
     }
 
-    return UnknownIpV6Option.newInstance(rawData);
+    return newInstance(rawData);
   }
 
   public IpV6Option newInstance(byte[] rawData) {
-    return UnknownIpV6Option.newInstance(rawData);
+    try {
+      return UnknownIpV6Option.newInstance(rawData);
+    } catch (IllegalRawDataException e) {
+      return IllegalIpV6Option.newInstance(rawData);
+    }
   }
 
   private static abstract class Instantiater {
 
-    public abstract IpV6Option newInstance(byte [] rawData);
+    public abstract IpV6Option newInstance(byte [] rawData) throws IllegalRawDataException;
 
   }
 

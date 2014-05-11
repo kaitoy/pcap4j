@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -32,13 +32,14 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new Dot1qVlanTagPacket object.
+   * @throws IllegalRawDataException
    * @throws PacketException
    */
-  public static Dot1qVlanTagPacket newPacket(byte[] rawData){
+  public static Dot1qVlanTagPacket newPacket(byte[] rawData) throws IllegalRawDataException{
     return new Dot1qVlanTagPacket(rawData);
   }
 
-  private Dot1qVlanTagPacket(byte[] rawData) {
+  private Dot1qVlanTagPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new Dot1qVlanTagHeader(rawData);
 
     byte[] rawPayload
@@ -205,7 +206,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
     private final short vid;
     private final EtherType type;
 
-    private Dot1qVlanTagHeader(byte[] rawData) {
+    private Dot1qVlanTagHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < DOT1Q_TAG_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an IEEE802.1Q Tag header(")

@@ -127,8 +127,12 @@ public class IcmpV6TimeExceededPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacket() {
-    IcmpV6TimeExceededPacket p
-      = IcmpV6TimeExceededPacket.newPacket(packet.getRawData());
+    IcmpV6TimeExceededPacket p;
+    try {
+      p = IcmpV6TimeExceededPacket.newPacket(packet.getRawData());
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
     assertEquals(packet, p);
 
     assertTrue(p.getPayload().contains(IpV6Packet.class));

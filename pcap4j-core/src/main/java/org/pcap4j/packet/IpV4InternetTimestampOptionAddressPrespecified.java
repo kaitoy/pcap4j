@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -48,14 +48,17 @@ implements IpV4InternetTimestampOptionData {
    *
    * @param rawData
    * @return a new IpV4InternetTimestampOptionAddressPrespecified object.
+   * @throws IllegalRawDataException
    */
   public static IpV4InternetTimestampOptionAddressPrespecified newInstance(
     byte[] rawData
-  ) {
+  ) throws IllegalRawDataException {
     return new IpV4InternetTimestampOptionAddressPrespecified(rawData);
   }
 
-  private IpV4InternetTimestampOptionAddressPrespecified(byte[] rawData) {
+  private IpV4InternetTimestampOptionAddressPrespecified(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }

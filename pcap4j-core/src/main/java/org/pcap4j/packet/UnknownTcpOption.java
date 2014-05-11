@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -31,12 +31,15 @@ public final class UnknownTcpOption implements TcpOption {
    *
    * @param rawData
    * @return a new UnknownTcpOption object.
+   * @throws IllegalRawDataException
    */
-  public static UnknownTcpOption newInstance(byte[] rawData) {
+  public static UnknownTcpOption newInstance(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new UnknownTcpOption(rawData);
   }
 
-  private UnknownTcpOption(byte[] rawData) {
+  private UnknownTcpOption(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -34,12 +34,15 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new IpV6ExtRoutingPacket object.
+   * @throws IllegalRawDataException
    */
-  public static IpV6ExtRoutingPacket newPacket(byte[] rawData) {
+  public static IpV6ExtRoutingPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new IpV6ExtRoutingPacket(rawData);
   }
 
-  private IpV6ExtRoutingPacket(byte[] rawData) {
+  private IpV6ExtRoutingPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new IpV6ExtRoutingHeader(rawData);
 
     byte[] rawPayload
@@ -245,7 +248,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
     private final byte segmentsLeft;
     private final IpV6RoutingData data;
 
-    private IpV6ExtRoutingHeader(byte[] rawData) {
+    private IpV6ExtRoutingHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 4) {
         StringBuilder sb = new StringBuilder(110);
         sb.append(
@@ -293,13 +296,13 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
         StringBuilder sb = new StringBuilder(100);
         sb.append("data length must be more than 3. data: ")
           .append(builder.data);
-        throw new IllegalRawDataException(sb.toString());
+        throw new IllegalArgumentException(sb.toString());
       }
       if (((builder.data.length() + 4) % 8) != 0) {
         StringBuilder sb = new StringBuilder(100);
         sb.append("(builder.data.length() + 8 ) % 8 must be 0. data: ")
           .append(builder.data);
-        throw new IllegalRawDataException(sb.toString());
+        throw new IllegalArgumentException(sb.toString());
       }
 
       this.nextHeader = builder.nextHeader;
@@ -331,7 +334,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
      *
      * @return hdrExtLen
      */
-    public int getHdrExtLenAsInt() { return (int)(0xFF & hdrExtLen); }
+    public int getHdrExtLenAsInt() { return 0xFF & hdrExtLen; }
 
     /**
      *

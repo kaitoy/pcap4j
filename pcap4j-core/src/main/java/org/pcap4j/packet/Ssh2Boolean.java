@@ -54,8 +54,9 @@ public final class Ssh2Boolean implements Serializable {
   /**
    *
    * @param rawData
+   * @throws IllegalRawDataException
    */
-  public Ssh2Boolean(byte[] rawData) {
+  public Ssh2Boolean(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("array may not be null");
     }

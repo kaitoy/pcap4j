@@ -135,8 +135,12 @@ public class IcmpV4ParameterProblemPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacket() {
-    IcmpV4ParameterProblemPacket p
-      = IcmpV4ParameterProblemPacket.newPacket(packet.getRawData());
+    IcmpV4ParameterProblemPacket p;
+    try {
+      p = IcmpV4ParameterProblemPacket.newPacket(packet.getRawData());
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
     assertEquals(packet, p);
 
     assertTrue(p.getPayload().contains(IpV4Packet.class));

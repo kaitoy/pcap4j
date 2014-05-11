@@ -31,12 +31,15 @@ public final class Ssh2DisconnectPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new Ssh2DisconnectPacket object.
+   * @throws IllegalRawDataException
    */
-  public static Ssh2DisconnectPacket newPacket(byte[] rawData) {
+  public static Ssh2DisconnectPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new Ssh2DisconnectPacket(rawData);
   }
 
-  private Ssh2DisconnectPacket(byte[] rawData) {
+  private Ssh2DisconnectPacket(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -156,7 +159,7 @@ public final class Ssh2DisconnectPacket extends AbstractPacket {
     private final Ssh2String description;
     private final Ssh2String languageTag;
 
-    private Ssh2DisconnectHeader(byte[] rawData) {
+    private Ssh2DisconnectHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 13) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 Disconnect header. data: ")

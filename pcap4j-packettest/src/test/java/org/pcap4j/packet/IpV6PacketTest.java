@@ -109,8 +109,12 @@ public class IpV6PacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacket() {
-    IpV6Packet p = IpV6Packet.newPacket(packet.getRawData());
-    assertEquals(packet, p);
+    try {
+      IpV6Packet p = IpV6Packet.newPacket(packet.getRawData());
+      assertEquals(packet, p);
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
   }
 
   @Test

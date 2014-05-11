@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -44,13 +44,14 @@ public final class EthernetPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new EthernetPacket object.
+   * @throws IllegalRawDataException
    * @throws PacketException
    */
-  public static EthernetPacket newPacket(byte[] rawData) {
+  public static EthernetPacket newPacket(byte[] rawData) throws IllegalRawDataException {
     return new EthernetPacket(rawData);
   }
 
-  private EthernetPacket(byte[] rawData) {
+  private EthernetPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new EthernetHeader(rawData);
 
     byte[] rawPayload
@@ -320,7 +321,7 @@ public final class EthernetPacket extends AbstractPacket {
     private final MacAddress srcAddr;
     private final EtherType type;
 
-    private EthernetHeader(byte[] rawData) {
+    private EthernetHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < ETHERNET_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(100);
         sb.append("The data is too short to build an Ethernet header(")

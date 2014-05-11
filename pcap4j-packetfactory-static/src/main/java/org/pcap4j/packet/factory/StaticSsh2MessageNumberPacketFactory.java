@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet.factory;
 
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.Ssh2KexInitPacket;
 import org.pcap4j.packet.namednumber.Ssh2MessageNumber;
@@ -25,7 +26,7 @@ extends AbstractStaticPacketFactory<Ssh2MessageNumber> {
     instantiaters.put(
       Ssh2MessageNumber.SSH_MSG_KEXINIT, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return Ssh2KexInitPacket.newPacket(rawData);
         }
       }

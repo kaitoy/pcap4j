@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -32,7 +32,7 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
     instantiaters.put(
       IpV6RoutingHeaderType.SOURCE_ROUTE, new Instantiater() {
         @Override
-        public IpV6RoutingData newInstance(byte[] rawData) {
+        public IpV6RoutingData newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV6RoutingSourceRouteData.newInstance(rawData);
         }
       }
@@ -68,16 +68,22 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
       return IllegalIpV6RoutingData.newInstance(rawData);
     }
 
-    return UnknownIpV6RoutingData.newInstance(rawData);
+    return newInstance(rawData);
   }
 
   public IpV6RoutingData newInstance(byte[] rawData) {
-    return UnknownIpV6RoutingData.newInstance(rawData);
+    try {
+      return UnknownIpV6RoutingData.newInstance(rawData);
+    } catch (IllegalRawDataException e) {
+      return IllegalIpV6RoutingData.newInstance(rawData);
+    }
   }
 
   private static abstract class Instantiater {
 
-    public abstract IpV6RoutingData newInstance(byte [] rawData);
+    public abstract IpV6RoutingData newInstance(
+      byte [] rawData
+    ) throws IllegalRawDataException;
 
   }
 

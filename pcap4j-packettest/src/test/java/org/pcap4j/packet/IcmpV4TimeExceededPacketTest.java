@@ -132,8 +132,12 @@ public class IcmpV4TimeExceededPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacket() {
-    IcmpV4TimeExceededPacket p
-      = IcmpV4TimeExceededPacket.newPacket(packet.getRawData());
+    IcmpV4TimeExceededPacket p;
+    try {
+      p = IcmpV4TimeExceededPacket.newPacket(packet.getRawData());
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
     assertEquals(packet, p);
 
     assertTrue(p.getPayload().contains(IpV4Packet.class));

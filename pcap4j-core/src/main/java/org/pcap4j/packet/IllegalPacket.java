@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -35,6 +35,10 @@ public final class IllegalPacket extends AbstractPacket {
     if (rawData == null) {
       throw new NullPointerException();
     }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
+
     this.rawData = new byte[rawData.length];
     System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);
   }
@@ -66,6 +70,7 @@ public final class IllegalPacket extends AbstractPacket {
   /**
    *
    */
+  @Override
   public Builder getBuilder() {
     return new Builder(this);
   }

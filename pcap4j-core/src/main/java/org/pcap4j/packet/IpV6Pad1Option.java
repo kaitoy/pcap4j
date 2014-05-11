@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -47,8 +47,9 @@ public final class IpV6Pad1Option implements IpV6Option {
    *
    * @param rawData
    * @return the singleton instance of IpV6Pad1Option.
+   * @throws IllegalRawDataException
    */
-  public static IpV6Pad1Option newInstance(byte[] rawData) {
+  public static IpV6Pad1Option newInstance(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }

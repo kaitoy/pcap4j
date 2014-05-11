@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014 Kaito Yamada
   _##
   _##########################################################################
 */
@@ -34,12 +34,15 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
    *
    * @param rawData
    * @return a new IpV6RoutingSourceRouteData object.
+   * @throws IllegalRawDataException
    */
-  public static IpV6RoutingSourceRouteData newInstance(byte[] rawData) {
+  public static IpV6RoutingSourceRouteData newInstance(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new IpV6RoutingSourceRouteData(rawData);
   }
 
-  private IpV6RoutingSourceRouteData(byte[] rawData) {
+  private IpV6RoutingSourceRouteData(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }

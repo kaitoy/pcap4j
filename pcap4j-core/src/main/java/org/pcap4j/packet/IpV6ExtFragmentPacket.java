@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -32,12 +32,15 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new IpV6ExtFragmentPacket object.
+   * @throws IllegalRawDataException
    */
-  public static IpV6ExtFragmentPacket newPacket(byte[] rawData) {
+  public static IpV6ExtFragmentPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new IpV6ExtFragmentPacket(rawData);
   }
 
-  private IpV6ExtFragmentPacket(byte[] rawData) {
+  private IpV6ExtFragmentPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new IpV6ExtFragmentHeader(rawData);
 
     byte[] rawPayload
@@ -248,7 +251,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     private final boolean m;
     private final int identification;
 
-    private IpV6ExtFragmentHeader(byte[] rawData) {
+    private IpV6ExtFragmentHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < IPV6_EXT_FRAGMENT_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an IPv6 fragment header(")

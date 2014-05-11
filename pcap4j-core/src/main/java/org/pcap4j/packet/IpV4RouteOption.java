@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -31,7 +31,7 @@ abstract class IpV4RouteOption implements IpV4Option {
   private final byte pointer;
   private final List<Inet4Address> routeData;
 
-  protected IpV4RouteOption(byte[] rawData) {
+  protected IpV4RouteOption(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }

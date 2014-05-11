@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -34,7 +34,9 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
     instantiaters.put(
       IpV4InternetTimestampOptionFlag.TIMESTAMPS_ONLY, new Instantiater() {
         @Override
-        public IpV4InternetTimestampOptionData newInstance(byte[] rawData) {
+        public IpV4InternetTimestampOptionData newInstance(
+          byte[] rawData
+        ) throws IllegalRawDataException {
           return IpV4InternetTimestampOptionTimestamps.newInstance(rawData);
         }
       }
@@ -42,7 +44,9 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
     instantiaters.put(
       IpV4InternetTimestampOptionFlag.EACH_TIMESTAMP_PRECEDED_WITH_ADDRESS, new Instantiater() {
         @Override
-        public IpV4InternetTimestampOptionData newInstance(byte[] rawData) {
+        public IpV4InternetTimestampOptionData newInstance(
+          byte[] rawData
+        ) throws IllegalRawDataException {
           return IpV4InternetTimestampOptionTimestampsWithAddresses.newInstance(rawData);
         }
       }
@@ -50,7 +54,9 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
     instantiaters.put(
       IpV4InternetTimestampOptionFlag.ADDRESS_PRESPECIFIED, new Instantiater() {
         @Override
-        public IpV4InternetTimestampOptionData newInstance(byte[] rawData) {
+        public IpV4InternetTimestampOptionData newInstance(
+          byte[] rawData
+        ) throws IllegalRawDataException {
           return IpV4InternetTimestampOptionAddressPrespecified.newInstance(rawData);
         }
       }
@@ -95,7 +101,9 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
 
   private static abstract class Instantiater {
 
-    public abstract IpV4InternetTimestampOptionData newInstance(byte [] rawData);
+    public abstract IpV4InternetTimestampOptionData newInstance(
+      byte [] rawData
+    ) throws IllegalRawDataException;
 
   }
 

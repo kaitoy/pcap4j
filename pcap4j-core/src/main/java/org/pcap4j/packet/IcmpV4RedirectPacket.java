@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2013  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -30,8 +30,11 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
    *
    * @param rawData
    * @return a new IcmpV4RedirectPacket object.
+   * @throws IllegalRawDataException
    */
-  public static IcmpV4RedirectPacket newPacket(byte[] rawData) {
+  public static IcmpV4RedirectPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     IcmpV4RedirectHeader header = new IcmpV4RedirectHeader(rawData);
     byte[] rawPayload
       = ByteArrays.getSubArray(
@@ -140,7 +143,7 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
 
     private final Inet4Address gatewayInternetAddress;
 
-    private IcmpV4RedirectHeader(byte[] rawData) {
+    private IcmpV4RedirectHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < ICMPV4_REDIRECT_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 Redirect Header(")

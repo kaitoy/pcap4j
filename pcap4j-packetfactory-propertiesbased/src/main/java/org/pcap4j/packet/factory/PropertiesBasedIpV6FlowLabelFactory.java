@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2013 Kaito Yamada
+  _##  Copyright (C) 2012-2014 Kaito Yamada
   _##
   _##########################################################################
 */
@@ -10,7 +10,6 @@ package org.pcap4j.packet.factory;
 import static org.pcap4j.util.ByteArrays.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
 import org.pcap4j.packet.namednumber.NA;
 import org.pcap4j.util.ByteArrays;
@@ -61,7 +60,7 @@ implements PacketFactory<IpV6FlowLabel, NA> {
       throw new NullPointerException(sb.toString());
     }
     if (rawData.length < INT_SIZE_IN_BYTES) {
-      throw new IllegalRawDataException(
+      throw new IllegalArgumentException(
               "rawData is too short: " + ByteArrays.toHexString(rawData, " ")
             );
     }

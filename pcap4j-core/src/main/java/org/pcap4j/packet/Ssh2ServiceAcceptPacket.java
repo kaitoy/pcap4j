@@ -29,12 +29,15 @@ public final class Ssh2ServiceAcceptPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new Ssh2ServiceAcceptPacket object.
+   * @throws IllegalRawDataException
    */
-  public static Ssh2ServiceAcceptPacket newPacket(byte[] rawData) {
+  public static Ssh2ServiceAcceptPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new Ssh2ServiceAcceptPacket(rawData);
   }
 
-  private Ssh2ServiceAcceptPacket(byte[] rawData) {
+  private Ssh2ServiceAcceptPacket(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -122,7 +125,7 @@ public final class Ssh2ServiceAcceptPacket extends AbstractPacket {
     private final Ssh2MessageNumber messageNumber = Ssh2MessageNumber.SSH_MSG_SERVICE_ACCEPT;
     private final Ssh2String serviceName;
 
-    private Ssh2ServiceAcceptHeader(byte[] rawData) {
+    private Ssh2ServiceAcceptHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 5) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 Service Accept header. data: ")

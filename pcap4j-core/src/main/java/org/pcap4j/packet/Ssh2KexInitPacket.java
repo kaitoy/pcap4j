@@ -29,12 +29,13 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new Ssh2KexInitPacket object.
+   * @throws IllegalRawDataException
    */
-  public static Ssh2KexInitPacket newPacket(byte[] rawData) {
+  public static Ssh2KexInitPacket newPacket(byte[] rawData) throws IllegalRawDataException {
     return new Ssh2KexInitPacket(rawData);
   }
 
-  private Ssh2KexInitPacket(byte[] rawData) {
+  private Ssh2KexInitPacket(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -316,7 +317,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     private final Ssh2Boolean firstKexPacketFollows;
     private final int reserved;
 
-    private Ssh2KexInitHeader(byte[] rawData) {
+    private Ssh2KexInitHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 62) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 KEX init header. data: ")

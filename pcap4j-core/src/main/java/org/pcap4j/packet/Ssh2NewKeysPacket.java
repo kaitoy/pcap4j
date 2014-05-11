@@ -28,12 +28,13 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new Ssh2NewKeysPacket object.
+   * @throws IllegalRawDataException
    */
-  public static Ssh2NewKeysPacket newPacket(byte[] rawData) {
+  public static Ssh2NewKeysPacket newPacket(byte[] rawData) throws IllegalRawDataException {
     return new Ssh2NewKeysPacket(rawData);
   }
 
-  private Ssh2NewKeysPacket(byte[] rawData) {
+  private Ssh2NewKeysPacket(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -102,7 +103,7 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
 
     private final Ssh2MessageNumber messageNumber = Ssh2MessageNumber.SSH_MSG_NEWKEYS;
 
-    private Ssh2NewKeysHeader(byte[] rawData) {
+    private Ssh2NewKeysHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 1) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 New Keys header. data: ")

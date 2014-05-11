@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -36,6 +36,9 @@ public final class IllegalIpV4InternetTimestampOptionData implements IpV4Interne
   private IllegalIpV4InternetTimestampOptionData(byte[] rawData) {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
     }
 
     this.rawData = new byte[rawData.length];

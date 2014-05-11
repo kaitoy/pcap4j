@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -9,6 +9,7 @@ package org.pcap4j.packet.factory;
 
 import org.pcap4j.packet.ArpPacket;
 import org.pcap4j.packet.Dot1qVlanTagPacket;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV4Packet;
 import org.pcap4j.packet.IpV6Packet;
 import org.pcap4j.packet.Packet;
@@ -28,7 +29,7 @@ extends AbstractStaticPacketFactory<EtherType> {
     instantiaters.put(
       EtherType.IPV4, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV4Packet.newPacket(rawData);
         }
       }
@@ -36,7 +37,7 @@ extends AbstractStaticPacketFactory<EtherType> {
     instantiaters.put(
       EtherType.ARP, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return ArpPacket.newPacket(rawData);
         }
       }
@@ -44,7 +45,7 @@ extends AbstractStaticPacketFactory<EtherType> {
     instantiaters.put(
       EtherType.DOT1Q_VLAN_TAGGED_FRAMES, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return Dot1qVlanTagPacket.newPacket(rawData);
         }
       }
@@ -52,7 +53,7 @@ extends AbstractStaticPacketFactory<EtherType> {
     instantiaters.put(
       EtherType.IPV6, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV6Packet.newPacket(rawData);
         }
       }

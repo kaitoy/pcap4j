@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -28,8 +28,11 @@ public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
    *
    * @param rawData
    * @return a new IpV6ExtHopByHopOptionsPacket object.
+   * @throws IllegalRawDataException
    */
-  public static IpV6ExtHopByHopOptionsPacket newPacket(byte[] rawData) {
+  public static IpV6ExtHopByHopOptionsPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     IpV6ExtHopByHopOptionsHeader optHeader
       = new IpV6ExtHopByHopOptionsHeader(rawData);
     byte[] rawPayload
@@ -137,7 +140,9 @@ public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
      */
     private static final long serialVersionUID = -3903426584619413207L;
 
-    private IpV6ExtHopByHopOptionsHeader(byte[] rawData) { super(rawData); }
+    private IpV6ExtHopByHopOptionsHeader(byte[] rawData) throws IllegalRawDataException {
+      super(rawData);
+    }
 
     private IpV6ExtHopByHopOptionsHeader(Builder builder) { super(builder); }
 

@@ -43,12 +43,13 @@ public final class IpV4Packet extends AbstractPacket {
    *
    * @param rawData
    * @return a new IpV4Packet object.
+   * @throws IllegalRawDataException
    */
-  public static IpV4Packet newPacket(byte[] rawData) {
+  public static IpV4Packet newPacket(byte[] rawData) throws IllegalRawDataException {
     return new IpV4Packet(rawData);
   }
 
-  private IpV4Packet(byte[] rawData) {
+  private IpV4Packet(byte[] rawData) throws IllegalRawDataException {
     this.header = new IpV4Header(rawData);
 
     int remainingRawDataLength = rawData.length - header.length();
@@ -476,7 +477,7 @@ public final class IpV4Packet extends AbstractPacket {
     private final List<IpV4Option> options;
     private final byte[] padding;
 
-    private IpV4Header(byte[] rawData) {
+    private IpV4Header(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < MIN_IPV4_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an IPv4 header. ")

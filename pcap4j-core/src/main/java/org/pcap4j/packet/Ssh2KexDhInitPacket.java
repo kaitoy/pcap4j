@@ -29,12 +29,15 @@ public final class Ssh2KexDhInitPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new Ssh2KexDhInitPacket object.
+   * @throws IllegalRawDataException
    */
-  public static Ssh2KexDhInitPacket newPacket(byte[] rawData) {
+  public static Ssh2KexDhInitPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new Ssh2KexDhInitPacket(rawData);
   }
 
-  private Ssh2KexDhInitPacket(byte[] rawData) {
+  private Ssh2KexDhInitPacket(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -122,7 +125,7 @@ public final class Ssh2KexDhInitPacket extends AbstractPacket {
     private final Ssh2MessageNumber messageNumber = Ssh2MessageNumber.SSH_MSG_KEXDH_INIT;
     private final Ssh2MpInt e;
 
-    private Ssh2KexDhInitHeader(byte[] rawData) {
+    private Ssh2KexDhInitHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 5) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 KEX DH init header. data: ")

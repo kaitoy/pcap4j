@@ -122,9 +122,13 @@ public class IpV6ExtHopByHopOptionsPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacket() {
-    IpV6ExtHopByHopOptionsPacket p
-      = IpV6ExtHopByHopOptionsPacket.newPacket(packet.getRawData());
-    assertEquals(packet, p);
+    try {
+      IpV6ExtHopByHopOptionsPacket p
+        = IpV6ExtHopByHopOptionsPacket.newPacket(packet.getRawData());
+      assertEquals(packet, p);
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
   }
 
   @Test

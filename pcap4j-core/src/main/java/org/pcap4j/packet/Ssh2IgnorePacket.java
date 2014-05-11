@@ -29,12 +29,13 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new Ssh2IgnorePacket object.
+   * @throws IllegalRawDataException
    */
-  public static Ssh2IgnorePacket newPacket(byte[] rawData) {
+  public static Ssh2IgnorePacket newPacket(byte[] rawData) throws IllegalRawDataException {
     return new Ssh2IgnorePacket(rawData);
   }
 
-  private Ssh2IgnorePacket(byte[] rawData) {
+  private Ssh2IgnorePacket(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -122,7 +123,7 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
     private final Ssh2MessageNumber messageNumber = Ssh2MessageNumber.SSH_MSG_IGNORE;
     private final Ssh2String data;
 
-    private Ssh2IgnoreHeader(byte[] rawData) {
+    private Ssh2IgnoreHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 5) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 Ignore header. data: ")

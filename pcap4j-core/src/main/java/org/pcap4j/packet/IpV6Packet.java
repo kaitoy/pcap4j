@@ -40,12 +40,13 @@ public final class IpV6Packet extends AbstractPacket {
    *
    * @param rawData
    * @return a new IpV6Packet object.
+   * @throws IllegalRawDataException
    */
-  public static IpV6Packet newPacket(byte[] rawData) {
+  public static IpV6Packet newPacket(byte[] rawData) throws IllegalRawDataException {
     return new IpV6Packet(rawData);
   }
 
-  private IpV6Packet(byte[] rawData) {
+  private IpV6Packet(byte[] rawData) throws IllegalRawDataException {
     this.header = new IpV6Header(rawData);
 
     int remainingRawDataLength = rawData.length - header.length();
@@ -338,7 +339,7 @@ public final class IpV6Packet extends AbstractPacket {
     private final Inet6Address srcAddr;
     private final Inet6Address dstAddr;
 
-    private IpV6Header(byte[] rawData) {
+    private IpV6Header(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < IPV6_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an IPv6 header(")

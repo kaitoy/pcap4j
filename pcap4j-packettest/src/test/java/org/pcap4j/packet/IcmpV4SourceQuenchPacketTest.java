@@ -132,8 +132,12 @@ public class IcmpV4SourceQuenchPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacket() {
-    IcmpV4SourceQuenchPacket p
-      = IcmpV4SourceQuenchPacket.newPacket(packet.getRawData());
+    IcmpV4SourceQuenchPacket p;
+    try {
+      p = IcmpV4SourceQuenchPacket.newPacket(packet.getRawData());
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
     assertEquals(packet, p);
 
     assertTrue(p.getPayload().contains(IpV4Packet.class));

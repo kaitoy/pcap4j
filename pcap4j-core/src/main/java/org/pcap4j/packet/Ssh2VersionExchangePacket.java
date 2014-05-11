@@ -29,12 +29,15 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new Ssh2VersionExchangePacket object.
+   * @throws IllegalRawDataException
    */
-  public static Ssh2VersionExchangePacket newPacket(byte[] rawData) {
+  public static Ssh2VersionExchangePacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new Ssh2VersionExchangePacket(rawData);
   }
 
-  private Ssh2VersionExchangePacket(byte[] rawData) {
+  private Ssh2VersionExchangePacket(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -183,7 +186,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
     private final String softwareVersion;
     private final String comments;
 
-    private Ssh2VersionExchangeHeader(byte[] rawData) {
+    private Ssh2VersionExchangeHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 9) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 version exchange header. data: ")

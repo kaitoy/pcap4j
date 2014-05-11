@@ -69,8 +69,9 @@ public final class Ssh2NameList implements Serializable {
   /**
    *
    * @param rawData
+   * @throws IllegalRawDataException
    */
-  public Ssh2NameList(byte[] rawData) {
+  public Ssh2NameList(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }

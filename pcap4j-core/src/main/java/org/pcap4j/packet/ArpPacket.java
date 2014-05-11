@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -34,12 +34,13 @@ public final class ArpPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new ArpPacket object.
+   * @throws IllegalRawDataException
    */
-  public static ArpPacket newPacket(byte[] rawData) {
+  public static ArpPacket newPacket(byte[] rawData) throws IllegalRawDataException {
     return new ArpPacket(rawData);
   }
 
-  private ArpPacket(byte[] rawData) {
+  private ArpPacket(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -307,7 +308,7 @@ public final class ArpPacket extends AbstractPacket {
     private final MacAddress dstHardwareAddr;
     private final InetAddress dstProtocolAddr;
 
-    private ArpHeader(byte[] rawData) {
+    private ArpHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < ARP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an ARP header(")

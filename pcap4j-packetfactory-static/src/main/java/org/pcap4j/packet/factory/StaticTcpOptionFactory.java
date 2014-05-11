@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -34,7 +34,7 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     instantiaters.put(
       TcpOptionKind.END_OF_OPTION_LIST, new Instantiater() {
         @Override
-        public TcpOption newInstance(byte[] rawData) {
+        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
           return TcpEndOfOptionList.newInstance(rawData);
         }
       }
@@ -42,7 +42,7 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     instantiaters.put(
       TcpOptionKind.NO_OPERATION, new Instantiater() {
         @Override
-        public TcpOption newInstance(byte[] rawData) {
+        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
           return TcpNoOperationOption.newInstance(rawData);
         }
       }
@@ -50,7 +50,7 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     instantiaters.put(
       TcpOptionKind.MAXIMUM_SEGMENT_SIZE, new Instantiater() {
         @Override
-        public TcpOption newInstance(byte[] rawData) {
+        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
           return TcpMaximumSegmentSizeOption.newInstance(rawData);
         }
       }
@@ -86,16 +86,20 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
       return IllegalTcpOption.newInstance(rawData);
     }
 
-    return UnknownTcpOption.newInstance(rawData);
+    return newInstance(rawData);
   }
 
   public TcpOption newInstance(byte[] rawData) {
-    return UnknownTcpOption.newInstance(rawData);
+    try {
+      return UnknownTcpOption.newInstance(rawData);
+    } catch (IllegalRawDataException e) {
+      return IllegalTcpOption.newInstance(rawData);
+    }
   }
 
   private static abstract class Instantiater {
 
-    public abstract TcpOption newInstance(byte [] rawData);
+    public abstract TcpOption newInstance(byte [] rawData) throws IllegalRawDataException;
 
   }
 

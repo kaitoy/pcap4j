@@ -102,9 +102,13 @@ public class IcmpV4TimestampReplyPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacket() {
-    IcmpV4TimestampReplyPacket p
-      = IcmpV4TimestampReplyPacket.newPacket(packet.getRawData());
-    assertEquals(packet, p);
+    try {
+      IcmpV4TimestampReplyPacket p
+        = IcmpV4TimestampReplyPacket.newPacket(packet.getRawData());
+      assertEquals(packet, p);
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
   }
 
   @Test

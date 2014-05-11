@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -33,12 +33,13 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new IcmpV4CommonPacket object.
+   * @throws IllegalRawDataException
    */
-  public static IcmpV4CommonPacket newPacket(byte[] rawData) {
+  public static IcmpV4CommonPacket newPacket(byte[] rawData) throws IllegalRawDataException {
     return new IcmpV4CommonPacket(rawData);
   }
 
-  private IcmpV4CommonPacket(byte[] rawData) {
+  private IcmpV4CommonPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new IcmpV4CommonHeader(rawData);
 
     byte[] rawPayload
@@ -223,7 +224,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     private final IcmpV4Code code;
     private final short checksum;
 
-    private IcmpV4CommonHeader(byte[] rawData) {
+    private IcmpV4CommonHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < ICMPV4_COMMON_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 common header(")

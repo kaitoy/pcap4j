@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -40,12 +40,13 @@ public final class TcpPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new TcpPacket object.
+   * @throws IllegalRawDataException
    */
-  public static TcpPacket newPacket(byte[] rawData) {
+  public static TcpPacket newPacket(byte[] rawData) throws IllegalRawDataException {
     return new TcpPacket(rawData);
   }
 
-  private TcpPacket(byte[] rawData) {
+  private TcpPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new TcpHeader(rawData);
 
     byte[] rawPayload
@@ -573,7 +574,7 @@ public final class TcpPacket extends AbstractPacket {
     private final List<TcpOption> options;
     private final byte[] padding;
 
-    private TcpHeader(byte[] rawData) {
+    private TcpHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < MIN_TCP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build this header(")

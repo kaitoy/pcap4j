@@ -174,8 +174,12 @@ public class IpV4PacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacket() {
-    IpV4Packet p = IpV4Packet.newPacket(packet1.getRawData());
-    assertEquals(packet1, p);
+    try {
+      IpV4Packet p = IpV4Packet.newPacket(packet1.getRawData());
+      assertEquals(packet1, p);
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
   }
 
   @Test
@@ -306,6 +310,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
     assertTrue(p.getHeader().hasValidChecksum(true));
   }
 
+  @Override
   @Test
   public void testLength() {
     assertEquals(packet1.getRawData().length, packet1.length());

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -8,6 +8,7 @@
 package org.pcap4j.packet.factory;
 
 import org.pcap4j.packet.EthernetPacket;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.DataLinkType;
 
@@ -25,7 +26,7 @@ extends AbstractStaticPacketFactory<DataLinkType> {
     instantiaters.put(
       DataLinkType.EN10MB, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return EthernetPacket.newPacket(rawData);
         }
       }

@@ -139,7 +139,12 @@ public class IcmpV4RedirectPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacket() {
-    IcmpV4RedirectPacket p = IcmpV4RedirectPacket.newPacket(packet.getRawData());
+    IcmpV4RedirectPacket p;
+    try {
+      p = IcmpV4RedirectPacket.newPacket(packet.getRawData());
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
     assertEquals(packet, p);
 
     assertTrue(p.getPayload().contains(IpV4Packet.class));

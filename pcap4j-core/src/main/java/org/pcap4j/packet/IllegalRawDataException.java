@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -11,13 +11,12 @@ package org.pcap4j.packet;
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
-public final class IllegalRawDataException extends RuntimeException {
-
+public final class IllegalRawDataException extends Exception {
 
   /**
    *
    */
-  private static final long serialVersionUID = -765629349654704179L;
+  private static final long serialVersionUID = -6426401494142677707L;
 
   /**
    *

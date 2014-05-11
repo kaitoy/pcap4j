@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -35,19 +35,10 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData {
 
   private IllegalIpV6RoutingData(byte[] rawData) {
     if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
+      throw new NullPointerException("rawData may not be null.");
     }
-    if (rawData.length < 4) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("rawData length must be more than 3. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
-      throw new IllegalRawDataException(sb.toString());
-    }
-    if (((rawData.length + 4) % 8) != 0) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("(rawData.length + 8 ) % 8 must be 0. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
-      throw new IllegalRawDataException(sb.toString());
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
     }
 
     this.rawData = new byte[rawData.length];

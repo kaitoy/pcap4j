@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -28,12 +28,15 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
    *
    * @param rawData
    * @return a new IcmpV4TimestampReplyPacket object.
+   * @throws IllegalRawDataException
    */
-  public static IcmpV4TimestampReplyPacket newPacket(byte[] rawData) {
+  public static IcmpV4TimestampReplyPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new IcmpV4TimestampReplyPacket(rawData);
   }
 
-  private IcmpV4TimestampReplyPacket(byte[] rawData) {
+  private IcmpV4TimestampReplyPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new IcmpV4TimestampReplyHeader(rawData);
   }
 
@@ -167,7 +170,7 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
     private final int receiveTimestamp;
     private final int transmitTimestamp;
 
-    private IcmpV4TimestampReplyHeader(byte[] rawData) {
+    private IcmpV4TimestampReplyHeader(byte[] rawData) throws IllegalRawDataException {
       super(rawData);
 
       if (rawData.length < ICMPV4_TIMESTAMP_HEADER_SIZE) {

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -197,8 +197,9 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
     /**
      *
      * @param rawData
+     * @throws IllegalRawDataException
      */
-    protected IpV6ExtOptionsHeader(byte[] rawData) {
+    protected IpV6ExtOptionsHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 2) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data length of ")
@@ -302,7 +303,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
      * @return hdrExtLen
      */
     public int getHdrExtLenAsInt() {
-      return (int)(0xFF & hdrExtLen);
+      return 0xFF & hdrExtLen;
     }
 
     /**

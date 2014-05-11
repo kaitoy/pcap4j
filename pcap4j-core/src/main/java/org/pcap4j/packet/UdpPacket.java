@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -35,12 +35,13 @@ public final class UdpPacket extends AbstractPacket {
   /**
    * @param rawData
    * @return a new UdpPacket object.
+   * @throws IllegalRawDataException
    */
-  public static UdpPacket newPacket(byte[] rawData) {
+  public static UdpPacket newPacket(byte[] rawData) throws IllegalRawDataException {
     return new UdpPacket(rawData);
   }
 
-  private UdpPacket(byte[] rawData) {
+  private UdpPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new UdpHeader(rawData);
 
     int payloadLength = header.getLengthAsInt() - header.length();
@@ -370,7 +371,7 @@ public final class UdpPacket extends AbstractPacket {
     private final short length;
     private final short checksum;
 
-    private UdpHeader(byte[] rawData) {
+    private UdpHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < UCP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build a UDP header(")
@@ -515,7 +516,7 @@ public final class UdpPacket extends AbstractPacket {
      * @return length
      */
     public int getLengthAsInt() {
-      return (int)(0xFFFF & length);
+      return 0xFFFF & length;
     }
 
     /**

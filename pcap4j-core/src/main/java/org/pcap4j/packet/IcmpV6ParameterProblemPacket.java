@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -30,8 +30,11 @@ extends IcmpV6InvokingPacketPacket {
    *
    * @param rawData
    * @return a new IcmpV6ParameterProblemPacket object.
+   * @throws IllegalRawDataException
    */
-  public static IcmpV6ParameterProblemPacket newPacket(byte[] rawData) {
+  public static IcmpV6ParameterProblemPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     IcmpV6ParameterProblemHeader header
       = new IcmpV6ParameterProblemHeader(rawData);
     byte[] rawPayload
@@ -135,7 +138,7 @@ extends IcmpV6InvokingPacketPacket {
 
     private final int pointer;
 
-    private IcmpV6ParameterProblemHeader(byte[] rawData) {
+    private IcmpV6ParameterProblemHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < ICMPV6_PARAMETER_PROBLEM_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv6 Parameter Problem Header(")

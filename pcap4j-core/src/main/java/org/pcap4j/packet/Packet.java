@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -16,7 +16,7 @@ import java.io.Serializable;
 public interface Packet extends Iterable<Packet>, Serializable {
 
   // /* must implement if use PropertiesBasedPacketFactory */
-  // public static Packet newPacket(byte[] rawData);
+  // public static Packet newPacket(byte[] rawData) throws IllegalRawDataException;
 
   /**
    *

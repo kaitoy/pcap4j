@@ -147,8 +147,13 @@ public class ArpPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacket() {
-    ArpPacket p = ArpPacket.newPacket(packet.getRawData());
-    assertEquals(packet, p);
+    try {
+      ArpPacket p = ArpPacket.newPacket(packet.getRawData());
+      assertEquals(packet, p);
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
+
   }
 
 }

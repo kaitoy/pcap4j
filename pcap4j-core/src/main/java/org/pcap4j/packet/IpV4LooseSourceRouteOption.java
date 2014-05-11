@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -31,12 +31,15 @@ public final class IpV4LooseSourceRouteOption extends IpV4RouteOption {
    *
    * @param rawData
    * @return a new IpV4LooseSourceRouteOption object.
+   * @throws IllegalRawDataException
    */
-  public static IpV4LooseSourceRouteOption newInstance(byte[] rawData) {
+  public static IpV4LooseSourceRouteOption newInstance(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new IpV4LooseSourceRouteOption(rawData);
   }
 
-  private IpV4LooseSourceRouteOption(byte[] rawData) {
+  private IpV4LooseSourceRouteOption(byte[] rawData) throws IllegalRawDataException {
     super(rawData);
   }
 
@@ -44,6 +47,7 @@ public final class IpV4LooseSourceRouteOption extends IpV4RouteOption {
     super(builder);
   }
 
+  @Override
   public IpV4OptionType getType() {
     return IpV4OptionType.LOOSE_SOURCE_ROUTING;
   }
@@ -52,6 +56,7 @@ public final class IpV4LooseSourceRouteOption extends IpV4RouteOption {
    *
    * @return a new Builder object populated with this object's fields.
    */
+  @Override
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -76,6 +81,7 @@ public final class IpV4LooseSourceRouteOption extends IpV4RouteOption {
      *
      * @return a new IpV4LooseSourceRouteOption object.
      */
+    @Override
     public IpV4LooseSourceRouteOption build() {
       return new IpV4LooseSourceRouteOption(this);
     }

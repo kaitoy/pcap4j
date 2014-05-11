@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -29,8 +29,11 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
    *
    * @param rawData
    * @return a new IcmpV4TimeExceededPacket object.
+   * @throws IllegalRawDataException
    */
-  public static IcmpV4TimeExceededPacket newPacket(byte[] rawData) {
+  public static IcmpV4TimeExceededPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     IcmpV4TimeExceededHeader header = new IcmpV4TimeExceededHeader(rawData);
     byte[] rawPayload
       = ByteArrays.getSubArray(
@@ -131,7 +134,7 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
 
     private final int unused;
 
-    private IcmpV4TimeExceededHeader(byte[] rawData) {
+    private IcmpV4TimeExceededHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < ICMPV4_TIME_EXCEEDED_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 Time Exceeded Header(")

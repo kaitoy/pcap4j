@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -35,13 +35,13 @@ implements PacketFactory<Packet, N> {
       throw new NullPointerException(sb.toString());
     }
 
-    try {
-      PacketInstantiater instantiater = instantiaters.get(number);
-      if (instantiater != null) {
+    PacketInstantiater instantiater = instantiaters.get(number);
+    if (instantiater != null) {
+      try {
         return instantiater.newInstance(rawData);
+      } catch (IllegalRawDataException e) {
+        return IllegalPacket.newPacket(rawData);
       }
-    } catch (IllegalRawDataException e) {
-      return IllegalPacket.newPacket(rawData);
     }
 
     return UnknownPacket.newPacket(rawData);

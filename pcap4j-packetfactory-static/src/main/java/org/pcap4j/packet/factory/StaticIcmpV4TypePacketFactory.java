@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -18,6 +18,7 @@ import org.pcap4j.packet.IcmpV4SourceQuenchPacket;
 import org.pcap4j.packet.IcmpV4TimeExceededPacket;
 import org.pcap4j.packet.IcmpV4TimestampPacket;
 import org.pcap4j.packet.IcmpV4TimestampReplyPacket;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.IcmpV4Type;
 
@@ -35,7 +36,7 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.ECHO_REPLY, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IcmpV4EchoReplyPacket.newPacket(rawData);
         }
       }
@@ -43,7 +44,7 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.DESTINATION_UNREACHABLE, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IcmpV4DestinationUnreachablePacket.newPacket(rawData);
         }
       }
@@ -51,7 +52,7 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.SOURCE_QUENCH, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IcmpV4SourceQuenchPacket.newPacket(rawData);
         }
       }
@@ -59,7 +60,7 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.REDIRECT, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IcmpV4RedirectPacket.newPacket(rawData);
         }
       }
@@ -67,7 +68,7 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.ECHO, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IcmpV4EchoPacket.newPacket(rawData);
         }
       }
@@ -75,7 +76,7 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.TIME_EXCEEDED, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IcmpV4TimeExceededPacket.newPacket(rawData);
         }
       }
@@ -83,7 +84,7 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.PARAMETER_PROBLEM, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IcmpV4ParameterProblemPacket.newPacket(rawData);
         }
       }
@@ -91,7 +92,7 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.TIMESTAMP, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IcmpV4TimestampPacket.newPacket(rawData);
         }
       }
@@ -99,7 +100,7 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.TIMESTAMP_REPLY, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IcmpV4TimestampReplyPacket.newPacket(rawData);
         }
       }
@@ -107,7 +108,7 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.INFORMATION_REQUEST, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IcmpV4InformationRequestPacket.newPacket(rawData);
         }
       }
@@ -115,7 +116,7 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.INFORMATION_REPLY, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
+        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IcmpV4InformationReplyPacket.newPacket(rawData);
         }
       }

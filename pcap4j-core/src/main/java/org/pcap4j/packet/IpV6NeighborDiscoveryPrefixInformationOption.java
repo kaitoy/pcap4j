@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013 Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -100,14 +100,17 @@ implements IpV6NeighborDiscoveryOption {
    *
    * @param rawData
    * @return a new IpV6NeighborDiscoveryPrefixInformationOption object.
+   * @throws IllegalRawDataException
    */
   public static IpV6NeighborDiscoveryPrefixInformationOption newInstance(
     byte[] rawData
-  ) {
+  ) throws IllegalRawDataException {
     return new IpV6NeighborDiscoveryPrefixInformationOption(rawData);
   }
 
-  private IpV6NeighborDiscoveryPrefixInformationOption(byte[] rawData) {
+  private IpV6NeighborDiscoveryPrefixInformationOption(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }

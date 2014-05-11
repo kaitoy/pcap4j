@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -27,12 +27,13 @@ public final class IcmpV4EchoPacket extends IcmpIdentifiablePacket {
    *
    * @param rawData
    * @return a new IcmpV4EchoPacket object
+   * @throws IllegalRawDataException
    */
-  public static IcmpV4EchoPacket newPacket(byte[] rawData) {
+  public static IcmpV4EchoPacket newPacket(byte[] rawData) throws IllegalRawDataException {
     return new IcmpV4EchoPacket(rawData);
   }
 
-  private IcmpV4EchoPacket(byte[] rawData) {
+  private IcmpV4EchoPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new IcmpV4EchoHeader(rawData);
 
     byte[] rawPayload
@@ -142,7 +143,9 @@ public final class IcmpV4EchoPacket extends IcmpIdentifiablePacket {
      */
     private static final long serialVersionUID = -1302478674628547524L;
 
-    private IcmpV4EchoHeader(byte[] rawData) { super(rawData); }
+    private IcmpV4EchoHeader(byte[] rawData) throws IllegalRawDataException {
+      super(rawData);
+    }
 
     private IcmpV4EchoHeader(Builder builder) { super(builder); }
 

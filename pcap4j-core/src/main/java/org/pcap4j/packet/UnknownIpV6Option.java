@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -32,12 +32,15 @@ public final class UnknownIpV6Option implements IpV6Option {
    *
    * @param rawData
    * @return a new UnknownIpV6Option object.
+   * @throws IllegalRawDataException
    */
-  public static UnknownIpV6Option newInstance(byte[] rawData) {
+  public static UnknownIpV6Option newInstance(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new UnknownIpV6Option(rawData);
   }
 
-  private UnknownIpV6Option(byte[] rawData) {
+  private UnknownIpV6Option(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }

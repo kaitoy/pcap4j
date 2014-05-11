@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -36,7 +36,9 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
     instantiaters.put(
       IpV6NeighborDiscoveryOptionType.SOURCE_LINK_LAYER_ADDRESS, new Instantiater() {
         @Override
-        public IpV6NeighborDiscoveryOption newInstance(byte[] rawData) {
+        public IpV6NeighborDiscoveryOption newInstance(
+          byte[] rawData
+        ) throws IllegalRawDataException {
           return IpV6NeighborDiscoverySourceLinkLayerAddressOption.newInstance(rawData);
         }
       }
@@ -44,7 +46,9 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
     instantiaters.put(
       IpV6NeighborDiscoveryOptionType.TARGET_LINK_LAYER_ADDRESS, new Instantiater() {
         @Override
-        public IpV6NeighborDiscoveryOption newInstance(byte[] rawData) {
+        public IpV6NeighborDiscoveryOption newInstance(
+          byte[] rawData
+        ) throws IllegalRawDataException {
           return IpV6NeighborDiscoveryTargetLinkLayerAddressOption.newInstance(rawData);
         }
       }
@@ -52,7 +56,9 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
     instantiaters.put(
       IpV6NeighborDiscoveryOptionType.PREFIX_INFORMATION, new Instantiater() {
         @Override
-        public IpV6NeighborDiscoveryOption newInstance(byte[] rawData) {
+        public IpV6NeighborDiscoveryOption newInstance(
+          byte[] rawData
+        ) throws IllegalRawDataException {
           return IpV6NeighborDiscoveryPrefixInformationOption.newInstance(rawData);
         }
       }
@@ -60,7 +66,9 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
     instantiaters.put(
       IpV6NeighborDiscoveryOptionType.REDIRECTED_HEADER, new Instantiater() {
         @Override
-        public IpV6NeighborDiscoveryOption newInstance(byte[] rawData) {
+        public IpV6NeighborDiscoveryOption newInstance(
+          byte[] rawData
+        ) throws IllegalRawDataException {
           return IpV6NeighborDiscoveryRedirectedHeaderOption.newInstance(rawData);
         }
       }
@@ -68,7 +76,9 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
     instantiaters.put(
       IpV6NeighborDiscoveryOptionType.MTU, new Instantiater() {
         @Override
-        public IpV6NeighborDiscoveryOption newInstance(byte[] rawData) {
+        public IpV6NeighborDiscoveryOption newInstance(
+          byte[] rawData
+        ) throws IllegalRawDataException {
           return IpV6NeighborDiscoveryMtuOption.newInstance(rawData);
         }
       }
@@ -104,16 +114,22 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
       return IllegalIpV6NeighborDiscoveryOption.newInstance(rawData);
     }
 
-    return UnknownIpV6NeighborDiscoveryOption.newInstance(rawData);
+    return newInstance(rawData);
   }
 
   public IpV6NeighborDiscoveryOption newInstance(byte[] rawData) {
-    return UnknownIpV6NeighborDiscoveryOption.newInstance(rawData);
+    try {
+      return UnknownIpV6NeighborDiscoveryOption.newInstance(rawData);
+    } catch (IllegalRawDataException e) {
+      return IllegalIpV6NeighborDiscoveryOption.newInstance(rawData);
+    }
   }
 
   private static abstract class Instantiater {
 
-    public abstract IpV6NeighborDiscoveryOption newInstance(byte [] rawData);
+    public abstract IpV6NeighborDiscoveryOption newInstance(
+      byte [] rawData
+    ) throws IllegalRawDataException;
 
   }
 

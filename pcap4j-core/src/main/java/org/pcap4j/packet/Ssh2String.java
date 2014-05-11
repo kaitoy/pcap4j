@@ -47,8 +47,9 @@ public final class Ssh2String implements Serializable {
   /**
    *
    * @param rawData
+   * @throws IllegalRawDataException
    */
-  public Ssh2String(byte[] rawData) {
+  public Ssh2String(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }
@@ -86,22 +87,6 @@ public final class Ssh2String implements Serializable {
     } catch (UnsupportedEncodingException e) {
       throw new AssertionError("Never get here.");
     }
-  }
-
-  /**
-   *
-   * @param str
-   * @return a new Ssh2String object.
-   */
-  public static Ssh2String newInstance(byte[] str) {
-    if (str == null) {
-      throw new NullPointerException();
-    }
-
-    byte[] rawData = new byte[str.length + 4];
-    System.arraycopy(ByteArrays.toByteArray(str.length), 0, rawData, 0, INT_SIZE_IN_BYTES);
-    System.arraycopy(str, 0, rawData, INT_SIZE_IN_BYTES, str.length);
-    return new Ssh2String(rawData);
   }
 
   /**

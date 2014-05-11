@@ -43,7 +43,7 @@ public class IcmpV6PacketTooBigPacketTest extends AbstractPacketTest {
       srcAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:1");
       dstAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:2");
     } catch (UnknownHostException e) {
-      throw new AssertionError();
+      throw new AssertionError(e);
     }
     IcmpV6CommonPacket.Builder icmpV6b = new IcmpV6CommonPacket.Builder();
     icmpV6b.type(IcmpV6Type.ECHO_REQUEST)
@@ -127,8 +127,12 @@ public class IcmpV6PacketTooBigPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacket() {
-    IcmpV6PacketTooBigPacket p
-      = IcmpV6PacketTooBigPacket.newPacket(packet.getRawData());
+    IcmpV6PacketTooBigPacket p;
+    try {
+      p = IcmpV6PacketTooBigPacket.newPacket(packet.getRawData());
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
     assertEquals(packet, p);
 
     assertTrue(p.getPayload().contains(IpV6Packet.class));

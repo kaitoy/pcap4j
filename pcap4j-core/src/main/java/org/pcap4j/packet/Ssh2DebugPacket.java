@@ -30,12 +30,13 @@ public final class Ssh2DebugPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new Ssh2DebugPacket object.
+   * @throws IllegalRawDataException
    */
-  public static Ssh2DebugPacket newPacket(byte[] rawData) {
+  public static Ssh2DebugPacket newPacket(byte[] rawData) throws IllegalRawDataException {
     return new Ssh2DebugPacket(rawData);
   }
 
-  private Ssh2DebugPacket(byte[] rawData) {
+  private Ssh2DebugPacket(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -155,7 +156,7 @@ public final class Ssh2DebugPacket extends AbstractPacket {
     private final Ssh2String message;
     private final Ssh2String languageTag;
 
-    private Ssh2DebugHeader(byte[] rawData) {
+    private Ssh2DebugHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 10) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 Debug header. data: ")

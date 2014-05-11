@@ -78,12 +78,13 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new Ssh2BinaryPacket object.
+   * @throws IllegalRawDataException
    */
-  public static Ssh2BinaryPacket newPacket(byte[] rawData) {
+  public static Ssh2BinaryPacket newPacket(byte[] rawData) throws IllegalRawDataException {
     return new Ssh2BinaryPacket(rawData);
   }
 
-  private Ssh2BinaryPacket(byte[] rawData) {
+  private Ssh2BinaryPacket(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -343,7 +344,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     private final int packetLength;
     private final byte paddingLength;
 
-    private Ssh2BinaryHeader(byte[] rawData) {
+    private Ssh2BinaryHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < SSH2_BINARY_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(100);
         sb.append("The data is too short to build an SSH2 Binary header(")

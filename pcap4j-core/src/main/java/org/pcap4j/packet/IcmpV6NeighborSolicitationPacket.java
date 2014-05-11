@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -33,12 +33,15 @@ public final class IcmpV6NeighborSolicitationPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new IcmpV6NeighborSolicitationPacket object.
+   * @throws IllegalRawDataException
    */
-  public static IcmpV6NeighborSolicitationPacket newPacket(byte[] rawData) {
+  public static IcmpV6NeighborSolicitationPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new IcmpV6NeighborSolicitationPacket(rawData);
   }
 
-  private IcmpV6NeighborSolicitationPacket(byte[] rawData) {
+  private IcmpV6NeighborSolicitationPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new IcmpV6NeighborSolicitationHeader(rawData);
   }
 
@@ -172,7 +175,9 @@ public final class IcmpV6NeighborSolicitationPacket extends AbstractPacket {
     private final Inet6Address targetAddress;
     private final List<IpV6NeighborDiscoveryOption> options;
 
-    private IcmpV6NeighborSolicitationHeader(byte[] rawData) {
+    private IcmpV6NeighborSolicitationHeader(
+      byte[] rawData
+    ) throws IllegalRawDataException {
       if (rawData.length < OPTIONS_OFFSET) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The raw data must be more than ")

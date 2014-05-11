@@ -13,6 +13,9 @@ Future
 
 ### Other Changes ###
 * Required Java version changes from 5 to 6.
+* Change org.pcap4j.packet.IllegalRawDataException to checked exception.
+* Change serialization formats:
+ * Change org.pcap4j.packet.IllegalRawDataException
 
 Release 1.1.0 (7-Mar-2014)
 ==========================

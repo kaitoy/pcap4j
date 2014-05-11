@@ -1,19 +1,16 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2013 Kaito Yamada
+  _##  Copyright (C) 2012-2014 Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
 
-import static org.pcap4j.util.ByteArrays.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV4Packet.IpV4Tos;
 import org.pcap4j.packet.namednumber.NA;
-import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
@@ -58,10 +55,8 @@ implements PacketFactory<IpV4Tos, NA> {
         .append(tosClass);
       throw new NullPointerException(sb.toString());
     }
-    if (rawData.length < BYTE_SIZE_IN_BYTES) {
-      throw new IllegalRawDataException(
-              "rawData is too short: " + ByteArrays.toHexString(rawData, " ")
-            );
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
     }
 
     try {

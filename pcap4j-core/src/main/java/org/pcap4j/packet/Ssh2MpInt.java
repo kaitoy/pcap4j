@@ -42,8 +42,9 @@ public final class Ssh2MpInt implements Serializable {
   /**
    *
    * @param rawData
+   * @throws IllegalRawDataException
    */
-  public Ssh2MpInt(byte[] rawData) {
+  public Ssh2MpInt(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }

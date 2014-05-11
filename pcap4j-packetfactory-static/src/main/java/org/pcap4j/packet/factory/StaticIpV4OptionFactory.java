@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -39,7 +39,7 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.END_OF_OPTION_LIST, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) {
+        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV4EndOfOptionList.newInstance(rawData);
         }
       }
@@ -47,7 +47,7 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.NO_OPERATION, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) {
+        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV4NoOperationOption.newInstance(rawData);
         }
       }
@@ -55,7 +55,7 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.SECURITY, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) {
+        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV4Rfc791SecurityOption.newInstance(rawData);
         }
       }
@@ -63,7 +63,7 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.LOOSE_SOURCE_ROUTING, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) {
+        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV4LooseSourceRouteOption.newInstance(rawData);
         }
       }
@@ -71,7 +71,7 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.INTERNET_TIMESTAMP, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) {
+        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV4InternetTimestampOption.newInstance(rawData);
         }
       }
@@ -79,7 +79,7 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.RECORD_ROUTE, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) {
+        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV4RecordRouteOption.newInstance(rawData);
         }
       }
@@ -87,7 +87,7 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.STREAM_ID, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) {
+        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV4StreamIdOption.newInstance(rawData);
         }
       }
@@ -95,7 +95,7 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.STRICT_SOURCE_ROUTING, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) {
+        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV4StrictSourceRouteOption.newInstance(rawData);
         }
       }
@@ -129,16 +129,20 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
       return IllegalIpV4Option.newInstance(rawData);
     }
 
-    return UnknownIpV4Option.newInstance(rawData);
+    return newInstance(rawData);
   }
 
   public IpV4Option newInstance(byte[] rawData) {
-    return UnknownIpV4Option.newInstance(rawData);
+    try {
+      return UnknownIpV4Option.newInstance(rawData);
+    } catch (IllegalRawDataException e) {
+      return IllegalIpV4Option.newInstance(rawData);
+    }
   }
 
   private static abstract class Instantiater {
 
-    public abstract IpV4Option newInstance(byte [] rawData);
+    public abstract IpV4Option newInstance(byte [] rawData) throws IllegalRawDataException;
 
   }
 

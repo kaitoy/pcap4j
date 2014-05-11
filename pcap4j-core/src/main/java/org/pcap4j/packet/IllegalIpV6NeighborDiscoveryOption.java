@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013 Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -45,7 +45,7 @@ implements IpV6NeighborDiscoveryOption {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data has no data. rawData: ")
         .append(ByteArrays.toHexString(rawData, " "));
-      throw new IllegalRawDataException(sb.toString());
+      throw new IllegalArgumentException(sb.toString());
     }
 
     this.type = IpV6NeighborDiscoveryOptionType.getInstance(rawData[0]);

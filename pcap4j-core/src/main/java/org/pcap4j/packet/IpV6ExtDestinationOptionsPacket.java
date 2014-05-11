@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -28,8 +28,11 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
    *
    * @param rawData
    * @return a new IpV6ExtDestinationOptionsPacket object.
+   * @throws IllegalRawDataException
    */
-  public static IpV6ExtDestinationOptionsPacket newPacket(byte[] rawData) {
+  public static IpV6ExtDestinationOptionsPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     IpV6ExtDestinationOptionsHeader optHeader
       = new IpV6ExtDestinationOptionsHeader(rawData);
     byte[] rawPayload
@@ -137,7 +140,9 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
      */
     private static final long serialVersionUID = 4686702407537705400L;
 
-    private IpV6ExtDestinationOptionsHeader(byte[] rawData) { super(rawData); }
+    private IpV6ExtDestinationOptionsHeader(byte[] rawData) throws IllegalRawDataException {
+      super(rawData);
+    }
 
     private IpV6ExtDestinationOptionsHeader(Builder builder) { super(builder); }
 

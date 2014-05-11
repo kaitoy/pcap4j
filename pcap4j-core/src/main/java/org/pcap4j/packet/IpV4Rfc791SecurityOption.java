@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -51,12 +51,15 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
    *
    * @param rawData
    * @return a new IpV4Rfc791SecurityOption object.
+   * @throws IllegalRawDataException
    */
-  public static IpV4Rfc791SecurityOption newInstance(byte[] rawData) {
+  public static IpV4Rfc791SecurityOption newInstance(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new IpV4Rfc791SecurityOption(rawData);
   }
 
-  private IpV4Rfc791SecurityOption(byte[] rawData) {
+  private IpV4Rfc791SecurityOption(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -110,7 +110,7 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
     private final short identifier;
     private final short sequenceNumber;
 
-    protected IcmpIdentifiableHeader(byte[] rawData) {
+    protected IcmpIdentifiableHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < ICMP_IDENTIFIABLE_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ")

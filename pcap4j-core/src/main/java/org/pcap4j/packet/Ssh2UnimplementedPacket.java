@@ -29,12 +29,15 @@ public final class Ssh2UnimplementedPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new Ssh2UnimplementedPacket object.
+   * @throws IllegalRawDataException
    */
-  public static Ssh2UnimplementedPacket newPacket(byte[] rawData) {
+  public static Ssh2UnimplementedPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     return new Ssh2UnimplementedPacket(rawData);
   }
 
-  private Ssh2UnimplementedPacket(byte[] rawData) {
+  private Ssh2UnimplementedPacket(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException();
     }
@@ -118,7 +121,7 @@ public final class Ssh2UnimplementedPacket extends AbstractPacket {
     private final Ssh2MessageNumber messageNumber = Ssh2MessageNumber.SSH_MSG_UNIMPLEMENTED;
     private final int sequenceNumber;
 
-    private Ssh2UnimplementedHeader(byte[] rawData) {
+    private Ssh2UnimplementedHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 5) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 Unimplemented header. data: ")

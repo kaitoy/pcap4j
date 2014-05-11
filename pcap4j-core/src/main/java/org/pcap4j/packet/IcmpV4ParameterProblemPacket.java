@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2013  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -29,8 +29,11 @@ public final class IcmpV4ParameterProblemPacket extends IcmpV4InvokingPacketPack
    *
    * @param rawData
    * @return a new IcmpV4ParameterProblemPacket object
+   * @throws IllegalRawDataException
    */
-  public static IcmpV4ParameterProblemPacket newPacket(byte[] rawData) {
+  public static IcmpV4ParameterProblemPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     IcmpV4ParameterProblemHeader header
       = new IcmpV4ParameterProblemHeader(rawData);
     byte[] rawPayload
@@ -143,7 +146,7 @@ public final class IcmpV4ParameterProblemPacket extends IcmpV4InvokingPacketPack
     private final byte pointer;
     private final int unused;
 
-    private IcmpV4ParameterProblemHeader(byte[] rawData) {
+    private IcmpV4ParameterProblemHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < ICMPV4_PARAMETER_PROBLEM_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append(

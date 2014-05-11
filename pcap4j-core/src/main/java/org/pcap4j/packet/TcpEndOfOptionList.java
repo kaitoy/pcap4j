@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -48,8 +48,11 @@ public final class TcpEndOfOptionList implements TcpOption {
    *
    * @param rawData
    * @return the singleton instance of TcpEndOfOptionList.
+   * @throws IllegalRawDataException
    */
-  public static TcpEndOfOptionList newInstance(byte[] rawData) {
+  public static TcpEndOfOptionList newInstance(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     if (rawData == null) {
       throw new NullPointerException("rawData may not be null");
     }

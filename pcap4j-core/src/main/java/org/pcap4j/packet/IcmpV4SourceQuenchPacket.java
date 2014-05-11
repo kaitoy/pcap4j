@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -29,8 +29,11 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4InvokingPacketPacket {
    *
    * @param rawData
    * @return a new IcmpV4SourceQuenchPacket object.
+   * @throws IllegalRawDataException
    */
-  public static IcmpV4SourceQuenchPacket newPacket(byte[] rawData) {
+  public static IcmpV4SourceQuenchPacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     IcmpV4SourceQuenchHeader header = new IcmpV4SourceQuenchHeader(rawData);
     byte[] rawPayload
       = ByteArrays.getSubArray(
@@ -131,7 +134,7 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4InvokingPacketPacket {
 
     private final int unused;
 
-    private IcmpV4SourceQuenchHeader(byte[] rawData) {
+    private IcmpV4SourceQuenchHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < ICMPV4_SOURCE_QUENCH_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 Source Quench Header(")

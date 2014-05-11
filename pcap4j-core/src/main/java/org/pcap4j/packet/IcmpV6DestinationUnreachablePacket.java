@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -30,8 +30,11 @@ extends IcmpV6InvokingPacketPacket {
    *
    * @param rawData
    * @return a new IcmpV6DestinationUnreachablePacket object.
+   * @throws IllegalRawDataException
    */
-  public static IcmpV6DestinationUnreachablePacket newPacket(byte[] rawData) {
+  public static IcmpV6DestinationUnreachablePacket newPacket(
+    byte[] rawData
+  ) throws IllegalRawDataException {
     IcmpV6DestinationUnreachableHeader header
       = new IcmpV6DestinationUnreachableHeader(rawData);
     byte[] rawPayload
@@ -135,7 +138,7 @@ extends IcmpV6InvokingPacketPacket {
 
     private final int unused;
 
-    private IcmpV6DestinationUnreachableHeader(byte[] rawData) {
+    private IcmpV6DestinationUnreachableHeader(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < ICMPV6_DESTINATION_UNREACHABLE_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv6 Destination Unreachable Header(")
