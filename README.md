@@ -10,6 +10,24 @@ Pcap4J wraps a native packet capture library([libpcap](http://www.tcpdump.org/) 
 [WinPcap](http://www.winpcap.org/)) via [JNA](https://github.com/twall/jna)
 and provides you Java-Oriented APIs.
 
+Contents
+----
+
+* [Download](#Download)
+* [Why Pcap4J was born](#Why Pcap4J was born)
+* [Features](#Features)
+* [Supported Operating Systems](#Supported Operating Systems)
+* [How to use](#How to use)
+ * [Overview](#Overview)
+ * [How to run samples](#How to run samples)
+ * [How to use in a Maven project](#How to use in a Maven project)
+ * [About pcap library loading](#About pcap library loading)
+* [How to build](#How to build)
+ * [Build Procedure on Eclipse](#Build Procedure on Eclipse)
+ * [Build Procedure with Maven Command](#Build Procedure with Maven Command)
+* [License](#License)
+* [Extra](#Extra)
+
 Download
 --------
 
@@ -70,6 +88,7 @@ I hope Pcap4j can run on the other OSes supported by both JNA and libpcap.
 How to use
 ----------
 
+#### Overview ####
 The latest JavaDoc is [here](http://kaitoy.github.com/pcap4j/javadoc/latest/en).
 Each version's JavaDoc is on the [Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22).
 The version 0.9.13's JavaDoc is [here](http://kaitoy.github.com/pcap4j/javadoc/0.9.13/en).
@@ -91,12 +110,48 @@ I'm using the following libraries for the test.
 
 * libpcap 1.1.1
 * WinPcap 4.1.2
-* jna 3.5.2
+* jna 4.1.0
 * slf4j-api 1.6.4
-* logback-core 1.0.1
-* logback-classic 1.0.1
+* logback-core 1.0.0
+* logback-classic 1.0.0
 
 Run Pcap4J with administrator/root privileges.
+
+#### How to run samples ####
+See the following examples:
+
+* [org.pcap4j.sample.Loop](/www/sample_Loop.md)
+* [org.pcap4j.sample.SendArpRequest](/www/sample_SendArpRequest.md)
+
+If you want to run a sample in pcap4j-sample on Eclipse,
+add pcap4j-packetfactory-static or pcap4j-packetfactory-propertiesbased project
+to the top of User Entries in Classpath tab of the Run Configuration for the sample.
+
+#### How to use in a Maven project ####
+Add a dependency to the pom.xml as like below:
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  ...
+  <dependencies>
+    <dependency>
+      <groupId>org.pcap4j</groupId>
+      <artifactId>pcap4j-core</artifactId>
+      <version>1.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.pcap4j</groupId>
+      <artifactId>pcap4j-packetfactory-static</artifactId>
+      <version>1.1.0</version>
+    </dependency>
+       ...
+  </dependencies>
+  ...
+</project>
+```
 
 #### About pcap library loading ####
 By default, Pcap4j loads the pcap library on the following conditions:
@@ -118,39 +173,6 @@ You can use the following Java system properties to change the default behavior.
 * jna.library.path: Specify the search path
 * org.pcap4j.core.pcapLibName: Specify the full path of the pcap library
 
-
-#### How to use in a Maven project ####
-Add a dependency to the pom.xml as like below:
-
-      <project xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                            http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        ...
-        <dependencies>
-          <dependency>
-            <groupId>org.pcap4j</groupId>
-            <artifactId>pcap4j-core</artifactId>
-            <version>1.1.0</version>
-          </dependency>
-          <dependency>
-            <groupId>org.pcap4j</groupId>
-            <artifactId>pcap4j-packetfactory-static</artifactId>
-            <version>1.1.0</version>
-          </dependency>
-             ...
-        </dependencies>
-        ...
-      </project>
-
-
-Examples
---------
-
-* [org.pcap4j.sample.Loop](/www/sample_Loop.md)
-* [org.pcap4j.sample.SendArpRequest](/www/sample_SendArpRequest.md)
-
-
 How to build
 ------------
 I'm developing Pcap4j in the following environment.
@@ -159,8 +181,7 @@ I'm developing Pcap4j in the following environment.
 * [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
 * [Apache Maven](http://maven.apache.org/) 3.0.5
 
-The build procedure using Eclipse is the following:
-
+#### Build Procedure on Eclipse ####
 0. Install WinPcap/libpcap<br>
    The pcap library is needed for the unit tests ran in the Build step.
 1. Setup Eclipse 3.7+<br>
@@ -190,8 +211,7 @@ The build procedure using Eclipse is the following:
 For your information, M2E was formerly called [m2eclipse](http://m2eclipse.sonatype.org/).
 If you want to build Pcap4j with m2eclipse, skip the step 2 and import the maven project instead of the eclipse project in the step 4.
 
-The build procedure using Maven command line is the following:
-
+#### Build Procedure with Maven Command ####
 0. Install WinPcap/libpcap<br>
    The pcap library is needed for the unit tests ran in the Build step.
 1. Install JDK1.5+<br>

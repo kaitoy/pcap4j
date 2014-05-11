@@ -10,6 +10,24 @@ Pcap4J
 または[WinPcap](http://www.winpcap.org/)を[JNA](https://github.com/twall/jna)を
 使ってラッピングして、JavaらしいAPIに仕上げたもの。
 
+目次
+----
+
+* [ダウンロード](#ダウンロード)
+* [開発経緯](#開発経緯)
+* [機能](#機能)
+* [対応OS](#対応OS)
+* [使い方](#使い方)
+ * [概要](#概要)
+ * [サンプル実行方法](#サンプル実行方法)
+ * [Mavenプロジェクトでの使用方法](#Mavenプロジェクトでの使用方法)
+ * [pcapライブラリのロードについて](#pcapライブラリのロードについて)
+* [ビルド](#ビルド)
+ * [Eclipse上でのビルド手順](#Eclipse上でのビルド手順)
+ * [Mavenコマンドでのビルド手順](#Mavenコマンドでのビルド手順)
+* [ライセンス](#ライセンス)
+* [おまけ](#おまけ)
+
 ダウンロード
 ------------
 
@@ -70,6 +88,7 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 使い方
 ------
 
+#### 概要 ####
 最新のJavaDocは[こちら](http://kaitoy.github.com/pcap4j/javadoc/latest/en)。
 各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22)からダウンロードできる。
 0.9.13のJavaDocは[こちら](http://kaitoy.github.com/pcap4j/javadoc/0.9.13/en)。
@@ -93,11 +112,46 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 
 * libpcap 1.1.1
 * WinPcap 4.1.2
-* jna 3.5.2
+* jna 4.1.0
 * slf4j-api 1.6.4
-* logback-core 1.0.1
-* logback-classic 1.0.1
+* logback-core 1.0.0
+* logback-classic 1.0.0
 
+#### サンプル実行方法 ####
+以下の例を参照。
+
+* [org.pcap4j.sample.Loop](/www/sample_Loop_ja.md)
+* [org.pcap4j.sample.SendArpRequest](/www/sample_SendArpRequest_ja.md)
+
+Eclipse上でpcap4j-sampleにあるサンプルを実行する場合、
+その実行構成のクラスパスタブのユーザー・エントリーの最初に、
+pcap4j-packetfactory-staticプロジェクトかpcap4j-packetfactory-propertiesbasedプロジェクトを追加する必要がある。
+
+#### Mavenプロジェクトでの使用方法 ####
+pom.xmlに以下のような記述を追加する。
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  ...
+  <dependencies>
+    <dependency>
+      <groupId>org.pcap4j</groupId>
+      <artifactId>pcap4j-core</artifactId>
+      <version>1.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.pcap4j</groupId>
+      <artifactId>pcap4j-packetfactory-static</artifactId>
+      <version>1.1.0</version>
+    </dependency>
+       ...
+  </dependencies>
+  ...
+</project>
+```
 
 #### pcapライブラリのロードについて ####
 デフォルトでは下記の条件でpcapライブラリを検索し、ロードする。
@@ -117,39 +171,6 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 * jna.library.path: サーチパスを指定する。
 * org.pcap4j.core.pcapLibName: ライブラリへのフルパスを指定する。
 
-
-#### Mavenプロジェクトでの使用方法 ####
-pom.xmlに以下のような記述を追加する。
-
-      <project xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                            http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        ...
-        <dependencies>
-          <dependency>
-            <groupId>org.pcap4j</groupId>
-            <artifactId>pcap4j-core</artifactId>
-            <version>1.1.0</version>
-          </dependency>
-          <dependency>
-            <groupId>org.pcap4j</groupId>
-            <artifactId>pcap4j-packetfactory-static</artifactId>
-            <version>1.1.0</version>
-          </dependency>
-             ...
-        </dependencies>
-        ...
-      </project>
-
-
-実行例
-------
-
-* [org.pcap4j.sample.Loop](/www/sample_Loop_ja.md)
-* [org.pcap4j.sample.SendArpRequest](/www/sample_SendArpRequest_ja.md)
-
-
 ビルド
 ------
 開発に使っている環境は以下。
@@ -158,8 +179,7 @@ pom.xmlに以下のような記述を追加する。
 * [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
 * [Apache Maven](http://maven.apache.org/) 3.0.5
 
-Eclipseからのビルド手順は以下。
-
+#### Eclipse上でのビルド手順 ####
 0. WinPcap/libpcapインストール<br>
   ビルド時に実行されるunit testで必要なので。
 1. Eclipseインストール<br>
@@ -187,8 +207,7 @@ Eclipseからのビルド手順は以下。
 因みに、M2Eは旧[m2eclipse](http://m2eclipse.sonatype.org/)。
 m2eclipseでビルドしたい場合は、ステップ2をスキップして、ステップ4でMavenプロジェクトの方をインポートすればよい。
 
-Mavenコマンドを直接実行するビルド手順は以下。
-
+#### Mavenコマンドでのビルド手順 ####
 0. WinPcap/libpcapインストール<br>
   ビルド時に実行されるunit testで必要なので。
 1. JDK1.5+インストール<br>
