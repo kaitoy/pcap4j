@@ -13,20 +13,20 @@ and provides you Java-Oriented APIs.
 Contents
 ----
 
-* [Download](#Download)
-* [Why Pcap4J was born](#Why Pcap4J was born)
-* [Features](#Features)
-* [Supported Operating Systems](#Supported Operating Systems)
-* [How to use](#How to use)
- * [Overview](#Overview)
- * [How to run samples](#How to run samples)
- * [How to use in a Maven project](#How to use in a Maven project)
- * [About pcap library loading](#About pcap library loading)
-* [How to build](#How to build)
- * [Build Procedure on Eclipse](#Build Procedure on Eclipse)
- * [Build Procedure with Maven Command](#Build Procedure with Maven Command)
-* [License](#License)
-* [Extra](#Extra)
+* [Download](#download)
+* [Why Pcap4J was born](#why-pcap4j-was-born)
+* [Features](#features)
+* [Supported Operating Systems](#supported-operating-systems)
+* [How to use](#how-to-use)
+ * [Overview](#overview)
+ * [How to run samples](#how-to-run-samples)
+ * [How to use in a Maven project](#how-to-use-in-a-maven-project)
+ * [About pcap library loading](#about-pcap-library-loading)
+* [How to build](#how-to-build)
+ * [Build Procedure on Eclipse](#build-procedure-on-eclipse)
+ * [Build Procedure with Maven Command](#build-procedure-with-maven-command)
+* [License](#license)
+* [Extra](#extra)
 
 Download
 --------
