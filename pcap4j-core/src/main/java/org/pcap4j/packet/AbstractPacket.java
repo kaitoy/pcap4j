@@ -78,7 +78,7 @@ public abstract class AbstractPacket implements Packet {
   }
 
   // /* must implement if use PropertiesBasedPacketFactory */
-  // public static Packet newPacket(byte[] rawData);
+  // public static Packet newPacket(byte[] rawData) throws IllegalRawDataException;
 
   public Header getHeader() { return null; }
 
