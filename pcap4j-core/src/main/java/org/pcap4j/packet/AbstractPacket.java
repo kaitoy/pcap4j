@@ -107,7 +107,7 @@ public abstract class AbstractPacket implements Packet {
 
   /**
    *
-   * @return row data
+   * @return raw data
    */
   protected byte[] buildRawData() {
     byte[] rd = new byte[length()];
