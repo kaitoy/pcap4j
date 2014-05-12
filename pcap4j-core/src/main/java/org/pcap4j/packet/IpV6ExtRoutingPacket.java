@@ -45,16 +45,21 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
   private IpV6ExtRoutingPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new IpV6ExtRoutingHeader(rawData);
 
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-
-    this.payload
-      = PacketFactories.getFactory(Packet.class, IpNumber.class)
-          .newInstance(rawPayload, header.getNextHeader());
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+      this.payload
+        = PacketFactories.getFactory(Packet.class, IpNumber.class)
+            .newInstance(rawPayload, header.getNextHeader());
+    }
+    else {
+      this.payload = null;
+    }
   }
 
   private IpV6ExtRoutingPacket(Builder builder) {
@@ -62,17 +67,15 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
          builder == null
       || builder.nextHeader == null
       || builder.data == null
-      || builder.payloadBuilder == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
         .append(" builder.nextHeader: ").append(builder.nextHeader)
-        .append(" builder.data: ").append(builder.data)
-        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+        .append(" builder.data: ").append(builder.data);
       throw new NullPointerException(sb.toString());
     }
 
-    this.payload = builder.payloadBuilder.build();
+    this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new IpV6ExtRoutingHeader(builder);
   }
 
@@ -122,7 +125,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
       this.routingType = packet.header.routingType;
       this.segmentsLeft = packet.header.segmentsLeft;
       this.data = packet.header.data;
-      this.payloadBuilder = packet.payload.getBuilder();
+      this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
 
     /**

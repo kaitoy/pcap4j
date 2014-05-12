@@ -36,17 +36,24 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
     byte[] rawData
   ) throws IllegalRawDataException {
     IcmpV4RedirectHeader header = new IcmpV4RedirectHeader(rawData);
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-    return new IcmpV4RedirectPacket(header, rawPayload);
+
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+      return new IcmpV4RedirectPacket(header, rawPayload);
+    }
+    else {
+      return new IcmpV4RedirectPacket(header, null);
+    }
   }
 
-  private IcmpV4RedirectPacket(IcmpV4RedirectHeader header, byte[] rawData) {
-    super(rawData);
+  private IcmpV4RedirectPacket(IcmpV4RedirectHeader header, byte[] rawPayload) {
+    super(rawPayload);
     this.header = header;
   }
 

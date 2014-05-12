@@ -63,31 +63,36 @@ public final class IpV4Packet extends AbstractPacket {
       payloadLength = totalLength - header.length();
     }
 
-    byte[] rawPayload;
-    if (payloadLength > remainingRawDataLength) {
-      rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            remainingRawDataLength
-          );
-    }
-    else {
-      rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            payloadLength
-          );
-    }
+    if (payloadLength != 0) {
+      byte[] rawPayload;
+      if (payloadLength > remainingRawDataLength) {
+        rawPayload
+          = ByteArrays.getSubArray(
+              rawData,
+              header.length(),
+              remainingRawDataLength
+            );
+      }
+      else {
+        rawPayload
+          = ByteArrays.getSubArray(
+              rawData,
+              header.length(),
+              payloadLength
+            );
+      }
 
-    if (header.getMoreFragmentFlag() || header.getFlagmentOffset() != 0) {
-      this.payload = FragmentedPacket.newPacket(rawPayload);
+      if (header.getMoreFragmentFlag() || header.getFlagmentOffset() != 0) {
+        this.payload = FragmentedPacket.newPacket(rawPayload);
+      }
+      else {
+        this.payload
+          = PacketFactories.getFactory(Packet.class, IpNumber.class)
+              .newInstance(rawPayload, header.getProtocol());
+      }
     }
     else {
-      this.payload
-        = PacketFactories.getFactory(Packet.class, IpNumber.class)
-            .newInstance(rawPayload, header.getProtocol());
+      this.payload = null;
     }
   }
 
@@ -99,7 +104,6 @@ public final class IpV4Packet extends AbstractPacket {
       || builder.protocol == null
       || builder.srcAddr == null
       || builder.dstAddr == null
-      || builder.payloadBuilder == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
@@ -107,12 +111,11 @@ public final class IpV4Packet extends AbstractPacket {
         .append(" builder.tos: ").append(builder.tos)
         .append(" builder.protocol: ").append(builder.protocol)
         .append(" builder.srcAddr: ").append(builder.srcAddr)
-        .append(" builder.dstAddr: ").append(builder.dstAddr)
-        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+        .append(" builder.dstAddr: ").append(builder.dstAddr);
       throw new NullPointerException(sb.toString());
     }
 
-    this.payload = builder.payloadBuilder.build();
+    this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new IpV4Header(builder, payload);
   }
 
@@ -186,7 +189,7 @@ public final class IpV4Packet extends AbstractPacket {
       this.dstAddr = packet.header.dstAddr;
       this.options = packet.header.options;
       this.padding = packet.header.padding;
-      this.payloadBuilder = packet.payload.getBuilder();
+      this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
 
     /**
@@ -611,7 +614,7 @@ public final class IpV4Packet extends AbstractPacket {
           this.totalLength = (short)(payload.length() + length());
         }
         else {
-          this.totalLength = builder.totalLength;
+          this.totalLength = (short)length();
         }
       }
       else {

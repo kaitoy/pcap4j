@@ -16,8 +16,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.15
  */
-public final class IcmpV6PacketTooBigPacket
-extends IcmpV6InvokingPacketPacket {
+public final class IcmpV6PacketTooBigPacket extends IcmpV6InvokingPacketPacket {
 
   /**
    *
@@ -35,21 +34,27 @@ extends IcmpV6InvokingPacketPacket {
   public static IcmpV6PacketTooBigPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
-    IcmpV6PacketTooBigHeader header
-      = new IcmpV6PacketTooBigHeader(rawData);
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-    return new IcmpV6PacketTooBigPacket(header, rawPayload);
+    IcmpV6PacketTooBigHeader header = new IcmpV6PacketTooBigHeader(rawData);
+
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+      return new IcmpV6PacketTooBigPacket(header, rawPayload);
+    }
+    else {
+      return new IcmpV6PacketTooBigPacket(header, null);
+    }
   }
 
   private IcmpV6PacketTooBigPacket(
-    IcmpV6PacketTooBigHeader header, byte[] rawData
+    IcmpV6PacketTooBigHeader header, byte[] rawPayload
   ) {
-    super(rawData);
+    super(rawPayload);
     this.header = header;
   }
 

@@ -146,8 +146,7 @@ public class IcmpV4ParameterProblemPacketTest extends AbstractPacketTest {
     assertTrue(p.getPayload().contains(IpV4Packet.class));
     assertTrue(p.getPayload().contains(IcmpV4CommonPacket.class));
     assertTrue(p.getPayload().contains(IcmpV4EchoPacket.class));
-    assertTrue(p.getPayload().contains(UnknownPacket.class));
-    assertEquals(p.getPayload().get(UnknownPacket.class).length(), 0);
+    assertFalse(p.getPayload().contains(UnknownPacket.class));
     assertFalse(p.getPayload().contains(IllegalPacket.class));
   }
 

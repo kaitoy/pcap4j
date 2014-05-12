@@ -35,17 +35,24 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
     byte[] rawData
   ) throws IllegalRawDataException {
     IcmpV4TimeExceededHeader header = new IcmpV4TimeExceededHeader(rawData);
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-    return new IcmpV4TimeExceededPacket(header, rawPayload);
+
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+      return new IcmpV4TimeExceededPacket(header, rawPayload);
+    }
+    else {
+      return new IcmpV4TimeExceededPacket(header, null);
+    }
   }
 
-  private IcmpV4TimeExceededPacket(IcmpV4TimeExceededHeader header, byte[] rawData) {
-    super(rawData);
+  private IcmpV4TimeExceededPacket(IcmpV4TimeExceededHeader header, byte[] rawPayload) {
+    super(rawPayload);
     this.header = header;
   }
 

@@ -37,9 +37,14 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
   protected IpV6ExtOptionsPacket(
     byte[] rawPayload, IpNumber number
   ) {
-    this.payload
-      = PacketFactories.getFactory(Packet.class, IpNumber.class)
-          .newInstance(rawPayload, number);
+    if (rawPayload != null) {
+      this.payload
+        = PacketFactories.getFactory(Packet.class, IpNumber.class)
+            .newInstance(rawPayload, number);
+    }
+    else {
+      this.payload = null;
+    }
   }
 
   /**
@@ -51,13 +56,11 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
         builder == null
      || builder.nextHeader == null
      || builder.options == null
-     || builder.payloadBuilder == null
    ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
         .append(" builder.nextHeader: ").append(builder.nextHeader)
-        .append(" builder.options: ").append(builder.options)
-        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+        .append(" builder.options: ").append(builder.options);
       throw new NullPointerException(sb.toString());
    }
 //   if (builder.options.size() == 0) {
@@ -66,7 +69,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 //           );
 //   }
 
-    this.payload = builder.payloadBuilder.build();
+    this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
   }
 
   @Override
@@ -103,7 +106,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
       this.nextHeader = packet.getHeader().nextHeader;
       this.hdrExtLen = packet.getHeader().hdrExtLen;
       this.options = packet.getHeader().options;
-      this.payloadBuilder = packet.payload.getBuilder();
+      this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
 
     /**

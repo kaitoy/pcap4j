@@ -21,5 +21,3 @@
 [ICMPv4 Echo Header (4 bytes)]
   Identifier: 100
   SequenceNumber: 10
-[data (0 bytes)]
-  Hex stream: 

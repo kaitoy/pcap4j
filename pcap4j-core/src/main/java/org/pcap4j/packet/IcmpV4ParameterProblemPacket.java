@@ -36,19 +36,26 @@ public final class IcmpV4ParameterProblemPacket extends IcmpV4InvokingPacketPack
   ) throws IllegalRawDataException {
     IcmpV4ParameterProblemHeader header
       = new IcmpV4ParameterProblemHeader(rawData);
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-    return new IcmpV4ParameterProblemPacket(header, rawPayload);
+
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+      return new IcmpV4ParameterProblemPacket(header, rawPayload);
+    }
+    else {
+      return new IcmpV4ParameterProblemPacket(header, null);
+    }
   }
 
   private IcmpV4ParameterProblemPacket(
-    IcmpV4ParameterProblemHeader header, byte[] rawData
+    IcmpV4ParameterProblemHeader header, byte[] rawPayload
   ) {
-    super(rawData);
+    super(rawPayload);
     this.header = header;
   }
 

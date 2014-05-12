@@ -35,14 +35,20 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
   ) throws IllegalRawDataException {
     IpV6ExtDestinationOptionsHeader optHeader
       = new IpV6ExtDestinationOptionsHeader(rawData);
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          optHeader.length(),
-          rawData.length - optHeader.length()
-        );
 
-    return new IpV6ExtDestinationOptionsPacket(rawPayload, optHeader);
+    int payloadLength = rawData.length - optHeader.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            optHeader.length(),
+            payloadLength
+          );
+      return new IpV6ExtDestinationOptionsPacket(rawPayload, optHeader);
+    }
+    else {
+      return new IpV6ExtDestinationOptionsPacket(null, optHeader);
+    }
   }
 
   private IpV6ExtDestinationOptionsPacket(

@@ -38,25 +38,25 @@ public final class IcmpV4EchoReplyPacket extends IcmpIdentifiablePacket {
   private IcmpV4EchoReplyPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new IcmpV4EchoReplyHeader(rawData);
 
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-
-    this.payload
-      = UnknownPacket.newPacket(rawPayload);
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+      this.payload
+        = UnknownPacket.newPacket(rawPayload);
+    }
+    else {
+      this.payload = null;
+    }
   }
 
   private IcmpV4EchoReplyPacket(Builder builder) {
     super(builder);
-
-    if (builder.payloadBuilder == null) {
-      throw new NullPointerException("builder.payloadBuilder must not be null");
-    }
-
-    this.payload = builder.payloadBuilder.build();
+    this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new IcmpV4EchoReplyHeader(builder);
   }
 
@@ -91,7 +91,7 @@ public final class IcmpV4EchoReplyPacket extends IcmpIdentifiablePacket {
 
     private Builder(IcmpV4EchoReplyPacket packet) {
       super(packet);
-      this.payloadBuilder = packet.payload.getBuilder();
+      this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
 
     @Override

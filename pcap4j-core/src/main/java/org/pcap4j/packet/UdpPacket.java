@@ -45,28 +45,32 @@ public final class UdpPacket extends AbstractPacket {
     this.header = new UdpHeader(rawData);
 
     int payloadLength = header.getLengthAsInt() - header.length();
-    byte[] rawPayload;
-
-    if (payloadLength > rawData.length - header.length()) {
-      rawPayload
-        = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-    }
-    else {
-      rawPayload
-        = ByteArrays.getSubArray(
+    if (payloadLength > 0) {
+      byte[] rawPayload;
+      if (payloadLength > rawData.length - header.length()) {
+        rawPayload
+          = ByteArrays.getSubArray(
             rawData,
             header.length(),
-            payloadLength
+            rawData.length - header.length()
           );
-    }
+      }
+      else {
+        rawPayload
+          = ByteArrays.getSubArray(
+              rawData,
+              header.length(),
+              payloadLength
+            );
+      }
 
-    this.payload
-      = PacketFactories.getFactory(Packet.class, UdpPort.class)
-          .newInstance(rawPayload, header.getDstPort());
+      this.payload
+        = PacketFactories.getFactory(Packet.class, UdpPort.class)
+            .newInstance(rawPayload, header.getDstPort());
+    }
+    else {
+      this.payload = null;
+    }
   }
 
   private UdpPacket(Builder builder) {
@@ -74,13 +78,11 @@ public final class UdpPacket extends AbstractPacket {
          builder == null
       || builder.srcPort == null
       || builder.dstPort == null
-      || builder.payloadBuilder == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
         .append(" builder.srcPort: ").append(builder.srcPort)
-        .append(" builder.dstPort: ").append(builder.dstPort)
-        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+        .append(" builder.dstPort: ").append(builder.dstPort);
       throw new NullPointerException(sb.toString());
     }
 
@@ -99,10 +101,10 @@ public final class UdpPacket extends AbstractPacket {
       }
     }
 
-    this.payload = builder.payloadBuilder.build();
+    this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new UdpHeader(
                     builder,
-                    payload.getRawData()
+                    payload != null ? payload.getRawData() : new byte[0]
                   );
   }
 
@@ -146,8 +148,15 @@ public final class UdpPacket extends AbstractPacket {
       if (acceptZero) { return true; }
       else { return false; }
     }
-    return header.calcChecksum(srcAddr, dstAddr, payload.getRawData())
-             == header.checksum;
+
+    if (payload != null) {
+      return header.calcChecksum(srcAddr, dstAddr, payload.getRawData())
+               == header.checksum;
+    }
+    else {
+      return header.calcChecksum(srcAddr, dstAddr, new byte[0])
+               == header.checksum;
+    }
   }
 
   @Override
@@ -187,7 +196,7 @@ public final class UdpPacket extends AbstractPacket {
       this.dstPort = packet.header.dstPort;
       this.length = packet.header.length;
       this.checksum = packet.header.checksum;
-      this.payloadBuilder = packet.payload.getBuilder();
+      this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
 
     /**

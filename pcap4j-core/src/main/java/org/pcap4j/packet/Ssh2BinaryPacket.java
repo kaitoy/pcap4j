@@ -90,46 +90,48 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     }
     this.header = new Ssh2BinaryHeader(rawData);
 
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          5,
-          header.getPacketLength() - header.getPaddingLength() - 1
-        );
-    if (rawPayload.length == 0) {
-      StringBuilder sb = new StringBuilder(120);
-      sb.append("Payload is required for Ssh2BinaryPacket. data: ")
-        .append(ByteArrays.toHexString(rawData, " "));
-      throw new IllegalRawDataException(sb.toString());
+    int payloadLength = header.getPacketLength() - header.getPaddingLength() - 1;
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            5,
+            payloadLength
+          );
+      this.payload
+        = PacketFactories.getFactory(Packet.class, Ssh2MessageNumber.class)
+            .newInstance(rawPayload, Ssh2MessageNumber.getInstance(rawPayload[0]));
+    }
+    else {
+      this.payload = null;
     }
 
-    this.payload
-      = PacketFactories.getFactory(Packet.class, Ssh2MessageNumber.class)
-          .newInstance(rawPayload, Ssh2MessageNumber.getInstance(rawPayload[0]));
+    try {
+      this.randomPadding
+        = ByteArrays.getSubArray(
+            rawData,
+            5 + payloadLength,
+            header.getPaddingLength()
+          );
 
-    this.randomPadding
-      = ByteArrays.getSubArray(
-          rawData,
-          5 + payload.length(),
-          header.getPaddingLength()
-        );
-
-    this.mac
-      = ByteArrays.getSubArray(
-          rawData,
-          5 + payload.length() + randomPadding.length
-        );
+      this.mac
+        = ByteArrays.getSubArray(
+            rawData,
+            5 + payloadLength + randomPadding.length
+          );
+    } catch (Exception e) {
+      throw new IllegalRawDataException(e);
+    }
   }
 
   private Ssh2BinaryPacket(Builder builder) {
     if (
          builder == null
-      || builder.payloadBuilder == null
+      || builder.randomPadding == null
       || builder.mac == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
-        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder)
         .append(" builder.randomPadding: ").append(builder.randomPadding)
         .append(" builder.mac: ").append(builder.mac);
       throw new NullPointerException(sb.toString());
@@ -142,11 +144,12 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
                 );
     }
 
-    this.payload = builder.payloadBuilder.build();
+    this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
 
+    int payloadLength = payload != null ? payload.length() : 0;
     if (builder.paddingAtBuild) {
       int blockSize = builder.cipherBlockSize > 8 ? builder.cipherBlockSize : 8;
-      int paddingSize = payload.length() % blockSize;
+      int paddingSize = payloadLength % blockSize;
       this.randomPadding = new byte[paddingSize];
     }
     else {
@@ -156,7 +159,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
       );
     }
 
-    this.header = new Ssh2BinaryHeader(builder, payload.length(), (byte)randomPadding.length);
+    this.header = new Ssh2BinaryHeader(builder, payloadLength, (byte)randomPadding.length);
     this.mac = new byte[builder.mac.length];
     System.arraycopy(
       builder.mac, 0, this.mac, 0, builder.mac.length
@@ -224,7 +227,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     private Builder(Ssh2BinaryPacket packet) {
       this.packetLength = packet.header.packetLength;
       this.paddingLength = packet.header.paddingLength;
-      this.payloadBuilder = packet.payload.getBuilder();
+      this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
       this.randomPadding = packet.randomPadding;
       this.mac = packet.mac;
     }

@@ -42,32 +42,35 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
   private Dot1qVlanTagPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new Dot1qVlanTagHeader(rawData);
 
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-
-    this.payload
-      = PacketFactories.getFactory(Packet.class, EtherType.class)
-          .newInstance(rawPayload, header.getType());
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+      this.payload
+        = PacketFactories.getFactory(Packet.class, EtherType.class)
+            .newInstance(rawPayload, header.getType());
+    }
+    else {
+      this.payload = null;
+    }
   }
 
   private Dot1qVlanTagPacket(Builder builder) {
     if (
          builder == null
       || builder.type == null
-      || builder.payloadBuilder == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
-        .append(" builder.type: ").append(builder.type)
-        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+        .append(" builder.type: ").append(builder.type);
       throw new NullPointerException(sb.toString());
     }
 
-    this.payload = builder.payloadBuilder.build();
+    this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new Dot1qVlanTagHeader(builder);
   }
 
@@ -108,7 +111,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
       this.cfi = packet.header.cfi;
       this.vid = packet.header.vid;
       this.type = packet.header.type;
-      this.payloadBuilder = packet.payload.getBuilder();
+      this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
 
     /**

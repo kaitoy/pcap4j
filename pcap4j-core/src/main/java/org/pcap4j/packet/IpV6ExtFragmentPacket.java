@@ -43,20 +43,26 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
   private IpV6ExtFragmentPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new IpV6ExtFragmentHeader(rawData);
 
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
 
-    if (header.m || header.fragmentOffset != 0) {
-      this.payload = FragmentedPacket.newPacket(rawPayload);
+      if (header.m || header.fragmentOffset != 0) {
+        this.payload = FragmentedPacket.newPacket(rawPayload);
+      }
+      else {
+        this.payload
+          = PacketFactories.getFactory(Packet.class, IpNumber.class)
+              .newInstance(rawPayload, header.getNextHeader());
+      }
     }
     else {
-      this.payload
-        = PacketFactories.getFactory(Packet.class, IpNumber.class)
-            .newInstance(rawPayload, header.getNextHeader());
+      this.payload = null;
     }
   }
 
@@ -64,16 +70,14 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     if (
          builder == null
       || builder.nextHeader == null
-      || builder.payloadBuilder == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
-        .append(" builder.nextHeader: ").append(builder.nextHeader)
-        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+        .append(" builder.nextHeader: ").append(builder.nextHeader);
       throw new NullPointerException(sb.toString());
     }
 
-    this.payload = builder.payloadBuilder.build();
+    this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new IpV6ExtFragmentHeader(builder);
   }
 
@@ -122,7 +126,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
       this.res = packet.header.res;
       this.m = packet.header.m;
       this.identification = packet.header.identification;
-      this.payloadBuilder = packet.payload.getBuilder();
+      this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
 
     /**

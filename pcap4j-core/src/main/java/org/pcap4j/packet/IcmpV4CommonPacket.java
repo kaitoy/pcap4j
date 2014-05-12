@@ -42,16 +42,21 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
   private IcmpV4CommonPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new IcmpV4CommonHeader(rawData);
 
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-
-    this.payload
-      = PacketFactories.getFactory(Packet.class, IcmpV4Type.class)
-          .newInstance(rawPayload, header.getType());
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+      this.payload
+        = PacketFactories.getFactory(Packet.class, IcmpV4Type.class)
+            .newInstance(rawPayload, header.getType());
+    }
+    else {
+      this.payload = null;
+    }
   }
 
   private IcmpV4CommonPacket(Builder builder) {
@@ -59,20 +64,18 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
          builder == null
       || builder.type == null
       || builder.code == null
-      || builder.payloadBuilder == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
         .append(" builder.type: ").append(builder.type)
-        .append(" builder.code: ").append(builder.code)
-        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+        .append(" builder.code: ").append(builder.code);
       throw new NullPointerException(sb.toString());
     }
 
-    this.payload = builder.payloadBuilder.build();
+    this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new IcmpV4CommonHeader(
                     builder,
-                    payload.getRawData()
+                    payload != null ? payload.getRawData() : new byte[0]
                   );
   }
 
@@ -102,7 +105,13 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
       if (acceptZero) { return true; }
       else { return false; }
     }
-    return header.calcChecksum(payload.getRawData()) == header.checksum;
+
+    if (payload != null) {
+      return header.calcChecksum(payload.getRawData()) == header.checksum;
+    }
+    else {
+      return header.calcChecksum(new byte[0]) == header.checksum;
+    }
   }
 
   /**
@@ -128,7 +137,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
       this.type = packet.header.type;
       this.code = packet.header.code;
       this.checksum = packet.header.checksum;
-      this.payloadBuilder = packet.payload.getBuilder();
+      this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
 
     /**

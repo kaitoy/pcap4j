@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -32,11 +32,16 @@ abstract class IcmpV6InvokingPacketPacket extends AbstractPacket {
 
   /**
    *
-   * @param rawData
+   * @param rawPayload
    */
-  protected IcmpV6InvokingPacketPacket(byte[] rawData) {
+  protected IcmpV6InvokingPacketPacket(byte[] rawPayload) {
+    if (rawPayload == null) {
+      this.payload = null;
+      return;
+    }
+
     Packet p = PacketFactories.getFactory(Packet.class, EtherType.class)
-                 .newInstance(rawData, EtherType.IPV6);
+                 .newInstance(rawPayload, EtherType.IPV6);
 
     if (p instanceof IllegalPacket) {
       this.payload = p;
@@ -68,13 +73,9 @@ abstract class IcmpV6InvokingPacketPacket extends AbstractPacket {
    * @param builder
    */
   protected IcmpV6InvokingPacketPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.payload == null
-    ) {
+    if (builder == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.payload: ").append(builder.payload);
+      sb.append("builder: ").append(builder);
       throw new NullPointerException(sb.toString());
     }
 

@@ -37,19 +37,26 @@ extends IcmpV4InvokingPacketPacket {
   ) throws IllegalRawDataException {
     IcmpV4DestinationUnreachableHeader header
       = new IcmpV4DestinationUnreachableHeader(rawData);
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-    return new IcmpV4DestinationUnreachablePacket(header, rawPayload);
+
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+      return new IcmpV4DestinationUnreachablePacket(header, rawPayload);
+    }
+    else {
+      return new IcmpV4DestinationUnreachablePacket(header, null);
+    }
   }
 
   private IcmpV4DestinationUnreachablePacket(
-    IcmpV4DestinationUnreachableHeader header, byte[] rawData
+    IcmpV4DestinationUnreachableHeader header, byte[] rawPayload
   ) {
-    super(rawData);
+    super(rawPayload);
     this.header = header;
   }
 

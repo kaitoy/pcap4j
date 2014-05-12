@@ -54,24 +54,30 @@ public final class EthernetPacket extends AbstractPacket {
   private EthernetPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new EthernetHeader(rawData);
 
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-
-    this.payload
-      = PacketFactories.getFactory(Packet.class, EtherType.class)
-          .newInstance(rawPayload, header.getType());
-
-    if (rawPayload.length > payload.length()) {
-      this.pad
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
         = ByteArrays.getSubArray(
-            rawPayload, payload.length(), rawPayload.length - payload.length()
+            rawData,
+            header.length(),
+            payloadLength
           );
+      this.payload
+        = PacketFactories.getFactory(Packet.class, EtherType.class)
+            .newInstance(rawPayload, header.getType());
+
+      if (rawPayload.length > payload.length()) {
+        this.pad
+          = ByteArrays.getSubArray(
+              rawPayload, payload.length(), rawPayload.length - payload.length()
+            );
+      }
+      else {
+        this.pad = new byte[0];
+      }
     }
     else {
+      this.payload = null;
       this.pad = new byte[0];
     }
   }
@@ -82,14 +88,12 @@ public final class EthernetPacket extends AbstractPacket {
       || builder.dstAddr == null
       || builder.srcAddr == null
       || builder.type == null
-      || builder.payloadBuilder == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
         .append(" builder.dstAddr: ").append(builder.dstAddr)
         .append(" builder.srcAddr: ").append(builder.srcAddr)
-        .append(" builder.type: ").append(builder.type)
-        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+        .append(" builder.type: ").append(builder.type);
       throw new NullPointerException(sb.toString());
     }
 
@@ -100,12 +104,13 @@ public final class EthernetPacket extends AbstractPacket {
                 );
     }
 
-    this.payload = builder.payloadBuilder.build();
+    this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new EthernetHeader(builder);
 
+    int payloadLength = payload != null ? payload.length() : 0;
     if (builder.paddingAtBuild) {
-      if (payload.length() < MIN_ETHERNET_PAYLOAD_LENGTH) {
-        this.pad = new byte[MIN_ETHERNET_PAYLOAD_LENGTH - payload.length()];
+      if (payloadLength < MIN_ETHERNET_PAYLOAD_LENGTH) {
+        this.pad = new byte[MIN_ETHERNET_PAYLOAD_LENGTH - payloadLength];
       }
       else {
         this.pad = new byte[0];
@@ -162,7 +167,9 @@ public final class EthernetPacket extends AbstractPacket {
     StringBuilder sb = new StringBuilder();
 
     sb.append(header.toString());
-    sb.append(payload.toString());
+    if (payload != null) {
+      sb.append(payload.toString());
+    }
     if (pad.length != 0) {
       String ls = System.getProperty("line.separator");
       sb.append("[Ethernet Pad (")
@@ -204,7 +211,7 @@ public final class EthernetPacket extends AbstractPacket {
       this.dstAddr = packet.header.dstAddr;
       this.srcAddr = packet.header.srcAddr;
       this.type = packet.header.type;
-      this.payloadBuilder = packet.payload.getBuilder();
+      this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
       this.pad = new byte[packet.pad.length];
       System.arraycopy(
         packet.pad, 0, this.pad, 0, packet.pad.length

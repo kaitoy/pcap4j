@@ -35,17 +35,24 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4InvokingPacketPacket {
     byte[] rawData
   ) throws IllegalRawDataException {
     IcmpV4SourceQuenchHeader header = new IcmpV4SourceQuenchHeader(rawData);
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-    return new IcmpV4SourceQuenchPacket(header, rawPayload);
+
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+      return new IcmpV4SourceQuenchPacket(header, rawPayload);
+    }
+    else {
+      return new IcmpV4SourceQuenchPacket(header, null);
+    }
   }
 
-  private IcmpV4SourceQuenchPacket(IcmpV4SourceQuenchHeader header, byte[] rawData) {
-    super(rawData);
+  private IcmpV4SourceQuenchPacket(IcmpV4SourceQuenchHeader header, byte[] rawPayload) {
+    super(rawPayload);
     this.header = header;
   }
 

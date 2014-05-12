@@ -59,27 +59,32 @@ public final class IpV6Packet extends AbstractPacket {
       payloadLength = header.getPayloadLengthAsInt();
     }
 
-    byte[] rawPayload;
-    if (payloadLength > remainingRawDataLength) {
-      rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            remainingRawDataLength
-          );
+    if (payloadLength != 0) {
+      byte[] rawPayload;
+      if (payloadLength > remainingRawDataLength) {
+        rawPayload
+          = ByteArrays.getSubArray(
+              rawData,
+              header.length(),
+              remainingRawDataLength
+            );
+      }
+      else {
+        rawPayload
+          = ByteArrays.getSubArray(
+              rawData,
+              header.length(),
+              payloadLength
+            );
+      }
+
+      this.payload
+        = PacketFactories.getFactory(Packet.class, IpNumber.class)
+            .newInstance(rawPayload, header.getNextHeader());
     }
     else {
-      rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            payloadLength
-          );
+      this.payload = null;
     }
-
-    this.payload
-      = PacketFactories.getFactory(Packet.class, IpNumber.class)
-          .newInstance(rawPayload, header.getNextHeader());
   }
 
   private IpV6Packet(Builder builder) {
@@ -91,7 +96,6 @@ public final class IpV6Packet extends AbstractPacket {
       || builder.nextHeader == null
       || builder.srcAddr == null
       || builder.dstAddr == null
-      || builder.payloadBuilder == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
@@ -100,12 +104,11 @@ public final class IpV6Packet extends AbstractPacket {
         .append(" builder.flowLabel: ").append(builder.flowLabel)
         .append(" builder.nextHeader: ").append(builder.nextHeader)
         .append(" builder.srcAddr: ").append(builder.srcAddr)
-        .append(" builder.dstAddr: ").append(builder.dstAddr)
-        .append(" builder.payloadBuilder: ").append(builder.payloadBuilder);
+        .append(" builder.dstAddr: ").append(builder.dstAddr);
       throw new NullPointerException(sb.toString());
     }
 
-    this.payload = builder.payloadBuilder.build();
+    this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new IpV6Header(builder, payload);
   }
 
@@ -160,7 +163,7 @@ public final class IpV6Packet extends AbstractPacket {
       this.hopLimit = packet.header.hopLimit;
       this.srcAddr = packet.header.srcAddr;
       this.dstAddr = packet.header.dstAddr;
-      this.payloadBuilder = packet.payload.getBuilder();
+      this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
 
     /**

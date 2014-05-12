@@ -77,12 +77,17 @@ public final class IcmpV6Helper {
 
       pos--;
       if (pos == 0) {
-        b.payloadBuilder(
-            new UnknownPacket.Builder()
-              .rawData(
-                 ByteArrays.getSubArray(last.getRawData(), 0, size - prelength)
-               )
-          );
+        if (size - prelength > 0) {
+          b.payloadBuilder(
+              new UnknownPacket.Builder()
+                .rawData(
+                   ByteArrays.getSubArray(last.getRawData(), 0, size - prelength)
+                 )
+            );
+        }
+        else {
+          b.payloadBuilder(null);
+        }
         break;
       }
     }

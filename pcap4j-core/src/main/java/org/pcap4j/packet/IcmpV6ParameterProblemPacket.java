@@ -35,21 +35,27 @@ extends IcmpV6InvokingPacketPacket {
   public static IcmpV6ParameterProblemPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
-    IcmpV6ParameterProblemHeader header
-      = new IcmpV6ParameterProblemHeader(rawData);
-    byte[] rawPayload
-      = ByteArrays.getSubArray(
-          rawData,
-          header.length(),
-          rawData.length - header.length()
-        );
-    return new IcmpV6ParameterProblemPacket(header, rawPayload);
+    IcmpV6ParameterProblemHeader header = new IcmpV6ParameterProblemHeader(rawData);
+
+    int payloadLength = rawData.length - header.length();
+    if (payloadLength > 0) {
+      byte[] rawPayload
+        = ByteArrays.getSubArray(
+            rawData,
+            header.length(),
+            payloadLength
+          );
+      return new IcmpV6ParameterProblemPacket(header, rawPayload);
+    }
+    else {
+      return new IcmpV6ParameterProblemPacket(header, null);
+    }
   }
 
   private IcmpV6ParameterProblemPacket(
-    IcmpV6ParameterProblemHeader header, byte[] rawData
+    IcmpV6ParameterProblemHeader header, byte[] rawPayload
   ) {
-    super(rawData);
+    super(rawPayload);
     this.header = header;
   }
 
