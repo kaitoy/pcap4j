@@ -31,10 +31,19 @@ extends IcmpV6InvokingPacketPacket {
    * @param rawData
    * @return a new IcmpV6ParameterProblemPacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV6ParameterProblemPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
+
     IcmpV6ParameterProblemHeader header = new IcmpV6ParameterProblemHeader(rawData);
 
     int payloadLength = rawData.length - header.length();
@@ -48,8 +57,12 @@ extends IcmpV6InvokingPacketPacket {
       return new IcmpV6ParameterProblemPacket(header, rawPayload);
     }
     else {
-      return new IcmpV6ParameterProblemPacket(header, null);
+      return new IcmpV6ParameterProblemPacket(header);
     }
+  }
+
+  private IcmpV6ParameterProblemPacket(IcmpV6ParameterProblemHeader header) {
+    this.header = header;
   }
 
   private IcmpV6ParameterProblemPacket(

@@ -40,15 +40,20 @@ public final class IpV6PadNOption implements IpV6Option {
    * @param rawData
    * @return a new IpV6PadNOption object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV6PadNOption newInstance(byte[] rawData) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new IpV6PadNOption(rawData);
   }
 
   private IpV6PadNOption(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
-    }
     if (rawData.length < 2) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data length must be more than 1. rawData: ")

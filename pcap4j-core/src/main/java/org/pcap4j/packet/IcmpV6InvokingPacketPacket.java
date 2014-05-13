@@ -32,12 +32,21 @@ abstract class IcmpV6InvokingPacketPacket extends AbstractPacket {
 
   /**
    *
+   */
+  protected IcmpV6InvokingPacketPacket() {
+    this.payload = null;
+  }
+
+  /**
+   *
    * @param rawPayload
    */
   protected IcmpV6InvokingPacketPacket(byte[] rawPayload) {
     if (rawPayload == null) {
-      this.payload = null;
-      return;
+      throw new NullPointerException("rawPayload must not be null.");
+    }
+    if (rawPayload.length == 0) {
+      throw new IllegalArgumentException("rawPayload is empty.");
     }
 
     Packet p = PacketFactories.getFactory(Packet.class, EtherType.class)

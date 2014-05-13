@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -26,15 +26,20 @@ public final class FragmentedPacket extends AbstractPacket {
    *
    * @param rawData
    * @return a new FragmentedPacket object.
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static FragmentedPacket newPacket(byte[] rawData) {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new FragmentedPacket(rawData);
   }
 
   private FragmentedPacket(byte[] rawData) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
-    }
     this.rawData = new byte[rawData.length];
     System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);
   }

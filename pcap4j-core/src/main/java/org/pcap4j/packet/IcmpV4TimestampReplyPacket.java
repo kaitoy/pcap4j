@@ -29,10 +29,18 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
    * @param rawData
    * @return a new IcmpV4TimestampReplyPacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV4TimestampReplyPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new IcmpV4TimestampReplyPacket(rawData);
   }
 

@@ -30,17 +30,22 @@ public final class Ssh2KexDhInitPacket extends AbstractPacket {
    * @param rawData
    * @return a new Ssh2KexDhInitPacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static Ssh2KexDhInitPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new Ssh2KexDhInitPacket(rawData);
   }
 
   private Ssh2KexDhInitPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException();
-    }
     this.header = new Ssh2KexDhInitHeader(rawData);
   }
 

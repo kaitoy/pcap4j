@@ -30,10 +30,19 @@ public final class IcmpV6TimeExceededPacket extends IcmpV6InvokingPacketPacket {
    * @param rawData
    * @return a new IcmpV6TimeExceededPacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV6TimeExceededPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
+
     IcmpV6TimeExceededHeader header = new IcmpV6TimeExceededHeader(rawData);
 
     int payloadLength = rawData.length - header.length();
@@ -47,8 +56,12 @@ public final class IcmpV6TimeExceededPacket extends IcmpV6InvokingPacketPacket {
       return new IcmpV6TimeExceededPacket(header, rawPayload);
     }
     else {
-      return new IcmpV6TimeExceededPacket(header, null);
+      return new IcmpV6TimeExceededPacket(header);
     }
+  }
+
+  private IcmpV6TimeExceededPacket(IcmpV6TimeExceededHeader header) {
+    this.header = header;
   }
 
   private IcmpV6TimeExceededPacket(

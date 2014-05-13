@@ -33,17 +33,22 @@ public final class UnknownIpV6Option implements IpV6Option {
    * @param rawData
    * @return a new UnknownIpV6Option object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static UnknownIpV6Option newInstance(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new UnknownIpV6Option(rawData);
   }
 
   private UnknownIpV6Option(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
-    }
     if (rawData.length < 2) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data length must be more than 1. rawData: ")

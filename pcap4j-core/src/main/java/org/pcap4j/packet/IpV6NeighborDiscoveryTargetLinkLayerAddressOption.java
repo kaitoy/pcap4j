@@ -51,19 +51,24 @@ implements IpV6NeighborDiscoveryOption {
    * @param rawData
    * @return a new IpV6NeighborDiscoveryTargetLinkLayerAddressOption object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV6NeighborDiscoveryTargetLinkLayerAddressOption newInstance(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new IpV6NeighborDiscoveryTargetLinkLayerAddressOption(rawData);
   }
 
   private IpV6NeighborDiscoveryTargetLinkLayerAddressOption(
     byte[] rawData
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
-    }
     if (rawData.length < 8) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 7. rawData: ")

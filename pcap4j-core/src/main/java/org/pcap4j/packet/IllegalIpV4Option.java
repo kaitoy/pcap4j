@@ -31,22 +31,20 @@ public final class IllegalIpV4Option implements IpV4Option {
    *
    * @param rawData
    * @return a new IllegalIpV4Option object
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IllegalIpV4Option newInstance(byte[] rawData) {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new IllegalIpV4Option(rawData);
   }
 
   private IllegalIpV4Option(byte[] rawData) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
-    }
-    if (rawData.length == 0) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("The raw data has no data. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
-      throw new IllegalArgumentException(sb.toString());
-    }
-
     this.type = IpV4OptionType.getInstance(rawData[0]);
     this.rawData = new byte[rawData.length];
     System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);

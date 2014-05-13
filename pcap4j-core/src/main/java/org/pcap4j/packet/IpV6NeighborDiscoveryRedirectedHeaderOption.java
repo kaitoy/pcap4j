@@ -68,19 +68,24 @@ implements IpV6NeighborDiscoveryOption {
    * @param rawData
    * @return a new IpV6NeighborDiscoveryRedirectedHeaderOption object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV6NeighborDiscoveryRedirectedHeaderOption newInstance(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new IpV6NeighborDiscoveryRedirectedHeaderOption(rawData);
   }
 
   private IpV6NeighborDiscoveryRedirectedHeaderOption(
     byte[] rawData
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
-    }
     if (rawData.length < IP_HEADER_OFFSET + 40) { // IP_HEADER_OFFSET + IPv6 Header
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 47. rawData: ")

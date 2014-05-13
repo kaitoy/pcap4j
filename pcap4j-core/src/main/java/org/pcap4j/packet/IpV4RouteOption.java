@@ -33,7 +33,10 @@ abstract class IpV4RouteOption implements IpV4Option {
 
   protected IpV4RouteOption(byte[] rawData) throws IllegalRawDataException {
     if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
     }
     if (rawData.length < 3) {
       StringBuilder sb = new StringBuilder(100);

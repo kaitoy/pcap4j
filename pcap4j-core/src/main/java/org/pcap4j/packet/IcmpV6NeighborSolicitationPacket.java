@@ -34,10 +34,18 @@ public final class IcmpV6NeighborSolicitationPacket extends AbstractPacket {
    * @param rawData
    * @return a new IcmpV6NeighborSolicitationPacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV6NeighborSolicitationPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new IcmpV6NeighborSolicitationPacket(rawData);
   }
 

@@ -31,10 +31,19 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
    * @param rawData
    * @return a new IcmpV4RedirectPacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV4RedirectPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
+
     IcmpV4RedirectHeader header = new IcmpV4RedirectHeader(rawData);
 
     int payloadLength = rawData.length - header.length();
@@ -48,8 +57,12 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
       return new IcmpV4RedirectPacket(header, rawPayload);
     }
     else {
-      return new IcmpV4RedirectPacket(header, null);
+      return new IcmpV4RedirectPacket(header);
     }
+  }
+
+  private IcmpV4RedirectPacket(IcmpV4RedirectHeader header) {
+    this.header = header;
   }
 
   private IcmpV4RedirectPacket(IcmpV4RedirectHeader header, byte[] rawPayload) {

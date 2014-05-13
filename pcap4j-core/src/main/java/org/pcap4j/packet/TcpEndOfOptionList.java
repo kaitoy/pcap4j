@@ -49,17 +49,17 @@ public final class TcpEndOfOptionList implements TcpOption {
    * @param rawData
    * @return the singleton instance of TcpEndOfOptionList.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static TcpEndOfOptionList newInstance(
     byte[] rawData
   ) throws IllegalRawDataException {
     if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
+      throw new NullPointerException("rawData must not be null.");
     }
     if (rawData.length == 0) {
-      throw new IllegalRawDataException(
-              "The raw data length must be more than 0"
-            );
+      throw new IllegalArgumentException("rawData is empty.");
     }
     if (rawData[0] != kind.value()) {
       StringBuilder sb = new StringBuilder(100);

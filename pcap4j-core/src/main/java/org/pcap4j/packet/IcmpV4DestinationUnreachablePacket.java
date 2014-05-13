@@ -31,10 +31,19 @@ extends IcmpV4InvokingPacketPacket {
    * @param rawData
    * @return a new IcmpV4DestinationUnreachablePacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV4DestinationUnreachablePacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
+
     IcmpV4DestinationUnreachableHeader header
       = new IcmpV4DestinationUnreachableHeader(rawData);
 
@@ -49,8 +58,12 @@ extends IcmpV4InvokingPacketPacket {
       return new IcmpV4DestinationUnreachablePacket(header, rawPayload);
     }
     else {
-      return new IcmpV4DestinationUnreachablePacket(header, null);
+      return new IcmpV4DestinationUnreachablePacket(header);
     }
+  }
+
+  private IcmpV4DestinationUnreachablePacket(IcmpV4DestinationUnreachableHeader header) {
+    this.header = header;
   }
 
   private IcmpV4DestinationUnreachablePacket(

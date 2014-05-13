@@ -30,10 +30,19 @@ public final class IcmpV4ParameterProblemPacket extends IcmpV4InvokingPacketPack
    * @param rawData
    * @return a new IcmpV4ParameterProblemPacket object
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV4ParameterProblemPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
+
     IcmpV4ParameterProblemHeader header
       = new IcmpV4ParameterProblemHeader(rawData);
 
@@ -48,8 +57,12 @@ public final class IcmpV4ParameterProblemPacket extends IcmpV4InvokingPacketPack
       return new IcmpV4ParameterProblemPacket(header, rawPayload);
     }
     else {
-      return new IcmpV4ParameterProblemPacket(header, null);
+      return new IcmpV4ParameterProblemPacket(header);
     }
+  }
+
+  private IcmpV4ParameterProblemPacket(IcmpV4ParameterProblemHeader header) {
+    this.header = header;
   }
 
   private IcmpV4ParameterProblemPacket(

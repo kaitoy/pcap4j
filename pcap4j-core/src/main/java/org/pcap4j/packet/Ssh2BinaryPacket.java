@@ -79,15 +79,20 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
    * @param rawData
    * @return a new Ssh2BinaryPacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static Ssh2BinaryPacket newPacket(byte[] rawData) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new Ssh2BinaryPacket(rawData);
   }
 
   private Ssh2BinaryPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException();
-    }
     this.header = new Ssh2BinaryHeader(rawData);
 
     int payloadLength = header.getPacketLength() - header.getPaddingLength() - 1;

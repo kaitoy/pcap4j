@@ -30,10 +30,19 @@ public final class IcmpV6PacketTooBigPacket extends IcmpV6InvokingPacketPacket {
    * @param rawData
    * @return a new IcmpV6PacketTooBigPacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV6PacketTooBigPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
+
     IcmpV6PacketTooBigHeader header = new IcmpV6PacketTooBigHeader(rawData);
 
     int payloadLength = rawData.length - header.length();
@@ -47,8 +56,12 @@ public final class IcmpV6PacketTooBigPacket extends IcmpV6InvokingPacketPacket {
       return new IcmpV6PacketTooBigPacket(header, rawPayload);
     }
     else {
-      return new IcmpV6PacketTooBigPacket(header, null);
+      return new IcmpV6PacketTooBigPacket(header);
     }
+  }
+
+  private IcmpV6PacketTooBigPacket(IcmpV6PacketTooBigHeader header) {
+    this.header = header;
   }
 
   private IcmpV6PacketTooBigPacket(

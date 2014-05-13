@@ -33,17 +33,22 @@ implements IpV6NeighborDiscoveryOption {
    * @param rawData
    * @return a new UnknownIpV6NeighborDiscoveryOption object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static UnknownIpV6NeighborDiscoveryOption newInstance(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new UnknownIpV6NeighborDiscoveryOption(rawData);
   }
 
   private UnknownIpV6NeighborDiscoveryOption(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
-    }
     if (rawData.length < 2) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data length must be more than 1. rawData: ")

@@ -33,9 +33,16 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
    * @param rawData
    * @return a new Dot1qVlanTagPacket object.
    * @throws IllegalRawDataException
-   * @throws PacketException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static Dot1qVlanTagPacket newPacket(byte[] rawData) throws IllegalRawDataException{
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new Dot1qVlanTagPacket(rawData);
   }
 

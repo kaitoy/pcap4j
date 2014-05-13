@@ -30,10 +30,19 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4InvokingPacketPacket {
    * @param rawData
    * @return a new IcmpV4SourceQuenchPacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV4SourceQuenchPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
+
     IcmpV4SourceQuenchHeader header = new IcmpV4SourceQuenchHeader(rawData);
 
     int payloadLength = rawData.length - header.length();
@@ -47,8 +56,12 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4InvokingPacketPacket {
       return new IcmpV4SourceQuenchPacket(header, rawPayload);
     }
     else {
-      return new IcmpV4SourceQuenchPacket(header, null);
+      return new IcmpV4SourceQuenchPacket(header);
     }
+  }
+
+  private IcmpV4SourceQuenchPacket(IcmpV4SourceQuenchHeader header) {
+    this.header = header;
   }
 
   private IcmpV4SourceQuenchPacket(IcmpV4SourceQuenchHeader header, byte[] rawPayload) {

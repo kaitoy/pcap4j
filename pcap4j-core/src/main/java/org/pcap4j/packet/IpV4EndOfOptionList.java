@@ -48,6 +48,8 @@ public final class IpV4EndOfOptionList implements IpV4Option {
    * @param rawData
    * @return the singleton instance of IpV4EndOfOptionList.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV4EndOfOptionList newInstance(
     byte[] rawData

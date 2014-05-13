@@ -30,15 +30,20 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
    * @param rawData
    * @return a new Ssh2IgnorePacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static Ssh2IgnorePacket newPacket(byte[] rawData) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new Ssh2IgnorePacket(rawData);
   }
 
   private Ssh2IgnorePacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException();
-    }
     this.header = new Ssh2IgnoreHeader(rawData);
   }
 

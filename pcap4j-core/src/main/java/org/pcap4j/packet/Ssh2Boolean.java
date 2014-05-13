@@ -54,16 +54,16 @@ public final class Ssh2Boolean implements Serializable {
   /**
    *
    * @param rawData
-   * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public Ssh2Boolean(byte[] rawData) throws IllegalRawDataException {
+  public Ssh2Boolean(byte[] rawData) {
     if (rawData == null) {
-      throw new NullPointerException("array may not be null");
+      throw new NullPointerException("rawData must not be null.");
     }
-    if (rawData.length < 1) {
-      throw new IllegalRawDataException("The rawData is empty.");
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
     }
-
     this.rawData = rawData[0];
   }
 

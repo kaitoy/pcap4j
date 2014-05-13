@@ -48,17 +48,17 @@ public final class IpV4NoOperationOption implements IpV4Option {
    * @param rawData
    * @return the singleton instance of IpV4NoOperationOption.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV4NoOperationOption newInstance(
     byte[] rawData
   ) throws IllegalRawDataException {
     if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
+      throw new NullPointerException("rawData must not be null.");
     }
     if (rawData.length == 0) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("The raw data length must be more than 0");
-      throw new IllegalRawDataException(sb.toString());
+      throw new IllegalArgumentException("rawData is empty.");
     }
     if (rawData[0] != type.value()) {
       StringBuilder sb = new StringBuilder(100);

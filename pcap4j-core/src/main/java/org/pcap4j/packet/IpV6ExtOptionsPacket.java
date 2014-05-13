@@ -31,20 +31,26 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
   /**
    *
+   */
+  protected IpV6ExtOptionsPacket() {
+    this.payload = null;
+  }
+
+  /**
+   *
    * @param rawPayload
    * @param number
    */
-  protected IpV6ExtOptionsPacket(
-    byte[] rawPayload, IpNumber number
-  ) {
-    if (rawPayload != null) {
-      this.payload
-        = PacketFactories.getFactory(Packet.class, IpNumber.class)
-            .newInstance(rawPayload, number);
+  protected IpV6ExtOptionsPacket(byte[] rawPayload, IpNumber number) {
+    if (rawPayload == null) {
+      throw new NullPointerException("rawPayload must not be null.");
     }
-    else {
-      this.payload = null;
+    if (rawPayload.length == 0) {
+      throw new IllegalArgumentException("rawPayload is empty.");
     }
+    this.payload
+      = PacketFactories.getFactory(Packet.class, IpNumber.class)
+          .newInstance(rawPayload, number);
   }
 
   /**

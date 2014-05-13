@@ -30,17 +30,22 @@ public final class Ssh2ServiceAcceptPacket extends AbstractPacket {
    * @param rawData
    * @return a new Ssh2ServiceAcceptPacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static Ssh2ServiceAcceptPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new Ssh2ServiceAcceptPacket(rawData);
   }
 
   private Ssh2ServiceAcceptPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException();
-    }
     this.header = new Ssh2ServiceAcceptHeader(rawData);
   }
 

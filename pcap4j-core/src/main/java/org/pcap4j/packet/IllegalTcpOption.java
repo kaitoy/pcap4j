@@ -30,19 +30,20 @@ public final class IllegalTcpOption implements TcpOption {
    *
    * @param rawData
    * @return a new IllegalTcpOption object.
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IllegalTcpOption newInstance(byte[] rawData) {
-    return new IllegalTcpOption(rawData);
-  }
-
-  private IllegalTcpOption(byte[] rawData) {
     if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
+      throw new NullPointerException("rawData must not be null.");
     }
     if (rawData.length == 0) {
       throw new IllegalArgumentException("rawData is empty.");
     }
+    return new IllegalTcpOption(rawData);
+  }
 
+  private IllegalTcpOption(byte[] rawData) {
     this.kind = TcpOptionKind.getInstance(rawData[0]);
     this.rawData = new byte[rawData.length];
     System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);

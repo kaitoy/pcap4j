@@ -29,10 +29,19 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
    * @param rawData
    * @return a new IpV6ExtDestinationOptionsPacket object.
    * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV6ExtDestinationOptionsPacket newPacket(
     byte[] rawData
   ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
+
     IpV6ExtDestinationOptionsHeader optHeader
       = new IpV6ExtDestinationOptionsHeader(rawData);
 
@@ -47,8 +56,12 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
       return new IpV6ExtDestinationOptionsPacket(rawPayload, optHeader);
     }
     else {
-      return new IpV6ExtDestinationOptionsPacket(null, optHeader);
+      return new IpV6ExtDestinationOptionsPacket(optHeader);
     }
+  }
+
+  private IpV6ExtDestinationOptionsPacket(IpV6ExtDestinationOptionsHeader optHeader) {
+    this.header = optHeader;
   }
 
   private IpV6ExtDestinationOptionsPacket(

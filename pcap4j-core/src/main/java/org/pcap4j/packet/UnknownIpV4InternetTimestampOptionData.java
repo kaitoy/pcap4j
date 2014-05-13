@@ -29,16 +29,20 @@ implements IpV4InternetTimestampOptionData {
    *
    * @param rawData
    * @return a new UnknownIpV4InternetTimestampData object.
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static UnknownIpV4InternetTimestampOptionData newInstance(byte[] rawData) {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
     return new UnknownIpV4InternetTimestampOptionData(rawData);
   }
 
   private UnknownIpV4InternetTimestampOptionData(byte[] rawData) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData may not be null");
-    }
-
     this.rawData = new byte[rawData.length];
     System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);
   }
