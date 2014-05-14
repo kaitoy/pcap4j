@@ -90,12 +90,19 @@ public final class TcpPort extends NamedNumber<Short> {
   }
 
   /**
+   * @return the value of this object as an int.
+   */
+  public int valueAsInt() {
+    return 0xFFFF & value();
+  }
+
+  /**
    *
    * @return a string representation of this value.
    */
   @Override
   public String valueAsString() {
-    return String.valueOf(0xFFFF & value());
+    return String.valueOf(valueAsInt());
   }
 
   @Override
