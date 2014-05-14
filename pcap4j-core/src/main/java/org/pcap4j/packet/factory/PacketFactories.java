@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -42,7 +42,7 @@ public final class PacketFactories {
    * @param numberClass
    * @return a {@link org.pcap4j.packet.factory.PacketFactory PacketFactory} object.
    */
-  public static <T, N extends NamedNumber<?>> PacketFactory<T, N> getFactory(
+  public static <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {
     if (numberClass == null || targetClass == null) {

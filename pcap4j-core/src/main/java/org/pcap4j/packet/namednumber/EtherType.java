@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -16,7 +16,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class EtherType extends NamedNumber<Short> {
+public final class EtherType extends NamedNumber<Short, EtherType> {
 
   /**
    *
@@ -147,8 +147,8 @@ public final class EtherType extends NamedNumber<Short> {
   }
 
   @Override
-  public int compareTo(Short o) {
-    return value().compareTo(o);
+  public int compareTo(EtherType o) {
+    return value().compareTo(o.value());
   }
 
 }

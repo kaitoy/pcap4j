@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.12
  */
-public final class TcpOptionKind extends NamedNumber<Byte> {
+public final class TcpOptionKind extends NamedNumber<Byte, TcpOptionKind> {
 
   // http://www.iana.org/assignments/tcp-parameters/tcp-parameters.xml
 
@@ -95,7 +95,9 @@ public final class TcpOptionKind extends NamedNumber<Byte> {
   }
 
   @Override
-  public int compareTo(Byte o) { return value().compareTo(o); }
+  public int compareTo(TcpOptionKind o) {
+    return value().compareTo(o.value());
+  }
 
   /**
    *

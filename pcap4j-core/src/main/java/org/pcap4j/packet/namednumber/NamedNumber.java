@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -13,10 +13,11 @@ import java.io.Serializable;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  * @param <T>
+ * @param <U>
  */
 public
-abstract class NamedNumber<T extends Number>
-implements Comparable<T>, Serializable {
+abstract class NamedNumber<T extends Number, U extends NamedNumber<T, ?>>
+implements Comparable<U>, Serializable {
 
   /**
    *
@@ -60,7 +61,7 @@ implements Comparable<T>, Serializable {
     return value.toString();
   }
 
-  public abstract int compareTo(T o);
+  public abstract int compareTo(U o);
 
   @Override
   public String toString() {

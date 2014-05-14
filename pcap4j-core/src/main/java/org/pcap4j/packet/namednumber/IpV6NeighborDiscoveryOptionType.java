@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,7 +15,8 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.15
  */
-public final class IpV6NeighborDiscoveryOptionType extends NamedNumber<Byte> {
+public final class IpV6NeighborDiscoveryOptionType
+extends NamedNumber<Byte, IpV6NeighborDiscoveryOptionType> {
 
   // http://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xml#icmpv6-parameters-5
 
@@ -107,7 +108,9 @@ public final class IpV6NeighborDiscoveryOptionType extends NamedNumber<Byte> {
   }
 
   @Override
-  public int compareTo(Byte o) { return value().compareTo(o); }
+  public int compareTo(IpV6NeighborDiscoveryOptionType o) {
+    return value().compareTo(o.value());
+  }
 
   /**
    *

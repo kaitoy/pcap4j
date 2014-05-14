@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -19,7 +19,7 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @since pcap4j 0.9.14
  */
 public final class PropertiesBasedPacketFactory
-implements PacketFactory<Packet, NamedNumber<?>> {
+implements PacketFactory<Packet, NamedNumber<?, ?>> {
 
   private static final PropertiesBasedPacketFactory INSTANCE
     = new PropertiesBasedPacketFactory();
@@ -33,7 +33,7 @@ implements PacketFactory<Packet, NamedNumber<?>> {
   public static PropertiesBasedPacketFactory getInstance() { return INSTANCE; }
 
 
-  public Packet newInstance(byte[] rawData, NamedNumber<?> number) {
+  public Packet newInstance(byte[] rawData, NamedNumber<?, ?> number) {
     if (number == null) {
       throw new NullPointerException(" number: " + number);
     }

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class IpVersion extends NamedNumber<Byte> {
+public final class IpVersion extends NamedNumber<Byte, IpVersion> {
 
   /**
    *
@@ -119,8 +119,8 @@ public final class IpVersion extends NamedNumber<Byte> {
   }
 
   @Override
-  public int compareTo(Byte o) {
-    return value().compareTo(o);
+  public int compareTo(IpVersion o) {
+    return value().compareTo(o.value());
   }
 
 }

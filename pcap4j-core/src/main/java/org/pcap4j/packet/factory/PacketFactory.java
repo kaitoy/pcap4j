@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,7 +15,7 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @param <T> target
  * @param <N> number
  */
-public interface PacketFactory<T, N extends NamedNumber<?>> {
+public interface PacketFactory<T, N extends NamedNumber<?, ?>> {
 
   /**
    *

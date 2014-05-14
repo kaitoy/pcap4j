@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -27,7 +27,7 @@ final class PacketFactoryBinder {
 
   public static PacketFactoryBinder getInstance() { return INSTANCE; }
 
-  public <T, N extends NamedNumber<?>> PacketFactory<T, N> getPacketFactory(
+  public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {
     if (Packet.class.isAssignableFrom(targetClass)) {
@@ -73,10 +73,10 @@ final class PacketFactoryBinder {
   private static final class CacheKey {
 
     private final Class<?> targetClass;
-    private final Class<? extends NamedNumber<?>> numberClass;
+    private final Class<? extends NamedNumber<?, ?>> numberClass;
 
     public CacheKey(
-      Class<?> targetClass, Class<? extends NamedNumber<?>> numberClass
+      Class<?> targetClass, Class<? extends NamedNumber<?, ?>> numberClass
     ) {
       this.targetClass = targetClass;
       this.numberClass = numberClass;

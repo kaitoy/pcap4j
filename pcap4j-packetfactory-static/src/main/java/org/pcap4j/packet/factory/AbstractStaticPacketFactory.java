@@ -19,7 +19,7 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */
-public abstract class AbstractStaticPacketFactory<N extends NamedNumber<?>>
+public abstract class AbstractStaticPacketFactory<N extends NamedNumber<?, ?>>
 implements PacketFactory<Packet, N> {
 
   protected final Map<N, PacketInstantiater> instantiaters

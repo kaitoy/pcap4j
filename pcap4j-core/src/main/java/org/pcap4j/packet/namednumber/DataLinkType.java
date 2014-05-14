@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class DataLinkType extends NamedNumber<Integer> {
+public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
 
   /**
    *
@@ -127,8 +127,8 @@ public final class DataLinkType extends NamedNumber<Integer> {
   }
 
   @Override
-  public int compareTo(Integer o) {
-    return value().compareTo(o);
+  public int compareTo(DataLinkType o) {
+    return value().compareTo(o.value());
   }
 
 }

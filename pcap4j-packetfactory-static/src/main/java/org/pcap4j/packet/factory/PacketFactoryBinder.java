@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -36,8 +36,8 @@ final class PacketFactoryBinder {
 
   private static final PacketFactoryBinder INSTANCE = new PacketFactoryBinder();
 
-  private final Map<Class<? extends NamedNumber<?>>, PacketFactory<?, ?>> packetFactories
-    = new HashMap<Class<? extends NamedNumber<?>>, PacketFactory<?, ?>>();
+  private final Map<Class<? extends NamedNumber<?, ?>>, PacketFactory<?, ?>> packetFactories
+    = new HashMap<Class<? extends NamedNumber<?, ?>>, PacketFactory<?, ?>>();
   private final Map<Class<?>, PacketFactory<?, ?>> packetpPieceFactories
     = new HashMap<Class<?>, PacketFactory<?, ?>>();
 
@@ -91,7 +91,7 @@ final class PacketFactoryBinder {
   public static PacketFactoryBinder getInstance() { return INSTANCE; }
 
   @SuppressWarnings("unchecked")
-  public <T, N extends NamedNumber<?>> PacketFactory<T, N> getPacketFactory(
+  public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {
     if (Packet.class.isAssignableFrom(targetClass)) {

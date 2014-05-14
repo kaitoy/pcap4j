@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.12
  */
-public final class TcpPort extends NamedNumber<Short> {
+public final class TcpPort extends NamedNumber<Short, TcpPort> {
 
   /**
    *
@@ -106,8 +106,8 @@ public final class TcpPort extends NamedNumber<Short> {
   }
 
   @Override
-  public int compareTo(Short o) {
-    return value().compareTo(o);
+  public int compareTo(TcpPort o) {
+    return value().compareTo(o.value());
   }
 
 }

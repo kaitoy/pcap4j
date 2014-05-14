@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -181,7 +181,7 @@ public final class PacketFactoryPropertiesLoader {
    * @param number
    * @return a class which implements Packet for a specified NamedNumber.
    */
-  public <T extends NamedNumber<?>> Class<? extends Packet> getPacketClass(T number) {
+  public <T extends NamedNumber<?, ?>> Class<? extends Packet> getPacketClass(T number) {
     StringBuilder sb = new StringBuilder(110);
     sb.append(PACKET_CLASS_KEY_BASE)
       .append(number.getClass().getName())
@@ -213,7 +213,7 @@ public final class PacketFactoryPropertiesLoader {
    *         for specified classes.
    */
   public Class<? extends PacketFactory<?, ?>> getPacketFactoryClass(
-    Class<?> targetClass, Class<? extends NamedNumber<?>> numberClass
+    Class<?> targetClass, Class<? extends NamedNumber<?, ?>> numberClass
   ) {
     StringBuilder sb = new StringBuilder(200);
     sb.append(targetClass.getName());

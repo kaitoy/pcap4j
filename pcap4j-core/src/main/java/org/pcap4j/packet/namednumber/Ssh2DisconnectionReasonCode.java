@@ -15,7 +15,8 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 1.0.1
  */
-public final class Ssh2DisconnectionReasonCode extends NamedNumber<Integer> {
+public final class Ssh2DisconnectionReasonCode
+extends NamedNumber<Integer, Ssh2DisconnectionReasonCode> {
 
   // https://www.iana.org/assignments/ssh-parameters/ssh-parameters.xhtml#ssh-parameters-3
 
@@ -172,8 +173,8 @@ public final class Ssh2DisconnectionReasonCode extends NamedNumber<Integer> {
   }
 
   @Override
-  public int compareTo(Integer o) {
-    return value().compareTo(o);
+  public int compareTo(Ssh2DisconnectionReasonCode o) {
+    return value().compareTo(o.value());
   }
 
 }

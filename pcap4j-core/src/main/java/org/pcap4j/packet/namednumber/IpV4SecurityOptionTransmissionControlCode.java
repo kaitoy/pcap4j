@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -17,7 +17,8 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.11
  */
 public final class
-IpV4SecurityOptionTransmissionControlCode extends NamedNumber<Integer> {
+IpV4SecurityOptionTransmissionControlCode
+extends NamedNumber<Integer, IpV4SecurityOptionTransmissionControlCode> {
 
 
   // http://www.ietf.org/rfc/rfc791.txt
@@ -102,8 +103,8 @@ IpV4SecurityOptionTransmissionControlCode extends NamedNumber<Integer> {
   }
 
   @Override
-  public int compareTo(Integer o) {
-    return value().compareTo(o);
+  public int compareTo(IpV4SecurityOptionTransmissionControlCode o) {
+    return value().compareTo(o.value());
   }
 
 }

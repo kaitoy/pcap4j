@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
-public final class IcmpV4Code extends NamedNumber<Byte> {
+public final class IcmpV4Code extends NamedNumber<Byte, IcmpV4Code> {
 
   /**
    *
@@ -342,8 +342,8 @@ public final class IcmpV4Code extends NamedNumber<Byte> {
   }
 
   @Override
-  public int compareTo(Byte o) {
-    return value().compareTo(o);
+  public int compareTo(IcmpV4Code o) {
+    return value().compareTo(o.value());
   }
 
 }

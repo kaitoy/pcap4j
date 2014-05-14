@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -16,7 +16,8 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
-public final class IpV4SecurityOptionHandlingRestrictions extends NamedNumber<Short> {
+public final class IpV4SecurityOptionHandlingRestrictions
+extends NamedNumber<Short, IpV4SecurityOptionHandlingRestrictions> {
 
 
   // http://www.ietf.org/rfc/rfc791.txt
@@ -94,8 +95,8 @@ public final class IpV4SecurityOptionHandlingRestrictions extends NamedNumber<Sh
   }
 
   @Override
-  public int compareTo(Short o) {
-    return value().compareTo(o);
+  public int compareTo(IpV4SecurityOptionHandlingRestrictions o) {
+    return value().compareTo(o.value());
   }
 
 }

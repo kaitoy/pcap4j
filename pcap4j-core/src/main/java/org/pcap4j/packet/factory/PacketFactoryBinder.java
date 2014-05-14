@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -21,7 +21,7 @@ final class PacketFactoryBinder {
 
   public static PacketFactoryBinder getInstance() { return INSTANCE; }
 
-  public <T, N extends NamedNumber<?>> PacketFactory<T, N> getPacketFactory(
+  public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {
     throw new UnsupportedOperationException("This code is never included in pcap4j-core.jar.");

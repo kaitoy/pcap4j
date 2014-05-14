@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 1.0.1
  */
-public final class Ssh2MessageNumber extends NamedNumber<Byte> {
+public final class Ssh2MessageNumber extends NamedNumber<Byte, Ssh2MessageNumber> {
 
   // https://www.iana.org/assignments/ssh-parameters/ssh-parameters.xhtml#ssh-parameters-1
   // http://www.rfc-editor.org/errata_search.php?rfc=4253
@@ -263,8 +263,8 @@ public final class Ssh2MessageNumber extends NamedNumber<Byte> {
   }
 
   @Override
-  public int compareTo(Byte o) {
-    return value().compareTo(o);
+  public int compareTo(Ssh2MessageNumber o) {
+    return value().compareTo(o.value());
   }
 
 }

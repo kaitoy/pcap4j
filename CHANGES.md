@@ -16,6 +16,7 @@ Future
 * Change org.pcap4j.packet.IllegalRawDataException to checked exception.
 * Change serialization formats:
  * Change org.pcap4j.packet.IllegalRawDataException
+* Make compareTo methods of NamedNumber's subclasses more reasonable.
 
 Release 1.1.0 (7-Mar-2014)
 ==========================

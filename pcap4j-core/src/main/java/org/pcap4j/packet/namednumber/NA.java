@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -12,7 +12,7 @@ package org.pcap4j.packet.namednumber;
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */
-public final class NA extends NamedNumber<Byte> {
+public final class NA extends NamedNumber<Byte, NA> {
 
   /**
    *
@@ -35,8 +35,8 @@ public final class NA extends NamedNumber<Byte> {
   }
 
   @Override
-  public int compareTo(Byte o) {
-    return value().compareTo(o);
+  public int compareTo(NA o) {
+    return value().compareTo(o.value());
   }
 
 }

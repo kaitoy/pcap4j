@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
-public final class IpV4OptionType extends NamedNumber<Byte> {
+public final class IpV4OptionType extends NamedNumber<Byte, IpV4OptionType> {
 
   // http://www.iana.org/assignments/ip-parameters
 
@@ -168,7 +168,9 @@ public final class IpV4OptionType extends NamedNumber<Byte> {
   }
 
   @Override
-  public int compareTo(Byte o) { return value().compareTo(o); }
+  public int compareTo(IpV4OptionType o) {
+    return value().compareTo(o.value());
+  }
 
   /**
    *

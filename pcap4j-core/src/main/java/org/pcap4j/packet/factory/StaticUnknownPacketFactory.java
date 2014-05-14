@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -16,7 +16,7 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @since pcap4j 0.9.14
  */
 public final class StaticUnknownPacketFactory
-implements PacketFactory<Packet, NamedNumber<?>> {
+implements PacketFactory<Packet, NamedNumber<?, ?>> {
 
   private static final StaticUnknownPacketFactory INSTANCE
     = new StaticUnknownPacketFactory();
@@ -29,7 +29,7 @@ implements PacketFactory<Packet, NamedNumber<?>> {
    */
   public static StaticUnknownPacketFactory getInstance() { return INSTANCE; }
 
-  public Packet newInstance(byte[] rawData, NamedNumber<?> number) {
+  public Packet newInstance(byte[] rawData, NamedNumber<?, ?> number) {
     return newInstance(rawData);
   }
 
