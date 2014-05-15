@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -30,14 +30,15 @@ implements PacketFactory<IpV6TrafficClass, NA> {
    */
   public static PropertiesBasedIpV6TrafficClassFactory getInstance() { return INSTANCE; }
 
+  @Override
+  @Deprecated
   public IpV6TrafficClass newInstance(byte[] rawData, NA number) {
     return newInstance(rawData);
   }
 
+  @Override
   public IpV6TrafficClass newInstance(byte[] rawData) {
-    Class<? extends IpV6TrafficClass> clazz
-      = PacketFactoryPropertiesLoader.getInstance().getIpV6TrafficClassClass();
-    return newInstance(rawData, clazz);
+    return newInstance(rawData, getTargetClass());
   }
 
   /**
@@ -75,6 +76,17 @@ implements PacketFactory<IpV6TrafficClass, NA> {
     } catch (InvocationTargetException e) {
       throw new IllegalStateException(e.getTargetException());
     }
+  }
+
+  @Override
+  @Deprecated
+  public Class<? extends IpV6TrafficClass> getTargetClass(NA number) {
+    return getTargetClass();
+  }
+
+  @Override
+  public Class<? extends IpV6TrafficClass> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance().getIpV6TrafficClassClass();
   }
 
 }

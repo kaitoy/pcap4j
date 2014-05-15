@@ -29,6 +29,10 @@ extends AbstractStaticPacketFactory<DataLinkType> {
         public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return EthernetPacket.newPacket(rawData);
         }
+        @Override
+        public Class<EthernetPacket> getTargetClass() {
+          return EthernetPacket.class;
+        }
       }
     );
   };

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -33,20 +33,14 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
    */
   public static PropertiesBasedIpV6OptionFactory getInstance() { return INSTANCE; }
 
+  @Override
   public IpV6Option newInstance(byte[] rawData, IpV6OptionType number) {
-    if (number == null) {
-      throw new NullPointerException(" number: " + number);
-    }
-
-    Class<? extends IpV6Option> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getIpV6OptionClass(number);
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass(number));
   }
 
+  @Override
   public IpV6Option newInstance(byte[] rawData) {
-    Class<? extends IpV6Option> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getUnknownIpV6OptionClass();
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass());
   }
 
   /**
@@ -82,6 +76,19 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
       }
       throw new IllegalStateException(e.getTargetException());
     }
+  }
+
+  @Override
+  public Class<? extends IpV6Option> getTargetClass(IpV6OptionType number) {
+    if (number == null) {
+      throw new NullPointerException(" number: " + number);
+    }
+    return PacketFactoryPropertiesLoader.getInstance().getIpV6OptionClass(number);
+  }
+
+  @Override
+  public Class<? extends IpV6Option> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance().getUnknownIpV6OptionClass();
   }
 
 }

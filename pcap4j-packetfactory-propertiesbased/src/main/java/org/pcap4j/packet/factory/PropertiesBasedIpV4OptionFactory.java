@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -33,20 +33,14 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
    */
   public static PropertiesBasedIpV4OptionFactory getInstance() { return INSTANCE; }
 
+  @Override
   public IpV4Option newInstance(byte[] rawData, IpV4OptionType number) {
-    if (number == null) {
-      throw new NullPointerException(" number: " + number);
-    }
-
-    Class<? extends IpV4Option> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getIpV4OptionClass(number);
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass(number));
   }
 
+  @Override
   public IpV4Option newInstance(byte[] rawData) {
-    Class<? extends IpV4Option> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getUnknownIpV4OptionClass();
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass());
   }
 
   /**
@@ -82,6 +76,19 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
       }
       throw new IllegalStateException(e.getTargetException());
     }
+  }
+
+  @Override
+  public Class<? extends IpV4Option> getTargetClass(IpV4OptionType number) {
+    if (number == null) {
+      throw new NullPointerException("number: " + number);
+    }
+    return PacketFactoryPropertiesLoader.getInstance().getIpV4OptionClass(number);
+  }
+
+  @Override
+  public Class<? extends IpV4Option> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance().getUnknownIpV4OptionClass();
   }
 
 }

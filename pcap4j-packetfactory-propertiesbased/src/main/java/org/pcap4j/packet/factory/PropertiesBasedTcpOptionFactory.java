@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -33,20 +33,14 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
    */
   public static PropertiesBasedTcpOptionFactory getInstance() { return INSTANCE; }
 
+  @Override
   public TcpOption newInstance(byte[] rawData, TcpOptionKind number) {
-    if (number == null) {
-      throw new NullPointerException(" number: " + number);
-    }
-
-    Class<? extends TcpOption> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getTcpOptionClass(number);
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass(number));
   }
 
+  @Override
   public TcpOption newInstance(byte[] rawData) {
-    Class<? extends TcpOption> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getUnknownTcpOptionClass();
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass());
   }
 
   /**
@@ -82,6 +76,19 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
       }
       throw new IllegalStateException(e.getTargetException());
     }
+  }
+
+  @Override
+  public Class<? extends TcpOption> getTargetClass(TcpOptionKind number) {
+    if (number == null) {
+      throw new NullPointerException(" number: " + number);
+    }
+    return PacketFactoryPropertiesLoader.getInstance().getTcpOptionClass(number);
+  }
+
+  @Override
+  public Class<? extends TcpOption> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance().getUnknownTcpOptionClass();
   }
 
 }

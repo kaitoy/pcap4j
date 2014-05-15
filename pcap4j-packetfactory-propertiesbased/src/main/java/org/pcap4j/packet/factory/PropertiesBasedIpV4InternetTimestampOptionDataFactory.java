@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -35,22 +35,16 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
     return INSTANCE;
   }
 
+  @Override
   public IpV4InternetTimestampOptionData newInstance(
     byte[] rawData, IpV4InternetTimestampOptionFlag flag
   ) {
-    if (flag == null) {
-      throw new NullPointerException("flag may not be null");
-    }
-
-    Class<? extends IpV4InternetTimestampOptionData> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getIpV4InternetTimestampDataClass(flag);
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass(flag));
   }
 
+  @Override
   public IpV4InternetTimestampOptionData newInstance(byte[] rawData) {
-    Class<? extends IpV4InternetTimestampOptionData> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getUnknownIpV4InternetTimestampDataClass();
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass());
   }
 
   /**
@@ -88,6 +82,22 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
       }
       throw new IllegalStateException(e.getTargetException());
     }
+  }
+
+  @Override
+  public Class<? extends IpV4InternetTimestampOptionData>
+  getTargetClass(IpV4InternetTimestampOptionFlag flag) {
+    if (flag == null) {
+      throw new NullPointerException("flag must not be null");
+    }
+    return PacketFactoryPropertiesLoader.getInstance()
+             .getIpV4InternetTimestampDataClass(flag);
+  }
+
+  @Override
+  public Class<? extends IpV4InternetTimestampOptionData> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance()
+             .getUnknownIpV4InternetTimestampDataClass();
   }
 
 }

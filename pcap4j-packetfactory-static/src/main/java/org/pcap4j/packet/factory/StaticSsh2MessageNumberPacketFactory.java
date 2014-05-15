@@ -29,6 +29,10 @@ extends AbstractStaticPacketFactory<Ssh2MessageNumber> {
         public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return Ssh2KexInitPacket.newPacket(rawData);
         }
+        @Override
+        public Class<Ssh2KexInitPacket> getTargetClass() {
+          return Ssh2KexInitPacket.class;
+        }
       }
     );
   };

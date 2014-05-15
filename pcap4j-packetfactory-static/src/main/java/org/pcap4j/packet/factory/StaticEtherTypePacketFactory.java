@@ -32,6 +32,10 @@ extends AbstractStaticPacketFactory<EtherType> {
         public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV4Packet.newPacket(rawData);
         }
+        @Override
+        public Class<IpV4Packet> getTargetClass() {
+          return IpV4Packet.class;
+        }
       }
     );
     instantiaters.put(
@@ -39,6 +43,10 @@ extends AbstractStaticPacketFactory<EtherType> {
         @Override
         public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return ArpPacket.newPacket(rawData);
+        }
+        @Override
+        public Class<ArpPacket> getTargetClass() {
+          return ArpPacket.class;
         }
       }
     );
@@ -48,6 +56,10 @@ extends AbstractStaticPacketFactory<EtherType> {
         public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return Dot1qVlanTagPacket.newPacket(rawData);
         }
+        @Override
+        public Class<Dot1qVlanTagPacket> getTargetClass() {
+          return Dot1qVlanTagPacket.class;
+        }
       }
     );
     instantiaters.put(
@@ -55,6 +67,10 @@ extends AbstractStaticPacketFactory<EtherType> {
         @Override
         public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV6Packet.newPacket(rawData);
+        }
+        @Override
+        public Class<IpV6Packet> getTargetClass() {
+          return IpV6Packet.class;
         }
       }
     );

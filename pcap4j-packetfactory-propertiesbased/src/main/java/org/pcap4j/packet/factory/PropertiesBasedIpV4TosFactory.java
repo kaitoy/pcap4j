@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -30,14 +30,15 @@ implements PacketFactory<IpV4Tos, NA> {
    */
   public static PropertiesBasedIpV4TosFactory getInstance() { return INSTANCE; }
 
+  @Override
+  @Deprecated
   public IpV4Tos newInstance(byte[] rawData, NA number) {
     return newInstance(rawData);
   }
 
+  @Override
   public IpV4Tos newInstance(byte[] rawData) {
-    Class<? extends IpV4Tos> tosClass
-      = PacketFactoryPropertiesLoader.getInstance().getIpV4TosClass();
-    return newInstance(rawData, tosClass);
+    return newInstance(rawData, getTargetClass());
   }
 
   /**
@@ -73,6 +74,17 @@ implements PacketFactory<IpV4Tos, NA> {
     } catch (InvocationTargetException e) {
       throw new IllegalStateException(e.getTargetException());
     }
+  }
+
+  @Override
+  @Deprecated
+  public Class<? extends IpV4Tos> getTargetClass(NA number) {
+    return getTargetClass();
+  }
+
+  @Override
+  public Class<? extends IpV4Tos> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance().getIpV4TosClass();
   }
 
 }

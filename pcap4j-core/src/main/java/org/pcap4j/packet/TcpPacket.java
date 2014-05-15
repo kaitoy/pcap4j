@@ -15,6 +15,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.packet.namednumber.TcpPort;
@@ -65,9 +66,21 @@ public final class TcpPacket extends AbstractPacket {
             header.length(),
             payloadLength
           );
+
+      PacketFactory<Packet, TcpPort> factory
+        = PacketFactories.getFactory(Packet.class, TcpPort.class);
+      Class<? extends Packet> class4UnknownPort = factory.getTargetClass();
+      Class<? extends Packet> class4DstPort = factory.getTargetClass(header.getDstPort());
+      TcpPort serverPort;
+      if (class4DstPort.equals(class4UnknownPort)) {
+        serverPort = header.getSrcPort();
+      }
+      else {
+        serverPort = header.getDstPort();
+      }
       this.payload
         = PacketFactories.getFactory(Packet.class, TcpPort.class)
-            .newInstance(rawPayload, header.getDstPort());
+            .newInstance(rawPayload, serverPort);
     }
     else {
       this.payload = null;
@@ -436,11 +449,13 @@ public final class TcpPacket extends AbstractPacket {
       return this;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
+    @Override
     public Builder correctChecksumAtBuild(boolean correctChecksumAtBuild) {
       this.correctChecksumAtBuild = correctChecksumAtBuild;
       return this;

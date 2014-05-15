@@ -31,16 +31,16 @@ implements PacketFactory<IpV6FlowLabel, NA> {
     return INSTANCE;
   }
 
+  @Override
+  @Deprecated
   public IpV6FlowLabel newInstance(byte[] rawData, NA number) {
     return newInstance(rawData);
   }
 
+  @Override
   public IpV6FlowLabel newInstance(byte[] rawData) {
     if (rawData == null) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("rawData: ")
-        .append(rawData);
-      throw new NullPointerException(sb.toString());
+      throw new NullPointerException("rawData is null.");
     }
     if (rawData.length < INT_SIZE_IN_BYTES) {
       throw new IllegalArgumentException(
@@ -49,6 +49,17 @@ implements PacketFactory<IpV6FlowLabel, NA> {
     }
 
     return IpV6SimpleFlowLabel.newInstance(ByteArrays.getInt(rawData, 0));
+  }
+
+  @Override
+  @Deprecated
+  public Class<? extends IpV6FlowLabel> getTargetClass(NA number) {
+    return getTargetClass();
+  }
+
+  @Override
+  public Class<? extends IpV6FlowLabel> getTargetClass() {
+    return IpV6SimpleFlowLabel.class;
   }
 
 }

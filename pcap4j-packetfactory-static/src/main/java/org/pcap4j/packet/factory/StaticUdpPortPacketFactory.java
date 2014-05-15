@@ -26,6 +26,10 @@ extends AbstractStaticPacketFactory<UdpPort> {
 //        public Packet newInstance(byte[] rawData) {
 //          return SnmpPacket.newPacket(rawData);
 //        }
+//        @Override
+//        public Class<SnmpPacket> getTargetClass() {
+//          return SnmpPacket.class;
+//        }
 //      }
 //    );
   };

@@ -5,6 +5,7 @@ Future
 * Upgrade JNA to 4.10.
 * [Issues#17](https://github.com/kaitoy/pcap4j/issues/17): Add PcapHandle.Builder, which internally uses pcap_create, pcap_set_snaplen, pcap_set_promisc, pcap_set_rfmon, pcap_set_timeout, pcap_set_buffer_size, and pcap_activate.
 * [Issues#15](https://github.com/kaitoy/pcap4j/issues/15): TSO support.
+* Add getTargetClass(N number) and getTargetClass() to org.pcap4j.packet.factory.PacketFactory.
 
 ### Bug Fixes ###
 * Change required libpcap version from 0.9.3 to 1.0.0 to solve [Issues#16](https://github.com/kaitoy/pcap4j/issues/16).

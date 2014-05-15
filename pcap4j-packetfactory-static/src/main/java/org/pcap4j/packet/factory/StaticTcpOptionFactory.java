@@ -37,6 +37,10 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
         public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
           return TcpEndOfOptionList.newInstance(rawData);
         }
+        @Override
+        public Class<TcpEndOfOptionList> getTargetClass() {
+          return TcpEndOfOptionList.class;
+        }
       }
     );
     instantiaters.put(
@@ -45,6 +49,10 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
         public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
           return TcpNoOperationOption.newInstance(rawData);
         }
+        @Override
+        public Class<TcpNoOperationOption> getTargetClass() {
+          return TcpNoOperationOption.class;
+        }
       }
     );
     instantiaters.put(
@@ -52,6 +60,10 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
         @Override
         public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
           return TcpMaximumSegmentSizeOption.newInstance(rawData);
+        }
+        @Override
+        public Class<TcpMaximumSegmentSizeOption> getTargetClass() {
+          return TcpMaximumSegmentSizeOption.class;
         }
       }
     );
@@ -65,6 +77,7 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     return INSTANCE;
   }
 
+  @Override
   public TcpOption newInstance(
     byte[] rawData, TcpOptionKind number
   ) {
@@ -89,6 +102,7 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     return newInstance(rawData);
   }
 
+  @Override
   public TcpOption newInstance(byte[] rawData) {
     try {
       return UnknownTcpOption.newInstance(rawData);
@@ -97,9 +111,25 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     }
   }
 
-  private static abstract class Instantiater {
+  @Override
+  public Class<? extends TcpOption> getTargetClass(TcpOptionKind number) {
+    if (number == null) {
+      throw new NullPointerException("number must not be null.");
+    }
+    Instantiater instantiater = instantiaters.get(number);
+    return instantiater != null ? instantiater.getTargetClass() : getTargetClass();
+  }
 
-    public abstract TcpOption newInstance(byte [] rawData) throws IllegalRawDataException;
+  @Override
+  public Class<? extends TcpOption> getTargetClass() {
+    return UnknownTcpOption.class;
+  }
+
+  private static interface Instantiater {
+
+    public TcpOption newInstance(byte [] rawData) throws IllegalRawDataException;
+
+    public Class<? extends TcpOption> getTargetClass();
 
   }
 

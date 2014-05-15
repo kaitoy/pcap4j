@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013 Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -35,22 +35,16 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
     return INSTANCE;
   }
 
+  @Override
   public IpV6NeighborDiscoveryOption newInstance(
     byte[] rawData, IpV6NeighborDiscoveryOptionType type
   ) {
-    if (type == null) {
-      throw new NullPointerException(" type: " + type);
-    }
-
-    Class<? extends IpV6NeighborDiscoveryOption> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getIpV6NeighborDiscoveryOptionClass(type);
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass(type));
   }
 
+  @Override
   public IpV6NeighborDiscoveryOption newInstance(byte[] rawData) {
-    Class<? extends IpV6NeighborDiscoveryOption> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getUnknownIpV6NeighborDiscoveryOptionClass();
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass());
   }
 
   /**
@@ -88,6 +82,22 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
       }
       throw new IllegalStateException(e.getTargetException());
     }
+  }
+
+  @Override
+  public Class<? extends IpV6NeighborDiscoveryOption>
+  getTargetClass(IpV6NeighborDiscoveryOptionType type) {
+    if (type == null) {
+      throw new NullPointerException("type: " + type);
+    }
+    return PacketFactoryPropertiesLoader.getInstance()
+             .getIpV6NeighborDiscoveryOptionClass(type);
+  }
+
+  @Override
+  public Class<? extends IpV6NeighborDiscoveryOption> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance()
+             .getUnknownIpV6NeighborDiscoveryOptionClass();
   }
 
 }

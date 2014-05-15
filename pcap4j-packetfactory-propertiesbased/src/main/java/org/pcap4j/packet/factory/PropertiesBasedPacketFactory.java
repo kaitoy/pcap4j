@@ -34,19 +34,11 @@ implements PacketFactory<Packet, NamedNumber<?, ?>> {
 
 
   public Packet newInstance(byte[] rawData, NamedNumber<?, ?> number) {
-    if (number == null) {
-      throw new NullPointerException(" number: " + number);
-    }
-
-    Class<? extends Packet> packetClass
-      = PacketFactoryPropertiesLoader.getInstance().getPacketClass(number);
-    return newInstance(rawData, packetClass);
+    return newInstance(rawData, getTargetClass(number));
   }
 
   public Packet newInstance(byte[] rawData) {
-    Class<? extends Packet> packetClass
-      = PacketFactoryPropertiesLoader.getInstance().getUnknownPacketClass();
-    return newInstance(rawData, packetClass);
+    return newInstance(rawData, getTargetClass());
   }
 
   /**
@@ -84,6 +76,19 @@ implements PacketFactory<Packet, NamedNumber<?, ?>> {
       }
       throw new IllegalStateException(e);
     }
+  }
+
+  @Override
+  public Class<? extends Packet> getTargetClass(NamedNumber<?, ?> number) {
+    if (number == null) {
+      throw new NullPointerException("number: " + number);
+    }
+    return PacketFactoryPropertiesLoader.getInstance().getPacketClass(number);
+  }
+
+  @Override
+  public Class<? extends Packet> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance().getUnknownPacketClass();
   }
 
 }

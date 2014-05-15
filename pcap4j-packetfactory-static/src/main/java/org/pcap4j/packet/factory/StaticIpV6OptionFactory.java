@@ -36,6 +36,10 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
         public IpV6Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV6Pad1Option.newInstance(rawData);
         }
+        @Override
+        public Class<IpV6Pad1Option> getTargetClass() {
+          return IpV6Pad1Option.class;
+        }
       }
     );
     instantiaters.put(
@@ -43,6 +47,10 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
         @Override
         public IpV6Option newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV6PadNOption.newInstance(rawData);
+        }
+        @Override
+        public Class<IpV6PadNOption> getTargetClass() {
+          return IpV6PadNOption.class;
         }
       }
     );
@@ -56,6 +64,7 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
     return INSTANCE;
   }
 
+  @Override
   public IpV6Option newInstance(
     byte[] rawData, IpV6OptionType number
   ) {
@@ -80,6 +89,7 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
     return newInstance(rawData);
   }
 
+  @Override
   public IpV6Option newInstance(byte[] rawData) {
     try {
       return UnknownIpV6Option.newInstance(rawData);
@@ -88,9 +98,25 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
     }
   }
 
-  private static abstract class Instantiater {
+  @Override
+  public Class<? extends IpV6Option> getTargetClass(IpV6OptionType number) {
+    if (number == null) {
+      throw new NullPointerException("number must not be null.");
+    }
+    Instantiater instantiater = instantiaters.get(number);
+    return instantiater != null ? instantiater.getTargetClass() : getTargetClass();
+  }
 
-    public abstract IpV6Option newInstance(byte [] rawData) throws IllegalRawDataException;
+  @Override
+  public Class<? extends IpV6Option> getTargetClass() {
+    return UnknownIpV6Option.class;
+  }
+
+  private static interface Instantiater {
+
+    public IpV6Option newInstance(byte [] rawData) throws IllegalRawDataException;
+
+    public Class<? extends IpV6Option> getTargetClass();
 
   }
 

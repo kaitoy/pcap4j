@@ -29,10 +29,13 @@ implements PacketFactory<IpV6TrafficClass, NA> {
     return INSTANCE;
   }
 
+  @Override
+  @Deprecated
   public IpV6TrafficClass newInstance(byte[] rawData, NA number) {
     return newInstance(rawData);
   }
 
+  @Override
   public IpV6TrafficClass newInstance(byte[] rawData) {
     if (rawData == null) {
       StringBuilder sb = new StringBuilder(40);
@@ -45,6 +48,17 @@ implements PacketFactory<IpV6TrafficClass, NA> {
     }
 
     return IpV6SimpleTrafficClass.newInstance(rawData[0]);
+  }
+
+  @Override
+  @Deprecated
+  public Class<? extends IpV6TrafficClass> getTargetClass(NA number) {
+    return getTargetClass();
+  }
+
+  @Override
+  public Class<? extends IpV6TrafficClass> getTargetClass() {
+    return IpV6SimpleTrafficClass.class;
   }
 
 }

@@ -37,4 +37,14 @@ implements PacketFactory<Packet, NamedNumber<?, ?>> {
     return UnknownPacket.newPacket(rawData);
   }
 
+  @Override
+  public Class<? extends Packet> getTargetClass(NamedNumber<?, ?> number) {
+    return getTargetClass();
+  }
+
+  @Override
+  public Class<? extends Packet> getTargetClass() {
+    return UnknownPacket.class;
+  }
+
 }

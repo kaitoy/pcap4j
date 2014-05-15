@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -35,22 +35,16 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
     return INSTANCE;
   }
 
+  @Override
   public IpV6RoutingData newInstance(
     byte[] rawData, IpV6RoutingHeaderType type
   ) {
-    if (type == null) {
-      throw new NullPointerException("type may not be null");
-    }
-
-    Class<? extends IpV6RoutingData> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getIpV6RoutingDataClass(type);
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass(type));
   }
 
+  @Override
   public IpV6RoutingData newInstance(byte[] rawData) {
-    Class<? extends IpV6RoutingData> dataClass
-      = PacketFactoryPropertiesLoader.getInstance().getUnknownIpV6RoutingDataClass();
-    return newInstance(rawData, dataClass);
+    return newInstance(rawData, getTargetClass());
   }
 
   /**
@@ -88,6 +82,19 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
       }
       throw new IllegalStateException(e.getTargetException());
     }
+  }
+
+  @Override
+  public Class<? extends IpV6RoutingData> getTargetClass(IpV6RoutingHeaderType type) {
+    if (type == null) {
+      throw new NullPointerException("type must not be null");
+    }
+    return PacketFactoryPropertiesLoader.getInstance().getIpV6RoutingDataClass(type);
+  }
+
+  @Override
+  public Class<? extends IpV6RoutingData> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance().getUnknownIpV6RoutingDataClass();
   }
 
 }

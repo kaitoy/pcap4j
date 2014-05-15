@@ -25,6 +25,7 @@ implements PacketFactory<Packet, N> {
   protected final Map<N, PacketInstantiater> instantiaters
     = new HashMap<N, PacketInstantiater>();
 
+  @Override
   public Packet newInstance(byte[] rawData, N number) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
@@ -44,11 +45,26 @@ implements PacketFactory<Packet, N> {
       }
     }
 
+    return newInstance(rawData);
+  }
+
+  @Override
+  public Packet newInstance(byte[] rawData) {
     return UnknownPacket.newPacket(rawData);
   }
 
-  public Packet newInstance(byte[] rawData) {
-    return UnknownPacket.newPacket(rawData);
+  @Override
+  public Class<? extends Packet> getTargetClass(N number) {
+    if (number == null) {
+      throw new NullPointerException("number must not be null.");
+    }
+    PacketInstantiater pi = instantiaters.get(number);
+    return pi != null ? pi.getTargetClass() : getTargetClass();
+  }
+
+  @Override
+  public Class<? extends Packet> getTargetClass() {
+    return UnknownPacket.class;
   }
 
 }

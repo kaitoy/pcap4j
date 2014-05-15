@@ -26,6 +26,10 @@ extends AbstractStaticPacketFactory<TcpPort> {
 //        public Packet newInstance(byte[] rawData) {
 //          return HttpPacket.newPacket(rawData);
 //        }
+//        @Override
+//        public Class<HttpPacket> getTargetClass() {
+//          return HttpPacket.class;
+//        }
 //      }
 //    );
   };

@@ -10,8 +10,10 @@ package org.pcap4j.packet.factory;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
 
-abstract class PacketInstantiater {
+interface PacketInstantiater {
 
-  public abstract Packet newInstance(byte [] rawData) throws IllegalRawDataException;
+  public Packet newInstance(byte [] rawData) throws IllegalRawDataException;
+
+  public Class<? extends Packet> getTargetClass();
 
 }

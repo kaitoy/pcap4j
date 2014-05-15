@@ -35,6 +35,10 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
         public IpV6RoutingData newInstance(byte[] rawData) throws IllegalRawDataException {
           return IpV6RoutingSourceRouteData.newInstance(rawData);
         }
+        @Override
+        public Class<IpV6RoutingSourceRouteData> getTargetClass() {
+          return IpV6RoutingSourceRouteData.class;
+        }
       }
     );
   };
@@ -47,6 +51,7 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
     return INSTANCE;
   }
 
+  @Override
   public IpV6RoutingData newInstance(
     byte[] rawData, IpV6RoutingHeaderType number
   ) {
@@ -71,6 +76,7 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
     return newInstance(rawData);
   }
 
+  @Override
   public IpV6RoutingData newInstance(byte[] rawData) {
     try {
       return UnknownIpV6RoutingData.newInstance(rawData);
@@ -79,11 +85,27 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
     }
   }
 
-  private static abstract class Instantiater {
+  @Override
+  public Class<? extends IpV6RoutingData> getTargetClass(IpV6RoutingHeaderType number) {
+    if (number == null) {
+      throw new NullPointerException("number must not be null.");
+    }
+    Instantiater instantiater = instantiaters.get(number);
+    return instantiater != null ? instantiater.getTargetClass() : getTargetClass();
+  }
 
-    public abstract IpV6RoutingData newInstance(
+  @Override
+  public Class<? extends IpV6RoutingData> getTargetClass() {
+    return UnknownIpV6RoutingData.class;
+  }
+
+  private static interface Instantiater {
+
+    public IpV6RoutingData newInstance(
       byte [] rawData
     ) throws IllegalRawDataException;
+
+    public Class<? extends IpV6RoutingData> getTargetClass();
 
   }
 

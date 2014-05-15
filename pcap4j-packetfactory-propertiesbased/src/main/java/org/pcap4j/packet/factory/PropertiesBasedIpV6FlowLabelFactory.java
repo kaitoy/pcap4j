@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014 Kaito Yamada
+  _##  Copyright (C) 2012-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -32,14 +32,15 @@ implements PacketFactory<IpV6FlowLabel, NA> {
    */
   public static PropertiesBasedIpV6FlowLabelFactory getInstance() { return INSTANCE; }
 
+  @Override
+  @Deprecated
   public IpV6FlowLabel newInstance(byte[] rawData, NA number) {
     return newInstance(rawData);
   }
 
+  @Override
   public IpV6FlowLabel newInstance(byte[] rawData) {
-    Class<? extends IpV6FlowLabel> clazz
-      = PacketFactoryPropertiesLoader.getInstance().getIpV6FlowLabelClass();
-    return newInstance(rawData, clazz);
+    return newInstance(rawData, getTargetClass());
   }
 
   /**
@@ -79,6 +80,17 @@ implements PacketFactory<IpV6FlowLabel, NA> {
     } catch (InvocationTargetException e) {
       throw new IllegalStateException(e.getTargetException());
     }
+  }
+
+  @Override
+  @Deprecated
+  public Class<? extends IpV6FlowLabel> getTargetClass(NA number) {
+    return getTargetClass();
+  }
+
+  @Override
+  public Class<? extends IpV6FlowLabel> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance().getIpV6FlowLabelClass();
   }
 
 }
