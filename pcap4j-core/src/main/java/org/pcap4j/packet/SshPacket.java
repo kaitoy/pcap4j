@@ -41,10 +41,10 @@ public final class SshPacket extends AbstractPacket {
     }
 
     try {
-      return Ssh2BinaryPacket.newPacket(rawData);
-    } catch (IllegalRawDataException e) {
-      logger.debug("rawData seems not SSH2 binary packet.", e);
       return Ssh2VersionExchangePacket.newPacket(rawData);
+    } catch (IllegalRawDataException e) {
+      logger.debug("rawData seems not SSH2 version exchange packet.", e);
+      return Ssh2BinaryPacket.newPacket(rawData);
     }
   }
 
