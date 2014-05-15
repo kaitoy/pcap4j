@@ -27,14 +27,37 @@ public final class TcpPort extends NamedNumber<Short, TcpPort> {
   /**
    *
    */
-  public static final TcpPort SNMP
-    = new TcpPort((short)161, "SNMP");
+  public static final TcpPort FTP_DATA = new TcpPort((short)20, "FTP-data");
 
   /**
    *
    */
-  public static final TcpPort SNMP_TRAP
-    = new TcpPort((short)162, "SNMP Trap");
+  public static final TcpPort FTP = new TcpPort((short)21, "FTP");
+
+  /**
+   *
+   */
+  public static final TcpPort SSH = new TcpPort((short)22, "SSH");
+
+  /**
+   *
+   */
+  public static final TcpPort TELNET = new TcpPort((short)23, "Telnet");
+
+  /**
+   *
+   */
+  public static final TcpPort HTTP = new TcpPort((short)80, "HTTP");
+
+  /**
+   *
+   */
+  public static final TcpPort SNMP = new TcpPort((short)161, "SNMP");
+
+  /**
+   *
+   */
+  public static final TcpPort SNMP_TRAP = new TcpPort((short)162, "SNMP Trap");
 
   private static final Map<Short, TcpPort> registry
     = new HashMap<Short, TcpPort>();

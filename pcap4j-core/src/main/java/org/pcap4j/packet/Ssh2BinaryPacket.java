@@ -95,12 +95,26 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
   private Ssh2BinaryPacket(byte[] rawData) throws IllegalRawDataException {
     this.header = new Ssh2BinaryHeader(rawData);
 
-    int payloadLength = header.getPacketLength() - header.getPaddingLength() - 1;
+    int payloadLength = header.getPacketLength() - header.getPaddingLengthAsInt() - 1;
+    if (
+         payloadLength < 0
+      || payloadLength > rawData.length - Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE
+    ) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("rawData is too short. rawData length: ")
+        .append(rawData.length)
+        .append(", header.getPacketLength(): ")
+        .append(header.getPacketLength())
+        .append(", header.getPaddingLengthAsInt(): ")
+        .append(header.getPaddingLengthAsInt());
+      throw new IllegalRawDataException(sb.toString());
+    }
+
     if (payloadLength > 0) {
       byte[] rawPayload
         = ByteArrays.getSubArray(
             rawData,
-            5,
+            Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE,
             payloadLength
           );
       this.payload
@@ -115,14 +129,14 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
       this.randomPadding
         = ByteArrays.getSubArray(
             rawData,
-            5 + payloadLength,
+            Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE + payloadLength,
             header.getPaddingLength()
           );
 
       this.mac
         = ByteArrays.getSubArray(
             rawData,
-            5 + payloadLength + randomPadding.length
+            Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE + payloadLength + randomPadding.length
           );
     } catch (Exception e) {
       throw new IllegalRawDataException(e);
@@ -199,6 +213,70 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     byte[] copy = new byte[mac.length];
     System.arraycopy(mac, 0, copy, 0, mac.length);
     return copy;
+  }
+
+  @Override
+  protected int calcLength() {
+    int length = super.calcLength();
+    length += randomPadding.length;
+    length += mac.length;
+    return length;
+  }
+
+  @Override
+  protected byte[] buildRawData() {
+    byte[] rawData = super.buildRawData();
+    if (randomPadding.length != 0) {
+      System.arraycopy(
+        randomPadding,
+        0,
+        rawData,
+        rawData.length - randomPadding.length - mac.length,
+        randomPadding.length
+      );
+    }
+    if (mac.length != 0) {
+      System.arraycopy(
+        mac,
+        0,
+        rawData,
+        rawData.length - mac.length,
+        mac.length
+      );
+    }
+    return rawData;
+  }
+
+  @Override
+  protected String buildString() {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append(header.toString());
+    if (payload != null) {
+      sb.append(payload.toString());
+    }
+    if (randomPadding.length != 0) {
+      String ls = System.getProperty("line.separator");
+      sb.append("[random padding (")
+        .append(randomPadding.length)
+        .append(" bytes)]")
+        .append(ls)
+        .append("  Hex stream: ")
+        .append(ByteArrays.toHexString(randomPadding, " "))
+        .append(ls);
+    }
+    if (mac.length != 0) {
+      String ls = System.getProperty("line.separator");
+      sb.append("[mac (")
+        .append(mac.length)
+        .append(" bytes)]")
+        .append(ls)
+        .append("  Hex stream: ")
+        .append(ByteArrays.toHexString(mac, " "))
+        .append(ls);
+    }
+
+    return sb.toString();
   }
 
   @Override
@@ -288,6 +366,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
       return this;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
