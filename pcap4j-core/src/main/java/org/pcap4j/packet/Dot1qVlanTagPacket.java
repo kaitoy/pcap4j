@@ -231,7 +231,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
 
       this.priority = (byte)((priorityAndCfiAndVid & 0xE000) >> 13);
       this.cfi = ((priorityAndCfiAndVid & 0x1000) >> 12) == 1;
-      this.vid = (byte)(priorityAndCfiAndVid & 0x0FFF);
+      this.vid = (short)(priorityAndCfiAndVid & 0x0FFF);
       this.type
         = EtherType.getInstance(ByteArrays.getShort(rawData, TYPE_OFFSET));
     }

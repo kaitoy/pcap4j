@@ -11,6 +11,7 @@ Future
 * Change required libpcap version from 0.9.3 to 1.0.0 to solve [Issues#16](https://github.com/kaitoy/pcap4j/issues/16).
 * [Issues#14](https://github.com/kaitoy/pcap4j/issues/14): Fix some getters of Inet4Address and Inet6Address which cause endless recursion --> stack overflow.
 * [Issues#18](https://github.com/kaitoy/pcap4j/issues/18): Fix a bug where freed pointer may be accessed.
+* [Issues#21](https://github.com/kaitoy/pcap4j/issues/21): Fix VLAN ID discovery by Dot1qVlanTagPacket class.
 
 ### Other Changes ###
 * Required Java version changes from 5 to 6.
