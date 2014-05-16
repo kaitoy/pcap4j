@@ -15,6 +15,10 @@ import org.pcap4j.packet.TcpEndOfOptionList;
 import org.pcap4j.packet.TcpMaximumSegmentSizeOption;
 import org.pcap4j.packet.TcpNoOperationOption;
 import org.pcap4j.packet.TcpPacket.TcpOption;
+import org.pcap4j.packet.TcpSackOption;
+import org.pcap4j.packet.TcpSackPermittedOption;
+import org.pcap4j.packet.TcpTimestampsOption;
+import org.pcap4j.packet.TcpWindowScaleOption;
 import org.pcap4j.packet.UnknownTcpOption;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 
@@ -64,6 +68,54 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
         @Override
         public Class<TcpMaximumSegmentSizeOption> getTargetClass() {
           return TcpMaximumSegmentSizeOption.class;
+        }
+      }
+    );
+    instantiaters.put(
+      TcpOptionKind.WINDOW_SCALE, new Instantiater() {
+        @Override
+        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
+          return TcpWindowScaleOption.newInstance(rawData);
+        }
+        @Override
+        public Class<TcpWindowScaleOption> getTargetClass() {
+          return TcpWindowScaleOption.class;
+        }
+      }
+    );
+    instantiaters.put(
+      TcpOptionKind.SACK_PERMITTED, new Instantiater() {
+        @Override
+        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
+          return TcpSackPermittedOption.newInstance(rawData);
+        }
+        @Override
+        public Class<TcpSackPermittedOption> getTargetClass() {
+          return TcpSackPermittedOption.class;
+        }
+      }
+    );
+    instantiaters.put(
+      TcpOptionKind.SACK, new Instantiater() {
+        @Override
+        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
+          return TcpSackOption.newInstance(rawData);
+        }
+        @Override
+        public Class<TcpSackOption> getTargetClass() {
+          return TcpSackOption.class;
+        }
+      }
+    );
+    instantiaters.put(
+      TcpOptionKind.TIMESTAMPS, new Instantiater() {
+        @Override
+        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
+          return TcpTimestampsOption.newInstance(rawData);
+        }
+        @Override
+        public Class<TcpTimestampsOption> getTargetClass() {
+          return TcpTimestampsOption.class;
         }
       }
     );

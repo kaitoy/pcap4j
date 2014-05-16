@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Kaito Yamada
+  _##  Copyright (C) 2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -14,35 +14,38 @@ import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.12
+ * @since pcap4j 1.2.0
  */
-public final class TcpMaximumSegmentSizeOption implements TcpOption {
+public final class TcpTimestampsOption implements TcpOption {
 
   /*
-   *  +--------+--------+--------+--------+
-   *  |00000010|00000100|   max seg size  |
-   *  +--------+--------+--------+--------+
-   *   Kind=2   Length=4
+   * http://tools.ietf.org/html/draft-ietf-tcpm-1323bis-21
+   *
+   *   +-------+-------+---------------------+---------------------+
+   *   |Kind=8 |  10   |   TS Value (TSval)  |TS Echo Reply (TSecr)|
+   *   +-------+-------+---------------------+---------------------+
+   *       1       1              4                     4
    */
 
   /**
    *
    */
-  private static final long serialVersionUID = 7552907605220130850L;
+  private static final long serialVersionUID = -7134215148170658739L;
 
-  private final TcpOptionKind kind = TcpOptionKind.MAXIMUM_SEGMENT_SIZE;
+  private final TcpOptionKind kind = TcpOptionKind.TIMESTAMPS;
   private final byte length;
-  private final short maxSegSize;
+  private final int tsValue;
+  private final int tsEchoReply;
 
   /**
    *
    * @param rawData
-   * @return a new TcpMaximumSegmentSizeOption object.
+   * @return a new TcpTimestampsOption object.
    * @throws IllegalRawDataException
    * @throws NullPointerException if the rawData argument is null.
    * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static TcpMaximumSegmentSizeOption newInstance(
+  public static TcpTimestampsOption newInstance(
     byte[] rawData
   ) throws IllegalRawDataException {
     if (rawData == null) {
@@ -51,13 +54,13 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
     if (rawData.length == 0) {
       throw new IllegalArgumentException("rawData is empty.");
     }
-    return new TcpMaximumSegmentSizeOption(rawData);
+    return new TcpTimestampsOption(rawData);
   }
 
-  private TcpMaximumSegmentSizeOption(byte[] rawData) throws IllegalRawDataException {
-    if (rawData.length < 4) {
+  private TcpTimestampsOption(byte[] rawData) throws IllegalRawDataException {
+    if (rawData.length < 10) {
       StringBuilder sb = new StringBuilder(50);
-      sb.append("The raw data length must be more than 3. rawData: ")
+      sb.append("The raw data length must be more than 9. rawData: ")
         .append(ByteArrays.toHexString(rawData, " "));
       throw new IllegalRawDataException(sb.toString());
     }
@@ -69,22 +72,24 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
         .append(ByteArrays.toHexString(rawData, " "));
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[1] != 4) {
+    if (rawData[1] != 10) {
       throw new IllegalRawDataException(
-                  "Invalid value of length field: " + rawData[1]
+                  "The value of length field must be 10 but: " + rawData[1]
                 );
     }
 
     this.length = rawData[1];
-    this.maxSegSize = ByteArrays.getShort(rawData, 2);
+    this.tsValue = ByteArrays.getInt(rawData, 2);
+    this.tsEchoReply = ByteArrays.getInt(rawData, 6);
   }
 
-  private TcpMaximumSegmentSizeOption(Builder builder) {
+  private TcpTimestampsOption(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder: " + builder);
     }
 
-    this.maxSegSize = builder.maxSegSize;
+    this.tsValue = builder.tsValue;
+    this.tsEchoReply = builder.tsEchoReply;
 
     if (builder.correctLengthAtBuild) {
       this.length = (byte)length();
@@ -112,27 +117,41 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
   public int getLengthAsInt() { return 0xFF & length; }
 
   /**
-   *
-   * @return maxSegSize
+   * @return tsValue
    */
-  public short getMaxSegSize() { return maxSegSize; }
+  public int getTsValue() {
+    return tsValue;
+  }
 
   /**
-   *
-   * @return maxSegSize
+   * @return tsValue
    */
-  public int getMaxSegSizeAsInt() { return 0xFFFF & maxSegSize; }
+  public long getTsValueAsLong() {
+    return 0xFFFFFFFFL & tsValue;
+  }
+
+  /**
+   * @return tsEchoReply
+   */
+  public int getTsEchoReply() {
+    return tsEchoReply;
+  }
+
+  /**
+   * @return tsEchoReply
+   */
+  public long getTsEchoReplyAsLong() {
+    return 0xFFFFFFFFL & tsEchoReply;
+  }
 
   @Override
-  public int length() { return 4; }
+  public int length() { return 10; }
 
   @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[0] = kind.value();
     rawData[1] = length;
-    rawData[2] = (byte)(maxSegSize >> 8);
-    rawData[3] = (byte)maxSegSize;
     return rawData;
   }
 
@@ -150,10 +169,8 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
     sb.append("[Kind: ")
       .append(kind);
     sb.append("] [Length: ")
-      .append(getLengthAsInt());
-    sb.append(" bytes] [Maximum Segment Size: ")
-      .append(getMaxSegSizeAsInt());
-    sb.append(" bytes]");
+      .append(getLengthAsInt())
+      .append(" bytes]");
     return sb.toString();
   }
 
@@ -171,13 +188,14 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 0.9.12
+   * @since pcap4j 1.2.0
    */
   public static final class Builder
-  implements LengthBuilder<TcpMaximumSegmentSizeOption> {
+  implements LengthBuilder<TcpTimestampsOption> {
 
     private byte length;
-    private short maxSegSize;
+    private int tsValue;
+    private int tsEchoReply;
     private boolean correctLengthAtBuild;
 
     /**
@@ -185,9 +203,8 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
      */
     public Builder() {}
 
-    private Builder(TcpMaximumSegmentSizeOption option) {
+    private Builder(TcpTimestampsOption option) {
       this.length = option.length;
-      this.maxSegSize = option.maxSegSize;
     }
 
     /**
@@ -202,11 +219,21 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
 
     /**
      *
-     * @param maxSegSize
+     * @param tsValue
      * @return this Builder object for method chaining.
      */
-    public Builder maxSegSize(short maxSegSize) {
-      this.maxSegSize = maxSegSize;
+    public Builder tsValue(int tsValue) {
+      this.tsValue = tsValue;
+      return this;
+    }
+
+    /**
+     *
+     * @param tsEchoReply
+     * @return this Builder object for method chaining.
+     */
+    public Builder tsEchoReply(int tsEchoReply) {
+      this.tsEchoReply = tsEchoReply;
       return this;
     }
 
@@ -217,8 +244,8 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
     }
 
     @Override
-    public TcpMaximumSegmentSizeOption build() {
-      return new TcpMaximumSegmentSizeOption(this);
+    public TcpTimestampsOption build() {
+      return new TcpTimestampsOption(this);
     }
 
   }

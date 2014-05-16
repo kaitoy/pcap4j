@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pcap4j.packet.TcpPacket.TcpHeader;
 import org.pcap4j.packet.TcpPacket.TcpOption;
+import org.pcap4j.packet.TcpSackOption.Sack;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
@@ -52,7 +53,7 @@ public class TcpPacketTest extends AbstractPacketTest {
     this.dstPort = TcpPort.getInstance((short)0);
     this.sequenceNumber = 1234567;
     this.acknowledgmentNumber = 7654321;
-    this.dataOffset = 7;
+    this.dataOffset = 14;
     this.reserved = (byte)11;
     this.urg = false;
     this.ack = true;
@@ -72,10 +73,29 @@ public class TcpPacketTest extends AbstractPacketTest {
         .build()
     );
     options.add(TcpNoOperationOption.getInstance());
+    options.add(
+      new TcpWindowScaleOption.Builder()
+        .shiftCount((byte)2)
+        .correctLengthAtBuild(true)
+        .build()
+    );
     options.add(TcpNoOperationOption.getInstance());
+    options.add(TcpNoOperationOption.getInstance());
+    options.add(TcpSackPermittedOption.getInstance());
+    options.add(TcpNoOperationOption.getInstance());
+    options.add(TcpNoOperationOption.getInstance());
+    List<Sack> sacks = new ArrayList<Sack>();
+    sacks.add(new Sack(2000, 4000));
+    sacks.add(new Sack(6000, 10000));
+    options.add(
+      new TcpSackOption.Builder()
+        .sacks(sacks)
+        .correctLengthAtBuild(true)
+        .build()
+    );
     options.add(TcpEndOfOptionList.getInstance());
 
-    this.padding = new byte[] { (byte)0xEE };
+    this.padding = new byte[] { (byte)0xDD, (byte)0xEE, (byte)0xFF };
 
     try {
       this.srcAddr

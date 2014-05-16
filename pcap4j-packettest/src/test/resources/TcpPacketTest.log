@@ -1,9 +1,9 @@
-[TCP Header (28 bytes)]
+[TCP Header (56 bytes)]
   Source port: 161(SNMP)
   Destination port: 0(unknown)
   Sequence Number: 1234567
   Acknowledgment Number: 7654321
-  Data Offset: 7 (28 [bytes])
+  Data Offset: 14 (56 [bytes])
   Reserved: 11
   URG: false
   ACK: true
@@ -14,10 +14,16 @@
   Window: 9999
   Checksum: 0xabcd
   Urgent Pointer: 1111
-  Option: [Kind: 2(Maximum Segment Size)] Length: 4 bytes] [Maximum Segment Size: 5555 bytes]
+  Option: [Kind: 2(Maximum Segment Size)] [Length: 4 bytes] [Maximum Segment Size: 5555 bytes]
+  Option: [Kind: 1(No Operation)]
+  Option: [Kind: 3(Window Scale)] [Length: 3 bytes] [Shift Count: 2]
   Option: [Kind: 1(No Operation)]
   Option: [Kind: 1(No Operation)]
+  Option: [Kind: 4(SACK Permitted)] [Length: 2 bytes]
+  Option: [Kind: 1(No Operation)]
+  Option: [Kind: 1(No Operation)]
+  Option: [Kind: 5(SACK)] [Length: 18 bytes] [LE: 2000 RE: 4000] [LE: 6000 RE: 10000]
   Option: [Kind: 0(End of Option List)]
-  Padding: 0xee
+  Padding: 0xdd ee ff
 [data (4 bytes)]
   Hex stream: 00 01 02 03

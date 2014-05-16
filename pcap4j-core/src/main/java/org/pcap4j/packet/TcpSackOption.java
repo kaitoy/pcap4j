@@ -1,0 +1,330 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2014  Kaito Yamada
+  _##
+  _##########################################################################
+*/
+
+package org.pcap4j.packet;
+
+import static org.pcap4j.util.ByteArrays.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.pcap4j.packet.TcpPacket.TcpOption;
+import org.pcap4j.packet.namednumber.TcpOptionKind;
+import org.pcap4j.util.ByteArrays;
+
+/**
+ * @author Kaito Yamada
+ * @since pcap4j 1.2.0
+ */
+public final class TcpSackOption implements TcpOption {
+
+  /*
+   * http://tools.ietf.org/html/rfc2018
+   *
+   *                     +--------+--------+
+   *                     | Kind=5 | Length |
+   *   +--------+--------+--------+--------+
+   *   |      Left Edge of 1st Block       |
+   *   +--------+--------+--------+--------+
+   *   |      Right Edge of 1st Block      |
+   *   +--------+--------+--------+--------+
+   *   |                                   |
+   *   /            . . .                  /
+   *   |                                   |
+   *   +--------+--------+--------+--------+
+   *   |      Left Edge of nth Block       |
+   *   +--------+--------+--------+--------+
+   *   |      Right Edge of nth Block      |
+   *   +--------+--------+--------+--------+
+   */
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = -3308738405807657257L;
+
+  private final TcpOptionKind kind = TcpOptionKind.SACK;
+  private final byte length;
+  private final List<Sack> sacks = new ArrayList<Sack>();
+
+  /**
+   *
+   * @param rawData
+   * @return a new TcpSackOption object.
+   * @throws IllegalRawDataException
+   * @throws NullPointerException if the rawData argument is null.
+   * @throws IllegalArgumentException if the rawData argument is empty.
+   */
+  public static TcpSackOption newInstance(
+    byte[] rawData
+  ) throws IllegalRawDataException {
+    if (rawData == null) {
+      throw new NullPointerException("rawData must not be null.");
+    }
+    if (rawData.length == 0) {
+      throw new IllegalArgumentException("rawData is empty.");
+    }
+    return new TcpSackOption(rawData);
+  }
+
+  private TcpSackOption(byte[] rawData) throws IllegalRawDataException {
+    if (rawData.length < 2) {
+      StringBuilder sb = new StringBuilder(50);
+      sb.append("The raw data length must be more than 1. rawData: ")
+        .append(ByteArrays.toHexString(rawData, " "));
+      throw new IllegalRawDataException(sb.toString());
+    }
+    if (rawData[0] != kind.value()) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("The kind must be: ")
+        .append(kind.valueAsString())
+        .append(" rawData: ")
+        .append(ByteArrays.toHexString(rawData, " "));
+      throw new IllegalRawDataException(sb.toString());
+    }
+    if (rawData[1] < 2) {
+      throw new IllegalRawDataException(
+                  "The value of length field must be  more than 1 but: " + rawData[1]
+                );
+    }
+    this.length = rawData[1];
+
+    if ((length - 2) % (INT_SIZE_IN_BYTES * 2) != 0) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append(
+           "The value of length field must be an integer multiple of 8 octets long but: "
+         )
+        .append(length);
+      throw new IllegalRawDataException(sb.toString());
+    }
+    if (rawData.length < length) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("rawData is too short. length field: ")
+        .append(length)
+        .append(", rawData: ")
+        .append(ByteArrays.toHexString(rawData, " "));
+      throw new IllegalRawDataException(sb.toString());
+    }
+
+    for (int i = 2; i < length; i += INT_SIZE_IN_BYTES * 2) {
+      sacks.add(
+        new Sack(
+          ByteArrays.getInt(rawData, i),
+          ByteArrays.getInt(rawData, i + INT_SIZE_IN_BYTES)
+        )
+      );
+    }
+  }
+
+  private TcpSackOption(Builder builder) {
+    if (
+         builder == null
+      || builder.sacks == null
+    ) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("builder: ").append(builder)
+        .append(" builder.sacks: ").append(builder.sacks);
+      throw new NullPointerException(sb.toString());
+    }
+
+    this.sacks.addAll(builder.sacks);
+
+    if (builder.correctLengthAtBuild) {
+      this.length = (byte)length();
+    }
+    else {
+      this.length = builder.length;
+    }
+  }
+
+  @Override
+  public TcpOptionKind getKind() {
+    return kind;
+  }
+
+  /**
+   *
+   * @return length
+   */
+  public byte getLength() { return length; }
+
+  /**
+   *
+   * @return length
+   */
+  public int getLengthAsInt() { return 0xFF & length; }
+
+  @Override
+  public int length() {
+    return sacks.size() * INT_SIZE_IN_BYTES * 2 + 2;
+  }
+
+  @Override
+  public byte[] getRawData() {
+    byte[] rawData = new byte[length()];
+    rawData[0] = kind.value();
+    rawData[1] = length;
+
+    int offset = 2;
+    for (Sack sack: sacks) {
+      System.arraycopy(
+        ByteArrays.toByteArray(sack.leftEdge), 0,
+        rawData, offset, INT_SIZE_IN_BYTES
+      );
+      System.arraycopy(
+        ByteArrays.toByteArray(sack.rightEdge), 0,
+        rawData, offset + INT_SIZE_IN_BYTES, INT_SIZE_IN_BYTES
+      );
+      offset += INT_SIZE_IN_BYTES * 2;
+    }
+
+    return rawData;
+  }
+
+  /**
+   *
+   * @return a new Builder object populated with this object's fields.
+   */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("[Kind: ")
+      .append(kind);
+    sb.append("] [Length: ")
+      .append(getLengthAsInt())
+      .append(" bytes]");
+    for (Sack sack: sacks) {
+      sb.append(" [LE: ")
+        .append(sack.getLeftEdgeAsLong())
+        .append(" RE: ")
+        .append(sack.getRightEdgeAsLong())
+        .append("]");
+    }
+    return sb.toString();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) { return true; }
+    if (!this.getClass().isInstance(obj)) { return false; }
+    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+  }
+
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(getRawData());
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 1.2.0
+   */
+  public static final class Builder
+  implements LengthBuilder<TcpSackOption> {
+
+    private byte length;
+    private boolean correctLengthAtBuild;
+    private List<Sack> sacks;
+
+    /**
+     *
+     */
+    public Builder() {}
+
+    private Builder(TcpSackOption option) {
+      this.length = option.length;
+    }
+
+    /**
+     * @param length
+     * @return this Builder object for method chaining.
+     */
+    public Builder length(byte length) {
+      this.length = length;
+      return this;
+    }
+
+    /**
+     * @param sacks
+     * @return this Builder object for method chaining.
+     */
+    public Builder sacks(List<Sack> sacks) {
+      this.sacks = sacks;
+      return this;
+    }
+
+    @Override
+    public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
+      this.correctLengthAtBuild = correctLengthAtBuild;
+      return this;
+    }
+
+    @Override
+    public TcpSackOption build() {
+      return new TcpSackOption(this);
+    }
+
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @since pcap4j 1.2.0
+   */
+  public static final class Sack implements Serializable {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1218420566089129438L;
+
+    private final int leftEdge;
+    private final int rightEdge;
+
+    /**
+     * @param leftEdge
+     * @param rightEdge
+     */
+    public Sack(int leftEdge, int rightEdge) {
+      this.leftEdge = leftEdge;
+      this.rightEdge = rightEdge;
+    }
+
+    /**
+     * @return leftEdge
+     */
+    public int getLeftEdge() {
+      return leftEdge;
+    }
+
+    /**
+     * @return leftEdge
+     */
+    public long getLeftEdgeAsLong() {
+      return 0xFFFFFFFFL & leftEdge;
+    }
+
+    /**
+     * @return rightEdge
+     */
+    public int getRightEdge() {
+      return rightEdge;
+    }
+
+    /**
+     * @return rightEdge
+     */
+    public long getRightEdgeAsLong() {
+      return 0xFFFFFFFFL & rightEdge;
+    }
+
+  }
+
+}

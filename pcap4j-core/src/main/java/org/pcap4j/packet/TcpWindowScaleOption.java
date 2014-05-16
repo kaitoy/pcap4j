@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Kaito Yamada
+  _##  Copyright (C) 2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -14,35 +14,37 @@ import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.12
+ * @since pcap4j 1.2.0
  */
-public final class TcpMaximumSegmentSizeOption implements TcpOption {
+public final class TcpWindowScaleOption implements TcpOption {
 
   /*
-   *  +--------+--------+--------+--------+
-   *  |00000010|00000100|   max seg size  |
-   *  +--------+--------+--------+--------+
-   *   Kind=2   Length=4
+   * http://tools.ietf.org/html/draft-ietf-tcpm-1323bis-21
+   *
+   *   +---------+---------+---------+
+   *   | Kind=3  |Length=3 |shift.cnt|
+   *   +---------+---------+---------+
+   *        1         1         1
    */
 
   /**
    *
    */
-  private static final long serialVersionUID = 7552907605220130850L;
+  private static final long serialVersionUID = -1755743386204601523L;
 
-  private final TcpOptionKind kind = TcpOptionKind.MAXIMUM_SEGMENT_SIZE;
+  private final TcpOptionKind kind = TcpOptionKind.WINDOW_SCALE;
   private final byte length;
-  private final short maxSegSize;
+  private final byte shiftCount;
 
   /**
    *
    * @param rawData
-   * @return a new TcpMaximumSegmentSizeOption object.
+   * @return a new TcpWindowScaleOption object.
    * @throws IllegalRawDataException
    * @throws NullPointerException if the rawData argument is null.
    * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static TcpMaximumSegmentSizeOption newInstance(
+  public static TcpWindowScaleOption newInstance(
     byte[] rawData
   ) throws IllegalRawDataException {
     if (rawData == null) {
@@ -51,13 +53,13 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
     if (rawData.length == 0) {
       throw new IllegalArgumentException("rawData is empty.");
     }
-    return new TcpMaximumSegmentSizeOption(rawData);
+    return new TcpWindowScaleOption(rawData);
   }
 
-  private TcpMaximumSegmentSizeOption(byte[] rawData) throws IllegalRawDataException {
-    if (rawData.length < 4) {
+  private TcpWindowScaleOption(byte[] rawData) throws IllegalRawDataException {
+    if (rawData.length < 3) {
       StringBuilder sb = new StringBuilder(50);
-      sb.append("The raw data length must be more than 3. rawData: ")
+      sb.append("The raw data length must be more than 2. rawData: ")
         .append(ByteArrays.toHexString(rawData, " "));
       throw new IllegalRawDataException(sb.toString());
     }
@@ -69,22 +71,22 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
         .append(ByteArrays.toHexString(rawData, " "));
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[1] != 4) {
+    if (rawData[1] != 3) {
       throw new IllegalRawDataException(
-                  "Invalid value of length field: " + rawData[1]
+                  "The value of length field must be 3 but: " + rawData[1]
                 );
     }
 
     this.length = rawData[1];
-    this.maxSegSize = ByteArrays.getShort(rawData, 2);
+    this.shiftCount = rawData[2];
   }
 
-  private TcpMaximumSegmentSizeOption(Builder builder) {
+  private TcpWindowScaleOption(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder: " + builder);
     }
 
-    this.maxSegSize = builder.maxSegSize;
+    this.shiftCount = builder.shiftCount;
 
     if (builder.correctLengthAtBuild) {
       this.length = (byte)length();
@@ -113,26 +115,25 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
 
   /**
    *
-   * @return maxSegSize
+   * @return shiftCount
    */
-  public short getMaxSegSize() { return maxSegSize; }
+  public byte getShiftCount() { return shiftCount; }
 
   /**
    *
-   * @return maxSegSize
+   * @return shiftCount
    */
-  public int getMaxSegSizeAsInt() { return 0xFFFF & maxSegSize; }
+  public int getShiftCountAsInt() { return 0xFF & shiftCount; }
 
   @Override
-  public int length() { return 4; }
+  public int length() { return 3; }
 
   @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[0] = kind.value();
     rawData[1] = length;
-    rawData[2] = (byte)(maxSegSize >> 8);
-    rawData[3] = (byte)maxSegSize;
+    rawData[2] = shiftCount;
     return rawData;
   }
 
@@ -151,9 +152,9 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
       .append(kind);
     sb.append("] [Length: ")
       .append(getLengthAsInt());
-    sb.append(" bytes] [Maximum Segment Size: ")
-      .append(getMaxSegSizeAsInt());
-    sb.append(" bytes]");
+    sb.append(" bytes] [Shift Count: ")
+      .append(getShiftCountAsInt());
+    sb.append("]");
     return sb.toString();
   }
 
@@ -171,13 +172,13 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 0.9.12
+   * @since pcap4j 1.2.0
    */
   public static final class Builder
-  implements LengthBuilder<TcpMaximumSegmentSizeOption> {
+  implements LengthBuilder<TcpWindowScaleOption> {
 
     private byte length;
-    private short maxSegSize;
+    private byte shiftCount;
     private boolean correctLengthAtBuild;
 
     /**
@@ -185,9 +186,9 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
      */
     public Builder() {}
 
-    private Builder(TcpMaximumSegmentSizeOption option) {
+    private Builder(TcpWindowScaleOption option) {
       this.length = option.length;
-      this.maxSegSize = option.maxSegSize;
+      this.shiftCount = option.shiftCount;
     }
 
     /**
@@ -202,11 +203,11 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
 
     /**
      *
-     * @param maxSegSize
+     * @param shiftCount
      * @return this Builder object for method chaining.
      */
-    public Builder maxSegSize(short maxSegSize) {
-      this.maxSegSize = maxSegSize;
+    public Builder shiftCount(byte shiftCount) {
+      this.shiftCount = shiftCount;
       return this;
     }
 
@@ -217,8 +218,8 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
     }
 
     @Override
-    public TcpMaximumSegmentSizeOption build() {
-      return new TcpMaximumSegmentSizeOption(this);
+    public TcpWindowScaleOption build() {
+      return new TcpWindowScaleOption(this);
     }
 
   }

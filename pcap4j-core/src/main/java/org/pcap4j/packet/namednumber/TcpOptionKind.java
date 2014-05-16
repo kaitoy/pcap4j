@@ -42,6 +42,30 @@ public final class TcpOptionKind extends NamedNumber<Byte, TcpOptionKind> {
   public static final TcpOptionKind MAXIMUM_SEGMENT_SIZE
     = new TcpOptionKind((byte)2, "Maximum Segment Size");
 
+  /**
+   *
+   */
+  public static final TcpOptionKind WINDOW_SCALE
+    = new TcpOptionKind((byte)3, "Window Scale");
+
+  /**
+   *
+   */
+  public static final TcpOptionKind SACK_PERMITTED
+    = new TcpOptionKind((byte)4, "SACK Permitted");
+
+  /**
+   *
+   */
+  public static final TcpOptionKind SACK
+    = new TcpOptionKind((byte)5, "SACK");
+
+  /**
+   *
+   */
+  public static final TcpOptionKind TIMESTAMPS
+    = new TcpOptionKind((byte)8, "Timestamps");
+
   private static final Map<Byte, TcpOptionKind> registry
     = new HashMap<Byte, TcpOptionKind>();
 
