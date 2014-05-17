@@ -76,6 +76,12 @@ public final class UdpPacket extends AbstractPacket {
         = PacketFactories.getFactory(Packet.class, UdpPort.class)
             .newInstance(rawPayload, header.getDstPort());
     }
+    else if (payloadLength < 0) {
+      throw new IllegalRawDataException(
+              "The value of length field seems to be wrong: "
+                + header.getLengthAsInt()
+            );
+    }
     else {
       this.payload = null;
     }
@@ -286,11 +292,13 @@ public final class UdpPacket extends AbstractPacket {
       return this;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
+    @Override
     public Builder correctChecksumAtBuild(boolean correctChecksumAtBuild) {
       this.correctChecksumAtBuild = correctChecksumAtBuild;
       return this;

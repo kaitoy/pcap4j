@@ -67,7 +67,7 @@ public final class IpV6Packet extends AbstractPacket {
       payloadLength = header.getPayloadLengthAsInt();
     }
 
-    if (payloadLength != 0) {
+    if (payloadLength > 0) {
       byte[] rawPayload;
       if (payloadLength > remainingRawDataLength) {
         rawPayload
@@ -89,6 +89,12 @@ public final class IpV6Packet extends AbstractPacket {
       this.payload
         = PacketFactories.getFactory(Packet.class, IpNumber.class)
             .newInstance(rawPayload, header.getNextHeader());
+    }
+    else if (payloadLength < 0) {
+      throw new IllegalRawDataException(
+              "The value of payload length field seems to be wrong: "
+                + header.getPayloadLengthAsInt()
+            );
     }
     else {
       this.payload = null;
@@ -265,6 +271,7 @@ public final class IpV6Packet extends AbstractPacket {
       return payloadBuilder;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;

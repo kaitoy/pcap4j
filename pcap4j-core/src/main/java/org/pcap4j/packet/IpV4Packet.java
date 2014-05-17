@@ -71,7 +71,7 @@ public final class IpV4Packet extends AbstractPacket {
       payloadLength = totalLength - header.length();
     }
 
-    if (payloadLength != 0) {
+    if (payloadLength > 0) {
       byte[] rawPayload;
       if (payloadLength > remainingRawDataLength) {
         rawPayload
@@ -98,6 +98,11 @@ public final class IpV4Packet extends AbstractPacket {
           = PacketFactories.getFactory(Packet.class, IpNumber.class)
               .newInstance(rawPayload, header.getProtocol());
       }
+    }
+    else if (payloadLength < 0) {
+      throw new IllegalRawDataException(
+              "The value of total length field seems to be wrong: " + totalLength
+            );
     }
     else {
       this.payload = null;
@@ -371,11 +376,13 @@ public final class IpV4Packet extends AbstractPacket {
       return payloadBuilder;
     }
 
+    @Override
     public Builder correctChecksumAtBuild(boolean correctChecksumAtBuild) {
       this.correctChecksumAtBuild = correctChecksumAtBuild;
       return this;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
