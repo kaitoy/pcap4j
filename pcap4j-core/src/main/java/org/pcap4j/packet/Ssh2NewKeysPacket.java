@@ -22,7 +22,16 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
    */
   private static final long serialVersionUID = -4355029035065046101L;
 
-  private final Ssh2NewKeysHeader header;
+  private static final Ssh2NewKeysPacket INSTANCE = new Ssh2NewKeysPacket();
+
+  private final Ssh2NewKeysHeader header = Ssh2NewKeysHeader.getInstance();
+
+  private Ssh2NewKeysPacket() {}
+
+  /**
+   * @return the singleton instance of Ssh2NewKeysPacket.
+   */
+  public static Ssh2NewKeysPacket getInstance() { return INSTANCE; }
 
   /**
    *
@@ -39,21 +48,8 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
     if (rawData.length == 0) {
       throw new IllegalArgumentException("rawData is empty.");
     }
-    return new Ssh2NewKeysPacket(rawData);
-  }
-
-  private Ssh2NewKeysPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new Ssh2NewKeysHeader(rawData);
-  }
-
-  private Ssh2NewKeysPacket(Builder builder) {
-    if (builder == null) {
-      StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder);
-      throw new NullPointerException(sb.toString());
-    }
-
-    this.header = new Ssh2NewKeysHeader(builder);
+    Ssh2NewKeysHeader.checkRawData(rawData);
+    return INSTANCE;
   }
 
   @Override
@@ -63,29 +59,7 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
 
   @Override
   public Builder getBuilder() {
-    return new Builder(this);
-  }
-
-  /**
-   *
-   * @author Kaito Yamada
-   * @since pcap4j 1.0.1
-   */
-  public static final class Builder extends AbstractBuilder {
-
-    /**
-     *
-     */
-    public Builder() {}
-
-    private Builder(Ssh2NewKeysPacket packet) {
-    }
-
-    @Override
-    public Ssh2NewKeysPacket build() {
-      return new Ssh2NewKeysPacket(this);
-    }
-
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -106,9 +80,13 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
      */
     private static final long serialVersionUID = -6964593795610286838L;
 
+    private static final Ssh2NewKeysHeader INSTANCE = new Ssh2NewKeysHeader();
+
     private final Ssh2MessageNumber messageNumber = Ssh2MessageNumber.SSH_MSG_NEWKEYS;
 
-    private Ssh2NewKeysHeader(byte[] rawData) throws IllegalRawDataException {
+    private Ssh2NewKeysHeader() {}
+
+    private static void checkRawData(byte[] rawData) throws IllegalRawDataException {
       if (rawData.length < 1) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 New Keys header. data: ")
@@ -124,8 +102,7 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
       }
     }
 
-    private Ssh2NewKeysHeader(Builder builder) {
-    }
+    private static Ssh2NewKeysHeader getInstance() { return INSTANCE; }
 
     /**
      *

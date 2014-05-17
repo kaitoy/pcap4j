@@ -121,7 +121,7 @@ public final class Ssh2MpInt implements Serializable {
 
   /**
    *
-   * @return value as long
+   * @return value as BigInteger
    */
   public BigInteger getValueAsBigInteger() {
     return new BigInteger(value);
