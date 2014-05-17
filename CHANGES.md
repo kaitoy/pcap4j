@@ -2,6 +2,14 @@ Future
 ======
 ### New Features ###
 * Add SSH2 support.
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.2.0 (16-May-2014)
+===========================
+### New Features ###
 * Upgrade JNA to 4.10.
 * [Issues#17](https://github.com/kaitoy/pcap4j/issues/17): Add PcapHandle.Builder, which internally uses pcap_create, pcap_set_snaplen, pcap_set_promisc, pcap_set_rfmon, pcap_set_timeout, pcap_set_buffer_size, and pcap_activate.
 * [Issues#15](https://github.com/kaitoy/pcap4j/issues/15): TSO support.

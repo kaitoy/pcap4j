@@ -35,9 +35,9 @@ Maven Central Repositoryからダウンロードできるようになりまし�
 
 * Pcap4J 0.9.13 (このページから配布する最後のバージョン)
  * [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
-* Pcap4J 1.1.0 (Maven Central Repositoryにある最新バージョン)
- * ソースなし: [pcap4j-distribution-1.1.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.1.0/pcap4j-distribution-1.1.0-bin.zip)
- * ソース入り: [pcap4j-distribution-1.1.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.1.0/pcap4j-distribution-1.1.0-src.zip)
+* Pcap4J 1.2.0 (Maven Central Repositoryにある最新バージョン)
+ * ソースなし: [pcap4j-distribution-1.2.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.0/pcap4j-distribution-1.2.0-bin.zip)
+ * ソース入り: [pcap4j-distribution-1.2.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.0/pcap4j-distribution-1.2.0-src.zip)
 * スナップショットビルド
  * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
 
@@ -62,7 +62,13 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 * パケットオブジェクトにアクセスしてパケットのフィールドを取得できる。
 * 手動でパケットオブジェクトを組み立てることもできる。
 * パケットオブジェクトを現実のパケットに変換してネットワークに送信できる。
-* Ethernet、IEEE802.1Q、ARP、IPv4(RFC791、RFC1349)、IPv6(RFC2460)、ICMPv4(RFC792)、ICMPv6(RFC4443, RFC4861)、TCP(RFC793)、UDPに対応。
+* 以下のプロトコルに対応。
+ * Ethernet
+ * IEEE802.1Q
+ * ARP
+ * IPv4 (RFC791、RFC1349)、IPv6 (RFC2460)
+ * ICMPv4 (RFC792)、ICMPv6 (RFC4443, RFC4861)
+ * TCP (RFC793、RFC2018、draft-ietf-tcpm-1323bis-21)、UDP。
 * 各ビルトインパケットクラスはシリアライズに対応。スレッドセーフ(実質的に不変)。
 * ライブラリをいじらずに、対応プロトコルをユーザが追加できる。
 * pcapのダンプファイル(Wiresharkのcapture fileなど)の読み込み、書き込み。
@@ -140,12 +146,12 @@ pom.xmlに以下のような記述を追加する。
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-core</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.0</version>
     </dependency>
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-packetfactory-static</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.0</version>
     </dependency>
        ...
   </dependencies>

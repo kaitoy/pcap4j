@@ -35,9 +35,9 @@ Pcap4J is now available on the Maven Central Repository.
 
 * Pcap4J 0.9.13 (last version distributed from this page)
  * [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
-* Pcap4J 1.1.0 (latest version on Maven Central Repository)
- * without source: [pcap4j-distribution-1.1.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.1.0/pcap4j-distribution-1.1.0-bin.zip)
- * with    source: [pcap4j-distribution-1.1.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.1.0/pcap4j-distribution-1.1.0-src.zip)
+* Pcap4J 1.2.0 (latest version on Maven Central Repository)
+ * without source: [pcap4j-distribution-1.2.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.0/pcap4j-distribution-1.2.0-bin.zip)
+ * with    source: [pcap4j-distribution-1.2.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.0/pcap4j-distribution-1.2.0-src.zip)
 * Snapshot builds
  * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
 
@@ -62,7 +62,13 @@ Features
   You can get/set each field of a packet header via the Java object converted from the packet.
   You can also craft a packet object from scratch.
 * Sending packet objects to a real network.
-* Supported protocols: Ethernet, IEEE802.1Q, ARP, IPv4(RFC791 and RFC1349), IPv6(RFC2460), ICMPv4(RFC792), ICMPv6(RFC4443, RFC4861), TCP(RFC793), and UDP.
+* Supported protocols:
+ * Ethernet
+ * IEEE802.1Q
+ * ARP
+ * IPv4 (RFC791 and RFC1349) and IPv6 (RFC2460)
+ * ICMPv4 (RFC792) and ICMPv6 (RFC4443, RFC4861)
+ * TCP(RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21) and UDP
 * All built-in packet classes are serializable and thread-safe(practically immutable).
 * You can add a protocol support without modifying Pcap4J library itself.
 * Dumping and reading pcap-formatted files(e.g. a capture file of Wireshark).
@@ -140,12 +146,12 @@ Add a dependency to the pom.xml as like below:
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-core</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.0</version>
     </dependency>
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-packetfactory-static</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.0</version>
     </dependency>
        ...
   </dependencies>
