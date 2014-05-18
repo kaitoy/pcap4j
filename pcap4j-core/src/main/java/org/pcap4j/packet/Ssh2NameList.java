@@ -171,4 +171,16 @@ public final class Ssh2NameList implements Serializable {
     return sb.toString();
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) { return true; }
+    if (!this.getClass().isInstance(obj)) { return false; }
+    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+  }
+
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(getRawData());
+  }
+
 }

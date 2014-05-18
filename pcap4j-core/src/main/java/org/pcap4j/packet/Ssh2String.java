@@ -10,6 +10,7 @@ package org.pcap4j.packet;
 import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -148,6 +149,18 @@ public final class Ssh2String implements Serializable {
       .append(ByteArrays.toHexString(string, " "))
       .append(")");
     return sb.toString();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) { return true; }
+    if (!this.getClass().isInstance(obj)) { return false; }
+    return Arrays.equals((getClass().cast(obj)).string, string);
+  }
+
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(string);
   }
 
 }

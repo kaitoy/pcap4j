@@ -10,13 +10,14 @@ package org.pcap4j.packet;
 import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Arrays;
 import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
  * @since pcap4j 1.0.1
  */
-public final class Ssh2MpInt implements Serializable {
+public final class Ssh2MpInt implements Serializable, Comparable<Ssh2MpInt> {
 
   /*
    * http://www.ietf.org/rfc/rfc4251.txt
@@ -155,6 +156,23 @@ public final class Ssh2MpInt implements Serializable {
       .append(ByteArrays.toHexString(value, " "))
       .append(")");
     return sb.toString();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) { return true; }
+    if (!this.getClass().isInstance(obj)) { return false; }
+    return Arrays.equals((getClass().cast(obj)).value, value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(value);
+  }
+
+  @Override
+  public int compareTo(Ssh2MpInt o) {
+    return getValueAsBigInteger().compareTo(o.getValueAsBigInteger());
   }
 
 }
