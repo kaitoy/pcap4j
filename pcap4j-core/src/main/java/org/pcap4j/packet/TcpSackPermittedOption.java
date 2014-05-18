@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import java.util.Arrays;
+import java.io.ObjectStreamException;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.ByteArrays;
@@ -126,16 +126,10 @@ public final class TcpSackPermittedOption implements TcpOption {
     return sb.toString();
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
-  }
-
-  @Override
-  public int hashCode() {
-    return Arrays.hashCode(getRawData());
+  // Override deserializer to keep singleton
+  @SuppressWarnings("static-method")
+  private Object readResolve() throws ObjectStreamException {
+    return INSTANCE;
   }
 
 }

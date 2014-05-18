@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.namednumber.Ssh2MessageNumber;
@@ -60,6 +61,12 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
   @Override
   public Builder getBuilder() {
     throw new UnsupportedOperationException();
+  }
+
+  // Override deserializer to keep singleton
+  @SuppressWarnings("static-method")
+  private Object readResolve() throws ObjectStreamException {
+    return INSTANCE;
   }
 
   /**
@@ -136,6 +143,12 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    // Override deserializer to keep singleton
+    @SuppressWarnings("static-method")
+    private Object readResolve() throws ObjectStreamException {
+      return INSTANCE;
     }
 
   }
