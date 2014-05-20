@@ -155,7 +155,7 @@ public final class Ssh2String implements Serializable {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).string, string);
+    return Arrays.equals(((Ssh2String)obj).string, string);
   }
 
   @Override

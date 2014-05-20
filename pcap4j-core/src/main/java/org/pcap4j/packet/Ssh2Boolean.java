@@ -105,7 +105,7 @@ public final class Ssh2Boolean implements Serializable {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return (getClass().cast(obj)).rawData ==  rawData;
+    return ((Ssh2Boolean)obj).rawData == rawData;
   }
 
   @Override

@@ -162,7 +162,7 @@ public final class Ssh2MpInt implements Serializable, Comparable<Ssh2MpInt> {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).value, value);
+    return Arrays.equals(((Ssh2MpInt)obj).value, value);
   }
 
   @Override
