@@ -9,6 +9,8 @@ package org.pcap4j.packet.namednumber;
 
 
 /**
+ * N/A
+ *
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */

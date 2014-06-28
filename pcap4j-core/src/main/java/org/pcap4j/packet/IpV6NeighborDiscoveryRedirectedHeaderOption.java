@@ -13,6 +13,7 @@ import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
+import org.pcap4j.packet.namednumber.NA;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -128,8 +129,9 @@ implements IpV6NeighborDiscoveryOption {
       Packet.Builder builder = p.getBuilder();
       builder.getOuterOf(IllegalPacket.Builder.class)
         .payloadBuilder(
-           new UnknownPacket.Builder()
-             .rawData(p.get(IllegalPacket.class).getRawData())
+          PacketFactories.getFactory(Packet.class, NA.class)
+            .newInstance(p.get(IllegalPacket.class).getRawData())
+              .getBuilder()
          );
       for (Packet.Builder b: builder) {
         if (b instanceof LengthBuilder) {
@@ -179,6 +181,7 @@ implements IpV6NeighborDiscoveryOption {
     }
   }
 
+  @Override
   public IpV6NeighborDiscoveryOptionType getType() {
     return type;
   }
@@ -207,8 +210,10 @@ implements IpV6NeighborDiscoveryOption {
    */
   public Packet getIpPacket() { return ipPacket; }
 
+  @Override
   public int length() { return 8 + ipPacket.length(); }
 
+  @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[TYPE_OFFSET] = getType().value();
@@ -312,11 +317,13 @@ implements IpV6NeighborDiscoveryOption {
       return this;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
+    @Override
     public IpV6NeighborDiscoveryRedirectedHeaderOption build() {
       return new IpV6NeighborDiscoveryRedirectedHeaderOption(this);
     }

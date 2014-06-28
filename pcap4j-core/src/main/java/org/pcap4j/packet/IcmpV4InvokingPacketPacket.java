@@ -9,6 +9,7 @@ package org.pcap4j.packet;
 
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.EtherType;
+import org.pcap4j.packet.namednumber.NA;
 import org.pcap4j.util.IcmpV4Helper;
 
 /**
@@ -61,8 +62,9 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
       Packet.Builder builder = p.getBuilder();
       builder.getOuterOf(IllegalPacket.Builder.class)
                 .payloadBuilder(
-                   new UnknownPacket.Builder()
-                     .rawData(p.get(IllegalPacket.class).getRawData())
+                  PacketFactories.getFactory(Packet.class, NA.class)
+                    .newInstance(p.get(IllegalPacket.class).getRawData())
+                      .getBuilder()
                  );
       for (Packet.Builder b: builder) {
         if (b instanceof LengthBuilder) {

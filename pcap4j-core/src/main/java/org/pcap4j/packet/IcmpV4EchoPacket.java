@@ -7,6 +7,8 @@
 
 package org.pcap4j.packet;
 
+import org.pcap4j.packet.factory.PacketFactories;
+import org.pcap4j.packet.namednumber.NA;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -53,7 +55,7 @@ public final class IcmpV4EchoPacket extends IcmpIdentifiablePacket {
             payloadLength
           );
       this.payload
-        = UnknownPacket.newPacket(rawPayload);
+        = PacketFactories.getFactory(Packet.class, NA.class).newInstance(rawPayload);
     }
     else {
       this.payload = null;
