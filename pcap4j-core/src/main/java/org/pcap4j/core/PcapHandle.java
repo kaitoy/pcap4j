@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
@@ -779,6 +780,7 @@ public final class PcapHandle {
 
     public static SimpleExecutor getInstance() { return INSTANCE; }
 
+    @Override
     public void execute(Runnable command) {
       command.run();
     }
@@ -800,6 +802,7 @@ public final class PcapHandle {
       this.executor = executor;
     }
 
+    @Override
     public void got_packet(
       Pointer args, final pcap_pkthdr header, final Pointer packet
     ) {
@@ -809,6 +812,7 @@ public final class PcapHandle {
 
       executor.execute(
         new Runnable() {
+          @Override
           public void run() {
             timestampsInts.set(tvs);
             timestampsMicros.set(tvus);
@@ -964,27 +968,64 @@ public final class PcapHandle {
    * @throws NotOpenException
    */
   public PcapStat getStat() throws PcapNativeException, NotOpenException {
-    pcap_stat ps;
     if (Platform.isWindows()) {
-      ps = new win_pcap_stat();
-    } else {
-      ps = new pcap_stat();
-    }
-
-    int rc;
-    synchronized (thisLock) {
-      if (!open) {
-        throw new NotOpenException();
+      Pointer psp;
+      IntByReference pcapStatSize = new IntByReference();
+      synchronized (thisLock) {
+        if (!open) {
+          throw new NotOpenException();
+        }
+        psp = PcapLibrary.INSTANCE.win_pcap_stats_ex(handle, pcapStatSize);
       }
-      rc = NativeMappings.pcap_stats(handle, ps);
+
+      if (pcapStatSize.getValue() != 24) {
+        throw new PcapNativeException(getError());
+      }
+      if (psp == null) {
+        throw new PcapNativeException(getError());
+      }
+
+      return new PcapStat(new win_pcap_stat(psp));
+    }
+    else {
+      pcap_stat ps = new pcap_stat();
+      int rc;
+      synchronized (thisLock) {
+        if (!open) {
+          throw new NotOpenException();
+        }
+        rc = NativeMappings.pcap_stats(handle, ps);
+      }
+
+      if (rc < 0) {
+        throw new PcapNativeException(getError(), rc);
+      }
+
+      return new PcapStat(ps);
     }
 
-    if (rc < 0) {
-      throw new PcapNativeException(getError(), rc);
-    }
 
-    return new PcapStat(ps);
   }
+
+//  /**
+//   *
+//   * @return a {@link org.pcap4j.core.PcapStatEx PcapStatEx} object.
+//   * @throws PcapNativeException
+//   * @throws NotOpenException
+//   */
+//  public PcapStatEx getStatsEx() throws PcapNativeException, NotOpenException {
+//    if (!Platform.isWindows()) {
+//      throw new UnsupportedOperationException("This method is only for Windows.");
+//    }
+//
+//    pcap_stat_ex ps = new pcap_stat_ex();
+//    int rc = PcapLibrary.INSTANCE.dos_pcap_stats_ex(handle, ps);
+//    if (rc < 0) {
+//      throw new PcapNativeException(getError(), rc);
+//    }
+//
+//    return new PcapStatEx(ps);
+//  }
 
   /**
    * @return a list of {@link org.pcap4j.packet.namednumber.DataLinkType DataLinkType}

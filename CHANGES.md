@@ -4,6 +4,7 @@ Future
 * Add SSH2 support.
 
 ### Bug Fixes ###
+* org.pcap4j.core.PcapStat#getNumPacketsCaptured() doesn't return a valid value even on Windows.
 
 ### Other Changes ###
 

@@ -1,17 +1,21 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.core;
 
+import java.lang.reflect.Method;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import com.sun.jna.Callback;
 import com.sun.jna.Function;
+import com.sun.jna.FunctionMapper;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
@@ -40,6 +44,9 @@ final class NativeMappings {
         "pcap_dump"
       );
 
+  static final Map<String, Object> NATIVE_LOAD_LIBRARY_OPTIONS
+    = new HashMap<String, Object>();
+
   // LITTLE_ENDIAN: SPARC, JVM
   // BIG_ENDIAN: x86, network bite order
   static final ByteOrder NATIVE_BYTE_ORDER = ByteOrder.nativeOrder();
@@ -58,10 +65,28 @@ final class NativeMappings {
   }
 
   static {
-    // Native.register(PCAP_LIB_NAME);
     Native.register(
       NativeMappings.class,
       NativeLibrary.getInstance(PCAP_LIB_NAME)
+    );
+
+    // for interface mapping
+    final Map<String, String> funcMap = new HashMap<String, String>();
+    funcMap.put("pcap_set_rfmon", "pcap_set_rfmon");
+    funcMap.put("strioctl", "strioctl");
+    funcMap.put("dos_pcap_stats_ex", "pcap_stats_ex");
+    funcMap.put("win_pcap_stats_ex", "pcap_stats_ex");
+
+    NATIVE_LOAD_LIBRARY_OPTIONS.put(
+      Library.OPTION_FUNCTION_MAPPER,
+      new FunctionMapper() {
+
+        @Override
+        public String getFunctionName(NativeLibrary library, Method method) {
+          return funcMap.get(method.getName());
+        }
+
+      }
     );
   }
 
@@ -227,125 +252,45 @@ final class NativeMappings {
   // int pcap_activate(pcap_t *p)
   static native int pcap_activate(Pointer p);
 
+
+
   // interface mappings
   interface PcapLibrary extends Library {
+
     static final PcapLibrary INSTANCE
       = (PcapLibrary)Native.loadLibrary(
           PCAP_LIB_NAME,
-          PcapLibrary.class
+          PcapLibrary.class,
+          NATIVE_LOAD_LIBRARY_OPTIONS
         );
 
-    // int pcap_findalldevs(pcap_if_t **alldevsp, char *errbuf)
-    @Deprecated // Use direct mapped one instead.
-    int pcap_findalldevs(PointerByReference alldevsp, PcapErrbuf errbuf);
-
-    // void  pcap_freealldevs (pcap_if_t *alldevsp)
-    @Deprecated // Use direct mapped one instead.
-    void pcap_freealldevs(Pointer alldevsp);
-
-    // char *pcap_lookupdev(char *errbuf)
-    @Deprecated // Use direct mapped one instead.
-    Pointer pcap_lookupdev(PcapErrbuf errbuf);
-
-    // pcap_t *pcap_open_live(
-    //   const char *device, int snaplen, int promisc, int to_ms, char *errbuf
-    // )
-    @Deprecated // Use direct mapped one instead.
-    Pointer pcap_open_live(
-      String device, int snaplen, int promisc, int to_ms, PcapErrbuf errbuf
-    );
-
-    // pcap_t *pcap_open_dead (int linktype, int snaplen)
-    @Deprecated // Use direct mapped one instead.
-    Pointer pcap_open_dead(int linktype, int snaplen);
-
-    // pcap_t *pcap_open_offline(const char *fname, char *errbuf)
-    @Deprecated // Use direct mapped one instead.
-    Pointer pcap_open_offline(String fname, PcapErrbuf errbuf);
-
-    // pcap_dumper_t *pcap_dump_open(pcap_t *p, const char *fname)
-    @Deprecated // Use direct mapped one instead.
-    Pointer pcap_dump_open(Pointer p, String fname);
-
-    // void pcap_dump(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
-    @Deprecated // Use direct mapped one instead.
-    void pcap_dump(Pointer user, pcap_pkthdr header, byte[] packet);
-
-    // void pcap_dump_close(pcap_dumper_t *p)
-    @Deprecated // Use direct mapped one instead.
-    void pcap_dump_close(Pointer p);
-
-    // u_char *pcap_next(pcap_t *p, struct pcap_pkthdr *h)
-    @Deprecated // Use direct mapped one instead.
-    Pointer pcap_next(Pointer p, pcap_pkthdr h);
-
-    // int pcap_next_ex(pcap_t *p, struct pcap_pkthdr **h, const u_char **data)
-    @Deprecated // Use direct mapped one instead.
-    int pcap_next_ex(Pointer p, PointerByReference h, PointerByReference data);
-
-    // int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user)
-    @Deprecated // Use direct mapped one instead.
-    int pcap_loop(Pointer p, int cnt, pcap_handler callback, Pointer user);
-    @Deprecated // Use direct mapped one instead.
-    int pcap_loop(Pointer p, int cnt, Function callback, Pointer user);
-
-    // void pcap_breakloop(pcap_t *p)
-    @Deprecated // Use direct mapped one instead.
-    void pcap_breakloop(Pointer p);
-
-    // int pcap_compile(
-    //   pcap_t *p, struct bpf_program *fp, char *str,
-    //   int optimize, bpf_u_int32 netmask
-    // )
-    @Deprecated // Use direct mapped one instead.
-    int pcap_compile(
-      Pointer p, bpf_program fp, String str, int optimize, int netmask
-    );
-
-    // int pcap_setfilter(pcap_t *p, struct bpf_program *fp)
-    @Deprecated // Use direct mapped one instead.
-    int pcap_setfilter(Pointer p, bpf_program fp);
-
-    // void pcap_freecode(struct bpf_program *fp)
-    @Deprecated // Use direct mapped one instead.
-    void  pcap_freecode(bpf_program fp);
-
-    // int pcap_sendpacket(pcap_t *p, const u_char *buf, int size)
-    @Deprecated // Use direct mapped one instead.
-    int pcap_sendpacket(Pointer p, byte buf[], int size);
-
-    // void pcap_close(pcap_t *p)
-    @Deprecated // Use direct mapped one instead.
-    void pcap_close(Pointer p);
-
-    // int pcap_datalink(pcap_t *p)
-    @Deprecated // Use direct mapped one instead.
-    int pcap_datalink(Pointer p);
-
-    // char *pcap_geterr(pcap_t *p)
-    @Deprecated // Use direct mapped one instead.
-    Pointer pcap_geterr(Pointer p);
-
-    // char *pcap_strerror(int errno)
-    @Deprecated // Use direct mapped one instead.
-    Pointer pcap_strerror(int errno);
+    // The following functions can't be mapped directly because not all OSes support them.
 
     // int pcap_set_rfmon(pcap_t *p, int rfmon)
     int pcap_set_rfmon(Pointer p, int rfmon);
 
     // int strioctl(int fd, int cmd, int len, char *dp)
-    int strioctl(int fd, int cmd, int len, Pointer dp);  // Can't map directly because not all OSes support this function.
+    int strioctl(int fd, int cmd, int len, Pointer dp);
+
+    //int pcap_stats_ex(pcap_t *p, struct pcap_stat_ex *ps)
+    int dos_pcap_stats_ex(Pointer p, pcap_stat_ex ps);
+
+    // struct pcap_stat* pcap_stats_ex(pcap_t *p, int *pcap_stat_size)
+    Pointer win_pcap_stats_ex(Pointer p, IntByReference pcap_stat_size);
 
   }
 
   static interface pcap_handler extends Callback {
+
     // void got_packet(
     //   u_char *args, const struct pcap_pkthdr *header, const u_char *packet
     // );
     public void got_packet(Pointer args, pcap_pkthdr header, Pointer packet);
+
   }
 
   public static class pcap_if extends Structure {
+
     public pcap_if.ByReference next; // struct pcap_if *
     public String name; // char *
     public String description; // char *
@@ -355,8 +300,7 @@ final class NativeMappings {
     public pcap_if() {}
 
     public pcap_if(Pointer p) {
-      super();
-      useMemory(p, 0);
+      super(p);
       read();
     }
 
@@ -388,8 +332,7 @@ final class NativeMappings {
     public pcap_addr() {}
 
     public pcap_addr(Pointer p) {
-      super();
-      useMemory(p, 0);
+      super(p);
       read();
     }
 
@@ -418,8 +361,7 @@ final class NativeMappings {
     public sockaddr() {}
 
     public sockaddr(Pointer p) {
-      super();
-      useMemory(p, 0);
+      super(p);
       read();
     }
 
@@ -475,8 +417,7 @@ final class NativeMappings {
     public sockaddr_in() {}
 
     public sockaddr_in(Pointer p) {
-      super();
-      useMemory(p, 0);
+      super(p);
       read();
     }
 
@@ -532,8 +473,7 @@ final class NativeMappings {
     public sockaddr_in6() {}
 
     public sockaddr_in6(Pointer p) {
-      super();
-      useMemory(p, 0);
+      super(p);
       read();
     }
 
@@ -593,8 +533,7 @@ final class NativeMappings {
     public sockaddr_ll() {}
 
     public sockaddr_ll(Pointer p) {
-      super();
-      useMemory(p, 0);
+      super(p);
       read();
     }
 
@@ -644,8 +583,7 @@ final class NativeMappings {
     public sockaddr_dl() {}
 
     public sockaddr_dl(Pointer p) {
-      super();
-      useMemory(p, 0);
+      super(p);
       read();
     }
 
@@ -678,8 +616,7 @@ final class NativeMappings {
     public pcap_pkthdr() {}
 
     public pcap_pkthdr(Pointer p) {
-      super();
-      useMemory(p, 0);
+      super(p);
       read();
     }
 
@@ -765,6 +702,11 @@ final class NativeMappings {
 
     public pcap_stat() {}
 
+    public pcap_stat(Pointer p) {
+      super(p);
+      read();
+    }
+
     public static
     class ByReference
     extends pcap_stat implements Structure.ByReference {}
@@ -786,17 +728,82 @@ final class NativeMappings {
 
     public win_pcap_stat() {}
 
+    public win_pcap_stat(Pointer p) {
+      super(p);
+      read();
+    }
+
     public static
     class ByReference
     extends win_pcap_stat implements Structure.ByReference {}
 
     @Override
     protected List<String> getFieldOrder() {
-      List<String> list = new ArrayList<String>();
-      list.add("ps_recv");
-      list.add("ps_drop");
-      list.add("ps_ifdrop");
+      List<String> list = super.getFieldOrder();
       list.add("bs_capt");
+      return list;
+    }
+
+  };
+
+  public static class pcap_stat_ex extends Structure {
+
+    public NativeLong rx_packets;        /* total packets received       */ // u_long
+    public NativeLong tx_packets;        /* total packets transmitted    */ // u_long
+    public NativeLong rx_bytes;          /* total bytes received         */ // u_long
+    public NativeLong tx_bytes;          /* total bytes transmitted      */ // u_long
+    public NativeLong rx_errors;         /* bad packets received         */ // u_long
+    public NativeLong tx_errors;         /* packet transmit problems     */ // u_long
+    public NativeLong rx_dropped;        /* no space in Rx buffers       */ // u_long
+    public NativeLong tx_dropped;        /* no space available for Tx    */ // u_long
+    public NativeLong multicast;         /* multicast packets received   */ // u_long
+    public NativeLong collisions; // u_long
+
+    /* detailed rx_errors: */
+    public NativeLong rx_length_errors; // u_long
+    public NativeLong rx_over_errors;    /* receiver ring buff overflow  */ // u_long
+    public NativeLong rx_crc_errors;     /* recv'd pkt with crc error    */ // u_long
+    public NativeLong rx_frame_errors;   /* recv'd frame alignment error */ // u_long
+    public NativeLong rx_fifo_errors;    /* recv'r fifo overrun          */ // u_long
+    public NativeLong rx_missed_errors;  /* recv'r missed packet         */ // u_long
+
+    /* detailed tx_errors */
+    public NativeLong tx_aborted_errors; // u_long
+    public NativeLong tx_carrier_errors; // u_long
+    public NativeLong tx_fifo_errors; // u_long
+    public NativeLong tx_heartbeat_errors; // u_long
+    public NativeLong tx_window_errors; // u_long
+
+    public pcap_stat_ex() {}
+
+    public static
+    class ByReference
+    extends pcap_stat_ex implements Structure.ByReference {}
+
+    @Override
+    protected List<String> getFieldOrder() {
+      List<String> list = new ArrayList<String>();
+      list.add("rx_packets");
+      list.add("tx_packets");
+      list.add("rx_bytes");
+      list.add("tx_bytes");
+      list.add("rx_errors");
+      list.add("tx_errors");
+      list.add("rx_dropped");
+      list.add("tx_dropped");
+      list.add("multicast");
+      list.add("collisions");
+      list.add("rx_length_errors");
+      list.add("rx_over_errors");
+      list.add("rx_crc_errors");
+      list.add("rx_frame_errors");
+      list.add("rx_fifo_errors");
+      list.add("rx_missed_errors");
+      list.add("tx_aborted_errors");
+      list.add("tx_carrier_errors");
+      list.add("tx_fifo_errors");
+      list.add("tx_heartbeat_errors");
+      list.add("tx_window_errors");
       return list;
     }
 
