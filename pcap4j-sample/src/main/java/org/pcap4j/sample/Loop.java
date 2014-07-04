@@ -66,6 +66,7 @@ public class Loop {
 
     PacketListener listener
       = new PacketListener() {
+          @Override
           public void gotPacket(Packet packet) {
             Timestamp ts = new Timestamp(handle.getTimestampInts() * 1000L);
             ts.setNanos(handle.getTimestampMicros() * 1000);
@@ -81,7 +82,7 @@ public class Loop {
       e.printStackTrace();
     }
 
-    PcapStat ps = handle.getStat();
+    PcapStat ps = handle.getStats();
     System.out.println("ps_recv: " + ps.getNumPacketsReceived());
     System.out.println("ps_drop: " + ps.getNumPacketsDropped());
     System.out.println("ps_ifdrop: " + ps.getNumPacketsDroppedByIf());

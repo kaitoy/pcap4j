@@ -967,7 +967,7 @@ public final class PcapHandle {
    * @throws PcapNativeException
    * @throws NotOpenException
    */
-  public PcapStat getStat() throws PcapNativeException, NotOpenException {
+  public PcapStat getStats() throws PcapNativeException, NotOpenException {
     if (Platform.isWindows()) {
       Pointer psp;
       IntByReference pcapStatSize = new IntByReference();

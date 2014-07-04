@@ -7,6 +7,7 @@ Future
 * org.pcap4j.core.PcapStat#getNumPacketsCaptured() doesn't return a valid value even on Windows.
 
 ### Other Changes ###
+* Change a method name from org.pcap4j.core.PcapHandle#getStat() to getStats().
 
 Release 1.2.0 (16-May-2014)
 ===========================

@@ -91,7 +91,7 @@ public class GetNextPacket {
       }
     }
 
-    PcapStat ps = handle.getStat();
+    PcapStat ps = handle.getStats();
     System.out.println("ps_recv: " + ps.getNumPacketsReceived());
     System.out.println("ps_drop: " + ps.getNumPacketsDropped());
     System.out.println("ps_ifdrop: " + ps.getNumPacketsDroppedByIf());

@@ -42,8 +42,8 @@ public class PcapHandleTest {
   }
 
   @Test
-  public void testGetStat() throws Exception {
-    PcapStat ps = ph.getStat();
+  public void testGetStats() throws Exception {
+    PcapStat ps = ph.getStats();
     assertNotNull(ps);
   }
 
