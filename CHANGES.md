@@ -4,6 +4,14 @@ Future
 * Add SSH2 support.
 
 ### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.2.1 (4-Jul-2014)
+==========================
+### New Features ###
+
+### Bug Fixes ###
 * org.pcap4j.core.PcapStat#getNumPacketsCaptured() doesn't return a valid value even on Windows.
 
 ### Other Changes ###

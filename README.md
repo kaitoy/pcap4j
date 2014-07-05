@@ -35,9 +35,9 @@ Pcap4J is now available on the Maven Central Repository.
 
 * Pcap4J 0.9.13 (last version distributed from this page)
  * [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
-* Pcap4J 1.2.0 (latest version on Maven Central Repository)
- * without source: [pcap4j-distribution-1.2.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.0/pcap4j-distribution-1.2.0-bin.zip)
- * with    source: [pcap4j-distribution-1.2.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.0/pcap4j-distribution-1.2.0-src.zip)
+* Pcap4J 1.2.1 (latest version on Maven Central Repository)
+ * without source: [pcap4j-distribution-1.2.1-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.1/pcap4j-distribution-1.2.1-bin.zip)
+ * with    source: [pcap4j-distribution-1.2.1-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.1/pcap4j-distribution-1.2.1-src.zip)
 * Snapshot builds
  * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
 
@@ -110,7 +110,7 @@ And the following resources will help you to learn how to use Pcap4j.
 * [Sample Classes](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample)
 * [How to add protocol support](/www/HowToAddProtocolSupport.md)
 
-Pcap4j 1.1.0 or older needs J2SE 5.0+. Pcap4j 1.2.0 or older needs J2SE 6.0+.
+Pcap4j 1.1.0 or older needs J2SE 5.0+. Pcap4j 1.2.0 or newer needs J2SE 6.0+.
 And also libpcap 1.0.0+ or WinPcap 3.0+, jna, slf4j-api, and an implementation of logger for slf4j are required.
 I'm using the following libraries for the test.
 
@@ -146,12 +146,12 @@ Add a dependency to the pom.xml as like below:
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-core</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
     </dependency>
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-packetfactory-static</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
     </dependency>
        ...
   </dependencies>

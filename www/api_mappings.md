@@ -176,7 +176,11 @@ Mapping between pcap API and Pcap4j API
   </tr>
   <tr>
     <td>int pcap_stats(pcap_t *, struct pcap_stat *)</td>
-    <td>PcapStat org.pcap4j.core.PcapHandle.getStat()</td>
+    <td>PcapStat org.pcap4j.core.PcapHandle.getStats()</td>
+  </tr>
+  <tr>
+    <td>struct pcap_stat* pcap_stats_ex(pcap_t *, int *) (WinPcap only)</td>
+    <td>PcapStat org.pcap4j.core.PcapHandle.getStats()</td>
   </tr>
   <tr>
     <td>char *pcap_geterr(pcap_t *)</td>
