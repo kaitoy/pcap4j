@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
+
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
@@ -29,6 +30,7 @@ import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
@@ -539,6 +541,7 @@ public final class PcapHandle {
   public Packet getNextPacket() throws NotOpenException {
     pcap_pkthdr header = new pcap_pkthdr();
     Pointer packet;
+    header.setAutoSynch(false);
 
     synchronized (thisLock) {
       if (!open) {
@@ -548,12 +551,13 @@ public final class PcapHandle {
     }
 
     if (packet != null) {
-      timestampsInts.set(header.ts.tv_sec.longValue());
-      timestampsMicros.set(header.ts.tv_usec.intValue());
+      Pointer headerP = header.getPointer();
+      timestampsInts.set(pcap_pkthdr.getTvSec(headerP).longValue());
+      timestampsMicros.set(pcap_pkthdr.getTvUsec(headerP).intValue());
 
       return PacketFactories.getFactory(Packet.class, DataLinkType.class)
                .newInstance(
-                  packet.getByteArray(0, header.caplen),
+                  packet.getByteArray(0, pcap_pkthdr.getCaplen(headerP)),
                   dlt
                 );
     }
@@ -596,13 +600,12 @@ public final class PcapHandle {
                     );
         }
 
-        pcap_pkthdr header = new pcap_pkthdr(headerP);
-        timestampsInts.set(header.ts.tv_sec.longValue());
-        timestampsMicros.set(header.ts.tv_usec.intValue());
+        timestampsInts.set(pcap_pkthdr.getTvSec(headerP).longValue());
+        timestampsMicros.set(pcap_pkthdr.getTvUsec(headerP).intValue());
 
         return PacketFactories.getFactory(Packet.class, DataLinkType.class)
                  .newInstance(
-                    dataP.getByteArray(0, header.caplen),
+                    dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP)),
                     dlt
                   );
       case -1:
@@ -668,7 +671,7 @@ public final class PcapHandle {
         throw new NotOpenException();
       }
 
-      logger.info("Start loop");
+      logger.info("Start loop.");
       rc = NativeMappings.pcap_loop(
              handle,
              packetCount,
@@ -804,11 +807,12 @@ public final class PcapHandle {
 
     @Override
     public void got_packet(
-      Pointer args, final pcap_pkthdr header, final Pointer packet
+      Pointer args, Pointer header, final Pointer packet
     ) {
-      final long tvs = header.ts.tv_sec.longValue();
-      final int tvus = header.ts.tv_usec.intValue();
-      final byte[] ba = packet.getByteArray(0, header.caplen);
+
+      final long tvs = pcap_pkthdr.getTvSec(header).longValue();
+      final int tvus = pcap_pkthdr.getTvUsec(header).intValue();
+      final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
 
       executor.execute(
         new Runnable() {

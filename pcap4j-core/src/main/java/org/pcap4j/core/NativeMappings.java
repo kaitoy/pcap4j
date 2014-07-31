@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.sun.jna.Callback;
 import com.sun.jna.Function;
 import com.sun.jna.FunctionMapper;
@@ -285,7 +286,7 @@ final class NativeMappings {
     // void got_packet(
     //   u_char *args, const struct pcap_pkthdr *header, const u_char *packet
     // );
-    public void got_packet(Pointer args, pcap_pkthdr header, Pointer packet);
+    public void got_packet(Pointer args, Pointer header, Pointer packet);
 
   }
 
@@ -609,9 +610,18 @@ final class NativeMappings {
 
   public static class pcap_pkthdr extends Structure {
 
+    public static final int TS_OFFSET;
+    public static final int CAPLEN_OFFSET;
+
     public timeval ts;// struct timeval
     public int caplen; // bpf_u_int32
     public int len;// bpf_u_int32
+
+    static {
+      pcap_pkthdr ph = new pcap_pkthdr();
+      TS_OFFSET = ph.fieldOffset("ts");
+      CAPLEN_OFFSET = ph.fieldOffset("caplen");
+    }
 
     public pcap_pkthdr() {}
 
@@ -633,12 +643,33 @@ final class NativeMappings {
       return list;
     }
 
+    static NativeLong getTvSec(Pointer p) {
+      return p.getNativeLong(TS_OFFSET + timeval.TV_SEC_OFFSET);
+    }
+
+    static NativeLong getTvUsec(Pointer p) {
+      return p.getNativeLong(TS_OFFSET + timeval.TV_USEC_OFFSET);
+    }
+
+    static int getCaplen(Pointer p) {
+      return p.getInt(CAPLEN_OFFSET);
+    }
+
   }
 
   public static class timeval extends Structure {
 
+    public static final int TV_SEC_OFFSET;
+    public static final int TV_USEC_OFFSET;
+
     public NativeLong tv_sec; // long
     public NativeLong tv_usec; // long
+
+    static {
+      timeval tv = new timeval();
+      TV_SEC_OFFSET = tv.fieldOffset("tv_sec");
+      TV_USEC_OFFSET = tv.fieldOffset("tv_usec");
+    }
 
     public timeval() {}
 
@@ -669,7 +700,7 @@ final class NativeMappings {
 
   }
 
-  public static class  bpf_insn extends Structure {
+  public static class bpf_insn extends Structure {
 
     public short code; // u_short
     public byte jt; // u_char
