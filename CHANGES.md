@@ -7,6 +7,15 @@ Future
 
 ### Other Changes ###
 
+Release 1.2.2 (31-Jul-2014)
+==========================
+### New Features ###
+* Improved performance of PcapHandle#loop(), PcapHandle#getNextPacket(), and PcapHandle#getNextPacketEx().
+
+### Bug Fixes ###
+
+### Other Changes ###
+
 Release 1.2.1 (4-Jul-2014)
 ==========================
 ### New Features ###
