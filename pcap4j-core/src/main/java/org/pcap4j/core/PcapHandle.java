@@ -1065,8 +1065,8 @@ public final class PcapHandle {
 
       Pointer dltBufP = dltBufPP.getValue();
       list = new ArrayList<DataLinkType>(rc);
-      for (int i = 0; i < rc; i++) {
-        list.add(DataLinkType.getInstance(dltBufP.getInt(Pointer.SIZE * i)));
+      for (int i: dltBufP.getIntArray(0, rc)) {
+        list.add(DataLinkType.getInstance(i));
       }
       NativeMappings.pcap_free_datalinks(dltBufP);
     } finally {

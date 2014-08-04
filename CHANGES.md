@@ -5,6 +5,7 @@ Future
 * Optimize mutually exclusive executions of methods in PcapHandle and PcapDumper.
 
 ### Bug Fixes ###
+* Fix a bug in PcapHandle#listDatalinks().
 
 ### Other Changes ###
 * PcapHandle#breakLoop() now throws NotOpenException.
