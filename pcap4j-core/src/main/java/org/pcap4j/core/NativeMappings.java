@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.sun.jna.Callback;
 import com.sun.jna.Function;
 import com.sun.jna.FunctionMapper;
@@ -727,9 +726,20 @@ final class NativeMappings {
 
   public static class pcap_stat extends Structure {
 
+    public static final int PS_RECV_OFFSET;
+    public static final int PS_DROP_OFFSET;
+    public static final int PS_IFDROP_OFFSET;
+
     public int ps_recv; // u_int
     public int ps_drop; // u_int
     public int ps_ifdrop; // u_int
+
+    static {
+      pcap_stat ph = new pcap_stat();
+      PS_RECV_OFFSET = ph.fieldOffset("ps_recv");
+      PS_DROP_OFFSET = ph.fieldOffset("ps_drop");
+      PS_IFDROP_OFFSET = ph.fieldOffset("ps_ifdrop");
+    }
 
     public pcap_stat() {}
 
@@ -751,11 +761,30 @@ final class NativeMappings {
       return list;
     }
 
+    static int getPsRecv(Pointer p) {
+      return p.getInt(PS_RECV_OFFSET);
+    }
+
+    static int getPsDrop(Pointer p) {
+      return p.getInt(PS_DROP_OFFSET);
+    }
+
+    static int getPsIfdrop(Pointer p) {
+      return p.getInt(PS_IFDROP_OFFSET);
+    }
+
   };
 
   public static class win_pcap_stat extends pcap_stat {
 
+    public static final int BS_CAPT_OFFSET;
+
     public int bs_capt; // u_int
+
+    static {
+      win_pcap_stat ph = new win_pcap_stat();
+      BS_CAPT_OFFSET = ph.fieldOffset("bs_capt");
+    }
 
     public win_pcap_stat() {}
 
@@ -773,6 +802,10 @@ final class NativeMappings {
       List<String> list = super.getFieldOrder();
       list.add("bs_capt");
       return list;
+    }
+
+    static int getBsCapt(Pointer p) {
+      return p.getInt(BS_CAPT_OFFSET);
     }
 
   };

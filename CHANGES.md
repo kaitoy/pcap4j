@@ -3,6 +3,7 @@ Future
 ### New Features ###
 * Add SSH2 support.
 * Optimize mutually exclusive executions of methods in PcapHandle and PcapDumper.
+* Improve performance of PcapHandle#getStats().
 
 ### Bug Fixes ###
 * Fix a bug in PcapHandle#listDatalinks().

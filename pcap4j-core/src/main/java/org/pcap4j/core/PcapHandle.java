@@ -22,7 +22,6 @@ import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.bpf_program;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.core.NativeMappings.pcap_stat;
-import org.pcap4j.core.NativeMappings.win_pcap_stat;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.factory.PacketFactories;
@@ -1001,16 +1000,17 @@ public final class PcapHandle {
           throw new PcapNativeException(getError());
         }
 
-        return new PcapStat(new win_pcap_stat(psp));
+        return new PcapStat(psp, true);
       }
       else {
         pcap_stat ps = new pcap_stat();
+        ps.setAutoSynch(false);
         int rc = NativeMappings.pcap_stats(handle, ps);
         if (rc < 0) {
           throw new PcapNativeException(getError(), rc);
         }
 
-        return new PcapStat(ps);
+        return new PcapStat(ps.getPointer(), false);
       }
     } finally {
       handleLock.readLock().unlock();

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -9,6 +9,7 @@ package org.pcap4j.core;
 
 import org.pcap4j.core.NativeMappings.pcap_stat;
 import org.pcap4j.core.NativeMappings.win_pcap_stat;
+import com.sun.jna.Pointer;
 
 /**
  * @author Kaito Yamada
@@ -37,6 +38,18 @@ public final class PcapStat {
     }
   }
 
+  PcapStat(Pointer p, boolean isWinPcapStat) {
+    this.numPacketsReceived = pcap_stat.getPsRecv(p) & 0xFFFFFFFFL;
+    this.numPacketsDropped = pcap_stat.getPsDrop(p) & 0xFFFFFFFFL;
+    this.numPacketsDroppedByIf = pcap_stat.getPsIfdrop(p) & 0xFFFFFFFFL;
+
+    if (isWinPcapStat) {
+      this.numPacketsCaptured = win_pcap_stat.getBsCapt(p) & 0xFFFFFFFFL;
+    }
+    else {
+      this.numPacketsCaptured = 0;
+    }
+  }
 
   /**
    * @return ps_recv
@@ -45,7 +58,6 @@ public final class PcapStat {
     return numPacketsReceived;
   }
 
-
   /**
    * @return ps_drop
    */
@@ -53,14 +65,12 @@ public final class PcapStat {
     return numPacketsDropped;
   }
 
-
   /**
    * @return ps_ifdrop
    */
   public long getNumPacketsDroppedByIf() {
     return numPacketsDroppedByIf;
   }
-
 
   /**
    * @return bs_capt, which is valid only on Windows.
