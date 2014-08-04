@@ -1,12 +1,13 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014 Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.core;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.core.NativeMappings.timeval;
 import org.pcap4j.packet.Packet;
@@ -24,7 +25,7 @@ public final class PcapDumper {
   private static final Logger logger = LoggerFactory.getLogger(PcapDumper.class);
 
   private final Pointer dumper;
-  private final Object thisLock = new Object();
+  private final ReentrantReadWriteLock dumperLock = new ReentrantReadWriteLock(true);
 
   private volatile boolean open = true;
 
@@ -75,6 +76,9 @@ public final class PcapDumper {
     if (packet == null) {
       throw new NullPointerException("packet may not be null");
     }
+    if (!open) {
+      throw new NotOpenException();
+    }
 
     pcap_pkthdr header = new pcap_pkthdr();
     header.len = header.caplen = packet.length();
@@ -82,11 +86,16 @@ public final class PcapDumper {
     header.ts.tv_sec = new NativeLong(timestampSec);
     header.ts.tv_usec = new NativeLong(timestampMicros);
 
-    synchronized (thisLock) {
+    if (!dumperLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
       NativeMappings.pcap_dump(dumper, header, packet.getRawData());
+    } finally {
+      dumperLock.readLock().unlock();
     }
 
     if (logger.isDebugEnabled()) {
@@ -99,12 +108,21 @@ public final class PcapDumper {
    * @throws NotOpenException
    */
   public void flush() throws PcapNativeException, NotOpenException {
+    if (!open) {
+      throw new NotOpenException();
+    }
+
     int rc;
-    synchronized (thisLock) {
+    if (!dumperLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
       rc = NativeMappings.pcap_dump_flush(dumper);
+    } finally {
+      dumperLock.readLock().unlock();
     }
 
     if (rc < 0) {
@@ -118,12 +136,21 @@ public final class PcapDumper {
    * @throws NotOpenException
    */
   public long ftell() throws PcapNativeException, NotOpenException {
+    if (!open) {
+      throw new NotOpenException();
+    }
+
     NativeLong nposition;
-    synchronized (thisLock) {
+    if (!dumperLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
       nposition = NativeMappings.pcap_dump_ftell(dumper);
+    } finally {
+      dumperLock.readLock().unlock();
     }
 
     long position = nposition.longValue();
@@ -138,15 +165,23 @@ public final class PcapDumper {
    *
    */
   public void close() {
-    synchronized (thisLock) {
+    if (!open) {
+      logger.warn("Already closed.");
+      return;
+    }
+
+    dumperLock.writeLock().lock();
+    try {
       if (!open) {
         logger.warn("Already closed.");
         return;
       }
-      NativeMappings.pcap_dump_close(dumper);
       open = false;
+    } finally {
+      dumperLock.writeLock().unlock();
     }
 
+    NativeMappings.pcap_dump_close(dumper);
     logger.info("Closed.");
   }
 

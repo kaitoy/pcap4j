@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
-
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
@@ -30,7 +30,6 @@ import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
@@ -50,11 +49,11 @@ public final class PcapHandle {
 
   private volatile DataLinkType dlt;
   private final Pointer handle;
-  private final Object thisLock = new Object();
   private final ThreadLocal<Long> timestampsInts
     = new ThreadLocal<Long>();
   private final ThreadLocal<Integer> timestampsMicros
     = new ThreadLocal<Integer>();
+  private final ReentrantReadWriteLock handleLock = new ReentrantReadWriteLock(true);
 
   private volatile boolean open = true;
   private volatile String filteringExpression = "";
@@ -85,51 +84,55 @@ public final class PcapHandle {
       throw new PcapNativeException(errbuf.toString());
     }
 
-    if (builder.isSnaplenSet) {
-      int rc = NativeMappings.pcap_set_snaplen(handle, builder.snaplen);
-      if (rc != 0) {
-        throw new PcapNativeException(getError(), rc);
-      }
-    }
-    if (builder.promiscuousMode != null) {
-      int rc = NativeMappings.pcap_set_promisc(handle, builder.promiscuousMode.getValue());
-      if (rc != 0) {
-        throw new PcapNativeException(getError(), rc);
-      }
-    }
-    if (builder.isRfmonSet) {
-      try {
-        int rc = PcapLibrary.INSTANCE.pcap_set_rfmon(handle, builder.rfmon ? 1 : 0);
+    try {
+      if (builder.isSnaplenSet) {
+        int rc = NativeMappings.pcap_set_snaplen(handle, builder.snaplen);
         if (rc != 0) {
           throw new PcapNativeException(getError(), rc);
         }
-      } catch (UnsatisfiedLinkError e) {
-        logger.error("Failed to instantiate PcapHandle object.", e);
-        throw new PcapNativeException("Monitor mode is not supported on this platform.");
       }
-    }
-    if (builder.isTimeoutMillisSet) {
-      int rc = NativeMappings.pcap_set_timeout(handle, builder.timeoutMillis);
-      if (rc != 0) {
-        throw new PcapNativeException(getError(), rc);
+      if (builder.promiscuousMode != null) {
+        int rc = NativeMappings.pcap_set_promisc(handle, builder.promiscuousMode.getValue());
+        if (rc != 0) {
+          throw new PcapNativeException(getError(), rc);
+        }
       }
-    }
-    if (builder.isBufferSizeSet) {
-      int rc = NativeMappings.pcap_set_buffer_size(handle, builder.bufferSize);
-      if (rc != 0) {
-        throw new PcapNativeException(getError(), rc);
+      if (builder.isRfmonSet) {
+        try {
+          int rc = PcapLibrary.INSTANCE.pcap_set_rfmon(handle, builder.rfmon ? 1 : 0);
+          if (rc != 0) {
+            throw new PcapNativeException(getError(), rc);
+          }
+        } catch (UnsatisfiedLinkError e) {
+          logger.error("Failed to instantiate PcapHandle object.", e);
+          throw new PcapNativeException("Monitor mode is not supported on this platform.");
+        }
       }
-    }
+      if (builder.isTimeoutMillisSet) {
+        int rc = NativeMappings.pcap_set_timeout(handle, builder.timeoutMillis);
+        if (rc != 0) {
+          throw new PcapNativeException(getError(), rc);
+        }
+      }
+      if (builder.isBufferSizeSet) {
+        int rc = NativeMappings.pcap_set_buffer_size(handle, builder.bufferSize);
+        if (rc != 0) {
+          throw new PcapNativeException(getError(), rc);
+        }
+      }
 
-    int rc = NativeMappings.pcap_activate(handle);
-    if (rc < 0) {
-      throw new PcapNativeException(getError(), rc);
+      int rc = NativeMappings.pcap_activate(handle);
+      if (rc < 0) {
+        throw new PcapNativeException(getError(), rc);
+      }
+    } catch (NotOpenException e) {
+      throw new AssertionError("Never get here.");
     }
 
     this.dlt = getDltByNative();
   }
 
-  DataLinkType getDltByNative() {
+  private DataLinkType getDltByNative() {
     return DataLinkType.getInstance(
              NativeMappings.pcap_datalink(handle)
            );
@@ -151,8 +154,14 @@ public final class PcapHandle {
     if (dlt == null) {
       throw new NullPointerException("dlt must not be null.");
     }
+    if (!open) {
+      throw new NotOpenException();
+    }
 
-    synchronized (thisLock) {
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
@@ -161,9 +170,11 @@ public final class PcapHandle {
       if (rc < 0) {
         throw new PcapNativeException(getError(), rc);
       }
-
-      this.dlt = dlt;
+    } finally {
+      handleLock.readLock().unlock();
     }
+
+    this.dlt = dlt;
   }
 
   /**
@@ -198,49 +209,20 @@ public final class PcapHandle {
    * @throws NotOpenException
    */
   public int getSnapshot() throws NotOpenException {
-    synchronized (thisLock) {
+    if (!open) {
+      throw new NotOpenException();
+    }
+
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
-
       return NativeMappings.pcap_snapshot(handle);
-    }
-  }
-
-  /**
-   *
-   * @author Kaito Yamada
-   * @version pcap4j 0.9.16
-   */
-  public static enum SwappedType {
-
-    /**
-     *
-     */
-    NOT_SWAPPED(0),
-
-    /**
-     *
-     */
-    SWAPPED(1),
-
-    /**
-     *
-     */
-    MAYBE_SWAPPED(2);
-
-    private final int value;
-
-    private SwappedType(int value) {
-      this.value = value;
-    }
-
-    /**
-     *
-     * @return value
-     */
-    public int getValue() {
-      return value;
+    } finally {
+      handleLock.readLock().unlock();
     }
   }
 
@@ -250,23 +232,33 @@ public final class PcapHandle {
    * @throws NotOpenException
    */
   public SwappedType isSwapped() throws NotOpenException {
-    synchronized (thisLock) {
+    if (!open) {
+      throw new NotOpenException();
+    }
+
+    int rc;
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
+      rc = NativeMappings.pcap_is_swapped(handle);
+    } finally {
+      handleLock.readLock().unlock();
+    }
 
-      int rc = NativeMappings.pcap_is_swapped(handle);
-      switch (rc) {
-        case 0:
-          return SwappedType.NOT_SWAPPED;
-        case 1:
-          return SwappedType.SWAPPED;
-        case 2:
-          return SwappedType.MAYBE_SWAPPED;
-        default:
-          logger.warn("pcap_snapshot returned an unexpected code: " + rc);
-          return SwappedType.MAYBE_SWAPPED;
-      }
+    switch (rc) {
+      case 0:
+        return SwappedType.NOT_SWAPPED;
+      case 1:
+        return SwappedType.SWAPPED;
+      case 2:
+        return SwappedType.MAYBE_SWAPPED;
+      default:
+        logger.warn("pcap_snapshot returned an unexpected code: " + rc);
+        return SwappedType.MAYBE_SWAPPED;
     }
   }
 
@@ -276,12 +268,20 @@ public final class PcapHandle {
    * @throws NotOpenException
    */
   public int getMajorVersion() throws NotOpenException {
-    synchronized (thisLock) {
+    if (!open) {
+      throw new NotOpenException();
+    }
+
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
-
       return NativeMappings.pcap_major_version(handle);
+    } finally {
+      handleLock.readLock().unlock();
     }
   }
 
@@ -291,12 +291,20 @@ public final class PcapHandle {
    * @throws NotOpenException
    */
   public int getMinorVersion() throws NotOpenException {
-    synchronized (thisLock) {
+    if (!open) {
+      throw new NotOpenException();
+    }
+
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
-
       return NativeMappings.pcap_minor_version(handle);
+    } finally {
+      handleLock.readLock().unlock();
     }
   }
 
@@ -323,22 +331,29 @@ public final class PcapHandle {
         .append(" netmask: ").append(netmask);
       throw new NullPointerException(sb.toString());
     }
+    if (!open) {
+      throw new NotOpenException();
+    }
 
-    bpf_program prog = new bpf_program();
-    int rc;
-    synchronized (thisLock) {
+    bpf_program prog;
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
 
-      rc = NativeMappings.pcap_compile(
-             handle, prog, bpfExpression, mode.getValue(),
-             ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0)
-           );
-    }
-
-    if (rc < 0) {
-      throw new PcapNativeException(getError(), rc);
+      prog = new bpf_program();
+      int rc = NativeMappings.pcap_compile(
+                 handle, prog, bpfExpression, mode.getValue(),
+                 ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0)
+               );
+      if (rc < 0) {
+        throw new PcapNativeException(getError(), rc);
+      }
+    } finally {
+      handleLock.readLock().unlock();
     }
 
     return new BpfProgram(prog, bpfExpression);
@@ -367,16 +382,21 @@ public final class PcapHandle {
         .append(" netmask: ").append(netmask);
       throw new NullPointerException(sb.toString());
     }
+    if (!open) {
+      throw new NotOpenException();
+    }
 
-    synchronized (thisLock) {
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
 
-      int mask = ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0);
-
       bpf_program prog = new bpf_program();
       try {
+        int mask = ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0);
         int rc = NativeMappings.pcap_compile(
                    handle, prog, bpfExpression, mode.getValue(), mask
                  );
@@ -399,6 +419,8 @@ public final class PcapHandle {
       } finally {
         NativeMappings.pcap_freecode(prog);
       }
+    } finally {
+      handleLock.readLock().unlock();
     }
   }
 
@@ -422,16 +444,20 @@ public final class PcapHandle {
    * @throws PcapNativeException
    * @throws NotOpenException
    */
-  public void setFilter(
-    BpfProgram prog
-  ) throws PcapNativeException, NotOpenException {
+  public void setFilter(BpfProgram prog) throws PcapNativeException, NotOpenException {
     if (prog == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("prog: ").append(prog);
       throw new NullPointerException(sb.toString());
     }
+    if (!open) {
+      throw new NotOpenException();
+    }
 
-    synchronized (thisLock) {
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
@@ -440,41 +466,11 @@ public final class PcapHandle {
       if (rc < 0) {
         throw new PcapNativeException("Failed to set filter: " + getError(), rc);
       }
-
-      this.filteringExpression = prog.getExpression();
-    }
-  }
-
-  /**
-   *
-   * @author Kaito Yamada
-   * @version pcap4j 0.9.15
-   */
-  public static enum BlockingMode {
-
-    /**
-     *
-     */
-    BLOCKING(0),
-
-    /**
-     *
-     */
-    NONBLOCKING(1);
-
-    private final int value;
-
-    private BlockingMode(int value) {
-      this.value = value;
+    } finally {
+      handleLock.readLock().unlock();
     }
 
-    /**
-     *
-     * @return value
-     */
-    public int getValue() {
-      return value;
-    }
+    this.filteringExpression = prog.getExpression();
   }
 
   /**
@@ -483,26 +479,31 @@ public final class PcapHandle {
    * @throws PcapNativeException
    * @throws NotOpenException
    */
-  public void setBlockingMode(
-    BlockingMode mode
-  ) throws PcapNativeException, NotOpenException {
+  public void setBlockingMode(BlockingMode mode) throws PcapNativeException, NotOpenException {
     if (mode == null) {
       StringBuilder sb = new StringBuilder();
       sb.append(" mode: ").append(mode);
       throw new NullPointerException(sb.toString());
     }
+    if (!open) {
+      throw new NotOpenException();
+    }
 
-    PcapErrbuf errbuf = new PcapErrbuf();
-    int rc;
-    synchronized (thisLock) {
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
-      rc = NativeMappings.pcap_setnonblock(handle, mode.getValue(), errbuf);
-    }
 
-    if (rc < 0) {
-      throw new PcapNativeException(errbuf.toString(), rc);
+      PcapErrbuf errbuf = new PcapErrbuf();
+      int rc = NativeMappings.pcap_setnonblock(handle, mode.getValue(), errbuf);
+      if (rc < 0) {
+        throw new PcapNativeException(errbuf.toString(), rc);
+      }
+    } finally {
+      handleLock.readLock().unlock();
     }
   }
 
@@ -513,13 +514,22 @@ public final class PcapHandle {
    * @throws NotOpenException
    */
   public BlockingMode getBlockingMode() throws PcapNativeException, NotOpenException {
+    if (!open) {
+      throw new NotOpenException();
+    }
+
     PcapErrbuf errbuf = new PcapErrbuf();
     int rc;
-    synchronized (thisLock) {
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
       rc = NativeMappings.pcap_getnonblock(handle, errbuf);
+    } finally {
+      handleLock.readLock().unlock();
     }
 
     if (rc == 0) {
@@ -539,15 +549,23 @@ public final class PcapHandle {
    * @throws NotOpenException
    */
   public Packet getNextPacket() throws NotOpenException {
-    pcap_pkthdr header = new pcap_pkthdr();
-    Pointer packet;
-    header.setAutoSynch(false);
+    if (!open) {
+      throw new NotOpenException();
+    }
 
-    synchronized (thisLock) {
+    pcap_pkthdr header = new pcap_pkthdr();
+    header.setAutoSynch(false);
+    Pointer packet;
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
       packet = NativeMappings.pcap_next(handle, header);
+    } finally {
+      handleLock.readLock().unlock();
     }
 
     if (packet != null) {
@@ -576,48 +594,56 @@ public final class PcapHandle {
    */
   public Packet getNextPacketEx()
   throws PcapNativeException, EOFException, TimeoutException, NotOpenException {
-    PointerByReference headerPP = new PointerByReference();
-    PointerByReference dataPP = new PointerByReference();
-    int rc;
+    if (!open) {
+      throw new NotOpenException();
+    }
 
-    synchronized (thisLock) {
+
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
-      rc = NativeMappings.pcap_next_ex(handle, headerPP, dataPP);
-    }
 
-    switch (rc) {
-      case 0:
-        throw new TimeoutException();
-      case 1:
-        Pointer headerP = headerPP.getValue();
-        Pointer dataP = dataPP.getValue();
-        if (headerP == null || dataP == null) {
-          throw new PcapNativeException(
-                      "Failed to get packet. *header: "
-                        + headerP + " *data: " + dataP
+      PointerByReference headerPP = new PointerByReference();
+      PointerByReference dataPP = new PointerByReference();
+      int rc = NativeMappings.pcap_next_ex(handle, headerPP, dataPP);
+      switch (rc) {
+        case 0:
+          throw new TimeoutException();
+        case 1:
+          Pointer headerP = headerPP.getValue();
+          Pointer dataP = dataPP.getValue();
+          if (headerP == null || dataP == null) {
+            throw new PcapNativeException(
+                        "Failed to get packet. *header: "
+                          + headerP + " *data: " + dataP
+                      );
+          }
+
+          timestampsInts.set(pcap_pkthdr.getTvSec(headerP).longValue());
+          timestampsMicros.set(pcap_pkthdr.getTvUsec(headerP).intValue());
+
+          return PacketFactories.getFactory(Packet.class, DataLinkType.class)
+                   .newInstance(
+                      dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP)),
+                      dlt
                     );
-        }
-
-        timestampsInts.set(pcap_pkthdr.getTvSec(headerP).longValue());
-        timestampsMicros.set(pcap_pkthdr.getTvUsec(headerP).intValue());
-
-        return PacketFactories.getFactory(Packet.class, DataLinkType.class)
-                 .newInstance(
-                    dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP)),
-                    dlt
-                  );
-      case -1:
-        throw new PcapNativeException(
-                "Error occured in pcap_next_ex(): " + getError(), rc
-              );
-      case -2:
-        throw new EOFException();
-      default:
-        throw new PcapNativeException(
-                "Unexpected error occured: " + getError(), rc
-              );
+        case -1:
+          throw new PcapNativeException(
+                  "Error occured in pcap_next_ex(): " + getError(), rc
+                );
+        case -2:
+          throw new EOFException();
+        default:
+          throw new PcapNativeException(
+                  "Unexpected error occured: " + getError(), rc
+                );
+      }
+    } finally {
+      handleLock.readLock().unlock();
     }
   }
 
@@ -664,37 +690,43 @@ public final class PcapHandle {
         .append(" executor: ").append(executor);
       throw new NullPointerException(sb.toString());
     }
+    if (!open) {
+      throw new NotOpenException();
+    }
 
-    int rc;
-    synchronized (thisLock) {
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
 
-      logger.info("Start loop.");
-      rc = NativeMappings.pcap_loop(
-             handle,
-             packetCount,
-             new GotPacketFuncExecutor(listener, dlt, executor),
-             null
-           );
-    }
-
-    switch (rc) {
-      case  0:
-        logger.info("Finish loop.");
-        break;
-      case -1:
-        throw new PcapNativeException(
-                "Error occured: " + getError(), rc
-              );
-      case -2:
-        logger.info("Broken.");
-        throw new InterruptedException();
-      default:
-        throw new PcapNativeException(
-                "Unexpected error occured: " + getError(), rc
-              );
+      logger.info("Starting loop.");
+      int rc = NativeMappings.pcap_loop(
+                 handle,
+                 packetCount,
+                 new GotPacketFuncExecutor(listener, dlt, executor),
+                 null
+               );
+      switch (rc) {
+        case  0:
+          logger.info("Finished loop.");
+          break;
+        case -1:
+          throw new PcapNativeException(
+                  "Error occured: " + getError(), rc
+                );
+        case -2:
+          logger.info("Broken.");
+          throw new InterruptedException();
+        default:
+          throw new PcapNativeException(
+                  "Unexpected error occured: " + getError(), rc
+                );
+      }
+    } finally {
+      handleLock.readLock().unlock();
     }
   }
 
@@ -736,102 +768,49 @@ public final class PcapHandle {
         .append(" executor: ").append(executor);
       throw new NullPointerException(sb.toString());
     }
+    if (!open) {
+      throw new NotOpenException();
+    }
 
     int rc;
-    synchronized (thisLock) {
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
 
-      logger.info("Start dispatch");
+      logger.info("Starting dispatch.");
       rc = NativeMappings.pcap_dispatch(
              handle,
              packetCount,
              new GotPacketFuncExecutor(listener, dlt, executor),
              null
            );
-
-    }
-
-    if (rc < 0) {
-      switch (rc) {
-        case -1:
-          throw new PcapNativeException(
-                  "Error occured: " + getError(),
-                  rc
-                );
-        case -2:
-          logger.info("Broken.");
-          throw new InterruptedException();
-        default:
-          throw new PcapNativeException(
-                  "Unexpected error occured: " + getError(),
-                  rc
-                );
+      if (rc < 0) {
+        switch (rc) {
+          case -1:
+            throw new PcapNativeException(
+                    "Error occured: " + getError(),
+                    rc
+                  );
+          case -2:
+            logger.info("Broken.");
+            throw new InterruptedException();
+          default:
+            throw new PcapNativeException(
+                    "Unexpected error occured: " + getError(),
+                    rc
+                  );
+        }
       }
+    } finally {
+      handleLock.readLock().unlock();
     }
 
     logger.info("Finish dispatch.");
     return rc;
-  }
-
-  private static final class SimpleExecutor implements Executor {
-
-    private SimpleExecutor() {}
-
-    private static final SimpleExecutor INSTANCE = new SimpleExecutor();
-
-    public static SimpleExecutor getInstance() { return INSTANCE; }
-
-    @Override
-    public void execute(Runnable command) {
-      command.run();
-    }
-
-  }
-
-  private final class GotPacketFuncExecutor
-  implements NativeMappings.pcap_handler {
-
-    private final DataLinkType dlt;
-    private final PacketListener listener;
-    private final Executor executor;
-
-    public GotPacketFuncExecutor(
-      PacketListener listener, DataLinkType dlt, Executor executor
-    ) {
-      this.dlt = dlt;
-      this.listener = listener;
-      this.executor = executor;
-    }
-
-    @Override
-    public void got_packet(
-      Pointer args, Pointer header, final Pointer packet
-    ) {
-
-      final long tvs = pcap_pkthdr.getTvSec(header).longValue();
-      final int tvus = pcap_pkthdr.getTvUsec(header).intValue();
-      final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
-
-      executor.execute(
-        new Runnable() {
-          @Override
-          public void run() {
-            timestampsInts.set(tvs);
-            timestampsMicros.set(tvus);
-            listener.gotPacket(
-              PacketFactories.getFactory(Packet.class, DataLinkType.class)
-                .newInstance(
-                   ba,
-                   dlt
-                 )
-            );
-          }
-        }
-      );
-    }
-
   }
 
   /**
@@ -841,18 +820,31 @@ public final class PcapHandle {
    *        must be the same as this dlt.
    * @return an opened PcapDumper.
    * @throws PcapNativeException
+   * @throws NotOpenException
    */
-  public PcapDumper dumpOpen(String filePath) throws PcapNativeException {
+  public PcapDumper dumpOpen(String filePath) throws PcapNativeException, NotOpenException {
     if (filePath == null) {
       throw new NullPointerException("filePath must not be null.");
     }
+    if (!open) {
+      throw new NotOpenException();
+    }
 
     Pointer dumper;
-    synchronized (thisLock) {
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
+      if (!open) {
+        throw new NotOpenException();
+      }
+
       dumper = NativeMappings.pcap_dump_open(handle, filePath);
       if (dumper == null) {
         throw new PcapNativeException(getError());
       }
+    } finally {
+      handleLock.readLock().unlock();
     }
 
     return new PcapDumper(dumper);
@@ -872,37 +864,44 @@ public final class PcapHandle {
     if (dumper == null) {
       throw new NullPointerException("dumper must not be null.");
     }
+    if (!open) {
+      throw new NotOpenException();
+    }
 
-    int rc;
-    synchronized (thisLock) {
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
 
-      logger.info("Start dump loop");
-      rc = NativeMappings.pcap_loop(
-             handle,
-             packetCount,
-             NativeMappings.PCAP_DUMP,
-             dumper.getDumper()
-           );
-    }
+      logger.info("Starting dump loop.");
+      int rc = NativeMappings.pcap_loop(
+                 handle,
+                 packetCount,
+                 NativeMappings.PCAP_DUMP,
+                 dumper.getDumper()
+               );
 
-    switch (rc) {
-      case  0:
-        logger.info("Finish dump loop.");
-        break;
-      case -1:
-        throw new PcapNativeException(
-                "Error occured: " + getError(), rc
-              );
-      case -2:
-        logger.info("Broken.");
-        throw new InterruptedException();
-      default:
-        throw new PcapNativeException(
-                "Unexpected error occured: " + getError(), rc
-              );
+      switch (rc) {
+        case  0:
+          logger.info("Finished dump loop.");
+          break;
+        case -1:
+          throw new PcapNativeException(
+                  "Error occured: " + getError(), rc
+                );
+        case -2:
+          logger.info("Broken.");
+          throw new InterruptedException();
+        default:
+          throw new PcapNativeException(
+                  "Unexpected error occured: " + getError(), rc
+                );
+      }
+    } finally {
+      handleLock.readLock().unlock();
     }
   }
 
@@ -913,10 +912,26 @@ public final class PcapHandle {
    * because of buffering or something.
    * As a workaround, letting this capture some bogus packets
    * after calling this method may work.
+   * @throws NotOpenException
    */
-  public void breakLoop() {
-    logger.info("Break loop.");
-    NativeMappings.pcap_breakloop(handle);
+  public void breakLoop() throws NotOpenException {
+    if (!open) {
+      throw new NotOpenException();
+    }
+
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
+      if (!open) {
+        throw new NotOpenException();
+      }
+
+      logger.info("Break loop.");
+      NativeMappings.pcap_breakloop(handle);
+    } finally {
+      handleLock.readLock().unlock();
+    }
   }
 
   /**
@@ -930,39 +945,30 @@ public final class PcapHandle {
     if (packet == null) {
       throw new NullPointerException("packet may not be null");
     }
+    if (!open) {
+      throw new NotOpenException();
+    }
 
-    int rc;
-    synchronized (thisLock) {
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
-      rc = NativeMappings.pcap_sendpacket(
-             handle, packet.getRawData(), packet.length()
-           );
-    }
 
-    if (rc < 0) {
-      throw new PcapNativeException(
-              "Error occured in pcap_sendpacket(): " + getError(),
-              rc
-            );
-    }
-  }
-
-  /**
-   * Closes this PcapHandle.
-   */
-  public void close() {
-    synchronized (thisLock) {
-      if (!open) {
-        logger.warn("Already closed.");
-        return;
+      int rc = NativeMappings.pcap_sendpacket(
+                 handle, packet.getRawData(), packet.length()
+               );
+      if (rc < 0) {
+        throw new PcapNativeException(
+                "Error occured in pcap_sendpacket(): " + getError(),
+                rc
+              );
       }
-      NativeMappings.pcap_close(handle);
-      open = false;
+    } finally {
+      handleLock.readLock().unlock();
     }
-
-    logger.info("Closed.");
   }
 
   /**
@@ -972,43 +978,43 @@ public final class PcapHandle {
    * @throws NotOpenException
    */
   public PcapStat getStats() throws PcapNativeException, NotOpenException {
-    if (Platform.isWindows()) {
-      Pointer psp;
-      IntByReference pcapStatSize = new IntByReference();
-      synchronized (thisLock) {
-        if (!open) {
-          throw new NotOpenException();
-        }
-        psp = PcapLibrary.INSTANCE.win_pcap_stats_ex(handle, pcapStatSize);
-      }
-
-      if (pcapStatSize.getValue() != 24) {
-        throw new PcapNativeException(getError());
-      }
-      if (psp == null) {
-        throw new PcapNativeException(getError());
-      }
-
-      return new PcapStat(new win_pcap_stat(psp));
-    }
-    else {
-      pcap_stat ps = new pcap_stat();
-      int rc;
-      synchronized (thisLock) {
-        if (!open) {
-          throw new NotOpenException();
-        }
-        rc = NativeMappings.pcap_stats(handle, ps);
-      }
-
-      if (rc < 0) {
-        throw new PcapNativeException(getError(), rc);
-      }
-
-      return new PcapStat(ps);
+    if (!open) {
+      throw new NotOpenException();
     }
 
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
+      if (!open) {
+        throw new NotOpenException();
+      }
 
+      if (Platform.isWindows()) {
+        IntByReference pcapStatSize = new IntByReference();
+        Pointer psp = PcapLibrary.INSTANCE.win_pcap_stats_ex(handle, pcapStatSize);
+
+        if (pcapStatSize.getValue() != 24) {
+          throw new PcapNativeException(getError());
+        }
+        if (psp == null) {
+          throw new PcapNativeException(getError());
+        }
+
+        return new PcapStat(new win_pcap_stat(psp));
+      }
+      else {
+        pcap_stat ps = new pcap_stat();
+        int rc = NativeMappings.pcap_stats(handle, ps);
+        if (rc < 0) {
+          throw new PcapNativeException(getError(), rc);
+        }
+
+        return new PcapStat(ps);
+      }
+    } finally {
+      handleLock.readLock().unlock();
+    }
   }
 
 //  /**
@@ -1038,35 +1044,83 @@ public final class PcapHandle {
    */
   public List<DataLinkType> listDatalinks()
   throws PcapNativeException, NotOpenException {
-    PointerByReference dltBufPP = new PointerByReference();
-    int rc;
-    synchronized (thisLock) {
+    if (!open) {
+      throw new NotOpenException();
+    }
+
+    List<DataLinkType> list;
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
       if (!open) {
         throw new NotOpenException();
       }
-      rc = NativeMappings.pcap_list_datalinks(handle, dltBufPP);
+
+      PointerByReference dltBufPP = new PointerByReference();
+      int rc = NativeMappings.pcap_list_datalinks(handle, dltBufPP);
+      if (rc < 0) {
+        throw new PcapNativeException(getError(), rc);
+      }
+
+      Pointer dltBufP = dltBufPP.getValue();
+      list = new ArrayList<DataLinkType>(rc);
+      for (int i = 0; i < rc; i++) {
+        list.add(DataLinkType.getInstance(dltBufP.getInt(Pointer.SIZE * i)));
+      }
+      NativeMappings.pcap_free_datalinks(dltBufP);
+    } finally {
+      handleLock.readLock().unlock();
     }
 
-    if (rc < 0) {
-      throw new PcapNativeException(getError(), rc);
-    }
-
-    Pointer dltBufP = dltBufPP.getValue();
-    List<DataLinkType> list = new ArrayList<DataLinkType>(rc);
-    for (int i = 0; i < rc; i++) {
-      list.add(DataLinkType.getInstance(dltBufP.getInt(Pointer.SIZE * i)));
-    }
-
-    NativeMappings.pcap_free_datalinks(dltBufP);
     return list;
   }
 
   /**
    *
    * @return an error message.
+   * @throws NotOpenException
    */
-  public String getError() {
-    return NativeMappings.pcap_geterr(handle).getString(0);
+  public String getError() throws NotOpenException {
+    if (!open) {
+      throw new NotOpenException();
+    }
+
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
+      if (!open) {
+        throw new NotOpenException();
+      }
+      return NativeMappings.pcap_geterr(handle).getString(0);
+    } finally {
+      handleLock.readLock().unlock();
+    }
+  }
+
+  /**
+   * Closes this PcapHandle.
+   */
+  public void close() {
+    if (!open) {
+      logger.warn("Already closed.");
+      return;
+    }
+
+    handleLock.writeLock().lock();
+    try {
+      if (!open) {
+        logger.warn("Already closed.");
+        return;
+      }
+      open = false;
+    } finally {
+      handleLock.writeLock().unlock();
+    }
+
+    NativeMappings.pcap_close(handle);
+    logger.info("Closed.");
   }
 
   @Override
@@ -1080,6 +1134,63 @@ public final class PcapHandle {
       .append("]");
 
     return sb.toString();
+  }
+
+  private static final class SimpleExecutor implements Executor {
+
+    private SimpleExecutor() {}
+
+    private static final SimpleExecutor INSTANCE = new SimpleExecutor();
+
+    public static SimpleExecutor getInstance() { return INSTANCE; }
+
+    @Override
+    public void execute(Runnable command) {
+      command.run();
+    }
+
+  }
+
+  private final class GotPacketFuncExecutor implements NativeMappings.pcap_handler {
+
+    private final DataLinkType dlt;
+    private final PacketListener listener;
+    private final Executor executor;
+
+    public GotPacketFuncExecutor(
+      PacketListener listener, DataLinkType dlt, Executor executor
+    ) {
+      this.dlt = dlt;
+      this.listener = listener;
+      this.executor = executor;
+    }
+
+    @Override
+    public void got_packet(
+      Pointer args, Pointer header, final Pointer packet
+    ) {
+      final long tvs = pcap_pkthdr.getTvSec(header).longValue();
+      final int tvus = pcap_pkthdr.getTvUsec(header).intValue();
+      final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
+
+      executor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            timestampsInts.set(tvs);
+            timestampsMicros.set(tvus);
+            listener.gotPacket(
+              PacketFactories.getFactory(Packet.class, DataLinkType.class)
+                .newInstance(
+                   ba,
+                   dlt
+                 )
+            );
+          }
+        }
+      );
+    }
+
   }
 
   /**
@@ -1190,6 +1301,75 @@ public final class PcapHandle {
       return new PcapHandle(this);
     }
 
+  }
+
+  /**
+   *
+   * @author Kaito Yamada
+   * @version pcap4j 0.9.16
+   */
+  public static enum SwappedType {
+
+    /**
+     *
+     */
+    NOT_SWAPPED(0),
+
+    /**
+     *
+     */
+    SWAPPED(1),
+
+    /**
+     *
+     */
+    MAYBE_SWAPPED(2);
+
+    private final int value;
+
+    private SwappedType(int value) {
+      this.value = value;
+    }
+
+    /**
+     *
+     * @return value
+     */
+    public int getValue() {
+      return value;
+    }
+  }
+
+  /**
+   *
+   * @author Kaito Yamada
+   * @version pcap4j 0.9.15
+   */
+  public static enum BlockingMode {
+
+    /**
+     *
+     */
+    BLOCKING(0),
+
+    /**
+     *
+     */
+    NONBLOCKING(1);
+
+    private final int value;
+
+    private BlockingMode(int value) {
+      this.value = value;
+    }
+
+    /**
+     *
+     * @return value
+     */
+    public int getValue() {
+      return value;
+    }
   }
 
 }

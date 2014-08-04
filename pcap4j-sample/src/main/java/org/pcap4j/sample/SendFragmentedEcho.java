@@ -99,6 +99,7 @@ public class SendFragmentedEcho {
 
       PacketListener listener
         = new PacketListener() {
+            @Override
             public void gotPacket(Packet packet) {
               System.out.println(packet);
             }
@@ -156,6 +157,7 @@ public class SendFragmentedEcho {
         ) {
           etherBuilder.payloadBuilder(
             new AbstractBuilder() {
+              @Override
               public Packet build() {
                 return ipV4Packet;
               }
@@ -182,7 +184,9 @@ public class SendFragmentedEcho {
       e.printStackTrace();
     } finally {
       if (handle != null && handle.isOpen()) {
-        handle.breakLoop();
+        try {
+          handle.breakLoop();
+        } catch (NotOpenException noe) {}
         try {
           Thread.sleep(1000);
         } catch (InterruptedException e) {}
@@ -207,6 +211,7 @@ public class SendFragmentedEcho {
       this.listener = listener;
     }
 
+    @Override
     public void run() {
       try {
         handle.loop(-1, listener);
