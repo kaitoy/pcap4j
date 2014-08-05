@@ -2,6 +2,14 @@ Future
 ======
 ### New Features ###
 * Add SSH2 support.
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.2.3 (4-Aug-2014)
+===========================
+### New Features ###
 * Optimize mutually exclusive executions of methods in PcapHandle and PcapDumper.
 * Improve performance of PcapHandle#getStats().
 
@@ -12,7 +20,7 @@ Future
 * PcapHandle#breakLoop() now throws NotOpenException.
 
 Release 1.2.2 (31-Jul-2014)
-==========================
+===========================
 ### New Features ###
 * Improved performance of PcapHandle#loop(), PcapHandle#getNextPacket(), and PcapHandle#getNextPacketEx().
 

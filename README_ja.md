@@ -35,9 +35,9 @@ Maven Central Repositoryからダウンロードできるようになりまし�
 
 * Pcap4J 0.9.13 (このページから配布する最後のバージョン)
  * [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
-* Pcap4J 1.2.2 (Maven Central Repositoryにある最新バージョン)
- * ソースなし: [pcap4j-distribution-1.2.2-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.2/pcap4j-distribution-1.2.2-bin.zip)
- * ソース入り: [pcap4j-distribution-1.2.2-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.2/pcap4j-distribution-1.2.2-src.zip)
+* Pcap4J 1.2.3 (Maven Central Repositoryにある最新バージョン)
+ * ソースなし: [pcap4j-distribution-1.2.3-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.3/pcap4j-distribution-1.2.3-bin.zip)
+ * ソース入り: [pcap4j-distribution-1.2.3-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.2.3/pcap4j-distribution-1.2.3-src.zip)
 * スナップショットビルド
  * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
 
@@ -146,12 +146,12 @@ pom.xmlに以下のような記述を追加する。
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-core</artifactId>
-      <version>1.2.2</version>
+      <version>1.2.3</version>
     </dependency>
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-packetfactory-static</artifactId>
-      <version>1.2.2</version>
+      <version>1.2.3</version>
     </dependency>
        ...
   </dependencies>
