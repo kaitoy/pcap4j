@@ -35,9 +35,7 @@ import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
- * A wrapping class for struct pcap_t.
- * On some OSes, such as Linux and Solaris, this class can't capture packets
- * whose source and destination interface are the same.
+ * A wrapper class for struct pcap_t.
  *
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
@@ -647,9 +645,11 @@ public final class PcapHandle {
   }
 
   /**
-   * A wrapper method for "int pcap_loop(pcap_t *, int, pcap_handler, u_char *)".
-   * Once a packet is captured, listener.gotPacket(Packet) is called in the same thread,
-   * and this won't capture any other packets until the thread finishes.
+   * A wrapper method for <code>int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</code>.
+   * When a packet is captured, <code>listener.gotPacket(Packet)</code> is called in
+   * the thread which called the <code>loop()</code>. And then this PcapHandle waits for
+   * the thread to return from the <code>gotPacket()</code> before it retrieves the next
+   * packet from the pcap capture buffer.
    *
    * @param packetCount
    * @param listener
@@ -668,10 +668,14 @@ public final class PcapHandle {
   }
 
   /**
-   * A wrapper method for "int pcap_loop(pcap_t *, int, pcap_handler, u_char *)".
-   * Once a packet is captured, listener.gotPacket(Packet) is called via the executor.
-   * If listener.gotPacket(Packet) is expected to take a long time,
-   * this method should be used with proper executor instead of loop(int, PacketListener).
+   * A wrapper method for <code>int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</code>.
+   * When a packet is captured, the
+   * {@link java.util.concurrent.Executor#execute(Runnable) executor.execute()} is called
+   * with a Runnable object in the thread which called the <code>loop()</code>.
+   * Then, the Runnable object calls <code>listener.gotPacket(Packet)</code>.
+   * If <code>listener.gotPacket(Packet)</code> is expected to take a long time to
+   * process a packet, this method should be used with a proper executor instead of
+   * {@link #loop(int, PacketListener)} in order to prevent the pcap capture buffer from overflowing.
    *
    * @param packetCount
    * @param listener
