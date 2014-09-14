@@ -32,8 +32,8 @@ extends AbstractStaticPacketFactory<NA> {
 
   @Override
   @Deprecated
-  public Packet newInstance(byte[] rawData, NA number) {
-    return super.newInstance(rawData, number);
+  public Packet newInstance(byte[] rawData, int offset, int length, NA number) {
+    return super.newInstance(rawData, offset, length, number);
   }
 
   @Override

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Kaito Yamada
+  _##  Copyright (C) 2013-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -23,8 +23,10 @@ extends AbstractStaticPacketFactory<TcpPort> {
 //    instantiaters.put(
 //      TcpPort.HTTP, new PacketInstantiater() {
 //        @Override
-//        public Packet newInstance(byte[] rawData) {
-//          return HttpPacket.newPacket(rawData);
+//        public Packet newInstance(
+//          byte[] rawData, int offset, int length
+//        ) throws IllegalRawDataException {
+//          return HttpPacket.newPacket(rawData, offset, length);
 //        }
 //        @Override
 //        public Class<HttpPacket> getTargetClass() {

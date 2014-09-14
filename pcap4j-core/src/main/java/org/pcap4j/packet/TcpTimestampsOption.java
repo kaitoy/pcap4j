@@ -38,49 +38,58 @@ public final class TcpTimestampsOption implements TcpOption {
   private final int tsEchoReply;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new TcpTimestampsOption object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static TcpTimestampsOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new TcpTimestampsOption(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new TcpTimestampsOption(rawData, offset, length);
   }
 
-  private TcpTimestampsOption(byte[] rawData) throws IllegalRawDataException {
-    if (rawData.length < 10) {
+  private TcpTimestampsOption(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    if (length < 10) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 9. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[0] != kind.value()) {
+    if (rawData[offset] != kind.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The kind must be: ")
         .append(kind.valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[1] != 10) {
+
+    this.length = rawData[1 + offset];
+    if (this.length != 10) {
       throw new IllegalRawDataException(
-                  "The value of length field must be 10 but: " + rawData[1]
+                  "The value of length field must be 10 but: " + this.length
                 );
     }
 
-    this.length = rawData[1];
-    this.tsValue = ByteArrays.getInt(rawData, 2);
-    this.tsEchoReply = ByteArrays.getInt(rawData, 6);
+    this.tsValue = ByteArrays.getInt(rawData, 2 + offset);
+    this.tsEchoReply = ByteArrays.getInt(rawData, 6 + offset);
   }
 
   private TcpTimestampsOption(Builder builder) {

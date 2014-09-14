@@ -34,39 +34,33 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
   private final Packet payload;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IcmpV6CommonPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV6CommonPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IcmpV6CommonPacket(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IcmpV6CommonPacket(rawData, offset, length);
   }
 
-  private IcmpV6CommonPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new IcmpV6CommonHeader(rawData);
+  private IcmpV6CommonPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new IcmpV6CommonHeader(rawData, offset, length);
 
-    int payloadLength = rawData.length - header.length();
+    int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      byte[] rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            payloadLength
-          );
       this.payload
         = PacketFactories.getFactory(Packet.class, IcmpV6Type.class)
-            .newInstance(rawPayload, header.getType());
+            .newInstance(rawData, offset + header.length(), payloadLength, header.getType());
     }
     else {
       this.payload = null;
@@ -249,6 +243,7 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
       return this;
     }
 
+    @Override
     public Builder correctChecksumAtBuild(boolean correctChecksumAtBuild) {
       this.correctChecksumAtBuild = correctChecksumAtBuild;
       return this;
@@ -303,24 +298,28 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
     private final IcmpV6Code code;
     private final short checksum;
 
-    private IcmpV6CommonHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < ICMPV6_COMMON_HEADER_SIZE) {
+    private IcmpV6CommonHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < ICMPV6_COMMON_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv6 common header(")
           .append(ICMPV6_COMMON_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.type
-        = IcmpV6Type
-            .getInstance(ByteArrays.getByte(rawData, TYPE_OFFSET));
+        = IcmpV6Type.getInstance(ByteArrays.getByte(rawData, TYPE_OFFSET + offset));
       this.code
-        = IcmpV6Code
-            .getInstance(type.value(), ByteArrays.getByte(rawData, CODE_OFFSET));
+        = IcmpV6Code.getInstance(type.value(), ByteArrays.getByte(rawData, CODE_OFFSET + offset));
       this.checksum
-        = ByteArrays.getShort(rawData, CHECKSUM_OFFSET);
+        = ByteArrays.getShort(rawData, CHECKSUM_OFFSET + offset);
     }
 
     private IcmpV6CommonHeader(Builder builder, byte[] payload) {
@@ -456,13 +455,16 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
   }
 
   /**
+   * The interface representing an IPv6 neighbor discovery option.
+   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
+   * Classes which imprement this interface must implement the following method:
+   * {@code public static IpV6NeighborDiscoveryOption newInstance(byte[] rawData, int offset, int length)
+   * throws IllegalRawDataException}
+   *
    * @author Kaito Yamada
    * @since pcap4j 0.9.15
    */
   public interface IpV6NeighborDiscoveryOption extends Serializable {
-
-    // /* must implement if use PropertiesBasedIpV6NeighborDiscoveryOptionFactory */
-    // public static IpV6NeighborDiscoveryOption newInstance(byte[] rawData);
 
     /**
      *

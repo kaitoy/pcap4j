@@ -34,24 +34,31 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
   public static PropertiesBasedTcpOptionFactory getInstance() { return INSTANCE; }
 
   @Override
-  public TcpOption newInstance(byte[] rawData, TcpOptionKind number) {
-    return newInstance(rawData, getTargetClass(number));
+  public TcpOption newInstance(byte[] rawData, int offset, int length, TcpOptionKind number) {
+    return newInstance(rawData, offset, length, getTargetClass(number));
   }
 
   @Override
-  public TcpOption newInstance(byte[] rawData) {
-    return newInstance(rawData, getTargetClass());
+  public TcpOption newInstance(byte[] rawData, int offset, int length) {
+    return newInstance(rawData, offset, length, getTargetClass());
   }
 
   /**
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @param dataClass
    * @return a new TcpOption object.
+   * @throws IllegalStateException
+   * @throws IllegalArgumentException
+   * @throws NullPointerException
    */
-  public TcpOption newInstance(byte[] rawData, Class<? extends TcpOption> dataClass) {
+  public TcpOption newInstance(
+    byte[] rawData, int offset, int length, Class<? extends TcpOption> dataClass
+  ) {
     if (rawData == null || dataClass == null) {
-      StringBuilder sb = new StringBuilder(50);
+      StringBuilder sb = new StringBuilder(40);
       sb.append("rawData: ")
         .append(rawData)
         .append(" dataClass: ")
@@ -60,8 +67,8 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     }
 
     try {
-      Method newInstance = dataClass.getMethod("newInstance", byte[].class);
-      return (TcpOption)newInstance.invoke(null, rawData);
+      Method newInstance = dataClass.getMethod("newInstance", byte[].class, int.class, int.class);
+      return (TcpOption)newInstance.invoke(null, rawData, offset, length);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -72,9 +79,9 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
       throw new IllegalStateException(e);
     } catch (InvocationTargetException e) {
       if (e.getTargetException() instanceof IllegalRawDataException) {
-        return IllegalTcpOption.newInstance(rawData);
+        return IllegalTcpOption.newInstance(rawData, offset, length);
       }
-      throw new IllegalStateException(e.getTargetException());
+      throw new IllegalArgumentException(e);
     }
   }
 

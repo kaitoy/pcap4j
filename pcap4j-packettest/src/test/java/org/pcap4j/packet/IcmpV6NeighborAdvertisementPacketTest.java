@@ -121,7 +121,8 @@ public class IcmpV6NeighborAdvertisementPacketTest extends AbstractPacketTest {
   public void testNewPacket() {
     try {
       IcmpV6NeighborAdvertisementPacket p
-        = IcmpV6NeighborAdvertisementPacket.newPacket(packet.getRawData());
+        = IcmpV6NeighborAdvertisementPacket
+            .newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

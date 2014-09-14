@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -33,15 +33,10 @@ public final class IpV6SimpleFlowLabel implements IpV6FlowLabel {
   }
 
   private IpV6SimpleFlowLabel(int value) {
-    if ((value & 0xFFF00000) != 0) {
-      throw new IllegalArgumentException(
-                  "The value must be between 0 and 1048575. value: "
-                    + value
-                );
-    }
-    this.value = value;
+    this.value = value & 0x000FFFFF;
   }
 
+  @Override
   public int value() { return value; }
 
   @Override

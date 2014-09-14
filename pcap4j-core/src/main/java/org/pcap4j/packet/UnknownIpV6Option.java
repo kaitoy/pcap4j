@@ -29,36 +29,53 @@ public final class UnknownIpV6Option implements IpV6Option {
   private final byte[] data;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new UnknownIpV6Option object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static UnknownIpV6Option newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new UnknownIpV6Option(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new UnknownIpV6Option(rawData, offset, length);
   }
 
-  private UnknownIpV6Option(byte[] rawData) throws IllegalRawDataException {
-    if (rawData.length < 2) {
+  private UnknownIpV6Option(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    if (length < 2) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data length must be more than 1. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.type = IpV6OptionType.getInstance(rawData[0]);
-    this.dataLen = rawData[1];
-    this.data = ByteArrays.getSubArray(rawData, 2, dataLen);
+    this.type = IpV6OptionType.getInstance(rawData[offset]);
+    this.dataLen = rawData[1 + offset];
+    if (length - 2 < this.dataLen) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("The raw data is too short to build this option(")
+        .append(this.dataLen + 2)
+        .append("). data: ")
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
+      throw new IllegalRawDataException(sb.toString());
+    }
+
+    this.data = ByteArrays.getSubArray(rawData, 2 + offset, dataLen);
   }
 
   private UnknownIpV6Option(Builder builder) {
@@ -88,6 +105,7 @@ public final class UnknownIpV6Option implements IpV6Option {
     }
   }
 
+  @Override
   public IpV6OptionType getType() { return type; }
 
   /**
@@ -112,6 +130,7 @@ public final class UnknownIpV6Option implements IpV6Option {
     return copy;
   }
 
+  @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[0] = type.value();
@@ -120,6 +139,7 @@ public final class UnknownIpV6Option implements IpV6Option {
     return rawData;
   }
 
+  @Override
   public int length() { return data.length + 2; }
 
   /**
@@ -206,11 +226,13 @@ public final class UnknownIpV6Option implements IpV6Option {
       return this;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
+    @Override
     public UnknownIpV6Option build() {
       return new UnknownIpV6Option(this);
     }

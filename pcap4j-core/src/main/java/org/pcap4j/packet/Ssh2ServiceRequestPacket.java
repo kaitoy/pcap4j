@@ -26,27 +26,27 @@ public final class Ssh2ServiceRequestPacket extends AbstractPacket {
   private final Ssh2ServiceRequestHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new Ssh2ServiceRequestPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static Ssh2ServiceRequestPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new Ssh2ServiceRequestPacket(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new Ssh2ServiceRequestPacket(rawData, offset, length);
   }
 
-  private Ssh2ServiceRequestPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new Ssh2ServiceRequestHeader(rawData);
+  private Ssh2ServiceRequestPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new Ssh2ServiceRequestHeader(rawData, offset, length);
   }
 
   private Ssh2ServiceRequestPacket(Builder builder) {
@@ -130,22 +130,34 @@ public final class Ssh2ServiceRequestPacket extends AbstractPacket {
     private final Ssh2MessageNumber messageNumber = Ssh2MessageNumber.SSH_MSG_SERVICE_REQUEST;
     private final Ssh2String serviceName;
 
-    private Ssh2ServiceRequestHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < 5) {
+    private Ssh2ServiceRequestHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < 5) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 Service Request header. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
-
-      if (!Ssh2MessageNumber.getInstance(rawData[0]).equals(Ssh2MessageNumber.SSH_MSG_SERVICE_REQUEST)) {
+      if (
+        !Ssh2MessageNumber.getInstance(rawData[offset])
+          .equals(Ssh2MessageNumber.SSH_MSG_SERVICE_REQUEST)
+      ) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is not an SSH2 Service Request message. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.serviceName = new Ssh2String(ByteArrays.getSubArray(rawData, 1));
+      this.serviceName = new Ssh2String(rawData, 1 + offset, length -1);
     }
 
     private Ssh2ServiceRequestHeader(Builder builder) {

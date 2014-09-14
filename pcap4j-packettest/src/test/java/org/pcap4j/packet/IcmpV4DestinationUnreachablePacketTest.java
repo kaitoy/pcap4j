@@ -135,7 +135,8 @@ public class IcmpV4DestinationUnreachablePacketTest extends AbstractPacketTest {
   public void testNewPacket() {
     IcmpV4DestinationUnreachablePacket p;
     try {
-      p = IcmpV4DestinationUnreachablePacket.newPacket(packet.getRawData());
+      p = IcmpV4DestinationUnreachablePacket
+            .newPacket(packet.getRawData(), 0, packet.getRawData().length);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
     }

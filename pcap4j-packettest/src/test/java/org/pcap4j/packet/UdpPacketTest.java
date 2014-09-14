@@ -108,7 +108,7 @@ public class UdpPacketTest extends AbstractPacketTest {
   @Test
   public void testNewPacket() {
     try {
-      UdpPacket p = UdpPacket.newPacket(packet.getRawData());
+      UdpPacket p = UdpPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

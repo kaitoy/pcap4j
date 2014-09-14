@@ -99,7 +99,8 @@ public class IcmpV6EchoReplyPacketTest extends AbstractPacketTest {
   public void testNewPacket() {
     try {
       IcmpV6EchoReplyPacket p
-        = IcmpV6EchoReplyPacket.newPacket(packet.getRawData());
+        = IcmpV6EchoReplyPacket
+            .newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

@@ -8,9 +8,11 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.packet.namednumber.ArpHardwareType;
 import org.pcap4j.packet.namednumber.ArpOperation;
 import org.pcap4j.packet.namednumber.EtherType;
@@ -31,25 +33,25 @@ public final class ArpPacket extends AbstractPacket {
   private final ArpHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new ArpPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static ArpPacket newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new ArpPacket(rawData);
+  public static ArpPacket newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new ArpPacket(rawData, offset, length);
   }
 
-  private ArpPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new ArpHeader(rawData);
+  private ArpPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    this.header = new ArpHeader(rawData, offset, length);
   }
 
   private ArpPacket(Builder builder) {
@@ -313,37 +315,41 @@ public final class ArpPacket extends AbstractPacket {
     private final MacAddress dstHardwareAddr;
     private final InetAddress dstProtocolAddr;
 
-    private ArpHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < ARP_HEADER_SIZE) {
-        StringBuilder sb = new StringBuilder(120);
+    private ArpHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+      if (length < ARP_HEADER_SIZE) {
+        StringBuilder sb = new StringBuilder(200);
         sb.append("The data is too short to build an ARP header(")
           .append(ARP_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.hardwareType
         = ArpHardwareType
-            .getInstance(ByteArrays.getShort(rawData, HARDWARE_TYPE_OFFSET));
+            .getInstance(ByteArrays.getShort(rawData, HARDWARE_TYPE_OFFSET + offset));
       this.protocolType
         = EtherType
-            .getInstance(ByteArrays.getShort(rawData, PROTOCOL_TYPE_OFFSET));
+            .getInstance(ByteArrays.getShort(rawData, PROTOCOL_TYPE_OFFSET + offset));
       this.hardwareLength
-        = ByteArrays.getByte(rawData, HARDWARE_LENGTH_OFFSET);
+        = ByteArrays.getByte(rawData, HARDWARE_LENGTH_OFFSET + offset);
       this.protocolLength
-        = ByteArrays.getByte(rawData, PROTOCOL_LENGTH_OFFSET);
+        = ByteArrays.getByte(rawData, PROTOCOL_LENGTH_OFFSET + offset);
       this.operation
         = ArpOperation
-            .getInstance(ByteArrays.getShort(rawData, OPERATION_OFFSET));
+            .getInstance(ByteArrays.getShort(rawData, OPERATION_OFFSET + offset));
       this.srcHardwareAddr
-        = ByteArrays.getMacAddress(rawData, SRC_HARDWARE_ADDR_OFFSET);
+        = ByteArrays.getMacAddress(rawData, SRC_HARDWARE_ADDR_OFFSET + offset);
       this.srcProtocolAddr
-        = ByteArrays.getInet4Address(rawData, SRC_PROTOCOL_ADDR_OFFSET);
+        = ByteArrays.getInet4Address(rawData, SRC_PROTOCOL_ADDR_OFFSET + offset);
       this.dstHardwareAddr
-        = ByteArrays.getMacAddress(rawData, DST_HARDWARE_ADDR_OFFSET);
+        = ByteArrays.getMacAddress(rawData, DST_HARDWARE_ADDR_OFFSET + offset);
       this.dstProtocolAddr
-        = ByteArrays.getInet4Address(rawData, DST_PROTOCOL_ADDR_OFFSET);
+        = ByteArrays.getInet4Address(rawData, DST_PROTOCOL_ADDR_OFFSET + offset);
     }
 
     private ArpHeader(Builder builder) {

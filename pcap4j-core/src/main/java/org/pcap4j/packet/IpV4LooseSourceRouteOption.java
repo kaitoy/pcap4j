@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import org.pcap4j.packet.namednumber.IpV4OptionType;
+import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
@@ -28,27 +29,27 @@ public final class IpV4LooseSourceRouteOption extends IpV4RouteOption {
   private static final long serialVersionUID = 6450781975561609234L;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IpV4LooseSourceRouteOption object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV4LooseSourceRouteOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IpV4LooseSourceRouteOption(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IpV4LooseSourceRouteOption(rawData, offset, length);
   }
 
-  private IpV4LooseSourceRouteOption(byte[] rawData) throws IllegalRawDataException {
-    super(rawData);
+  private IpV4LooseSourceRouteOption(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    super(rawData, offset, length);
   }
 
   private IpV4LooseSourceRouteOption(Builder builder) {

@@ -187,7 +187,7 @@ public class TcpPacketTest extends AbstractPacketTest {
   @Test
   public void testNewPacket() {
     try {
-      TcpPacket p = TcpPacket.newPacket(packet.getRawData());
+      TcpPacket p = TcpPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

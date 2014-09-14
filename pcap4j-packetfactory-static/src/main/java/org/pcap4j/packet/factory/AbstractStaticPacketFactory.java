@@ -26,7 +26,7 @@ implements PacketFactory<Packet, N> {
     = new HashMap<N, PacketInstantiater>();
 
   @Override
-  public Packet newInstance(byte[] rawData, N number) {
+  public Packet newInstance(byte[] rawData, int offset, int length, N number) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
       sb.append("rawData: ")
@@ -39,18 +39,18 @@ implements PacketFactory<Packet, N> {
     PacketInstantiater instantiater = instantiaters.get(number);
     if (instantiater != null) {
       try {
-        return instantiater.newInstance(rawData);
+        return instantiater.newInstance(rawData, offset, length);
       } catch (IllegalRawDataException e) {
-        return IllegalPacket.newPacket(rawData);
+        return IllegalPacket.newPacket(rawData, offset, length);
       }
     }
 
-    return newInstance(rawData);
+    return newInstance(rawData, offset, length);
   }
 
   @Override
-  public Packet newInstance(byte[] rawData) {
-    return UnknownPacket.newPacket(rawData);
+  public Packet newInstance(byte[] rawData, int offset, int length) {
+    return UnknownPacket.newPacket(rawData, offset, length);
   }
 
   @Override

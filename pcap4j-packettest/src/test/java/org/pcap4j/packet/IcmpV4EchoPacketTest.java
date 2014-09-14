@@ -97,7 +97,8 @@ public class IcmpV4EchoPacketTest extends AbstractPacketTest {
   @Test
   public void testNewPacket() {
     try {
-      IcmpV4EchoPacket p = IcmpV4EchoPacket.newPacket(packet.getRawData());
+      IcmpV4EchoPacket p
+        = IcmpV4EchoPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

@@ -37,48 +37,58 @@ public final class TcpWindowScaleOption implements TcpOption {
   private final byte shiftCount;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new TcpWindowScaleOption object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static TcpWindowScaleOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new TcpWindowScaleOption(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new TcpWindowScaleOption(rawData, offset, length);
   }
 
-  private TcpWindowScaleOption(byte[] rawData) throws IllegalRawDataException {
-    if (rawData.length < 3) {
+  private TcpWindowScaleOption(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    if (length < 3) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 2. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[0] != kind.value()) {
+    if (rawData[offset] != kind.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The kind must be: ")
         .append(kind.valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[1] != 3) {
+
+    this.length = rawData[1 + offset];
+    if (this.length != 3) {
       throw new IllegalRawDataException(
-                  "The value of length field must be 3 but: " + rawData[1]
+                  "The value of length field must be 3 but: " + this.length
                 );
     }
 
-    this.length = rawData[1];
-    this.shiftCount = rawData[2];
+
+    this.shiftCount = rawData[2 + offset];
   }
 
   private TcpWindowScaleOption(Builder builder) {

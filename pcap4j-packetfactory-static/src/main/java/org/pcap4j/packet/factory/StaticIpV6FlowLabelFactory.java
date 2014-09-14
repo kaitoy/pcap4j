@@ -33,22 +33,25 @@ implements PacketFactory<IpV6FlowLabel, NA> {
 
   @Override
   @Deprecated
-  public IpV6FlowLabel newInstance(byte[] rawData, NA number) {
-    return newInstance(rawData);
+  public IpV6FlowLabel newInstance(byte[] rawData, int offset, int length, NA number) {
+    return newInstance(rawData, offset, length);
   }
 
   @Override
-  public IpV6FlowLabel newInstance(byte[] rawData) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData is null.");
-    }
-    if (rawData.length < INT_SIZE_IN_BYTES) {
-      throw new IllegalArgumentException(
-              "rawData is too short: " + ByteArrays.toHexString(rawData, " ")
-            );
+  public IpV6FlowLabel newInstance(byte[] rawData, int offset, int length) {
+    ByteArrays.validateBounds(rawData, offset, length);
+    if (length < INT_SIZE_IN_BYTES) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("rawData is too short: ")
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
+      throw new IllegalArgumentException(sb.toString());
     }
 
-    return IpV6SimpleFlowLabel.newInstance(ByteArrays.getInt(rawData, 0));
+    return IpV6SimpleFlowLabel.newInstance(ByteArrays.getInt(rawData, offset));
   }
 
   @Override

@@ -29,12 +29,12 @@ implements PacketFactory<Packet, NamedNumber<?, ?>> {
    */
   public static StaticUnknownPacketFactory getInstance() { return INSTANCE; }
 
-  public Packet newInstance(byte[] rawData, NamedNumber<?, ?> number) {
-    return newInstance(rawData);
+  public Packet newInstance(byte[] rawData, int offset, int length, NamedNumber<?, ?> number) {
+    return newInstance(rawData, offset, length);
   }
 
-  public Packet newInstance(byte[] rawData) {
-    return UnknownPacket.newPacket(rawData);
+  public Packet newInstance(byte[] rawData, int offset, int length) {
+    return UnknownPacket.newPacket(rawData, offset, length);
   }
 
   @Override

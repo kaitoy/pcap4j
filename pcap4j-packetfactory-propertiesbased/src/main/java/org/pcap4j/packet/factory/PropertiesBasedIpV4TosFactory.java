@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.pcap4j.packet.IpV4Packet.IpV4Tos;
 import org.pcap4j.packet.namednumber.NA;
+import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
@@ -32,37 +33,40 @@ implements PacketFactory<IpV4Tos, NA> {
 
   @Override
   @Deprecated
-  public IpV4Tos newInstance(byte[] rawData, NA number) {
-    return newInstance(rawData);
+  public IpV4Tos newInstance(byte[] rawData, int offset, int length, NA number) {
+    return newInstance(rawData, offset, length);
   }
 
   @Override
-  public IpV4Tos newInstance(byte[] rawData) {
-    return newInstance(rawData, getTargetClass());
+  public IpV4Tos newInstance(byte[] rawData, int offset, int length) {
+    return newInstance(rawData, offset, length, getTargetClass());
   }
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @param tosClass
    * @return a new IpV4Tos object.
+   * @throws IllegalStateException
+   * @throws IllegalArgumentException
+   * @throws NullPointerException
    */
-  public IpV4Tos newInstance(byte[] rawData, Class<? extends IpV4Tos> tosClass) {
-    if (rawData == null || tosClass == null) {
-      StringBuilder sb = new StringBuilder(50);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" tosClass: ")
-        .append(tosClass);
-      throw new NullPointerException(sb.toString());
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
+  public IpV4Tos newInstance(
+    byte[] rawData, int offset, int length, Class<? extends IpV4Tos> tosClass
+  ) {
+    ByteArrays.validateBounds(rawData, offset, length);
+    if (tosClass == null) {
+      throw new NullPointerException("tosClass is null.");
     }
 
     try {
       Method newInstance = tosClass.getMethod("newInstance", byte.class);
-      return (IpV4Tos)newInstance.invoke(null, rawData[0]);
+      return (IpV4Tos)newInstance.invoke(null, rawData[offset]);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -72,7 +76,7 @@ implements PacketFactory<IpV4Tos, NA> {
     } catch (IllegalAccessException e) {
       throw new IllegalStateException(e);
     } catch (InvocationTargetException e) {
-      throw new IllegalStateException(e.getTargetException());
+      throw new IllegalArgumentException(e);
     }
   }
 

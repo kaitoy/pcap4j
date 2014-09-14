@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
@@ -26,27 +27,27 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
   private final Ssh2VersionExchangeHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new Ssh2VersionExchangePacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static Ssh2VersionExchangePacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new Ssh2VersionExchangePacket(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new Ssh2VersionExchangePacket(rawData, offset, length);
   }
 
-  private Ssh2VersionExchangePacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new Ssh2VersionExchangeHeader(rawData);
+  private Ssh2VersionExchangePacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new Ssh2VersionExchangeHeader(rawData, offset, length);
   }
 
   private Ssh2VersionExchangePacket(Builder builder) {
@@ -191,17 +192,23 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
     private final String softwareVersion;
     private final String comments;
 
-    private Ssh2VersionExchangeHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < 9) {
+    private Ssh2VersionExchangeHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < 9) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 version exchange header. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       String data;
       try {
-        data = new String(rawData, "UTF-8");
+        data = new String(rawData, offset, length, "UTF-8");
       } catch (UnsupportedEncodingException e) {
         throw new AssertionError("Never get here.");
       }
@@ -254,7 +261,11 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
       if (length() > 255) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too long for an SSH version exchange header. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
     }

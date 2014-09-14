@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
+
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpV4SecurityOptionCompartments;
@@ -48,59 +49,67 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
   private final IpV4SecurityOptionTransmissionControlCode tcc;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IpV4Rfc791SecurityOption object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV4Rfc791SecurityOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IpV4Rfc791SecurityOption(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IpV4Rfc791SecurityOption(rawData, offset, length);
   }
 
-  private IpV4Rfc791SecurityOption(byte[] rawData) throws IllegalRawDataException {
-    if (rawData.length < 11) {
+  private IpV4Rfc791SecurityOption(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    if (length < 11) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 10. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[0] != getType().value()) {
+    if (rawData[0 + offset] != getType().value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The type must be: ")
         .append(getType().valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[1] != 11) {
+    if (rawData[1 + offset] != 11) {
       throw new IllegalRawDataException(
-                  "Invalid value of length field: " + rawData[1]
+                  "Invalid value of length field: " + rawData[1 + offset]
                 );
     }
 
-    this.length = rawData[1];
+    this.length = rawData[1 + offset];
     this.security
       = IpV4SecurityOptionSecurity
-          .getInstance(ByteArrays.getShort(rawData, 2));
+          .getInstance(ByteArrays.getShort(rawData, 2 + offset));
     this.compartments
       = IpV4SecurityOptionCompartments
-          .getInstance(ByteArrays.getShort(rawData, 4));
+          .getInstance(ByteArrays.getShort(rawData, 4 + offset));
     this.handlingRestrictions
       = IpV4SecurityOptionHandlingRestrictions
-          .getInstance(ByteArrays.getShort(rawData, 6));
+          .getInstance(ByteArrays.getShort(rawData, 6 + offset));
     this.tcc
       = IpV4SecurityOptionTransmissionControlCode
-          .getInstance(ByteArrays.getInt(rawData, 7) & 0x00FFFFFF);
+          .getInstance(ByteArrays.getInt(rawData, 7 + offset) & 0x00FFFFFF);
   }
 
   private IpV4Rfc791SecurityOption(Builder builder) {

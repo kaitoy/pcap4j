@@ -28,27 +28,27 @@ public final class Ssh2DisconnectPacket extends AbstractPacket {
   private final Ssh2DisconnectHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new Ssh2DisconnectPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static Ssh2DisconnectPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new Ssh2DisconnectPacket(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new Ssh2DisconnectPacket(rawData, offset, length);
   }
 
-  private Ssh2DisconnectPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new Ssh2DisconnectHeader(rawData);
+  private Ssh2DisconnectPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new Ssh2DisconnectHeader(rawData, offset, length);
   }
 
   private Ssh2DisconnectPacket(Builder builder) {
@@ -164,27 +164,43 @@ public final class Ssh2DisconnectPacket extends AbstractPacket {
     private final Ssh2String description;
     private final Ssh2String languageTag;
 
-    private Ssh2DisconnectHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < 13) {
+    private Ssh2DisconnectHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < 13) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 Disconnect header. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
-
-      if (!Ssh2MessageNumber.getInstance(rawData[0]).equals(Ssh2MessageNumber.SSH_MSG_DISCONNECT)) {
+      if (
+        !Ssh2MessageNumber.getInstance(rawData[offset])
+          .equals(Ssh2MessageNumber.SSH_MSG_DISCONNECT)
+      ) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is not an SSH2 Disconnect message. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      int offset = 1;
-      this.reasonCode = Ssh2DisconnectionReasonCode.getInstance((ByteArrays.getInt(rawData, offset)));
-      offset += INT_SIZE_IN_BYTES;
-      this.description = new Ssh2String(ByteArrays.getSubArray(rawData, offset));
-      offset += description.length();
-      this.languageTag = new Ssh2String(ByteArrays.getSubArray(rawData, offset));
+      int currentOffset = 1 + offset;
+      int remainingLength = length - 1;
+      this.reasonCode
+        = Ssh2DisconnectionReasonCode.getInstance((ByteArrays.getInt(rawData, currentOffset)));
+      currentOffset += INT_SIZE_IN_BYTES;
+      remainingLength -= INT_SIZE_IN_BYTES;
+      this.description = new Ssh2String(rawData, currentOffset, remainingLength);
+      currentOffset += description.length();
+      remainingLength -= description.length();
+      this.languageTag = new Ssh2String(rawData, currentOffset, remainingLength);
     }
 
     private Ssh2DisconnectHeader(Builder builder) {

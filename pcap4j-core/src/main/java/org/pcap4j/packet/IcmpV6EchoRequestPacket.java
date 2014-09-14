@@ -26,38 +26,33 @@ public final class IcmpV6EchoRequestPacket extends IcmpIdentifiablePacket {
   private final Packet payload;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
-   * @return a new IcmpV6EchoRequestPacket object
+   * @param offset
+   * @param length
+   * @return a new IcmpV6EchoRequestPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV6EchoRequestPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IcmpV6EchoRequestPacket(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IcmpV6EchoRequestPacket(rawData, offset, length);
   }
 
-  private IcmpV6EchoRequestPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new IcmpV6EchoRequestHeader(rawData);
+  private IcmpV6EchoRequestPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new IcmpV6EchoRequestHeader(rawData, offset, length);
 
-    int payloadLength = rawData.length - header.length();
+    int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      byte[] rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            payloadLength
-          );
       this.payload
-        = PacketFactories.getFactory(Packet.class, NA.class).newInstance(rawPayload);
+        = PacketFactories.getFactory(Packet.class, NA.class)
+            .newInstance(rawData, offset + header.length(), payloadLength);
     }
     else {
       this.payload = null;
@@ -156,8 +151,10 @@ public final class IcmpV6EchoRequestPacket extends IcmpIdentifiablePacket {
      */
     private static final long serialVersionUID = -6510139039546388892L;
 
-    private IcmpV6EchoRequestHeader(byte[] rawData) throws IllegalRawDataException {
-      super(rawData);
+    private IcmpV6EchoRequestHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      super(rawData, offset, length);
     }
 
     private IcmpV6EchoRequestHeader(Builder builder) { super(builder); }

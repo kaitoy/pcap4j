@@ -29,44 +29,40 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
   private final Packet payload;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IpV6ExtFragmentPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV6ExtFragmentPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IpV6ExtFragmentPacket(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IpV6ExtFragmentPacket(rawData, offset, length);
   }
 
-  private IpV6ExtFragmentPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new IpV6ExtFragmentHeader(rawData);
+  private IpV6ExtFragmentPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new IpV6ExtFragmentHeader(rawData, offset, length);
 
-    int payloadLength = rawData.length - header.length();
+    int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      byte[] rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            payloadLength
-          );
-
       if (header.m || header.fragmentOffset != 0) {
-        this.payload = FragmentedPacket.newPacket(rawPayload);
+        this.payload
+          = FragmentedPacket.newPacket(rawData, offset + header.length(), payloadLength);
       }
       else {
         this.payload
           = PacketFactories.getFactory(Packet.class, IpNumber.class)
-              .newInstance(rawPayload, header.getNextHeader());
+              .newInstance(
+                 rawData, offset + header.length(), payloadLength, header.getNextHeader()
+               );
       }
     }
     else {
@@ -263,23 +259,29 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     private final boolean m;
     private final int identification;
 
-    private IpV6ExtFragmentHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < IPV6_EXT_FRAGMENT_HEADER_SIZE) {
+    private IpV6ExtFragmentHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < IPV6_EXT_FRAGMENT_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an IPv6 fragment header(")
           .append(IPV6_EXT_FRAGMENT_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.nextHeader
         = IpNumber
-            .getInstance(ByteArrays.getByte(rawData, NEXT_HEADER_OFFSET));
+            .getInstance(ByteArrays.getByte(rawData, NEXT_HEADER_OFFSET + offset));
       this.reserved
-        = ByteArrays.getByte(rawData, RESERVED_OFFSET);
+        = ByteArrays.getByte(rawData, RESERVED_OFFSET + offset);
       short fragmentOffsetAndResAndM
-        = ByteArrays.getShort(rawData, FRAGMENT_OFFSET_AND_RES_AND_M_OFFSET);
+        = ByteArrays.getShort(rawData, FRAGMENT_OFFSET_AND_RES_AND_M_OFFSET + offset);
       this.fragmentOffset
         = (short)((fragmentOffsetAndResAndM & 0xFFF8) >> 3);
       this.res
@@ -287,7 +289,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
       this.m
         = (fragmentOffsetAndResAndM & 0x0001) == 1;
       this.identification
-        = ByteArrays.getInt(rawData, IDENTIFICATION_OFFSET);
+        = ByteArrays.getInt(rawData, IDENTIFICATION_OFFSET + offset);
     }
 
     private IpV6ExtFragmentHeader(Builder builder) {

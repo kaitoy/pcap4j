@@ -38,35 +38,28 @@ public final class TcpPacket extends AbstractPacket {
   private final Packet payload;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new TcpPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static TcpPacket newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new TcpPacket(rawData);
+  public static TcpPacket newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new TcpPacket(rawData, offset, length);
   }
 
-  private TcpPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new TcpHeader(rawData);
+  private TcpPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    this.header = new TcpHeader(rawData, offset, length);
 
-    int payloadLength = rawData.length - header.length();
+    int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      byte[] rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            payloadLength
-          );
-
       PacketFactory<Packet, TcpPort> factory
         = PacketFactories.getFactory(Packet.class, TcpPort.class);
       Class<? extends Packet> class4UnknownPort = factory.getTargetClass();
@@ -80,7 +73,7 @@ public final class TcpPacket extends AbstractPacket {
       }
       this.payload
         = PacketFactories.getFactory(Packet.class, TcpPort.class)
-            .newInstance(rawPayload, serverPort);
+            .newInstance(rawData, offset + header.length(), payloadLength, serverPort);
     }
     else {
       this.payload = null;
@@ -607,25 +600,31 @@ public final class TcpPacket extends AbstractPacket {
     private final List<TcpOption> options;
     private final byte[] padding;
 
-    private TcpHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < MIN_TCP_HEADER_SIZE) {
+    private TcpHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+      if (length < MIN_TCP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build this header(")
           .append(MIN_TCP_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.srcPort
-        = TcpPort.getInstance(ByteArrays.getShort(rawData, SRC_PORT_OFFSET));
+        = TcpPort.getInstance(ByteArrays.getShort(rawData, SRC_PORT_OFFSET + offset));
       this.dstPort
-        = TcpPort.getInstance(ByteArrays.getShort(rawData, DST_PORT_OFFSET));
-      this.sequenceNumber = ByteArrays.getInt(rawData, SEQUENCE_NUMBER_OFFSET);
-      this.acknowledgmentNumber = ByteArrays.getInt(rawData, ACKNOWLEDGMENT_NUMBER_OFFSET);
+        = TcpPort.getInstance(ByteArrays.getShort(rawData, DST_PORT_OFFSET + offset));
+      this.sequenceNumber
+        = ByteArrays.getInt(rawData, SEQUENCE_NUMBER_OFFSET + offset);
+      this.acknowledgmentNumber
+        = ByteArrays.getInt(rawData, ACKNOWLEDGMENT_NUMBER_OFFSET + offset);
 
       short dataOffsetAndReservedAndControlBits
-        = ByteArrays.getShort(rawData, DATA_OFFSET_AND_RESERVED_AND_CONTROL_BITS_OFFSET);
+        = ByteArrays.getShort(rawData, DATA_OFFSET_AND_RESERVED_AND_CONTROL_BITS_OFFSET + offset);
 
       this.dataOffset = (byte)((dataOffsetAndReservedAndControlBits & 0xF000) >> 12);
       this.reserved = (byte)((dataOffsetAndReservedAndControlBits & 0x0FC0) >> 6);
@@ -636,45 +635,63 @@ public final class TcpPacket extends AbstractPacket {
       this.syn = (dataOffsetAndReservedAndControlBits & 0x0002) != 0;
       this.fin = (dataOffsetAndReservedAndControlBits & 0x0001) != 0;
 
-      this.window = ByteArrays.getShort(rawData, WINDOW_OFFSET);
-      this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET);
-      this.urgentPointer = ByteArrays.getShort(rawData, URGENT_POINTER_OFFSET);
+      this.window = ByteArrays.getShort(rawData, WINDOW_OFFSET + offset);
+      this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET + offset);
+      this.urgentPointer = ByteArrays.getShort(rawData, URGENT_POINTER_OFFSET + offset);
 
       int headerLength = dataOffset * 4;
-      if (rawData.length < headerLength) {
+      if (length < headerLength) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build this header(")
           .append(headerLength)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.options = new ArrayList<TcpOption>();
-      int currentOffset = OPTIONS_OFFSET;
-      while (currentOffset < headerLength) {
-        byte[] optRawData = ByteArrays.getSubArray(
-                              rawData,
-                              currentOffset,
-                              headerLength - currentOffset
-                            );
-        TcpOptionKind kind = TcpOptionKind.getInstance(optRawData[0]);
-        TcpOption newOne
-          = PacketFactories
-              .getFactory(TcpOption.class, TcpOptionKind.class)
-                 .newInstance(optRawData, kind);
+      int currentOffsetInHeader = OPTIONS_OFFSET;
+      while (currentOffsetInHeader < headerLength) {
+        TcpOptionKind kind
+          = TcpOptionKind.getInstance(rawData[currentOffsetInHeader + offset]);
+        TcpOption newOne;
+        try {
+          newOne = PacketFactories
+                     .getFactory(TcpOption.class, TcpOptionKind.class)
+                        .newInstance(
+                           rawData,
+                           currentOffsetInHeader + offset,
+                           headerLength - currentOffsetInHeader,
+                           kind
+                         );
+        } catch (Exception e) {
+          break;
+        }
+
+        if (currentOffsetInHeader + newOne.length() > headerLength) {
+          break;
+        }
+
         options.add(newOne);
-        currentOffset += newOne.length();
+        currentOffsetInHeader += newOne.length();
 
         if (newOne.getKind().equals(TcpOptionKind.END_OF_OPTION_LIST)) {
           break;
         }
       }
 
-      this.padding
-        = ByteArrays.getSubArray(
-            rawData, currentOffset, headerLength - currentOffset
-          );
+      int paddingLength = headerLength - currentOffsetInHeader;
+      if (paddingLength != 0) {
+        this.padding
+          = ByteArrays.getSubArray(rawData, currentOffsetInHeader + offset, paddingLength);
+      }
+      else {
+        this.padding = new byte[0];
+      }
     }
 
     private TcpHeader(Builder builder, byte[] payload) {
@@ -1065,13 +1082,16 @@ public final class TcpPacket extends AbstractPacket {
   }
 
   /**
+   * The interface representing a TCP option.
+   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
+   * Classes which imprement this interface must implement the following method:
+   * {@code public static TcpOption newInstance(byte[] rawData, int offset, int length)
+   * throws IllegalRawDataException}
+   *
    * @author Kaito Yamada
    * @since pcap4j 0.9.12
    */
   public interface TcpOption extends Serializable {
-
-    // /* must implement if use PropertiesBasedTcpOptionFactory */
-    // public static TcpOption newInstance(byte[] rawData);
 
     /**
      *

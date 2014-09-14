@@ -6,6 +6,7 @@ Future
 ### Bug Fixes ###
 
 ### Other Changes ###
+* Constructors and static factory methods of all packet classes and packet factory classes now have additional arguments offset and length to specify data range in rawData.
 
 Release 1.2.3 (4-Aug-2014)
 ===========================

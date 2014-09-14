@@ -95,7 +95,8 @@ public class IcmpV4InformationRequestPacketTest extends AbstractPacketTest {
   public void testNewPacket() {
     try {
       IcmpV4InformationRequestPacket p
-        = IcmpV4InformationRequestPacket.newPacket(packet.getRawData());
+        = IcmpV4InformationRequestPacket
+            .newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

@@ -8,8 +8,10 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -27,34 +29,29 @@ extends IcmpV6InvokingPacketPacket {
   private final IcmpV6ParameterProblemHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IcmpV6ParameterProblemPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV6ParameterProblemPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
+    ByteArrays.validateBounds(rawData, offset, length);
 
-    IcmpV6ParameterProblemHeader header = new IcmpV6ParameterProblemHeader(rawData);
+    IcmpV6ParameterProblemHeader header
+      = new IcmpV6ParameterProblemHeader(rawData, offset, length);
 
-    int payloadLength = rawData.length - header.length();
+    int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      byte[] rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            payloadLength
-          );
-      return new IcmpV6ParameterProblemPacket(header, rawPayload);
+      return new IcmpV6ParameterProblemPacket(
+               header, rawData, offset + header.length(), payloadLength
+             );
     }
     else {
       return new IcmpV6ParameterProblemPacket(header);
@@ -66,9 +63,9 @@ extends IcmpV6InvokingPacketPacket {
   }
 
   private IcmpV6ParameterProblemPacket(
-    IcmpV6ParameterProblemHeader header, byte[] rawPayload
+    IcmpV6ParameterProblemHeader header, byte[] rawData, int payloadOffset, int payloadLength
   ) {
-    super(rawPayload);
+    super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }
 
@@ -157,17 +154,23 @@ extends IcmpV6InvokingPacketPacket {
 
     private final int pointer;
 
-    private IcmpV6ParameterProblemHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < ICMPV6_PARAMETER_PROBLEM_HEADER_SIZE) {
+    private IcmpV6ParameterProblemHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < ICMPV6_PARAMETER_PROBLEM_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv6 Parameter Problem Header(")
           .append(ICMPV6_PARAMETER_PROBLEM_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.pointer = ByteArrays.getInt(rawData, POINTER_OFFSET);
+      this.pointer = ByteArrays.getInt(rawData, POINTER_OFFSET + offset);
     }
 
     private IcmpV6ParameterProblemHeader(Builder builder) {

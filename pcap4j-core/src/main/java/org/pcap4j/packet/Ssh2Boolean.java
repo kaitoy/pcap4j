@@ -52,19 +52,16 @@ public final class Ssh2Boolean implements Serializable {
   }
 
   /**
+   * Constructor.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
+   * @param offset
    */
-  public Ssh2Boolean(byte[] rawData) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    this.rawData = rawData[0];
+  public Ssh2Boolean(byte[] rawData, int offset) {
+    ByteArrays.validateBounds(rawData, offset, 1);
+    this.rawData = rawData[offset];
   }
 
   /**

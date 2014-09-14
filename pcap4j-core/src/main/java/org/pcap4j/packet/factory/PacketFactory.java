@@ -18,19 +18,21 @@ import org.pcap4j.packet.namednumber.NamedNumber;
 public interface PacketFactory<T, N extends NamedNumber<?, ?>> {
 
   /**
-   *
    * @param rawData
+   * @param offset
+   * @param length
    * @param number
    * @return a new data object.
    */
-  public T newInstance(byte[] rawData, N number);
+  public T newInstance(byte[] rawData, int offset, int length, N number);
 
   /**
-   *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new data object.
    */
-  public T newInstance(byte[] rawData);
+  public T newInstance(byte[] rawData, int offset, int length);
 
   /**
    * @param number

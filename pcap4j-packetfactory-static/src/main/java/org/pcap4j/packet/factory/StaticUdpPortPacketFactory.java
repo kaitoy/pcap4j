@@ -23,8 +23,10 @@ extends AbstractStaticPacketFactory<UdpPort> {
 //    instantiaters.put(
 //      UdpPort.SNMP, new PacketInstantiater() {
 //        @Override
-//        public Packet newInstance(byte[] rawData) {
-//          return SnmpPacket.newPacket(rawData);
+//        public Packet newInstance(
+//          byte[] rawData, int offset, int length
+//        ) throws IllegalRawDataException {
+//          return SnmpPacket.newPacket(rawData, offset, length);
 //        }
 //        @Override
 //        public Class<SnmpPacket> getTargetClass() {

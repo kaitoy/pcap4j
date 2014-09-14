@@ -8,8 +8,10 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
@@ -29,37 +31,33 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
   private final Packet payload;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new Dot1qVlanTagPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static Dot1qVlanTagPacket newPacket(byte[] rawData) throws IllegalRawDataException{
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new Dot1qVlanTagPacket(rawData);
+  public static Dot1qVlanTagPacket newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new Dot1qVlanTagPacket(rawData, offset, length);
   }
 
-  private Dot1qVlanTagPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new Dot1qVlanTagHeader(rawData);
+  private Dot1qVlanTagPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new Dot1qVlanTagHeader(rawData, offset, length);
 
-    int payloadLength = rawData.length - header.length();
+    int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      byte[] rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            payloadLength
-          );
       this.payload
         = PacketFactories.getFactory(Packet.class, EtherType.class)
-            .newInstance(rawPayload, header.getType());
+            .newInstance(rawData, offset + header.length(), payloadLength, header.getType());
     }
     else {
       this.payload = null;
@@ -216,24 +214,29 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
     private final short vid;
     private final EtherType type;
 
-    private Dot1qVlanTagHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < DOT1Q_TAG_HEADER_SIZE) {
-        StringBuilder sb = new StringBuilder(110);
+    private Dot1qVlanTagHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < DOT1Q_TAG_HEADER_SIZE) {
+        StringBuilder sb = new StringBuilder(200);
         sb.append("The data is too short to build an IEEE802.1Q Tag header(")
           .append(DOT1Q_TAG_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       short priorityAndCfiAndVid
-        = ByteArrays.getShort(rawData, PRIORITY_AND_CFI_AND_VID_OFFSET);
+        = ByteArrays.getShort(rawData, PRIORITY_AND_CFI_AND_VID_OFFSET + offset);
 
       this.priority = (byte)((priorityAndCfiAndVid & 0xE000) >> 13);
       this.cfi = ((priorityAndCfiAndVid & 0x1000) >> 12) == 1;
       this.vid = (short)(priorityAndCfiAndVid & 0x0FFF);
-      this.type
-        = EtherType.getInstance(ByteArrays.getShort(rawData, TYPE_OFFSET));
+      this.type = EtherType.getInstance(ByteArrays.getShort(rawData, TYPE_OFFSET + offset));
     }
 
     private Dot1qVlanTagHeader(Builder builder) {

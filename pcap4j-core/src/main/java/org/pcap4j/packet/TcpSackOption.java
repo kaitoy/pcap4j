@@ -52,69 +52,80 @@ public final class TcpSackOption implements TcpOption {
   private final List<Sack> sacks = new ArrayList<Sack>();
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new TcpSackOption object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static TcpSackOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new TcpSackOption(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new TcpSackOption(rawData, offset, length);
   }
 
-  private TcpSackOption(byte[] rawData) throws IllegalRawDataException {
-    if (rawData.length < 2) {
+  private TcpSackOption(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    if (length < 2) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 1. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[0] != kind.value()) {
+    if (rawData[offset] != kind.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The kind must be: ")
         .append(kind.valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[1] < 2) {
+
+    this.length = rawData[1 + offset];
+    if (this.length < 2) {
       throw new IllegalRawDataException(
-                  "The value of length field must be  more than 1 but: " + rawData[1]
+                  "The value of length field must be  more than 1 but: " + this.length
                 );
     }
-    this.length = rawData[1];
 
-    if ((length - 2) % (INT_SIZE_IN_BYTES * 2) != 0) {
+    if ((this.length - 2) % (INT_SIZE_IN_BYTES * 2) != 0) {
       StringBuilder sb = new StringBuilder(100);
       sb.append(
            "The value of length field must be an integer multiple of 8 octets long but: "
          )
+        .append(this.length);
+      throw new IllegalRawDataException(sb.toString());
+    }
+    if (length < this.length) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("rawData is too short. length field: ")
+        .append(this.length)
+        .append(", rawData: ")
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
         .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData.length < length) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("rawData is too short. length field: ")
-        .append(length)
-        .append(", rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
-      throw new IllegalRawDataException(sb.toString());
-    }
 
-    for (int i = 2; i < length; i += INT_SIZE_IN_BYTES * 2) {
+    for (int i = 2; i < this.length; i += INT_SIZE_IN_BYTES * 2) {
       sacks.add(
         new Sack(
-          ByteArrays.getInt(rawData, i),
-          ByteArrays.getInt(rawData, i + INT_SIZE_IN_BYTES)
+          ByteArrays.getInt(rawData, i + offset),
+          ByteArrays.getInt(rawData, i + INT_SIZE_IN_BYTES + offset)
         )
       );
     }

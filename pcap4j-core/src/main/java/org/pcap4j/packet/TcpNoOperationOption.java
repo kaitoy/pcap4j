@@ -45,37 +45,43 @@ public final class TcpNoOperationOption implements TcpOption {
   public static TcpNoOperationOption getInstance() { return INSTANCE; }
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return the singleton instance of TcpNoOperationOption.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static TcpNoOperationOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    if (rawData[0] != kind.value()) {
+    ByteArrays.validateBounds(rawData, offset, length);
+
+    if (rawData[offset] != kind.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The kind must be: ")
         .append(kind.valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     return INSTANCE;
   }
 
+  @Override
   public TcpOptionKind getKind() { return kind; }
 
+  @Override
   public int length() { return 1; }
 
+  @Override
   public byte[] getRawData() { return new byte[] {(byte)1}; }
 
   @Override

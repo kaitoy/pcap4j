@@ -37,27 +37,27 @@ public final class IpV6Packet extends AbstractPacket {
   private final Packet payload;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IpV6Packet object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static IpV6Packet newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IpV6Packet(rawData);
+  public static IpV6Packet newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IpV6Packet(rawData, offset, length);
   }
 
-  private IpV6Packet(byte[] rawData) throws IllegalRawDataException {
-    this.header = new IpV6Header(rawData);
+  private IpV6Packet(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    this.header = new IpV6Header(rawData, offset, length);
 
-    int remainingRawDataLength = rawData.length - header.length();
+    int remainingRawDataLength = length - header.length();
     int payloadLength;
     if (header.getPayloadLengthAsInt() == 0) {
       logger.debug("Total Length is 0. Assuming segmentation offload to be working.");
@@ -68,27 +68,13 @@ public final class IpV6Packet extends AbstractPacket {
     }
 
     if (payloadLength > 0) {
-      byte[] rawPayload;
       if (payloadLength > remainingRawDataLength) {
-        rawPayload
-          = ByteArrays.getSubArray(
-              rawData,
-              header.length(),
-              remainingRawDataLength
-            );
-      }
-      else {
-        rawPayload
-          = ByteArrays.getSubArray(
-              rawData,
-              header.length(),
-              payloadLength
-            );
+        payloadLength = remainingRawDataLength;
       }
 
       this.payload
         = PacketFactories.getFactory(Packet.class, IpNumber.class)
-            .newInstance(rawPayload, header.getNextHeader());
+            .newInstance(rawData, offset + header.length(), payloadLength, header.getNextHeader());
     }
     else if (payloadLength < 0) {
       throw new IllegalRawDataException(
@@ -357,20 +343,24 @@ public final class IpV6Packet extends AbstractPacket {
     private final Inet6Address srcAddr;
     private final Inet6Address dstAddr;
 
-    private IpV6Header(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < IPV6_HEADER_SIZE) {
+    private IpV6Header(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+      if (length < IPV6_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an IPv6 header(")
           .append(IPV6_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       int versionAndTrafficClassAndFlowLabel
         = ByteArrays.getInt(
             rawData,
-            VERSION_AND_TRAFFIC_CLASS_AND_FLOW_LABEL_OFFSET
+            VERSION_AND_TRAFFIC_CLASS_AND_FLOW_LABEL_OFFSET + offset
           );
 
       this.version
@@ -378,30 +368,28 @@ public final class IpV6Packet extends AbstractPacket {
             (byte)(versionAndTrafficClassAndFlowLabel >>> 28)
           );
       this.trafficClass
-        = PacketFactories.getFactory(
-            IpV6TrafficClass.class, NA.class
-          ).newInstance(
-              new byte[] {
-                (byte)((versionAndTrafficClassAndFlowLabel & 0x0FF00000) >> 20)
-              }
-            );
+        = PacketFactories.getFactory(IpV6TrafficClass.class, NA.class)
+            .newInstance(
+               new byte[] {
+                 (byte)((versionAndTrafficClassAndFlowLabel & 0x0FF00000) >> 20)
+               },
+               0,
+               1
+             );
       this.flowLabel
-        = PacketFactories.getFactory(
-            IpV6FlowLabel.class, NA.class
-          ).newInstance(
-              ByteArrays.toByteArray(versionAndTrafficClassAndFlowLabel & 0x000FFFFF)
-            );
+        = PacketFactories.getFactory(IpV6FlowLabel.class, NA.class)
+            .newInstance(rawData, VERSION_AND_TRAFFIC_CLASS_AND_FLOW_LABEL_OFFSET + offset, 4);
       this.payloadLength
-        = ByteArrays.getShort(rawData, PAYLOAD_LENGTH_OFFSET);
+        = ByteArrays.getShort(rawData, PAYLOAD_LENGTH_OFFSET + offset);
       this.nextHeader
         = IpNumber
-            .getInstance(ByteArrays.getByte(rawData, NEXT_HEADER_OFFSET));
+            .getInstance(ByteArrays.getByte(rawData, NEXT_HEADER_OFFSET + offset));
       this.hopLimit
-        = ByteArrays.getByte(rawData, HOP_LIMIT_OFFSET);
+        = ByteArrays.getByte(rawData, HOP_LIMIT_OFFSET + offset);
       this.srcAddr
-        = ByteArrays.getInet6Address(rawData, SRC_ADDR_OFFSET);
+        = ByteArrays.getInet6Address(rawData, SRC_ADDR_OFFSET + offset);
       this.dstAddr
-        = ByteArrays.getInet6Address(rawData, DST_ADDR_OFFSET);
+        = ByteArrays.getInet6Address(rawData, DST_ADDR_OFFSET + offset);
     }
 
     private IpV6Header(Builder builder, Packet payload) {
@@ -568,13 +556,15 @@ public final class IpV6Packet extends AbstractPacket {
   }
 
   /**
+   * The interface representing an IPv6 traffic class.
+   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
+   * Classes which imprement this interface must implement the following method:
+   * {@code public static IpV6TrafficClass newInstance(byte value)}
+   *
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
   public interface IpV6TrafficClass extends Serializable {
-
-    // /* must implement if use PropertiesBasedIpV6TrafficClassFactory */
-    // public static IpV6TrafficClass newInstance(byte value);
 
     /**
      *
@@ -585,13 +575,15 @@ public final class IpV6Packet extends AbstractPacket {
   }
 
   /**
+   * The interface representing an IPv6 flow label.
+   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
+   * Classes which imprement this interface must implement the following method:
+   * {@code public static IpV6FlowLabel newInstance(int value)}
+   *
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
   public interface IpV6FlowLabel extends Serializable {
-
-    // /* must implement if use PropertiesBasedIpV6FlowLabelFactory */
-    // public static IpV6FlowLabel newInstance(int value);
 
     /**
      *

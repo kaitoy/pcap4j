@@ -35,48 +35,57 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
   private final short maxSegSize;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new TcpMaximumSegmentSizeOption object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static TcpMaximumSegmentSizeOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new TcpMaximumSegmentSizeOption(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new TcpMaximumSegmentSizeOption(rawData, offset, length);
   }
 
-  private TcpMaximumSegmentSizeOption(byte[] rawData) throws IllegalRawDataException {
-    if (rawData.length < 4) {
+  private TcpMaximumSegmentSizeOption(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    if (length < 4) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 3. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[0] != kind.value()) {
+    if (rawData[offset] != kind.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The kind must be: ")
         .append(kind.valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[1] != 4) {
+
+    this.length = rawData[1 + offset];
+    if (this.length != 4) {
       throw new IllegalRawDataException(
-                  "Invalid value of length field: " + rawData[1]
+                  "Invalid value of length field: " + this.length
                 );
     }
 
-    this.length = rawData[1];
-    this.maxSegSize = ByteArrays.getShort(rawData, 2);
+    this.maxSegSize = ByteArrays.getShort(rawData, 2 + offset);
   }
 
   private TcpMaximumSegmentSizeOption(Builder builder) {

@@ -175,7 +175,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
   @Test
   public void testNewPacket() {
     try {
-      IpV4Packet p = IpV4Packet.newPacket(packet1.getRawData());
+      IpV4Packet p = IpV4Packet.newPacket(packet1.getRawData(), 0, packet1.getRawData().length);
       assertEquals(packet1, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

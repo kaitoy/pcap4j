@@ -32,8 +32,10 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
     instantiaters.put(
       IpV6RoutingHeaderType.SOURCE_ROUTE, new Instantiater() {
         @Override
-        public IpV6RoutingData newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV6RoutingSourceRouteData.newInstance(rawData);
+        public IpV6RoutingData newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IpV6RoutingSourceRouteData.newInstance(rawData, offset, length);
         }
         @Override
         public Class<IpV6RoutingSourceRouteData> getTargetClass() {
@@ -53,7 +55,7 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
 
   @Override
   public IpV6RoutingData newInstance(
-    byte[] rawData, IpV6RoutingHeaderType number
+    byte[] rawData, int offset, int length, IpV6RoutingHeaderType number
   ) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
@@ -67,21 +69,21 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
     try {
       Instantiater instantiater = instantiaters.get(number);
       if (instantiater != null) {
-        return instantiater.newInstance(rawData);
+        return instantiater.newInstance(rawData, offset, length);
       }
     } catch (IllegalRawDataException e) {
-      return IllegalIpV6RoutingData.newInstance(rawData);
+      return IllegalIpV6RoutingData.newInstance(rawData, offset, length);
     }
 
-    return newInstance(rawData);
+    return newInstance(rawData, offset, length);
   }
 
   @Override
-  public IpV6RoutingData newInstance(byte[] rawData) {
+  public IpV6RoutingData newInstance(byte[] rawData, int offset, int length) {
     try {
-      return UnknownIpV6RoutingData.newInstance(rawData);
+      return UnknownIpV6RoutingData.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalIpV6RoutingData.newInstance(rawData);
+      return IllegalIpV6RoutingData.newInstance(rawData, offset, length);
     }
   }
 
@@ -102,7 +104,7 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
   private static interface Instantiater {
 
     public IpV6RoutingData newInstance(
-      byte [] rawData
+      byte[] rawData, int offset, int length
     ) throws IllegalRawDataException;
 
     public Class<? extends IpV6RoutingData> getTargetClass();

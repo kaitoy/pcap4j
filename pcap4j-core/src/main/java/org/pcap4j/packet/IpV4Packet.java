@@ -40,27 +40,27 @@ public final class IpV4Packet extends AbstractPacket {
   private final Packet payload;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IpV4Packet object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static IpV4Packet newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IpV4Packet(rawData);
+  public static IpV4Packet newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IpV4Packet(rawData, offset, length);
   }
 
-  private IpV4Packet(byte[] rawData) throws IllegalRawDataException {
-    this.header = new IpV4Header(rawData);
+  private IpV4Packet(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    this.header = new IpV4Header(rawData, offset, length);
 
-    int remainingRawDataLength = rawData.length - header.length();
+    int remainingRawDataLength = length - header.length();
     int totalLength = header.getTotalLengthAsInt();
     int payloadLength;
     if (totalLength == 0) {
@@ -72,31 +72,18 @@ public final class IpV4Packet extends AbstractPacket {
     }
 
     if (payloadLength > 0) {
-      byte[] rawPayload;
       if (payloadLength > remainingRawDataLength) {
-        rawPayload
-          = ByteArrays.getSubArray(
-              rawData,
-              header.length(),
-              remainingRawDataLength
-            );
-      }
-      else {
-        rawPayload
-          = ByteArrays.getSubArray(
-              rawData,
-              header.length(),
-              payloadLength
-            );
+        payloadLength = remainingRawDataLength;
       }
 
       if (header.getMoreFragmentFlag() || header.getFlagmentOffset() != 0) {
-        this.payload = FragmentedPacket.newPacket(rawPayload);
+        this.payload
+          = FragmentedPacket.newPacket(rawData, header.length() + offset, payloadLength);
       }
       else {
         this.payload
           = PacketFactories.getFactory(Packet.class, IpNumber.class)
-              .newInstance(rawPayload, header.getProtocol());
+              .newInstance(rawData, header.length() + offset, payloadLength, header.getProtocol());
       }
     }
     else if (payloadLength < 0) {
@@ -495,19 +482,23 @@ public final class IpV4Packet extends AbstractPacket {
     private final List<IpV4Option> options;
     private final byte[] padding;
 
-    private IpV4Header(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < MIN_IPV4_HEADER_SIZE) {
+    private IpV4Header(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+      if (length < MIN_IPV4_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an IPv4 header. ")
           .append("It must be at least ")
           .append(MIN_IPV4_HEADER_SIZE)
           .append(" bytes. data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       byte versionAndIhl
-        = ByteArrays.getByte(rawData, VERSION_AND_IHL_OFFSET);
+        = ByteArrays.getByte(rawData, VERSION_AND_IHL_OFFSET + offset);
       this.version = IpVersion.getInstance(
                        (byte)((versionAndIhl & 0xF0) >> 4)
                      );
@@ -516,66 +507,84 @@ public final class IpV4Packet extends AbstractPacket {
       this.tos
         = PacketFactories.getFactory(
             IpV4Tos.class, NA.class
-          ).newInstance(ByteArrays.getSubArray(rawData, TOS_OFFSET, BYTE_SIZE_IN_BYTES));
+          ).newInstance(rawData, TOS_OFFSET + offset, BYTE_SIZE_IN_BYTES);
       this.totalLength
-        = ByteArrays.getShort(rawData, TOTAL_LENGTH_OFFSET);
+        = ByteArrays.getShort(rawData, TOTAL_LENGTH_OFFSET + offset);
       this.identification
-        = ByteArrays.getShort(rawData, IDENTIFICATION_OFFSET);
+        = ByteArrays.getShort(rawData, IDENTIFICATION_OFFSET + offset);
 
       short flagsAndFlagmentOffset
-        = ByteArrays.getShort(rawData, FLAGS_AND_FLAGMENT_OFFSET_OFFSET);
+        = ByteArrays.getShort(rawData, FLAGS_AND_FLAGMENT_OFFSET_OFFSET + offset);
       this.reservedFlag = (flagsAndFlagmentOffset & 0x8000) != 0;
       this.dontFragmentFlag = (flagsAndFlagmentOffset & 0x4000) != 0;
       this.moreFragmentFlag = (flagsAndFlagmentOffset & 0x2000) != 0;
       this.flagmentOffset = (short)(flagsAndFlagmentOffset & 0x1FFF);
 
       this.ttl
-        = ByteArrays.getByte(rawData, TTL_OFFSET);
+        = ByteArrays.getByte(rawData, TTL_OFFSET + offset);
       this.protocol
         = IpNumber
-            .getInstance(ByteArrays.getByte(rawData, PROTOCOL_OFFSET));
+            .getInstance(ByteArrays.getByte(rawData, PROTOCOL_OFFSET + offset));
       this.headerChecksum
-        = ByteArrays.getShort(rawData, HEADER_CHECKSUM_OFFSET);
+        = ByteArrays.getShort(rawData, HEADER_CHECKSUM_OFFSET + offset);
       this.srcAddr
-        = ByteArrays.getInet4Address(rawData, SRC_ADDR_OFFSET);
+        = ByteArrays.getInet4Address(rawData, SRC_ADDR_OFFSET + offset);
       this.dstAddr
-        = ByteArrays.getInet4Address(rawData, DST_ADDR_OFFSET);
+        = ByteArrays.getInet4Address(rawData, DST_ADDR_OFFSET + offset);
 
       int headerLength = ihl * 4;
-      if (rawData.length < headerLength) {
+      if (length < headerLength) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an IPv4 header(")
           .append(headerLength)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.options = new ArrayList<IpV4Option>();
-      int currentOffset = OPTIONS_OFFSET;
-      while (currentOffset < headerLength) {
-        byte[] optRawData = ByteArrays.getSubArray(
-                              rawData,
-                              currentOffset,
-                              headerLength - currentOffset
-                            );
-        IpV4OptionType type = IpV4OptionType.getInstance(optRawData[0]);
-        IpV4Option newOne
-          = PacketFactories
-              .getFactory(IpV4Option.class, IpV4OptionType.class)
-                 .newInstance(optRawData, type);
+      int currentOffsetInHeader = OPTIONS_OFFSET;
+      while (currentOffsetInHeader < headerLength) {
+        IpV4OptionType type
+          = IpV4OptionType.getInstance(rawData[currentOffsetInHeader + offset]);
+        IpV4Option newOne;
+        try {
+          newOne = PacketFactories
+                     .getFactory(IpV4Option.class, IpV4OptionType.class)
+                        .newInstance(
+                           rawData,
+                           currentOffsetInHeader + offset,
+                           headerLength - currentOffsetInHeader,
+                           type
+                         );
+        } catch (Exception e) {
+          break;
+        }
+
+        if (currentOffsetInHeader + newOne.length() > headerLength) {
+          break;
+        }
+
         options.add(newOne);
-        currentOffset += newOne.length();
+        currentOffsetInHeader += newOne.length();
 
         if (newOne.getType().equals(IpV4OptionType.END_OF_OPTION_LIST)) {
           break;
         }
       }
 
-      this.padding
-        = ByteArrays.getSubArray(
-            rawData, currentOffset, headerLength - currentOffset
-          );
+      int paddingLength = headerLength - currentOffsetInHeader;
+      if (paddingLength != 0) {
+        this.padding
+          = ByteArrays.getSubArray(rawData, currentOffsetInHeader + offset, paddingLength);
+      }
+      else {
+        this.padding = new byte[0];
+      }
     }
 
     private IpV4Header(Builder builder, Packet payload) {
@@ -946,13 +955,16 @@ public final class IpV4Packet extends AbstractPacket {
   }
 
   /**
+   * The interface representing an IPv4 option.
+   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
+   * Classes which imprement this interface must implement the following method:
+   * {@code public static IpV4Option newInstance(byte[] rawData, int offset, int length)
+   * throws IllegalRawDataException}
+   *
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
   public interface IpV4Option extends Serializable {
-
-    // /* must implement if use PropertiesBasedIpV4OptionFactory */
-    // public static IpV4Option newInstance(byte[] rawData);
 
     /**
      *
@@ -975,13 +987,15 @@ public final class IpV4Packet extends AbstractPacket {
   }
 
   /**
+   * The interface representing an IPv4 TOS.
+   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
+   * Classes which imprement this interface must implement the following method:
+   * {@code public static IpV4Tos newInstance(byte value)}
+   *
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
   public interface IpV4Tos extends Serializable {
-
-    // /* must implement if use PropertiesBasedIpV4TosFactory */
-    // public static IpV4Tos newInstance(byte value);
 
     /**
      *

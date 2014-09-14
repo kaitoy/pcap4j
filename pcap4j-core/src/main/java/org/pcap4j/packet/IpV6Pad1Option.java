@@ -44,21 +44,21 @@ public final class IpV6Pad1Option implements IpV6Option {
   public static IpV6Pad1Option getInstance() { return INSTANCE; }
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return the singleton instance of IpV6Pad1Option.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static IpV6Pad1Option newInstance(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    if (rawData[0] != type.value()) {
+  public static IpV6Pad1Option newInstance(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    if (rawData[offset] != type.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The type must be: ")
         .append(type.valueAsString())
@@ -69,10 +69,13 @@ public final class IpV6Pad1Option implements IpV6Option {
     return INSTANCE;
   }
 
+  @Override
   public IpV6OptionType getType() { return type; }
 
+  @Override
   public int length() { return 1; }
 
+  @Override
   public byte[] getRawData() { return new byte[1]; }
 
   @Override

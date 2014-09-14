@@ -26,25 +26,27 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
   private final Ssh2KexInitHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new Ssh2KexInitPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static Ssh2KexInitPacket newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new Ssh2KexInitPacket(rawData);
+  public static Ssh2KexInitPacket newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new Ssh2KexInitPacket(rawData, offset, length);
   }
 
-  private Ssh2KexInitPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new Ssh2KexInitHeader(rawData);
+  private Ssh2KexInitPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new Ssh2KexInitHeader(rawData, offset, length);
   }
 
   private Ssh2KexInitPacket(Builder builder) {
@@ -322,55 +324,83 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     private final Ssh2Boolean firstKexPacketFollows;
     private final int reserved;
 
-    private Ssh2KexInitHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < 62) {
+    private Ssh2KexInitHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < 62) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 KEX init header. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
-
-      if (!Ssh2MessageNumber.getInstance(rawData[0]).equals(Ssh2MessageNumber.SSH_MSG_KEXINIT)) {
+      if (
+        !Ssh2MessageNumber.getInstance(rawData[offset])
+          .equals(Ssh2MessageNumber.SSH_MSG_KEXINIT)
+      ) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is not an SSH2 KEX init message. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      int offset = 1;
-      this.cookie = ByteArrays.getSubArray(rawData, offset, 16);
-      offset += 16;
-      this.kexAlgorithms = new Ssh2NameList(ByteArrays.getSubArray(rawData, offset));
-      offset += kexAlgorithms.length();
-      this.serverHostKeyAlgorithms = new Ssh2NameList(ByteArrays.getSubArray(rawData, offset));
-      offset += serverHostKeyAlgorithms.length();
-      this.encryptionAlgorithmsClientToServer = new Ssh2NameList(ByteArrays.getSubArray(rawData, offset));
-      offset += encryptionAlgorithmsClientToServer.length();
-      this.encryptionAlgorithmsServerToClient = new Ssh2NameList(ByteArrays.getSubArray(rawData, offset));
-      offset += encryptionAlgorithmsServerToClient.length();
-      this.macAlgorithmsClientToServer = new Ssh2NameList(ByteArrays.getSubArray(rawData, offset));
-      offset += macAlgorithmsClientToServer.length();
-      this.macAlgorithmsServerToClient = new Ssh2NameList(ByteArrays.getSubArray(rawData, offset));
-      offset += macAlgorithmsServerToClient.length();
-      this.compressionAlgorithmsClientToServer = new Ssh2NameList(ByteArrays.getSubArray(rawData, offset));
-      offset += compressionAlgorithmsClientToServer.length();
-      this.compressionAlgorithmsServerToClient = new Ssh2NameList(ByteArrays.getSubArray(rawData, offset));
-      offset += compressionAlgorithmsServerToClient.length();
-      this.languagesClientToServer = new Ssh2NameList(ByteArrays.getSubArray(rawData, offset));
-      offset += languagesClientToServer.length();
-      this.languagesServerToClient = new Ssh2NameList(ByteArrays.getSubArray(rawData, offset));
-      offset += languagesServerToClient.length();
+      int currentOffset = 1 + offset;
+      int remainingLength = length - 1;
+      this.cookie = ByteArrays.getSubArray(rawData, currentOffset, 16);
+      currentOffset += cookie.length;
+      remainingLength -= cookie.length;
+      this.kexAlgorithms = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      currentOffset += kexAlgorithms.length();
+      remainingLength -= kexAlgorithms.length();
+      this.serverHostKeyAlgorithms = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      currentOffset += serverHostKeyAlgorithms.length();
+      remainingLength -= serverHostKeyAlgorithms.length();
+      this.encryptionAlgorithmsClientToServer = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      currentOffset += encryptionAlgorithmsClientToServer.length();
+      remainingLength -= encryptionAlgorithmsClientToServer.length();
+      this.encryptionAlgorithmsServerToClient = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      currentOffset += encryptionAlgorithmsClientToServer.length();
+      remainingLength -= encryptionAlgorithmsClientToServer.length();
+      this.macAlgorithmsClientToServer = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      currentOffset += macAlgorithmsClientToServer.length();
+      remainingLength -= macAlgorithmsClientToServer.length();
+      this.macAlgorithmsServerToClient = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      currentOffset += macAlgorithmsServerToClient.length();
+      remainingLength -= macAlgorithmsServerToClient.length();
+      this.compressionAlgorithmsClientToServer = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      currentOffset += compressionAlgorithmsClientToServer.length();
+      remainingLength -= compressionAlgorithmsClientToServer.length();
+      this.compressionAlgorithmsServerToClient = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      currentOffset += compressionAlgorithmsServerToClient.length();
+      remainingLength -= compressionAlgorithmsServerToClient.length();
+      this.languagesClientToServer = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      currentOffset += languagesClientToServer.length();
+      remainingLength -= languagesClientToServer.length();
+      this.languagesServerToClient = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      currentOffset += languagesServerToClient.length();
+      remainingLength -= languagesServerToClient.length();
 
-      if (rawData.length < offset + 5) {
+      if (remainingLength < 5) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 KEX init header. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.firstKexPacketFollows = new Ssh2Boolean(rawData[offset]);
-      offset += 1;
-      this.reserved = ByteArrays.getInt(rawData, offset);
+      this.firstKexPacketFollows = new Ssh2Boolean(rawData[currentOffset]);
+      currentOffset += 1;
+      this.reserved = ByteArrays.getInt(rawData, currentOffset);
     }
 
     private Ssh2KexInitHeader(Builder builder) {

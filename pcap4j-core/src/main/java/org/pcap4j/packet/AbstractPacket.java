@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Kaito Yamada
+  _##  Copyright (C) 2011-2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -15,6 +15,12 @@ import org.pcap4j.util.LazyValue;
 import org.pcap4j.util.LazyValue.BuildValueCommand;
 
 /**
+ * Abstract packet class.
+ * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
+ * this subclass must implement the following method:
+ * {@code public static Packet newPacket(byte[] rawData, int offset, int length)
+ * throws IllegalRawDataException}
+ *
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
@@ -38,6 +44,7 @@ public abstract class AbstractPacket implements Packet {
     this.lengthCache
     = new LazyValue<Integer>(
         new BuildValueCommand<Integer>() {
+          @Override
           public Integer buildValue() {
             return calcLength();
           }
@@ -46,6 +53,7 @@ public abstract class AbstractPacket implements Packet {
     this.rawDataCache
       = new LazyValue<byte[]>(
           new BuildValueCommand<byte[]>() {
+            @Override
             public byte[] buildValue() {
               return buildRawData();
             }
@@ -54,6 +62,7 @@ public abstract class AbstractPacket implements Packet {
     this.hexStringCache
       = new LazyValue<String>(
           new BuildValueCommand<String>() {
+            @Override
             public String buildValue() {
               return buildHexString();
             }
@@ -62,6 +71,7 @@ public abstract class AbstractPacket implements Packet {
     this.stringCache
       = new LazyValue<String>(
           new BuildValueCommand<String>() {
+            @Override
             public String buildValue() {
               return buildString();
             }
@@ -70,6 +80,7 @@ public abstract class AbstractPacket implements Packet {
     this.hashCodeCache
       = new LazyValue<Integer>(
           new BuildValueCommand<Integer>() {
+            @Override
             public Integer buildValue() {
               return calcHashCode();
             }
@@ -77,11 +88,10 @@ public abstract class AbstractPacket implements Packet {
         );
   }
 
-  // /* must implement if use PropertiesBasedPacketFactory */
-  // public static Packet newPacket(byte[] rawData) throws IllegalRawDataException;
-
+  @Override
   public Header getHeader() { return null; }
 
+  @Override
   public Packet getPayload() { return null; }
 
   /**
@@ -101,6 +111,7 @@ public abstract class AbstractPacket implements Packet {
     return length;
   }
 
+  @Override
   public int length() {
     return lengthCache.getValue();
   }
@@ -131,6 +142,7 @@ public abstract class AbstractPacket implements Packet {
     return rd;
   }
 
+  @Override
   public byte[] getRawData() {
     byte[] rawData = rawDataCache.getValue();
 
@@ -139,10 +151,12 @@ public abstract class AbstractPacket implements Packet {
     return copy;
   }
 
+  @Override
   public Iterator<Packet> iterator() {
     return new PacketIterator(this);
   }
 
+  @Override
   public <T extends Packet> T get(Class<T> clazz) {
     for (Packet p: this) {
       if (clazz.isInstance(p)) {
@@ -152,6 +166,7 @@ public abstract class AbstractPacket implements Packet {
     return null;
   }
 
+  @Override
   public Packet getOuterOf(Class<? extends Packet> clazz) {
     for (Packet p: this) {
       if (clazz.isInstance(p.getPayload())) {
@@ -161,10 +176,12 @@ public abstract class AbstractPacket implements Packet {
     return null;
   }
 
+  @Override
   public <T extends Packet> boolean contains(Class<T> clazz) {
     return get(clazz) != null;
   }
 
+  @Override
   public abstract Builder getBuilder();
 
   /**
@@ -254,10 +271,12 @@ public abstract class AbstractPacket implements Packet {
    */
   public static abstract class AbstractBuilder implements Builder {
 
+    @Override
     public Iterator<Builder> iterator() {
       return new BuilderIterator(this);
     }
 
+    @Override
     public <T extends Builder> T get(Class<T> clazz) {
       for (Builder b: this) {
         if (clazz.isInstance(b)) {
@@ -267,6 +286,7 @@ public abstract class AbstractPacket implements Packet {
       return null;
     }
 
+    @Override
     public Builder getOuterOf(Class<? extends Builder> clazz) {
       for (Builder b: this) {
         if (clazz.isInstance(b.getPayloadBuilder())) {
@@ -276,12 +296,15 @@ public abstract class AbstractPacket implements Packet {
       return null;
     }
 
+    @Override
     public AbstractBuilder payloadBuilder(Builder payloadBuilder) {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public Builder getPayloadBuilder() { return null; }
 
+    @Override
     public abstract Packet build();
 
   }
@@ -311,6 +334,7 @@ public abstract class AbstractPacket implements Packet {
       this.lengthCache
         = new LazyValue<Integer>(
             new BuildValueCommand<Integer>() {
+              @Override
               public Integer buildValue() {
                 return calcLength();
               }
@@ -319,6 +343,7 @@ public abstract class AbstractPacket implements Packet {
       this.rawDataCache
         = new LazyValue<byte[]>(
             new BuildValueCommand<byte[]>() {
+              @Override
               public byte[] buildValue() {
                 return buildRawData();
               }
@@ -327,6 +352,7 @@ public abstract class AbstractPacket implements Packet {
       this.hexStringCache
         = new LazyValue<String>(
             new BuildValueCommand<String>() {
+              @Override
               public String buildValue() {
                 return buildHexString();
               }
@@ -335,6 +361,7 @@ public abstract class AbstractPacket implements Packet {
       this.stringCache
         = new LazyValue<String>(
             new BuildValueCommand<String>() {
+              @Override
               public String buildValue() {
                 return buildString();
               }
@@ -343,6 +370,7 @@ public abstract class AbstractPacket implements Packet {
       this.hashCodeCache
         = new LazyValue<Integer>(
             new BuildValueCommand<Integer>() {
+              @Override
               public Integer buildValue() {
                 return calcHashCode();
               }
@@ -368,6 +396,7 @@ public abstract class AbstractPacket implements Packet {
       return length;
     }
 
+    @Override
     public int length() {
       return lengthCache.getValue();
     }
@@ -397,6 +426,7 @@ public abstract class AbstractPacket implements Packet {
       return rawData;
     }
 
+    @Override
     public byte[] getRawData() {
       byte[] rawData = rawDataCache.getValue();
 

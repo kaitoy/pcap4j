@@ -26,27 +26,27 @@ public final class Ssh2UnimplementedPacket extends AbstractPacket {
   private final Ssh2UnimplementedHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new Ssh2UnimplementedPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static Ssh2UnimplementedPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new Ssh2UnimplementedPacket(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new Ssh2UnimplementedPacket(rawData, offset, length);
   }
 
-  private Ssh2UnimplementedPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new Ssh2UnimplementedHeader(rawData);
+  private Ssh2UnimplementedPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new Ssh2UnimplementedHeader(rawData, offset, length);
   }
 
   private Ssh2UnimplementedPacket(Builder builder) {
@@ -126,22 +126,34 @@ public final class Ssh2UnimplementedPacket extends AbstractPacket {
     private final Ssh2MessageNumber messageNumber = Ssh2MessageNumber.SSH_MSG_UNIMPLEMENTED;
     private final int sequenceNumber;
 
-    private Ssh2UnimplementedHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < 5) {
+    private Ssh2UnimplementedHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < 5) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 Unimplemented header. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
-
-      if (!Ssh2MessageNumber.getInstance(rawData[0]).equals(Ssh2MessageNumber.SSH_MSG_UNIMPLEMENTED)) {
+      if (
+        !Ssh2MessageNumber.getInstance(rawData[offset])
+          .equals(Ssh2MessageNumber.SSH_MSG_UNIMPLEMENTED)
+      ) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is not an SSH2 Unimplemented message. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.sequenceNumber = ByteArrays.getInt(rawData, 1);
+      this.sequenceNumber = ByteArrays.getInt(rawData, 1 + offset);
     }
 
     private Ssh2UnimplementedHeader(Builder builder) {

@@ -62,54 +62,59 @@ implements IpV6NeighborDiscoveryOption {
   private final int mtu;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
-   * @return a new IpV6NeighborDiscoveryRedirectedHeaderOption object.
+   * @param offset
+   * @param length
+   * @return a new IpV6NeighborDiscoveryMtuOption object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV6NeighborDiscoveryMtuOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IpV6NeighborDiscoveryMtuOption(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IpV6NeighborDiscoveryMtuOption(rawData, offset, length);
   }
 
-  private IpV6NeighborDiscoveryMtuOption(byte[] rawData) throws IllegalRawDataException {
-    if (rawData.length < IPV6_NEIGHBOR_DISCOVERY_MTU_OPTION_SIZE) {
+  private IpV6NeighborDiscoveryMtuOption(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    if (length < IPV6_NEIGHBOR_DISCOVERY_MTU_OPTION_SIZE) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 7. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[TYPE_OFFSET] != getType().value()) {
+    if (rawData[TYPE_OFFSET + offset] != getType().value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The type must be: ")
         .append(getType().valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.length = rawData[LENGTH_OFFSET];
-
-    if (rawData.length < length * 8) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("The raw data is too short to build this option. ")
-        .append(length * 8)
-        .append(" bytes data is needed. data: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+    this.length = rawData[LENGTH_OFFSET + offset];
+    if (this.length * 8 != IPV6_NEIGHBOR_DISCOVERY_MTU_OPTION_SIZE) {
+      StringBuilder sb = new StringBuilder(50);
+      sb.append("Illegal value in the length field: ")
+        .append(this.length);
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.reserved = ByteArrays.getShort(rawData, RESERVED_OFFSET);
-    this.mtu = ByteArrays.getInt(rawData, MTU_OFFSET);
+    this.reserved = ByteArrays.getShort(rawData, RESERVED_OFFSET + offset);
+    this.mtu = ByteArrays.getInt(rawData, MTU_OFFSET + offset);
   }
 
   private IpV6NeighborDiscoveryMtuOption(Builder builder) {
@@ -130,6 +135,7 @@ implements IpV6NeighborDiscoveryOption {
     }
   }
 
+  @Override
   public IpV6NeighborDiscoveryOptionType getType() {
     return type;
   }
@@ -164,8 +170,10 @@ implements IpV6NeighborDiscoveryOption {
    */
   public long getMtuAsLong() { return mtu & 0xFFFFFFFFL; }
 
+  @Override
   public int length() { return IPV6_NEIGHBOR_DISCOVERY_MTU_OPTION_SIZE; }
 
+  @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[TYPE_OFFSET] = getType().value();
@@ -270,11 +278,13 @@ implements IpV6NeighborDiscoveryOption {
       return this;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
+    @Override
     public IpV6NeighborDiscoveryMtuOption build() {
       return new IpV6NeighborDiscoveryMtuOption(this);
     }

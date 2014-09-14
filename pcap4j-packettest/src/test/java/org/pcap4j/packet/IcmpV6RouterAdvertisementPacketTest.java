@@ -147,7 +147,8 @@ public class IcmpV6RouterAdvertisementPacketTest extends AbstractPacketTest {
   public void testNewPacket() {
     try {
       IcmpV6RouterAdvertisementPacket p
-        = IcmpV6RouterAdvertisementPacket.newPacket(packet.getRawData());
+        = IcmpV6RouterAdvertisementPacket
+            .newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

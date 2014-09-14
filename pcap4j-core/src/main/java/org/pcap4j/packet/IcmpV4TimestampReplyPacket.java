@@ -8,7 +8,9 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.List;
+
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -25,27 +27,27 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
   private final IcmpV4TimestampReplyHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IcmpV4TimestampReplyPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV4TimestampReplyPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IcmpV4TimestampReplyPacket(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IcmpV4TimestampReplyPacket(rawData, offset, length);
   }
 
-  private IcmpV4TimestampReplyPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new IcmpV4TimestampReplyHeader(rawData);
+  private IcmpV4TimestampReplyPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new IcmpV4TimestampReplyHeader(rawData, offset, length);
   }
 
   private IcmpV4TimestampReplyPacket(Builder builder) {
@@ -178,26 +180,32 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
     private final int receiveTimestamp;
     private final int transmitTimestamp;
 
-    private IcmpV4TimestampReplyHeader(byte[] rawData) throws IllegalRawDataException {
-      super(rawData);
+    private IcmpV4TimestampReplyHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      super(rawData, offset, length);
 
-      if (rawData.length < ICMPV4_TIMESTAMP_HEADER_SIZE) {
+      if (length < ICMPV4_TIMESTAMP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ")
           .append(getHeaderName())
           .append("(")
           .append(ICMPV4_TIMESTAMP_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.originateTimestamp
-        = ByteArrays.getInt(rawData, ORIGINATE_TIMESTAMP_OFFSET);
+        = ByteArrays.getInt(rawData, ORIGINATE_TIMESTAMP_OFFSET + offset);
       this.receiveTimestamp
-        = ByteArrays.getInt(rawData, RECEIVE_TIMESTAMP_OFFSET);
+        = ByteArrays.getInt(rawData, RECEIVE_TIMESTAMP_OFFSET + offset);
       this.transmitTimestamp
-        = ByteArrays.getInt(rawData, TRANSMIT_TIMESTAMP_OFFSET);
+        = ByteArrays.getInt(rawData, TRANSMIT_TIMESTAMP_OFFSET + offset);
     }
 
     private IcmpV4TimestampReplyHeader(Builder builder) {

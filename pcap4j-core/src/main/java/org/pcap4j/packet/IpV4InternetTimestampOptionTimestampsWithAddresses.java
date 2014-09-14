@@ -8,12 +8,14 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.io.Serializable;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
 import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;
 import org.pcap4j.util.ByteArrays;
 
@@ -47,44 +49,46 @@ implements IpV4InternetTimestampOptionData {
   private final List<TimestampWithAddress> timestampsWithAddresses;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IpV4InternetTimestampOptionTimestampsWithAddresses object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV4InternetTimestampOptionTimestampsWithAddresses newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IpV4InternetTimestampOptionTimestampsWithAddresses(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IpV4InternetTimestampOptionTimestampsWithAddresses(rawData, offset, length);
   }
 
   private IpV4InternetTimestampOptionTimestampsWithAddresses(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if ((rawData.length % INT_SIZE_IN_BYTES) != 0) {
+    if ((length % INT_SIZE_IN_BYTES) != 0) {
       StringBuilder sb = new StringBuilder(100);
       sb.append(
           "The raw data length must be an integer multiple of 4 octets long."
             + " rawData: "
         )
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.timestampsWithAddresses = new ArrayList<TimestampWithAddress>();
-    for (int i = 0; i < rawData.length; i += INT_SIZE_IN_BYTES * 2) {
-      Inet4Address address = ByteArrays.getInet4Address(rawData, i);
+    for (int i = 0; i < length; i += INT_SIZE_IN_BYTES * 2) {
+      Inet4Address address = ByteArrays.getInet4Address(rawData, i + offset);
       Integer timestamp = null;
-      if (i + INT_SIZE_IN_BYTES < rawData.length) {
-        timestamp = ByteArrays.getInt(rawData, i + INT_SIZE_IN_BYTES);
+      if (i + INT_SIZE_IN_BYTES < length) {
+        timestamp = ByteArrays.getInt(rawData, i + INT_SIZE_IN_BYTES + offset);
       }
       timestampsWithAddresses.add(new TimestampWithAddress(address, timestamp));
     }

@@ -131,7 +131,7 @@ public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
   public void testNewPacket() {
     try {
       IpV6ExtFragmentPacket p
-        = IpV6ExtFragmentPacket.newPacket(packet1.getRawData());
+        = IpV6ExtFragmentPacket.newPacket(packet1.getRawData(), 0, packet1.getRawData().length);
       assertEquals(packet1, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

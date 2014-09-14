@@ -569,12 +569,9 @@ public final class PcapHandle {
       Pointer headerP = header.getPointer();
       timestampsInts.set(pcap_pkthdr.getTvSec(headerP).longValue());
       timestampsMicros.set(pcap_pkthdr.getTvUsec(headerP).intValue());
-
+      byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
       return PacketFactories.getFactory(Packet.class, DataLinkType.class)
-               .newInstance(
-                  packet.getByteArray(0, pcap_pkthdr.getCaplen(headerP)),
-                  dlt
-                );
+               .newInstance(ba, 0, ba.length, dlt);
     }
     else {
       return null;
@@ -622,12 +619,9 @@ public final class PcapHandle {
 
           timestampsInts.set(pcap_pkthdr.getTvSec(headerP).longValue());
           timestampsMicros.set(pcap_pkthdr.getTvUsec(headerP).intValue());
-
+          byte[] ba = dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
           return PacketFactories.getFactory(Packet.class, DataLinkType.class)
-                   .newInstance(
-                      dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP)),
-                      dlt
-                    );
+                   .newInstance(ba, 0, ba.length, dlt);
         case -1:
           throw new PcapNativeException(
                   "Error occured in pcap_next_ex(): " + getError(), rc
@@ -1185,10 +1179,7 @@ public final class PcapHandle {
             timestampsMicros.set(tvus);
             listener.gotPacket(
               PacketFactories.getFactory(Packet.class, DataLinkType.class)
-                .newInstance(
-                   ba,
-                   dlt
-                 )
+                .newInstance(ba, 0, ba.length, dlt)
             );
           }
         }

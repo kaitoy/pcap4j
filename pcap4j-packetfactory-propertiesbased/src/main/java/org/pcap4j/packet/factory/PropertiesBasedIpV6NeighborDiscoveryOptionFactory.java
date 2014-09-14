@@ -37,24 +37,29 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
 
   @Override
   public IpV6NeighborDiscoveryOption newInstance(
-    byte[] rawData, IpV6NeighborDiscoveryOptionType type
+    byte[] rawData, int offset, int length, IpV6NeighborDiscoveryOptionType type
   ) {
-    return newInstance(rawData, getTargetClass(type));
+    return newInstance(rawData, offset, length, getTargetClass(type));
   }
 
   @Override
-  public IpV6NeighborDiscoveryOption newInstance(byte[] rawData) {
-    return newInstance(rawData, getTargetClass());
+  public IpV6NeighborDiscoveryOption newInstance(byte[] rawData, int offset, int length) {
+    return newInstance(rawData, offset, length, getTargetClass());
   }
 
   /**
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @param dataClass
    * @return a new IpV6NeighborDiscoveryOption object.
+   * @throws IllegalStateException
+   * @throws IllegalArgumentException
+   * @throws NullPointerException
    */
   public IpV6NeighborDiscoveryOption newInstance(
-    byte[] rawData, Class<? extends IpV6NeighborDiscoveryOption> dataClass
+    byte[] rawData, int offset, int length, Class<? extends IpV6NeighborDiscoveryOption> dataClass
   ) {
     if (rawData == null || dataClass == null) {
       StringBuilder sb = new StringBuilder(50);
@@ -66,8 +71,8 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
     }
 
     try {
-      Method newInstance = dataClass.getMethod("newInstance", byte[].class);
-      return (IpV6NeighborDiscoveryOption)newInstance.invoke(null, rawData);
+      Method newInstance = dataClass.getMethod("newInstance", byte[].class, int.class, int.class);
+      return (IpV6NeighborDiscoveryOption)newInstance.invoke(null, rawData, offset, length);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -78,9 +83,9 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
       throw new IllegalStateException(e);
     } catch (InvocationTargetException e) {
       if (e.getTargetException() instanceof IllegalRawDataException) {
-        return IllegalIpV6NeighborDiscoveryOption.newInstance(rawData);
+        return IllegalIpV6NeighborDiscoveryOption.newInstance(rawData, offset, length);
       }
-      throw new IllegalStateException(e.getTargetException());
+      throw new IllegalArgumentException(e);
     }
   }
 

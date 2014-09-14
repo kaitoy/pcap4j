@@ -38,8 +38,10 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     instantiaters.put(
       TcpOptionKind.END_OF_OPTION_LIST, new Instantiater() {
         @Override
-        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
-          return TcpEndOfOptionList.newInstance(rawData);
+        public TcpOption newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return TcpEndOfOptionList.newInstance(rawData, offset, length);
         }
         @Override
         public Class<TcpEndOfOptionList> getTargetClass() {
@@ -50,8 +52,10 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     instantiaters.put(
       TcpOptionKind.NO_OPERATION, new Instantiater() {
         @Override
-        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
-          return TcpNoOperationOption.newInstance(rawData);
+        public TcpOption newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return TcpNoOperationOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<TcpNoOperationOption> getTargetClass() {
@@ -62,8 +66,10 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     instantiaters.put(
       TcpOptionKind.MAXIMUM_SEGMENT_SIZE, new Instantiater() {
         @Override
-        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
-          return TcpMaximumSegmentSizeOption.newInstance(rawData);
+        public TcpOption newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return TcpMaximumSegmentSizeOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<TcpMaximumSegmentSizeOption> getTargetClass() {
@@ -74,8 +80,10 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     instantiaters.put(
       TcpOptionKind.WINDOW_SCALE, new Instantiater() {
         @Override
-        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
-          return TcpWindowScaleOption.newInstance(rawData);
+        public TcpOption newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return TcpWindowScaleOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<TcpWindowScaleOption> getTargetClass() {
@@ -86,8 +94,10 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     instantiaters.put(
       TcpOptionKind.SACK_PERMITTED, new Instantiater() {
         @Override
-        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
-          return TcpSackPermittedOption.newInstance(rawData);
+        public TcpOption newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return TcpSackPermittedOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<TcpSackPermittedOption> getTargetClass() {
@@ -98,8 +108,10 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     instantiaters.put(
       TcpOptionKind.SACK, new Instantiater() {
         @Override
-        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
-          return TcpSackOption.newInstance(rawData);
+        public TcpOption newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return TcpSackOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<TcpSackOption> getTargetClass() {
@@ -110,8 +122,10 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     instantiaters.put(
       TcpOptionKind.TIMESTAMPS, new Instantiater() {
         @Override
-        public TcpOption newInstance(byte[] rawData) throws IllegalRawDataException {
-          return TcpTimestampsOption.newInstance(rawData);
+        public TcpOption newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return TcpTimestampsOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<TcpTimestampsOption> getTargetClass() {
@@ -131,7 +145,7 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
 
   @Override
   public TcpOption newInstance(
-    byte[] rawData, TcpOptionKind number
+    byte[] rawData, int offset, int length, TcpOptionKind number
   ) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
@@ -145,21 +159,21 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
     try {
       Instantiater instantiater = instantiaters.get(number);
       if (instantiater != null) {
-        return instantiater.newInstance(rawData);
+        return instantiater.newInstance(rawData, offset, length);
       }
     } catch (IllegalRawDataException e) {
-      return IllegalTcpOption.newInstance(rawData);
+      return IllegalTcpOption.newInstance(rawData, offset, length);
     }
 
-    return newInstance(rawData);
+    return newInstance(rawData, offset, length);
   }
 
   @Override
-  public TcpOption newInstance(byte[] rawData) {
+  public TcpOption newInstance(byte[] rawData, int offset, int length) {
     try {
-      return UnknownTcpOption.newInstance(rawData);
+      return UnknownTcpOption.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalTcpOption.newInstance(rawData);
+      return IllegalTcpOption.newInstance(rawData, offset, length);
     }
   }
 
@@ -179,7 +193,9 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
 
   private static interface Instantiater {
 
-    public TcpOption newInstance(byte [] rawData) throws IllegalRawDataException;
+    public TcpOption newInstance(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException;
 
     public Class<? extends TcpOption> getTargetClass();
 

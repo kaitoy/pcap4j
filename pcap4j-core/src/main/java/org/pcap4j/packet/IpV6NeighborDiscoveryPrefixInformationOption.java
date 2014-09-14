@@ -97,71 +97,65 @@ implements IpV6NeighborDiscoveryOption {
   private final Inet6Address prefix;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IpV6NeighborDiscoveryPrefixInformationOption object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV6NeighborDiscoveryPrefixInformationOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IpV6NeighborDiscoveryPrefixInformationOption(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IpV6NeighborDiscoveryPrefixInformationOption(rawData, offset, length);
   }
 
   private IpV6NeighborDiscoveryPrefixInformationOption(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData.length < IPV6_NEIGHBOR_DISCOVERY_PREFIX_INFORMATION_OPTION_SIZE) {
+    if (length < IPV6_NEIGHBOR_DISCOVERY_PREFIX_INFORMATION_OPTION_SIZE) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 31. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[TYPE_OFFSET] != getType().value()) {
+    if (rawData[TYPE_OFFSET + offset] != getType().value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The type must be: ")
         .append(getType().valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (
-      rawData[LENGTH_OFFSET]
-        != IPV6_NEIGHBOR_DISCOVERY_PREFIX_INFORMATION_OPTION_SIZE / 8
-    ) {
+
+    this.length = rawData[LENGTH_OFFSET + offset];
+    if (this.length * 8 != IPV6_NEIGHBOR_DISCOVERY_PREFIX_INFORMATION_OPTION_SIZE) {
       throw new IllegalRawDataException(
-                  "Invalid value of length field: " + rawData[LENGTH_OFFSET]
+                  "Invalid value of length field: " + this.length
                 );
     }
 
-    this.length = rawData[LENGTH_OFFSET];
-
-    if (rawData.length < length * 8) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("The raw data is too short to build this option. ")
-        .append(length * 8)
-        .append(" bytes data is needed. data: ")
-        .append(ByteArrays.toHexString(rawData, " "));
-      throw new IllegalRawDataException(sb.toString());
-    }
-
-    this.prefixLength = ByteArrays.getByte(rawData, PREFIX_LENGTH_OFFSET);
-    byte tmp = ByteArrays.getByte(rawData, L_A_RESERVED1_OFFSET);
+    this.prefixLength = ByteArrays.getByte(rawData, PREFIX_LENGTH_OFFSET + offset);
+    byte tmp = ByteArrays.getByte(rawData, L_A_RESERVED1_OFFSET + offset);
     this.onLinkFlag = (tmp & 0x80) != 0;
     this.addressConfigurationFlag = (tmp & 0x40) != 0;
     this.reserved1 = (byte)(0x3F & tmp);
-    this.validLifetime = ByteArrays.getInt(rawData, VALID_LIFETIME_OFFSET);
-    this.preferredLifetime = ByteArrays.getInt(rawData, PREFERRED_LIFETIME_OFFSET);
-    this.reserved2 = ByteArrays.getInt(rawData, RESERVED2_OFFSET);
-    this.prefix = ByteArrays.getInet6Address(rawData, PREFIX_OFFSET);
+    this.validLifetime = ByteArrays.getInt(rawData, VALID_LIFETIME_OFFSET + offset);
+    this.preferredLifetime = ByteArrays.getInt(rawData, PREFERRED_LIFETIME_OFFSET + offset);
+    this.reserved2 = ByteArrays.getInt(rawData, RESERVED2_OFFSET + offset);
+    this.prefix = ByteArrays.getInet6Address(rawData, PREFIX_OFFSET + offset);
   }
 
   private IpV6NeighborDiscoveryPrefixInformationOption(Builder builder) {
@@ -197,6 +191,7 @@ implements IpV6NeighborDiscoveryOption {
     }
   }
 
+  @Override
   public IpV6NeighborDiscoveryOptionType getType() {
     return type;
   }
@@ -300,10 +295,12 @@ implements IpV6NeighborDiscoveryOption {
     return prefix;
   }
 
+  @Override
   public int length() {
     return IPV6_NEIGHBOR_DISCOVERY_PREFIX_INFORMATION_OPTION_SIZE;
   }
 
+  @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[TYPE_OFFSET] = getType().value();
@@ -508,11 +505,13 @@ implements IpV6NeighborDiscoveryOption {
       return this;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
+    @Override
     public IpV6NeighborDiscoveryPrefixInformationOption build() {
       return new IpV6NeighborDiscoveryPrefixInformationOption(this);
     }

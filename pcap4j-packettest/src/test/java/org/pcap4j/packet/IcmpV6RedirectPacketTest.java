@@ -162,7 +162,7 @@ public class IcmpV6RedirectPacketTest extends AbstractPacketTest {
   public void testNewPacket() {
     try {
       IcmpV6RedirectPacket p
-        = IcmpV6RedirectPacket.newPacket(packet.getRawData());
+        = IcmpV6RedirectPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
+
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.ByteArrays;
@@ -27,26 +28,24 @@ public final class IllegalTcpOption implements TcpOption {
   private final byte[] rawData;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IllegalTcpOption object.
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static IllegalTcpOption newInstance(byte[] rawData) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IllegalTcpOption(rawData);
+  public static IllegalTcpOption newInstance(byte[] rawData, int offset, int length) {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IllegalTcpOption(rawData, offset, length);
   }
 
-  private IllegalTcpOption(byte[] rawData) {
-    this.kind = TcpOptionKind.getInstance(rawData[0]);
-    this.rawData = new byte[rawData.length];
-    System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);
+  private IllegalTcpOption(byte[] rawData, int offset, int length) {
+    this.kind = TcpOptionKind.getInstance(rawData[offset]);
+    this.rawData = new byte[length];
+    System.arraycopy(rawData, offset, this.rawData, 0, length);
   }
 
   private IllegalTcpOption(Builder builder) {

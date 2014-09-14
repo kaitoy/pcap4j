@@ -8,8 +8,10 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IcmpV4Code;
 import org.pcap4j.packet.namednumber.IcmpV4Type;
@@ -30,37 +32,33 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
   private final Packet payload;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IcmpV4CommonPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static IcmpV4CommonPacket newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IcmpV4CommonPacket(rawData);
+  public static IcmpV4CommonPacket newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IcmpV4CommonPacket(rawData, offset, length);
   }
 
-  private IcmpV4CommonPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new IcmpV4CommonHeader(rawData);
+  private IcmpV4CommonPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new IcmpV4CommonHeader(rawData, offset, length);
 
-    int payloadLength = rawData.length - header.length();
+    int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      byte[] rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            payloadLength
-          );
       this.payload
         = PacketFactories.getFactory(Packet.class, IcmpV4Type.class)
-            .newInstance(rawPayload, header.getType());
+            .newInstance(rawData, offset + header.length(), payloadLength, header.getType());
     }
     else {
       this.payload = null;
@@ -241,24 +239,30 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     private final IcmpV4Code code;
     private final short checksum;
 
-    private IcmpV4CommonHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < ICMPV4_COMMON_HEADER_SIZE) {
+    private IcmpV4CommonHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < ICMPV4_COMMON_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 common header(")
           .append(ICMPV4_COMMON_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.type
         = IcmpV4Type
-            .getInstance(ByteArrays.getByte(rawData, TYPE_OFFSET));
+            .getInstance(ByteArrays.getByte(rawData, TYPE_OFFSET + offset));
       this.code
         = IcmpV4Code
-            .getInstance(type.value(), ByteArrays.getByte(rawData, CODE_OFFSET));
+            .getInstance(type.value(), ByteArrays.getByte(rawData, CODE_OFFSET + offset));
       this.checksum
-        = ByteArrays.getShort(rawData, CHECKSUM_OFFSET);
+        = ByteArrays.getShort(rawData, CHECKSUM_OFFSET + offset);
     }
 
     private IcmpV4CommonHeader(Builder builder, byte[] payload) {

@@ -12,7 +12,9 @@ import org.pcap4j.packet.Packet;
 
 interface PacketInstantiater {
 
-  public Packet newInstance(byte [] rawData) throws IllegalRawDataException;
+  public Packet newInstance(
+    byte [] rawData, int offset, int length
+  ) throws IllegalRawDataException;
 
   public Class<? extends Packet> getTargetClass();
 

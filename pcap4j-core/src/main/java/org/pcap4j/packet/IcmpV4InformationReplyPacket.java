@@ -7,6 +7,8 @@
 
 package org.pcap4j.packet;
 
+import org.pcap4j.util.ByteArrays;
+
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
@@ -21,27 +23,27 @@ public final class IcmpV4InformationReplyPacket extends IcmpIdentifiablePacket {
   private final IcmpV4InformationReplyHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IcmpV4InformationReplyPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV4InformationReplyPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IcmpV4InformationReplyPacket(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IcmpV4InformationReplyPacket(rawData, offset, length);
   }
 
-  private IcmpV4InformationReplyPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new IcmpV4InformationReplyHeader(rawData);
+  private IcmpV4InformationReplyPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new IcmpV4InformationReplyHeader(rawData, offset, length);
   }
 
   private IcmpV4InformationReplyPacket(Builder builder) {
@@ -111,8 +113,10 @@ public final class IcmpV4InformationReplyPacket extends IcmpIdentifiablePacket {
      */
     private static final long serialVersionUID = -2093444994122929555L;
 
-    private IcmpV4InformationReplyHeader(byte[] rawData) throws IllegalRawDataException {
-      super(rawData);
+    private IcmpV4InformationReplyHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      super(rawData, offset, length);
     }
 
     private IcmpV4InformationReplyHeader(Builder builder) { super(builder); }

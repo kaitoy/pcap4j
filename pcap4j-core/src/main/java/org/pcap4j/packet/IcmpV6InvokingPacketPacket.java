@@ -40,18 +40,13 @@ abstract class IcmpV6InvokingPacketPacket extends AbstractPacket {
 
   /**
    *
-   * @param rawPayload
+   * @param rawData
+   * @param payloadOffset
+   * @param payloadLength
    */
-  protected IcmpV6InvokingPacketPacket(byte[] rawPayload) {
-    if (rawPayload == null) {
-      throw new NullPointerException("rawPayload must not be null.");
-    }
-    if (rawPayload.length == 0) {
-      throw new IllegalArgumentException("rawPayload is empty.");
-    }
-
+  protected IcmpV6InvokingPacketPacket(byte[] rawData, int payloadOffset, int payloadLength) {
     Packet p = PacketFactories.getFactory(Packet.class, EtherType.class)
-                 .newInstance(rawPayload, EtherType.IPV6);
+                 .newInstance(rawData, payloadOffset, payloadLength, EtherType.IPV6);
 
     if (p instanceof IllegalPacket) {
       this.payload = p;
@@ -59,10 +54,11 @@ abstract class IcmpV6InvokingPacketPacket extends AbstractPacket {
     }
     else if (p.contains(IllegalPacket.class)) {
       Packet.Builder builder = p.getBuilder();
+      byte[] ipRawData = p.get(IllegalPacket.class).getRawData();
       builder.getOuterOf(IllegalPacket.Builder.class)
                 .payloadBuilder(
                   PacketFactories.getFactory(Packet.class, NA.class)
-                    .newInstance(p.get(IllegalPacket.class).getRawData())
+                    .newInstance(ipRawData, 0, ipRawData.length)
                       .getBuilder()
                  );
       for (Packet.Builder b: builder) {

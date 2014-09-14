@@ -127,7 +127,7 @@ public class IpV6ExtRoutingPacketTest extends AbstractPacketTest {
   public void testNewPacket() {
     try {
       IpV6ExtRoutingPacket p
-        = IpV6ExtRoutingPacket.newPacket(packet.getRawData());
+        = IpV6ExtRoutingPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

@@ -39,8 +39,8 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.END_OF_OPTION_LIST, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV4EndOfOptionList.newInstance(rawData);
+        public IpV4Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+          return IpV4EndOfOptionList.newInstance(rawData, offset, length);
         }
         @Override
         public Class<IpV4EndOfOptionList> getTargetClass() {
@@ -51,8 +51,8 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.NO_OPERATION, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV4NoOperationOption.newInstance(rawData);
+        public IpV4Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+          return IpV4NoOperationOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<IpV4NoOperationOption> getTargetClass() {
@@ -63,8 +63,8 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.SECURITY, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV4Rfc791SecurityOption.newInstance(rawData);
+        public IpV4Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+          return IpV4Rfc791SecurityOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<IpV4Rfc791SecurityOption> getTargetClass() {
@@ -75,8 +75,8 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.LOOSE_SOURCE_ROUTING, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV4LooseSourceRouteOption.newInstance(rawData);
+        public IpV4Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+          return IpV4LooseSourceRouteOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<IpV4LooseSourceRouteOption> getTargetClass() {
@@ -87,8 +87,8 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.INTERNET_TIMESTAMP, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV4InternetTimestampOption.newInstance(rawData);
+        public IpV4Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+          return IpV4InternetTimestampOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<IpV4InternetTimestampOption> getTargetClass() {
@@ -99,8 +99,8 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.RECORD_ROUTE, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV4RecordRouteOption.newInstance(rawData);
+        public IpV4Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+          return IpV4RecordRouteOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<IpV4RecordRouteOption> getTargetClass() {
@@ -111,8 +111,8 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.STREAM_ID, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV4StreamIdOption.newInstance(rawData);
+        public IpV4Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+          return IpV4StreamIdOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<IpV4StreamIdOption> getTargetClass() {
@@ -123,8 +123,8 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     instantiaters.put(
       IpV4OptionType.STRICT_SOURCE_ROUTING, new Instantiater() {
         @Override
-        public IpV4Option newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV4StrictSourceRouteOption.newInstance(rawData);
+        public IpV4Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+          return IpV4StrictSourceRouteOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<IpV4StrictSourceRouteOption> getTargetClass() {
@@ -143,7 +143,7 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
   }
 
   @Override
-  public IpV4Option newInstance(byte[] rawData, IpV4OptionType number) {
+  public IpV4Option newInstance(byte[] rawData, int offset, int length, IpV4OptionType number) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
       sb.append("rawData: ")
@@ -156,21 +156,21 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
     try {
       Instantiater instantiater = instantiaters.get(number);
       if (instantiater != null) {
-        return instantiater.newInstance(rawData);
+        return instantiater.newInstance(rawData, offset, length);
       }
     } catch (IllegalRawDataException e) {
-      return IllegalIpV4Option.newInstance(rawData);
+      return IllegalIpV4Option.newInstance(rawData, offset, length);
     }
 
-    return newInstance(rawData);
+    return newInstance(rawData, offset, length);
   }
 
   @Override
-  public IpV4Option newInstance(byte[] rawData) {
+  public IpV4Option newInstance(byte[] rawData, int offset, int length) {
     try {
-      return UnknownIpV4Option.newInstance(rawData);
+      return UnknownIpV4Option.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalIpV4Option.newInstance(rawData);
+      return IllegalIpV4Option.newInstance(rawData, offset, length);
     }
   }
 
@@ -190,7 +190,9 @@ implements PacketFactory<IpV4Option, IpV4OptionType> {
 
   private static interface Instantiater {
 
-    public IpV4Option newInstance(byte [] rawData) throws IllegalRawDataException;
+    public IpV4Option newInstance(
+      byte [] rawData, int offset, int length
+    ) throws IllegalRawDataException;
 
     public Class<? extends IpV4Option> getTargetClass();
 

@@ -37,24 +37,30 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
 
   @Override
   public IpV4InternetTimestampOptionData newInstance(
-    byte[] rawData, IpV4InternetTimestampOptionFlag flag
+    byte[] rawData, int offset, int length, IpV4InternetTimestampOptionFlag flag
   ) {
-    return newInstance(rawData, getTargetClass(flag));
+    return newInstance(rawData, offset, length, getTargetClass(flag));
   }
 
   @Override
-  public IpV4InternetTimestampOptionData newInstance(byte[] rawData) {
-    return newInstance(rawData, getTargetClass());
+  public IpV4InternetTimestampOptionData newInstance(byte[] rawData, int offset, int length) {
+    return newInstance(rawData, offset, length, getTargetClass());
   }
 
   /**
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @param dataClass
    * @return a new IpV4InternetTimestampOptionData object.
+   * @throws IllegalStateException
+   * @throws IllegalArgumentException
+   * @throws NullPointerException
    */
   public IpV4InternetTimestampOptionData newInstance(
-    byte[] rawData, Class<? extends IpV4InternetTimestampOptionData> dataClass
+    byte[] rawData, int offset, int length,
+    Class<? extends IpV4InternetTimestampOptionData> dataClass
   ) {
     if (rawData == null || dataClass == null) {
       StringBuilder sb = new StringBuilder(50);
@@ -66,8 +72,8 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
     }
 
     try {
-      Method newInstance = dataClass.getMethod("newInstance", byte[].class);
-      return (IpV4InternetTimestampOptionData)newInstance.invoke(null, rawData);
+      Method newInstance = dataClass.getMethod("newInstance", byte[].class, int.class, int.class);
+      return (IpV4InternetTimestampOptionData)newInstance.invoke(null, rawData, offset, length);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -78,9 +84,9 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
       throw new IllegalStateException(e);
     } catch (InvocationTargetException e) {
       if (e.getTargetException() instanceof IllegalRawDataException) {
-        return IllegalIpV4InternetTimestampOptionData.newInstance(rawData);
+        return IllegalIpV4InternetTimestampOptionData.newInstance(rawData, offset, length);
       }
-      throw new IllegalStateException(e.getTargetException());
+      throw new IllegalArgumentException(e);
     }
   }
 

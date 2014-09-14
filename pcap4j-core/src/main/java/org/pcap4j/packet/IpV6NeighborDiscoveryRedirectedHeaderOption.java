@@ -65,60 +65,71 @@ implements IpV6NeighborDiscoveryOption {
   private final Packet ipPacket;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IpV6NeighborDiscoveryRedirectedHeaderOption object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV6NeighborDiscoveryRedirectedHeaderOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IpV6NeighborDiscoveryRedirectedHeaderOption(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IpV6NeighborDiscoveryRedirectedHeaderOption(rawData, offset, length);
   }
 
   private IpV6NeighborDiscoveryRedirectedHeaderOption(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData.length < IP_HEADER_OFFSET + 40) { // IP_HEADER_OFFSET + IPv6 Header
+    if (length < IP_HEADER_OFFSET + 40) { // IP_HEADER_OFFSET + IPv6 Header
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 47. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[TYPE_OFFSET] != getType().value()) {
+    if (rawData[TYPE_OFFSET + offset] != getType().value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The type must be: ")
         .append(getType().valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.length = rawData[LENGTH_OFFSET];
-
-    if (rawData.length < length * 8) {
+    this.length = rawData[LENGTH_OFFSET + offset];
+    if (length < this.length * 8) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option. ")
-        .append(length * 8)
+        .append(this.length * 8)
         .append(" bytes data is needed. data: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.reserved
-      = ByteArrays.getSubArray(rawData, RESERVED_OFFSET, RESERVED_SIZE);
+      = ByteArrays.getSubArray(rawData, RESERVED_OFFSET + offset, RESERVED_SIZE);
 
     Packet p = PacketFactories.getFactory(Packet.class, EtherType.class)
                  .newInstance(
-                    ByteArrays.getSubArray(rawData, IP_HEADER_OFFSET),
+                    rawData,
+                    IP_HEADER_OFFSET + offset,
+                    length - IP_HEADER_OFFSET,
                     EtherType.IPV6
                   );
     if (p instanceof IllegalPacket) {
@@ -127,10 +138,11 @@ implements IpV6NeighborDiscoveryOption {
     }
     else if (p.contains(IllegalPacket.class)) {
       Packet.Builder builder = p.getBuilder();
+      byte[] ipRawData = p.get(IllegalPacket.class).getRawData();
       builder.getOuterOf(IllegalPacket.Builder.class)
         .payloadBuilder(
           PacketFactories.getFactory(Packet.class, NA.class)
-            .newInstance(p.get(IllegalPacket.class).getRawData())
+            .newInstance(ipRawData, 0, ipRawData.length)
               .getBuilder()
          );
       for (Packet.Builder b: builder) {

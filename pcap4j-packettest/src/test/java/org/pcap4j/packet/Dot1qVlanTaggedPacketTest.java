@@ -95,7 +95,8 @@ public class Dot1qVlanTaggedPacketTest extends AbstractPacketTest {
   @Test
   public void testNewPacket() {
     try {
-      Dot1qVlanTagPacket p = Dot1qVlanTagPacket.newPacket(packet.getRawData());
+      Dot1qVlanTagPacket p
+        = Dot1qVlanTagPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

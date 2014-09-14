@@ -11,6 +11,7 @@ import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.namednumber.Ssh2MessageNumber;
+import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
@@ -35,21 +36,21 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
   public static Ssh2NewKeysPacket getInstance() { return INSTANCE; }
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
-   * @return a new Ssh2NewKeysPacket object.
+   * @param offset
+   * @param length
+   * @return the singleton instance of Ssh2NewKeysPacket.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static Ssh2NewKeysPacket newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    Ssh2NewKeysHeader.checkRawData(rawData);
+  public static Ssh2NewKeysPacket newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    Ssh2NewKeysHeader.checkRawData(rawData, offset, length);
     return INSTANCE;
   }
 
@@ -93,18 +94,31 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
 
     private Ssh2NewKeysHeader() {}
 
-    private static void checkRawData(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < 1) {
+    private static void checkRawData(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < 1) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 New Keys header. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      if (!Ssh2MessageNumber.getInstance(rawData[0]).equals(Ssh2MessageNumber.SSH_MSG_KEXINIT)) {
+      if (
+        !Ssh2MessageNumber.getInstance(rawData[offset])
+          .equals(Ssh2MessageNumber.SSH_MSG_KEXINIT)
+      ) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is not an SSH2 New Keys message. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
     }

@@ -75,34 +75,34 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
   private final byte[] mac;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new Ssh2BinaryPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static Ssh2BinaryPacket newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new Ssh2BinaryPacket(rawData);
+  public static Ssh2BinaryPacket newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new Ssh2BinaryPacket(rawData, offset, length);
   }
 
-  private Ssh2BinaryPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new Ssh2BinaryHeader(rawData);
+  private Ssh2BinaryPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    this.header = new Ssh2BinaryHeader(rawData, offset, length);
 
     int payloadLength = header.getPacketLength() - header.getPaddingLengthAsInt() - 1;
     if (
          payloadLength < 0
-      || payloadLength > rawData.length - Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE
+      || payloadLength > length - Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE
     ) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("rawData is too short. rawData length: ")
-        .append(rawData.length)
+        .append(length)
         .append(", header.getPacketLength(): ")
         .append(header.getPacketLength())
         .append(", header.getPaddingLengthAsInt(): ")
@@ -110,16 +110,16 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
       throw new IllegalRawDataException(sb.toString());
     }
 
+    int payloadOffset = Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE + offset;
     if (payloadLength > 0) {
-      byte[] rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE,
-            payloadLength
-          );
       this.payload
         = PacketFactories.getFactory(Packet.class, Ssh2MessageNumber.class)
-            .newInstance(rawPayload, Ssh2MessageNumber.getInstance(rawPayload[0]));
+            .newInstance(
+               rawData,
+               payloadOffset,
+               payloadLength,
+               Ssh2MessageNumber.getInstance(rawData[payloadOffset])
+             );
     }
     else {
       this.payload = null;
@@ -129,14 +129,14 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
       this.randomPadding
         = ByteArrays.getSubArray(
             rawData,
-            Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE + payloadLength,
+            payloadOffset + payloadLength,
             header.getPaddingLength()
           );
 
       this.mac
         = ByteArrays.getSubArray(
             rawData,
-            Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE + payloadLength + randomPadding.length
+            payloadOffset + payloadLength + randomPadding.length
           );
     } catch (Exception e) {
       throw new IllegalRawDataException(e);
@@ -431,18 +431,24 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     private final int packetLength;
     private final byte paddingLength;
 
-    private Ssh2BinaryHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < SSH2_BINARY_HEADER_SIZE) {
+    private Ssh2BinaryHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < SSH2_BINARY_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(100);
         sb.append("The data is too short to build an SSH2 Binary header(")
           .append(SSH2_BINARY_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.packetLength = ByteArrays.getInt(rawData, PACKET_LENGTH_OFFSET);
-      this.paddingLength = ByteArrays.getByte(rawData, PADDING_LENGTH_OFFSET);
+      this.packetLength = ByteArrays.getInt(rawData, PACKET_LENGTH_OFFSET + offset);
+      this.paddingLength = ByteArrays.getByte(rawData, PADDING_LENGTH_OFFSET + offset);
 
       if (packetLength < 0) {
         StringBuilder sb = new StringBuilder(120);

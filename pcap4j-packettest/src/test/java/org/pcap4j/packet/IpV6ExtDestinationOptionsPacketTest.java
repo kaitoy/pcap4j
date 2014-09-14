@@ -124,7 +124,8 @@ public class IpV6ExtDestinationOptionsPacketTest extends AbstractPacketTest {
   public void testNewPacket() {
     try {
       IpV6ExtDestinationOptionsPacket p
-        = IpV6ExtDestinationOptionsPacket.newPacket(packet.getRawData());
+        = IpV6ExtDestinationOptionsPacket
+            .newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

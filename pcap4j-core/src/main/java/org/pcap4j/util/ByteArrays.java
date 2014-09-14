@@ -81,15 +81,7 @@ public final class ByteArrays {
    * @return byte value.
    */
   public static byte getByte(byte[] array, int offset) {
-    if (array == null) {
-      throw new NullPointerException("array may not be null");
-    }
-    if (offset < 0 || offset + BYTE_SIZE_IN_BYTES > array.length) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("array: ").append(toHexString(array, " "))
-        .append(" offset: ").append(offset);
-      throw new ArrayIndexOutOfBoundsException(sb.toString());
-    }
+    validateBounds(array, offset, BYTE_SIZE_IN_BYTES);
     return array[offset];
   }
 
@@ -130,18 +122,10 @@ public final class ByteArrays {
    * @return short value
    */
   public static short getShort(byte[] array, int offset, ByteOrder bo) {
-    if (array == null || bo == null) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("array: ").append(array)
-        .append(" bo: ").append(bo);
-      throw new NullPointerException(sb.toString());
-    }
-    if (offset < 0 || offset + SHORT_SIZE_IN_BYTES > array.length) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("array: ").append(toHexString(array, " "))
-        .append(" offset: ").append(offset)
-        .append(" bo: ").append(bo);
-      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    validateBounds(array, offset, SHORT_SIZE_IN_BYTES);
+
+    if (bo == null) {
+      throw new NullPointerException(" bo: " + bo);
     }
 
     if (bo.equals(LITTLE_ENDIAN)) {
@@ -227,18 +211,10 @@ public final class ByteArrays {
    * @return int value.
    */
   public static int getInt(byte[] array, int offset, ByteOrder bo) {
-    if (array == null || bo == null) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("array: ").append(array)
-        .append(" bo: ").append(bo);
-      throw new NullPointerException(sb.toString());
-    }
-    if (offset < 0 || offset + INT_SIZE_IN_BYTES > array.length) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("array: ").append(toHexString(array, " "))
-        .append(" offset: ").append(offset)
-        .append(" bo: ").append(bo);
-      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    validateBounds(array, offset, INT_SIZE_IN_BYTES);
+
+    if (bo == null) {
+      throw new NullPointerException(" bo: " + bo);
     }
 
     if (bo.equals(LITTLE_ENDIAN)) {
@@ -328,18 +304,10 @@ public final class ByteArrays {
    * @return long value
    */
   public static long getLong(byte[] array, int offset, ByteOrder bo) {
-    if (array == null || bo == null) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("array: ").append(array)
-        .append(" bo: ").append(bo);
-      throw new NullPointerException(sb.toString());
-    }
-    if (offset < 0 || offset + LONG_SIZE_IN_BYTES > array.length) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("array: ").append(toHexString(array, " "))
-        .append(" offset: ").append(offset)
-        .append(" bo: ").append(bo);
-      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    validateBounds(array, offset, LONG_SIZE_IN_BYTES);
+
+    if (bo == null) {
+      throw new NullPointerException(" bo: " + bo);
     }
 
     if (bo.equals(LITTLE_ENDIAN)) {
@@ -447,18 +415,10 @@ public final class ByteArrays {
   public static MacAddress getMacAddress(
     byte[] array, int offset, ByteOrder bo
   ) {
-    if (array == null || bo == null) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("array: ").append(array)
-        .append(" bo: ").append(bo);
-      throw new NullPointerException(sb.toString());
-    }
-    if (offset < 0 || offset + MacAddress.SIZE_IN_BYTES > array.length) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("array: ").append(toHexString(array, " "))
-        .append(" offset: ").append(offset)
-        .append(" bo: ").append(bo);
-      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    validateBounds(array, offset, MacAddress.SIZE_IN_BYTES);
+
+    if (bo == null) {
+      throw new NullPointerException(" bo: " + bo);
     }
 
     if (bo.equals(LITTLE_ENDIAN)) {
@@ -517,18 +477,10 @@ public final class ByteArrays {
   public static Inet4Address getInet4Address(
     byte[] array, int offset, ByteOrder bo
   ) {
-    if (array == null || bo == null) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("array: ").append(array)
-        .append(" bo: ").append(bo);
-      throw new NullPointerException(sb.toString());
-    }
-    if (offset < 0 || offset + INET4_ADDRESS_SIZE_IN_BYTES > array.length) {
-      StringBuilder sb = new StringBuilder(50);
-      sb.append("array: ").append(toHexString(array, " "))
-        .append(" offset: ").append(offset)
-        .append(" bo: ").append(bo);
-      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    validateBounds(array, offset, INET4_ADDRESS_SIZE_IN_BYTES);
+
+    if (bo == null) {
+      throw new NullPointerException(" bo: " + bo);
     }
 
     try {
@@ -577,18 +529,10 @@ public final class ByteArrays {
   public static Inet6Address getInet6Address(
     byte[] array, int offset, ByteOrder bo
   ) {
-    if (array == null || bo == null) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("array: ").append(array)
-        .append(" bo: ").append(bo);
-      throw new NullPointerException(sb.toString());
-    }
-    if (offset < 0 || offset + INET6_ADDRESS_SIZE_IN_BYTES > array.length) {
-      StringBuilder sb = new StringBuilder(50);
-      sb.append("array: ").append(toHexString(array, " "))
-        .append(" offset: ").append(offset)
-        .append(" bo: ").append(bo);
-      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    validateBounds(array, offset, INET6_ADDRESS_SIZE_IN_BYTES);
+
+    if (bo == null) {
+      throw new NullPointerException(" bo: " + bo);
     }
 
     try {
@@ -649,16 +593,7 @@ public final class ByteArrays {
    * @return sub array
    */
   public static byte[] getSubArray(byte[] array, int offset, int length) {
-    if (array == null) {
-      throw new NullPointerException("array may not be null");
-    }
-    if (offset < 0 || length < 0 || offset + length > array.length) {
-      StringBuilder sb = new StringBuilder(50);
-      sb.append("array: ").append(toHexString(array, " "))
-        .append(" offset: ").append(offset)
-        .append(" length: ").append(length);
-      throw new ArrayIndexOutOfBoundsException(sb.toString());
-    }
+    validateBounds(array, offset, length);
 
     byte[] subArray = new byte[length];
     System.arraycopy(array, offset, subArray, 0, length);
@@ -672,9 +607,6 @@ public final class ByteArrays {
    * @return sub array
    */
   public static byte[] getSubArray(byte[] array, int offset) {
-    if (array == null) {
-      throw new NullPointerException("array may not be null");
-    }
     return getSubArray(array, offset, array.length - offset);
   }
 
@@ -710,13 +642,7 @@ public final class ByteArrays {
   public static String toHexString(
     byte[] array, String separator, int offset, int length
   ) {
-    if (offset < 0 || length < 0 || offset + length > array.length) {
-      StringBuilder sb = new StringBuilder(100);
-      sb.append("array: ").append(toHexString(array, " "))
-        .append(" offset: ").append(offset)
-        .append(" length: ").append(length);
-      throw new ArrayIndexOutOfBoundsException(sb.toString());
-    }
+    validateBounds(array, offset, length);
 
     StringBuffer buf = new StringBuffer();
 
@@ -834,6 +760,41 @@ public final class ByteArrays {
     byte[] clone = new byte[array.length];
     System.arraycopy(array, 0, clone, 0, array.length);
     return clone;
+  }
+
+
+  /**
+   *
+   * A utility method to validate arguments which indicate a part of an array.
+   *
+   * @param arr
+   * @param offset
+   * @param len
+   * @throws NullPointerException if the {@code arr} is null.
+   * @throws IllegalArgumentException if {@code arr} is empty or {@code len} is zero.
+   * @throws ArrayIndexOutOfBoundsException if {@code offset} or {@code len} is negative,
+   *         or ({@code offset} + {@code len}) is greater than or equal to {@code arr.length}.
+   */
+  public static void validateBounds(byte[] arr, int offset, int len) {
+    if (arr == null) {
+      throw new NullPointerException("arr must not be null.");
+    }
+    if (arr.length == 0) {
+      throw new IllegalArgumentException("arr is empty.");
+    }
+    if (len == 0) {
+      throw new IllegalArgumentException("length is zero.");
+    }
+    if (offset < 0 || len < 0 || offset + len > arr.length) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("arr.length: ")
+        .append(arr.length)
+        .append(", offset: ")
+        .append(offset)
+        .append(", len: ")
+        .append(len);
+      throw new ArrayIndexOutOfBoundsException(sb.toString());
+    }
   }
 
 }

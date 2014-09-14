@@ -7,7 +7,6 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.namednumber.Ssh2MessageNumber;
@@ -27,25 +26,25 @@ public final class Ssh2DebugPacket extends AbstractPacket {
   private final Ssh2DebugHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new Ssh2DebugPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static Ssh2DebugPacket newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new Ssh2DebugPacket(rawData);
+  public static Ssh2DebugPacket newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new Ssh2DebugPacket(rawData, offset, length);
   }
 
-  private Ssh2DebugPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new Ssh2DebugHeader(rawData);
+  private Ssh2DebugPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    this.header = new Ssh2DebugHeader(rawData, offset, length);
   }
 
   private Ssh2DebugPacket(Builder builder) {
@@ -161,27 +160,42 @@ public final class Ssh2DebugPacket extends AbstractPacket {
     private final Ssh2String message;
     private final Ssh2String languageTag;
 
-    private Ssh2DebugHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < 10) {
+    private Ssh2DebugHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < 10) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 Debug header. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
-
-      if (!Ssh2MessageNumber.getInstance(rawData[0]).equals(Ssh2MessageNumber.SSH_MSG_DEBUG)) {
+      if (
+        !Ssh2MessageNumber.getInstance(rawData[offset])
+          .equals(Ssh2MessageNumber.SSH_MSG_DEBUG)
+      ) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is not an SSH2 Debug message. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      int offset = 1;
-      this.alwaysDisplay = new Ssh2Boolean((ByteArrays.getSubArray(rawData, offset)));
-      offset += BYTE_SIZE_IN_BYTES;
-      this.message = new Ssh2String(ByteArrays.getSubArray(rawData, offset));
-      offset += message.length();
-      this.languageTag = new Ssh2String(ByteArrays.getSubArray(rawData, offset));
+      int currentOffset = 1 + offset;
+      int remainingLength = length - 1;
+      this.alwaysDisplay = new Ssh2Boolean(rawData, currentOffset);
+      currentOffset += alwaysDisplay.length();
+      remainingLength -= alwaysDisplay.length();
+      this.message = new Ssh2String(rawData, currentOffset, remainingLength);
+      currentOffset += message.length();
+      remainingLength -= message.length();
+      this.languageTag = new Ssh2String(rawData, currentOffset, remainingLength);
     }
 
     private Ssh2DebugHeader(Builder builder) {

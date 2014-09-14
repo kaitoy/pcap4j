@@ -26,8 +26,10 @@ extends AbstractStaticPacketFactory<Ssh2MessageNumber> {
     instantiaters.put(
       Ssh2MessageNumber.SSH_MSG_KEXINIT, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return Ssh2KexInitPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return Ssh2KexInitPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<Ssh2KexInitPacket> getTargetClass() {

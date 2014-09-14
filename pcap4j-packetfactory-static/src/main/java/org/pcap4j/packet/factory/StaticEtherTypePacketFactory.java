@@ -29,8 +29,10 @@ extends AbstractStaticPacketFactory<EtherType> {
     instantiaters.put(
       EtherType.IPV4, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV4Packet.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IpV4Packet.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IpV4Packet> getTargetClass() {
@@ -41,8 +43,10 @@ extends AbstractStaticPacketFactory<EtherType> {
     instantiaters.put(
       EtherType.ARP, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return ArpPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return ArpPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<ArpPacket> getTargetClass() {
@@ -53,8 +57,10 @@ extends AbstractStaticPacketFactory<EtherType> {
     instantiaters.put(
       EtherType.DOT1Q_VLAN_TAGGED_FRAMES, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return Dot1qVlanTagPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return Dot1qVlanTagPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<Dot1qVlanTagPacket> getTargetClass() {
@@ -65,8 +71,10 @@ extends AbstractStaticPacketFactory<EtherType> {
     instantiaters.put(
       EtherType.IPV6, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV6Packet.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IpV6Packet.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IpV6Packet> getTargetClass() {

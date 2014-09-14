@@ -107,7 +107,8 @@ public class IcmpV6CommonPacketTest extends AbstractPacketTest {
   @Test
   public void testNewPacket() {
     try {
-      IcmpV6CommonPacket p = IcmpV6CommonPacket.newPacket(packet.getRawData());
+      IcmpV6CommonPacket p
+        = IcmpV6CommonPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

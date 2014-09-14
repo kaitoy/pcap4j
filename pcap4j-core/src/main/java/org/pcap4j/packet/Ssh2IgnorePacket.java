@@ -26,25 +26,25 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
   private final Ssh2IgnoreHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new Ssh2IgnorePacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static Ssh2IgnorePacket newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new Ssh2IgnorePacket(rawData);
+  public static Ssh2IgnorePacket newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new Ssh2IgnorePacket(rawData, offset, length);
   }
 
-  private Ssh2IgnorePacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new Ssh2IgnoreHeader(rawData);
+  private Ssh2IgnorePacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    this.header = new Ssh2IgnoreHeader(rawData, offset, length);
   }
 
   private Ssh2IgnorePacket(Builder builder) {
@@ -128,22 +128,34 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
     private final Ssh2MessageNumber messageNumber = Ssh2MessageNumber.SSH_MSG_IGNORE;
     private final Ssh2String data;
 
-    private Ssh2IgnoreHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < 5) {
+    private Ssh2IgnoreHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < 5) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 Ignore header. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
-
-      if (!Ssh2MessageNumber.getInstance(rawData[0]).equals(Ssh2MessageNumber.SSH_MSG_IGNORE)) {
+      if (
+        !Ssh2MessageNumber.getInstance(rawData[offset])
+          .equals(Ssh2MessageNumber.SSH_MSG_IGNORE)
+      ) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is not an SSH2 Ignore message. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.data = new Ssh2String(ByteArrays.getSubArray(rawData, 1));
+      this.data = new Ssh2String(rawData, 1 + offset, length - 1);
     }
 
     private Ssh2IgnoreHeader(Builder builder) {

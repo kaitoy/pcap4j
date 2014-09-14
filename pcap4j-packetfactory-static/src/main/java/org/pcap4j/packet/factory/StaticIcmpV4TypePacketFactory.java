@@ -36,8 +36,10 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.ECHO_REPLY, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4EchoReplyPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4EchoReplyPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4EchoReplyPacket> getTargetClass() {
@@ -48,8 +50,10 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.DESTINATION_UNREACHABLE, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4DestinationUnreachablePacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4DestinationUnreachablePacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4DestinationUnreachablePacket> getTargetClass() {
@@ -60,8 +64,10 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.SOURCE_QUENCH, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4SourceQuenchPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4SourceQuenchPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4SourceQuenchPacket> getTargetClass() {
@@ -72,8 +78,10 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.REDIRECT, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4RedirectPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4RedirectPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4RedirectPacket> getTargetClass() {
@@ -84,8 +92,10 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.ECHO, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4EchoPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4EchoPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4EchoPacket> getTargetClass() {
@@ -96,8 +106,10 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.TIME_EXCEEDED, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4TimeExceededPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4TimeExceededPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4TimeExceededPacket> getTargetClass() {
@@ -108,8 +120,10 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.PARAMETER_PROBLEM, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4ParameterProblemPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4ParameterProblemPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4ParameterProblemPacket> getTargetClass() {
@@ -120,8 +134,10 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.TIMESTAMP, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4TimestampPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4TimestampPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4TimestampPacket> getTargetClass() {
@@ -132,8 +148,10 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.TIMESTAMP_REPLY, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4TimestampReplyPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4TimestampReplyPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4TimestampReplyPacket> getTargetClass() {
@@ -144,8 +162,10 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.INFORMATION_REQUEST, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4InformationRequestPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4InformationRequestPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4InformationRequestPacket> getTargetClass() {
@@ -156,8 +176,10 @@ extends AbstractStaticPacketFactory<IcmpV4Type> {
     instantiaters.put(
       IcmpV4Type.INFORMATION_REPLY, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4InformationReplyPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4InformationReplyPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4InformationReplyPacket> getTargetClass() {

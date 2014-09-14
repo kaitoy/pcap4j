@@ -46,36 +46,40 @@ public final class Ssh2String implements Serializable {
   private final byte[] string;
 
   /**
+   * Constructor.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public Ssh2String(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
+  public Ssh2String(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
 
-    if (rawData.length < 4) {
+    if (length < 4) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The rawData length must be more than 3. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.length = ByteArrays.getInt(rawData, 0);
-    if (length < 0) {
+    this.length = ByteArrays.getInt(rawData, offset);
+    if (this.length < 0) {
       StringBuilder sb = new StringBuilder(120);
-      sb.append("A name-list the length of which is longer than 2147483647 is not supported. length: ")
-        .append(length & 0xFFFFFFFFL);
+      sb.append(
+           "A string the length of which is longer than 2147483647 is not supported. length: "
+         )
+        .append(this.length & 0xFFFFFFFFL);
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.string = ByteArrays.getSubArray(rawData, 4, length);
+    this.string = ByteArrays.getSubArray(rawData, 4 + offset, this.length);
   }
 
   /**

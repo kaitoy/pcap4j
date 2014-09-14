@@ -33,8 +33,8 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
     instantiaters.put(
       IpV6OptionType.PAD1, new Instantiater() {
         @Override
-        public IpV6Option newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV6Pad1Option.newInstance(rawData);
+        public IpV6Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+          return IpV6Pad1Option.newInstance(rawData, offset, length);
         }
         @Override
         public Class<IpV6Pad1Option> getTargetClass() {
@@ -45,8 +45,8 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
     instantiaters.put(
       IpV6OptionType.PADN, new Instantiater() {
         @Override
-        public IpV6Option newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV6PadNOption.newInstance(rawData);
+        public IpV6Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+          return IpV6PadNOption.newInstance(rawData, offset, length);
         }
         @Override
         public Class<IpV6PadNOption> getTargetClass() {
@@ -66,7 +66,7 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
 
   @Override
   public IpV6Option newInstance(
-    byte[] rawData, IpV6OptionType number
+    byte[] rawData, int offset, int length, IpV6OptionType number
   ) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
@@ -80,21 +80,21 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
     try {
       Instantiater instantiater = instantiaters.get(number);
       if (instantiater != null) {
-        return instantiater.newInstance(rawData);
+        return instantiater.newInstance(rawData, offset, length);
       }
     } catch (IllegalRawDataException e) {
-      return IllegalIpV6Option.newInstance(rawData);
+      return IllegalIpV6Option.newInstance(rawData, offset, length);
     }
 
-    return newInstance(rawData);
+    return newInstance(rawData, offset, length);
   }
 
   @Override
-  public IpV6Option newInstance(byte[] rawData) {
+  public IpV6Option newInstance(byte[] rawData, int offset, int length) {
     try {
-      return UnknownIpV6Option.newInstance(rawData);
+      return UnknownIpV6Option.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalIpV6Option.newInstance(rawData);
+      return IllegalIpV6Option.newInstance(rawData, offset, length);
     }
   }
 
@@ -114,7 +114,9 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
 
   private static interface Instantiater {
 
-    public IpV6Option newInstance(byte [] rawData) throws IllegalRawDataException;
+    public IpV6Option newInstance(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException;
 
     public Class<? extends IpV6Option> getTargetClass();
 

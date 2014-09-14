@@ -10,6 +10,7 @@ package org.pcap4j.packet.factory;
 import org.pcap4j.packet.IpV4Packet.IpV4Tos;
 import org.pcap4j.packet.IpV4Rfc1349Tos;
 import org.pcap4j.packet.namednumber.NA;
+import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
@@ -30,20 +31,14 @@ public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NA> {
 
   @Override
   @Deprecated
-  public IpV4Tos newInstance(byte[] rawData, NA number) {
-    return newInstance(rawData);
+  public IpV4Tos newInstance(byte[] rawData, int offset, int length, NA number) {
+    return newInstance(rawData, offset, length);
   }
 
   @Override
-  public IpV4Tos newInstance(byte[] rawData) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData is null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-
-    return IpV4Rfc1349Tos.newInstance(rawData[0]);
+  public IpV4Tos newInstance(byte[] rawData, int offset, int length) {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return IpV4Rfc1349Tos.newInstance(rawData[offset]);
   }
 
   @Override

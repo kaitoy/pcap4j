@@ -104,7 +104,8 @@ public class EthernetPacketTest extends AbstractPacketTest {
   @Test
   public void testNewPacket() {
     try {
-      EthernetPacket p = EthernetPacket.newPacket(packet.getRawData());
+      EthernetPacket p
+        = EthernetPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

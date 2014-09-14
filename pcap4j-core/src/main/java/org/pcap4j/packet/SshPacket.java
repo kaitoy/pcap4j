@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,26 +26,26 @@ public final class SshPacket extends AbstractPacket {
   private static final Logger logger = LoggerFactory.getLogger(SshPacket.class);
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new Packet object representing an SSH packet.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static Packet newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-
+  public static Packet newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    // This will be done by actual packet classes.
+    // ByteArrays.validateBounds(rawData, offset, length);
     try {
-      return Ssh2VersionExchangePacket.newPacket(rawData);
+      return Ssh2VersionExchangePacket.newPacket(rawData, offset, length);
     } catch (IllegalRawDataException e) {
       logger.debug("rawData seems not SSH2 version exchange packet.", e);
-      return Ssh2BinaryPacket.newPacket(rawData);
+      return Ssh2BinaryPacket.newPacket(rawData, offset, length);
     }
   }
 

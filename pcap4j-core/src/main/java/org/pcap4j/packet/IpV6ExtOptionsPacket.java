@@ -38,19 +38,17 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
   /**
    *
-   * @param rawPayload
+   * @param rawData
+   * @param payloadOffset
+   * @param payloadLength
    * @param number
    */
-  protected IpV6ExtOptionsPacket(byte[] rawPayload, IpNumber number) {
-    if (rawPayload == null) {
-      throw new NullPointerException("rawPayload must not be null.");
-    }
-    if (rawPayload.length == 0) {
-      throw new IllegalArgumentException("rawPayload is empty.");
-    }
+  protected IpV6ExtOptionsPacket(
+    byte[] rawData, int payloadOffset, int payloadLength, IpNumber number
+  ) {
     this.payload
       = PacketFactories.getFactory(Packet.class, IpNumber.class)
-          .newInstance(rawPayload, number);
+          .newInstance(rawData, payloadOffset, payloadLength, number);
   }
 
   /**
@@ -156,6 +154,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
       return payloadBuilder;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
@@ -206,52 +205,74 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
     /**
      *
      * @param rawData
+     * @param offset
+     * @param length
      * @throws IllegalRawDataException
      */
-    protected IpV6ExtOptionsHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < 2) {
+    protected IpV6ExtOptionsHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < 2) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data length of ")
           .append(getHeaderName())
           .append(" is must be more than 1. data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.nextHeader
         = IpNumber
-            .getInstance(ByteArrays.getByte(rawData, NEXT_HEADER_OFFSET));
+            .getInstance(ByteArrays.getByte(rawData, NEXT_HEADER_OFFSET + offset));
       this.hdrExtLen
-        = ByteArrays.getByte(rawData, HDR_EXT_LEN_OFFSET);
+        = ByteArrays.getByte(rawData, HDR_EXT_LEN_OFFSET + offset);
 
       int headerLength = ((hdrExtLen & 0xFF) + 1) * 8;
-      if (rawData.length < headerLength) {
+      if (length < headerLength) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an ")
           .append(getHeaderName())
           .append("(")
           .append(headerLength)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.options = new ArrayList<IpV6Option>();
 
-      int currentOffset = OPTIONS_OFFSET;
-      while (currentOffset < headerLength) {
-        byte[] optRawData = ByteArrays.getSubArray(
-                              rawData,
-                              currentOffset,
-                              headerLength - currentOffset
-                            );
-        IpV6OptionType type = IpV6OptionType.getInstance(optRawData[0]);
-        IpV6Option newOne
-          = PacketFactories
-              .getFactory(IpV6Option.class, IpV6OptionType.class)
-                .newInstance(optRawData, type);
+      int currentOffsetInHeader = OPTIONS_OFFSET;
+      while (currentOffsetInHeader < headerLength) {
+        IpV6OptionType type
+          = IpV6OptionType.getInstance(rawData[currentOffsetInHeader + offset]);
+        IpV6Option newOne;
+        try {
+          newOne = PacketFactories
+                     .getFactory(IpV6Option.class, IpV6OptionType.class)
+                       .newInstance(
+                          rawData,
+                          currentOffsetInHeader + offset,
+                          headerLength - currentOffsetInHeader,
+                          type
+                        );
+        } catch (Exception e) {
+          break;
+        }
+
+        if (currentOffsetInHeader + newOne.length() > headerLength) {
+          break;
+        }
+
         options.add(newOne);
-        currentOffset += newOne.length();
+        currentOffsetInHeader += newOne.length();
       }
     }
 
@@ -383,13 +404,16 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
   }
 
   /**
+   * The interface representing an IPv6 option.
+   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
+   * Classes which imprement this interface must implement the following method:
+   * {@code public static IpV6Option newInstance(byte[] rawData, int offset, int length)
+   * throws IllegalRawDataException}
+   *
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
   public interface IpV6Option extends Serializable {
-
-    // /* must implement if use PropertiesBasedIpV6OptionFactory */
-    // public static IpV6Option newInstance(byte[] rawData);
 
     /**
      *

@@ -34,8 +34,10 @@ extends AbstractStaticPacketFactory<IpNumber> {
     instantiaters.put(
       IpNumber.UDP, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return UdpPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return UdpPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<UdpPacket> getTargetClass() {
@@ -46,8 +48,10 @@ extends AbstractStaticPacketFactory<IpNumber> {
     instantiaters.put(
       IpNumber.ICMPV4, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV4CommonPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV4CommonPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV4CommonPacket> getTargetClass() {
@@ -58,8 +62,10 @@ extends AbstractStaticPacketFactory<IpNumber> {
     instantiaters.put(
       IpNumber.ICMPV6, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IcmpV6CommonPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV6CommonPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IcmpV6CommonPacket> getTargetClass() {
@@ -70,8 +76,10 @@ extends AbstractStaticPacketFactory<IpNumber> {
     instantiaters.put(
       IpNumber.TCP, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return TcpPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return TcpPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<TcpPacket> getTargetClass() {
@@ -82,8 +90,10 @@ extends AbstractStaticPacketFactory<IpNumber> {
     instantiaters.put(
       IpNumber.IPV6_HOPOPT, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV6ExtHopByHopOptionsPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IpV6ExtHopByHopOptionsPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IpV6ExtHopByHopOptionsPacket> getTargetClass() {
@@ -94,8 +104,10 @@ extends AbstractStaticPacketFactory<IpNumber> {
     instantiaters.put(
       IpNumber.IPV6_FRAG, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV6ExtFragmentPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IpV6ExtFragmentPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IpV6ExtFragmentPacket> getTargetClass() {
@@ -106,8 +118,10 @@ extends AbstractStaticPacketFactory<IpNumber> {
     instantiaters.put(
       IpNumber.IPV6_DST_OPTS, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV6ExtDestinationOptionsPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IpV6ExtDestinationOptionsPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IpV6ExtDestinationOptionsPacket> getTargetClass() {
@@ -118,8 +132,10 @@ extends AbstractStaticPacketFactory<IpNumber> {
     instantiaters.put(
       IpNumber.IPV6_ROUTE, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return IpV6ExtRoutingPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IpV6ExtRoutingPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<IpV6ExtRoutingPacket> getTargetClass() {
@@ -130,8 +146,10 @@ extends AbstractStaticPacketFactory<IpNumber> {
     instantiaters.put(
       IpNumber.IPV6_NONXT, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) {
-          return UnknownPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return UnknownPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<UnknownPacket> getTargetClass() {

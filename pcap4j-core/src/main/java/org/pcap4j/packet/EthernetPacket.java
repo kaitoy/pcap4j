@@ -8,8 +8,10 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
@@ -41,42 +43,38 @@ public final class EthernetPacket extends AbstractPacket {
   private final byte[] pad;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new EthernetPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static EthernetPacket newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new EthernetPacket(rawData);
+  public static EthernetPacket newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new EthernetPacket(rawData, offset, length);
   }
 
-  private EthernetPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new EthernetHeader(rawData);
+  private EthernetPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    this.header = new EthernetHeader(rawData, offset, length);
 
-    int payloadLength = rawData.length - header.length();
-    if (payloadLength > 0) {
-      byte[] rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            payloadLength
-          );
+    int payloadAndPadLength = length - header.length();
+    if (payloadAndPadLength > 0) {
+      int payloadOffset = offset + header.length();
       this.payload
         = PacketFactories.getFactory(Packet.class, EtherType.class)
-            .newInstance(rawPayload, header.getType());
+            .newInstance(rawData, payloadOffset, payloadAndPadLength, header.getType());
 
-      if (rawPayload.length > payload.length()) {
+      int padLength = payloadAndPadLength - payload.length();
+      if (padLength > 0) {
         this.pad
           = ByteArrays.getSubArray(
-              rawPayload, payload.length(), rawPayload.length - payload.length()
+              rawData, payloadOffset + payload.length(), padLength
             );
       }
       else {
@@ -335,20 +333,23 @@ public final class EthernetPacket extends AbstractPacket {
     private final MacAddress srcAddr;
     private final EtherType type;
 
-    private EthernetHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < ETHERNET_HEADER_SIZE) {
+    private EthernetHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+      if (length < ETHERNET_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(100);
         sb.append("The data is too short to build an Ethernet header(")
           .append(ETHERNET_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.dstAddr = ByteArrays.getMacAddress(rawData, DST_ADDR_OFFSET);
-      this.srcAddr = ByteArrays.getMacAddress(rawData, SRC_ADDR_OFFSET);
-      this.type
-        = EtherType.getInstance(ByteArrays.getShort(rawData, TYPE_OFFSET));
+      this.dstAddr = ByteArrays.getMacAddress(rawData, DST_ADDR_OFFSET + offset);
+      this.srcAddr = ByteArrays.getMacAddress(rawData, SRC_ADDR_OFFSET + offset);
+      this.type = EtherType.getInstance(ByteArrays.getShort(rawData, TYPE_OFFSET + offset));
     }
 
     private EthernetHeader(Builder builder) {

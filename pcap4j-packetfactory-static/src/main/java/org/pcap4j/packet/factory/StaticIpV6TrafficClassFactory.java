@@ -10,6 +10,7 @@ package org.pcap4j.packet.factory;
 import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
 import org.pcap4j.packet.IpV6SimpleTrafficClass;
 import org.pcap4j.packet.namednumber.NA;
+import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
@@ -31,23 +32,14 @@ implements PacketFactory<IpV6TrafficClass, NA> {
 
   @Override
   @Deprecated
-  public IpV6TrafficClass newInstance(byte[] rawData, NA number) {
-    return newInstance(rawData);
+  public IpV6TrafficClass newInstance(byte[] rawData, int offset, int length, NA number) {
+    return newInstance(rawData, offset, length);
   }
 
   @Override
-  public IpV6TrafficClass newInstance(byte[] rawData) {
-    if (rawData == null) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("rawData: ")
-        .append(rawData);
-      throw new NullPointerException(sb.toString());
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-
-    return IpV6SimpleTrafficClass.newInstance(rawData[0]);
+  public IpV6TrafficClass newInstance(byte[] rawData, int offset, int length) {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return IpV6SimpleTrafficClass.newInstance(rawData[offset]);
   }
 
   @Override

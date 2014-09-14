@@ -34,41 +34,43 @@ implements PacketFactory<IpV6FlowLabel, NA> {
 
   @Override
   @Deprecated
-  public IpV6FlowLabel newInstance(byte[] rawData, NA number) {
-    return newInstance(rawData);
+  public IpV6FlowLabel newInstance(byte[] rawData, int offset, int length, NA number) {
+    return newInstance(rawData, offset, length);
   }
 
   @Override
-  public IpV6FlowLabel newInstance(byte[] rawData) {
-    return newInstance(rawData, getTargetClass());
+  public IpV6FlowLabel newInstance(byte[] rawData, int offset, int length) {
+    return newInstance(rawData, offset, length, getTargetClass());
   }
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @param clazz
    * @return a new IpV6FlowLabel object.
+   * @throws IllegalStateException
+   * @throws IllegalArgumentException
+   * @throws NullPointerException
    */
   public IpV6FlowLabel newInstance(
-    byte[] rawData, Class<? extends IpV6FlowLabel> clazz
+    byte[] rawData, int offset, int length, Class<? extends IpV6FlowLabel> clazz
   ) {
-    if (rawData == null || clazz == null) {
-      StringBuilder sb = new StringBuilder(50);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" clazz: ")
-        .append(clazz);
-      throw new NullPointerException(sb.toString());
+    ByteArrays.validateBounds(rawData, offset, length);
+    if (clazz == null) {
+      throw new NullPointerException("clazz is null.");
     }
-    if (rawData.length < INT_SIZE_IN_BYTES) {
-      throw new IllegalArgumentException(
-              "rawData is too short: " + ByteArrays.toHexString(rawData, " ")
-            );
+    if (length < INT_SIZE_IN_BYTES) {
+      throw new IllegalArgumentException("rawData is too short: " + length);
     }
 
     try {
       Method newInstance = clazz.getMethod("newInstance", int.class);
-      return (IpV6FlowLabel)newInstance.invoke(null, ByteArrays.getInt(rawData, 0));
+      return (IpV6FlowLabel)newInstance.invoke(null, ByteArrays.getInt(rawData, offset));
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -78,7 +80,7 @@ implements PacketFactory<IpV6FlowLabel, NA> {
     } catch (IllegalAccessException e) {
       throw new IllegalStateException(e);
     } catch (InvocationTargetException e) {
-      throw new IllegalStateException(e.getTargetException());
+      throw new IllegalArgumentException(e);
     }
   }
 

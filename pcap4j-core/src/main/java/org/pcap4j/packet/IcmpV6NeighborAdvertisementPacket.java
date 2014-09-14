@@ -30,27 +30,27 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
   private final IcmpV6NeighborAdvertisementHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IcmpV6NeighborAdvertisementPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV6NeighborAdvertisementPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IcmpV6NeighborAdvertisementPacket(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IcmpV6NeighborAdvertisementPacket(rawData, offset, length);
   }
 
-  private IcmpV6NeighborAdvertisementPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new IcmpV6NeighborAdvertisementHeader(rawData);
+  private IcmpV6NeighborAdvertisementPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new IcmpV6NeighborAdvertisementHeader(rawData, offset, length);
   }
 
   private IcmpV6NeighborAdvertisementPacket(Builder builder) {
@@ -223,41 +223,55 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
     private final List<IpV6NeighborDiscoveryOption> options;
 
     private IcmpV6NeighborAdvertisementHeader(
-      byte[] rawData
+      byte[] rawData, int offset, int length
     ) throws IllegalRawDataException {
-      if (rawData.length < OPTIONS_OFFSET) {
+      if (length < OPTIONS_OFFSET) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The raw data must be more than ")
           .append(OPTIONS_OFFSET - 1).append("bytes")
           .append(" to build this header. raw data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      int tmp = ByteArrays.getInt(rawData, R_S_O_RESERVED_OFFSET);
+      int tmp = ByteArrays.getInt(rawData, R_S_O_RESERVED_OFFSET + offset);
       this.routerFlag = (tmp & 0x80000000) != 0;
       this.solicitedFlag = (tmp & 0x40000000) != 0;
       this.overrideFlag = (tmp & 0x20000000) != 0;
       this.reserved = 0x1FFFFFFF & tmp;
-      this.targetAddress = ByteArrays.getInet6Address(rawData, TARGET_ADDRESS_OFFSET);
+      this.targetAddress = ByteArrays.getInet6Address(rawData, TARGET_ADDRESS_OFFSET + offset);
       this.options = new ArrayList<IpV6NeighborDiscoveryOption>();
-      int currentOffset = OPTIONS_OFFSET;
-      while (currentOffset < rawData.length) {
-        byte[] optRawData = ByteArrays.getSubArray(
-                              rawData,
-                              currentOffset,
-                              rawData.length - currentOffset
-                            );
+      int currentOffsetInHeader = OPTIONS_OFFSET;
+      while (currentOffsetInHeader < length) {
         IpV6NeighborDiscoveryOptionType type
-          = IpV6NeighborDiscoveryOptionType.getInstance(optRawData[0]);
-        IpV6NeighborDiscoveryOption newOne
-          = PacketFactories
-              .getFactory(
-                 IpV6NeighborDiscoveryOption.class,
-                 IpV6NeighborDiscoveryOptionType.class
-               ).newInstance(optRawData, type);
+          = IpV6NeighborDiscoveryOptionType.getInstance(rawData[currentOffsetInHeader + offset]);
+        IpV6NeighborDiscoveryOption newOne;
+        try {
+          newOne
+            = PacketFactories
+                .getFactory(
+                   IpV6NeighborDiscoveryOption.class,
+                   IpV6NeighborDiscoveryOptionType.class
+                 ).newInstance(
+                     rawData,
+                     currentOffsetInHeader + offset,
+                     length - currentOffsetInHeader,
+                     type
+                   );
+        } catch (Exception e) {
+          break;
+        }
+
+        if (currentOffsetInHeader + newOne.length() > length) {
+          break;
+        }
+
         options.add(newOne);
-        currentOffset += newOne.length();
+        currentOffsetInHeader += newOne.length();
       }
     }
 

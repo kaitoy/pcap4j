@@ -33,25 +33,32 @@ implements PacketFactory<Packet, NamedNumber<?, ?>> {
   public static PropertiesBasedPacketFactory getInstance() { return INSTANCE; }
 
 
-  public Packet newInstance(byte[] rawData, NamedNumber<?, ?> number) {
-    return newInstance(rawData, getTargetClass(number));
+  @Override
+  public Packet newInstance(byte[] rawData, int offset, int length, NamedNumber<?, ?> number) {
+    return newInstance(rawData, offset, length, getTargetClass(number));
   }
 
-  public Packet newInstance(byte[] rawData) {
-    return newInstance(rawData, getTargetClass());
+  @Override
+  public Packet newInstance(byte[] rawData, int offset, int length) {
+    return newInstance(rawData, offset, length, getTargetClass());
   }
 
   /**
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @param packetClass
    * @return a new Packet object.
+   * @throws IllegalStateException
+   * @throws IllegalArgumentException
+   * @throws NullPointerException
    */
   public Packet newInstance(
-    byte[] rawData, Class<? extends Packet> packetClass
+    byte[] rawData, int offset, int length, Class<? extends Packet> packetClass
   ) {
     if (rawData == null || packetClass == null) {
-      StringBuilder sb = new StringBuilder(50);
+      StringBuilder sb = new StringBuilder(40);
       sb.append("rawData: ")
         .append(rawData)
         .append(" packetClass: ")
@@ -60,8 +67,8 @@ implements PacketFactory<Packet, NamedNumber<?, ?>> {
     }
 
     try {
-      Method newPacket = packetClass.getMethod("newPacket", byte[].class);
-      return (Packet)newPacket.invoke(null, rawData);
+      Method newPacket = packetClass.getMethod("newPacket", byte[].class, int.class, int.class);
+      return (Packet)newPacket.invoke(null, rawData, offset, length);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -72,9 +79,9 @@ implements PacketFactory<Packet, NamedNumber<?, ?>> {
       throw new IllegalStateException(e);
     } catch (InvocationTargetException e) {
       if (e.getTargetException() instanceof IllegalRawDataException) {
-        return IllegalPacket.newPacket(rawData);
+        return IllegalPacket.newPacket(rawData, offset, length);
       }
-      throw new IllegalStateException(e);
+      throw new IllegalArgumentException(e);
     }
   }
 

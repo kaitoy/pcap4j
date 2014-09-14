@@ -136,7 +136,12 @@ public final class IpV4Helper {
      .payloadBuilder(
         new SimpleBuilder(
           PacketFactories.getFactory(Packet.class, IpNumber.class)
-            .newInstance(defragmentedPayload, list.get(0).getHeader().getProtocol())
+            .newInstance(
+               defragmentedPayload,
+               0,
+               defragmentedPayload.length,
+               list.get(0).getHeader().getProtocol()
+             )
         )
       )
      .correctChecksumAtBuild(true)
@@ -147,6 +152,7 @@ public final class IpV4Helper {
 
   private static final class ComparatorImpl implements Comparator<IpV4Packet> {
 
+    @Override
     public int compare(IpV4Packet p1, IpV4Packet p2) {
       return p1.getHeader().getFlagmentOffset()
                - p2.getHeader().getFlagmentOffset();

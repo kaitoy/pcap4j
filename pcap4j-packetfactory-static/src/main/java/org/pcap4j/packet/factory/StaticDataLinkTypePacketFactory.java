@@ -26,8 +26,10 @@ extends AbstractStaticPacketFactory<DataLinkType> {
     instantiaters.put(
       DataLinkType.EN10MB, new PacketInstantiater() {
         @Override
-        public Packet newInstance(byte[] rawData) throws IllegalRawDataException {
-          return EthernetPacket.newPacket(rawData);
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return EthernetPacket.newPacket(rawData, offset, length);
         }
         @Override
         public Class<EthernetPacket> getTargetClass() {

@@ -109,7 +109,8 @@ public class IcmpV6RouterSolicitationPacketTest extends AbstractPacketTest {
   public void testNewPacket() {
     try {
       IcmpV6RouterSolicitationPacket p
-        = IcmpV6RouterSolicitationPacket.newPacket(packet.getRawData());
+        = IcmpV6RouterSolicitationPacket
+            .newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);

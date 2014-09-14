@@ -8,8 +8,10 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -110,22 +112,26 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
     private final short identifier;
     private final short sequenceNumber;
 
-    protected IcmpIdentifiableHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < ICMP_IDENTIFIABLE_HEADER_SIZE) {
+    protected IcmpIdentifiableHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+      if (length < ICMP_IDENTIFIABLE_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ")
           .append(getHeaderName())
           .append("(")
           .append(ICMP_IDENTIFIABLE_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.identifier
-        = ByteArrays.getShort(rawData, IDENTIFIER_OFFSET);
+        = ByteArrays.getShort(rawData, IDENTIFIER_OFFSET + offset);
       this.sequenceNumber
-        = ByteArrays.getShort(rawData, SEQUENCE_NUMBER_OFFSET);
+        = ByteArrays.getShort(rawData, SEQUENCE_NUMBER_OFFSET + offset);
     }
 
     protected IcmpIdentifiableHeader(Builder builder) {

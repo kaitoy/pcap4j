@@ -33,48 +33,35 @@ public final class UdpPacket extends AbstractPacket {
   private final Packet payload;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
+   *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new UdpPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static UdpPacket newPacket(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new UdpPacket(rawData);
+  public static UdpPacket newPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new UdpPacket(rawData, offset, length);
   }
 
-  private UdpPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new UdpHeader(rawData);
+  private UdpPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    this.header = new UdpHeader(rawData, offset, length);
 
     int payloadLength = header.getLengthAsInt() - header.length();
     if (payloadLength > 0) {
-      byte[] rawPayload;
-      if (payloadLength > rawData.length - header.length()) {
-        rawPayload
-          = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            rawData.length - header.length()
-          );
-      }
-      else {
-        rawPayload
-          = ByteArrays.getSubArray(
-              rawData,
-              header.length(),
-              payloadLength
-            );
+      if (payloadLength > length - header.length()) {
+        payloadLength = length - header.length();
       }
 
       this.payload
         = PacketFactories.getFactory(Packet.class, UdpPort.class)
-            .newInstance(rawPayload, header.getDstPort());
+            .newInstance(rawData, offset + header.length(), payloadLength, header.getDstPort());
     }
     else if (payloadLength < 0) {
       throw new IllegalRawDataException(
@@ -396,22 +383,26 @@ public final class UdpPacket extends AbstractPacket {
     private final short length;
     private final short checksum;
 
-    private UdpHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < UCP_HEADER_SIZE) {
+    private UdpHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+      if (length < UCP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build a UDP header(")
           .append(UCP_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.srcPort
-        = UdpPort.getInstance(ByteArrays.getShort(rawData, SRC_PORT_OFFSET));
+        = UdpPort.getInstance(ByteArrays.getShort(rawData, SRC_PORT_OFFSET + offset));
       this.dstPort
-        = UdpPort.getInstance(ByteArrays.getShort(rawData, DST_PORT_OFFSET));
-      this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET);
-      this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET);
+        = UdpPort.getInstance(ByteArrays.getShort(rawData, DST_PORT_OFFSET + offset));
+      this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET + offset);
+      this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET + offset);
     }
 
     private UdpHeader(Builder builder, byte[] payload) {

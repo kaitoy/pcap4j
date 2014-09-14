@@ -44,37 +44,42 @@ public final class IpV4NoOperationOption implements IpV4Option {
   public static IpV4NoOperationOption getInstance() { return INSTANCE; }
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return the singleton instance of IpV4NoOperationOption.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV4NoOperationOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    if (rawData[0] != type.value()) {
+    ByteArrays.validateBounds(rawData, offset, length);
+    if (rawData[offset] != type.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The type must be: ")
         .append(type.valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     return getInstance();
   }
 
+  @Override
   public IpV4OptionType getType() { return type; }
 
+  @Override
   public int length() { return 1; }
 
+  @Override
   public byte[] getRawData() { return new byte[] {(byte)1}; }
 
   @Override

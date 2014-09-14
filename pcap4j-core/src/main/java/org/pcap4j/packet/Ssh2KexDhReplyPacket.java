@@ -26,27 +26,27 @@ public final class Ssh2KexDhReplyPacket extends AbstractPacket {
   private final Ssh2KexDhReplyHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new Ssh2KexDhReplyPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static Ssh2KexDhReplyPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new Ssh2KexDhReplyPacket(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new Ssh2KexDhReplyPacket(rawData, offset, length);
   }
 
-  private Ssh2KexDhReplyPacket(byte[] rawData) throws IllegalRawDataException {
-    this.header = new Ssh2KexDhReplyHeader(rawData);
+  private Ssh2KexDhReplyPacket(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    this.header = new Ssh2KexDhReplyHeader(rawData, offset, length);
   }
 
   private Ssh2KexDhReplyPacket(Builder builder) {
@@ -162,27 +162,42 @@ public final class Ssh2KexDhReplyPacket extends AbstractPacket {
     private final Ssh2MpInt f;
     private final Ssh2String signatureOfH;
 
-    private Ssh2KexDhReplyHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < 13) {
+    private Ssh2KexDhReplyHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < 13) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 KEX DH reply header. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
-
-      if (!Ssh2MessageNumber.getInstance(rawData[0]).equals(Ssh2MessageNumber.SSH_MSG_KEXDH_REPLY)) {
+      if (
+        !Ssh2MessageNumber.getInstance(rawData[offset])
+          .equals(Ssh2MessageNumber.SSH_MSG_KEXDH_REPLY)
+      ) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is not an SSH2 KEX DH reply message. data: ")
-          .append(new String(rawData));
+          .append(new String(rawData))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      int offset = 1;
-      this.k_s = new Ssh2String(ByteArrays.getSubArray(rawData, offset));
-      offset += k_s.length();
-      this.f = new Ssh2MpInt(ByteArrays.getSubArray(rawData, offset));
-      offset += f.length();
-      this.signatureOfH = new Ssh2String(ByteArrays.getSubArray(rawData, offset));
+      int currentOffset = 1 + offset;
+      int remainingLength = length - 1;
+      this.k_s = new Ssh2String(rawData, currentOffset, remainingLength);
+      currentOffset += k_s.length();
+      remainingLength -= k_s.length();
+      this.f = new Ssh2MpInt(rawData, currentOffset, remainingLength);
+      currentOffset += f.length();
+      remainingLength -= f.length();
+      this.signatureOfH = new Ssh2String(rawData, currentOffset, remainingLength);
     }
 
     private Ssh2KexDhReplyHeader(Builder builder) {

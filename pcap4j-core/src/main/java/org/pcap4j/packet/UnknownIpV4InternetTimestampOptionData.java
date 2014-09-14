@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012 Kaito Yamada
+  _##  Copyright (C) 2012-2014 Kaito Yamada
   _##
   _##########################################################################
 */
@@ -26,29 +26,31 @@ implements IpV4InternetTimestampOptionData {
   private final byte[] rawData;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
-   * @return a new UnknownIpV4InternetTimestampData object.
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
+   * @param offset
+   * @param length
+   * @return a new UnknownIpV4InternetTimestampOptionData object.
    */
-  public static UnknownIpV4InternetTimestampOptionData newInstance(byte[] rawData) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new UnknownIpV4InternetTimestampOptionData(rawData);
+  public static UnknownIpV4InternetTimestampOptionData newInstance(
+    byte[] rawData, int offset, int length
+  ) {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new UnknownIpV4InternetTimestampOptionData(rawData, offset, length);
   }
 
-  private UnknownIpV4InternetTimestampOptionData(byte[] rawData) {
-    this.rawData = new byte[rawData.length];
-    System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);
+  private UnknownIpV4InternetTimestampOptionData(byte[] rawData, int offset, int length) {
+    this.rawData = new byte[length];
+    System.arraycopy(rawData, offset, this.rawData, 0, length);
   }
 
+  @Override
   public int length() { return rawData.length; }
 
+  @Override
   public byte[] getRawData() {
     byte[] copy = new byte[rawData.length];
     System.arraycopy(rawData, 0, copy, 0, rawData.length);

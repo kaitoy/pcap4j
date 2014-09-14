@@ -31,49 +31,57 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
   private final List<Inet6Address> addresses;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IpV6RoutingSourceRouteData object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV6RoutingSourceRouteData newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IpV6RoutingSourceRouteData(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IpV6RoutingSourceRouteData(rawData, offset, length);
   }
 
-  private IpV6RoutingSourceRouteData(byte[] rawData) throws IllegalRawDataException {
-    if (rawData.length < 4) {
+  private IpV6RoutingSourceRouteData(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    if (length < 4) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("rawData length must be more than 3. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (((rawData.length - 4) % INET6_ADDRESS_SIZE_IN_BYTES) != 0) {
+    if (((length - 4) % INET6_ADDRESS_SIZE_IN_BYTES) != 0) {
       StringBuilder sb = new StringBuilder(100);
-      sb.append("(rawData.length -4 ) % ").append(INET6_ADDRESS_SIZE_IN_BYTES)
+      sb.append("(length -4 ) % ").append(INET6_ADDRESS_SIZE_IN_BYTES)
         .append(" must be 0. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.reserved = ByteArrays.getInt(rawData, 0);
+    this.reserved = ByteArrays.getInt(rawData, offset);
     this.addresses = new ArrayList<Inet6Address>();
 
     for (
       int i = INT_SIZE_IN_BYTES;
-      i < rawData.length;
+      i < length;
       i += INET6_ADDRESS_SIZE_IN_BYTES
     ) {
-      addresses.add(ByteArrays.getInet6Address(rawData, i));
+      addresses.add(ByteArrays.getInet6Address(rawData, i + offset));
     }
   }
 
@@ -90,10 +98,12 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
     this.addresses = new ArrayList<Inet6Address>(addresses);
   }
 
+  @Override
   public int length() {
     return addresses.size() * INET6_ADDRESS_SIZE_IN_BYTES + INT_SIZE_IN_BYTES;
   }
 
+  @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     System.arraycopy(

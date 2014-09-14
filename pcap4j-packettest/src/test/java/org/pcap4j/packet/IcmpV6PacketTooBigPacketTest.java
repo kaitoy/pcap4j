@@ -129,7 +129,7 @@ public class IcmpV6PacketTooBigPacketTest extends AbstractPacketTest {
   public void testNewPacket() {
     IcmpV6PacketTooBigPacket p;
     try {
-      p = IcmpV6PacketTooBigPacket.newPacket(packet.getRawData());
+      p = IcmpV6PacketTooBigPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
     }

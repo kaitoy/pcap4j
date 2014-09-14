@@ -47,56 +47,65 @@ implements IpV6NeighborDiscoveryOption {
   private final byte[] linkLayerAddress;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IpV6NeighborDiscoverySourceLinkLayerAddressOption object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV6NeighborDiscoverySourceLinkLayerAddressOption newInstance(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new IpV6NeighborDiscoverySourceLinkLayerAddressOption(rawData);
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IpV6NeighborDiscoverySourceLinkLayerAddressOption(rawData, offset, length);
   }
 
   private IpV6NeighborDiscoverySourceLinkLayerAddressOption(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData.length < 8) {
+    if (length < 8) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 7. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[TYPE_OFFSET] != getType().value()) {
+    if (rawData[TYPE_OFFSET + offset] != getType().value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The type must be: ")
         .append(getType().valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.length = rawData[LENGTH_OFFSET];
-
-    if (rawData.length < length * 8) {
+    this.length = rawData[LENGTH_OFFSET + offset];
+    if (length < this.length * 8) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option. ")
-        .append(length * 8)
+        .append(this.length * 8)
         .append(" bytes data is needed. data: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.linkLayerAddress = ByteArrays.getSubArray(
-      rawData, LINK_LAYER_ADDRESS_OFFSET, length * 8 - LINK_LAYER_ADDRESS_OFFSET
+      rawData, LINK_LAYER_ADDRESS_OFFSET + offset, this.length * 8 - LINK_LAYER_ADDRESS_OFFSET
     );
   }
 
@@ -131,6 +140,7 @@ implements IpV6NeighborDiscoveryOption {
     }
   }
 
+  @Override
   public IpV6NeighborDiscoveryOptionType getType() {
     return type;
   }
@@ -165,10 +175,12 @@ implements IpV6NeighborDiscoveryOption {
     return MacAddress.getByAddress(linkLayerAddress);
   }
 
+  @Override
   public int length() {
     return linkLayerAddress.length + LINK_LAYER_ADDRESS_OFFSET;
   }
 
+  @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[TYPE_OFFSET] = getType().value();
@@ -255,11 +267,13 @@ implements IpV6NeighborDiscoveryOption {
       return this;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
+    @Override
     public IpV6NeighborDiscoverySourceLinkLayerAddressOption build() {
       return new IpV6NeighborDiscoverySourceLinkLayerAddressOption(this);
     }

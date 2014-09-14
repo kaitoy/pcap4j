@@ -23,25 +23,23 @@ public final class FragmentedPacket extends AbstractPacket {
   private final byte[] rawData;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new FragmentedPacket object.
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
-  public static FragmentedPacket newPacket(byte[] rawData) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    return new FragmentedPacket(rawData);
+  public static FragmentedPacket newPacket(byte[] rawData, int offset, int length) {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new FragmentedPacket(rawData, offset, length);
   }
 
-  private FragmentedPacket(byte[] rawData) {
-    this.rawData = new byte[rawData.length];
-    System.arraycopy(rawData, 0, this.rawData, 0, rawData.length);
+  private FragmentedPacket(byte[] rawData, int offset, int length) {
+    this.rawData = new byte[length];
+    System.arraycopy(rawData, offset, this.rawData, 0, length);
   }
 
   private FragmentedPacket(Builder builder) {

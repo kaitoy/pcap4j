@@ -25,35 +25,29 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
   private final IpV6ExtDestinationOptionsHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IpV6ExtDestinationOptionsPacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IpV6ExtDestinationOptionsPacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
+    ByteArrays.validateBounds(rawData, offset, length);
 
     IpV6ExtDestinationOptionsHeader optHeader
-      = new IpV6ExtDestinationOptionsHeader(rawData);
+      = new IpV6ExtDestinationOptionsHeader(rawData, offset, length);
 
-    int payloadLength = rawData.length - optHeader.length();
+    int payloadLength = length - optHeader.length();
     if (payloadLength > 0) {
-      byte[] rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            optHeader.length(),
-            payloadLength
-          );
-      return new IpV6ExtDestinationOptionsPacket(rawPayload, optHeader);
+      return new IpV6ExtDestinationOptionsPacket(
+               rawData, offset + optHeader.length(), payloadLength, optHeader
+             );
     }
     else {
       return new IpV6ExtDestinationOptionsPacket(optHeader);
@@ -65,9 +59,10 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
   }
 
   private IpV6ExtDestinationOptionsPacket(
-    byte[] rawPayload, IpV6ExtDestinationOptionsHeader optHeader
+    byte[] rawData, int payloadOffset, int payloadLength,
+    IpV6ExtDestinationOptionsHeader optHeader
   ) {
-    super(rawPayload, optHeader.getNextHeader());
+    super(rawData, payloadOffset, payloadLength, optHeader.getNextHeader());
     this.header = optHeader;
   }
 
@@ -159,8 +154,10 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
      */
     private static final long serialVersionUID = 4686702407537705400L;
 
-    private IpV6ExtDestinationOptionsHeader(byte[] rawData) throws IllegalRawDataException {
-      super(rawData);
+    private IpV6ExtDestinationOptionsHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      super(rawData, offset, length);
     }
 
     private IpV6ExtDestinationOptionsHeader(Builder builder) { super(builder); }

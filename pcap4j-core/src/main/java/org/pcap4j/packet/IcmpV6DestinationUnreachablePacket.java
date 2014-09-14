@@ -8,8 +8,10 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -27,35 +29,29 @@ extends IcmpV6InvokingPacketPacket {
   private final IcmpV6DestinationUnreachableHeader header;
 
   /**
+   * A static factory method.
+   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
+   * which may throw exceptions undocumented here.
    *
    * @param rawData
+   * @param offset
+   * @param length
    * @return a new IcmpV6DestinationUnreachablePacket object.
    * @throws IllegalRawDataException
-   * @throws NullPointerException if the rawData argument is null.
-   * @throws IllegalArgumentException if the rawData argument is empty.
    */
   public static IcmpV6DestinationUnreachablePacket newPacket(
-    byte[] rawData
+    byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
+    ByteArrays.validateBounds(rawData, offset, length);
 
     IcmpV6DestinationUnreachableHeader header
-      = new IcmpV6DestinationUnreachableHeader(rawData);
+      = new IcmpV6DestinationUnreachableHeader(rawData, offset, length);
 
-    int payloadLength = rawData.length - header.length();
+    int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      byte[] rawPayload
-        = ByteArrays.getSubArray(
-            rawData,
-            header.length(),
-            payloadLength
-          );
-      return new IcmpV6DestinationUnreachablePacket(header, rawPayload);
+      return new IcmpV6DestinationUnreachablePacket(
+               header, rawData, offset + header.length(), payloadLength
+             );
     }
     else {
       return new IcmpV6DestinationUnreachablePacket(header);
@@ -67,9 +63,9 @@ extends IcmpV6InvokingPacketPacket {
   }
 
   private IcmpV6DestinationUnreachablePacket(
-    IcmpV6DestinationUnreachableHeader header, byte[] rawPayload
+    IcmpV6DestinationUnreachableHeader header, byte[] rawData, int payloadOffset, int payloadLength
   ) {
-    super(rawPayload);
+    super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }
 
@@ -158,18 +154,23 @@ extends IcmpV6InvokingPacketPacket {
 
     private final int unused;
 
-    private IcmpV6DestinationUnreachableHeader(byte[] rawData) throws IllegalRawDataException {
-      if (rawData.length < ICMPV6_DESTINATION_UNREACHABLE_HEADER_SIZE) {
+    private IcmpV6DestinationUnreachableHeader(
+      byte[] rawData, int offset, int length
+    ) throws IllegalRawDataException {
+      if (length < ICMPV6_DESTINATION_UNREACHABLE_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv6 Destination Unreachable Header(")
           .append(ICMPV6_DESTINATION_UNREACHABLE_HEADER_SIZE)
           .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "));
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.unused
-        = ByteArrays.getInt(rawData, UNUSED_OFFSET);
+      this.unused = ByteArrays.getInt(rawData, UNUSED_OFFSET + offset);
     }
 
     private IcmpV6DestinationUnreachableHeader(Builder builder) {

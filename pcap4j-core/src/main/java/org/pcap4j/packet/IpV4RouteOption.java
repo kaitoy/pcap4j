@@ -8,10 +8,12 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.util.ByteArrays;
@@ -31,49 +33,57 @@ abstract class IpV4RouteOption implements IpV4Option {
   private final byte pointer;
   private final List<Inet4Address> routeData;
 
-  protected IpV4RouteOption(byte[] rawData) throws IllegalRawDataException {
-    if (rawData == null) {
-      throw new NullPointerException("rawData must not be null.");
-    }
-    if (rawData.length == 0) {
-      throw new IllegalArgumentException("rawData is empty.");
-    }
-    if (rawData.length < 3) {
+  protected IpV4RouteOption(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
+    if (length < 3) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data length must be more than 2. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (rawData[0] != getType().value()) {
+    if (rawData[0 + offset] != getType().value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The type must be: ")
         .append(getType().valueAsString())
         .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.length = rawData[1];
+    this.length = rawData[1 + offset];
 
-    if (rawData.length < length) {
+    if (length < this.length) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option(")
-        .append(length)
+        .append(this.length)
         .append("). data: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if ((length - 3) % INET4_ADDRESS_SIZE_IN_BYTES != 0) {
+    if ((this.length - 3) % INET4_ADDRESS_SIZE_IN_BYTES != 0) {
       throw new IllegalRawDataException(
-                  "Invalid length for this option: " + length
+                  "Invalid length for this option: " + this.length
                 );
     }
 
-    this.pointer = rawData[2];
+    this.pointer = rawData[2 + offset];
 
     this.routeData = new ArrayList<Inet4Address>();
-    for (int i = 3; i < length; i += INET4_ADDRESS_SIZE_IN_BYTES) {
-      routeData.add(ByteArrays.getInet4Address(rawData, i));
+    for (int i = 3; i < this.length; i += INET4_ADDRESS_SIZE_IN_BYTES) {
+      routeData.add(ByteArrays.getInet4Address(rawData, i + offset));
     }
   }
 
