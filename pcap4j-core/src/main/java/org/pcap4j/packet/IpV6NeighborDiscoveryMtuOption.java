@@ -106,10 +106,11 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     this.length = rawData[LENGTH_OFFSET + offset];
-    if (this.length * 8 != IPV6_NEIGHBOR_DISCOVERY_MTU_OPTION_SIZE) {
+    int lengthFieldAsInt = getLengthAsInt();
+    if (lengthFieldAsInt * 8 != IPV6_NEIGHBOR_DISCOVERY_MTU_OPTION_SIZE) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("Illegal value in the length field: ")
-        .append(this.length);
+        .append(lengthFieldAsInt);
       throw new IllegalRawDataException(sb.toString());
     }
 

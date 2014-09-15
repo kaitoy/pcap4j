@@ -141,9 +141,10 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     this.length = rawData[LENGTH_OFFSET + offset];
-    if (this.length * 8 != IPV6_NEIGHBOR_DISCOVERY_PREFIX_INFORMATION_OPTION_SIZE) {
+    int lengthFieldAsInt = getLengthAsInt();
+    if (lengthFieldAsInt * 8 != IPV6_NEIGHBOR_DISCOVERY_PREFIX_INFORMATION_OPTION_SIZE) {
       throw new IllegalRawDataException(
-                  "Invalid value of length field: " + this.length
+                  "Invalid value of length field: " + lengthFieldAsInt
                 );
     }
 

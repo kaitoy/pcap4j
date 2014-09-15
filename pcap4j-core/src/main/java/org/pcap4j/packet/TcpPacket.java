@@ -639,7 +639,7 @@ public final class TcpPacket extends AbstractPacket {
       this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET + offset);
       this.urgentPointer = ByteArrays.getShort(rawData, URGENT_POINTER_OFFSET + offset);
 
-      int headerLength = dataOffset * 4;
+      int headerLength = getDataOffsetAsInt() * 4;
       if (length < headerLength) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build this header(")
@@ -881,6 +881,12 @@ public final class TcpPacket extends AbstractPacket {
      * @return dataOffset
      */
     public byte getDataOffset() { return dataOffset; }
+
+
+    /**
+     * @return dataOffset
+     */
+    public int getDataOffsetAsInt() { return 0xFF & dataOffset; }
 
     /**
      * @return reserved

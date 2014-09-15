@@ -93,11 +93,11 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     }
 
     this.length = rawData[1 + offset];
-
-    if (length < this.length) {
+    int lengthFieldAsInt = getLengthAsInt();
+    if (length < lengthFieldAsInt) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option(")
-        .append(this.length)
+        .append(getLengthAsInt())
         .append("). data: ")
         .append(ByteArrays.toHexString(rawData, " "))
         .append(", offset: ")
@@ -106,9 +106,9 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
         .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (this.length % INT_SIZE_IN_BYTES != 0) {
+    if (lengthFieldAsInt % INT_SIZE_IN_BYTES != 0) {
       throw new IllegalRawDataException(
-                  "Invalid length for this option: " + this.length
+                  "Invalid length for this option: " + lengthFieldAsInt
                 );
     }
 
@@ -121,7 +121,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
           .getFactory(
              IpV4InternetTimestampOptionData.class,
              IpV4InternetTimestampOptionFlag.class
-           ).newInstance(rawData, 4 + offset, this.length, flag);
+           ).newInstance(rawData, 4 + offset, lengthFieldAsInt, flag);
   }
 
   private IpV4InternetTimestampOption(Builder builder) {

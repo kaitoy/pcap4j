@@ -94,24 +94,25 @@ public final class TcpSackOption implements TcpOption {
     }
 
     this.length = rawData[1 + offset];
-    if (this.length < 2) {
+    int lengthFieldAsInt = getLengthAsInt();
+    if (lengthFieldAsInt < 2) {
       throw new IllegalRawDataException(
-                  "The value of length field must be  more than 1 but: " + this.length
+                  "The value of length field must be  more than 1 but: " + lengthFieldAsInt
                 );
     }
 
-    if ((this.length - 2) % (INT_SIZE_IN_BYTES * 2) != 0) {
+    if ((lengthFieldAsInt - 2) % (INT_SIZE_IN_BYTES * 2) != 0) {
       StringBuilder sb = new StringBuilder(100);
       sb.append(
            "The value of length field must be an integer multiple of 8 octets long but: "
          )
-        .append(this.length);
+        .append(lengthFieldAsInt);
       throw new IllegalRawDataException(sb.toString());
     }
-    if (length < this.length) {
+    if (length < lengthFieldAsInt) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("rawData is too short. length field: ")
-        .append(this.length)
+        .append(lengthFieldAsInt)
         .append(", rawData: ")
         .append(ByteArrays.toHexString(rawData, " "))
         .append(", offset: ")
@@ -121,7 +122,7 @@ public final class TcpSackOption implements TcpOption {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    for (int i = 2; i < this.length; i += INT_SIZE_IN_BYTES * 2) {
+    for (int i = 2; i < lengthFieldAsInt; i += INT_SIZE_IN_BYTES * 2) {
       sacks.add(
         new Sack(
           ByteArrays.getInt(rawData, i + offset),

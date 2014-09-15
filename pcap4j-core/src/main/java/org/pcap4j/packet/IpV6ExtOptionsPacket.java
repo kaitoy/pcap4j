@@ -231,7 +231,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
       this.hdrExtLen
         = ByteArrays.getByte(rawData, HDR_EXT_LEN_OFFSET + offset);
 
-      int headerLength = ((hdrExtLen & 0xFF) + 1) * 8;
+      int headerLength = (getHdrExtLenAsInt() + 1) * 8;
       if (length < headerLength) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an ")

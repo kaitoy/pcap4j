@@ -78,10 +78,11 @@ public final class IpV6PadNOption implements IpV6Option {
     }
 
     this.dataLen = rawData[1 + offset];
-    if (this.dataLen > length - 2)  {
+    int dataLenAsInt = getDataLenAsInt();
+    if (dataLenAsInt > length - 2)  {
       StringBuilder sb = new StringBuilder(100);
       sb.append("rawData is too short. dataLen field: ")
-        .append(this.dataLen)
+        .append(dataLenAsInt)
         .append(", rawData: ")
         .append(ByteArrays.toHexString(rawData, " "))
         .append(", offset: ")
@@ -91,7 +92,7 @@ public final class IpV6PadNOption implements IpV6Option {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.data = ByteArrays.getSubArray(rawData, 2 + offset, dataLen);
+    this.data = ByteArrays.getSubArray(rawData, 2 + offset, dataLenAsInt);
   }
 
   private IpV6PadNOption(Builder builder) {

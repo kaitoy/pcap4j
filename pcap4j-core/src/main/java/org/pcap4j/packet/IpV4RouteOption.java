@@ -8,12 +8,10 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
-
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.util.ByteArrays;
@@ -60,11 +58,11 @@ abstract class IpV4RouteOption implements IpV4Option {
     }
 
     this.length = rawData[1 + offset];
-
-    if (length < this.length) {
+    int lengthFieldAsInt = getLengthAsInt();
+    if (length < lengthFieldAsInt) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option(")
-        .append(this.length)
+        .append(lengthFieldAsInt)
         .append("). data: ")
         .append(ByteArrays.toHexString(rawData, " "))
         .append(", offset: ")
@@ -73,16 +71,16 @@ abstract class IpV4RouteOption implements IpV4Option {
         .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    if ((this.length - 3) % INET4_ADDRESS_SIZE_IN_BYTES != 0) {
+    if ((lengthFieldAsInt - 3) % INET4_ADDRESS_SIZE_IN_BYTES != 0) {
       throw new IllegalRawDataException(
-                  "Invalid length for this option: " + this.length
+                  "Invalid length for this option: " + lengthFieldAsInt
                 );
     }
 
     this.pointer = rawData[2 + offset];
 
     this.routeData = new ArrayList<Inet4Address>();
-    for (int i = 3; i < this.length; i += INET4_ADDRESS_SIZE_IN_BYTES) {
+    for (int i = 3; i < lengthFieldAsInt; i += INET4_ADDRESS_SIZE_IN_BYTES) {
       routeData.add(ByteArrays.getInet4Address(rawData, i + offset));
     }
   }
@@ -109,6 +107,7 @@ abstract class IpV4RouteOption implements IpV4Option {
     }
   }
 
+  @Override
   public abstract IpV4OptionType getType();
 
   /**
@@ -143,8 +142,10 @@ abstract class IpV4RouteOption implements IpV4Option {
     return new ArrayList<Inet4Address>(routeData);
   }
 
+  @Override
   public int length() { return routeData.size() * 4 + 3; }
 
+  @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[0] = getType().value();
@@ -252,11 +253,13 @@ abstract class IpV4RouteOption implements IpV4Option {
       return this;
     }
 
+    @Override
     public Builder<T> correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
+    @Override
     public abstract T build();
 
   }

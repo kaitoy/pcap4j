@@ -532,7 +532,7 @@ public final class IpV4Packet extends AbstractPacket {
       this.dstAddr
         = ByteArrays.getInet4Address(rawData, DST_ADDR_OFFSET + offset);
 
-      int headerLength = ihl * 4;
+      int headerLength = getIhlAsInt() * 4;
       if (length < headerLength) {
         StringBuilder sb = new StringBuilder(110);
         sb.append("The data is too short to build an IPv4 header(")
@@ -689,6 +689,14 @@ public final class IpV4Packet extends AbstractPacket {
      */
     public byte getIhl() {
       return ihl;
+    }
+
+    /**
+     *
+     * @return ihl
+     */
+    public int getIhlAsInt() {
+      return 0xFF & ihl;
     }
 
     /**
