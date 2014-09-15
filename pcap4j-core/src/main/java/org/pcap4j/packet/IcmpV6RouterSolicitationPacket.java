@@ -193,10 +193,6 @@ public final class IcmpV6RouterSolicitationPacket extends AbstractPacket {
           break;
         }
 
-        if (currentOffsetInHeader + newOne.length() > length) {
-          break;
-        }
-
         options.add(newOne);
         currentOffsetInHeader += newOne.length();
       }

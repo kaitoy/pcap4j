@@ -565,10 +565,6 @@ public final class IpV4Packet extends AbstractPacket {
           break;
         }
 
-        if (currentOffsetInHeader + newOne.length() > headerLength) {
-          break;
-        }
-
         options.add(newOne);
         currentOffsetInHeader += newOne.length();
 

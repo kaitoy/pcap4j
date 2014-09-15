@@ -223,10 +223,6 @@ public final class IcmpV6NeighborSolicitationPacket extends AbstractPacket {
           break;
         }
 
-        if (currentOffsetInHeader + newOne.length() > length) {
-          break;
-        }
-
         options.add(newOne);
         currentOffsetInHeader += newOne.length();
       }

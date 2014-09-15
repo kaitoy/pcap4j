@@ -232,6 +232,7 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
       this.destinationAddress
         = ByteArrays.getInet6Address(rawData, DESTINATION_ADDRESS_OFFSET + offset);
       this.options = new ArrayList<IpV6NeighborDiscoveryOption>();
+
       int currentOffsetInHeader = OPTIONS_OFFSET;
       while (currentOffsetInHeader < length) {
         IpV6NeighborDiscoveryOptionType type
@@ -250,10 +251,6 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
                      type
                    );
         } catch (Exception e) {
-          break;
-        }
-
-        if (currentOffsetInHeader + newOne.length() > length) {
           break;
         }
 

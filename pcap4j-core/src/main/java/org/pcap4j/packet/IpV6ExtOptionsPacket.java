@@ -267,10 +267,6 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
           break;
         }
 
-        if (currentOffsetInHeader + newOne.length() > headerLength) {
-          break;
-        }
-
         options.add(newOne);
         currentOffsetInHeader += newOne.length();
       }
