@@ -56,6 +56,9 @@ public class IpV4HelperTest {
     resourceDir
       = System.getProperty(AbstractPacketTest.class.getName() + ".resourceDir");
     tmpDir = System.getProperty(AbstractPacketTest.class.getName() + ".tmpDir");
+    if (tmpDir == null) {
+      tmpDir = System.getProperty("java.io.tmpdir");
+    }
   }
 
   @After
