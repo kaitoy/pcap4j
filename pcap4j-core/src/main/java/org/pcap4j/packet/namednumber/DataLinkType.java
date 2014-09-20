@@ -57,6 +57,12 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
   /**
    *
    */
+  public static final DataLinkType RAW
+    = new DataLinkType(12, "RAW"); // RAW IP packet
+
+  /**
+   *
+   */
   public static final DataLinkType IEEE802_11
     = new DataLinkType(105, "Wireless"); // IEEE 802.11 wireless
 

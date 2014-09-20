@@ -30,8 +30,12 @@ public class PcapHandleTest {
 
   @Before
   public void setUp() throws Exception {
-    ph = Pcaps.findAllDevs().get(0)
-           .openLive(55555, PromiscuousMode.PROMISCUOUS, 100);
+    try {
+      ph = Pcaps.findAllDevs().get(0)
+        .openLive(55555, PromiscuousMode.PROMISCUOUS, 100);
+    } catch (IndexOutOfBoundsException e) {
+      ph = Pcaps.openDead(DataLinkType.EN10MB, 2048);
+    }
   }
 
   @After
@@ -43,8 +47,12 @@ public class PcapHandleTest {
 
   @Test
   public void testGetStats() throws Exception {
-    PcapStat ps = ph.getStats();
-    assertNotNull(ps);
+    try {
+      PcapStat ps = ph.getStats();
+      assertNotNull(ps);
+    } catch (PcapNativeException e) {
+      assertEquals("Statistics aren't available from a pcap_open_dead pcap_t", e.getMessage());
+    }
   }
 
   @Test

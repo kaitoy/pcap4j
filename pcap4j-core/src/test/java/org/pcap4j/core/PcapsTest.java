@@ -37,7 +37,7 @@ public class PcapsTest {
   public void testFindAllDevs() throws Exception {
     List<PcapNetworkInterface> devs = Pcaps.findAllDevs();
     assertNotNull(devs);
-    assertTrue(devs.size() != 0);
+    assertTrue(devs.size() != 0 || !System.getProperty("user.name").equals("root"));
 
     for (PcapNetworkInterface dev: devs) {
       logger.info(dev.toString());
@@ -56,7 +56,13 @@ public class PcapsTest {
 
   @Test
   public void testLookupDev() throws Exception {
-    String dev = Pcaps.lookupDev();
+    String dev;
+    try {
+      dev = Pcaps.lookupDev();
+    } catch (PcapNativeException e) {
+      assertEquals("no suitable device found", e.getMessage());
+      return;
+    }
     assertNotNull(dev);
     assertTrue(dev.length() != 0);
     logger.info(Pcaps.lookupDev());
