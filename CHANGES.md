@@ -2,6 +2,7 @@ Future
 ======
 ### New Features ###
 * Add SSH2 support.
+* [Pulls#23](https://github.com/kaitoy/pcap4j/pull/23): Add support for a data link type DLT_RAW.
 
 ### Bug Fixes ###
 

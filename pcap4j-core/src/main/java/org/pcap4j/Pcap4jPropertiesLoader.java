@@ -44,6 +44,11 @@ public final class Pcap4jPropertiesLoader {
     */
    public static final String AF_LINK_KEY = KEY_PREFIX + ".af.link";
 
+   /**
+    *
+    */
+   public static final String DLT_RAW_KEY = KEY_PREFIX + ".dlt.raw";
+
    private static final Pcap4jPropertiesLoader INSTANCE = new Pcap4jPropertiesLoader();
 
    private PropertiesLoader loader
@@ -108,6 +113,19 @@ public final class Pcap4jPropertiesLoader {
   public Integer getAfLink() {
     return loader.getInteger(
              AF_LINK_KEY ,
+             null
+           );
+  }
+
+
+  /**
+   * DLT_RAW
+   *
+   * @return the value of DLT_RAW
+   */
+  public Integer getDltRaw() {
+    return loader.getInteger(
+             DLT_RAW_KEY ,
              null
            );
   }

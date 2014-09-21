@@ -26,9 +26,9 @@ public abstract class AbstractPacketTest {
   private static final Logger logger
     = LoggerFactory.getLogger(AbstractPacketTest.class);
 
-  private static final String RESOURCE_DIR_PROP
+  public static final String RESOURCE_DIR_PROP
     = AbstractPacketTest.class.getName() + ".resourceDir";
-  private static final String TMP_DIR_PROP
+  public static final String TMP_DIR_PROP
     = AbstractPacketTest.class.getName() + ".tmpDir";
 
   private String originalLineSeparator;

@@ -53,12 +53,8 @@ public class IpV4HelperTest {
 
   @Before
   public void setUp() throws Exception {
-    resourceDir
-      = System.getProperty(AbstractPacketTest.class.getName() + ".resourceDir");
-    tmpDir = System.getProperty(AbstractPacketTest.class.getName() + ".tmpDir");
-    if (tmpDir == null) {
-      tmpDir = System.getProperty("java.io.tmpdir");
-    }
+    resourceDir = System.getProperty(AbstractPacketTest.RESOURCE_DIR_PROP, "src/test/resources");
+    tmpDir = System.getProperty(AbstractPacketTest.TMP_DIR_PROP, "testdata");
   }
 
   @After

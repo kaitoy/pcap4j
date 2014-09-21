@@ -10,6 +10,8 @@ package org.pcap4j.packet.namednumber;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import org.pcap4j.Pcap4jPropertiesLoader;
+import com.sun.jna.Platform;
 
 /**
  * @author Kaito Yamada
@@ -57,8 +59,7 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
   /**
    *
    */
-  public static final DataLinkType RAW
-    = new DataLinkType(12, "RAW"); // RAW IP packet
+  public static final DataLinkType RAW; // RAW IP packet
 
   /**
    *
@@ -88,6 +89,19 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
         } catch (NullPointerException e) {
           continue;
         }
+      }
+    }
+
+    Integer raw = Pcap4jPropertiesLoader.getInstance().getDltRaw();
+    if (raw != null) {
+      RAW = new DataLinkType(raw, "RAW");
+    }
+    else {
+      if (Platform.isOpenBSD()) {
+        RAW = new DataLinkType(14, "RAW");
+      }
+      else {
+        RAW = new DataLinkType(12, "RAW");
       }
     }
   }
