@@ -61,7 +61,7 @@ public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
   private IpV6ExtHopByHopOptionsPacket(
     byte[] rawData, int payloadOffset, int payloadLength,
     IpV6ExtHopByHopOptionsHeader optHeader
-  ) {
+  ) throws IllegalRawDataException {
     super(rawData, payloadOffset, payloadLength, optHeader.getNextHeader());
     this.header = optHeader;
   }

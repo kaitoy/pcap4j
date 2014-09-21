@@ -1,6 +1,7 @@
 package org.pcap4j.sample;
 
 import java.io.IOException;
+
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapDumper;
@@ -8,6 +9,7 @@ import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
 
@@ -34,7 +36,7 @@ public class Dump {
   private static final String PCAP_FILE
     = System.getProperty(PCAP_FILE_KEY, "Dump.pcap");
 
-  public static void main(String[] args) throws PcapNativeException, NotOpenException {
+  public static void main(String[] args) throws PcapNativeException, NotOpenException, IllegalRawDataException {
     String filter = args.length != 0 ? args[0] : "";
 
     System.out.println(COUNT_KEY + ": " + COUNT);

@@ -61,7 +61,7 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
 
   private IcmpV4RedirectPacket(
     IcmpV4RedirectHeader header, byte[] rawData, int payloadOffset, int payloadLength
-  ) {
+  ) throws IllegalRawDataException {
     super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }

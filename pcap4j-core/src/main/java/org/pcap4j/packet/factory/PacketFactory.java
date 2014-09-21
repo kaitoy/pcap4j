@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet.factory;
 
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.namednumber.NamedNumber;
 
 /**
@@ -23,8 +24,9 @@ public interface PacketFactory<T, N extends NamedNumber<?, ?>> {
    * @param length
    * @param number
    * @return a new data object.
+   * @throws IllegalRawDataException
    */
-  public T newInstance(byte[] rawData, int offset, int length, N number);
+  public T newInstance(byte[] rawData, int offset, int length, N number) throws IllegalRawDataException;
 
   /**
    * @param rawData

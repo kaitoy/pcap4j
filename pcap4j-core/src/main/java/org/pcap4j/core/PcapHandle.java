@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
@@ -23,12 +24,14 @@ import org.pcap4j.core.NativeMappings.bpf_program;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.core.NativeMappings.pcap_stat;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
@@ -545,7 +548,7 @@ public final class PcapHandle {
    * @return a captured packet.
    * @throws NotOpenException
    */
-  public Packet getNextPacket() throws NotOpenException {
+  public Packet getNextPacket() throws NotOpenException, IllegalRawDataException {
     if (!open) {
       throw new NotOpenException();
     }
@@ -585,9 +588,10 @@ public final class PcapHandle {
    * @throws EOFException
    * @throws TimeoutException
    * @throws NotOpenException
+   * @throws IllegalRawDataException
    */
   public Packet getNextPacketEx()
-  throws PcapNativeException, EOFException, TimeoutException, NotOpenException {
+  throws PcapNativeException, EOFException, TimeoutException, NotOpenException, IllegalRawDataException {
     if (!open) {
       throw new NotOpenException();
     }
@@ -1177,10 +1181,13 @@ public final class PcapHandle {
           public void run() {
             timestampsInts.set(tvs);
             timestampsMicros.set(tvus);
-            listener.gotPacket(
-              PacketFactories.getFactory(Packet.class, DataLinkType.class)
-                .newInstance(ba, 0, ba.length, dlt)
-            );
+            try {
+                listener.gotPacket(
+                  PacketFactories.getFactory(Packet.class, DataLinkType.class)
+                    .newInstance(ba, 0, ba.length, dlt)
+                );
+            } catch (IllegalRawDataException e) {
+            }
           }
         }
       );

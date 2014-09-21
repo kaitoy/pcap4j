@@ -63,7 +63,7 @@ public final class IcmpV4ParameterProblemPacket extends IcmpV4InvokingPacketPack
 
   private IcmpV4ParameterProblemPacket(
     IcmpV4ParameterProblemHeader header, byte[] rawData, int payloadOffset, int payloadLength
-  ) {
+  ) throws IllegalRawDataException {
     super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }

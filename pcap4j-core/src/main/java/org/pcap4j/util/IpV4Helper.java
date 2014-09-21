@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV4Packet;
 import org.pcap4j.packet.IpV4Packet.IpV4Header;
 import org.pcap4j.packet.Packet;
@@ -98,8 +100,9 @@ public final class IpV4Helper {
    *
    * @param list
    * @return a defragmented packet.
+   * @throws IllegalRawDataException
    */
-  public static IpV4Packet defragment(List<IpV4Packet> list) {
+  public static IpV4Packet defragment(List<IpV4Packet> list) throws IllegalRawDataException {
     Collections.sort(list, comparator);
 
     IpV4Header lastPacketHeader = list.get(list.size() - 1).getHeader();

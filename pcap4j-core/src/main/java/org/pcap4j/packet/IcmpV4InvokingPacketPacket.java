@@ -44,8 +44,9 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
    * @param rawData
    * @param payloadOffset
    * @param payloadLength
+   * @throws IllegalRawDataException
    */
-  protected IcmpV4InvokingPacketPacket(byte[] rawData, int payloadOffset, int payloadLength) {
+  protected IcmpV4InvokingPacketPacket(byte[] rawData, int payloadOffset, int payloadLength) throws IllegalRawDataException {
     Packet p = PacketFactories.getFactory(Packet.class, EtherType.class)
                  .newInstance(rawData, payloadOffset, payloadLength, EtherType.IPV4);
 

@@ -62,7 +62,7 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
 
   private IcmpV4TimeExceededPacket(
     IcmpV4TimeExceededHeader header, byte[] rawData, int payloadOffset, int payloadLength
-  ) {
+  ) throws IllegalRawDataException {
     super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }

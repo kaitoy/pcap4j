@@ -42,10 +42,11 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
    * @param payloadOffset
    * @param payloadLength
    * @param number
+   * @throws IllegalRawDataException
    */
   protected IpV6ExtOptionsPacket(
     byte[] rawData, int payloadOffset, int payloadLength, IpNumber number
-  ) {
+  ) throws IllegalRawDataException {
     this.payload
       = PacketFactories.getFactory(Packet.class, IpNumber.class)
           .newInstance(rawData, payloadOffset, payloadLength, number);
