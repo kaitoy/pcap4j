@@ -62,7 +62,7 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4InvokingPacketPacket {
 
   private IcmpV4SourceQuenchPacket(
     IcmpV4SourceQuenchHeader header, byte[] rawData, int payloadOffset, int payloadLength
-  ) {
+  ) throws IllegalRawDataException {
     super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }

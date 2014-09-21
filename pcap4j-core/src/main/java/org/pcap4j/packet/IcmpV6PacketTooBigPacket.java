@@ -62,7 +62,7 @@ public final class IcmpV6PacketTooBigPacket extends IcmpV6InvokingPacketPacket {
 
   private IcmpV6PacketTooBigPacket(
     IcmpV6PacketTooBigHeader header, byte[] rawData, int payloadOffset, int payloadLength
-  ) {
+  ) throws IllegalRawDataException {
     super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }

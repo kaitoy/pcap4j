@@ -3,10 +3,12 @@ package org.pcap4j.sample;
 import java.io.EOFException;
 import java.sql.Timestamp;
 import java.util.concurrent.TimeoutException;
+
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.Pcaps;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
 
 @SuppressWarnings("javadoc")
@@ -19,7 +21,7 @@ public class ReadPacketFile {
   private static final String PCAP_FILE
     = System.getProperty(PCAP_FILE_KEY, "src/main/resources/echoAndEchoReply.pcap");
 
-  public static void main(String[] args) throws PcapNativeException, NotOpenException {
+  public static void main(String[] args) throws PcapNativeException, NotOpenException, IllegalRawDataException {
     PcapHandle handle = Pcaps.openOffline(PCAP_FILE);
 
     for (int i = 0; i < COUNT; i++) {

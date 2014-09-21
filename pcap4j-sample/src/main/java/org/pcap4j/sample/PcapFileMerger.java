@@ -5,12 +5,13 @@ import org.pcap4j.core.PcapDumper;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.Pcaps;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
 
 @SuppressWarnings("javadoc")
 public class PcapFileMerger {
 
-  public static void main(String[] args) throws PcapNativeException, NotOpenException {
+  public static void main(String[] args) throws PcapNativeException, NotOpenException, IllegalRawDataException {
     // args: pcap file list
 
     PcapDumper dumper = null;

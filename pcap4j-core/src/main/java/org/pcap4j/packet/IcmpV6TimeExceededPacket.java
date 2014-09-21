@@ -62,7 +62,7 @@ public final class IcmpV6TimeExceededPacket extends IcmpV6InvokingPacketPacket {
 
   private IcmpV6TimeExceededPacket(
     IcmpV6TimeExceededHeader header, byte[] rawData, int payloadOffset, int payloadLength
-  ) {
+  ) throws IllegalRawDataException {
     super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }

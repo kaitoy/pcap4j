@@ -64,7 +64,7 @@ extends IcmpV6InvokingPacketPacket {
 
   private IcmpV6DestinationUnreachablePacket(
     IcmpV6DestinationUnreachableHeader header, byte[] rawData, int payloadOffset, int payloadLength
-  ) {
+  ) throws IllegalRawDataException {
     super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }

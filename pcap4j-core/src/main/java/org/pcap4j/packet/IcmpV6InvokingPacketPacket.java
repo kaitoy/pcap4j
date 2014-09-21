@@ -43,8 +43,9 @@ abstract class IcmpV6InvokingPacketPacket extends AbstractPacket {
    * @param rawData
    * @param payloadOffset
    * @param payloadLength
+   * @throws IllegalRawDataException
    */
-  protected IcmpV6InvokingPacketPacket(byte[] rawData, int payloadOffset, int payloadLength) {
+  protected IcmpV6InvokingPacketPacket(byte[] rawData, int payloadOffset, int payloadLength) throws IllegalRawDataException {
     Packet p = PacketFactories.getFactory(Packet.class, EtherType.class)
                  .newInstance(rawData, payloadOffset, payloadLength, EtherType.IPV6);
 
