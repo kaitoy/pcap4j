@@ -1,8 +1,10 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -101,6 +103,11 @@ public class Dot1qVlanTaggedPacketTest extends AbstractPacketTest {
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
     }
+  }
+
+  @Test
+  public void testNewPacketRandom() {
+      RandomPacketTest.testClass(Dot1qVlanTagPacket.class, packet);
   }
 
   @Test

@@ -675,7 +675,7 @@ public final class TcpPacket extends AbstractPacket {
         options.add(newOne);
         currentOffsetInHeader += newOne.length();
 
-        if (newOne.getKind().equals(TcpOptionKind.END_OF_OPTION_LIST)) {
+        if (newOne.getKind() == null || newOne.getKind().equals(TcpOptionKind.END_OF_OPTION_LIST)) {
           break;
         }
       }
