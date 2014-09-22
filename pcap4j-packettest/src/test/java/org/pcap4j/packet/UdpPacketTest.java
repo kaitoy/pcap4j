@@ -1,9 +1,11 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -113,6 +115,11 @@ public class UdpPacketTest extends AbstractPacketTest {
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
     }
+  }
+
+  @Test
+  public void testNewPacketRandom() {
+      RandomPacketTest.testClass(UdpPacket.class, packet);
   }
 
   @Test

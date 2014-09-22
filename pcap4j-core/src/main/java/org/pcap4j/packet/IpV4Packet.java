@@ -7,11 +7,15 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
+
 import java.io.Serializable;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
@@ -75,6 +79,9 @@ public final class IpV4Packet extends AbstractPacket {
       if (payloadLength > remainingRawDataLength) {
         payloadLength = remainingRawDataLength;
       }
+    }
+    if (payloadLength > 0) {
+
 
       if (header.getMoreFragmentFlag() || header.getFlagmentOffset() != 0) {
         this.payload
@@ -568,12 +575,15 @@ public final class IpV4Packet extends AbstractPacket {
         options.add(newOne);
         currentOffsetInHeader += newOne.length();
 
-        if (newOne.getType().equals(IpV4OptionType.END_OF_OPTION_LIST)) {
+        if (newOne.getType() == null || newOne.getType().equals(IpV4OptionType.END_OF_OPTION_LIST)) {
           break;
         }
       }
 
       int paddingLength = headerLength - currentOffsetInHeader;
+      if (paddingLength < 0) {
+          throw new IllegalRawDataException("Negative padding length");
+      }
       if (paddingLength != 0) {
         this.padding
           = ByteArrays.getSubArray(rawData, currentOffsetInHeader + offset, paddingLength);

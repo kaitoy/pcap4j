@@ -1,12 +1,14 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -193,6 +195,12 @@ public class TcpPacketTest extends AbstractPacketTest {
       throw new AssertionError(e);
     }
   }
+
+  @Test
+  public void testNewPacketRandom() {
+      RandomPacketTest.testClass(TcpPacket.class, packet);
+  }
+
 
   @Test
   public void testGetHeader() {

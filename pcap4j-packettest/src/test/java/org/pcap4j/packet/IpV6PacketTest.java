@@ -1,9 +1,11 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -117,6 +119,12 @@ public class IpV6PacketTest extends AbstractPacketTest {
       throw new AssertionError(e);
     }
   }
+
+  @Test
+  public void testNewPacketRandom() {
+      RandomPacketTest.testClass(IpV6Packet.class, packet);
+  }
+
 
   @Test
   public void testGetHeader() {

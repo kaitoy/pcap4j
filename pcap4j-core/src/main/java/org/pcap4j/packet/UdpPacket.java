@@ -58,6 +58,8 @@ public final class UdpPacket extends AbstractPacket {
       if (payloadLength > length - header.length()) {
         payloadLength = length - header.length();
       }
+    }
+    if (payloadLength > 0) {
 
       this.payload
         = PacketFactories.getFactory(Packet.class, UdpPort.class)
