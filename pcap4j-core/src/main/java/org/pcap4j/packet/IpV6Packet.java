@@ -65,22 +65,22 @@ public final class IpV6Packet extends AbstractPacket {
     }
     else {
       payloadLength = header.getPayloadLengthAsInt();
-    }
+      if (payloadLength < 0) {
+        throw new IllegalRawDataException(
+                "The value of payload length field seems to be wrong: "
+                  + header.getPayloadLengthAsInt()
+              );
+      }
 
-    if (payloadLength > 0) {
       if (payloadLength > remainingRawDataLength) {
         payloadLength = remainingRawDataLength;
       }
+    }
 
+    if (payloadLength != 0) { // payloadLength is positive.
       this.payload
         = PacketFactories.getFactory(Packet.class, IpNumber.class)
             .newInstance(rawData, offset + header.length(), payloadLength, header.getNextHeader());
-    }
-    else if (payloadLength < 0) {
-      throw new IllegalRawDataException(
-              "The value of payload length field seems to be wrong: "
-                + header.getPayloadLengthAsInt()
-            );
     }
     else {
       this.payload = null;

@@ -675,25 +675,13 @@ public final class TcpPacket extends AbstractPacket {
         options.add(newOne);
         currentOffsetInHeader += newOne.length();
 
-        if (newOne.getKind() == null || newOne.getKind().equals(TcpOptionKind.END_OF_OPTION_LIST)) {
+        if (newOne.getKind().equals(TcpOptionKind.END_OF_OPTION_LIST)) {
           break;
         }
       }
 
       int paddingLength = headerLength - currentOffsetInHeader;
-      if (paddingLength < 0) {
-          StringBuilder sb = new StringBuilder(110);
-          sb.append("AN option in the header is larger than the header(")
-            .append(headerLength)
-            .append(" bytes). data: ")
-            .append(ByteArrays.toHexString(rawData, " "))
-            .append(", offset: ")
-            .append(offset)
-            .append(", length: ")
-            .append(length);
-          throw new IllegalRawDataException(sb.toString());
-      }
-      if (paddingLength != 0) {
+      if (paddingLength != 0) { // paddingLength is positive.
         this.padding
           = ByteArrays.getSubArray(rawData, currentOffsetInHeader + offset, paddingLength);
       }
