@@ -198,7 +198,7 @@ public class TcpPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTest.testClass(TcpPacket.class, packet);
+      RandomPacketTester.testClass(TcpPacket.class, packet);
   }
 
 

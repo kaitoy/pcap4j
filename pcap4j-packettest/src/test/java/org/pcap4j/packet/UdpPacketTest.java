@@ -119,7 +119,7 @@ public class UdpPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTest.testClass(UdpPacket.class, packet);
+      RandomPacketTester.testClass(UdpPacket.class, packet);
   }
 
   @Test

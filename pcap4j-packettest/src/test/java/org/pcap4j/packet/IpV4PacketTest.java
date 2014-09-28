@@ -191,7 +191,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTest.testClass(IpV4Packet.class, packet1);
+      RandomPacketTester.testClass(IpV4Packet.class, packet1);
   }
 
   @Test

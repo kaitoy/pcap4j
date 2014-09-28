@@ -160,7 +160,7 @@ public class ArpPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTest.testClass(ArpPacket.class, packet);
+      RandomPacketTester.testClass(ArpPacket.class, packet);
   }
 
 

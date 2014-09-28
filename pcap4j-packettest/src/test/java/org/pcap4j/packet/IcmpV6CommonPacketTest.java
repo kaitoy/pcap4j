@@ -119,7 +119,7 @@ public class IcmpV6CommonPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTest.testClass(IcmpV6CommonPacket.class, packet);
+      RandomPacketTester.testClass(IcmpV6CommonPacket.class, packet);
   }
 
   @Test

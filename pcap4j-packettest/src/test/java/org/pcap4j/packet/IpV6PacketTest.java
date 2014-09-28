@@ -122,7 +122,7 @@ public class IpV6PacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTest.testClass(IpV6Packet.class, packet);
+      RandomPacketTester.testClass(IpV6Packet.class, packet);
   }
 
 

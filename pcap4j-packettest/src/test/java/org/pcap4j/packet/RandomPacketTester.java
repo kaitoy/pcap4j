@@ -1,8 +1,6 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
+import static org.junit.Assert.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +23,7 @@ import java.util.concurrent.TimeoutException;
  * @author philip
  *
  */
-public class RandomPacketTest {
+public class RandomPacketTester {
     private static Random r = new Random();
 
     /**
@@ -34,19 +32,14 @@ public class RandomPacketTest {
      * @throws NoSuchMethodException
      * @throws SecurityException
      */
-    @SuppressWarnings("unused")
     public static void testClass(Class<? extends Packet> clazz, Packet original) {
-        Map<String, Integer> failures = new HashMap<String, Integer>();
-        Map<String, StackTracePrinter> details = new HashMap<String, StackTracePrinter>();
-        Method newPacket;
+        Method newPacket = null;
         try {
             newPacket = clazz.getMethod("newPacket", byte[].class, int.class, int.class);
         } catch (SecurityException e) {
-            assertNull(e);
-            return;
+            fail(e.toString());
         } catch (NoSuchMethodException e) {
-            assertNull(e);
-            return;
+            fail(e.toString());
         }
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -62,11 +55,11 @@ public class RandomPacketTest {
                     theTask.shutdown();
                 } else {
                     executor.shutdownNow();
-                    assertNull("Timed out. Possible loop?", e);
+                    fail("Timed out. Possible loop?");
                 }
             } catch (InterruptedException e) {
                 executor.shutdownNow();
-                assertNull(e);
+                fail(e.toString());
             } catch (ExecutionException e) {
                 executor.shutdownNow();
                 if (e.getCause() instanceof RuntimeException) {
@@ -76,7 +69,7 @@ public class RandomPacketTest {
                 if (e.getCause() instanceof AssertionError) {
                     throw (AssertionError) e.getCause();
                 }
-                assertNull(e.toString(), e);
+                fail(e.toString());
             }
         }
 
@@ -103,6 +96,7 @@ public class RandomPacketTest {
             this.data = data;
         }
 
+        @Override
         public String toString() {
             StringWriter sw = new StringWriter();
             for (byte b: data) {

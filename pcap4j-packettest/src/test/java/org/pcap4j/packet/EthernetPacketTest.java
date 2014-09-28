@@ -116,7 +116,7 @@ public class EthernetPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTest.testClass(EthernetPacket.class, packet);
+      RandomPacketTester.testClass(EthernetPacket.class, packet);
   }
 
 

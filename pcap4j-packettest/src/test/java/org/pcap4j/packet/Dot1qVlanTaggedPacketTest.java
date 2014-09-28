@@ -107,7 +107,7 @@ public class Dot1qVlanTaggedPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTest.testClass(Dot1qVlanTagPacket.class, packet);
+      RandomPacketTester.testClass(Dot1qVlanTagPacket.class, packet);
   }
 
   @Test
