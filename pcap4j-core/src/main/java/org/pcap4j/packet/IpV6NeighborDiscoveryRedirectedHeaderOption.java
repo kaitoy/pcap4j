@@ -109,17 +109,25 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     this.length = rawData[LENGTH_OFFSET + offset];
-    int ipPacketLen = getLengthAsInt() * 8;
-    if (length < ipPacketLen) {
+    int lengthInByte = getLengthAsInt() * 8;
+    if (length < lengthInByte) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option. ")
-        .append(ipPacketLen)
+        .append(lengthInByte)
         .append(" bytes data is needed. data: ")
         .append(ByteArrays.toHexString(rawData, " "))
         .append(", offset: ")
         .append(offset)
         .append(", length: ")
         .append(length);
+      throw new IllegalRawDataException(sb.toString());
+    }
+    if (lengthInByte < IP_HEADER_OFFSET) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("The length field value must be equal or more than")
+        .append(IP_HEADER_OFFSET / 8)
+        .append("but it is: ")
+        .append(getLengthAsInt());
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -130,7 +138,7 @@ implements IpV6NeighborDiscoveryOption {
                  .newInstance(
                     rawData,
                     IP_HEADER_OFFSET + offset,
-                    ipPacketLen - IP_HEADER_OFFSET,
+                    lengthInByte - IP_HEADER_OFFSET,
                     EtherType.IPV6
                   );
     if (p instanceof IllegalPacket) {

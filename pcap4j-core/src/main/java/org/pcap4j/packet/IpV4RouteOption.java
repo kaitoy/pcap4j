@@ -71,6 +71,12 @@ abstract class IpV4RouteOption implements IpV4Option {
         .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
+    if (lengthFieldAsInt < 3) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("The length field value must be equal or more than 3 but it is: ")
+        .append(lengthFieldAsInt);
+      throw new IllegalRawDataException(sb.toString());
+    }
     if ((lengthFieldAsInt - 3) % INET4_ADDRESS_SIZE_IN_BYTES != 0) {
       throw new IllegalRawDataException(
                   "Invalid length for this option: " + lengthFieldAsInt

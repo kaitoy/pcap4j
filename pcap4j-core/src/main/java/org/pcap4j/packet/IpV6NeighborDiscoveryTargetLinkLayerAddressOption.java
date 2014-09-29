@@ -91,11 +91,11 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     this.length = rawData[LENGTH_OFFSET + offset];
-    int addrLen = getLengthAsInt() * 8;
-    if (length < addrLen) {
+    int lengthInByte = getLengthAsInt() * 8;
+    if (length < lengthInByte) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option. ")
-        .append(addrLen)
+        .append(lengthInByte)
         .append(" bytes data is needed. data: ")
         .append(ByteArrays.toHexString(rawData, " "))
         .append(", offset: ")
@@ -104,9 +104,12 @@ implements IpV6NeighborDiscoveryOption {
         .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
+    if (this.length == 0) {
+      throw new IllegalRawDataException("The length field value must not be zero.");
+    }
 
     this.linkLayerAddress = ByteArrays.getSubArray(
-      rawData, LINK_LAYER_ADDRESS_OFFSET + offset, addrLen - LINK_LAYER_ADDRESS_OFFSET
+      rawData, LINK_LAYER_ADDRESS_OFFSET + offset, lengthInByte - LINK_LAYER_ADDRESS_OFFSET
     );
   }
 

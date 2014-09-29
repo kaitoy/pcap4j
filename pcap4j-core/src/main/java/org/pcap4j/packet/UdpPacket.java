@@ -54,22 +54,21 @@ public final class UdpPacket extends AbstractPacket {
     this.header = new UdpHeader(rawData, offset, length);
 
     int payloadLength = header.getLengthAsInt() - header.length();
-    if (payloadLength > 0) {
-      if (payloadLength > length - header.length()) {
-        payloadLength = length - header.length();
-      }
-    }
-    if (payloadLength > 0) {
-
-      this.payload
-        = PacketFactories.getFactory(Packet.class, UdpPort.class)
-            .newInstance(rawData, offset + header.length(), payloadLength, header.getDstPort());
-    }
-    else if (payloadLength < 0) {
+    if (payloadLength < 0) {
       throw new IllegalRawDataException(
               "The value of length field seems to be wrong: "
                 + header.getLengthAsInt()
             );
+    }
+
+    if (payloadLength > length - header.length()) {
+      payloadLength = length - header.length();
+    }
+
+    if (payloadLength != 0) { // payloadLength is positive.
+      this.payload
+        = PacketFactories.getFactory(Packet.class, UdpPort.class)
+            .newInstance(rawData, offset + header.length(), payloadLength, header.getDstPort());
     }
     else {
       this.payload = null;

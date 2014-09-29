@@ -545,6 +545,14 @@ public final class IpV4Packet extends AbstractPacket {
           .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
+      if (headerLength < OPTIONS_OFFSET) {
+        StringBuilder sb = new StringBuilder(100);
+        sb.append("The ihl must be equal or more than")
+          .append(OPTIONS_OFFSET / 4)
+          .append("but it is: ")
+          .append(getIhlAsInt());
+        throw new IllegalRawDataException(sb.toString());
+      }
 
       this.options = new ArrayList<IpV4Option>();
       int currentOffsetInHeader = OPTIONS_OFFSET;

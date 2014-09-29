@@ -652,6 +652,14 @@ public final class TcpPacket extends AbstractPacket {
           .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
+      if (headerLength < OPTIONS_OFFSET) {
+        StringBuilder sb = new StringBuilder(100);
+        sb.append("The data offset must be equal or more than ")
+          .append(OPTIONS_OFFSET / 4)
+          .append("but it is: ")
+          .append(getDataOffsetAsInt());
+        throw new IllegalRawDataException(sb.toString());
+      }
 
       this.options = new ArrayList<TcpOption>();
       int currentOffsetInHeader = OPTIONS_OFFSET;
@@ -682,6 +690,16 @@ public final class TcpPacket extends AbstractPacket {
 
       int paddingLength = headerLength - currentOffsetInHeader;
       if (paddingLength != 0) { // paddingLength is positive.
+        if (paddingLength < 0) {
+          StringBuilder sb = new StringBuilder();
+          sb.append("hogeeeeeeeeeeeeeeeeeeee");
+          sb.append(headerLength);
+          sb.append(currentOffsetInHeader);
+          sb.append(options.size());
+          if (options.size() != 0)
+            sb.append(options.get(0));
+          throw new AssertionError(sb.toString());
+        }
         this.padding
           = ByteArrays.getSubArray(rawData, currentOffsetInHeader + offset, paddingLength);
       }

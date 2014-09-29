@@ -106,6 +106,12 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
         .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
+    if (lengthFieldAsInt < 4) {
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("The length field value must be equal or more than 4 but it is: ")
+        .append(lengthFieldAsInt);
+      throw new IllegalRawDataException(sb.toString());
+    }
     if (lengthFieldAsInt % INT_SIZE_IN_BYTES != 0) {
       throw new IllegalRawDataException(
                   "Invalid length for this option: " + lengthFieldAsInt
@@ -116,24 +122,27 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     this.overflow = (byte)((rawData[3 + offset] & 0xF0) >> 4);
     this.flag
       = IpV4InternetTimestampOptionFlag.getInstance((byte)(rawData[3 + offset] & 0x0F));
-    this.data
-      = PacketFactories
-          .getFactory(
-             IpV4InternetTimestampOptionData.class,
-             IpV4InternetTimestampOptionFlag.class
-           ).newInstance(rawData, 4 + offset, lengthFieldAsInt, flag);
+    if (lengthFieldAsInt > 4) {
+      this.data
+        = PacketFactories
+            .getFactory(
+               IpV4InternetTimestampOptionData.class,
+               IpV4InternetTimestampOptionFlag.class
+             ).newInstance(rawData, 4 + offset, lengthFieldAsInt - 4, flag);
+    }
+    else {
+      this.data = null;
+    }
   }
 
   private IpV4InternetTimestampOption(Builder builder) {
     if (
         builder == null
      || builder.flag == null
-     || builder.data == null
    ) {
      StringBuilder sb = new StringBuilder();
      sb.append("builder: ").append(builder)
-       .append(" builder.flag: ").append(builder.flag)
-       .append(" builder.data: ").append(builder.data);
+       .append(" builder.flag: ").append(builder.flag);
      throw new NullPointerException(sb.toString());
    }
 
@@ -197,12 +206,12 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
 
   /**
    *
-   * @return data
+   * @return data, which may be null.
    */
   public IpV4InternetTimestampOptionData getData() { return data; }
 
   @Override
-  public int length() { return 4 + data.length(); }
+  public int length() { return 4 + (data != null ? data.length() : 0); }
 
   @Override
   public byte[] getRawData() {
@@ -212,7 +221,9 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     rawData[2] = pointer;
     rawData[3] = flag.value();
     rawData[3] = (byte)(rawData[3] | (overflow << 4));
-    System.arraycopy(data.getRawData(), 0, rawData, 4, data.length());
+    if (data != null) {
+      System.arraycopy(data.getRawData(), 0, rawData, 4, data.length());
+    }
     return rawData;
   }
 
@@ -234,10 +245,13 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     sb.append("] [overflow: ")
       .append(getOverflowAsInt());
     sb.append("] [flag: ")
-      .append(flag);
-    sb.append("] [data:")
-      .append(data);
-    sb.append("]");
+      .append(flag)
+      .append("]");
+    if (data != null) {
+      sb.append(" [data: ")
+        .append(data)
+        .append("]");
+    }
     return sb.toString();
   }
 
