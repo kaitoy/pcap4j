@@ -690,16 +690,6 @@ public final class TcpPacket extends AbstractPacket {
 
       int paddingLength = headerLength - currentOffsetInHeader;
       if (paddingLength != 0) { // paddingLength is positive.
-        if (paddingLength < 0) {
-          StringBuilder sb = new StringBuilder();
-          sb.append("hogeeeeeeeeeeeeeeeeeeee");
-          sb.append(headerLength);
-          sb.append(currentOffsetInHeader);
-          sb.append(options.size());
-          if (options.size() != 0)
-            sb.append(options.get(0));
-          throw new AssertionError(sb.toString());
-        }
         this.padding
           = ByteArrays.getSubArray(rawData, currentOffsetInHeader + offset, paddingLength);
       }
