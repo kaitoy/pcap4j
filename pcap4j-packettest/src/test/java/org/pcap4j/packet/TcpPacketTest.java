@@ -1,14 +1,12 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
-
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -55,7 +53,7 @@ public class TcpPacketTest extends AbstractPacketTest {
     this.dstPort = TcpPort.getInstance((short)0);
     this.sequenceNumber = 1234567;
     this.acknowledgmentNumber = 7654321;
-    this.dataOffset = 14;
+    this.dataOffset = 15;
     this.reserved = (byte)11;
     this.urg = false;
     this.ack = true;
@@ -81,11 +79,14 @@ public class TcpPacketTest extends AbstractPacketTest {
         .correctLengthAtBuild(true)
         .build()
     );
-    options.add(TcpNoOperationOption.getInstance());
-    options.add(TcpNoOperationOption.getInstance());
     options.add(TcpSackPermittedOption.getInstance());
-    options.add(TcpNoOperationOption.getInstance());
-    options.add(TcpNoOperationOption.getInstance());
+    options.add(
+      new TcpTimestampsOption.Builder()
+        .tsValue(200)
+        .tsEchoReply(111)
+        .correctLengthAtBuild(true)
+        .build()
+    );
     List<Sack> sacks = new ArrayList<Sack>();
     sacks.add(new Sack(2000, 4000));
     sacks.add(new Sack(6000, 10000));
@@ -97,7 +98,7 @@ public class TcpPacketTest extends AbstractPacketTest {
     );
     options.add(TcpEndOfOptionList.getInstance());
 
-    this.padding = new byte[] { (byte)0xDD, (byte)0xEE, (byte)0xFF };
+    this.padding = new byte[] { (byte)0xaa };
 
     try {
       this.srcAddr

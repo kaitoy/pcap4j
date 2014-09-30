@@ -5,6 +5,7 @@ Future
 * [Pulls#23](https://github.com/kaitoy/pcap4j/pull/23): Add support for a data link type DLT_RAW.
 
 ### Bug Fixes ###
+* [Issues#27](https://github.com/kaitoy/pcap4j/issues/27): TCP timestamp options are not be captured correctly.
 
 ### Other Changes ###
 * Constructors and static factory methods of all packet classes and packet factory classes now have additional arguments offset and length to specify data range in rawData.

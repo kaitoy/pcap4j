@@ -161,6 +161,12 @@ public final class TcpTimestampsOption implements TcpOption {
     byte[] rawData = new byte[length()];
     rawData[0] = kind.value();
     rawData[1] = length;
+    System.arraycopy(
+      ByteArrays.toByteArray(tsValue), 0, rawData, 2, ByteArrays.INT_SIZE_IN_BYTES
+    );
+    System.arraycopy(
+      ByteArrays.toByteArray(tsEchoReply), 0, rawData, 6, ByteArrays.INT_SIZE_IN_BYTES
+    );
     return rawData;
   }
 
@@ -176,10 +182,14 @@ public final class TcpTimestampsOption implements TcpOption {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[Kind: ")
-      .append(kind);
-    sb.append("] [Length: ")
+      .append(kind)
+      .append("] [Length: ")
       .append(getLengthAsInt())
-      .append(" bytes]");
+      .append(" bytes] [TS Value: ")
+      .append(getTsValueAsLong())
+      .append("] [TS Echo Reply: ")
+      .append(getTsEchoReplyAsLong())
+      .append("]");
     return sb.toString();
   }
 
