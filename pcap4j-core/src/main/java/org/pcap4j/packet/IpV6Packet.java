@@ -13,6 +13,7 @@ import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.packet.namednumber.NA;
@@ -78,9 +79,28 @@ public final class IpV6Packet extends AbstractPacket {
     }
 
     if (payloadLength != 0) { // payloadLength is positive.
-      this.payload
-        = PacketFactories.getFactory(Packet.class, IpNumber.class)
-            .newInstance(rawData, offset + header.length(), payloadLength, header.getNextHeader());
+      PacketFactory<Packet, IpNumber> factory
+        = PacketFactories.getFactory(Packet.class, IpNumber.class);
+      Class<? extends Packet> nextPacketClass = factory.getTargetClass(header.getNextHeader());
+      Packet nextPacket;
+      if (nextPacketClass.equals(factory.getTargetClass())) {
+        try {
+          nextPacket
+            = IpV6ExtUnknownPacket.newPacket(rawData, offset + header.length(), payloadLength);
+        } catch (IllegalRawDataException e) {
+          nextPacket = factory.newInstance(rawData, offset + header.length(), payloadLength);
+        }
+      }
+      else {
+        nextPacket
+          = factory.newInstance(
+              rawData,
+              offset + header.length(),
+              payloadLength, header.getNextHeader()
+              );
+      }
+
+      this.payload = nextPacket;
     }
     else {
       this.payload = null;

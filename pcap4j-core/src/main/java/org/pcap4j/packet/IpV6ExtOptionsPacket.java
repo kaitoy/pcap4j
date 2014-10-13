@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
 import org.pcap4j.util.ByteArrays;
@@ -46,9 +47,22 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
   protected IpV6ExtOptionsPacket(
     byte[] rawData, int payloadOffset, int payloadLength, IpNumber number
   ) {
-    this.payload
-      = PacketFactories.getFactory(Packet.class, IpNumber.class)
-          .newInstance(rawData, payloadOffset, payloadLength, number);
+    PacketFactory<Packet, IpNumber> factory
+      = PacketFactories.getFactory(Packet.class, IpNumber.class);
+    Class<? extends Packet> nextPacketClass = factory.getTargetClass(number);
+    Packet nextPacket;
+    if (nextPacketClass.equals(factory.getTargetClass())) {
+      try {
+        nextPacket = IpV6ExtUnknownPacket.newPacket(rawData, payloadOffset, payloadLength);
+      } catch (IllegalRawDataException e) {
+        nextPacket = factory.newInstance(rawData, payloadOffset, payloadLength);
+      }
+    }
+    else {
+      nextPacket = factory.newInstance(rawData, payloadOffset, payloadLength, number);
+    }
+
+    this.payload = nextPacket;
   }
 
   /**

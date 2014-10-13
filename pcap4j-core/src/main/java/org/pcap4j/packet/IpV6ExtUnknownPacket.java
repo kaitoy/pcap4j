@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Kaito Yamada
+  _##  Copyright (C) 2014  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -8,27 +8,25 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
-import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
 import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.10
+ * @since pcap4j 1.3.1
  */
-public final class IpV6ExtRoutingPacket extends AbstractPacket {
+public final class IpV6ExtUnknownPacket extends AbstractPacket {
 
   /**
    *
    */
-  private static final long serialVersionUID = -4454872145403587056L;
+  private static final long serialVersionUID = -7055290165058067091L;
 
-  private final IpV6ExtRoutingHeader header;
+  private final IpV6ExtUnknownHeader header;
   private final Packet payload;
 
   /**
@@ -39,51 +37,46 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
    * @param rawData
    * @param offset
    * @param length
-   * @return a new IpV6ExtRoutingPacket object.
+   * @return a new IpV6ExtUnknownPacket object.
    * @throws IllegalRawDataException
    */
-  public static IpV6ExtRoutingPacket newPacket(
+  public static IpV6ExtUnknownPacket newPacket(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new IpV6ExtRoutingPacket(rawData, offset, length);
+    return new IpV6ExtUnknownPacket(rawData, offset, length);
   }
-  private IpV6ExtRoutingPacket(
+  private IpV6ExtUnknownPacket(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
-    this.header = new IpV6ExtRoutingHeader(rawData, offset, length);
+    this.header = new IpV6ExtUnknownHeader(rawData, offset, length);
 
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
       PacketFactory<Packet, IpNumber> factory
         = PacketFactories.getFactory(Packet.class, IpNumber.class);
       Class<? extends Packet> nextPacketClass = factory.getTargetClass(header.getNextHeader());
-      Packet nextPacket;
       if (nextPacketClass.equals(factory.getTargetClass())) {
-        try {
-          nextPacket
-            = IpV6ExtUnknownPacket.newPacket(rawData, offset + header.length(), payloadLength);
-        } catch (IllegalRawDataException e) {
-          nextPacket = factory.newInstance(rawData, offset + header.length(), payloadLength);
-        }
+        this.payload
+          = IpV6ExtUnknownPacket.newPacket(rawData, offset + header.length(), payloadLength);
       }
       else {
-        nextPacket
-          = factory.newInstance(
-              rawData,
-              offset + header.length(),
-              payloadLength, header.getNextHeader()
-            );
+        this.payload
+          = PacketFactories.getFactory(Packet.class, IpNumber.class)
+              .newInstance(
+                 rawData,
+                 offset + header.length(),
+                 payloadLength,
+                 header.getNextHeader()
+               );
       }
-
-      this.payload = nextPacket;
     }
     else {
       this.payload = null;
     }
   }
 
-  private IpV6ExtRoutingPacket(Builder builder) {
+  private IpV6ExtUnknownPacket(Builder builder) {
     if (
          builder == null
       || builder.nextHeader == null
@@ -97,11 +90,11 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
     }
 
     this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
-    this.header = new IpV6ExtRoutingHeader(builder);
+    this.header = new IpV6ExtUnknownHeader(builder);
   }
 
   @Override
-  public IpV6ExtRoutingHeader getHeader() {
+  public IpV6ExtUnknownHeader getHeader() {
     return header;
   }
 
@@ -121,13 +114,11 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
    */
   public static final
   class Builder extends AbstractBuilder
-  implements LengthBuilder<IpV6ExtRoutingPacket> {
+  implements LengthBuilder<IpV6ExtUnknownPacket> {
 
     private IpNumber nextHeader;
     private byte hdrExtLen;
-    private IpV6RoutingHeaderType routingType;
-    private byte segmentsLeft;
-    private IpV6RoutingData data;
+    private byte[] data;
     private Packet.Builder payloadBuilder;
     private boolean correctLengthAtBuild;
 
@@ -140,11 +131,9 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
      *
      * @param packet
      */
-    public Builder(IpV6ExtRoutingPacket packet) {
+    public Builder(IpV6ExtUnknownPacket packet) {
       this.nextHeader = packet.header.nextHeader;
       this.hdrExtLen = packet.header.hdrExtLen;
-      this.routingType = packet.header.routingType;
-      this.segmentsLeft = packet.header.segmentsLeft;
       this.data = packet.header.data;
       this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
@@ -171,30 +160,10 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     /**
      *
-     * @param routingType
-     * @return this Builder object for method chaining.
-     */
-    public Builder routingType(IpV6RoutingHeaderType routingType) {
-      this.routingType = routingType;
-      return this;
-    }
-
-    /**
-     *
-     * @param segmentsLeft
-     * @return this Builder object for method chaining.
-     */
-    public Builder segmentsLeft(byte segmentsLeft) {
-      this.segmentsLeft = segmentsLeft;
-      return this;
-    }
-
-    /**
-     *
      * @param data
      * @return this Builder object for method chaining.
      */
-    public Builder data(IpV6RoutingData data) {
+    public Builder data(byte[] data) {
       this.data = data;
       return this;
     }
@@ -217,8 +186,8 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
     }
 
     @Override
-    public IpV6ExtRoutingPacket build() {
-      return new IpV6ExtRoutingPacket(this);
+    public IpV6ExtUnknownPacket build() {
+      return new IpV6ExtUnknownPacket(this);
     }
 
   }
@@ -227,16 +196,16 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public static final class IpV6ExtRoutingHeader extends AbstractHeader {
+  public static final class IpV6ExtUnknownHeader extends AbstractHeader {
 
     /*
      *   0                              16                            31
      *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     *  |  Next Header  |  Hdr Ext Len  |  Routing Type | Segments Left |
-     *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *  |  Next Header  |  Hdr Ext Len  |                               |
+     *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
      *  |                                                               |
      *  .                                                               .
-     *  .                       type-specific data                      .
+     *  .                       data                                    .
      *  .                                                               .
      *  |                                                               |
      *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -246,7 +215,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
     /**
      *
      */
-    private static final long serialVersionUID = 773193868313443164L;
+    private static final long serialVersionUID = -4314577591889991355L;
 
     private static final int NEXT_HEADER_OFFSET
       = 0;
@@ -256,24 +225,14 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
       = NEXT_HEADER_OFFSET + NEXT_HEADER_SIZE;
     private static final int HDR_EXT_LEN_SIZE
       = BYTE_SIZE_IN_BYTES;
-    private static final int ROUTING_TYPE_OFFSET
+    private static final int DATA_OFFSET
       = HDR_EXT_LEN_OFFSET + HDR_EXT_LEN_SIZE;
-    private static final int ROUTING_TYPE_SIZE
-      = BYTE_SIZE_IN_BYTES;
-    private static final int SEGMENTS_LEFT_OFFSET
-      = ROUTING_TYPE_OFFSET + ROUTING_TYPE_SIZE;
-    private static final int SEGMENTS_LEFT_SIZE
-      = BYTE_SIZE_IN_BYTES;
-    private static final int TYPE_SPECIFIC_DATA_OFFSET
-      = SEGMENTS_LEFT_OFFSET + SEGMENTS_LEFT_SIZE;
 
     private final IpNumber nextHeader;
     private final byte hdrExtLen;
-    private final IpV6RoutingHeaderType routingType;
-    private final byte segmentsLeft;
-    private final IpV6RoutingData data;
+    private final byte[] data;
 
-    private IpV6ExtRoutingHeader(
+    private IpV6ExtUnknownHeader(
       byte[] rawData, int offset, int length
     ) throws IllegalRawDataException {
       if (length < 4) {
@@ -309,44 +268,32 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.routingType
-        = IpV6RoutingHeaderType.getInstance(
-            ByteArrays.getByte(rawData, ROUTING_TYPE_OFFSET + offset)
-          );
-      this.segmentsLeft
-        = ByteArrays.getByte(rawData, SEGMENTS_LEFT_OFFSET + offset);
-      this.data
-        = PacketFactories
-            .getFactory(IpV6RoutingData.class, IpV6RoutingHeaderType.class)
-              .newInstance(
-                 rawData,
-                 TYPE_SPECIFIC_DATA_OFFSET + offset,
-                 headerLength - 4,
-                 routingType
-               );
+      this.data = ByteArrays.getSubArray(
+                    rawData,
+                    DATA_OFFSET + offset,
+                    headerLength - DATA_OFFSET
+                  );
     }
 
-    private IpV6ExtRoutingHeader(Builder builder) {
-      if (builder.data.length() < 4) {
+    private IpV6ExtUnknownHeader(Builder builder) {
+      if (builder.data.length < 6) {
         StringBuilder sb = new StringBuilder(100);
-        sb.append("data length must be more than 3. data: ")
-          .append(builder.data);
+        sb.append("data length must be more than 5. data: ")
+          .append(ByteArrays.toHexString(builder.data, " "));
         throw new IllegalArgumentException(sb.toString());
       }
-      if (((builder.data.length() + 4) % 8) != 0) {
+      if (((builder.data.length + 2) % 8) != 0) {
         StringBuilder sb = new StringBuilder(100);
-        sb.append("(builder.data.length() + 8 ) % 8 must be 0. data: ")
+        sb.append("(builder.data.length + 2) % 8 must be 0. data: ")
           .append(builder.data);
         throw new IllegalArgumentException(sb.toString());
       }
 
       this.nextHeader = builder.nextHeader;
-      this.routingType = builder.routingType;
-      this.segmentsLeft = builder.segmentsLeft;
-      this.data = builder.data;
+      this.data = ByteArrays.clone(builder.data);
 
       if (builder.correctLengthAtBuild) {
-        this.hdrExtLen = (byte)((data.length() + 4) / 8 - 1);
+        this.hdrExtLen = (byte)((data.length + 2) / 8 - 1);
       }
       else {
         this.hdrExtLen = builder.hdrExtLen;
@@ -373,41 +320,21 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     /**
      *
-     * @return routingType
-     */
-    public IpV6RoutingHeaderType getRoutingType() { return routingType; }
-
-    /**
-     *
-     * @return segmentsLeft
-     */
-    public byte getSegmentsLeft() { return segmentsLeft; }
-
-    /**
-     *
-     * @return segmentsLeft
-     */
-    public int getSegmentsLeftAsInt() { return segmentsLeft & 0xFF; }
-
-    /**
-     *
      * @return data
      */
-    public IpV6RoutingData getData() { return data; }
+    public byte[] getData() { return ByteArrays.clone(data); }
 
     @Override
     protected List<byte[]> getRawFields() {
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(ByteArrays.toByteArray(nextHeader.value()));
       rawFields.add(ByteArrays.toByteArray(hdrExtLen));
-      rawFields.add(ByteArrays.toByteArray(routingType.value()));
-      rawFields.add(ByteArrays.toByteArray(segmentsLeft));
-      rawFields.add(data.getRawData());
+      rawFields.add(getData());
       return rawFields;
     }
 
     @Override
-    public int calcLength() { return data.length() + 4; }
+    public int calcLength() { return data.length + 2; }
 
     @Override
     protected String buildString() {
@@ -427,44 +354,12 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
         .append((getHdrExtLenAsInt() + 1) * 8)
         .append(" [bytes])")
         .append(ls);
-      sb.append("  Routing Type: ")
-        .append(routingType)
-        .append(ls);
-      sb.append("  Segments Left: ")
-        .append(getSegmentsLeftAsInt())
-        .append(ls);
-      sb.append("  type-specific data: ")
-        .append(data)
+      sb.append("  data: ")
+        .append(ByteArrays.toHexString(data, " "))
         .append(ls);
 
       return sb.toString();
     }
-
-  }
-
-  /**
-   * The interface representing an IPv6 routing data.
-   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * Classes which imprement this interface must implement the following method:
-   * {@code public static IpV6RoutingData newInstance(byte[] rawData, int offset, int length)
-   * throws IllegalRawDataException}
-   *
-   * @author Kaito Yamada
-   * @since pcap4j 0.9.11
-   */
-  public interface IpV6RoutingData extends Serializable {
-
-    /**
-     *
-     * @return length
-     */
-    public int length();
-
-    /**
-     *
-     * @return raw data
-     */
-    public byte[] getRawData();
 
   }
 
