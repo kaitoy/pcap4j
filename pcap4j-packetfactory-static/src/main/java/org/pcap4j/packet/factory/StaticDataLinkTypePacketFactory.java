@@ -10,6 +10,7 @@ package org.pcap4j.packet.factory;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpPacket;
+import org.pcap4j.packet.LinuxSllPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.DataLinkType;
@@ -50,6 +51,20 @@ extends AbstractStaticPacketFactory<DataLinkType> {
         @Override
         public Class<UnknownPacket> getTargetClass() {
           return UnknownPacket.class;
+        }
+      }
+    );
+    instantiaters.put(
+      DataLinkType.LINUX_SLL, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return LinuxSllPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<LinuxSllPacket> getTargetClass() {
+          return LinuxSllPacket.class;
         }
       }
     );

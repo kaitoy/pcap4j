@@ -1,0 +1,16 @@
+[Linux SLL header (16 bytes)]
+  Packet Type: 0(A packet addressed to the local host)
+  Hardware Type: 1(Ethernet(10Mb))
+  Hardware Length: 4
+  Address: ff:ee:dd:cc (ff ee dd cc 11 22 33 44)
+  Protocol: 0x0806(ARP)
+[ARP Header (28 bytes)]
+  Hardware type: 1(Ethernet(10Mb))
+  Protocol type: 0x0800(IPv4)
+  Hardware length: 6 [bytes]
+  Protocol length: 4 [bytes]
+  Operation: 1(REQUEST)
+  Source hardware address: aa:bb:cc:dd:ee:ff
+  Source protocol address: /192.0.2.1
+  Destination hardware address: 11:22:33:44:55:66
+  Destination protocol address: /192.0.2.2

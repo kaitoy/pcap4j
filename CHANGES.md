@@ -2,6 +2,7 @@ Future
 ======
 ### New Features ###
 * Add SSH2 support.
+* [Issues#28](https://github.com/kaitoy/pcap4j/issues/28): Support Linux cooked-mode capture (SLL).
 
 ### Bug Fixes ###
 

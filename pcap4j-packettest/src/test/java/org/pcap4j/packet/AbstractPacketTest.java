@@ -106,7 +106,7 @@ public abstract class AbstractPacketTest {
                         .toString();
     Packet p = getWholePacket();
 
-    PcapHandle handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
+    PcapHandle handle = Pcaps.openDead(getDataLinkType(), 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
     dumper.dump(p, 0, 0);
     dumper.close();
@@ -135,6 +135,10 @@ public abstract class AbstractPacketTest {
 
     in1.close();
     in2.close();
+  }
+
+  protected DataLinkType getDataLinkType() {
+    return DataLinkType.EN10MB;
   }
 
   @Test

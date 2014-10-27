@@ -63,12 +63,12 @@ Features
   You can also craft a packet object from scratch.
 * Sending packet objects to a real network.
 * Supported protocols:
- * Ethernet
+ * Ethernet, Linux SLL, and raw IP
  * IEEE802.1Q
  * ARP
  * IPv4 (RFC791 and RFC1349) and IPv6 (RFC2460)
  * ICMPv4 (RFC792) and ICMPv6 (RFC4443, RFC4861)
- * TCP(RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21) and UDP
+ * TCP (RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21) and UDP
 * All built-in packet classes are serializable and thread-safe(practically immutable).
 * You can add a protocol support without modifying Pcap4J library itself.
 * Dumping and reading pcap-formatted files(e.g. a capture file of Wireshark).

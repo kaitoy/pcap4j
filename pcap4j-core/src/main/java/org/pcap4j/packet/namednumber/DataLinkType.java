@@ -70,6 +70,12 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
   /**
    *
    */
+  public static final DataLinkType LINUX_SLL
+    = new DataLinkType(113, "Linux cooked-mode capture"); // Linux cooked-mode capture (SLL)
+
+  /**
+   *
+   */
   public static final DataLinkType DOCSIS
     = new DataLinkType(143, "DOCSIS"); // DOCSIS
 

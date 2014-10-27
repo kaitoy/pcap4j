@@ -461,6 +461,71 @@ public final class ByteArrays {
    *
    * @param array
    * @param offset
+   * @param length
+   * @return a new LinkLayerAddress object.
+   */
+  public static LinkLayerAddress getLinkLayerAddress(byte[] array, int offset, int length) {
+    return getLinkLayerAddress(array, offset, length, ByteOrder.BIG_ENDIAN);
+  }
+
+
+  /**
+   *
+   * @param array
+   * @param offset
+   * @param length
+   * @param bo
+   * @return a new LinkLayerAddress object.
+   */
+  public static LinkLayerAddress getLinkLayerAddress(
+    byte[] array, int offset, int length, ByteOrder bo
+  ) {
+    validateBounds(array, offset, length);
+
+    if (bo == null) {
+      throw new NullPointerException(" bo: " + bo);
+    }
+
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return LinkLayerAddress.getByAddress(
+               reverse(getSubArray(array, offset, length))
+             );
+    }
+    else {
+      return LinkLayerAddress.getByAddress(
+               getSubArray(array, offset, length)
+             );
+    }
+  }
+
+  /**
+   *
+   * @param value
+   * @return byte array
+   */
+  public static byte[] toByteArray(LinkLayerAddress value) {
+    return toByteArray(value, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   *
+   * @param value
+   * @param bo
+   * @return byte array
+   */
+  public static byte[] toByteArray(LinkLayerAddress value, ByteOrder bo) {
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return reverse(value.getAddress());
+    }
+    else {
+      return value.getAddress();
+    }
+  }
+
+  /**
+   *
+   * @param array
+   * @param offset
    * @return a new Inet4Address object.
    */
   public static Inet4Address getInet4Address(byte[] array, int offset) {
