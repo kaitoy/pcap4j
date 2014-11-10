@@ -238,7 +238,7 @@ public final class IpV6ExtUnknownPacket extends AbstractPacket {
       if (length < 4) {
         StringBuilder sb = new StringBuilder(110);
         sb.append(
-            "The data length of IPv6 routing header is must be more than 3. data: "
+            "The data length of this header is must be more than 3. data: "
            )
           .append(ByteArrays.toHexString(rawData, " "))
           .append(", offset: ")
@@ -257,7 +257,7 @@ public final class IpV6ExtUnknownPacket extends AbstractPacket {
       int headerLength = (getHdrExtLenAsInt() + 1) * 8;
       if (length < headerLength) {
         StringBuilder sb = new StringBuilder(110);
-        sb.append("The data is too short to build an IPv6 routing header(")
+        sb.append("The data is too short to build this header(")
           .append(headerLength)
           .append(" bytes). data: ")
           .append(ByteArrays.toHexString(rawData, " "))
