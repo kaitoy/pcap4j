@@ -107,10 +107,10 @@ public abstract class AbstractPacket implements Packet {
   /**
    * This method calculates the value {@link #length length()} will return by
    * adding up the header length and the payload length.
-   * If you write this subclass which represents a packet with, for example, a trailer,
+   * If you write this subclass which represents a packet with extra parts (e.g. a trailer),
    * you need to override this method.
    *
-   * @return the calculated length
+   * @return a calculated length
    */
   protected int calcLength() {
     int length = 0;
@@ -139,10 +139,10 @@ public abstract class AbstractPacket implements Packet {
   /**
    * This method builds the value {@link #getRawData getRawData()} will return by
    * concatenating the header's raw data and the payload's raw data.
-   * If you write this subclass which represents a packet with, for example, a trailer,
+   * If you write this subclass which represents a packet with extra parts (e.g. a trailer),
    * you need to override this method.
    *
-   * @return the raw data built
+   * @return a raw data built
    */
   protected byte[] buildRawData() {
     byte[] rd = new byte[length()];
@@ -217,13 +217,12 @@ public abstract class AbstractPacket implements Packet {
   public abstract Builder getBuilder();
 
   /**
-   * Returns the hex string representation of this object.
    * This method builds the value {@link #toHexString toHexString()} will return
    * using the return value of {@link #getRawData getRawData()}.
    * Each octet in this return value is separated by a white space.
    * (e.g. 00 01 02 03 aa bb cc)
    *
-   * @return the hex string representation of this object
+   * @return a hex string representation of this object
    */
   protected String buildHexString() {
     return ByteArrays.toHexString(getRawData(), " ");
@@ -235,7 +234,7 @@ public abstract class AbstractPacket implements Packet {
    * when it is called for the first time,
    * and then, this method returns the cached value from the second time.
    *
-   * @return the hex string representation of this object
+   * @return a hex string representation of this object
    */
  public String toHexString() {
    return hexStringCache.getValue();
@@ -244,10 +243,10 @@ public abstract class AbstractPacket implements Packet {
   /**
    * This method builds the value {@link #toString toString()} will return by
    * concatenating the header's string representation and the payload's string representation.
-   * If you write this subclass which represents a packet with, for example, a trailer,
+   * If you write this subclass which represents a packet with extra parts (e.g. a trailer),
    * you need to override this method.
    *
-   * @return the string representation of this object.
+   * @return a string representation of this object
    */
   protected String buildString() {
     StringBuilder sb = new StringBuilder();
@@ -263,6 +262,7 @@ public abstract class AbstractPacket implements Packet {
   }
 
   /**
+   * Returns a string representation of the object.
    * This method calls {@link #buildString buildString()} and caches the return value
    * when it is called for the first time,
    * and then, this method returns the cached value from the second time.
@@ -311,19 +311,37 @@ public abstract class AbstractPacket implements Packet {
   }
 
   /**
+   * This method calculates the value {@link #hashCode hashCode()} will return using
+   * the header's hash code and the payload's hash code.
+   * If you write this subclass which represents a packet with extra parts (e.g. a trailer),
+   * you need to override this method.
    *
-   * @return a hash code value for the object.
+   * @return a calculated hash code value for the object
    */
   protected int calcHashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    if (getHeader() != null) {
+      result = 31 * result + getHeader().hashCode();
+    }
+    if (getPayload() != null) {
+      result = 31 * result + getPayload().hashCode();
+    }
+    return result;
   }
 
+  /**
+   * Returns a hash code value for the object.
+   * This method calls {@link #calcHashCode calcHashCode()} and caches the return value
+   * when it is called for the first time,
+   * and then, this method returns the cached value from the second time.
+   */
   @Override
   public int hashCode() {
     return hashCodeCache.getValue();
   }
 
   /**
+   * Abstract packet builder class.
    *
    * @author Kaito Yamada
    * @version pcap4j 0.9.9
@@ -369,6 +387,7 @@ public abstract class AbstractPacket implements Packet {
   }
 
   /**
+   * Abstract header class.
    *
    * @author Kaito Yamada
    * @version pcap4j 0.9.1
@@ -438,14 +457,20 @@ public abstract class AbstractPacket implements Packet {
     }
 
     /**
+     * Returns a list of byte arrays which represents this header's fields.
+     * This method is called by {@link #calcLength calcLength()}
+     * and {@link #buildRawData buildRawData()}.
      *
-     * @return a list containing the raw fields.
+     * @return a list of byte arrays which represents this header's fields
      */
     protected abstract List<byte[]> getRawFields();
 
     /**
+     * This method calculates the value {@link #length length()} will return by
+     * adding up the lengths of byte arrays in the list
+     * {@link #getRawFields getRawFields()} returns.
      *
-     * @return length
+     * @return a calculated length
      */
     protected int calcLength() {
       int length = 0;
@@ -455,14 +480,23 @@ public abstract class AbstractPacket implements Packet {
       return length;
     }
 
+    /**
+     * Returns the header length in bytes.
+     * This method calls {@link #calcLength calcLength()} and caches the return value
+     * when it is called for the first time,
+     * and then, this method returns the cached value from the second time.
+     */
     @Override
     public int length() {
       return lengthCache.getValue();
     }
 
     /**
+     * This method builds the value {@link #getRawData getRawData()} will return by
+     * concatenating the byte arrays in the list
+     * {@link #getRawFields getRawFields()} returns.
      *
-     * @return raw data
+     * @return a raw data built
      */
     protected byte[] buildRawData() {
       List<byte[]> rawFields = getRawFields();
@@ -485,6 +519,14 @@ public abstract class AbstractPacket implements Packet {
       return rawData;
     }
 
+    /**
+     * Returns this header's raw data.
+     * This method calls {@link #buildRawData buildRawData()} and caches the return value
+     * when it is called for the first time,
+     * and then, this method returns the cached value from the second time.
+     * More correctly, this method returns a copy of the cached value,
+     * so that the cache can't be changed.
+     */
     @Override
     public byte[] getRawData() {
       byte[] rawData = rawDataCache.getValue();
@@ -495,34 +537,67 @@ public abstract class AbstractPacket implements Packet {
     }
 
     /**
+     * This method builds the value {@link #toHexString toHexString()} will return
+     * using the return value of {@link #getRawData getRawData()}.
+     * Each octet in this return value is separated by a white space.
+     * (e.g. 00 01 02 03 aa bb cc)
      *
-     * @return a hex string representation of the object.
+     * @return a hex string representation of this object
      */
     protected String buildHexString() {
-      return ByteArrays.toHexString(getRawData(), ":");
+      return ByteArrays.toHexString(getRawData(), " ");
     }
 
     /**
+     * Returns the hex string representation of this object.
+     * This method calls {@link #buildHexString buildHexString()} and caches the return value
+     * when it is called for the first time,
+     * and then, this method returns the cached value from the second time.
      *
-     * @return a hex string representation of the object.
+     * @return a hex string representation of this object
      */
     public String toHexString() {
       return hexStringCache.getValue();
     }
 
     /**
+     * This method builds the value {@link #toString toString()} will return.
      *
-     * @return a string representation of the object.
+     * @return a string representation of this object
      */
     protected String buildString() {
-      return toHexString();
+      StringBuilder sb = new StringBuilder();
+      String ls = System.getProperty("line.separator");
+
+      sb.append("[A header (")
+        .append(length())
+        .append(" bytes)]")
+        .append(ls);
+      sb.append("  Hex stream: ")
+        .append(ByteArrays.toHexString(getRawData(), " "))
+        .append(ls);
+
+      return sb.toString();
     }
 
+    /**
+     * Returns a string representation of the object.
+     * This method calls {@link #buildString buildString()} and caches the return value
+     * when it is called for the first time,
+     * and then, this method returns the cached value from the second time.
+     */
     @Override
     public String toString() {
       return stringCache.getValue();
     }
 
+
+    /**
+     * Indicates whether some other object is "equal to" this one using
+     * return values of {@link #getRawData getRawData()}.
+     * This method should be overridden so that it does more strict comparisons
+     * more efficiently.
+     */
     @Override
     public boolean equals(Object obj) {
       if (obj == this) { return true; }
@@ -531,13 +606,22 @@ public abstract class AbstractPacket implements Packet {
     }
 
     /**
+     * This method builds the value {@link #hashCode hashCode()} will return using
+     * the byte array {@link #getRawData getRawData()} returns.
+     * This method may be better to be overridden for performance reason.
      *
-     * @return a hash code value for the object.
+     * @return a calculated hash code value for the object
      */
     protected int calcHashCode() {
       return Arrays.hashCode(getRawData());
     }
 
+    /**
+     * Returns a hash code value for the object.
+     * This method calls {@link #calcHashCode calcHashCode()} and caches the return value
+     * when it is called for the first time,
+     * and then, this method returns the cached value from the second time.
+     */
     @Override
     public int hashCode() {
       return hashCodeCache.getValue();

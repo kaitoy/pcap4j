@@ -10,7 +10,7 @@ package org.pcap4j.packet;
 import java.io.Serializable;
 
 /**
- * The interface representing a packet.
+ * The interface representing a packet which consists of a header and a payload.
  * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
  * classes which imprement this interface must implement the following method:
  * {@code public static Packet newPacket(byte[] rawData, int offset, int length)
