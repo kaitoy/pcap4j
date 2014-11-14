@@ -15,7 +15,7 @@ import org.pcap4j.util.LazyValue;
 import org.pcap4j.util.LazyValue.BuildValueCommand;
 
 /**
- * Abstract packet class.
+ * Abstract immutable packet class.
  * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
  * this subclass must implement the following method:
  * {@code public static Packet newPacket(byte[] rawData, int offset, int length)
@@ -387,7 +387,7 @@ public abstract class AbstractPacket implements Packet {
   }
 
   /**
-   * Abstract header class.
+   * Abstract immutable header class.
    *
    * @author Kaito Yamada
    * @version pcap4j 0.9.1
