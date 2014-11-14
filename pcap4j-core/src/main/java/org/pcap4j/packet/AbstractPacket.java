@@ -88,15 +88,29 @@ public abstract class AbstractPacket implements Packet {
         );
   }
 
+  /**
+   * Returns the Header object representing this packet's header.
+   * This subclass have to override this method if the packet
+   * represented by the subclass has a header.
+   */
   @Override
   public Header getHeader() { return null; }
 
+  /**
+   * Returns the Packet object representing this packet's payload.
+   * This subclass have to override this method if the packet
+   * represented by the subclass has a payload.
+   */
   @Override
   public Packet getPayload() { return null; }
 
   /**
+   * This method calculates the value {@link #length length()} will return by
+   * adding up the header length and the payload length.
+   * If you write this subclass which represents a packet with, for example, a trailer,
+   * you need to override this method.
    *
-   * @return length
+   * @return the calculated length
    */
   protected int calcLength() {
     int length = 0;
@@ -111,14 +125,24 @@ public abstract class AbstractPacket implements Packet {
     return length;
   }
 
+  /**
+   * Returns the packet length in bytes.
+   * This method calls {@link #calcLength calcLength()} and caches the return value
+   * when it is called for the first time,
+   * and then, this method returns the cached value from the second time.
+   */
   @Override
   public int length() {
     return lengthCache.getValue();
   }
 
   /**
+   * This method builds the value {@link #getRawData getRawData()} will return by
+   * concatenating the header's raw data and the payload's raw data.
+   * If you write this subclass which represents a packet with, for example, a trailer,
+   * you need to override this method.
    *
-   * @return raw data
+   * @return the raw data built
    */
   protected byte[] buildRawData() {
     byte[] rd = new byte[length()];
@@ -142,6 +166,14 @@ public abstract class AbstractPacket implements Packet {
     return rd;
   }
 
+  /**
+   * Returns this packet's raw data.
+   * This method calls {@link #buildRawData buildRawData()} and caches the return value
+   * when it is called for the first time,
+   * and then, this method returns the cached value from the second time.
+   * More correctly, this method returns a copy of the cached value,
+   * so that the cache can't be changed.
+   */
   @Override
   public byte[] getRawData() {
     byte[] rawData = rawDataCache.getValue();
@@ -185,25 +217,38 @@ public abstract class AbstractPacket implements Packet {
   public abstract Builder getBuilder();
 
   /**
+   * Returns the hex string representation of this object.
+   * This method builds the value {@link #toHexString toHexString()} will return
+   * using the return value of {@link #getRawData getRawData()}.
+   * Each octet in this return value is separated by a white space.
+   * (e.g. 00 01 02 03 aa bb cc)
    *
-   * @return a hex string representation of the object.
+   * @return the hex string representation of this object
    */
   protected String buildHexString() {
     return ByteArrays.toHexString(getRawData(), " ");
   }
 
   /**
+   * Returns the hex string representation of this object.
+   * This method calls {@link #buildHexString buildHexString()} and caches the return value
+   * when it is called for the first time,
+   * and then, this method returns the cached value from the second time.
    *
-   * @return a hex string representation of the object.
+   * @return the hex string representation of this object
    */
  public String toHexString() {
    return hexStringCache.getValue();
  }
 
- /**
-  *
-  * @return a string representation of the object.
-  */
+  /**
+   * This method builds the value {@link #toString toString()} will return by
+   * concatenating the header's string representation and the payload's string representation.
+   * If you write this subclass which represents a packet with, for example, a trailer,
+   * you need to override this method.
+   *
+   * @return the string representation of this object.
+   */
   protected String buildString() {
     StringBuilder sb = new StringBuilder();
 
@@ -217,11 +262,25 @@ public abstract class AbstractPacket implements Packet {
     return sb.toString();
   }
 
+  /**
+   * This method calls {@link #buildString buildString()} and caches the return value
+   * when it is called for the first time,
+   * and then, this method returns the cached value from the second time.
+   */
   @Override
   public String toString() {
     return stringCache.getValue();
   }
 
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   * This method firstly compares this packet's header using
+   * the header's equals(Object) method, then compares this packet's payload
+   * using the payload's equals(Object) method.
+   * If you write this subclass with fields which represent
+   * somethings other than header or payload,
+   * you need to override this method.
+   */
   @Override
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
