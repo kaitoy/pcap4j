@@ -8,10 +8,8 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -214,6 +212,22 @@ extends IcmpV6InvokingPacketPacket {
         .append(pointer)
         .append(ls);
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IcmpV6ParameterProblemHeader other = (IcmpV6ParameterProblemHeader)obj;
+      return pointer == other.pointer;
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + pointer;
+      return result;
     }
 
   }

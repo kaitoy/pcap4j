@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
-import java.util.Arrays;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 import org.pcap4j.util.ByteArrays;
@@ -218,12 +217,21 @@ implements IpV6NeighborDiscoveryOption {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IpV6NeighborDiscoveryMtuOption other = (IpV6NeighborDiscoveryMtuOption)obj;
+    return
+         mtu == other.mtu
+      && length == other.length
+      && reserved == other.reserved;
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + reserved;
+    result = 31 * result + mtu;
+    return result;
   }
 
   /**

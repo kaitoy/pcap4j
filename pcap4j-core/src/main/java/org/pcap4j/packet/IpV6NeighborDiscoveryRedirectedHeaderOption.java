@@ -277,12 +277,22 @@ implements IpV6NeighborDiscoveryOption {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IpV6NeighborDiscoveryRedirectedHeaderOption other
+      = (IpV6NeighborDiscoveryRedirectedHeaderOption)obj;
+    return
+         length == other.length
+      && ipPacket.equals(other.ipPacket)
+      && Arrays.equals(reserved, other.reserved);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + Arrays.hashCode(reserved);
+    result = 31 * result + ipPacket.hashCode();
+    return result;
   }
 
   /**

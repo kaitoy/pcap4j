@@ -7,7 +7,6 @@
 
 package org.pcap4j.packet;
 
-import java.util.Arrays;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.ByteArrays;
@@ -172,12 +171,19 @@ public final class TcpWindowScaleOption implements TcpOption {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    TcpWindowScaleOption other = (TcpWindowScaleOption)obj;
+    return
+         length == other.length
+      && shiftCount == other.shiftCount;
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + shiftCount;
+    return result;
   }
 
   /**

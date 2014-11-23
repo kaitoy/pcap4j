@@ -8,10 +8,9 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
@@ -192,6 +191,22 @@ public final class EthernetPacket extends AbstractPacket {
   @Override
   public Builder getBuilder() {
     return new Builder(this);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (super.equals(obj)) {
+      EthernetPacket other = (EthernetPacket)obj;
+      return Arrays.equals(pad, other.pad);
+    }
+    else {
+      return false;
+    }
+  }
+
+  @Override
+  protected int calcHashCode() {
+    return 31 * super.calcHashCode() + Arrays.hashCode(pad);
   }
 
   /**
@@ -416,6 +431,27 @@ public final class EthernetPacket extends AbstractPacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      EthernetHeader other = (EthernetHeader)obj;
+      return
+           dstAddr.equals(other.dstAddr)
+        && srcAddr.equals(other.srcAddr)
+        && type.equals(other.type);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + dstAddr.hashCode();
+      result = 31 * result + srcAddr.hashCode();
+      result = 31 * result + type.hashCode();
+      return result;
     }
 
   }

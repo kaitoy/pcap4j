@@ -1,12 +1,6 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
+import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -17,7 +11,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -52,7 +45,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
   private final boolean reservedFlag;
   private final boolean dontFragmentFlag;
   private final boolean moreFragmentFlag;
-  private final short flagmentOffset;
+  private final short fragmentOffset;
   private final byte ttl;
   private final IpNumber protocol;
   private final short headerChecksum;
@@ -72,7 +65,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
     this.reservedFlag = true;
     this.dontFragmentFlag = false;
     this.moreFragmentFlag = true;
-    this.flagmentOffset = (short)0;
+    this.fragmentOffset = (short)0;
     this.ttl = 111;
     this.protocol = IpNumber.UDP;
     this.headerChecksum = (short)0xEEEE;
@@ -132,7 +125,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
      .reservedFlag(reservedFlag)
      .dontFragmentFlag(dontFragmentFlag)
      .moreFragmentFlag(moreFragmentFlag)
-     .flagmentOffset(flagmentOffset)
+     .fragmentOffset(fragmentOffset)
      .ttl(ttl)
      .protocol(protocol)
      .headerChecksum(headerChecksum)
@@ -149,7 +142,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
       );
     this.packet1 = b.build();
 
-    b.flagmentOffset((short)1)
+    b.fragmentOffset((short)1)
      .moreFragmentFlag(false)
      .payloadBuilder(
         new FragmentedPacket.Builder()
@@ -205,7 +198,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
     assertEquals(reservedFlag, h.getReservedFlag());
     assertEquals(dontFragmentFlag, h.getDontFragmentFlag());
     assertEquals(moreFragmentFlag, h.getMoreFragmentFlag());
-    assertEquals(flagmentOffset, h.getFlagmentOffset());
+    assertEquals(fragmentOffset, h.getFragmentOffset());
     assertEquals(ttl, h.getTtl());
     assertEquals(protocol, h.getProtocol());
     assertEquals(headerChecksum, h.getHeaderChecksum());
@@ -246,27 +239,27 @@ public class IpV4PacketTest extends AbstractPacketTest {
 
     b.ihl((byte)1);
 
-    b.flagmentOffset((short)0);
+    b.fragmentOffset((short)0);
     p = b.build();
-    assertEquals((short)0, p.getHeader().getFlagmentOffset());
+    assertEquals((short)0, p.getHeader().getFragmentOffset());
 
-    b.flagmentOffset((short)8191);
+    b.fragmentOffset((short)8191);
     p = b.build();
-    assertEquals((short)8191, p.getHeader().getFlagmentOffset());
+    assertEquals((short)8191, p.getHeader().getFragmentOffset());
 
-    b.flagmentOffset((short)8192);
+    b.fragmentOffset((short)8192);
     try {
       p = b.build();
       fail();
     } catch (IllegalArgumentException e) {}
 
-    b.flagmentOffset((short)-1);
+    b.fragmentOffset((short)-1);
     try {
       p = b.build();
       fail();
     } catch (IllegalArgumentException e) {}
 
-    b.flagmentOffset((short)0);
+    b.fragmentOffset((short)0);
 
     b.totalLength((short)0);
     b.identification((short)0);

@@ -177,12 +177,19 @@ public final class Ssh2NameList implements Serializable {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    Ssh2NameList other = (Ssh2NameList)obj;
+    return
+         length == other.length
+      && list.equals(other.list);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + list.hashCode();
+    return result;
   }
 
 }

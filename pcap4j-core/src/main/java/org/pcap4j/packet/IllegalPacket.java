@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet;
 
+import java.util.Arrays;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -75,6 +76,35 @@ public final class IllegalPacket extends AbstractPacket {
     return new Builder(this);
   }
 
+  @Override
+  protected String buildString() {
+    StringBuilder sb = new StringBuilder();
+    String ls = System.getProperty("line.separator");
+
+    sb.append("[Illegal Packet (")
+      .append(length())
+      .append(" bytes)]")
+      .append(ls);
+    sb.append("  Hex stream: ")
+      .append(ByteArrays.toHexString(rawData, " "))
+      .append(ls);
+
+    return sb.toString();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) { return true; }
+    if (!this.getClass().isInstance(obj)) { return false; }
+    IllegalPacket other = (IllegalPacket)obj;
+    return Arrays.equals(rawData, other.rawData);
+  }
+
+  @Override
+  protected int calcHashCode() {
+    return Arrays.hashCode(rawData);
+  }
+
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.5
@@ -107,22 +137,6 @@ public final class IllegalPacket extends AbstractPacket {
       return new IllegalPacket(this);
     }
 
-  }
-
-  @Override
-  protected String buildString() {
-    StringBuilder sb = new StringBuilder();
-    String ls = System.getProperty("line.separator");
-
-    sb.append("[Illegal Packet (")
-      .append(length())
-      .append(" bytes)]")
-      .append(ls);
-    sb.append("  Hex stream: ")
-      .append(ByteArrays.toHexString(rawData, " "))
-      .append(ls);
-
-    return sb.toString();
   }
 
 }

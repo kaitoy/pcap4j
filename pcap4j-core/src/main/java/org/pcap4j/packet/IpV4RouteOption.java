@@ -10,7 +10,6 @@ package org.pcap4j.packet;
 import static org.pcap4j.util.ByteArrays.*;
 import java.net.Inet4Address;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
@@ -198,12 +197,21 @@ abstract class IpV4RouteOption implements IpV4Option {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IpV4RouteOption other = (IpV4RouteOption)obj;
+    return
+         length == other.length
+      && pointer == other.pointer
+      && routeData.equals(other.routeData);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + pointer;
+    result = 31 * result + routeData.hashCode();
+    return result;
   }
 
   /**

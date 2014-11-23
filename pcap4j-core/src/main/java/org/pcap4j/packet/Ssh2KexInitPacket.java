@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.pcap4j.packet.namednumber.Ssh2MessageNumber;
 import org.pcap4j.util.ByteArrays;
@@ -613,6 +614,47 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      Ssh2KexInitHeader other = (Ssh2KexInitHeader)obj;
+      return
+           Arrays.equals(cookie, other.cookie)
+        && kexAlgorithms.equals(other.kexAlgorithms)
+        && serverHostKeyAlgorithms.equals(other.serverHostKeyAlgorithms)
+        && encryptionAlgorithmsClientToServer.equals(other.encryptionAlgorithmsClientToServer)
+        && encryptionAlgorithmsServerToClient.equals(other.encryptionAlgorithmsServerToClient)
+        && macAlgorithmsClientToServer.equals(other.macAlgorithmsClientToServer)
+        && macAlgorithmsServerToClient.equals(other.macAlgorithmsServerToClient)
+        && compressionAlgorithmsClientToServer.equals(other.compressionAlgorithmsClientToServer)
+        && compressionAlgorithmsServerToClient.equals(other.compressionAlgorithmsServerToClient)
+        && languagesClientToServer.equals(other.languagesClientToServer)
+        && languagesServerToClient.equals(other.languagesServerToClient)
+        && firstKexPacketFollows.equals(other.firstKexPacketFollows)
+        && reserved == other.reserved;
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + Arrays.hashCode(cookie);
+      result = 31 * result + kexAlgorithms.hashCode();
+      result = 31 * result + serverHostKeyAlgorithms.hashCode();
+      result = 31 * result + encryptionAlgorithmsClientToServer.hashCode();
+      result = 31 * result + encryptionAlgorithmsServerToClient.hashCode();
+      result = 31 * result + macAlgorithmsClientToServer.hashCode();
+      result = 31 * result + macAlgorithmsServerToClient.hashCode();
+      result = 31 * result + compressionAlgorithmsClientToServer.hashCode();
+      result = 31 * result + compressionAlgorithmsServerToClient.hashCode();
+      result = 31 * result + languagesClientToServer.hashCode();
+      result = 31 * result + languagesServerToClient.hashCode();
+      result = 31 * result + firstKexPacketFollows.hashCode();
+      result = 31 * result + reserved;
+      return result;
     }
 
   }

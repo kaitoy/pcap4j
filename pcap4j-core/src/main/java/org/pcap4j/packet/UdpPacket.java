@@ -585,6 +585,29 @@ public final class UdpPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      UdpHeader other = (UdpHeader)obj;
+      return
+           checksum == other.checksum
+        && length == other.length
+        && srcPort.equals(other.srcPort)
+        && dstPort.equals(other.dstPort);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + srcPort.hashCode();
+      result = 31 * result + dstPort.hashCode();
+      result = 31 * result + length;
+      result = 31 * result + checksum;
+      return result;
+    }
+
   }
 
 }

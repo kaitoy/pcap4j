@@ -10,7 +10,6 @@ package org.pcap4j.packet;
 import static org.pcap4j.util.ByteArrays.*;
 import java.net.Inet6Address;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
@@ -142,12 +141,19 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IpV6RoutingSourceRouteData other = (IpV6RoutingSourceRouteData)obj;
+    return
+         reserved == other.reserved
+      && addresses.equals(other.addresses);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + reserved;
+    result = 31 * result + addresses.hashCode();
+    return result;
   }
 
 }

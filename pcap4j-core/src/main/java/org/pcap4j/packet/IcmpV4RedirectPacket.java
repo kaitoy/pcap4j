@@ -8,11 +8,9 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
-
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -217,6 +215,22 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IcmpV4RedirectHeader other = (IcmpV4RedirectHeader)obj;
+      return gatewayInternetAddress.equals(other.gatewayInternetAddress);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + gatewayInternetAddress.hashCode();
+      return result;
     }
 
   }

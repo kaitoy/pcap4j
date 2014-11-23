@@ -84,7 +84,7 @@ public final class UnknownIpV6RoutingData implements IpV6RoutingData {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[data: ")
-      .append(ByteArrays.toHexString(rawData, ""))
+      .append(ByteArrays.toHexString(rawData, " "))
       .append("]");
     return sb.toString();
   }
@@ -93,12 +93,14 @@ public final class UnknownIpV6RoutingData implements IpV6RoutingData {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    UnknownIpV6RoutingData other = (UnknownIpV6RoutingData)obj;
+    return Arrays.equals(rawData, other.rawData);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    return Arrays.hashCode(rawData);
   }
 
 }

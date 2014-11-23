@@ -7,7 +7,6 @@
 
 package org.pcap4j.packet;
 
-import java.util.Arrays;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.ByteArrays;
@@ -197,12 +196,21 @@ public final class TcpTimestampsOption implements TcpOption {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    TcpTimestampsOption other = (TcpTimestampsOption)obj;
+    return
+         length == other.length
+      && tsValue == other.tsValue
+      && tsEchoReply == other.tsEchoReply;
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + tsValue;
+    result = 31 * result + tsEchoReply;
+    return result;
   }
 
   /**

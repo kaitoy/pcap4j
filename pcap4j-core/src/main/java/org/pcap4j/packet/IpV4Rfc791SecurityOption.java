@@ -7,8 +7,6 @@
 
 package org.pcap4j.packet;
 
-import java.util.Arrays;
-
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpV4SecurityOptionCompartments;
@@ -130,6 +128,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
     }
   }
 
+  @Override
   public IpV4OptionType getType() { return type; }
 
   /**
@@ -172,8 +171,10 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
    */
   public IpV4SecurityOptionTransmissionControlCode getTcc() { return tcc; }
 
+  @Override
   public int length() { return 11; }
 
+  @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[0]  = getType().value();
@@ -219,12 +220,25 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IpV4Rfc791SecurityOption other = (IpV4Rfc791SecurityOption)obj;
+    return
+         length == other.length
+      && security.equals(other.security)
+      && compartments.equals(other.compartments)
+      && handlingRestrictions.equals(other.handlingRestrictions)
+      && tcc.equals(other.tcc);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + security.hashCode();
+    result = 31 * result + compartments.hashCode();
+    result = 31 * result + handlingRestrictions.hashCode();
+    result = 31 * result + tcc.hashCode();
+    return result;
   }
 
   /**
@@ -306,6 +320,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
       return this;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
@@ -314,6 +329,7 @@ public final class IpV4Rfc791SecurityOption implements IpV4Option {
     /**
      * @return a new IpV4Rfc791SecurityOption object.
      */
+    @Override
     public IpV4Rfc791SecurityOption build() {
       return new IpV4Rfc791SecurityOption(this);
     }

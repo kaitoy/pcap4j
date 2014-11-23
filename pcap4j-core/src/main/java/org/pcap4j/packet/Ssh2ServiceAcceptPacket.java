@@ -211,6 +211,22 @@ public final class Ssh2ServiceAcceptPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      Ssh2ServiceAcceptHeader other = (Ssh2ServiceAcceptHeader)obj;
+      return serviceName.equals(other.serviceName);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + serviceName.hashCode();
+      return result;
+    }
+
   }
 
 }

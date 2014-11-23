@@ -9,6 +9,7 @@ package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.factory.PacketFactory;
@@ -359,6 +360,27 @@ public final class IpV6ExtUnknownPacket extends AbstractPacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IpV6ExtUnknownHeader other = (IpV6ExtUnknownHeader)obj;
+      return
+           nextHeader.equals(other.nextHeader)
+        && hdrExtLen == other.hdrExtLen
+        && Arrays.equals(data, other.data);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + nextHeader.hashCode();
+      result = 31 * result + hdrExtLen;
+      result = 31 * result + Arrays.hashCode(data);
+      return result;
     }
 
   }

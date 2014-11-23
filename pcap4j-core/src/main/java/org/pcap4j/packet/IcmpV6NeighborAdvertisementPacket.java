@@ -397,6 +397,33 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IcmpV6NeighborAdvertisementHeader other = (IcmpV6NeighborAdvertisementHeader)obj;
+      return
+           targetAddress.equals(other.targetAddress)
+        && routerFlag == other.routerFlag
+        && solicitedFlag == other.solicitedFlag
+        && overrideFlag == other.overrideFlag
+        && reserved == other.reserved
+        && options.equals(other.options);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + (routerFlag ? 1231 : 1237);
+      result = 31 * result + (solicitedFlag ? 1231 : 1237);
+      result = 31 * result + (overrideFlag ? 1231 : 1237);
+      result = 31 * result + reserved;
+      result = 31 * result + targetAddress.hashCode();
+      result = 31 * result + options.hashCode();
+      return result;
+    }
+
   }
 
 }

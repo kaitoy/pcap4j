@@ -26,7 +26,7 @@ import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.IcmpV4CommonPacket;
 import org.pcap4j.packet.IcmpV4EchoPacket;
 import org.pcap4j.packet.IpV4Packet;
-import org.pcap4j.packet.IpV4Rfc791Tos;
+import org.pcap4j.packet.IpV4Rfc1349Tos;
 import org.pcap4j.packet.SimpleBuilder;
 import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.DataLinkType;
@@ -84,7 +84,7 @@ public class IpV4HelperTest {
 
     IpV4Packet.Builder ipv4b = new IpV4Packet.Builder();
     ipv4b.version(IpVersion.IPV4)
-         .tos(IpV4Rfc791Tos.newInstance((byte)0))
+         .tos(IpV4Rfc1349Tos.newInstance((byte)0))
          .identification((short)100)
          .ttl((byte)100)
          .protocol(IpNumber.ICMPV4)

@@ -10,7 +10,6 @@ package org.pcap4j.packet;
 import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
@@ -227,12 +226,19 @@ public final class TcpSackOption implements TcpOption {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    TcpSackOption other = (TcpSackOption)obj;
+    return
+         length == other.length
+      && sacks.equals(other.sacks);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + sacks.hashCode();
+    return result;
   }
 
   /**
@@ -335,6 +341,25 @@ public final class TcpSackOption implements TcpOption {
      */
     public long getRightEdgeAsLong() {
       return 0xFFFFFFFFL & rightEdge;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      Sack other = (Sack)obj;
+      return
+           leftEdge == other.leftEdge
+        && rightEdge == other.rightEdge;
+    }
+
+    @Override
+    public int hashCode() {
+      int result = 17;
+      result = 31 * result + leftEdge;
+      result = 31 * result + rightEdge;
+      return result;
     }
 
   }

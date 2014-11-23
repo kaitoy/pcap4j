@@ -4,11 +4,11 @@
 [IPv4 Header (20 bytes)]
   Version: 4(IPv4)
   IHL: 5 (20 [bytes])
-  TOS: [precedence: 0(Routine)] [lowDelay: false] [highThroughput: false] [highReliability: false] [seventhBit: 0] [eighthBit: 0]
+  TOS: [precedence: 0(Routine)] [tos: 0(Default)] [mbz: 0]
   Total length: 31 [bytes]
   Identification: 100
   Flags: (Reserved, Don't Fragment, More Fragment) = (false, false, false)
-  Flagment offset: 0 (0 [bytes])
+  Fragment offset: 0 (0 [bytes])
   TTL: 100
   Protocol: 1(ICMPv4)
   Header checksum: 0xd276

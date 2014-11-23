@@ -8,10 +8,8 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
@@ -336,6 +334,29 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      Dot1qVlanTagHeader other = (Dot1qVlanTagHeader)obj;
+      return
+           vid == other.vid
+        && type.equals(other.type)
+        && priority == other.priority
+        && cfi == other.cfi;
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + priority;
+      result = 31 * result + (cfi ? 1231 : 1237);
+      result = 31 * result + vid;
+      result = 31 * result + type.hashCode();
+      return result;
     }
 
   }

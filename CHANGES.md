@@ -5,6 +5,10 @@ Future
 * [Issues#28](https://github.com/kaitoy/pcap4j/issues/28): Support Linux cooked-mode capture (SLL).
 
 ### Bug Fixes ###
+* Fix a typo (flagment -> fragment) in org.pcap4j.packet.IpV4Packet.
+ * IpV4Header#getFlagmentOffset() -> IpV4Header#getFragmentOffset()
+ * Builder#flagmentOffset -> Builder#fragmentOffset
+ * Change the serialization format of IpV4Packet and IpV4Header.
 
 ### Other Changes ###
 

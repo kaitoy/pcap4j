@@ -9,7 +9,6 @@ package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
-import java.util.Arrays;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
@@ -259,12 +258,25 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IpV4InternetTimestampOption other = (IpV4InternetTimestampOption)obj;
+    return
+         length == other.length
+      && pointer == other.pointer
+      && overflow == other.overflow
+      && flag.equals(other.flag)
+      && data.equals(other.data);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + pointer;
+    result = 31 * result + overflow;
+    result = 31 * result + flag.hashCode();
+    result = 31 * result + data.hashCode();
+    return result;
   }
 
   /**

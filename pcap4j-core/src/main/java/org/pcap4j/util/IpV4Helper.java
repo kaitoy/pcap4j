@@ -60,7 +60,7 @@ public final class IpV4Helper {
 
         IpV4Packet.Builder b = packet.getBuilder();
         b.moreFragmentFlag(true)
-         .flagmentOffset((short)(srcPos / 8))
+         .fragmentOffset((short)(srcPos / 8))
          .payloadBuilder(
             new UnknownPacket.Builder().rawData(fragmented_payload)
           )
@@ -79,7 +79,7 @@ public final class IpV4Helper {
 
         IpV4Packet.Builder b = packet.getBuilder();
         b.moreFragmentFlag(false)
-         .flagmentOffset((short)(srcPos / 8))
+         .fragmentOffset((short)(srcPos / 8))
          .payloadBuilder(
             new UnknownPacket.Builder().rawData(fragmented_payload)
           )
@@ -104,7 +104,7 @@ public final class IpV4Helper {
 
     IpV4Header lastPacketHeader = list.get(list.size() - 1).getHeader();
     int payloadLength
-      = lastPacketHeader.getFlagmentOffset() * 8
+      = lastPacketHeader.getFragmentOffset() * 8
           + lastPacketHeader.getTotalLengthAsInt()
           - lastPacketHeader.getIhl() * 4;
     if (payloadLength <= 0) {
@@ -132,7 +132,7 @@ public final class IpV4Helper {
     IpV4Packet.Builder b = list.get(0).getBuilder();
 
     b.moreFragmentFlag(false)
-     .flagmentOffset((short)0)
+     .fragmentOffset((short)0)
      .payloadBuilder(
         new SimpleBuilder(
           PacketFactories.getFactory(Packet.class, IpNumber.class)
@@ -154,8 +154,8 @@ public final class IpV4Helper {
 
     @Override
     public int compare(IpV4Packet p1, IpV4Packet p2) {
-      return p1.getHeader().getFlagmentOffset()
-               - p2.getHeader().getFlagmentOffset();
+      return p1.getHeader().getFragmentOffset()
+               - p2.getHeader().getFragmentOffset();
     }
 
   }

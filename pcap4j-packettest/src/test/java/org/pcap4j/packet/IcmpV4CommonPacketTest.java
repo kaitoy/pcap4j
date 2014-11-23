@@ -1,11 +1,9 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
-
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -62,7 +60,7 @@ public class IcmpV4CommonPacketTest extends AbstractPacketTest {
   protected Packet getWholePacket() throws UnknownHostException {
     IpV4Packet.Builder ipv4b = new IpV4Packet.Builder();
     ipv4b.version(IpVersion.IPV4)
-         .tos(IpV4Rfc791Tos.newInstance((byte)0))
+         .tos(IpV4Rfc1349Tos.newInstance((byte)0))
          .identification((short)100)
          .ttl((byte)100)
          .protocol(IpNumber.ICMPV4)

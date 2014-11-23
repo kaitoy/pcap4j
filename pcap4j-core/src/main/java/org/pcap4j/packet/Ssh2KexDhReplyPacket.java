@@ -276,6 +276,27 @@ public final class Ssh2KexDhReplyPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      Ssh2KexDhReplyHeader other = (Ssh2KexDhReplyHeader)obj;
+      return
+           k_s.equals(other.k_s)
+        && f.equals(other.f)
+        && signatureOfH.equals(other.signatureOfH);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + k_s.hashCode();
+      result = 31 * result + f.hashCode();
+      result = 31 * result + signatureOfH.hashCode();
+      return result;
+    }
+
   }
 
 }

@@ -12,7 +12,7 @@ import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.1
+ * @since pcap4j 1.3.0
  */
 public final class IpPacket extends AbstractPacket {
 

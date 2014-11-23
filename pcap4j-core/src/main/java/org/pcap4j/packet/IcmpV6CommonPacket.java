@@ -452,6 +452,27 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IcmpV6CommonHeader other = (IcmpV6CommonHeader)obj;
+      return
+           checksum == other.checksum
+        && type.equals(other.type)
+        && code.equals(other.code);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + type.hashCode();
+      result = 31 * result + code.hashCode();
+      result = 31 * result + checksum;
+      return result;
+    }
+
   }
 
   /**

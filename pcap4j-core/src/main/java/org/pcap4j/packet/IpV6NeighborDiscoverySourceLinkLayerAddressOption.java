@@ -222,12 +222,20 @@ implements IpV6NeighborDiscoveryOption {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IpV6NeighborDiscoverySourceLinkLayerAddressOption other
+      = (IpV6NeighborDiscoverySourceLinkLayerAddressOption)obj;
+    return
+         length == other.length
+      && Arrays.equals(linkLayerAddress, other.linkLayerAddress);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + Arrays.hashCode(linkLayerAddress);
+    return result;
   }
 
   /**

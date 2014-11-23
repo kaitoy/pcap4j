@@ -490,6 +490,37 @@ public final class IcmpV6RouterAdvertisementPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IcmpV6RouterAdvertisementHeader other = (IcmpV6RouterAdvertisementHeader)obj;
+      return
+           routerLifetime == other.routerLifetime
+        && reachableTime == other.reachableTime
+        && retransTimer == other.retransTimer
+        && curHopLimit == other.curHopLimit
+        && managedAddressConfigurationFlag == other.managedAddressConfigurationFlag
+        && otherConfigurationFlag == other.otherConfigurationFlag
+        && reserved == other.reserved
+        && options.equals(other.options);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + curHopLimit;
+      result = 31 * result + (managedAddressConfigurationFlag ? 1231 : 1237);
+      result = 31 * result + (otherConfigurationFlag ? 1231 : 1237);
+      result = 31 * result + reserved;
+      result = 31 * result + routerLifetime;
+      result = 31 * result + reachableTime;
+      result = 31 * result + retransTimer;
+      result = 31 * result + options.hashCode();
+      return result;
+    }
+
   }
 
 }

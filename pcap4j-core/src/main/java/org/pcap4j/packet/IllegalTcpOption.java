@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.ByteArrays;
@@ -68,10 +67,13 @@ public final class IllegalTcpOption implements TcpOption {
    );
   }
 
+  @Override
   public TcpOptionKind getKind() { return kind; }
 
+  @Override
   public int length() { return rawData.length; }
 
+  @Override
   public byte[] getRawData() {
     byte[] copy = new byte[rawData.length];
     System.arraycopy(rawData, 0, copy, 0, copy.length);
@@ -101,12 +103,19 @@ public final class IllegalTcpOption implements TcpOption {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IllegalTcpOption other = (IllegalTcpOption)obj;
+    return
+         kind.equals(other.kind)
+      && Arrays.equals(other.rawData, rawData);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + kind.hashCode();
+    result = 31 * result + Arrays.hashCode(rawData);
+    return result;
   }
 
   /**

@@ -179,12 +179,19 @@ public final class IpV6PadNOption implements IpV6Option {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IpV6PadNOption other = (IpV6PadNOption)obj;
+    return
+         dataLen == other.dataLen
+      && Arrays.equals(data, other.data);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + dataLen;
+    result = 31 * Arrays.hashCode(data);
+    return result;
   }
 
   /**

@@ -8,10 +8,8 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IcmpV4Code;
 import org.pcap4j.packet.namednumber.IcmpV4Type;
@@ -187,6 +185,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
       return payloadBuilder;
     }
 
+    @Override
     public Builder correctChecksumAtBuild(boolean correctChecksumAtBuild) {
       this.correctChecksumAtBuild = correctChecksumAtBuild;
       return this;
@@ -367,6 +366,27 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IcmpV4CommonHeader other = (IcmpV4CommonHeader)obj;
+      return
+           checksum == other.checksum
+        && type.equals(other.type)
+        && code.equals(other.code);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + type.hashCode();
+      result = 31 * result + code.hashCode();
+      result = 31 * result + checksum;
+      return result;
     }
 
   }

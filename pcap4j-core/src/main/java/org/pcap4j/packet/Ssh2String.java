@@ -159,12 +159,19 @@ public final class Ssh2String implements Serializable {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals(((Ssh2String)obj).string, string);
+
+    Ssh2String other = (Ssh2String)obj;
+    return
+         length == other.length
+      && Arrays.equals(string, other.string);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(string);
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + Arrays.hashCode(string);
+    return result;
   }
 
 }

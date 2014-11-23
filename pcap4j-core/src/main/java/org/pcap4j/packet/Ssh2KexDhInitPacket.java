@@ -210,6 +210,22 @@ public final class Ssh2KexDhInitPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      Ssh2KexDhInitHeader other = (Ssh2KexDhInitHeader)obj;
+      return e.equals(other.e);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + e.hashCode();
+      return result;
+    }
+
   }
 
 }

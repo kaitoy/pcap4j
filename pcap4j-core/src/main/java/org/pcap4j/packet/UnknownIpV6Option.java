@@ -165,12 +165,21 @@ public final class UnknownIpV6Option implements IpV6Option {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    UnknownIpV6Option other = (UnknownIpV6Option)obj;
+    return
+         type.equals(other.type)
+      && dataLen == other.dataLen
+      && Arrays.equals(data, other.data);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + type.hashCode();
+    result = 31 * result + dataLen;
+    result = 31 * result + Arrays.hashCode(data);
+    return result;
   }
 
   /**

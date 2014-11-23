@@ -573,6 +573,37 @@ public final class IpV6Packet extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IpV6Header other = (IpV6Header)obj;
+      return
+           srcAddr.equals(other.srcAddr)
+        && dstAddr.equals(other.dstAddr)
+        && payloadLength == other.payloadLength
+        && hopLimit == other.hopLimit
+        && nextHeader.equals(other.nextHeader)
+        && trafficClass.equals(other.trafficClass)
+        && flowLabel.equals(other.flowLabel)
+        && version.equals(other.version);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + version.hashCode();
+      result = 31 * result + trafficClass.hashCode();
+      result = 31 * result + flowLabel.hashCode();
+      result = 31 * result + payloadLength;
+      result = 31 * result + nextHeader.hashCode();
+      result = 31 * result + hopLimit;
+      result = 31 * result + srcAddr.hashCode();
+      result = 31 * result + dstAddr.hashCode();
+      return result;
+    }
+
   }
 
   /**

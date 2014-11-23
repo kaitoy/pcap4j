@@ -62,7 +62,7 @@ public class IcmpV4TimestampReplyPacketTest extends AbstractPacketTest {
 
     IpV4Packet.Builder ipv4b = new IpV4Packet.Builder();
     ipv4b.version(IpVersion.IPV4)
-         .tos(IpV4Rfc791Tos.newInstance((byte)0))
+         .tos(IpV4Rfc1349Tos.newInstance((byte)0))
          .identification((short)100)
          .ttl((byte)100)
          .protocol(IpNumber.ICMPV4)

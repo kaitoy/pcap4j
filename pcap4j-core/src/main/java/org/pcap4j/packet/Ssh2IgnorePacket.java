@@ -208,6 +208,22 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      Ssh2IgnoreHeader other = (Ssh2IgnoreHeader)obj;
+      return data.equals(other.data);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + data.hashCode();
+      return result;
+    }
+
   }
 
 }

@@ -384,6 +384,29 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      Ssh2VersionExchangeHeader other = (Ssh2VersionExchangeHeader)obj;
+      return
+           protoVersion.equals(other.protoVersion)
+        && softwareVersion.equals(other.softwareVersion)
+        && comments.equals(other.comments)
+        && messages.equals(other.messages);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + messages.hashCode();
+      result = 31 * result + protoVersion.hashCode();
+      result = 31 * result + softwareVersion.hashCode();
+      result = 31 * result + comments.hashCode();
+      return result;
+    }
+
   }
 
 }

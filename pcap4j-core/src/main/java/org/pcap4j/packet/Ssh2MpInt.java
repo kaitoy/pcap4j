@@ -164,12 +164,19 @@ public final class Ssh2MpInt implements Serializable, Comparable<Ssh2MpInt> {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals(((Ssh2MpInt)obj).value, value);
+
+    Ssh2MpInt other = (Ssh2MpInt)obj;
+    return
+         length == other.length
+      && Arrays.equals(value, other.value);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(value);
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + Arrays.hashCode(value);
+    return result;
   }
 
   @Override

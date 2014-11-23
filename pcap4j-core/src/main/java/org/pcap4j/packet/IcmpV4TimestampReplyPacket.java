@@ -8,9 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
-
 import java.util.List;
-
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -270,6 +268,28 @@ public final class IcmpV4TimestampReplyPacket extends IcmpIdentifiablePacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (!super.equals(obj)) {
+        return false;
+      }
+
+      IcmpV4TimestampReplyHeader other = (IcmpV4TimestampReplyHeader)obj;
+      return
+           originateTimestamp == other.originateTimestamp
+        && receiveTimestamp == other.receiveTimestamp
+        && transmitTimestamp == other.transmitTimestamp;
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = super.calcHashCode();
+      result = 31 * result + originateTimestamp;
+      result = 31 * result + receiveTimestamp;
+      result = 31 * result + transmitTimestamp;
+      return result;
     }
 
     @Override

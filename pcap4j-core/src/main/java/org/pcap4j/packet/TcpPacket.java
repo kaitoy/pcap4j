@@ -13,6 +13,7 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.factory.PacketFactory;
@@ -1087,6 +1088,55 @@ public final class TcpPacket extends AbstractPacket {
       }
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      TcpHeader other = (TcpHeader)obj;
+      return
+           checksum == other.checksum
+        && sequenceNumber == other.sequenceNumber
+        && acknowledgmentNumber == other.acknowledgmentNumber
+        && dataOffset == other.dataOffset
+        && srcPort.equals(other.srcPort)
+        && dstPort.equals(other.dstPort)
+        && urg == other.urg
+        && ack == other.ack
+        && psh == other.psh
+        && rst == other.rst
+        && syn == other.syn
+        && fin == other.fin
+        && window == other.window
+        && urgentPointer == other.urgentPointer
+        && reserved == other.reserved
+        && options.equals(other.options)
+        && Arrays.equals(padding, other.padding);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + srcPort.hashCode();
+      result = 31 * result + dstPort.hashCode();
+      result = 31 * result + sequenceNumber;
+      result = 31 * result + acknowledgmentNumber;
+      result = 31 * result + dataOffset;
+      result = 31 * result + reserved;
+      result = 31 * result + (urg ? 1231 : 1237);
+      result = 31 * result + (ack ? 1231 : 1237);
+      result = 31 * result + (psh ? 1231 : 1237);
+      result = 31 * result + (rst ? 1231 : 1237);
+      result = 31 * result + (syn ? 1231 : 1237);
+      result = 31 * result + (fin ? 1231 : 1237);
+      result = 31 * result + window;
+      result = 31 * result + checksum;
+      result = 31 * result + urgentPointer;
+      result = 31 * result + options.hashCode();
+      result = 31 * result + Arrays.hashCode(padding);
+      return result;
     }
 
   }

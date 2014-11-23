@@ -440,6 +440,31 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IpV6ExtRoutingHeader other = (IpV6ExtRoutingHeader)obj;
+      return
+           nextHeader.equals(other.nextHeader)
+        && data.equals(other.data)
+        && routingType.equals(other.routingType)
+        && segmentsLeft == other.segmentsLeft
+        && hdrExtLen == other.hdrExtLen;
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + nextHeader.hashCode();
+      result = 31 * result + hdrExtLen;
+      result = 31 * result + routingType.hashCode();
+      result = 31 * result + segmentsLeft;
+      result = 31 * result + data.hashCode();
+      return result;
+    }
+
   }
 
   /**

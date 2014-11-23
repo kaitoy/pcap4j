@@ -259,6 +259,25 @@ public final class IcmpV6RouterSolicitationPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IcmpV6RouterSolicitationHeader other = (IcmpV6RouterSolicitationHeader)obj;
+      return
+           reserved == other.reserved
+        && options.equals(other.options);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + reserved;
+      result = 31 * result + options.hashCode();
+      return result;
+    }
+
   }
 
 }

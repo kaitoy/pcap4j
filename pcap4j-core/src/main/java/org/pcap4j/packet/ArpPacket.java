@@ -8,11 +8,9 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
-
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.namednumber.ArpHardwareType;
 import org.pcap4j.packet.namednumber.ArpOperation;
 import org.pcap4j.packet.namednumber.EtherType;
@@ -510,6 +508,39 @@ public final class ArpPacket extends AbstractPacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      ArpHeader other = (ArpHeader)obj;
+      return
+           operation.equals(other.getOperation())
+        && srcHardwareAddr.equals(other.srcHardwareAddr)
+        && srcProtocolAddr.equals(other.srcProtocolAddr)
+        && dstHardwareAddr.equals(other.dstHardwareAddr)
+        && dstProtocolAddr.equals(other.dstProtocolAddr)
+        && hardwareType.equals(other.hardwareType)
+        && protocolType.equals(other.protocolType)
+        && hardwareLength == other.hardwareLength
+        && protocolLength == other.protocolLength;
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + hardwareType.hashCode();
+      result = 31 * result + protocolType.hashCode();
+      result = 31 * result + hardwareLength;
+      result = 31 * result + protocolLength;
+      result = 31 * result + operation.hashCode();
+      result = 31 * result + srcHardwareAddr.hashCode();
+      result = 31 * result + srcProtocolAddr.hashCode();
+      result = 31 * result + dstHardwareAddr.hashCode();
+      result = 31 * result + dstProtocolAddr.hashCode();
+      return result;
     }
 
   }

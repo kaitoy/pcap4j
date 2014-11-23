@@ -405,6 +405,27 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IpV6ExtOptionsHeader other = (IpV6ExtOptionsHeader)obj;
+      return
+           nextHeader.equals(other.nextHeader)
+        && hdrExtLen == other.hdrExtLen
+        && options.equals(other.options);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + nextHeader.hashCode();
+      result = 31 * result + hdrExtLen;
+      result = 31 * result + options.hashCode();
+      return result;
+    }
+
     /**
      *
      * @return header name

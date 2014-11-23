@@ -9,6 +9,7 @@ package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.Ssh2MessageNumber;
@@ -284,6 +285,27 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     return new Builder(this);
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (super.equals(obj)) {
+      Ssh2BinaryPacket other = (Ssh2BinaryPacket)obj;
+      return
+           Arrays.equals(randomPadding, other.randomPadding)
+        && Arrays.equals(mac, other.mac);
+    }
+    else {
+      return false;
+    }
+  }
+
+  @Override
+  protected int calcHashCode() {
+    int result = super.calcHashCode();
+    result = 31 * result + Arrays.hashCode(randomPadding);
+    result = 31 * result + Arrays.hashCode(mac);
+    return result;
+  }
+
   /**
    *
    * @author Kaito Yamada
@@ -536,6 +558,25 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      Ssh2BinaryHeader other = (Ssh2BinaryHeader)obj;
+      return
+           packetLength == other.packetLength
+        && paddingLength == other.paddingLength;
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + packetLength;
+      result = 31 * result + paddingLength;
+      return result;
     }
 
   }

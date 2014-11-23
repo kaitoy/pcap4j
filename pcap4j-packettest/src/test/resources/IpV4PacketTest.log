@@ -5,7 +5,7 @@
   Total length: 44 [bytes]
   Identification: 123
   Flags: (Reserved, Don't Fragment, More Fragment) = (true, false, true)
-  Flagment offset: 0 (0 [bytes])
+  Fragment offset: 0 (0 [bytes])
   TTL: 111
   Protocol: 17(UDP)
   Header checksum: 0xeeee
@@ -26,7 +26,7 @@
   Total length: 44 [bytes]
   Identification: 123
   Flags: (Reserved, Don't Fragment, More Fragment) = (true, false, false)
-  Flagment offset: 1 (8 [bytes])
+  Fragment offset: 1 (8 [bytes])
   TTL: 111
   Protocol: 17(UDP)
   Header checksum: 0xeeee
@@ -47,7 +47,7 @@
   Total length: 52 [bytes]
   Identification: 123
   Flags: (Reserved, Don't Fragment, More Fragment) = (true, false, false)
-  Flagment offset: 0 (0 [bytes])
+  Fragment offset: 0 (0 [bytes])
   TTL: 111
   Protocol: 17(UDP)
   Header checksum: 0x618a

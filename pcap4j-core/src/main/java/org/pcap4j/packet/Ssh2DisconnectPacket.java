@@ -279,6 +279,27 @@ public final class Ssh2DisconnectPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      Ssh2DisconnectHeader other = (Ssh2DisconnectHeader)obj;
+      return
+           reasonCode.equals(other.reasonCode)
+        && description.equals(other.description)
+        && languageTag.equals(other.languageTag);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + reasonCode.hashCode();
+      result = 31 * result + description.hashCode();
+      result = 31 * result + languageTag.hashCode();
+      return result;
+    }
+
   }
 
 }

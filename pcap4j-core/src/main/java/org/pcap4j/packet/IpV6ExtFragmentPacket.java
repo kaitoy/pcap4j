@@ -400,6 +400,33 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IpV6ExtFragmentHeader other = (IpV6ExtFragmentHeader)obj;
+      return
+           fragmentOffset == other.fragmentOffset
+        && identification == other.identification
+        && nextHeader.equals(other.nextHeader)
+        && m == other.m
+        && reserved == other.reserved
+        && res == other.res;
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + nextHeader.hashCode();
+      result = 31 * result + reserved;
+      result = 31 * result + fragmentOffset;
+      result = 31 * result + res;
+      result = 31 * result + (m ? 1231 : 1237);
+      result = 31 * result + identification;
+      return result;
+    }
+
   }
 
 }

@@ -346,6 +346,29 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IcmpV6RedirectHeader other = (IcmpV6RedirectHeader)obj;
+      return
+           targetAddress.equals(other.targetAddress)
+        && destinationAddress.equals(other.destinationAddress)
+        && reserved == other.reserved
+        && options.equals(other.options);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + reserved;
+      result = 31 * result + targetAddress.hashCode();
+      result = 31 * result + destinationAddress.hashCode();
+      result = 31 * result + options.hashCode();
+      return result;
+    }
+
   }
 
 }

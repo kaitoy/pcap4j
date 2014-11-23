@@ -9,6 +9,7 @@ package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.ArpHardwareType;
@@ -403,6 +404,31 @@ public final class LinuxSllPacket extends AbstractPacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      LinuxSllHeader other = (LinuxSllHeader)obj;
+      return
+           Arrays.equals(addressField, other.addressField)
+        && packetType.equals(other.packetType)
+        && protocol.equals(other.protocol)
+        && hardwareType.equals(other.hardwareType)
+        && hardwareLength == other.hardwareLength;
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + packetType.hashCode();
+      result = 31 * result + hardwareType.hashCode();
+      result = 31 * result + hardwareLength;
+      result = 31 * result + Arrays.hashCode(addressField);
+      result = 31 * result + protocol.hashCode();
+      return result;
     }
 
   }

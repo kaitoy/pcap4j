@@ -64,6 +64,16 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
     throw new UnsupportedOperationException();
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    return ((Object)this).equals(obj);
+  }
+
+  @Override
+  protected int calcHashCode() {
+    return ((Object)this).hashCode();
+  }
+
   // Override deserializer to keep singleton
   @SuppressWarnings("static-method")
   private Object readResolve() throws ObjectStreamException {
@@ -157,6 +167,16 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
         .append(ls);
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      return ((Object)this).equals(obj);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      return ((Object)this).hashCode();
     }
 
     // Override deserializer to keep singleton

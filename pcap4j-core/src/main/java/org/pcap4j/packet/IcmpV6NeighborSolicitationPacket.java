@@ -302,6 +302,27 @@ public final class IcmpV6NeighborSolicitationPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IcmpV6NeighborSolicitationHeader other = (IcmpV6NeighborSolicitationHeader)obj;
+      return
+           targetAddress.equals(other.targetAddress)
+        && reserved == other.reserved
+        && options.equals(other.options);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + reserved;
+      result = 31 * result + targetAddress.hashCode();
+      result = 31 * result + options.hashCode();
+      return result;
+    }
+
   }
 
 }

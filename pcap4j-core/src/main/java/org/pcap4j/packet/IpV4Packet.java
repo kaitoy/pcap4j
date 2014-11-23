@@ -11,6 +11,7 @@ import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.net.Inet4Address;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
@@ -29,10 +30,11 @@ public final class IpV4Packet extends AbstractPacket {
 
   // http://tools.ietf.org/html/rfc791
 
+
   /**
    *
    */
-  private static final long serialVersionUID = -3907669810080927342L;
+  private static final long serialVersionUID = 5348211496230027548L;
 
   private static final Logger logger = LoggerFactory.getLogger(IpV4Packet.class);
 
@@ -81,7 +83,7 @@ public final class IpV4Packet extends AbstractPacket {
     }
 
     if (payloadLength != 0) { // payloadLength is positive.
-      if (header.getMoreFragmentFlag() || header.getFlagmentOffset() != 0) {
+      if (header.getMoreFragmentFlag() || header.getFragmentOffset() != 0) {
         this.payload
           = FragmentedPacket.newPacket(rawData, header.length() + offset, payloadLength);
       }
@@ -150,7 +152,7 @@ public final class IpV4Packet extends AbstractPacket {
     private boolean reservedFlag;
     private boolean dontFragmentFlag;
     private boolean moreFragmentFlag;
-    private short flagmentOffset;
+    private short fragmentOffset;
     private byte ttl;
     private IpNumber protocol;
     private short headerChecksum;
@@ -181,7 +183,7 @@ public final class IpV4Packet extends AbstractPacket {
       this.reservedFlag = packet.header.reservedFlag;
       this.dontFragmentFlag = packet.header.dontFragmentFlag;
       this.moreFragmentFlag = packet.header.moreFragmentFlag;
-      this.flagmentOffset = packet.header.flagmentOffset;
+      this.fragmentOffset = packet.header.fragmentOffset;
       this.ttl = packet.header.ttl;
       this.protocol = packet.header.protocol;
       this.headerChecksum = packet.header.headerChecksum;
@@ -274,11 +276,11 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @param flagmentOffset
+     * @param fragmentOffset
      * @return this Builder object for method chaining.
      */
-    public Builder flagmentOffset(short flagmentOffset) {
-      this.flagmentOffset = flagmentOffset;
+    public Builder fragmentOffset(short fragmentOffset) {
+      this.fragmentOffset = fragmentOffset;
       return this;
     }
 
@@ -414,10 +416,11 @@ public final class IpV4Packet extends AbstractPacket {
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      */
 
+
     /**
      *
      */
-    private static final long serialVersionUID = -337098234014128285L;
+    private static final long serialVersionUID = -7583326842445453539L;
 
     private static final int VERSION_AND_IHL_OFFSET
       = 0;
@@ -435,12 +438,12 @@ public final class IpV4Packet extends AbstractPacket {
       = TOTAL_LENGTH_OFFSET + TOTAL_LENGTH_SIZE;
     private static final int IDENTIFICATION_SIZE
       = SHORT_SIZE_IN_BYTES;
-    private static final int FLAGS_AND_FLAGMENT_OFFSET_OFFSET
+    private static final int FLAGS_AND_FRAGMENT_OFFSET_OFFSET
       = IDENTIFICATION_OFFSET + IDENTIFICATION_SIZE;
-    private static final int FLAGS_AND_FLAGMENT_OFFSET_SIZE
+    private static final int FLAGS_AND_FRAGMENT_OFFSET_SIZE
       = SHORT_SIZE_IN_BYTES;
     private static final int TTL_OFFSET
-      = FLAGS_AND_FLAGMENT_OFFSET_OFFSET + FLAGS_AND_FLAGMENT_OFFSET_SIZE;
+      = FLAGS_AND_FRAGMENT_OFFSET_OFFSET + FLAGS_AND_FRAGMENT_OFFSET_SIZE;
     private static final int TTL_SIZE
       = BYTE_SIZE_IN_BYTES;
     private static final int PROTOCOL_OFFSET
@@ -473,7 +476,7 @@ public final class IpV4Packet extends AbstractPacket {
     private final boolean reservedFlag;
     private final boolean dontFragmentFlag;
     private final boolean moreFragmentFlag;
-    private final short flagmentOffset;
+    private final short fragmentOffset;
     private final byte ttl;
     private final IpNumber protocol;
     private final short headerChecksum;
@@ -513,12 +516,12 @@ public final class IpV4Packet extends AbstractPacket {
       this.identification
         = ByteArrays.getShort(rawData, IDENTIFICATION_OFFSET + offset);
 
-      short flagsAndFlagmentOffset
-        = ByteArrays.getShort(rawData, FLAGS_AND_FLAGMENT_OFFSET_OFFSET + offset);
-      this.reservedFlag = (flagsAndFlagmentOffset & 0x8000) != 0;
-      this.dontFragmentFlag = (flagsAndFlagmentOffset & 0x4000) != 0;
-      this.moreFragmentFlag = (flagsAndFlagmentOffset & 0x2000) != 0;
-      this.flagmentOffset = (short)(flagsAndFlagmentOffset & 0x1FFF);
+      short flagsAndFragmentOffset
+        = ByteArrays.getShort(rawData, FLAGS_AND_FRAGMENT_OFFSET_OFFSET + offset);
+      this.reservedFlag = (flagsAndFragmentOffset & 0x8000) != 0;
+      this.dontFragmentFlag = (flagsAndFragmentOffset & 0x4000) != 0;
+      this.moreFragmentFlag = (flagsAndFragmentOffset & 0x2000) != 0;
+      this.fragmentOffset = (short)(flagsAndFragmentOffset & 0x1FFF);
 
       this.ttl
         = ByteArrays.getByte(rawData, TTL_OFFSET + offset);
@@ -592,9 +595,9 @@ public final class IpV4Packet extends AbstractPacket {
     }
 
     private IpV4Header(Builder builder, Packet payload) {
-      if ((builder.flagmentOffset & 0xE000) != 0) {
+      if ((builder.fragmentOffset & 0xE000) != 0) {
         throw new IllegalArgumentException(
-                "Invalid flagmentOffset: " + builder.flagmentOffset
+                "Invalid fragmentOffset: " + builder.fragmentOffset
               );
       }
 
@@ -604,7 +607,7 @@ public final class IpV4Packet extends AbstractPacket {
       this.reservedFlag = builder.reservedFlag;
       this.dontFragmentFlag = builder.dontFragmentFlag;
       this.moreFragmentFlag = builder.moreFragmentFlag;
-      this.flagmentOffset = builder.flagmentOffset;
+      this.fragmentOffset = builder.fragmentOffset;
       this.ttl = builder.ttl;
       this.protocol = builder.protocol;
       this.srcAddr = builder.srcAddr;
@@ -769,10 +772,10 @@ public final class IpV4Packet extends AbstractPacket {
 
     /**
      *
-     * @return flagmentOffset
+     * @return fragmentOffset
      */
-    public short getFlagmentOffset() {
-      return flagmentOffset;
+    public short getFragmentOffset() {
+      return fragmentOffset;
     }
 
     /**
@@ -867,7 +870,7 @@ public final class IpV4Packet extends AbstractPacket {
       rawFields.add(new byte[] {tos.value()});
       rawFields.add(ByteArrays.toByteArray(totalLength));
       rawFields.add(ByteArrays.toByteArray(identification));
-      rawFields.add(ByteArrays.toByteArray((short)((flags << 13) | flagmentOffset)));
+      rawFields.add(ByteArrays.toByteArray((short)((flags << 13) | fragmentOffset)));
       rawFields.add(ByteArrays.toByteArray(ttl));
       rawFields.add(ByteArrays.toByteArray(protocol.value()));
       rawFields.add(ByteArrays.toByteArray(headerChecksum));
@@ -929,10 +932,10 @@ public final class IpV4Packet extends AbstractPacket {
         .append(getMoreFragmentFlag())
         .append(")")
         .append(ls);
-      sb.append("  Flagment offset: ")
-        .append(flagmentOffset)
+      sb.append("  Fragment offset: ")
+        .append(fragmentOffset)
         .append(" (")
-        .append(flagmentOffset * 8)
+        .append(fragmentOffset * 8)
         .append(" [bytes])")
         .append(ls);
       sb.append("  TTL: ")
@@ -962,6 +965,53 @@ public final class IpV4Packet extends AbstractPacket {
       }
 
       return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      IpV4Header other = (IpV4Header)obj;
+      return
+           identification == other.identification
+        && headerChecksum == other.headerChecksum
+        && srcAddr.equals(other.srcAddr)
+        && dstAddr.equals(other.dstAddr)
+        && totalLength == other.totalLength
+        && protocol.equals(other.protocol)
+        && ttl == other.ttl
+        && fragmentOffset == other.fragmentOffset
+        && reservedFlag == other.reservedFlag
+        && dontFragmentFlag == other.dontFragmentFlag
+        && moreFragmentFlag == other.moreFragmentFlag
+        && tos.equals(other.tos)
+        && ihl == other.ihl
+        && version.equals(other.version)
+        && options.equals(other.options)
+        && Arrays.equals(padding, other.padding);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + version.hashCode();
+      result = 31 * result + ihl;
+      result = 31 * result + tos.hashCode();
+      result = 31 * result + totalLength;
+      result = 31 * result + identification;
+      result = 31 * result + (reservedFlag ? 1231 : 1237);
+      result = 31 * result + (dontFragmentFlag ? 1231 : 1237);
+      result = 31 * result + (moreFragmentFlag ? 1231 : 1237);
+      result = 31 * result + fragmentOffset;
+      result = 31 * result + ttl;
+      result = 31 * result + protocol.hashCode();
+      result = 31 * result + headerChecksum;
+      result = 31 * result + srcAddr.hashCode();
+      result = 31 * result + dstAddr.hashCode();
+      result = 31 * result + Arrays.hashCode(padding);
+      result = 31 * result + options.hashCode();
+      return result;
     }
 
   }

@@ -7,8 +7,6 @@
 
 package org.pcap4j.packet;
 
-import java.util.Arrays;
-
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.util.ByteArrays;
@@ -103,6 +101,7 @@ public final class IpV4StreamIdOption implements IpV4Option {
     }
   }
 
+  @Override
   public IpV4OptionType getType() {
     return type;
   }
@@ -131,8 +130,10 @@ public final class IpV4StreamIdOption implements IpV4Option {
    */
   public int getStreamIdAsInt() { return 0xFFFF & streamId; }
 
+  @Override
   public int length() { return 4; }
 
+  @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[0] = getType().value();
@@ -167,12 +168,17 @@ public final class IpV4StreamIdOption implements IpV4Option {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IpV4StreamIdOption other = (IpV4StreamIdOption)obj;
+    return streamId == other.streamId && length == other.length;
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + streamId;
+    return result;
   }
 
   /**
@@ -216,11 +222,13 @@ public final class IpV4StreamIdOption implements IpV4Option {
       return this;
     }
 
+    @Override
     public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
 
+    @Override
     public IpV4StreamIdOption build() {
       return new IpV4StreamIdOption(this);
     }

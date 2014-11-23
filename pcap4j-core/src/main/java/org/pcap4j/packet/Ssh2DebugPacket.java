@@ -274,6 +274,27 @@ public final class Ssh2DebugPacket extends AbstractPacket {
       return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == this) { return true; }
+      if (!this.getClass().isInstance(obj)) { return false; }
+
+      Ssh2DebugHeader other = (Ssh2DebugHeader)obj;
+      return
+           message.equals(other.message)
+        && languageTag.equals(other.languageTag)
+        && alwaysDisplay.equals(other.alwaysDisplay);
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = 17;
+      result = 31 * result + alwaysDisplay.hashCode();
+      result = 31 * result + message.hashCode();
+      result = 31 * result + languageTag.hashCode();
+      return result;
+    }
+
   }
 
 }

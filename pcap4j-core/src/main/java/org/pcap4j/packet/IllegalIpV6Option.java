@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.IpV6ExtOptionsPacket.IpV6Option;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
 import org.pcap4j.util.ByteArrays;
@@ -69,10 +68,13 @@ public final class IllegalIpV6Option implements IpV6Option {
    );
   }
 
+  @Override
   public IpV6OptionType getType() { return type; }
 
+  @Override
   public int length() { return rawData.length; }
 
+  @Override
   public byte[] getRawData() {
     byte[] copy = new byte[rawData.length];
     System.arraycopy(rawData, 0, copy, 0, copy.length);
@@ -102,12 +104,19 @@ public final class IllegalIpV6Option implements IpV6Option {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IllegalIpV6Option other = (IllegalIpV6Option)obj;
+    return
+         type.equals(other.type)
+      && Arrays.equals(other.rawData, rawData);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + type.hashCode();
+    result = 31 * result + Arrays.hashCode(rawData);
+    return result;
   }
 
   /**

@@ -5,7 +5,7 @@
   Total length: 32 [bytes]
   Identification: 100
   Flags: (Reserved, Don't Fragment, More Fragment) = (false, false, false)
-  Flagment offset: 0 (0 [bytes])
+  Fragment offset: 0 (0 [bytes])
   TTL: 100
   Protocol: 1(ICMPv4)
   Header checksum: 0xd275

@@ -70,12 +70,15 @@ implements IpV4InternetTimestampOptionData {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    UnknownIpV4InternetTimestampOptionData other
+      = (UnknownIpV4InternetTimestampOptionData)obj;
+    return Arrays.equals(rawData, other.rawData);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    return Arrays.hashCode(rawData);
   }
 
 }

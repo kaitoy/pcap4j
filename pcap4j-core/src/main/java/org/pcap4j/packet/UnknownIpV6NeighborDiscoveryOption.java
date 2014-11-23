@@ -167,12 +167,21 @@ implements IpV6NeighborDiscoveryOption {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    UnknownIpV6NeighborDiscoveryOption other = (UnknownIpV6NeighborDiscoveryOption)obj;
+    return
+         type.equals(other.type)
+      && length == other.length
+      && Arrays.equals(data, other.data);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + type.hashCode();
+    result = 31 * result + length;
+    result = 31 * result + Arrays.hashCode(data);
+    return result;
   }
 
   /**

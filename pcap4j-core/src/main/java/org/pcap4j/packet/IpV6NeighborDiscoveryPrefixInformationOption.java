@@ -9,7 +9,6 @@ package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
 import java.net.Inet6Address;
-import java.util.Arrays;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 import org.pcap4j.util.ByteArrays;
@@ -373,12 +372,34 @@ implements IpV6NeighborDiscoveryOption {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
+
+    IpV6NeighborDiscoveryPrefixInformationOption other
+      = (IpV6NeighborDiscoveryPrefixInformationOption)obj;
+    return
+         prefix.equals(other.prefix)
+      && prefixLength == other.prefixLength
+      && validLifetime == other.validLifetime
+      && preferredLifetime == other.preferredLifetime
+      && onLinkFlag == other.onLinkFlag
+      && addressConfigurationFlag == other.addressConfigurationFlag
+      && reserved1 == other.reserved1
+      && reserved2 == other.reserved2
+      && length == other.length;
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getRawData());
+    int result = 17;
+    result = 31 * result + length;
+    result = 31 * result + prefixLength;
+    result = 31 * result + (onLinkFlag ? 1231 : 1237);
+    result = 31 * result + (addressConfigurationFlag ? 1231 : 1237);
+    result = 31 * result + reserved1;
+    result = 31 * result + validLifetime;
+    result = 31 * result + preferredLifetime;
+    result = 31 * result + reserved2;
+    result = 31 * result + prefix.hashCode();
+    return result;
   }
 
   /**
