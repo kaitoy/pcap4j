@@ -260,12 +260,22 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     if (!this.getClass().isInstance(obj)) { return false; }
 
     IpV4InternetTimestampOption other = (IpV4InternetTimestampOption)obj;
-    return
+    if (
          length == other.length
       && pointer == other.pointer
       && overflow == other.overflow
       && flag.equals(other.flag)
-      && data.equals(other.data);
+    ) {
+      if (data == null) {
+        return other.data == null;
+      }
+      else {
+        return data.equals(other.data);
+      }
+    }
+    else {
+      return false;
+    }
   }
 
   @Override
@@ -275,7 +285,9 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
     result = 31 * result + pointer;
     result = 31 * result + overflow;
     result = 31 * result + flag.hashCode();
-    result = 31 * result + data.hashCode();
+    if (data != null) {
+      result = 31 * result + data.hashCode();
+    }
     return result;
   }
 
