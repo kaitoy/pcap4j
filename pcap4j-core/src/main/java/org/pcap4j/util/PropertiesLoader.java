@@ -111,7 +111,7 @@ public class PropertiesLoader {
       if (caching && cache.containsKey(key)) {
         String cacheValue = ((String)cache.get(key));
         logger.debug(
-          "[{}] Got {} from cache for {}",
+          "[{}] Got {} from cache by {}",
           new Object[] {resourceName, cacheValue, key}
         );
         return cacheValue;
@@ -125,7 +125,7 @@ public class PropertiesLoader {
 
       if (value != null) {
         logger.info(
-          "[System properties] Got {} for {}", value, key
+          "[System properties] Got {} by {}", value, key
         );
       }
       else {
@@ -133,13 +133,13 @@ public class PropertiesLoader {
 
         if (value != null) {
           logger.info(
-            "[{}] Got {} for {}",
+            "[{}] Got {} by {}",
             new Object[] {resourceName, value, key}
           );
         }
         else {
           logger.warn(
-            "[{}] Could not get value for {}, use default value: {}",
+            "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, defaultValue}
           );
           value = defaultValue;
@@ -165,7 +165,7 @@ public class PropertiesLoader {
       if (caching && cache.containsKey(key)) {
         Integer cacheValue = (Integer)cache.get(key);
         logger.debug(
-          "[{}] Got {} from cache for {}",
+          "[{}] Got {} from cache by {}",
           new Object[] {resourceName, cacheValue, key}
         );
         return cacheValue;
@@ -179,7 +179,7 @@ public class PropertiesLoader {
 
       if (value != null) {
         logger.info(
-          "[System properties] Got {} for {}", value, key
+          "[System properties] Got {} by {}", value, key
         );
       }
       else {
@@ -189,7 +189,7 @@ public class PropertiesLoader {
           try {
             value = Integer.decode(strValue);
             logger.info(
-              "[{}] Got {} for {}",
+              "[{}] Got {} by {}",
               new Object[] {resourceName, value, key}
             );
           } catch (NumberFormatException e) {
@@ -202,7 +202,7 @@ public class PropertiesLoader {
         }
         else {
           logger.warn(
-            "[{}] Could not get value for {}, use default value: {}",
+            "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, defaultValue}
           );
           value = defaultValue;
@@ -228,7 +228,7 @@ public class PropertiesLoader {
       if (caching && cache.containsKey(key)) {
         Boolean cacheValue = (Boolean)cache.get(key);
         logger.debug(
-          "[{}] Got {} from cache for {}",
+          "[{}] Got {} from cache by {}",
           new Object[] {resourceName, cacheValue, key}
         );
         return cacheValue;
@@ -242,7 +242,7 @@ public class PropertiesLoader {
         if (strValue != null) {
           value = Boolean.valueOf(strValue);
           logger.info(
-            "[System properties] Got \"{}\" means {} for {}",
+            "[System properties] Got \"{}\" which means {} by {}",
             new Object[] {strValue, value, key}
           );
         }
@@ -254,13 +254,13 @@ public class PropertiesLoader {
         if (strValue != null) {
           value = Boolean.valueOf(strValue);
           logger.info(
-            "[{}] Got\"{}\" means {} for {}",
+            "[{}] Got\"{}\" which means {} by {}",
             new Object[] {resourceName, strValue, value, key}
           );
         }
         else {
           logger.warn(
-            "[{}] Could not get value for {}, use default value: {}",
+            "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, defaultValue}
           );
           value = defaultValue;
@@ -289,7 +289,7 @@ public class PropertiesLoader {
         @SuppressWarnings("unchecked")
         Class<? extends T> cacheValue = (Class<? extends T>)cache.get(key);
         logger.debug(
-          "[{}] Got {} from cache for {}",
+          "[{}] Got {} from cache by {}",
           new Object[] {resourceName, cacheValue, key}
         );
         return cacheValue;
@@ -308,16 +308,16 @@ public class PropertiesLoader {
             value = clazz;
 
             logger.info(
-              "[System properties] Got {} for {}", strValue, key
+              "[System properties] Got {} by {}", strValue, key
             );
           } catch (ClassNotFoundException e) {
             logger.error(
-              "[System properties] Got Invalid value: {} for {}, ignore it.",
+              "[System properties] Got Invalid value: {} by {}, ignore it.",
                 strValue, key
             );
           } catch (ClassCastException e) {
             logger.error(
-              "[System properties] Got Invalid value: {} for {}, ignore it.",
+              "[System properties] Got Invalid value: {} by {}, ignore it.",
                 strValue, key
             );
           }
@@ -334,7 +334,7 @@ public class PropertiesLoader {
               = (Class<? extends T>)Class.forName(strValue);
             value = clazz;
             logger.info(
-              "[{}] Got {} for {}",
+              "[{}] Got {} by {}",
               new Object[] {resourceName, strValue, key}
             );
           } catch (ClassNotFoundException e) {
@@ -353,7 +353,7 @@ public class PropertiesLoader {
         }
         else {
           logger.warn(
-            "[{}] Could not get value for {}, use default value: {}",
+            "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, defaultValue}
           );
           value = defaultValue;
@@ -379,7 +379,7 @@ public class PropertiesLoader {
       if (caching && cache.containsKey(key)) {
         InetAddress cacheValue = (InetAddress)cache.get(key);
         logger.debug(
-          "[{}] Got {} from cache for {}",
+          "[{}] Got {} from cache by {}",
           new Object[] {resourceName, cacheValue, key}
         );
         return cacheValue;
@@ -394,12 +394,12 @@ public class PropertiesLoader {
           try {
             value = InetAddress.getByName(strValue);
             logger.info(
-              "[System properties] Got \"{}\" means {} for {}",
+              "[System properties] Got \"{}\" which means {} by {}",
               new Object[] {strValue, value, key}
             );
           } catch (UnknownHostException e) {
             logger.error(
-              "[System properties] Got Invalid value: {} for {}, ignore it.",
+              "[System properties] Got Invalid value: {} by {}, ignore it.",
                 strValue, key
             );
           }
@@ -413,7 +413,7 @@ public class PropertiesLoader {
           try {
             value = InetAddress.getByName(strValue);
             logger.info(
-              "[{}] Got\"{}\" means {} for {}",
+              "[{}] Got\"{}\" which means {} by {}",
               new Object[] {resourceName, strValue, value, key}
             );
           } catch (UnknownHostException e) {
@@ -426,7 +426,7 @@ public class PropertiesLoader {
         }
         else {
           logger.warn(
-            "[{}] Could not get value for {}, use default value: {}",
+            "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, defaultValue}
           );
           value = defaultValue;
@@ -452,7 +452,7 @@ public class PropertiesLoader {
       if (caching && cache.containsKey(key)) {
         int[] cacheValue = (int[])cache.get(key);
         logger.debug(
-          "[{}] Got {} from cache for {}",
+          "[{}] Got {} from cache by {}",
           new Object[] {resourceName, Arrays.toString(cacheValue), key}
         );
 
@@ -472,12 +472,12 @@ public class PropertiesLoader {
               value[i] = Integer.parseInt(strInts[i]);
             }
             logger.info(
-              "[System properties] Got \"{}\" means {} for {}",
+              "[System properties] Got \"{}\" which means {} by {}",
               new Object[] {csv, Arrays.toString(value), key}
             );
           } catch (NumberFormatException e) {
             logger.error(
-              "[System properties] Got Invalid value: {} for {}, ignore it.",
+              "[System properties] Got Invalid value: {} by {}, ignore it.",
               csv, key
             );
           }
@@ -495,7 +495,7 @@ public class PropertiesLoader {
               value[i] = Integer.parseInt(strInts[i]);
             }
             logger.info(
-              "[{}] Got\"{}\" means {} for {}",
+              "[{}] Got\"{}\" which means {} by {}",
               new Object[] {resourceName, csv, Arrays.toString(value), key}
             );
           } catch (NumberFormatException e) {
@@ -508,7 +508,7 @@ public class PropertiesLoader {
         }
         else {
           logger.warn(
-            "[{}] Could not get value for {}, use default value: {}",
+            "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, Arrays.toString(defaultValue)}
           );
           value = defaultValue;
