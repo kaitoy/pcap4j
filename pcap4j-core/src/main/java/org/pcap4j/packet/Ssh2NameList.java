@@ -97,6 +97,18 @@ public final class Ssh2NameList implements Serializable {
         .append(this.length & 0xFFFFFFFFL);
       throw new IllegalRawDataException(sb.toString());
     }
+    if (length - 4 < this.length) {
+      StringBuilder sb = new StringBuilder(110);
+      sb.append("The data is too short to build an Ssh2NameList (")
+        .append(this.length + 4)
+        .append(" bytes). data: ")
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
+      throw new IllegalRawDataException(sb.toString());
+    }
 
     String nameList = new String(rawData, 4 + offset, this.length);
     this.list = Arrays.asList(nameList.split(","));

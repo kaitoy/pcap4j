@@ -71,6 +71,18 @@ public final class Ssh2MpInt implements Serializable, Comparable<Ssh2MpInt> {
         .append(this.length & 0xFFFFFFFFL);
       throw new IllegalRawDataException(sb.toString());
     }
+    if (length - 4 < this.length) {
+      StringBuilder sb = new StringBuilder(110);
+      sb.append("The data is too short to build an Ssh2MpInt (")
+        .append(this.length + 4)
+        .append(" bytes). data: ")
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
+      throw new IllegalRawDataException(sb.toString());
+    }
 
     this.value = ByteArrays.getSubArray(rawData, 4 + offset, this.length);
   }
