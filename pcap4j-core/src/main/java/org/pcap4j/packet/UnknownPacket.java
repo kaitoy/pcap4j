@@ -7,21 +7,18 @@
 
 package org.pcap4j.packet;
 
-import java.util.Arrays;
 import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class UnknownPacket extends AbstractPacket {
+public final class UnknownPacket extends SimplePacket {
 
   /**
    *
    */
-  private static final long serialVersionUID = 4601589840627505036L;
-
-  private final byte[] rawData;
+  private static final long serialVersionUID = 8651511568344022477L;
 
   /**
    * A static factory method.
@@ -39,35 +36,11 @@ public final class UnknownPacket extends AbstractPacket {
   }
 
   private UnknownPacket(byte[] rawData, int offset, int length) {
-    this.rawData = new byte[length];
-    System.arraycopy(rawData, offset, this.rawData, 0, length);
+    super(rawData, offset, length);
   }
 
   private UnknownPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.rawData == null
-    ) {
-      StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.rawData: ").append(builder.rawData);
-      throw new NullPointerException(sb.toString());
-    }
-
-    this.rawData = new byte[builder.rawData.length];
-    System.arraycopy(
-      builder.rawData, 0, this.rawData, 0, builder.rawData.length
-    );
-  }
-
-  @Override
-  public int length() { return rawData.length; }
-
-  @Override
-  public byte[] getRawData() {
-    byte[] copy = new byte[rawData.length];
-    System.arraycopy(rawData, 0, copy, 0, copy.length);
-    return copy;
+    super(builder);
   }
 
   @Override
@@ -76,42 +49,13 @@ public final class UnknownPacket extends AbstractPacket {
   }
 
   @Override
-  protected String buildString() {
-    StringBuilder sb = new StringBuilder();
-    String ls = System.getProperty("line.separator");
-
-    sb.append("[data (")
-      .append(length())
-      .append(" bytes)]")
-      .append(ls);
-    sb.append("  Hex stream: ")
-      .append(ByteArrays.toHexString(rawData, " "))
-      .append(ls);
-
-    return sb.toString();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
-
-    UnknownPacket other = (UnknownPacket)obj;
-    return Arrays.equals(rawData, other.rawData);
-  }
-
-  @Override
-  protected int calcHashCode() {
-    return Arrays.hashCode(rawData);
-  }
+  protected String modifier() { return ""; }
 
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class Builder extends AbstractBuilder {
-
-    private byte[] rawData;
+  public static final class Builder extends org.pcap4j.packet.SimplePacket.Builder {
 
     /**
      *
@@ -119,7 +63,7 @@ public final class UnknownPacket extends AbstractPacket {
     public Builder() {}
 
     private Builder(UnknownPacket packet) {
-      rawData = packet.rawData;
+      super(packet);
     }
 
     /**
@@ -128,7 +72,7 @@ public final class UnknownPacket extends AbstractPacket {
      * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {
-      this.rawData = rawData;
+      setRawData(rawData);
       return this;
     }
 

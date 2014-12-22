@@ -32,7 +32,7 @@ import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
 import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
-import org.pcap4j.packet.namednumber.NA;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.packet.namednumber.NamedNumber;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.PropertiesLoader;
@@ -217,7 +217,7 @@ public final class PacketFactoryPropertiesLoader {
   ) {
     StringBuilder sb = new StringBuilder(200);
     sb.append(targetClass.getName());
-    if (!numberClass.equals(NA.class)) {
+    if (!numberClass.equals(NotApplicable.class)) {
       sb.append(".classifiedBy.")
         .append(numberClass.getName());
     }

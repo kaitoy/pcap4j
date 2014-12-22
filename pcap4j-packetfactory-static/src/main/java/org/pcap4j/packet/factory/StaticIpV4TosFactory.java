@@ -9,14 +9,14 @@ package org.pcap4j.packet.factory;
 
 import org.pcap4j.packet.IpV4Packet.IpV4Tos;
 import org.pcap4j.packet.IpV4Rfc1349Tos;
-import org.pcap4j.packet.namednumber.NA;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */
-public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NA> {
+public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NotApplicable> {
 
   private static final StaticIpV4TosFactory INSTANCE
     = new StaticIpV4TosFactory();
@@ -31,7 +31,7 @@ public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NA> {
 
   @Override
   @Deprecated
-  public IpV4Tos newInstance(byte[] rawData, int offset, int length, NA number) {
+  public IpV4Tos newInstance(byte[] rawData, int offset, int length, NotApplicable number) {
     return newInstance(rawData, offset, length);
   }
 
@@ -43,7 +43,7 @@ public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NA> {
 
   @Override
   @Deprecated
-  public Class<? extends IpV4Tos> getTargetClass(NA number) {
+  public Class<? extends IpV4Tos> getTargetClass(NotApplicable number) {
     return getTargetClass();
   }
 

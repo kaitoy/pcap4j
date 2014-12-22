@@ -16,7 +16,7 @@ import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
-import org.pcap4j.packet.namednumber.NA;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,12 +84,17 @@ public final class IpV6Packet extends AbstractPacket {
       Class<? extends Packet> nextPacketClass = factory.getTargetClass(header.getNextHeader());
       Packet nextPacket;
       if (nextPacketClass.equals(factory.getTargetClass())) {
-        try {
           nextPacket
-            = IpV6ExtUnknownPacket.newPacket(rawData, offset + header.length(), payloadLength);
-        } catch (IllegalRawDataException e) {
-          nextPacket = factory.newInstance(rawData, offset + header.length(), payloadLength);
-        }
+            = PacketFactories.getFactory(Packet.class, NotApplicable.class)
+                .newInstance(
+                   rawData,
+                   offset + header.length(),
+                   payloadLength,
+                   NotApplicable.UNKNOWN_IP_V6_EXTENSION
+                 );
+          if (nextPacket instanceof IllegalPacket) {
+            nextPacket = factory.newInstance(rawData, offset + header.length(), payloadLength);
+          }
       }
       else {
         nextPacket
@@ -388,7 +393,7 @@ public final class IpV6Packet extends AbstractPacket {
             (byte)(versionAndTrafficClassAndFlowLabel >>> 28)
           );
       this.trafficClass
-        = PacketFactories.getFactory(IpV6TrafficClass.class, NA.class)
+        = PacketFactories.getFactory(IpV6TrafficClass.class, NotApplicable.class)
             .newInstance(
                new byte[] {
                  (byte)((versionAndTrafficClassAndFlowLabel & 0x0FF00000) >> 20)
@@ -397,7 +402,7 @@ public final class IpV6Packet extends AbstractPacket {
                1
              );
       this.flowLabel
-        = PacketFactories.getFactory(IpV6FlowLabel.class, NA.class)
+        = PacketFactories.getFactory(IpV6FlowLabel.class, NotApplicable.class)
             .newInstance(rawData, VERSION_AND_TRAFFIC_CLASS_AND_FLOW_LABEL_OFFSET + offset, 4);
       this.payloadLength
         = ByteArrays.getShort(rawData, PAYLOAD_LENGTH_OFFSET + offset);

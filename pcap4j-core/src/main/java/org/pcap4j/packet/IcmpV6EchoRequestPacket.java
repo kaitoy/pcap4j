@@ -8,7 +8,7 @@
 package org.pcap4j.packet;
 
 import org.pcap4j.packet.factory.PacketFactories;
-import org.pcap4j.packet.namednumber.NA;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -51,8 +51,8 @@ public final class IcmpV6EchoRequestPacket extends IcmpIdentifiablePacket {
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
       this.payload
-        = PacketFactories.getFactory(Packet.class, NA.class)
-            .newInstance(rawData, offset + header.length(), payloadLength);
+        = PacketFactories.getFactory(Packet.class, NotApplicable.class)
+            .newInstance(rawData, offset + header.length(), payloadLength, NotApplicable.UNKNOWN);
     }
     else {
       this.payload = null;

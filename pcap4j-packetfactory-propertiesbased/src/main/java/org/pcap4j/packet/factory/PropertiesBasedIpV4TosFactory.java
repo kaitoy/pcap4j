@@ -10,7 +10,7 @@ package org.pcap4j.packet.factory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.pcap4j.packet.IpV4Packet.IpV4Tos;
-import org.pcap4j.packet.namednumber.NA;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -18,7 +18,7 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.14
  */
 public final class PropertiesBasedIpV4TosFactory
-implements PacketFactory<IpV4Tos, NA> {
+implements PacketFactory<IpV4Tos, NotApplicable> {
 
   private static final PropertiesBasedIpV4TosFactory INSTANCE
     = new PropertiesBasedIpV4TosFactory();
@@ -33,7 +33,7 @@ implements PacketFactory<IpV4Tos, NA> {
 
   @Override
   @Deprecated
-  public IpV4Tos newInstance(byte[] rawData, int offset, int length, NA number) {
+  public IpV4Tos newInstance(byte[] rawData, int offset, int length, NotApplicable number) {
     return newInstance(rawData, offset, length);
   }
 
@@ -82,7 +82,7 @@ implements PacketFactory<IpV4Tos, NA> {
 
   @Override
   @Deprecated
-  public Class<? extends IpV4Tos> getTargetClass(NA number) {
+  public Class<? extends IpV4Tos> getTargetClass(NotApplicable number) {
     return getTargetClass();
   }
 

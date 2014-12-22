@@ -1,0 +1,11 @@
+[IPv6 Unknown Extension Header (16 bytes)]
+  Next Header: 17(UDP)
+  Hdr Ext Len: 1 (16 [bytes])
+  data: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d
+[UDP Header (8 bytes)]
+  Source port: 162(SNMP Trap)
+  Destination port: 0(unknown)
+  Length: 12 [bytes]
+  Checksum: 0xa1b1
+[data (4 bytes)]
+  Hex stream: 00 01 02 03

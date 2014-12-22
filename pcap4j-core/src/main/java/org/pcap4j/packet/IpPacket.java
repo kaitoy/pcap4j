@@ -7,7 +7,11 @@
 
 package org.pcap4j.packet;
 
+import org.pcap4j.packet.factory.PacketFactories;
+import org.pcap4j.packet.factory.PacketFactory;
+import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpVersion;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -38,14 +42,17 @@ public final class IpPacket extends AbstractPacket {
     ByteArrays.validateBounds(rawData, offset, length);
 
     int ipVersion = (rawData[offset] >> 4) & 0x0f;
+    PacketFactory<Packet, EtherType> factory
+      = PacketFactories.getFactory(Packet.class, EtherType.class);
     if (ipVersion == IpVersion.IPV4.value().intValue()) {
-      return IpV4Packet.newPacket(rawData, offset, length);
+      return factory.newInstance(rawData, offset, length, EtherType.IPV4);
     }
     if (ipVersion == IpVersion.IPV6.value().intValue()) {
-      return IpV6Packet.newPacket(rawData, offset, length);
+      return factory.newInstance(rawData, offset, length, EtherType.IPV6);
     }
     else {
-      return UnknownPacket.newPacket(rawData, offset, length);
+      return PacketFactories.getFactory(Packet.class, NotApplicable.class)
+               .newInstance(rawData, offset, length, NotApplicable.UNKNOWN);
     }
   }
 

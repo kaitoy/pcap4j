@@ -3,6 +3,7 @@ Future
 ### New Features ###
 * Add SSH2 support.
 * [Issues#28](https://github.com/kaitoy/pcap4j/issues/28): Support Linux cooked-mode capture (SLL).
+* Pluggability for FragmentedPacket and IpV6ExtUnknownPacket.
 
 ### Bug Fixes ###
 * Fix a typo (flagment -> fragment) in org.pcap4j.packet.IpV4Packet.
@@ -11,7 +12,11 @@ Future
  * Change the serialization format of IpV4Packet and IpV4Header.
 
 ### Other Changes ###
-
+* The property org.pcap4j.packet.Packet.classFor.unknownNumber is changed to org.pcap4j.packet.Packet.classFor.org.pcap4j.packet.namednumber.NotApplicable.0.
+* Change serialization formats:
+ * org.pcap4j.packet.UnknownPacket
+ * org.pcap4j.packet.FragmentedPacket
+ 
 Release 1.3.0 (4-Oct-2014)
 ==========================
 ### New Features ###

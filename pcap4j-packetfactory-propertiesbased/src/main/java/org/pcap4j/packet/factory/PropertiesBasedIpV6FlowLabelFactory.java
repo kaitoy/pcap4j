@@ -11,7 +11,7 @@ import static org.pcap4j.util.ByteArrays.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
-import org.pcap4j.packet.namednumber.NA;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -19,7 +19,7 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.14
  */
 public final class PropertiesBasedIpV6FlowLabelFactory
-implements PacketFactory<IpV6FlowLabel, NA> {
+implements PacketFactory<IpV6FlowLabel, NotApplicable> {
 
   private static final PropertiesBasedIpV6FlowLabelFactory INSTANCE
     = new PropertiesBasedIpV6FlowLabelFactory();
@@ -34,7 +34,7 @@ implements PacketFactory<IpV6FlowLabel, NA> {
 
   @Override
   @Deprecated
-  public IpV6FlowLabel newInstance(byte[] rawData, int offset, int length, NA number) {
+  public IpV6FlowLabel newInstance(byte[] rawData, int offset, int length, NotApplicable number) {
     return newInstance(rawData, offset, length);
   }
 
@@ -86,7 +86,7 @@ implements PacketFactory<IpV6FlowLabel, NA> {
 
   @Override
   @Deprecated
-  public Class<? extends IpV6FlowLabel> getTargetClass(NA number) {
+  public Class<? extends IpV6FlowLabel> getTargetClass(NotApplicable number) {
     return getTargetClass();
   }
 

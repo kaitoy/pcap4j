@@ -10,7 +10,9 @@ package org.pcap4j.packet;
 import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -53,7 +55,8 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
       this.payload
-        = FragmentedPacket.newPacket(rawData, offset + header.length(), payloadLength);
+        = PacketFactories.getFactory(Packet.class, NotApplicable.class)
+            .newInstance(rawData, offset + header.length(), payloadLength, NotApplicable.FRAGMENTED);
     }
     else {
       this.payload = null;

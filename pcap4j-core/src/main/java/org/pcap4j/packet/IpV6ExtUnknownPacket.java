@@ -14,6 +14,7 @@ import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -57,12 +58,22 @@ public final class IpV6ExtUnknownPacket extends AbstractPacket {
       PacketFactory<Packet, IpNumber> factory
         = PacketFactories.getFactory(Packet.class, IpNumber.class);
       Class<? extends Packet> nextPacketClass = factory.getTargetClass(header.getNextHeader());
+      Packet nextPacket;
       if (nextPacketClass.equals(factory.getTargetClass())) {
-        this.payload
-          = IpV6ExtUnknownPacket.newPacket(rawData, offset + header.length(), payloadLength);
+        nextPacket
+          = PacketFactories.getFactory(Packet.class, NotApplicable.class)
+              .newInstance(
+                 rawData,
+                 offset + header.length(),
+                 payloadLength,
+                 NotApplicable.UNKNOWN_IP_V6_EXTENSION
+               );
+        if (nextPacket instanceof IllegalPacket) {
+          nextPacket = factory.newInstance(rawData, offset + header.length(), payloadLength);
+        }
       }
       else {
-        this.payload
+        nextPacket
           = PacketFactories.getFactory(Packet.class, IpNumber.class)
               .newInstance(
                  rawData,
@@ -71,6 +82,8 @@ public final class IpV6ExtUnknownPacket extends AbstractPacket {
                  header.getNextHeader()
                );
       }
+
+      this.payload = nextPacket;
     }
     else {
       this.payload = null;
@@ -342,7 +355,7 @@ public final class IpV6ExtUnknownPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[IPv6 Routing Header (")
+      sb.append("[IPv6 Unknown Extension Header (")
         .append(length())
         .append(" bytes)]")
         .append(ls);

@@ -17,7 +17,7 @@ import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpVersion;
-import org.pcap4j.packet.namednumber.NA;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +85,8 @@ public final class IpV4Packet extends AbstractPacket {
     if (payloadLength != 0) { // payloadLength is positive.
       if (header.getMoreFragmentFlag() || header.getFragmentOffset() != 0) {
         this.payload
-          = FragmentedPacket.newPacket(rawData, header.length() + offset, payloadLength);
+          = PacketFactories.getFactory(Packet.class, NotApplicable.class)
+              .newInstance(rawData, header.length() + offset, payloadLength, NotApplicable.FRAGMENTED);
       }
       else {
         this.payload
@@ -509,7 +510,7 @@ public final class IpV4Packet extends AbstractPacket {
 
       this.tos
         = PacketFactories.getFactory(
-            IpV4Tos.class, NA.class
+            IpV4Tos.class, NotApplicable.class
           ).newInstance(rawData, TOS_OFFSET + offset, BYTE_SIZE_IN_BYTES);
       this.totalLength
         = ByteArrays.getShort(rawData, TOTAL_LENGTH_OFFSET + offset);

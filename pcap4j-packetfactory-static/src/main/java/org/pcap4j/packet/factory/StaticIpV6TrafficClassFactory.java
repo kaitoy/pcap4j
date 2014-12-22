@@ -9,7 +9,7 @@ package org.pcap4j.packet.factory;
 
 import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
 import org.pcap4j.packet.IpV6SimpleTrafficClass;
-import org.pcap4j.packet.namednumber.NA;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -17,7 +17,7 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6TrafficClassFactory
-implements PacketFactory<IpV6TrafficClass, NA> {
+implements PacketFactory<IpV6TrafficClass, NotApplicable> {
 
   private static final StaticIpV6TrafficClassFactory INSTANCE
     = new StaticIpV6TrafficClassFactory();
@@ -32,7 +32,7 @@ implements PacketFactory<IpV6TrafficClass, NA> {
 
   @Override
   @Deprecated
-  public IpV6TrafficClass newInstance(byte[] rawData, int offset, int length, NA number) {
+  public IpV6TrafficClass newInstance(byte[] rawData, int offset, int length, NotApplicable number) {
     return newInstance(rawData, offset, length);
   }
 
@@ -44,7 +44,7 @@ implements PacketFactory<IpV6TrafficClass, NA> {
 
   @Override
   @Deprecated
-  public Class<? extends IpV6TrafficClass> getTargetClass(NA number) {
+  public Class<? extends IpV6TrafficClass> getTargetClass(NotApplicable number) {
     return getTargetClass();
   }
 
