@@ -7,6 +7,8 @@
 
 package org.pcap4j.packet.factory;
 
+import org.pcap4j.packet.CompressedPacket;
+import org.pcap4j.packet.EncryptedPacket;
 import org.pcap4j.packet.FragmentedPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV6ExtUnknownPacket;
@@ -64,6 +66,34 @@ extends AbstractStaticPacketFactory<NotApplicable> {
         @Override
         public Class<IpV6ExtUnknownPacket> getTargetClass() {
           return IpV6ExtUnknownPacket.class;
+        }
+      }
+    );
+    instantiaters.put(
+      NotApplicable.COMPRESSED, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return CompressedPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<CompressedPacket> getTargetClass() {
+          return CompressedPacket.class;
+        }
+      }
+    );
+    instantiaters.put(
+      NotApplicable.ENCRYPTED, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return EncryptedPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<EncryptedPacket> getTargetClass() {
+          return EncryptedPacket.class;
         }
       }
     );
