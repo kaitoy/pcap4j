@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -232,10 +232,7 @@ public final class EthernetPacket extends AbstractPacket {
       this.srcAddr = packet.header.srcAddr;
       this.type = packet.header.type;
       this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
-      this.pad = new byte[packet.pad.length];
-      System.arraycopy(
-        packet.pad, 0, this.pad, 0, packet.pad.length
-      );
+      this.pad = packet.pad;
     }
 
     /**
