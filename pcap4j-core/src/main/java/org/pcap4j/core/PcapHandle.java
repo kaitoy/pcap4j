@@ -643,9 +643,11 @@ public final class PcapHandle {
    * When a packet is captured, <code>listener.gotPacket(Packet)</code> is called in
    * the thread which called the <code>loop()</code>. And then this PcapHandle waits for
    * the thread to return from the <code>gotPacket()</code> before it retrieves the next
-   * packet from the pcap capture buffer.
+   * packet from the pcap buffer.
    *
-   * @param packetCount
+   * @param packetCount the number of packets to capture. -1 is equivalent to infinity.
+   *                    0 may result in different behaviors between platforms
+   *                    and pcap library versions.
    * @param listener
    * @throws PcapNativeException
    * @throws InterruptedException
@@ -669,9 +671,11 @@ public final class PcapHandle {
    * Then, the Runnable object calls <code>listener.gotPacket(Packet)</code>.
    * If <code>listener.gotPacket(Packet)</code> is expected to take a long time to
    * process a packet, this method should be used with a proper executor instead of
-   * {@link #loop(int, PacketListener)} in order to prevent the pcap capture buffer from overflowing.
+   * {@link #loop(int, PacketListener)} in order to prevent the pcap buffer from overflowing.
    *
-   * @param packetCount
+   * @param packetCount the number of packets to capture. -1 is equivalent to infinity.
+   *                    0 may result in different behaviors between platforms
+   *                    and pcap library versions.
    * @param listener
    * @param executor
    * @throws PcapNativeException
@@ -729,7 +733,11 @@ public final class PcapHandle {
 
   /**
    *
-   * @param packetCount
+   * @param packetCount the maximum number of packets to process.
+   *                    If -1 is specified, all the packets in the pcap buffer or pcap file
+   *                    will be processed before returning.
+   *                    0 may result in different behaviors between platforms
+   *                    and pcap library versions.
    * @param listener
    * @return the number of captured packets.
    * @throws PcapNativeException
@@ -748,7 +756,11 @@ public final class PcapHandle {
 
   /**
    *
-   * @param packetCount
+   * @param packetCount the maximum number of packets to process.
+   *                    If -1 is specified, all the packets in the pcap buffer or pcap file
+   *                    will be processed before returning.
+   *                    0 may result in different behaviors between platforms
+   *                    and pcap library versions.
    * @param listener
    * @param executor
    * @return the number of captured packets.
