@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Kaito Yamada
+  _##  Copyright (C) 2013-2015  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -24,8 +24,9 @@ import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IcmpV4Type;
 import org.pcap4j.packet.namednumber.IcmpV6Type;
 import org.pcap4j.packet.namednumber.IpNumber;
-import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.packet.namednumber.NamedNumber;
+import org.pcap4j.packet.namednumber.NotApplicable;
+import org.pcap4j.packet.namednumber.PppDllProtocol;
 import org.pcap4j.packet.namednumber.TcpPort;
 import org.pcap4j.packet.namednumber.UdpPort;
 
@@ -51,6 +52,7 @@ final class PacketFactoryBinder {
     packetFactories.put(TcpPort.class, StaticTcpPortPacketFactory.getInstance());
     packetFactories.put(UdpPort.class, StaticUdpPortPacketFactory.getInstance());
     packetFactories.put(NotApplicable.class, StaticNotApplicablePacketFactory.getInstance());
+    packetFactories.put(PppDllProtocol.class, StaticPppDllProtocolPacketFactory.getInstance());
 
     packetpPieceFactories.put(
       IpV4Option.class,

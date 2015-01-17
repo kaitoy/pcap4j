@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -60,6 +60,12 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
    *
    */
   public static final DataLinkType RAW; // RAW IP packet
+
+  /**
+   *
+   */
+  public static final DataLinkType PPP_SERIAL
+    = new DataLinkType(50, "PPP over serial with HDLC encapsulation");
 
   /**
    *
