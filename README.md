@@ -63,7 +63,7 @@ Features
   You can also craft a packet object from scratch.
 * Sending packet objects to a real network.
 * Supported protocols:
- * Ethernet, Linux SLL, and raw IP
+ * Ethernet, Linux SLL, raw IP, and PPP (RFC1661, RFC1662)
  * IEEE802.1Q
  * ARP
  * IPv4 (RFC791 and RFC1349) and IPv6 (RFC2460)
