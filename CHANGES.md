@@ -5,6 +5,13 @@ Future
 * Add PPP (RFC1661, RFC1662) support.
 * [Issues#28](https://github.com/kaitoy/pcap4j/issues/28): Support Linux cooked-mode capture (SLL).
 * Pluggability for FragmentedPacket and IpV6ExtUnknownPacket.
+* Add raw packet capture APIs:
+ * byte[] org.pcap4j.core.PcapHandle.getNextRawPacket()
+ * byte[] org.pcap4j.core.PcapHandle.getNextRawPacketEx()
+ * void org.pcap4j.core.PcapHandle.loop(int, RawPacketListener)
+ * void org.pcap4j.core.PcapHandle.loop(int, RawPacketListener, Executor)
+ * int org.pcap4j.core.PcapHandle.dispatch(int, RawPacketListener)
+ * int org.pcap4j.core.PcapHandle.dispatch(int, RawPacketListener, Executor)
 
 ### Bug Fixes ###
 * Fix a typo (flagment -> fragment) in org.pcap4j.packet.IpV4Packet.

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -541,11 +541,25 @@ public final class PcapHandle {
   }
 
   /**
-   *
-   * @return a captured packet.
+   * @return a captured packet. May be null.
    * @throws NotOpenException
    */
   public Packet getNextPacket() throws NotOpenException {
+    byte[] ba = getNextRawPacket();
+    if (ba == null) {
+      return null;
+    }
+
+    return PacketFactories.getFactory(Packet.class, DataLinkType.class)
+             .newInstance(ba, 0, ba.length, dlt);
+  }
+
+  /**
+   *
+   * @return a captured packet. May be null.
+   * @throws NotOpenException
+   */
+  public byte[] getNextRawPacket() throws NotOpenException {
     if (!open) {
       throw new NotOpenException();
     }
@@ -569,9 +583,7 @@ public final class PcapHandle {
       Pointer headerP = header.getPointer();
       timestampsInts.set(pcap_pkthdr.getTvSec(headerP).longValue());
       timestampsMicros.set(pcap_pkthdr.getTvUsec(headerP).intValue());
-      byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
-      return PacketFactories.getFactory(Packet.class, DataLinkType.class)
-               .newInstance(ba, 0, ba.length, dlt);
+      return packet.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
     }
     else {
       return null;
@@ -579,8 +591,7 @@ public final class PcapHandle {
   }
 
   /**
-   *
-   * @return a captured packet.
+   * @return a captured packet. Not null.
    * @throws PcapNativeException
    * @throws EOFException
    * @throws TimeoutException
@@ -588,10 +599,24 @@ public final class PcapHandle {
    */
   public Packet getNextPacketEx()
   throws PcapNativeException, EOFException, TimeoutException, NotOpenException {
+    byte[] ba = getNextRawPacketEx();
+    return PacketFactories.getFactory(Packet.class, DataLinkType.class)
+             .newInstance(ba, 0, ba.length, dlt);
+  }
+
+  /**
+   *
+   * @return a captured packet. Not null.
+   * @throws PcapNativeException
+   * @throws EOFException
+   * @throws TimeoutException
+   * @throws NotOpenException
+   */
+  public byte[] getNextRawPacketEx()
+  throws PcapNativeException, EOFException, TimeoutException, NotOpenException {
     if (!open) {
       throw new NotOpenException();
     }
-
 
     if (!handleLock.readLock().tryLock()) {
       throw new NotOpenException();
@@ -619,9 +644,7 @@ public final class PcapHandle {
 
           timestampsInts.set(pcap_pkthdr.getTvSec(headerP).longValue());
           timestampsMicros.set(pcap_pkthdr.getTvUsec(headerP).intValue());
-          byte[] ba = dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
-          return PacketFactories.getFactory(Packet.class, DataLinkType.class)
-                   .newInstance(ba, 0, ba.length, dlt);
+          return dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
         case -1:
           throw new PcapNativeException(
                   "Error occured in pcap_next_ex(): " + getError(), rc
@@ -691,6 +714,69 @@ public final class PcapHandle {
         .append(" executor: ").append(executor);
       throw new NullPointerException(sb.toString());
     }
+    doLoop(packetCount, new GotPacketFuncExecutor(listener, dlt, executor));
+  }
+
+  /**
+   * A wrapper method for <code>int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</code>.
+   * When a packet is captured, <code>listener.gotPacket(byte[])</code> is called in
+   * the thread which called the <code>loop()</code>. And then this PcapHandle waits for
+   * the thread to return from the <code>gotPacket()</code> before it retrieves the next
+   * packet from the pcap buffer.
+   *
+   * @param packetCount the number of packets to capture. -1 is equivalent to infinity.
+   *                    0 may result in different behaviors between platforms
+   *                    and pcap library versions.
+   * @param listener
+   * @throws PcapNativeException
+   * @throws InterruptedException
+   * @throws NotOpenException
+   */
+  public void loop(
+    int packetCount, RawPacketListener listener
+  ) throws PcapNativeException, InterruptedException, NotOpenException {
+    loop(
+      packetCount,
+      listener,
+      SimpleExecutor.getInstance()
+    );
+  }
+
+  /**
+   * A wrapper method for <code>int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</code>.
+   * When a packet is captured, the
+   * {@link java.util.concurrent.Executor#execute(Runnable) executor.execute()} is called
+   * with a Runnable object in the thread which called the <code>loop()</code>.
+   * Then, the Runnable object calls <code>listener.gotPacket(byte[])</code>.
+   * If <code>listener.gotPacket(byte[])</code> is expected to take a long time to
+   * process a packet, this method should be used with a proper executor instead of
+   * {@link #loop(int, RawPacketListener)} in order to prevent the pcap buffer from overflowing.
+   *
+   * @param packetCount the number of packets to capture. -1 is equivalent to infinity.
+   *                    0 may result in different behaviors between platforms
+   *                    and pcap library versions.
+   * @param listener
+   * @param executor
+   * @throws PcapNativeException
+   * @throws InterruptedException
+   * @throws NotOpenException
+   */
+  public void loop(
+    int packetCount, RawPacketListener listener, Executor executor
+  ) throws PcapNativeException, InterruptedException, NotOpenException {
+    if (listener == null || executor == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("listener: ").append(listener)
+        .append(" executor: ").append(executor);
+      throw new NullPointerException(sb.toString());
+    }
+    doLoop(packetCount, new GotRawPacketFuncExecutor(listener, executor));
+  }
+
+  private void doLoop(
+    int packetCount, NativeMappings.pcap_handler handler
+  ) throws PcapNativeException, InterruptedException, NotOpenException {
+
     if (!open) {
       throw new NotOpenException();
     }
@@ -707,7 +793,7 @@ public final class PcapHandle {
       int rc = NativeMappings.pcap_loop(
                  handle,
                  packetCount,
-                 new GotPacketFuncExecutor(listener, dlt, executor),
+                 handler,
                  null
                );
       switch (rc) {
@@ -777,6 +863,61 @@ public final class PcapHandle {
         .append(" executor: ").append(executor);
       throw new NullPointerException(sb.toString());
     }
+    return doDispatch(packetCount, new GotPacketFuncExecutor(listener, dlt, executor));
+  }
+
+  /**
+   *
+   * @param packetCount the maximum number of packets to process.
+   *                    If -1 is specified, all the packets in the pcap buffer or pcap file
+   *                    will be processed before returning.
+   *                    0 may result in different behaviors between platforms
+   *                    and pcap library versions.
+   * @param listener
+   * @return the number of captured packets.
+   * @throws PcapNativeException
+   * @throws InterruptedException
+   * @throws NotOpenException
+   */
+  public int dispatch(
+    int packetCount, RawPacketListener listener
+  ) throws PcapNativeException, InterruptedException, NotOpenException {
+    return dispatch(
+             packetCount,
+             listener,
+             SimpleExecutor.getInstance()
+           );
+  }
+
+  /**
+   *
+   * @param packetCount the maximum number of packets to process.
+   *                    If -1 is specified, all the packets in the pcap buffer or pcap file
+   *                    will be processed before returning.
+   *                    0 may result in different behaviors between platforms
+   *                    and pcap library versions.
+   * @param listener
+   * @param executor
+   * @return the number of captured packets.
+   * @throws PcapNativeException
+   * @throws InterruptedException
+   * @throws NotOpenException
+   */
+  public int dispatch(
+    int packetCount, RawPacketListener listener, Executor executor
+  ) throws PcapNativeException, InterruptedException, NotOpenException {
+    if (listener == null || executor == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("listener: ").append(listener)
+        .append(" executor: ").append(executor);
+      throw new NullPointerException(sb.toString());
+    }
+    return doDispatch(packetCount, new GotRawPacketFuncExecutor(listener, executor));
+  }
+
+  private int doDispatch(
+    int packetCount, NativeMappings.pcap_handler handler
+  ) throws PcapNativeException, InterruptedException, NotOpenException {
     if (!open) {
       throw new NotOpenException();
     }
@@ -794,7 +935,7 @@ public final class PcapHandle {
       rc = NativeMappings.pcap_dispatch(
              handle,
              packetCount,
-             new GotPacketFuncExecutor(listener, dlt, executor),
+             handler,
              null
            );
       if (rc < 0) {
@@ -1193,6 +1334,40 @@ public final class PcapHandle {
               PacketFactories.getFactory(Packet.class, DataLinkType.class)
                 .newInstance(ba, 0, ba.length, dlt)
             );
+          }
+        }
+      );
+    }
+
+  }
+
+  private final class GotRawPacketFuncExecutor implements NativeMappings.pcap_handler {
+
+    private final RawPacketListener listener;
+    private final Executor executor;
+
+    public GotRawPacketFuncExecutor(
+      RawPacketListener listener, Executor executor
+    ) {
+      this.listener = listener;
+      this.executor = executor;
+    }
+
+    @Override
+    public void got_packet(
+      Pointer args, Pointer header, final Pointer packet
+    ) {
+      final long tvs = pcap_pkthdr.getTvSec(header).longValue();
+      final int tvus = pcap_pkthdr.getTvUsec(header).intValue();
+      final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
+
+      executor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            timestampsInts.set(tvs);
+            timestampsMicros.set(tvus);
+            listener.gotPacket(ba);
           }
         }
       );
