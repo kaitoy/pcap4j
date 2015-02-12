@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -819,19 +819,19 @@ public final class ByteArrays {
    * @return checksum
    */
   public static short calcChecksum(byte[] data) {
-    int sum = 0;
-    for (int i = 0; i < data.length; i += SHORT_SIZE_IN_BYTES) {
-      sum += (0xFFFF) & getShort(data, i);
+    long sum = 0;
+    for (int i = 1; i < data.length; i += SHORT_SIZE_IN_BYTES) {
+        sum += 0xFFFFL & getShort(data, i - 1);
+    }
+    if (data.length % 2 != 0) {
+      sum += 0xFFL & data[data.length - 1];
     }
 
-    sum
-      = (0xFFFF & sum)
-        + ((0xFFFF0000 & sum) >> (BYTE_SIZE_IN_BITS * SHORT_SIZE_IN_BYTES));
-    sum
-      = (0xFFFF & sum)
-        + ((0xFFFF0000 & sum) >> (BYTE_SIZE_IN_BITS * SHORT_SIZE_IN_BYTES));
+    while ((sum >> (BYTE_SIZE_IN_BITS * SHORT_SIZE_IN_BYTES)) != 0) {
+      sum = (0xFFFFL & sum) + (sum >>> (BYTE_SIZE_IN_BITS * SHORT_SIZE_IN_BYTES));
+    }
 
-    return (short)(0xFFFF & ~sum);
+    return (short)~sum;
   }
 
   /**
