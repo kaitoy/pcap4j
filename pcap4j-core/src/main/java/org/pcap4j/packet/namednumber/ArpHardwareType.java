@@ -253,47 +253,47 @@ public final class ArpHardwareType extends NamedNumber<Short, ArpHardwareType> {
     = new ArpHardwareType((short)256, "HW_EXP2");
 
   private static final Map<Short, ArpHardwareType> registry
-    = new HashMap<Short, ArpHardwareType>();
+    = new HashMap<Short, ArpHardwareType>(40);
 
   static {
-    registry.put((short)1, ETHERNET);
-    registry.put((short)2, EXPERIMENTAL_ETHERNET);
-    registry.put((short)3, AMATEUR_RADIO_AX_25);
-    registry.put((short)4, PROTEON_PRONET_TOKEN_RING);
-    registry.put((short)5, CHAOS);
-    registry.put((short)6, IEEE_802_NETWORKS);
-    registry.put((short)7, ARCNET);
-    registry.put((short)8, HYPERCHANNEL);
-    registry.put((short)9, LANSTAR);
-    registry.put((short)10, AUTONET_SHORT_ADDRESS);
-    registry.put((short)11, LOCALTALK);
-    registry.put((short)12, LOCALNET);
-    registry.put((short)13, ULTRA_LINK);
-    registry.put((short)14, SMDS);
-    registry.put((short)15, FRAME_RELAY);
-    registry.put((short)16, ATM_16);
-    registry.put((short)17, HDLC);
-    registry.put((short)18, FIBRE_CHANNEL);
-    registry.put((short)19, ATM_19);
-    registry.put((short)20, SERIAL_LINE);
-    registry.put((short)21, ATM_21);
-    registry.put((short)22, MIL_STD_188_220);
-    registry.put((short)23, METRICOM);
-    registry.put((short)24, IEEE_1394_1995);
-    registry.put((short)25, MAPOS);
-    registry.put((short)26, TWINAXIAL);
-    registry.put((short)27, EUI_64);
-    registry.put((short)28, HIPARP);
-    registry.put((short)29, IP_AND_ARP_OVER_ISO_7816_3);
-    registry.put((short)30, ARPSEC);
-    registry.put((short)31, IPSEC_TUNNEL);
-    registry.put((short)32, INFINIBAND);
-    registry.put((short)33, CAI);
-    registry.put((short)34, WIEGAND_INTERFACE);
-    registry.put((short)35, PURE_IP);
-    registry.put((short)36, HW_EXP1);
-    registry.put((short)37, HFI);
-    registry.put((short)256, HW_EXP2);
+    registry.put(ETHERNET.value(), ETHERNET);
+    registry.put(EXPERIMENTAL_ETHERNET.value(), EXPERIMENTAL_ETHERNET);
+    registry.put(AMATEUR_RADIO_AX_25.value(), AMATEUR_RADIO_AX_25);
+    registry.put(PROTEON_PRONET_TOKEN_RING.value(), PROTEON_PRONET_TOKEN_RING);
+    registry.put(CHAOS.value(), CHAOS);
+    registry.put(IEEE_802_NETWORKS.value(), IEEE_802_NETWORKS);
+    registry.put(ARCNET.value(), ARCNET);
+    registry.put(HYPERCHANNEL.value(), HYPERCHANNEL);
+    registry.put(LANSTAR.value(), LANSTAR);
+    registry.put(AUTONET_SHORT_ADDRESS.value(), AUTONET_SHORT_ADDRESS);
+    registry.put(LOCALTALK.value(), LOCALTALK);
+    registry.put(LOCALNET.value(), LOCALNET);
+    registry.put(ULTRA_LINK.value(), ULTRA_LINK);
+    registry.put(SMDS.value(), SMDS);
+    registry.put(FRAME_RELAY.value(), FRAME_RELAY);
+    registry.put(ATM_16.value(), ATM_16);
+    registry.put(HDLC.value(), HDLC);
+    registry.put(FIBRE_CHANNEL.value(), FIBRE_CHANNEL);
+    registry.put(ATM_19.value(), ATM_19);
+    registry.put(SERIAL_LINE.value(), SERIAL_LINE);
+    registry.put(ATM_21.value(), ATM_21);
+    registry.put(MIL_STD_188_220.value(), MIL_STD_188_220);
+    registry.put(METRICOM.value(), METRICOM);
+    registry.put(IEEE_1394_1995.value(), IEEE_1394_1995);
+    registry.put(MAPOS.value(), MAPOS);
+    registry.put(TWINAXIAL.value(), TWINAXIAL);
+    registry.put(EUI_64.value(), EUI_64);
+    registry.put(HIPARP.value(), HIPARP);
+    registry.put(IP_AND_ARP_OVER_ISO_7816_3.value(), IP_AND_ARP_OVER_ISO_7816_3);
+    registry.put(ARPSEC.value(), ARPSEC);
+    registry.put(IPSEC_TUNNEL.value(), IPSEC_TUNNEL);
+    registry.put(INFINIBAND.value(), INFINIBAND);
+    registry.put(CAI.value(), CAI);
+    registry.put(WIEGAND_INTERFACE.value(), WIEGAND_INTERFACE);
+    registry.put(PURE_IP.value(), PURE_IP);
+    registry.put(HW_EXP1.value(), HW_EXP1);
+    registry.put(HFI.value(), HFI);
+    registry.put(HW_EXP2.value(), HW_EXP2);
   }
 
   /**

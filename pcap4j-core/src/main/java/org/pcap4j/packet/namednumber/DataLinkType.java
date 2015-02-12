@@ -92,19 +92,9 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
     = new DataLinkType(143, "DOCSIS");
 
   private static final Map<Integer, DataLinkType> registry
-    = new HashMap<Integer, DataLinkType>();
+    = new HashMap<Integer, DataLinkType>(15);
 
   static {
-    registry.put(0, NULL);
-    registry.put(1, EN10MB);
-    registry.put(6, IEEE802);
-    registry.put(9, PPP);
-    registry.put(10, FDDI);
-    registry.put(50, PPP_SERIAL);
-    registry.put(105, IEEE802_11);
-    registry.put(113, LINUX_SLL);
-    registry.put(143, DOCSIS);
-
     Integer raw = Pcap4jPropertiesLoader.getInstance().getDltRaw();
     if (raw != null) {
       RAW = new DataLinkType(raw, "RAW");
@@ -117,6 +107,17 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
         RAW = new DataLinkType(12, "RAW");
       }
     }
+
+    registry.put(NULL.value(), NULL);
+    registry.put(EN10MB.value(), EN10MB);
+    registry.put(IEEE802.value(), IEEE802);
+    registry.put(PPP.value(), PPP);
+    registry.put(FDDI.value(), FDDI);
+    registry.put(RAW.value(), RAW);
+    registry.put(PPP_SERIAL.value(), PPP_SERIAL);
+    registry.put(IEEE802_11.value(), IEEE802_11);
+    registry.put(LINUX_SLL.value(), LINUX_SLL);
+    registry.put(DOCSIS.value(), DOCSIS);
   }
 
   /**

@@ -174,34 +174,34 @@ public final class ArpOperation extends NamedNumber<Short, ArpOperation> {
     = new ArpOperation((short)25, "OP_EXP2");
 
   private static final Map<Short, ArpOperation> registry
-    = new HashMap<Short, ArpOperation>();
+    = new HashMap<Short, ArpOperation>(30);
 
   static {
-    registry.put((short)1, REQUEST);
-    registry.put((short)2, REPLY);
-    registry.put((short)3, REQUEST_REVERSE);
-    registry.put((short)4, REPLY_REVERSE);
-    registry.put((short)5, DRARP_REQUEST);
-    registry.put((short)6, DRARP_REPLY);
-    registry.put((short)7, DRARP_ERROR);
-    registry.put((short)8, INARP_REQUEST);
-    registry.put((short)9, INARP_REPLY);
-    registry.put((short)10, ARP_NAK);
-    registry.put((short)11, MARS_REQUEST);
-    registry.put((short)12, MARS_MULTI);
-    registry.put((short)13, MARS_MSERV);
-    registry.put((short)14, MARS_JOIN);
-    registry.put((short)15, MARS_LEAVE);
-    registry.put((short)16, MARS_NAK);
-    registry.put((short)17, MARS_UNSERV);
-    registry.put((short)18, MARS_SJOIN);
-    registry.put((short)19, MARS_SLEAVE);
-    registry.put((short)20, MARS_GROUPLIST_REQUEST);
-    registry.put((short)21, MARS_GROUPLIST_REPLY);
-    registry.put((short)22, MARS_REDIRECT_MAP);
-    registry.put((short)23, MAPOS_UNARP);
-    registry.put((short)24, OP_EXP1);
-    registry.put((short)25, OP_EXP2);
+    registry.put(REQUEST.value(), REQUEST);
+    registry.put(REPLY.value(), REPLY);
+    registry.put(REQUEST_REVERSE.value(), REQUEST_REVERSE);
+    registry.put(REPLY_REVERSE.value(), REPLY_REVERSE);
+    registry.put(DRARP_REQUEST.value(), DRARP_REQUEST);
+    registry.put(DRARP_REPLY.value(), DRARP_REPLY);
+    registry.put(DRARP_ERROR.value(), DRARP_ERROR);
+    registry.put(INARP_REQUEST.value(), INARP_REQUEST);
+    registry.put(INARP_REPLY.value(), INARP_REPLY);
+    registry.put(ARP_NAK.value(), ARP_NAK);
+    registry.put(MARS_REQUEST.value(), MARS_REQUEST);
+    registry.put(MARS_MULTI.value(), MARS_MULTI);
+    registry.put(MARS_MSERV.value(), MARS_MSERV);
+    registry.put(MARS_JOIN.value(), MARS_JOIN);
+    registry.put(MARS_LEAVE.value(), MARS_LEAVE);
+    registry.put(MARS_NAK.value(), MARS_NAK);
+    registry.put(MARS_UNSERV.value(), MARS_UNSERV);
+    registry.put(MARS_SJOIN.value(), MARS_SJOIN);
+    registry.put(MARS_SLEAVE.value(), MARS_SLEAVE);
+    registry.put(MARS_GROUPLIST_REQUEST.value(), MARS_GROUPLIST_REQUEST);
+    registry.put(MARS_GROUPLIST_REPLY.value(), MARS_GROUPLIST_REPLY);
+    registry.put(MARS_REDIRECT_MAP.value(), MARS_REDIRECT_MAP);
+    registry.put(MAPOS_UNARP.value(), MAPOS_UNARP);
+    registry.put(OP_EXP1.value(), OP_EXP1);
+    registry.put(OP_EXP2.value(), OP_EXP2);
   }
 
   /**
