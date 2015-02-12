@@ -3,7 +3,7 @@
   Source address: fe:00:00:00:00:01
   Type: 0x0806(ARP)
 [ARP Header (28 bytes)]
-  Hardware type: 1(Ethernet(10Mb))
+  Hardware type: 1(Ethernet (10Mb))
   Protocol type: 0x0800(IPv4)
   Hardware length: 6 [bytes]
   Protocol length: 4 [bytes]
