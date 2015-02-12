@@ -12,8 +12,8 @@ import java.util.Map;
 
 /**
  * ARP Hardware Type
- * http://www.iana.org/assignments/arp-parameters/arp-parameters.xml#arp-parameters-2
  *
+ * @see <a href="http://www.iana.org/assignments/arp-parameters/arp-parameters.xml#arp-parameters-2">IANA Registry</a>
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
