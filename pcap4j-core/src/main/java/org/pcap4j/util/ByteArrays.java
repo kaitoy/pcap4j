@@ -219,16 +219,65 @@ public final class ByteArrays {
 
     if (bo.equals(LITTLE_ENDIAN)) {
       return ((       array[offset + 3]) << (BYTE_SIZE_IN_BITS * 3))
-        | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
-        | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
-        | ((0xFF & array[offset    ])                           );
+           | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
+           | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
+           | ((0xFF & array[offset    ])                           );
     }
     else {
       return ((       array[offset    ]) << (BYTE_SIZE_IN_BITS * 3))
-        | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 2))
-        | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 1))
-        | ((0xFF & array[offset + 3])                           );
+           | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 2))
+           | ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 1))
+           | ((0xFF & array[offset + 3])                           );
     }
+  }
+
+  /**
+   * @param array
+   * @param offset
+   * @param length
+   * @return int value.
+   */
+  public static int getInt(byte[] array, int offset, int length) {
+    return getInt(array, offset, length, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   * @param array
+   * @param offset
+   * @param length
+   * @param bo
+   * @return int value.
+   */
+  public static int getInt(byte[] array, int offset, int length, ByteOrder bo) {
+    validateBounds(array, offset, length);
+    if (length > INT_SIZE_IN_BYTES) {
+      StringBuilder sb
+        = new StringBuilder(30)
+            .append("length must be equal or less than ")
+            .append(INT_SIZE_IN_BYTES)
+            .append(", but is: ")
+            .append(length);
+      throw new IllegalArgumentException(sb.toString());
+    }
+
+    if (bo == null) {
+      throw new NullPointerException(" bo: " + bo);
+    }
+
+    int value = 0;
+    if (bo.equals(LITTLE_ENDIAN)) {
+      for (int i = offset + length - 1; i >= offset; i--) {
+        value <<= BYTE_SIZE_IN_BITS;
+        value |= 0xFF & array[i];
+      }
+    }
+    else {
+      for (int i = offset; i < offset + length; i++) {
+        value <<= BYTE_SIZE_IN_BITS;
+        value |= 0xFF & array[i];
+      }
+    }
+    return value;
   }
 
   /**
@@ -263,6 +312,47 @@ public final class ByteArrays {
                (byte)(value                         )
              };
     }
+  }
+
+  /**
+   * @param value
+   * @param length
+   * @return byte array
+   */
+  public static byte[] toByteArray(int value, int length) {
+    return toByteArray(value, length, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   * @param value
+   * @param length
+   * @param bo
+   * @return byte array
+   */
+  public static byte[] toByteArray(int value, int length, ByteOrder bo) {
+    if (length > INT_SIZE_IN_BYTES) {
+      StringBuilder sb
+        = new StringBuilder(30)
+            .append("length must be equal or less than ")
+            .append(INT_SIZE_IN_BYTES)
+            .append(", but is: ")
+            .append(length);
+      throw new IllegalArgumentException(sb.toString());
+    }
+
+    byte[] arr = new byte[length];
+    if (bo.equals(LITTLE_ENDIAN)) {
+      for (int i = 0; i < length; i++) {
+        arr[length - i - 1] = (byte)(value >> BYTE_SIZE_IN_BITS * i);
+      }
+    }
+    else {
+      for (int i = 0; i < length; i++) {
+        arr[i] = (byte)(value >> BYTE_SIZE_IN_BITS * i);
+      }
+    }
+
+    return arr;
   }
 
   /**
