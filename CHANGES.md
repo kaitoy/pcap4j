@@ -12,6 +12,8 @@ Future
  * void org.pcap4j.core.PcapHandle.loop(int, RawPacketListener, Executor)
  * int org.pcap4j.core.PcapHandle.dispatch(int, RawPacketListener)
  * int org.pcap4j.core.PcapHandle.dispatch(int, RawPacketListener, Executor)
+ * void org.pcap4j.core.PcapDumper.dumpRaw(byte[])
+ * void org.pcap4j.core.PcapDumper.dumpRaw(byte[], long, int)
 
 ### Bug Fixes ###
 * Fix a typo (flagment -> fragment) in org.pcap4j.packet.IpV4Packet.
@@ -24,7 +26,7 @@ Future
 * Change serialization formats:
  * org.pcap4j.packet.UnknownPacket
  * org.pcap4j.packet.FragmentedPacket
- 
+
 Release 1.3.0 (4-Oct-2014)
 ==========================
 ### New Features ###
@@ -181,7 +183,7 @@ Release 0.9.15 (29-May-2013)
  * org.pcap4j.packet.IcmpV4RedirectPacket
  * org.pcap4j.packet.IcmpV4SourceQuenchPacket
  * org.pcap4j.packet.IcmpV4TimeExceededPacket
- 
+
 Release 0.9.14 (13-Apr-2013)
 ============================
 ### New Features ###
@@ -189,4 +191,3 @@ Release 0.9.14 (13-Apr-2013)
 * [Issues#4](https://github.com/kaitoy/pcap4j/issues/4): JNA 3.5+ Support. - [@kaitoy](https://github.com/kaitoy)
 
 ### Bug Fixes ###
-

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014 Kaito Yamada
+  _##  Copyright (C) 2012-2015 Kaito Yamada
   _##
   _##########################################################################
 */
@@ -11,6 +11,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.core.NativeMappings.timeval;
 import org.pcap4j.packet.Packet;
+import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.sun.jna.NativeLong;
@@ -61,6 +62,38 @@ public final class PcapDumper {
   public void dump(
     Packet packet, long timestampSec, int timestampMicros
   ) throws NotOpenException {
+    if (packet == null) {
+      throw new NullPointerException("packet may not be null");
+    }
+
+    if (logger.isDebugEnabled()) {
+      logger.debug("Dumping a packet: " + packet);
+    }
+    dumpRaw(packet.getRawData(), timestampSec, timestampMicros);
+  }
+
+  /**
+   *
+   * @param packet
+   * @throws NotOpenException
+   */
+  public void dumpRaw(byte[] packet) throws NotOpenException {
+    long cur = System.currentTimeMillis();
+    long timestampSec = cur / 1000L;
+    int timestampMicros = (int)((cur - timestampSec * 1000L) * 1000);
+    dumpRaw(packet, timestampSec, timestampMicros);
+  }
+
+  /**
+   *
+   * @param packet
+   * @param timestampSec
+   * @param timestampMicros
+   * @throws NotOpenException
+   */
+  public void dumpRaw(
+    byte[] packet, long timestampSec, int timestampMicros
+  ) throws NotOpenException {
     if (timestampSec < 0) {
       throw new IllegalArgumentException(
               "timestampSec must be positive: "
@@ -81,7 +114,7 @@ public final class PcapDumper {
     }
 
     pcap_pkthdr header = new pcap_pkthdr();
-    header.len = header.caplen = packet.length();
+    header.len = header.caplen = packet.length;
     header.ts = new timeval();
     header.ts.tv_sec = new NativeLong(timestampSec);
     header.ts.tv_usec = new NativeLong(timestampMicros);
@@ -93,13 +126,13 @@ public final class PcapDumper {
       if (!open) {
         throw new NotOpenException();
       }
-      NativeMappings.pcap_dump(dumper, header, packet.getRawData());
+      NativeMappings.pcap_dump(dumper, header, packet);
     } finally {
       dumperLock.readLock().unlock();
     }
 
     if (logger.isDebugEnabled()) {
-      logger.debug("Dumped a packet: " + packet);
+      logger.debug("Dumped a packet: " + ByteArrays.toHexString(packet, " "));
     }
   }
 

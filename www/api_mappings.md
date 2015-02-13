@@ -47,11 +47,17 @@ Mapping between pcap API and Pcap4j API
     <td>PcapDumper org.pcap4j.core.PcapHandle.dumpOpen(String)</td>
   </tr>
   <tr>
-    <td rowspan="2">void pcap_dump(u_char *, const struct pcap_pkthdr *, const u_char *)</td>
+    <td rowspan="4">void pcap_dump(u_char *, const struct pcap_pkthdr *, const u_char *)</td>
     <td>void org.pcap4j.core.PcapDumper.dump(Packet, long, int)</td>
   </tr>
   <tr>
     <td>void org.pcap4j.core.PcapDumper.dump(Packet)</td>
+  </tr>
+  <tr>
+    <td>void org.pcap4j.core.PcapDumper.dumpRaw(byte[])</td>
+  </tr>
+  <tr>
+  <td>void org.pcap4j.core.PcapDumper.dumpRaw(byte[], long, int)</td>
   </tr>
   <tr>
     <td>int pcap_dump_flush(pcap_dumper_t *)</td>
