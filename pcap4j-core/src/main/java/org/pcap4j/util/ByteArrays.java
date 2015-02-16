@@ -814,7 +814,9 @@ public final class ByteArrays {
   }
 
   /**
+   * A utility method to calculate the Internet checksum.
    *
+   * @see <a href="https://tools.ietf.org/html/rfc1071">RFC 1071</a>
    * @param data
    * @return checksum
    */
@@ -824,7 +826,7 @@ public final class ByteArrays {
         sum += 0xFFFFL & getShort(data, i - 1);
     }
     if (data.length % 2 != 0) {
-      sum += 0xFFL & data[data.length - 1];
+      sum += 0xFFFFL & (data[data.length - 1] << BYTE_SIZE_IN_BITS) ;
     }
 
     while ((sum >> (BYTE_SIZE_IN_BITS * SHORT_SIZE_IN_BYTES)) != 0) {
