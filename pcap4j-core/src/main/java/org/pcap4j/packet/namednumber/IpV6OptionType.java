@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Kaito Yamada
+  _##  Copyright (C) 2012-2015  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -12,18 +12,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * IpV6 Option Type
+ *
+ * @see <a href="http://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xml#ipv6-parameters-2">IANA Registry</a>
+ * @see <a href="http://tools.ietf.org/html/rfc2460#section-4.2">RFC 2460 section 4.2</a>
  * @author Kaito Yamada
  * @since pcap4j 0.9.10
  */
 public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
 
-  // http://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xml#ipv6-parameters-2
-  // http://www.ietf.org/rfc/rfc2460.txt
-
   /**
    *
    */
-  private static final long serialVersionUID = -5043412814955401877L;
+  private static final long serialVersionUID = 2460312908857953021L;
 
   /**
    *
@@ -57,7 +58,7 @@ public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
     }
   }
 
-  private final IpV6OptionTypeIdentifier identifier;
+  private final IpV6OptionTypeAction action;
 
   /**
    *
@@ -69,16 +70,16 @@ public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
 
     switch (value & 0xC0) {
       case 0x00:
-        this.identifier = IpV6OptionTypeIdentifier.SKIP;
+        this.action = IpV6OptionTypeAction.SKIP;
         break;
       case 0x40:
-        this.identifier = IpV6OptionTypeIdentifier.DISCARD;
+        this.action = IpV6OptionTypeAction.DISCARD;
         break;
       case 0x80:
-        this.identifier = IpV6OptionTypeIdentifier.DISCARD_AND_SEND_ICMP;
+        this.action = IpV6OptionTypeAction.DISCARD_AND_SEND_ICMP;
         break;
       case 0xC0:
-        this.identifier = IpV6OptionTypeIdentifier.DISCARD_AND_SEND_ICMP_IF_NOT_MULTICAST;
+        this.action = IpV6OptionTypeAction.DISCARD_AND_SEND_ICMP_IF_NOT_MULTICAST;
         break;
       default:
         throw new AssertionError("Never get here");
@@ -119,65 +120,64 @@ public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
   }
 
   /**
+   * The act field (The highest-order two bits of the Option Type)
    *
-   * @return identifier
+   * @return action
    */
-  public IpV6OptionTypeIdentifier getIdentifier() {
-    return identifier;
+  public IpV6OptionTypeAction getAction() {
+    return action;
   }
 
   /**
+   * The chg field (The third-highest-order bit of the Option Type)
    *
-   * @return true if the option data of the packet represented by this object
-   *         is changable; false otherwise.
+   * @return true if the option data may change en-route;
+   *         false the option data does not change en-route.
    */
-  public boolean optionDataIsChangable() {
+  public boolean optionDataMayChange() {
     return (value() & 0x20) != 0;
   }
 
   /**
+   * The act field (The highest-order two bits of the Option Type).
+   * This specifies the action that must be taken if the
+   * processing IPv6 node does not recognize the Option Type.
    *
+   * @see <a href="http://tools.ietf.org/html/rfc2460#section-4.2">RFC 2460 section 4.2</a>
    * @author Kaito
    * @since pcap4j 0.9.10
    */
-  public static enum IpV6OptionTypeIdentifier {
-
-    /*
-     * 00 - skip over this option and continue processing the header.
-     * 01 - discard the packet.
-     * 10 - discard the packet and, regardless of whether or not the
-     *      packet's Destination Address was a multicast address, send an
-     *      ICMP Parameter Problem, Code 2, message to the packet's
-     *      Source Address, pointing to the unrecognized Option Type.
-     * 11 - discard the packet and, only if the packet's Destination
-     *      Address was not a multicast address, send an ICMP Parameter
-     *      Problem, Code 2, message to the packet's Source Address,
-     *      pointing to the unrecognized Option Type.
-     */
+  public static enum IpV6OptionTypeAction {
 
     /**
-     *
+     * Skip over this option and continue processing the header: 0
      */
     SKIP((byte)0),
 
     /**
-     *
+     * Discard the packet: 1
      */
     DISCARD((byte)1),
 
     /**
-     *
+     * Discard the packet and, regardless of whether or not the
+     * packet's Destination Address was a multicast address, send an
+     * ICMP Parameter Problem, Code 2, message to the packet's
+     * Source Address, pointing to the unrecognized Option Type: 2
      */
     DISCARD_AND_SEND_ICMP((byte)2),
 
     /**
-     *
+     * Discard the packet and, only if the packet's Destination
+     * Address was not a multicast address, send an ICMP Parameter
+     * Problem, Code 2, message to the packet's Source Address,
+     * pointing to the unrecognized Option Type: 3
      */
     DISCARD_AND_SEND_ICMP_IF_NOT_MULTICAST((byte)3);
 
     private final byte value;
 
-    private IpV6OptionTypeIdentifier(byte value) {
+    private IpV6OptionTypeAction(byte value) {
       this.value = value;
     }
 
