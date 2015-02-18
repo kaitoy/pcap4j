@@ -42,14 +42,14 @@ public abstract class AbstractPacket implements Packet {
    */
   public AbstractPacket() {
     this.lengthCache
-    = new LazyValue<Integer>(
-        new BuildValueCommand<Integer>() {
-          @Override
-          public Integer buildValue() {
-            return calcLength();
+      = new LazyValue<Integer>(
+          new BuildValueCommand<Integer>() {
+            @Override
+            public Integer buildValue() {
+              return calcLength();
+            }
           }
-        }
-      );
+        );
     this.rawDataCache
       = new LazyValue<byte[]>(
           new BuildValueCommand<byte[]>() {
