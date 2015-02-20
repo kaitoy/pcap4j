@@ -10,6 +10,7 @@ package org.pcap4j.packet.namednumber;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import org.pcap4j.util.ByteArrays;
 
 /**
  * IpV6 Option Type
@@ -111,7 +112,7 @@ public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
 
   @Override
   public String valueAsString() {
-    return String.valueOf(value() & 0xFF);
+    return "0x" + ByteArrays.toHexString(value(), "");
   }
 
   @Override

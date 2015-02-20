@@ -22,7 +22,11 @@ Future
  * Change the serialization format of IpV4Packet and IpV4Header.
 
 ### Other Changes ###
-* The property org.pcap4j.packet.Packet.classFor.unknownNumber is changed to org.pcap4j.packet.Packet.classFor.org.pcap4j.packet.namednumber.NotApplicable.0.
+* Property changes:
+ * org.pcap4j.packet.Packet.classFor.unknownNumber -> org.pcap4j.packet.Packet.classFor.org.pcap4j.packet.namednumber.NotApplicable.0
+ * org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0 -> org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0x00
+ * org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.1 -> org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0x01
+
 * Change serialization formats:
  * org.pcap4j.packet.UnknownPacket
  * org.pcap4j.packet.FragmentedPacket

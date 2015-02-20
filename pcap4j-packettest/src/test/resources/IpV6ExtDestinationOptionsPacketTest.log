@@ -2,8 +2,8 @@
   Next Header: 17(UDP)
   Hdr Ext Len: 0 (8 [bytes])
   Options: 
-    [Option Type: 0(Pad1)]
-    [Option Type: 1(PadN)] [Option Data Len: 3 bytes] [Option Data: 0x000000]
+    [Option Type: 0x00(Pad1)]
+    [Option Type: 0x01(PadN)] [Option Data Len: 3 bytes] [Option Data: 0x000000]
 [UDP Header (8 bytes)]
   Source port: 162(SNMP Trap)
   Destination port: 0(unknown)
