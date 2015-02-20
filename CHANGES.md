@@ -27,9 +27,14 @@ Future
  * org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0 -> org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0x00
  * org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.1 -> org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0x01
 
+* Class name change:
+ * org.pcap4j.packet.namednumber.IpV6RoutingHeaderType -> org.pcap4j.packet.namednumber.IpV6RoutingType
+
 * Change serialization formats:
  * org.pcap4j.packet.UnknownPacket
  * org.pcap4j.packet.FragmentedPacket
+ * org.pcap4j.packet.IpV6ExtRoutingPacket
+ * org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6ExtRoutingHeader
 
 Release 1.3.0 (4-Oct-2014)
 ==========================

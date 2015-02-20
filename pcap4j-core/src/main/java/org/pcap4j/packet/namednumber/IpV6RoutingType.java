@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -13,9 +13,9 @@ import java.util.Map;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.11
+ * @since pcap4j 1.3.1
  */
-public final class IpV6RoutingHeaderType extends NamedNumber<Byte, IpV6RoutingHeaderType> {
+public final class IpV6RoutingType extends NamedNumber<Byte, IpV6RoutingType> {
 
   // http://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xml#ipv6-parameters-3
   // http://www.ietf.org/rfc/rfc2460.txt
@@ -23,34 +23,34 @@ public final class IpV6RoutingHeaderType extends NamedNumber<Byte, IpV6RoutingHe
   /**
    *
    */
-  private static final long serialVersionUID = -6648259162603151846L;
+  private static final long serialVersionUID = 3229438606992762639L;
 
   /**
    *
    */
-  public static final IpV6RoutingHeaderType SOURCE_ROUTE
-    = new IpV6RoutingHeaderType((byte)0, "Source Route");
+  public static final IpV6RoutingType SOURCE_ROUTE
+    = new IpV6RoutingType((byte)0, "Source Route");
 
   /**
    *
    */
-  public static final IpV6RoutingHeaderType TYPE2_ROUTING_HEADER
-    = new IpV6RoutingHeaderType((byte)2, "Type 2 Routing Header");
+  public static final IpV6RoutingType TYPE2_ROUTING_HEADER
+    = new IpV6RoutingType((byte)2, "Type 2 Routing Header");
 
   /**
    *
    */
-  public static final IpV6RoutingHeaderType RPL_SOURCE_ROUTE_HEADER
-    = new IpV6RoutingHeaderType((byte)3, "RPL Source Route Header");
+  public static final IpV6RoutingType RPL_SOURCE_ROUTE_HEADER
+    = new IpV6RoutingType((byte)3, "RPL Source Route Header");
 
-  private static final Map<Byte, IpV6RoutingHeaderType> registry
-    = new HashMap<Byte, IpV6RoutingHeaderType>();
+  private static final Map<Byte, IpV6RoutingType> registry
+    = new HashMap<Byte, IpV6RoutingType>();
 
   static {
-    for (Field field: IpV6RoutingHeaderType.class.getFields()) {
-      if (IpV6RoutingHeaderType.class.isAssignableFrom(field.getType())) {
+    for (Field field: IpV6RoutingType.class.getFields()) {
+      if (IpV6RoutingType.class.isAssignableFrom(field.getType())) {
         try {
-          IpV6RoutingHeaderType f = (IpV6RoutingHeaderType)field.get(null);
+          IpV6RoutingType f = (IpV6RoutingType)field.get(null);
           registry.put(f.value(), f);
         } catch (IllegalArgumentException e) {
           throw new AssertionError(e);
@@ -68,7 +68,7 @@ public final class IpV6RoutingHeaderType extends NamedNumber<Byte, IpV6RoutingHe
    * @param value
    * @param name
    */
-  public IpV6RoutingHeaderType(Byte value, String name) {
+  public IpV6RoutingType(Byte value, String name) {
     super(value, name);
   }
 
@@ -77,12 +77,12 @@ public final class IpV6RoutingHeaderType extends NamedNumber<Byte, IpV6RoutingHe
    * @param value
    * @return a IpV6RoutingHeaderType object.
    */
-  public static IpV6RoutingHeaderType getInstance(Byte value) {
+  public static IpV6RoutingType getInstance(Byte value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
     }
     else {
-      return new IpV6RoutingHeaderType(value, "unknown");
+      return new IpV6RoutingType(value, "unknown");
     }
   }
 
@@ -91,7 +91,7 @@ public final class IpV6RoutingHeaderType extends NamedNumber<Byte, IpV6RoutingHe
    * @param number
    * @return a IpV6RoutingHeaderType object.
    */
-  public static IpV6RoutingHeaderType register(IpV6RoutingHeaderType number) {
+  public static IpV6RoutingType register(IpV6RoutingType number) {
     return registry.put(number.value(), number);
   }
 
@@ -101,7 +101,7 @@ public final class IpV6RoutingHeaderType extends NamedNumber<Byte, IpV6RoutingHe
   }
 
   @Override
-  public int compareTo(IpV6RoutingHeaderType o) {
+  public int compareTo(IpV6RoutingType o) {
     return value().compareTo(o.value());
   }
 

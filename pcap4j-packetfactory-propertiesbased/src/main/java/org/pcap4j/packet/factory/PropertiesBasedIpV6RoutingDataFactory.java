@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 import org.pcap4j.packet.IllegalIpV6RoutingData;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
-import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
+import org.pcap4j.packet.namednumber.IpV6RoutingType;
 
 /**
  * @author Kaito Yamada
@@ -20,7 +20,7 @@ import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
  */
 public final class
 PropertiesBasedIpV6RoutingDataFactory
-implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
+implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
 
   private static final PropertiesBasedIpV6RoutingDataFactory INSTANCE
     = new PropertiesBasedIpV6RoutingDataFactory();
@@ -37,7 +37,7 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
 
   @Override
   public IpV6RoutingData newInstance(
-    byte[] rawData, int offset, int length, IpV6RoutingHeaderType type
+    byte[] rawData, int offset, int length, IpV6RoutingType type
   ) {
     return newInstance(rawData, offset, length, getTargetClass(type));
   }
@@ -90,7 +90,7 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingHeaderType> {
   }
 
   @Override
-  public Class<? extends IpV6RoutingData> getTargetClass(IpV6RoutingHeaderType type) {
+  public Class<? extends IpV6RoutingData> getTargetClass(IpV6RoutingType type) {
     if (type == null) {
       throw new NullPointerException("type must not be null");
     }

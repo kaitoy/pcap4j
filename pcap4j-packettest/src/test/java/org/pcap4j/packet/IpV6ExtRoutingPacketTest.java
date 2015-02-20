@@ -12,7 +12,7 @@ import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6ExtRoutingHeader;
 import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpNumber;
-import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
+import org.pcap4j.packet.namednumber.IpV6RoutingType;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.packet.namednumber.UdpPort;
 import org.pcap4j.util.MacAddress;
@@ -27,7 +27,7 @@ public class IpV6ExtRoutingPacketTest extends AbstractPacketTest {
 
   private final IpNumber nextHeader;
   private final byte hdrExtLen;
-  private final IpV6RoutingHeaderType routingType;
+  private final IpV6RoutingType routingType;
   private final byte segmentsLeft;
   private final IpV6RoutingData data;
   private final IpV6ExtRoutingPacket packet;
@@ -38,7 +38,7 @@ public class IpV6ExtRoutingPacketTest extends AbstractPacketTest {
   public IpV6ExtRoutingPacketTest() throws Exception {
     this.nextHeader = IpNumber.UDP;
     this.hdrExtLen = (byte)6;
-    this.routingType = IpV6RoutingHeaderType.SOURCE_ROUTE;
+    this.routingType = IpV6RoutingType.SOURCE_ROUTE;
     this.segmentsLeft = (byte)2;
 
     try {

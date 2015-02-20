@@ -31,7 +31,7 @@ import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
-import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
+import org.pcap4j.packet.namednumber.IpV6RoutingType;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.packet.namednumber.NamedNumber;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
@@ -368,7 +368,7 @@ public final class PacketFactoryPropertiesLoader {
    * @return a class which implements IpV6RoutingData for a specified type.
    */
   public Class<? extends IpV6RoutingData> getIpV6RoutingDataClass(
-    IpV6RoutingHeaderType type
+    IpV6RoutingType type
   ) {
     StringBuilder sb = new StringBuilder(120);
     sb.append(IPV6_ROUTING_DATA_CLASS_KEY_BASE)

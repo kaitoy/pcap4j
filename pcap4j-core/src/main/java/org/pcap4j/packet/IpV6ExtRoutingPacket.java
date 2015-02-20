@@ -14,7 +14,7 @@ import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
-import org.pcap4j.packet.namednumber.IpV6RoutingHeaderType;
+import org.pcap4j.packet.namednumber.IpV6RoutingType;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
@@ -27,7 +27,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
   /**
    *
    */
-  private static final long serialVersionUID = -4454872145403587056L;
+  private static final long serialVersionUID = -4408422883412551431L;
 
   private final IpV6ExtRoutingHeader header;
   private final Packet payload;
@@ -131,7 +131,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     private IpNumber nextHeader;
     private byte hdrExtLen;
-    private IpV6RoutingHeaderType routingType;
+    private IpV6RoutingType routingType;
     private byte segmentsLeft;
     private IpV6RoutingData data;
     private Packet.Builder payloadBuilder;
@@ -180,7 +180,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
      * @param routingType
      * @return this Builder object for method chaining.
      */
-    public Builder routingType(IpV6RoutingHeaderType routingType) {
+    public Builder routingType(IpV6RoutingType routingType) {
       this.routingType = routingType;
       return this;
     }
@@ -252,7 +252,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
     /**
      *
      */
-    private static final long serialVersionUID = 773193868313443164L;
+    private static final long serialVersionUID = -72622140516174483L;
 
     private static final int NEXT_HEADER_OFFSET
       = 0;
@@ -275,7 +275,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     private final IpNumber nextHeader;
     private final byte hdrExtLen;
-    private final IpV6RoutingHeaderType routingType;
+    private final IpV6RoutingType routingType;
     private final byte segmentsLeft;
     private final IpV6RoutingData data;
 
@@ -316,14 +316,14 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
       }
 
       this.routingType
-        = IpV6RoutingHeaderType.getInstance(
+        = IpV6RoutingType.getInstance(
             ByteArrays.getByte(rawData, ROUTING_TYPE_OFFSET + offset)
           );
       this.segmentsLeft
         = ByteArrays.getByte(rawData, SEGMENTS_LEFT_OFFSET + offset);
       this.data
         = PacketFactories
-            .getFactory(IpV6RoutingData.class, IpV6RoutingHeaderType.class)
+            .getFactory(IpV6RoutingData.class, IpV6RoutingType.class)
               .newInstance(
                  rawData,
                  TYPE_SPECIFIC_DATA_OFFSET + offset,
@@ -381,7 +381,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
      *
      * @return routingType
      */
-    public IpV6RoutingHeaderType getRoutingType() { return routingType; }
+    public IpV6RoutingType getRoutingType() { return routingType; }
 
     /**
      *
