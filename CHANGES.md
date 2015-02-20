@@ -1,7 +1,6 @@
 Future
 ======
 ### New Features ###
-* Add SSH2 support.
 * Add PPP (RFC1661, RFC1662) support.
 * [Issues#28](https://github.com/kaitoy/pcap4j/issues/28): Support Linux cooked-mode capture (SLL).
 * Pluggability for FragmentedPacket and IpV6ExtUnknownPacket.
@@ -27,14 +26,20 @@ Future
  * org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0 -> org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0x00
  * org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.1 -> org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0x01
 
-* Class name change:
+* Class name changes:
  * org.pcap4j.packet.namednumber.IpV6RoutingHeaderType -> org.pcap4j.packet.namednumber.IpV6RoutingType
+ * org.pcap4j.packet.namednumber.IpV6OptionType.IpV6OptionTypeIdentifier -> org.pcap4j.packet.namednumber.IpV6OptionType.IpV6OptionTypeAction
+
+* Method name changes:
+ * org.pcap4j.packet.namednumber.IpV6OptionType.optionDataIsChangable -> org.pcap4j.packet.namednumber.IpV6OptionType.optionDataMayChange
+ * org.pcap4j.packet.namednumber.IpV6OptionType.getIdentifier -> org.pcap4j.packet.namednumber.IpV6OptionType.getAction
 
 * Change serialization formats:
  * org.pcap4j.packet.UnknownPacket
  * org.pcap4j.packet.FragmentedPacket
  * org.pcap4j.packet.IpV6ExtRoutingPacket
  * org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6ExtRoutingHeader
+ * org.pcap4j.packet.namednumber.IpV6OptionType
 
 Release 1.3.0 (4-Oct-2014)
 ==========================
