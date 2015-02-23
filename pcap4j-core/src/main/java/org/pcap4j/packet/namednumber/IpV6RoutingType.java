@@ -7,18 +7,17 @@
 
 package org.pcap4j.packet.namednumber;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * IPv6 Routing Type
+ *
+ * @see <a href="http://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xml#ipv6-parameters-3">IANA Registry</a>
  * @author Kaito Yamada
  * @since pcap4j 1.3.1
  */
 public final class IpV6RoutingType extends NamedNumber<Byte, IpV6RoutingType> {
-
-  // http://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xml#ipv6-parameters-3
-  // http://www.ietf.org/rfc/rfc2460.txt
 
   /**
    *
@@ -26,19 +25,25 @@ public final class IpV6RoutingType extends NamedNumber<Byte, IpV6RoutingType> {
   private static final long serialVersionUID = 3229438606992762639L;
 
   /**
-   *
+   * Source Route: 0
    */
   public static final IpV6RoutingType SOURCE_ROUTE
     = new IpV6RoutingType((byte)0, "Source Route");
 
   /**
-   *
+   * Nimrod: 1
+   */
+  public static final IpV6RoutingType NIMROD
+    = new IpV6RoutingType((byte)1, "Nimrod");
+
+  /**
+   * Type 2 Routing Header: 2
    */
   public static final IpV6RoutingType TYPE2_ROUTING_HEADER
     = new IpV6RoutingType((byte)2, "Type 2 Routing Header");
 
   /**
-   *
+   * RPL Source Route Header: 3
    */
   public static final IpV6RoutingType RPL_SOURCE_ROUTE_HEADER
     = new IpV6RoutingType((byte)3, "RPL Source Route Header");
@@ -47,20 +52,10 @@ public final class IpV6RoutingType extends NamedNumber<Byte, IpV6RoutingType> {
     = new HashMap<Byte, IpV6RoutingType>();
 
   static {
-    for (Field field: IpV6RoutingType.class.getFields()) {
-      if (IpV6RoutingType.class.isAssignableFrom(field.getType())) {
-        try {
-          IpV6RoutingType f = (IpV6RoutingType)field.get(null);
-          registry.put(f.value(), f);
-        } catch (IllegalArgumentException e) {
-          throw new AssertionError(e);
-        } catch (IllegalAccessException e) {
-          throw new AssertionError(e);
-        } catch (NullPointerException e) {
-          continue;
-        }
-      }
-    }
+    registry.put(SOURCE_ROUTE.value(), SOURCE_ROUTE);
+    registry.put(NIMROD.value(), NIMROD);
+    registry.put(TYPE2_ROUTING_HEADER.value(), TYPE2_ROUTING_HEADER);
+    registry.put(RPL_SOURCE_ROUTE_HEADER.value(), RPL_SOURCE_ROUTE_HEADER);
   }
 
   /**

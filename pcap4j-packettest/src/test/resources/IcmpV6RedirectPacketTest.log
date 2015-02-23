@@ -2,7 +2,7 @@
   Reserved: 123454321
   Target Address: /2001:db8:0:0:aaaa:bbbb:0:1
   Destination Address: /2001:db8:0:0:aaaa:bbbb:0:254
-  Option: [Type: 2(Target Link-Layer Address)] [Length: 1 (8 bytes)] [linkLayerAddress: ff 00 00 01 02 03]
+  Option: [Type: 2(Target Link-layer Address)] [Length: 1 (8 bytes)] [linkLayerAddress: ff 00 00 01 02 03]
   Option: [Type: 4(Redirected Header)] [Length: 7 (56 bytes)] [Reserved: 00 11 22 33 44 55] [IP header + data: {[IPv6 Header (40 bytes)]
   Version: 6(IPv6)
   Traffic Class: 0x12

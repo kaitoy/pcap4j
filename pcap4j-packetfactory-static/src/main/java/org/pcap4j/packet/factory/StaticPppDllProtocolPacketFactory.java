@@ -25,7 +25,7 @@ extends AbstractStaticPacketFactory<PppDllProtocol> {
 
   private StaticPppDllProtocolPacketFactory() {
     instantiaters.put(
-      PppDllProtocol.INTERNET_PROTOCOL_VERSION_4, new PacketInstantiater() {
+      PppDllProtocol.IPV4, new PacketInstantiater() {
         @Override
         public Packet newInstance(
           byte[] rawData, int offset, int length
@@ -39,7 +39,7 @@ extends AbstractStaticPacketFactory<PppDllProtocol> {
       }
     );
     instantiaters.put(
-      PppDllProtocol.INTERNET_PROTOCOL_VERSION_6, new PacketInstantiater() {
+      PppDllProtocol.IPV6, new PacketInstantiater() {
         @Override
         public Packet newInstance(
           byte[] rawData, int offset, int length

@@ -1,3 +1,3 @@
 [ICMPv6 Router Solicitation Header (12 bytes)]
   Reserved: 123454321
-  Option: [Type: 1(Source Link-Layer Address)] [Length: 1 (8 bytes)] [linkLayerAddress: ff 00 00 01 02 03]
+  Option: [Type: 1(Source Link-layer Address)] [Length: 1 (8 bytes)] [linkLayerAddress: ff 00 00 01 02 03]

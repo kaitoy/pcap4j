@@ -7,7 +7,6 @@
 
 package org.pcap4j.packet.namednumber;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import org.pcap4j.util.ByteArrays;
@@ -28,35 +27,114 @@ public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
   private static final long serialVersionUID = 2460312908857953021L;
 
   /**
-   *
+   * Pad1: 0x00
    */
   public static final IpV6OptionType PAD1
-    = new IpV6OptionType((byte)0, "Pad1");
+    = new IpV6OptionType((byte)0x00, "Pad1");
 
   /**
-   *
+   * PadN: 0x01
    */
   public static final IpV6OptionType PADN
-    = new IpV6OptionType((byte)1, "PadN");
+    = new IpV6OptionType((byte)0x01, "PadN");
+
+  /**
+   * Jumbo Payload: 0xC2
+   */
+  public static final IpV6OptionType JUMBO_PAYLOAD
+    = new IpV6OptionType((byte)0xC2, "Jumbo Payload");
+
+  /**
+   * RPL: 0x63
+   */
+  public static final IpV6OptionType RPL
+    = new IpV6OptionType((byte)0x63, "RPL");
+
+  /**
+   * Tunnel Encapsulation Limit: 0x04
+   */
+  public static final IpV6OptionType TUNNEL_ENCAPSULATION_LIMIT
+    = new IpV6OptionType((byte)0x04, "Tunnel Encapsulation Limit");
+
+  /**
+   * Router Alert: 0x05
+   */
+  public static final IpV6OptionType ROUTER_ALERT
+    = new IpV6OptionType((byte)0x05, "Router Alert");
+
+  /**
+   * Quick-Start: 0x26
+   */
+  public static final IpV6OptionType QUICK_START
+    = new IpV6OptionType((byte)0x26, "Quick-Start");
+
+  /**
+   * CALIPSO: 0x07
+   */
+  public static final IpV6OptionType CALIPSO
+    = new IpV6OptionType((byte)0x07, "CALIPSO");
+
+  /**
+   * SMF_DPD: 0x08
+   */
+  public static final IpV6OptionType SMF_DPD
+    = new IpV6OptionType((byte)0x08, "SMF_DPD");
+
+  /**
+   * Home Address: 0xC9
+   */
+  public static final IpV6OptionType HOME_ADDRESS
+    = new IpV6OptionType((byte)0xC9, "Home Address");
+
+  /**
+   * Endpoint Identification: 0x8A
+   */
+  public static final IpV6OptionType ENDPOINT_IDENTIFICATION
+    = new IpV6OptionType((byte)0x8A, "Endpoint Identification");
+
+  /**
+   * ILNP Nonce: 0x8B
+   */
+  public static final IpV6OptionType ILNP_NONCE
+    = new IpV6OptionType((byte)0x8B, "ILNP Nonce");
+
+  /**
+   * Line-Identification: 0x8C
+   */
+  public static final IpV6OptionType LINE_IDENTIFICATION
+    = new IpV6OptionType((byte)0x8C, "Line-Identification");
+
+  /**
+   * MPL: 0x6D
+   */
+  public static final IpV6OptionType MPL
+    = new IpV6OptionType((byte)0x6D, "MPL");
+
+  /**
+   * IP_DFF: 0xEE
+   */
+  public static final IpV6OptionType IP_DFF
+    = new IpV6OptionType((byte)0xEE, "IP_DFF");
 
   private static final Map<Byte, IpV6OptionType> registry
     = new HashMap<Byte, IpV6OptionType>();
 
   static {
-    for (Field field: IpV6OptionType.class.getFields()) {
-      if (IpV6OptionType.class.isAssignableFrom(field.getType())) {
-        try {
-          IpV6OptionType f = (IpV6OptionType)field.get(null);
-          registry.put(f.value(), f);
-        } catch (IllegalArgumentException e) {
-          throw new AssertionError(e);
-        } catch (IllegalAccessException e) {
-          throw new AssertionError(e);
-        } catch (NullPointerException e) {
-          continue;
-        }
-      }
-    }
+    registry.put(PAD1.value(), PAD1);
+    registry.put(PADN.value(), PADN);
+    registry.put(JUMBO_PAYLOAD.value(), JUMBO_PAYLOAD);
+    registry.put(RPL.value(), RPL);
+    registry.put(TUNNEL_ENCAPSULATION_LIMIT.value(), TUNNEL_ENCAPSULATION_LIMIT);
+    registry.put(ROUTER_ALERT.value(), ROUTER_ALERT);
+    registry.put(QUICK_START.value(), QUICK_START);
+    registry.put(CALIPSO.value(), CALIPSO);
+    registry.put(SMF_DPD.value(), SMF_DPD);
+    registry.put(HOME_ADDRESS.value(), HOME_ADDRESS);
+    registry.put(ENDPOINT_IDENTIFICATION.value(), ENDPOINT_IDENTIFICATION);
+    registry.put(ILNP_NONCE.value(), ILNP_NONCE);
+    registry.put(LINE_IDENTIFICATION.value(), LINE_IDENTIFICATION);
+    registry.put(MPL.value(), MPL);
+    registry.put(IP_DFF.value(), IP_DFF);
   }
 
   private final IpV6OptionTypeAction action;

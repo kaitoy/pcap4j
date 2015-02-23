@@ -1,27 +1,26 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.namednumber;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Transmission Control Code of IPv4 Security Option
+ *
+ * @see <a href="https://tools.ietf.org/html/rfc791">RFC 791</a>
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
 public final class
 IpV4SecurityOptionTransmissionControlCode
 extends NamedNumber<Integer, IpV4SecurityOptionTransmissionControlCode> {
-
-
-  // http://www.ietf.org/rfc/rfc791.txt
 
   /**
    *
@@ -33,26 +32,6 @@ extends NamedNumber<Integer, IpV4SecurityOptionTransmissionControlCode> {
     = new HashMap<Integer, IpV4SecurityOptionTransmissionControlCode>();
 
   static {
-    for (
-      Field field: IpV4SecurityOptionTransmissionControlCode.class.getFields()
-    ) {
-      if (
-        IpV4SecurityOptionTransmissionControlCode.class
-          .isAssignableFrom(field.getType())
-      ) {
-        try {
-          IpV4SecurityOptionTransmissionControlCode f
-            = (IpV4SecurityOptionTransmissionControlCode)field.get(null);
-          registry.put(f.value(), f);
-        } catch (IllegalArgumentException e) {
-          throw new AssertionError(e);
-        } catch (IllegalAccessException e) {
-          throw new AssertionError(e);
-        } catch (NullPointerException e) {
-          continue;
-        }
-      }
-    }
   }
 
   /**

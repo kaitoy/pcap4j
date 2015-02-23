@@ -1,17 +1,17 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.namednumber;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * @see <a href="http://www.iana.org/assignments/version-numbers/version-numbers.xml">IANA Registry</a>
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
@@ -22,40 +22,38 @@ public final class IpVersion extends NamedNumber<Byte, IpVersion> {
    */
   private static final long serialVersionUID = 3155818580398801532L;
 
-  //http://www.iana.org/assignments/version-numbers/version-numbers.xml
-
   /**
-   *
+   * IPv4: 4
    */
   public static final IpVersion IPV4
     = new IpVersion((byte)4, "IPv4");
 
   /**
-   *
+   * ST: 5
    */
   public static final IpVersion ST
-    = new IpVersion((byte)5, "ST Datagram Mode");
+    = new IpVersion((byte)5, "ST");
 
   /**
-   *
+   * IPv6: 6
    */
   public static final IpVersion IPV6
     = new IpVersion((byte)6, "IPv6");
 
   /**
-   *
+   * TP/IX: 7
    */
   public static final IpVersion TP_IX
-    = new IpVersion((byte)7, "TP/IX: The Next Internet");
+    = new IpVersion((byte)7, "TP/IX");
 
   /**
-   *
+   * PIP: 8
    */
   public static final IpVersion PIP
-    = new IpVersion((byte)8, "The P Internet Protocol");
+    = new IpVersion((byte)8, "PIP");
 
   /**
-   *
+   * TUBA: 9
    */
   public static final IpVersion TUBA
     = new IpVersion((byte)9, "TUBA");
@@ -64,20 +62,12 @@ public final class IpVersion extends NamedNumber<Byte, IpVersion> {
     = new HashMap<Byte, IpVersion>();
 
   static {
-    for (Field field: IpVersion.class.getFields()) {
-      if (IpVersion.class.isAssignableFrom(field.getType())) {
-        try {
-          IpVersion f = (IpVersion)field.get(null);
-          registry.put(f.value(), f);
-        } catch (IllegalArgumentException e) {
-          throw new AssertionError(e);
-        } catch (IllegalAccessException e) {
-          throw new AssertionError(e);
-        } catch (NullPointerException e) {
-          continue;
-        }
-      }
-    }
+    registry.put(IPV4.value(), IPV4);
+    registry.put(ST.value(), ST);
+    registry.put(IPV6.value(), IPV6);
+    registry.put(TP_IX.value(), TP_IX);
+    registry.put(PIP.value(), PIP);
+    registry.put(TUBA.value(), TUBA);
   }
 
   /**

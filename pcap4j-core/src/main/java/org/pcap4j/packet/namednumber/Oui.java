@@ -1,18 +1,19 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.namednumber;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * OUI
+ * @see <a href="http://standards.ieee.org/develop/regauth/oui/oui.txt">IEEE OUI</a>
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
@@ -23,64 +24,64 @@ public final class Oui extends NamedNumber<Integer, Oui> {
    */
   private static final long serialVersionUID = 8322878251680068566L;
 
-  // http://standards.ieee.org/develop/regauth/oui/oui.txt
+  //
 
   /**
-   *
+   * Cisco: 0x00000C
    */
   public static final Oui CISCO_00000C
     = new Oui(0x00000C, "Cisco");
 
   /**
-   *
+   * Fujitsu: 0x00000E
    */
   public static final Oui FUJITSU_00000E
     = new Oui(0x00000E, "Fujitsu");
 
   /**
-   *
+   * Hewlett-Packard: 0x080009
    */
   public static final Oui HEWLETT_PACKARD_080009
     = new Oui(0x080009, "Hewlett-Packard");
 
   /**
-   *
+   * Fuji-Xerox: 0x080037
    */
   public static final Oui FUJI_XEROX_080037
     = new Oui(0x080037, "Fuji-Xerox");
 
   /**
-   *
+   * IBM: 0x08005A
    */
   public static final Oui IBM_08005A
     = new Oui(0x08005A, "IBM");
 
   /**
-   *
+   * Cisco: 0x000142
    */
   public static final Oui CISCO_000142
     = new Oui(0x000142, "Cisco");
 
   /**
-   *
+   * Cisco: 0x000143
    */
   public static final Oui CISCO_000143
     = new Oui(0x000143, "Cisco");
 
   /**
-   *
+   * AlaxalA: 0x0012E2
    */
   public static final Oui ALAXALA_0012E2
     = new Oui(0x0012E2, "AlaxalA");
 
   /**
-   *
+   * Hitachi: 0x001F67
    */
   public static final Oui Hitachi_001F67
     = new Oui(0x001F67, "Hitachi");
 
   /**
-   *
+   * Hitachi Cable: 0x004066
    */
   public static final Oui HITACHI_CABLE_004066
     = new Oui(0x004066, "Hitachi Cable");
@@ -89,20 +90,16 @@ public final class Oui extends NamedNumber<Integer, Oui> {
     = new HashMap<Integer, Oui>();
 
   static {
-    for (Field field: Oui.class.getFields()) {
-      if (Oui.class.isAssignableFrom(field.getType())) {
-        try {
-          Oui f = (Oui)field.get(null);
-          registry.put(f.value(), f);
-        } catch (IllegalArgumentException e) {
-          throw new AssertionError(e);
-        } catch (IllegalAccessException e) {
-          throw new AssertionError(e);
-        } catch (NullPointerException e) {
-          continue;
-        }
-      }
-    }
+    registry.put(CISCO_00000C.value(), CISCO_00000C);
+    registry.put(FUJITSU_00000E.value(), FUJITSU_00000E);
+    registry.put(HEWLETT_PACKARD_080009.value(), HEWLETT_PACKARD_080009);
+    registry.put(FUJI_XEROX_080037.value(), FUJI_XEROX_080037);
+    registry.put(IBM_08005A.value(), IBM_08005A);
+    registry.put(CISCO_000142.value(), CISCO_000142);
+    registry.put(CISCO_000143.value(), CISCO_000143);
+    registry.put(ALAXALA_0012E2.value(), ALAXALA_0012E2);
+    registry.put(Hitachi_001F67.value(), Hitachi_001F67);
+    registry.put(HITACHI_CABLE_004066.value(), HITACHI_CABLE_004066);
   }
 
   /**

@@ -1,25 +1,25 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.namednumber;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Security of IPv4 Security Option
+ *
+ * @see <a href="https://tools.ietf.org/html/rfc791">RFC 791</a>
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
 public final class IpV4SecurityOptionSecurity
 extends NamedNumber<Short, IpV4SecurityOptionSecurity> {
-
-  // http://www.ietf.org/rfc/rfc791.txt
 
   /**
    *
@@ -27,49 +27,49 @@ extends NamedNumber<Short, IpV4SecurityOptionSecurity> {
   private static final long serialVersionUID = -5609708606668323329L;
 
   /**
-   *
+   * Unclassified: 0x0000
    */
   public static final IpV4SecurityOptionSecurity UNCLASSIFIED
     = new IpV4SecurityOptionSecurity((short)0x0000, "Unclassified");
 
   /**
-   *
+   * Confidential: 0xF135
    */
   public static final IpV4SecurityOptionSecurity CONFIDENTIAL
     = new IpV4SecurityOptionSecurity((short)0xF135, "Confidential");
 
   /**
-   *
+   * EFTO: 0x789A
    */
   public static final IpV4SecurityOptionSecurity EFTO
     = new IpV4SecurityOptionSecurity((short)0x789A, "EFTO");
 
   /**
-   *
+   * MMMM: 0xBC4D
    */
   public static final IpV4SecurityOptionSecurity MMMM
     = new IpV4SecurityOptionSecurity((short)0xBC4D, "MMMM");
 
   /**
-   *
+   * PROG: 0x5E26
    */
   public static final IpV4SecurityOptionSecurity PROG
     = new IpV4SecurityOptionSecurity((short)0x5E26, "PROG");
 
   /**
-   *
+   * Restricted: 0xAF13
    */
   public static final IpV4SecurityOptionSecurity RESTRICTED
     = new IpV4SecurityOptionSecurity((short)0xAF13, "Restricted");
 
   /**
-   *
+   * Secret: 0xD788
    */
   public static final IpV4SecurityOptionSecurity SECRET
     = new IpV4SecurityOptionSecurity((short)0xD788, "Secret");
 
   /**
-   *
+   * Top Secret: 0x6BC5
    */
   public static final IpV4SecurityOptionSecurity TOP_SECRET
     = new IpV4SecurityOptionSecurity((short)0x6BC5, "Top Secret");
@@ -78,20 +78,14 @@ extends NamedNumber<Short, IpV4SecurityOptionSecurity> {
     = new HashMap<Short, IpV4SecurityOptionSecurity>();
 
   static {
-    for (Field field: IpV4SecurityOptionSecurity.class.getFields()) {
-      if (IpV4SecurityOptionSecurity.class.isAssignableFrom(field.getType())) {
-        try {
-          IpV4SecurityOptionSecurity f = (IpV4SecurityOptionSecurity)field.get(null);
-          registry.put(f.value(), f);
-        } catch (IllegalArgumentException e) {
-          throw new AssertionError(e);
-        } catch (IllegalAccessException e) {
-          throw new AssertionError(e);
-        } catch (NullPointerException e) {
-          continue;
-        }
-      }
-    }
+    registry.put(UNCLASSIFIED.value(), UNCLASSIFIED);
+    registry.put(CONFIDENTIAL.value(), CONFIDENTIAL);
+    registry.put(EFTO.value(), EFTO);
+    registry.put(MMMM.value(), MMMM);
+    registry.put(PROG.value(), PROG);
+    registry.put(RESTRICTED.value(), RESTRICTED);
+    registry.put(SECRET.value(), SECRET);
+    registry.put(TOP_SECRET.value(), TOP_SECRET);
   }
 
   /**

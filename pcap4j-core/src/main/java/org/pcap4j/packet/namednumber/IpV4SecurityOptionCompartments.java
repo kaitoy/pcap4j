@@ -1,18 +1,20 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.namednumber;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Compartments of IPv4 Security Option
+ *
+ * @see <a href="https://tools.ietf.org/html/rfc791">RFC 791</a>
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
@@ -24,10 +26,8 @@ extends NamedNumber<Short, IpV4SecurityOptionCompartments> {
    */
   private static final long serialVersionUID = -420949071267484565L;
 
-  // http://www.ietf.org/rfc/rfc791.txt
-
   /**
-   *
+   * not compartmented: 0x0000
    */
   public static final IpV4SecurityOptionCompartments NOT_COMPARTMENTED
     = new IpV4SecurityOptionCompartments((short)0x0000, "not compartmented");
@@ -36,20 +36,7 @@ extends NamedNumber<Short, IpV4SecurityOptionCompartments> {
     = new HashMap<Short, IpV4SecurityOptionCompartments>();
 
   static {
-    for (Field field: IpV4SecurityOptionCompartments.class.getFields()) {
-      if (IpV4SecurityOptionCompartments.class.isAssignableFrom(field.getType())) {
-        try {
-          IpV4SecurityOptionCompartments f = (IpV4SecurityOptionCompartments)field.get(null);
-          registry.put(f.value(), f);
-        } catch (IllegalArgumentException e) {
-          throw new AssertionError(e);
-        } catch (IllegalAccessException e) {
-          throw new AssertionError(e);
-        } catch (NullPointerException e) {
-          continue;
-        }
-      }
-    }
+    registry.put(NOT_COMPARTMENTED.value(), NOT_COMPARTMENTED);
   }
 
   /**

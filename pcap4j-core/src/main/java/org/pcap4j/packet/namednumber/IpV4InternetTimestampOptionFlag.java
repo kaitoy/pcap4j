@@ -1,24 +1,24 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Kaito Yamada
+  _##  Copyright (C) 2012-2015  Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.namednumber;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Flag of IPv4 Internet Timestamp Option
+ *
+ * @see <a href="http://www.ietf.org/rfc/rfc791.txt">RFC 791</a>
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
 public final class IpV4InternetTimestampOptionFlag
 extends NamedNumber<Byte, IpV4InternetTimestampOptionFlag> {
-
-  // http://www.ietf.org/rfc/rfc791.txt
 
   /**
    *
@@ -26,23 +26,22 @@ extends NamedNumber<Byte, IpV4InternetTimestampOptionFlag> {
   private static final long serialVersionUID = -8701646393814443788L;
 
   /**
-   *
+   * timestamps only: 0
    */
   public static final IpV4InternetTimestampOptionFlag TIMESTAMPS_ONLY
     = new IpV4InternetTimestampOptionFlag((byte)0, "timestamps only");
 
   /**
-   *
+   * each timestamp is preceded with internet address of the registering entity: 1
    */
   public static final IpV4InternetTimestampOptionFlag EACH_TIMESTAMP_PRECEDED_WITH_ADDRESS
     = new IpV4InternetTimestampOptionFlag(
         (byte)1,
-        "each timestamp is preceded with internet address"
-          + " of the registering entity"
+        "each timestamp is preceded with internet address of the registering entity"
       );
 
   /**
-   *
+   * the internet address fields are prespecified: 3
    */
   public static final IpV4InternetTimestampOptionFlag ADDRESS_PRESPECIFIED
     = new IpV4InternetTimestampOptionFlag(
@@ -53,20 +52,12 @@ extends NamedNumber<Byte, IpV4InternetTimestampOptionFlag> {
     = new HashMap<Byte, IpV4InternetTimestampOptionFlag>();
 
   static {
-    for (Field field: IpV4InternetTimestampOptionFlag.class.getFields()) {
-      if (IpV4InternetTimestampOptionFlag.class.isAssignableFrom(field.getType())) {
-        try {
-          IpV4InternetTimestampOptionFlag f = (IpV4InternetTimestampOptionFlag)field.get(null);
-          registry.put(f.value(), f);
-        } catch (IllegalArgumentException e) {
-          throw new AssertionError(e);
-        } catch (IllegalAccessException e) {
-          throw new AssertionError(e);
-        } catch (NullPointerException e) {
-          continue;
-        }
-      }
-    }
+    registry.put(TIMESTAMPS_ONLY.value(), TIMESTAMPS_ONLY);
+    registry.put(
+      EACH_TIMESTAMP_PRECEDED_WITH_ADDRESS.value(),
+      EACH_TIMESTAMP_PRECEDED_WITH_ADDRESS
+    );
+    registry.put(ADDRESS_PRESPECIFIED.value(), ADDRESS_PRESPECIFIED);
   }
 
   /**

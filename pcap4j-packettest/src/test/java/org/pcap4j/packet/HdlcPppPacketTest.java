@@ -38,7 +38,7 @@ public class HdlcPppPacketTest extends AbstractPacketTest {
   public HdlcPppPacketTest() throws Exception {
     this.address = (byte)0xFF;
     this.control = (byte)0x03;
-    this.protocol = PppDllProtocol.INTERNET_PROTOCOL_VERSION_4;
+    this.protocol = PppDllProtocol.IPV4;
     this.pad = new byte[] {
                  (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,
                  (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,

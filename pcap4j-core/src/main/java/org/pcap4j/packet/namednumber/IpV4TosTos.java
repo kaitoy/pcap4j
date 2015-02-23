@@ -1,23 +1,23 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.namednumber;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * TOS of IPv4 TOS
+ *
+ * @see <a href="http://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-3">IANA Registry</a>
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
 public final class IpV4TosTos extends NamedNumber<Byte, IpV4TosTos> {
-
-  // http://www.iana.org/assignments/ip-parameters
 
   /**
    *
@@ -25,59 +25,51 @@ public final class IpV4TosTos extends NamedNumber<Byte, IpV4TosTos> {
   private static final long serialVersionUID = -7507790549660176346L;
 
   /**
-   *
+   * Default: 0x0
    */
   public static final IpV4TosTos DEFAULT
-    = new IpV4TosTos((byte)0x00, "Default");
+    = new IpV4TosTos((byte)0x0, "Default");
 
   /**
-   *
+   * Minimize Monetary Cost: 0x1
    */
   public static final IpV4TosTos MINIMIZE_MONETARY_COST
-    = new IpV4TosTos((byte)0x01, "Minimize Monetary Cost");
+    = new IpV4TosTos((byte)0x1, "Minimize Monetary Cost");
 
   /**
-   *
+   * Maximize Reliability: 0x2
    */
   public static final IpV4TosTos MAXIMIZE_RELIABILITY
-    = new IpV4TosTos((byte)0x02, "Maximize Reliability");
+    = new IpV4TosTos((byte)0x2, "Maximize Reliability");
 
   /**
-   *
+   * Maximize Throughput: 0x4
    */
   public static final IpV4TosTos MAXIMIZE_THROUGHPUT
-    = new IpV4TosTos((byte)0x04, "Maximize Throughput");
+    = new IpV4TosTos((byte)0x4, "Maximize Throughput");
 
   /**
-   *
+   * Minimize Delay: 0x8
    */
   public static final IpV4TosTos MINIMIZE_DELAY
-    = new IpV4TosTos((byte)0x08, "Minimize Delay");
+    = new IpV4TosTos((byte)0x8, "Minimize Delay");
 
   /**
-   *
+   * Maximize Security: 0xF
    */
   public static final IpV4TosTos MAXIMIZE_SECURITY
-    = new IpV4TosTos((byte)0x0F, "Maximize Security");
+    = new IpV4TosTos((byte)0xF, "Maximize Security");
 
   private static final Map<Byte, IpV4TosTos> registry
     = new HashMap<Byte, IpV4TosTos>();
 
   static {
-    for (Field field: IpV4TosTos.class.getFields()) {
-      if (IpV4TosTos.class.isAssignableFrom(field.getType())) {
-        try {
-          IpV4TosTos f = (IpV4TosTos)field.get(null);
-          registry.put(f.value(), f);
-        } catch (IllegalArgumentException e) {
-          throw new AssertionError(e);
-        } catch (IllegalAccessException e) {
-          throw new AssertionError(e);
-        } catch (NullPointerException e) {
-          continue;
-        }
-      }
-    }
+    registry.put(DEFAULT.value(), DEFAULT);
+    registry.put(MINIMIZE_MONETARY_COST.value(), MINIMIZE_MONETARY_COST);
+    registry.put(MAXIMIZE_RELIABILITY.value(), MAXIMIZE_RELIABILITY);
+    registry.put(MAXIMIZE_THROUGHPUT.value(), MAXIMIZE_THROUGHPUT);
+    registry.put(MINIMIZE_DELAY.value(), MINIMIZE_DELAY);
+    registry.put(MAXIMIZE_SECURITY.value(), MAXIMIZE_SECURITY);
   }
 
   /**

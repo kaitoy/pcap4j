@@ -1,7 +1,7 @@
 [HDLC-encapsulated PPP Header (4 bytes)]
   Address: 0xff
   Control: 0x03
-  Protocol: 0x0021(Internet Protocol version 4)
+  Protocol: 0x0021(IPv4)
 [IPv4 Header (20 bytes)]
   Version: 4(IPv4)
   IHL: 5 (20 [bytes])
