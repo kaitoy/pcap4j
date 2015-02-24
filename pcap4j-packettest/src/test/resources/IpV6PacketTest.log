@@ -1,15 +1,15 @@
 [IPv6 Header (40 bytes)]
-  Version: 6(IPv6)
+  Version: 6 (IPv6)
   Traffic Class: 0x12
   Flow Label: 0x12345
   Payload length: 12 [bytes]
-  Next Header: 17(UDP)
+  Next Header: 17 (UDP)
   Hop Limit: 100
   Source address: /2001:db8:0:0:0:3:2:1
   Destination address: /2001:db8:0:0:0:3:2:2
 [UDP Header (8 bytes)]
-  Source port: 162(SNMP Trap)
-  Destination port: 0(unknown)
+  Source port: 162 (SNMP Trap)
+  Destination port: 0 (unknown)
   Length: 12 [bytes]
   Checksum: 0xa1b1
 [data (4 bytes)]

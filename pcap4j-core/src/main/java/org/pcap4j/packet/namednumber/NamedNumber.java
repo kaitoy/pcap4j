@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Kaito Yamada
+  _##  Copyright (C) 2011-2015  Kaito Yamada
   _##
   _##########################################################################
 */
@@ -61,12 +61,13 @@ implements Comparable<U>, Serializable {
     return value.toString();
   }
 
+  @Override
   public abstract int compareTo(U o);
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder(70);
-    return sb.append(valueAsString()).append("(")
+    return sb.append(valueAsString()).append(" (")
              .append(name).append(")").toString();
   }
 

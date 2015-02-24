@@ -1,17 +1,17 @@
 [ICMPv6 Parameter Problem Header (4 bytes)]
   Pointer: 12345
 [IPv6 Header (40 bytes)]
-  Version: 6(IPv6)
+  Version: 6 (IPv6)
   Traffic Class: 0x12
   Flow Label: 0x12345
   Payload length: 11 [bytes]
-  Next Header: 58(ICMPv6)
+  Next Header: 58 (ICMPv6)
   Hop Limit: 100
   Source address: /2001:db8:0:0:0:3:2:1
   Destination address: /2001:db8:0:0:0:3:2:2
 [ICMPv6 Common Header (4 bytes)]
-  Type: 128(Echo Request)
-  Code: 0(No Code)
+  Type: 128 (Echo Request)
+  Code: 0 (No Code)
   Checksum: 0x21cc
 [ICMPv6 Echo Request Header (4 bytes)]
   Identifier: 100

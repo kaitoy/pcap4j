@@ -1,67 +1,67 @@
 [IPv4 Header (36 bytes)]
-  Version: 4(IPv4)
+  Version: 4 (IPv4)
   IHL: 9 (36 [bytes])
-  TOS: [precedence: 3(Flash)] [tos: 10(unknown)] [mbz: 1]
+  TOS: [precedence: 3 (Flash)] [tos: 10 (unknown)] [mbz: 1]
   Total length: 44 [bytes]
   Identification: 123
   Flags: (Reserved, Don't Fragment, More Fragment) = (true, false, true)
   Fragment offset: 0 (0 [bytes])
   TTL: 111
-  Protocol: 17(UDP)
+  Protocol: 17 (UDP)
   Header checksum: 0xeeee
   Source address: /192.0.2.1
   Destination address: /192.0.2.2
-  Option: [option-type: 131(Loose Source Routing)] [option-length: 11 bytes] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
-  Option: [option-type: 1(No Operation)]
-  Option: [option-type: 1(No Operation)]
-  Option: [option-type: 1(No Operation)]
-  Option: [option-type: 0(End of Option List)]
+  Option: [option-type: 131 (Loose Source Routing)] [option-length: 11 bytes] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
+  Option: [option-type: 1 (No Operation)]
+  Option: [option-type: 1 (No Operation)]
+  Option: [option-type: 1 (No Operation)]
+  Option: [option-type: 0 (End of Option List)]
   Padding: 0xaa
 [Fragmented data (8 bytes)]
   Hex stream: 00 a1 00 00 00 10 77 21
 [IPv4 Header (36 bytes)]
-  Version: 4(IPv4)
+  Version: 4 (IPv4)
   IHL: 9 (36 [bytes])
-  TOS: [precedence: 3(Flash)] [tos: 10(unknown)] [mbz: 1]
+  TOS: [precedence: 3 (Flash)] [tos: 10 (unknown)] [mbz: 1]
   Total length: 44 [bytes]
   Identification: 123
   Flags: (Reserved, Don't Fragment, More Fragment) = (true, false, false)
   Fragment offset: 1 (8 [bytes])
   TTL: 111
-  Protocol: 17(UDP)
+  Protocol: 17 (UDP)
   Header checksum: 0xeeee
   Source address: /192.0.2.1
   Destination address: /192.0.2.2
-  Option: [option-type: 131(Loose Source Routing)] [option-length: 11 bytes] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
-  Option: [option-type: 1(No Operation)]
-  Option: [option-type: 1(No Operation)]
-  Option: [option-type: 1(No Operation)]
-  Option: [option-type: 0(End of Option List)]
+  Option: [option-type: 131 (Loose Source Routing)] [option-length: 11 bytes] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
+  Option: [option-type: 1 (No Operation)]
+  Option: [option-type: 1 (No Operation)]
+  Option: [option-type: 1 (No Operation)]
+  Option: [option-type: 0 (End of Option List)]
   Padding: 0xaa
 [Fragmented data (8 bytes)]
   Hex stream: 00 01 02 03 00 01 02 03
 [IPv4 Header (36 bytes)]
-  Version: 4(IPv4)
+  Version: 4 (IPv4)
   IHL: 9 (36 [bytes])
-  TOS: [precedence: 3(Flash)] [tos: 10(unknown)] [mbz: 1]
+  TOS: [precedence: 3 (Flash)] [tos: 10 (unknown)] [mbz: 1]
   Total length: 52 [bytes]
   Identification: 123
   Flags: (Reserved, Don't Fragment, More Fragment) = (true, false, false)
   Fragment offset: 0 (0 [bytes])
   TTL: 111
-  Protocol: 17(UDP)
+  Protocol: 17 (UDP)
   Header checksum: 0x618a
   Source address: /192.0.2.1
   Destination address: /192.0.2.2
-  Option: [option-type: 131(Loose Source Routing)] [option-length: 11 bytes] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
-  Option: [option-type: 1(No Operation)]
-  Option: [option-type: 1(No Operation)]
-  Option: [option-type: 1(No Operation)]
-  Option: [option-type: 0(End of Option List)]
+  Option: [option-type: 131 (Loose Source Routing)] [option-length: 11 bytes] [pointer: 8] [route data: /192.168.1.1 /192.168.1.2]
+  Option: [option-type: 1 (No Operation)]
+  Option: [option-type: 1 (No Operation)]
+  Option: [option-type: 1 (No Operation)]
+  Option: [option-type: 0 (End of Option List)]
   Padding: 0xaa
 [UDP Header (8 bytes)]
-  Source port: 161(SNMP)
-  Destination port: 0(unknown)
+  Source port: 161 (SNMP)
+  Destination port: 0 (unknown)
   Length: 16 [bytes]
   Checksum: 0x7721
 [data (8 bytes)]

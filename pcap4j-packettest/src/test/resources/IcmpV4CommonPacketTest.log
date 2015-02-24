@@ -1,6 +1,6 @@
 [ICMPv4 Common Header (4 bytes)]
-  Type: 8(Echo)
-  Code: 0(No Code)
+  Type: 8 (Echo)
+  Code: 0 (No Code)
   Checksum: 0x1234
 [ICMPv4 Echo Header (4 bytes)]
   Identifier: 100
