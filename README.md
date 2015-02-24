@@ -26,6 +26,7 @@ Contents
  * [Build Procedure on Eclipse](#build-procedure-on-eclipse)
  * [Build Procedure with Maven Command](#build-procedure-with-maven-command)
 * [License](#license)
+* [Contact](#contact)
 * [Extra](#extra)
 
 Download
@@ -256,8 +257,12 @@ Pcap4J is distributed under the MIT license.
     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+Contacts
+-------
+
+Kaito Yamada (kaitoy@pcap4j.org)
+
 Extra
 -----
 
 An SNMP Network Simulator using Pcap4J; SNeO is also hosted on Github: https://github.com/kaitoy/sneo
-
