@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @see <a href="https://github.com/the-tcpdump-group/libpcap/blob/master/pcap/sll.h">pcap/sll.h</a>
  * @author Kaito Yamada
- * @since pcap4j 1.3.1
+ * @since pcap4j 1.4.0
  */
 public final class LinuxSllPacketType extends NamedNumber<Short, LinuxSllPacketType> {
 

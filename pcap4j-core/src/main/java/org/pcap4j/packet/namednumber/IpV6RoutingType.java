@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @see <a href="http://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xml#ipv6-parameters-3">IANA Registry</a>
  * @author Kaito Yamada
- * @since pcap4j 1.3.1
+ * @since pcap4j 1.4.0
  */
 public final class IpV6RoutingType extends NamedNumber<Byte, IpV6RoutingType> {
 

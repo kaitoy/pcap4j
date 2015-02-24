@@ -18,7 +18,7 @@ import org.pcap4j.packet.namednumber.NotApplicable;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 1.3.1
+ * @since pcap4j 1.4.0
  */
 public final class StaticNotApplicablePacketFactory
 extends AbstractStaticPacketFactory<NotApplicable> {

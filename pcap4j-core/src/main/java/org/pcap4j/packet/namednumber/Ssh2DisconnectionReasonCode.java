@@ -14,7 +14,7 @@ import java.util.Map;
  * SSH2 Disconnection Reason Code
  * @see <a href="https://www.iana.org/assignments/ssh-parameters/ssh-parameters.xhtml#ssh-parameters-3">IANA Registry</a>
  * @author Kaito Yamada
- * @since pcap4j 1.3.1
+ * @since pcap4j 1.4.0
  */
 public final class Ssh2DisconnectionReasonCode
 extends NamedNumber<Integer, Ssh2DisconnectionReasonCode> {

@@ -12,7 +12,7 @@ import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 1.3.1
+ * @since pcap4j 1.4.0
  */
 abstract class SimplePacket extends AbstractPacket {
 
@@ -91,7 +91,7 @@ abstract class SimplePacket extends AbstractPacket {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.3.1
+   * @since pcap4j 1.4.0
    */
   public static abstract class Builder extends AbstractBuilder {
 

@@ -17,7 +17,7 @@ import org.pcap4j.util.ByteArrays;
  * https://tools.ietf.org/html/rfc1662
  *
  * @author Kaito Yamada
- * @since pcap4j 1.3.1
+ * @since pcap4j 1.4.0
  */
 public class HdlcPppPacket extends AbstractPppPacket {
 
@@ -69,7 +69,7 @@ public class HdlcPppPacket extends AbstractPppPacket {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.3.1
+   * @since pcap4j 1.4.0
    */
   public static class Builder extends AbstractPppPacket.Builder {
 
@@ -134,7 +134,7 @@ public class HdlcPppPacket extends AbstractPppPacket {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.3.1
+   * @since pcap4j 1.4.0
    */
   public static class HdlcPppHeader extends AbstractPppHeader {
 

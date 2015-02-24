@@ -19,7 +19,7 @@ import org.pcap4j.util.ByteArrays;
  * https://tools.ietf.org/html/rfc1661
  *
  * @author Kaito Yamada
- * @since pcap4j 1.3.1
+ * @since pcap4j 1.4.0
  */
 abstract class AbstractPppPacket extends AbstractPacket {
 
@@ -157,7 +157,7 @@ abstract class AbstractPppPacket extends AbstractPacket {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.3.1
+   * @since pcap4j 1.4.0
    */
   static abstract class Builder extends AbstractBuilder {
 
@@ -211,7 +211,7 @@ abstract class AbstractPppPacket extends AbstractPacket {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.3.1
+   * @since pcap4j 1.4.0
    */
   static abstract class AbstractPppHeader extends AbstractHeader {
 

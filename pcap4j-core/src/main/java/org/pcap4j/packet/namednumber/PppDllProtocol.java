@@ -16,7 +16,7 @@ import org.pcap4j.util.ByteArrays;
  *
  * @see <a href="http://www.iana.org/assignments/ppp-numbers/ppp-numbers.xhtml#ppp-numbers-2">IANA Registry</a>
  * @author Kaito Yamada
- * @since pcap4j 1.3.1
+ * @since pcap4j 1.4.0
  */
 public final class PppDllProtocol extends NamedNumber<Short, PppDllProtocol> {
 

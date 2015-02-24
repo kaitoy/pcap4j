@@ -10,7 +10,7 @@ package org.pcap4j.core;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 1.3.1
+ * @since pcap4j 1.4.0
  */
 public interface RawPacketListener {
 

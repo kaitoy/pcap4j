@@ -15,7 +15,7 @@ import org.pcap4j.packet.namednumber.PppDllProtocol;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 1.3.1
+ * @since pcap4j 1.4.0
  */
 public final class StaticPppDllProtocolPacketFactory
 extends AbstractStaticPacketFactory<PppDllProtocol> {
