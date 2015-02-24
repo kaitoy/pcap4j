@@ -26,7 +26,7 @@ Contents
  * [Build Procedure on Eclipse](#build-procedure-on-eclipse)
  * [Build Procedure with Maven Command](#build-procedure-with-maven-command)
 * [License](#license)
-* [Contact](#contact)
+* [Contacts](#contacts)
 * [Extra](#extra)
 
 Download
@@ -242,7 +242,6 @@ License
 Pcap4J is distributed under the MIT license.
 
     Copyright (c) 2011-2015 Pcap4J.org
-    All rights reserved.
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -258,7 +257,7 @@ Pcap4J is distributed under the MIT license.
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Contacts
--------
+--------
 
 Kaito Yamada (kaitoy@pcap4j.org)
 

@@ -237,7 +237,6 @@ m2eclipseでビルドしたい場合は、ステップ2をスキップして、�
 Pcap4J is distributed under the MIT license.
 
     Copyright (c) 2011-2015 Pcap4J.org
-    All rights reserved.
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -263,7 +262,7 @@ Pcap4J is distributed under the MIT license.
     あるいはソフトウェアの使用またはその他の扱いによって生じる一切の請求、損害、その他の義務について何らの責任も負わないものとします。
 
 コンタクト
--------
+----------
 
 Kaito Yamada (kaitoy@pcap4j.org)
 
