@@ -188,53 +188,56 @@ I'm developing Pcap4j in the following environment.
 * [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
 * [Apache Maven](http://maven.apache.org/) 3.0.5
 
-#### Build Procedure on Eclipse ####
-0. Install WinPcap/libpcap<br>
-   The pcap library is needed for the unit tests ran in the Build step.
-1. Setup Eclipse 3.7+<br>
-   Install JDK, download a compressed Eclipse file from
-   the [Eclipse Downloads Page](http://www.eclipse.org/downloads/), and decompress it.
-2. Install M2E<br>
-   Launch the Eclipse and select Help > Install New Software to open the "Install" wizard.
-   Paste the Update Site URL(http://download.eclipse.org/technology/m2e/releases)
-   into the field named "Work with:" and press Enter.
-   Click and check the box of "Maven Integration for Eclipse".
-   Click Next or Finish until beginning of the installation process.
-   Once the installation process is finished, restart the Eclipse.
-3. Install Git<br>
+#### Build Procedure with Maven Command (Recommended) ####
+1. Install WinPcap or libpcap:<br>
+   Install WinPcap (if Windows) or libpcap (if Linux/UNIX).
+   It's needed for the unit tests which are run during a build.
+2. Install JDK 1.6+:<br>
+   Download and install JDK 1.6 (or newer), and set the environment variable ***JAVA_HOME*** properly.
+3. Install Maven<br>
+   Download and install Maven 3.0.5 (or newer).
+   Then, add the path of the Maven bin directory to the environment variable ***PATH***.
+4. Install Git:<br>
    Download [Git](http://git-scm.com/downloads) and install it.
-   This step is optional, you can skip this step.
-4. Clone the Pcap4J repository<br>
-   Execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
-   If you skipped the step 3, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
-5. Import the Eclipse project<br>
-   In the Eclipse, select [File] > [Import]  to open the "Import" wizard.
-   Select [General] > [Existing Projects into Workspace] and
-   follow the wizard to import the all projects in the Pcap4J repository.
-6. Build<br>
-   Right-click the parent project in the Project Explorer of Eclipse and select [Run as] > [Maven install].
-   Note administrator/root privileges are needed for the unit tests.
+   This step is optional.
+5. Clone the Pcap4J repository:<br>
+   If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
+   Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
+6. Build:<br>
+   Open a command prompt/a terminal, `cd` to the project root directory,
+   and execute `mvn install`.
+   Note Administrator/root privileges are needed for the unit tests.
+
+#### Build Procedure on Eclipse ####
+1. Install WinPcap or libpcap:<br>
+   Install WinPcap (if Windows) or libpcap (if Linux/UNIX).
+   It's needed for the unit tests which are run during a build.
+2. Setup Eclipse 3.7+:<br>
+   Install JDK for Eclipse.
+   Then download an archived ***Eclipse IDE for Java Developers*** from
+   [Eclipse.org](http://www.eclipse.org/downloads/), and extract it.
+3. Install M2E:<br>
+   Launch the Eclipse and select ***Help > Install New Software*** to open the install wizard.
+   In the wizard window, enter the URL http://download.eclipse.org/technology/m2e/releases
+   into the text field next to ***Work with:***, and press the enter key to start searching.
+   When the search is done, check the the check box which precedes ***Maven Integration for Eclipse***,
+   click the ***Next*** button, and follow the wizard instructions to complete the installation.
+4. Install Git:<br>
+   Download [Git](http://git-scm.com/downloads) and install it.
+   This step is optional.
+5. Clone the Pcap4J repository:<br>
+   If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
+   Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
+6. Import the project into Eclipse:<br>
+   In the Eclipse, select ***File > Import*** to open the import wizard.
+   Then, select ***General > Existing Projects into Workspace*** and
+   follow the wizard instructions to import all Pcap4J projects.
+7. Build:<br>
+   In the Eclipse, right-click the parent project in the ***Project Explorer*** and select ***Run as > Maven install***.
+   Note Administrator/root privileges are needed for the unit tests.
 
 For your information, M2E was formerly called [m2eclipse](http://m2eclipse.sonatype.org/).
 If you want to build Pcap4j with m2eclipse, skip the step 2 and import the maven project instead of the eclipse project in the step 4.
-
-#### Build Procedure with Maven Command ####
-0. Install WinPcap/libpcap<br>
-   The pcap library is needed for the unit tests ran in the Build step.
-1. Install JDK1.5+<br>
-   Set the environment variable JAVA_HOME properly.
-2. Install Maven<br>
-   The newer the better. Add the path of the Maven bin directory to the environment variable PATH.
-3. Install Git<br>
-   Download [Git](http://git-scm.com/downloads) and install it.
-   This step is optional, you can skip this step.
-4. Clone the Pcap4J repository<br>
-   Execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
-   If you skipped the step 3, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
-5. Build<br>
-   Open a command prompt, `cd` to the project root directory(i.e. the same directory as the pom.xml in the directory created in the step 4),
-   and execute `mvn install`.
-   Note administrator/root privileges are needed for the unit tests.
 
 License
 -------

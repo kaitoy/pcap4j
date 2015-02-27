@@ -186,50 +186,52 @@ pom.xmlに以下のような記述を追加する。
 * [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
 * [Apache Maven](http://maven.apache.org/) 3.0.5
 
-#### Eclipse上でのビルド手順 ####
-0. WinPcap/libpcapインストール<br>
-  ビルド時に実行されるunit testで必要なので。
-1. Eclipseインストール<br>
-  ダウンロードして解凍するだけ。
-2. M2Eインストール<br>
-   EclipseのGUIで、[ヘルプ]＞[新規ソフトウェアのインストール] を開き、
-   「作業対象」に http://download.eclipse.org/technology/m2e/releases を入力してEnter。
-   m2e - Eclipse用のMaven統合をチェックして「次へ」。
-   使用条件の条項に同意しますにチェックして「完了」。
-   m2eのインストールが完了したらEclipseを再起動。
-3. Gitをインストール<br>
+#### Mavenコマンドでのビルド手順 (推奨) ####
+1. WinPcap/libpcapインストール:<br>
+   WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
+   ビルド時に実行されるunit testで必要なので。
+2. JDK 1.6+インストール:<br>
+   JDKの1.6以上をダウンロードしてインストール。JAVA_HOMEを設定する。
+3. Mavenインストール:<br>
+   Mavenの3.0.5以上をインストールして、そのbinディレクトリにPATHを通す。
+4. Gitをインストール:<br>
    [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
    Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
-4. Pcap4Jのレポジトリのダウンロード<br>
-   `git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-   ステップ3をスキップした場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
-5. プロジェクトのインポート<br>
-  EclipseのGUIで、[ファイル]＞[インポート] を開き、
-  「一般」の「既存プロジェクトをワークスペースへ」で 3. でダウンロードしたレポジトリ内の全プロジェクトをインポートする。
-6. ビルド<br>
-   EclipseのGUIのプロジェクト・エクスプローラーで、Pcap4Jの親プロジェクトを右クリックして、
-   [実行]＞[Maven package] か [実行]＞[Maven install] を実行する。
+5. Pcap4Jのレポジトリのダウンロード:<br>
+   Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
+   インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
+6. ビルド:<br>
+   プロジェクトのルートディレクトリに`cd`して、`mvn install` を実行する。
+   unit testを通すためにはAdministrator/root権限が必要。
+
+#### Eclipse上でのビルド手順 ####
+1. WinPcap/libpcapインストール:<br>
+   WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
+   ビルド時に実行されるunit testで必要なので。
+2. Eclipseインストール:<br>
+   [Eclipse.org](http://www.eclipse.org/downloads/)あたりでダウンロードして解凍するだけ。
+3. M2Eインストール:<br>
+   EclipseのGUIで、[ヘルプ]＞[新規ソフトウェアのインストール] を開き、
+   ***作業対象***に http://download.eclipse.org/technology/m2e/releases を入力してEnter。
+   ***m2e - Eclipse用のMaven統合***をチェックして***次へ***。
+   ***使用条件の条項に同意します***にチェックして***完了***。
+   m2eのインストールが完了したらEclipseを再起動。
+4. Gitをインストール:<br>
+   [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
+   Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
+5. Pcap4Jのレポジトリのダウンロード:<br>
+   Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
+   インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
+6. プロジェクトのインポート:<br>
+   EclipseのGUIで、***ファイル ＞ インポート*** を開き、
+   ***一般 ＞ 既存プロジェクトをワークスペースへ***でPcap4Jの全プロジェクトをインポートする。
+7. ビルド:<br>
+   EclipseのGUIの***プロジェクト・エクスプローラー***で、Pcap4Jの親プロジェクトを右クリックして、
+   ***実行 ＞ Maven install***を実行する。
    unit testを通すためにはAdministrator/root権限が必要。
 
 因みに、M2Eは旧[m2eclipse](http://m2eclipse.sonatype.org/)。
 m2eclipseでビルドしたい場合は、ステップ2をスキップして、ステップ4でMavenプロジェクトの方をインポートすればよい。
-
-#### Mavenコマンドでのビルド手順 ####
-0. WinPcap/libpcapインストール<br>
-  ビルド時に実行されるunit testで必要なので。
-1. JDK1.5+インストール<br>
-  JAVA_HOMEを設定する。
-2. Mavenインストール<br>
-  新しめのがいいかも。PATHを設定する。
-3. Gitをインストール<br>
-   [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
-   Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
-4. Pcap4Jのレポジトリのダウンロード<br>
-   `git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-   ステップ3をスキップした場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
-5. ビルド<br>
-  プロジェクトのルートディレクトリ(ステップ4でできたディレクトリ内のpom.xmlのあるところ)に`cd`して、`mvn install` を実行する。
-  unit testを通すためにはAdministrator/root権限が必要。
 
 ライセンス
 ----------
