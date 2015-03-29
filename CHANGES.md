@@ -19,6 +19,8 @@ Future
  * IpV4Header#getFlagmentOffset() -> IpV4Header#getFragmentOffset()
  * Builder#flagmentOffset -> Builder#fragmentOffset
  * Change the serialization format of IpV4Packet and IpV4Header.
+* [Issues#31](https://github.com/kaitoy/pcap4j/issues/31): Fix ByteArrays.calcChecksum() so it can accept odd length data.
+* [Issues#33](https://github.com/kaitoy/pcap4j/issues/33): Mutex PcapHandle.setFilter() and PcapHandle.compileFilter() to prevent JVM crash.
 
 ### Other Changes ###
 * Property changes:
