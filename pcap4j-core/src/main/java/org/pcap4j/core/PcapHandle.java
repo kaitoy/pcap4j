@@ -51,6 +51,7 @@ public final class PcapHandle {
   private final ThreadLocal<Integer> timestampsMicros
     = new ThreadLocal<Integer>();
   private final ReentrantReadWriteLock handleLock = new ReentrantReadWriteLock(true);
+  private final Object compileLock = new Object();
 
   private volatile boolean open = true;
   private volatile String filteringExpression = "";
@@ -342,10 +343,13 @@ public final class PcapHandle {
       }
 
       prog = new bpf_program();
-      int rc = NativeMappings.pcap_compile(
-                 handle, prog, bpfExpression, mode.getValue(),
-                 ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0)
-               );
+      int rc;
+      synchronized (compileLock) {
+        rc = NativeMappings.pcap_compile(
+               handle, prog, bpfExpression, mode.getValue(),
+               ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0)
+             );
+      }
       if (rc < 0) {
         throw new PcapNativeException(getError(), rc);
       }
@@ -394,9 +398,12 @@ public final class PcapHandle {
       bpf_program prog = new bpf_program();
       try {
         int mask = ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0);
-        int rc = NativeMappings.pcap_compile(
-                   handle, prog, bpfExpression, mode.getValue(), mask
-                 );
+        int rc;
+        synchronized (compileLock) {
+          rc = NativeMappings.pcap_compile(
+                 handle, prog, bpfExpression, mode.getValue(), mask
+               );
+        }
         if (rc < 0) {
           throw new PcapNativeException(
                       "Error occured in pcap_compile: " + getError(),
@@ -443,9 +450,7 @@ public final class PcapHandle {
    */
   public void setFilter(BpfProgram prog) throws PcapNativeException, NotOpenException {
     if (prog == null) {
-      StringBuilder sb = new StringBuilder();
-      sb.append("prog: ").append(prog);
-      throw new NullPointerException(sb.toString());
+      throw new NullPointerException("prog is null.");
     }
     if (!open) {
       throw new NotOpenException();
