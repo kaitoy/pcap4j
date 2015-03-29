@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.4.0 (29-Mar-2015)
+==========================
+### New Features ###
 * Add PPP (RFC1661, RFC1662) support.
 * [Issues#28](https://github.com/kaitoy/pcap4j/issues/28): Support Linux cooked-mode capture (SLL).
 * Pluggability for FragmentedPacket and IpV6ExtUnknownPacket.
