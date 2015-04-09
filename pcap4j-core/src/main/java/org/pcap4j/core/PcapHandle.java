@@ -197,7 +197,7 @@ public final class PcapHandle {
   /**
    *
    * @return a fraction part of a timestamp of a packet captured in a current thread.
-   *         The value represents the number of microseconds.
+   *         The value represents the number of microseconds or nanoseconds.
    */
   public Integer getTimestampMicros() { return timestampsMicros.get(); }
 
