@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Pcap4J.org
+  _##  Copyright (C) 2011-2015  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -26,7 +26,7 @@ public final class ArpPacket extends AbstractPacket {
   /**
    *
    */
-  private static final long serialVersionUID = 2232443026999119934L;
+  private static final long serialVersionUID = -7754807127571498700L;
 
   private final ArpHeader header;
 
@@ -97,8 +97,8 @@ public final class ArpPacket extends AbstractPacket {
 
     private ArpHardwareType hardwareType;
     private EtherType protocolType;
-    private byte hardwareLength;
-    private byte protocolLength;
+    private byte hardwareAddrLength;
+    private byte protocolAddrLength;
     private ArpOperation operation;
     private MacAddress srcHardwareAddr;
     private InetAddress srcProtocolAddr;
@@ -113,8 +113,8 @@ public final class ArpPacket extends AbstractPacket {
     private Builder(ArpPacket packet) {
       this.hardwareType = packet.header.hardwareType;
       this.protocolType = packet.header.protocolType;
-      this.hardwareLength = packet.header.hardwareLength;
-      this.protocolLength = packet.header.protocolLength;
+      this.hardwareAddrLength = packet.header.hardwareAddrLength;
+      this.protocolAddrLength = packet.header.protocolAddrLength;
       this.operation = packet.header.operation;
       this.srcHardwareAddr = packet.header.srcHardwareAddr;
       this.srcProtocolAddr = packet.header.srcProtocolAddr;
@@ -144,21 +144,21 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @param hardwareLength
+     * @param hardwareAddrLength
      * @return this Builder object for method chaining.
      */
-    public Builder hardwareLength(byte hardwareLength) {
-      this.hardwareLength = hardwareLength;
+    public Builder hardwareAddrLength(byte hardwareAddrLength) {
+      this.hardwareAddrLength = hardwareAddrLength;
       return this;
     }
 
     /**
      *
-     * @param protocolLength
+     * @param protocolAddrLength
      * @return this Builder object for method chaining.
      */
-    public Builder protocolLength(byte protocolLength) {
-      this.protocolLength = protocolLength;
+    public Builder protocolAddrLength(byte protocolAddrLength) {
+      this.protocolAddrLength = protocolAddrLength;
       return this;
     }
 
@@ -233,7 +233,7 @@ public final class ArpPacket extends AbstractPacket {
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      * |         Protocol Type         |
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |Hardware Length|Protocol Length|
+     * |  HW Addr Len  |Proto Addr Len |
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      * |         Operation             |
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -262,7 +262,7 @@ public final class ArpPacket extends AbstractPacket {
     /**
      *
      */
-    private static final long serialVersionUID = 2098135951321047828L;
+    private static final long serialVersionUID = -6744946002881067732L;
 
     private static final int HARDWARE_TYPE_OFFSET
       = 0;
@@ -272,16 +272,16 @@ public final class ArpPacket extends AbstractPacket {
       = HARDWARE_TYPE_OFFSET + HARDWARE_TYPE_SIZE;
     private static final int PROTOCOL_TYPE_SIZE
       = SHORT_SIZE_IN_BYTES;
-    private static final int HARDWARE_LENGTH_OFFSET
+    private static final int HW_ADDR_LENGTH_OFFSET
       = PROTOCOL_TYPE_OFFSET + PROTOCOL_TYPE_SIZE;
-    private static final int HARDWARE_LENGTH_SIZE
+    private static final int HW_ADDR_LENGTH_SIZE
       = BYTE_SIZE_IN_BYTES;
-    private static final int PROTOCOL_LENGTH_OFFSET
-      = HARDWARE_LENGTH_OFFSET + HARDWARE_LENGTH_SIZE;
-    private static final int PROTOCOL_LENGTH_SIZE
+    private static final int PROTO_ADDR_LENGTH_OFFSET
+      = HW_ADDR_LENGTH_OFFSET + HW_ADDR_LENGTH_SIZE;
+    private static final int PROTO_ADDR_LENGTH_SIZE
       = BYTE_SIZE_IN_BYTES;
     private static final int OPERATION_OFFSET
-      = PROTOCOL_LENGTH_OFFSET + PROTOCOL_LENGTH_SIZE;
+      = PROTO_ADDR_LENGTH_OFFSET + PROTO_ADDR_LENGTH_SIZE;
     private static final int OPERATION_SIZE
       = SHORT_SIZE_IN_BYTES;
     private static final int SRC_HARDWARE_ADDR_OFFSET
@@ -305,8 +305,8 @@ public final class ArpPacket extends AbstractPacket {
 
     private final ArpHardwareType hardwareType;
     private final EtherType protocolType;
-    private final byte hardwareLength;
-    private final byte protocolLength;
+    private final byte hardwareAddrLength;
+    private final byte protocolAddrLength;
     private final ArpOperation operation;
     private final MacAddress srcHardwareAddr;
     private final InetAddress srcProtocolAddr;
@@ -333,10 +333,10 @@ public final class ArpPacket extends AbstractPacket {
       this.protocolType
         = EtherType
             .getInstance(ByteArrays.getShort(rawData, PROTOCOL_TYPE_OFFSET + offset));
-      this.hardwareLength
-        = ByteArrays.getByte(rawData, HARDWARE_LENGTH_OFFSET + offset);
-      this.protocolLength
-        = ByteArrays.getByte(rawData, PROTOCOL_LENGTH_OFFSET + offset);
+      this.hardwareAddrLength
+        = ByteArrays.getByte(rawData, HW_ADDR_LENGTH_OFFSET + offset);
+      this.protocolAddrLength
+        = ByteArrays.getByte(rawData, PROTO_ADDR_LENGTH_OFFSET + offset);
       this.operation
         = ArpOperation
             .getInstance(ByteArrays.getShort(rawData, OPERATION_OFFSET + offset));
@@ -353,8 +353,8 @@ public final class ArpPacket extends AbstractPacket {
     private ArpHeader(Builder builder) {
       this.hardwareType = builder.hardwareType;
       this.protocolType = builder.protocolType;
-      this.hardwareLength = builder.hardwareLength;
-      this.protocolLength = builder.protocolLength;
+      this.hardwareAddrLength = builder.hardwareAddrLength;
+      this.protocolAddrLength = builder.protocolAddrLength;
       this.operation = builder.operation;
       this.srcHardwareAddr = builder.srcHardwareAddr;
       this.srcProtocolAddr = builder.srcProtocolAddr;
@@ -380,34 +380,34 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @return hardwareLength
+     * @return hardwareAddrLength
      */
-    public byte getHardwareLength() {
-      return hardwareLength;
+    public byte getHardwareAddrLength() {
+      return hardwareAddrLength;
     }
 
     /**
      *
-     * @return hardwareLength
+     * @return hardwareAddrLength
      */
-    public int getHardwareLengthAsInt() {
-      return 0xFF & hardwareLength;
+    public int getHardwareAddrLengthAsInt() {
+      return 0xFF & hardwareAddrLength;
     }
 
     /**
      *
-     * @return protocolLength
+     * @return protocolAddrLength
      */
-    public byte getProtocolLength() {
-      return protocolLength;
+    public byte getProtocolAddrLength() {
+      return protocolAddrLength;
     }
 
     /**
      *
-     * @return protocolLength
+     * @return protocolAddrLength
      */
-    public int getProtocolLengthAsInt() {
-      return 0xFF & protocolLength;
+    public int getProtocolAddrLengthAsInt() {
+      return 0xFF & protocolAddrLength;
     }
 
     /**
@@ -455,8 +455,8 @@ public final class ArpPacket extends AbstractPacket {
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(ByteArrays.toByteArray(hardwareType.value()));
       rawFields.add(ByteArrays.toByteArray(protocolType.value()));
-      rawFields.add(ByteArrays.toByteArray(hardwareLength));
-      rawFields.add(ByteArrays.toByteArray(protocolLength));
+      rawFields.add(ByteArrays.toByteArray(hardwareAddrLength));
+      rawFields.add(ByteArrays.toByteArray(protocolAddrLength));
       rawFields.add(ByteArrays.toByteArray(operation.value()));
       rawFields.add(ByteArrays.toByteArray(srcHardwareAddr));
       rawFields.add(ByteArrays.toByteArray(srcProtocolAddr));
@@ -483,12 +483,12 @@ public final class ArpPacket extends AbstractPacket {
       sb.append("  Protocol type: ")
         .append(protocolType)
         .append(ls);
-      sb.append("  Hardware length: ")
-        .append(getHardwareLengthAsInt())
+      sb.append("  Hardware address length: ")
+        .append(getHardwareAddrLengthAsInt())
         .append(" [bytes]")
         .append(ls);
-      sb.append("  Protocol length: ")
-        .append(getProtocolLengthAsInt())
+      sb.append("  Protocol address length: ")
+        .append(getProtocolAddrLengthAsInt())
         .append(" [bytes]")
         .append(ls);
       sb.append("  Operation: ")
@@ -524,8 +524,8 @@ public final class ArpPacket extends AbstractPacket {
         && dstProtocolAddr.equals(other.dstProtocolAddr)
         && hardwareType.equals(other.hardwareType)
         && protocolType.equals(other.protocolType)
-        && hardwareLength == other.hardwareLength
-        && protocolLength == other.protocolLength;
+        && hardwareAddrLength == other.hardwareAddrLength
+        && protocolAddrLength == other.protocolAddrLength;
     }
 
     @Override
@@ -533,8 +533,8 @@ public final class ArpPacket extends AbstractPacket {
       int result = 17;
       result = 31 * result + hardwareType.hashCode();
       result = 31 * result + protocolType.hashCode();
-      result = 31 * result + hardwareLength;
-      result = 31 * result + protocolLength;
+      result = 31 * result + hardwareAddrLength;
+      result = 31 * result + protocolAddrLength;
       result = 31 * result + operation.hashCode();
       result = 31 * result + srcHardwareAddr.hashCode();
       result = 31 * result + srcProtocolAddr.hashCode();

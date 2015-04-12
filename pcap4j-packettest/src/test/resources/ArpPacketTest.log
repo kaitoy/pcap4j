@@ -1,8 +1,8 @@
 [ARP Header (28 bytes)]
   Hardware type: 1 (Ethernet (10Mb))
   Protocol type: 0x0800 (IPv4)
-  Hardware length: 6 [bytes]
-  Protocol length: 4 [bytes]
+  Hardware address length: 6 [bytes]
+  Protocol address length: 4 [bytes]
   Operation: 1 (REQUEST)
   Source hardware address: fe:00:00:00:00:01
   Source protocol address: /192.0.2.1

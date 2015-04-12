@@ -1,10 +1,8 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -58,8 +56,8 @@ public class ArpPacketTest extends AbstractPacketTest {
     ArpPacket.Builder ab = new ArpPacket.Builder();
     ab.hardwareType(hardwareType)
       .protocolType(protocolType)
-      .hardwareLength(hardwareLength)
-      .protocolLength(protocolLength)
+      .hardwareAddrLength(hardwareLength)
+      .protocolAddrLength(protocolLength)
       .srcHardwareAddr(srcHardwareAddr)
       .dstHardwareAddr(dstHardwareAddr)
       .srcProtocolAddr(srcProtocolAddr)
@@ -103,10 +101,10 @@ public class ArpPacketTest extends AbstractPacketTest {
     ArpHeader h = packet.getHeader();
     assertEquals(hardwareType, h.getHardwareType());
     assertEquals(protocolType, h.getProtocolType());
-    assertEquals(hardwareLength, h.getHardwareLength());
-    assertEquals(hardwareLength, (byte)h.getHardwareLengthAsInt());
-    assertEquals(protocolLength, h.getProtocolLength());
-    assertEquals(protocolLength, (byte)h.getProtocolLengthAsInt());
+    assertEquals(hardwareLength, h.getHardwareAddrLength());
+    assertEquals(hardwareLength, (byte)h.getHardwareAddrLengthAsInt());
+    assertEquals(protocolLength, h.getProtocolAddrLength());
+    assertEquals(protocolLength, (byte)h.getProtocolAddrLengthAsInt());
     assertEquals(dstHardwareAddr, h.getDstHardwareAddr());
     assertEquals(srcHardwareAddr, h.getSrcHardwareAddr());
     assertEquals(dstProtocolAddr, h.getDstProtocolAddr());
@@ -116,35 +114,35 @@ public class ArpPacketTest extends AbstractPacketTest {
     ArpPacket.Builder ab = packet.getBuilder();
     ArpPacket p;
 
-    ab.hardwareLength((byte)0);
-    ab.protocolLength((byte)0);
+    ab.hardwareAddrLength((byte)0);
+    ab.protocolAddrLength((byte)0);
     p = ab.build();
-    assertEquals((byte)0, (byte)p.getHeader().getHardwareLengthAsInt());
-    assertEquals((byte)0, (byte)p.getHeader().getProtocolLengthAsInt());
+    assertEquals((byte)0, (byte)p.getHeader().getHardwareAddrLengthAsInt());
+    assertEquals((byte)0, (byte)p.getHeader().getProtocolAddrLengthAsInt());
 
-    ab.hardwareLength((byte)50);
-    ab.protocolLength((byte)50);
+    ab.hardwareAddrLength((byte)50);
+    ab.protocolAddrLength((byte)50);
     p = ab.build();
-    assertEquals((byte)50, (byte)p.getHeader().getHardwareLengthAsInt());
-    assertEquals((byte)50, (byte)p.getHeader().getProtocolLengthAsInt());
+    assertEquals((byte)50, (byte)p.getHeader().getHardwareAddrLengthAsInt());
+    assertEquals((byte)50, (byte)p.getHeader().getProtocolAddrLengthAsInt());
 
-    ab.hardwareLength((byte)127);
-    ab.protocolLength((byte)127);
+    ab.hardwareAddrLength((byte)127);
+    ab.protocolAddrLength((byte)127);
     p = ab.build();
-    assertEquals((byte)127, (byte)p.getHeader().getHardwareLengthAsInt());
-    assertEquals((byte)127, (byte)p.getHeader().getProtocolLengthAsInt());
+    assertEquals((byte)127, (byte)p.getHeader().getHardwareAddrLengthAsInt());
+    assertEquals((byte)127, (byte)p.getHeader().getProtocolAddrLengthAsInt());
 
-    ab.hardwareLength((byte)-1);
-    ab.protocolLength((byte)-1);
+    ab.hardwareAddrLength((byte)-1);
+    ab.protocolAddrLength((byte)-1);
     p = ab.build();
-    assertEquals((byte)-1, (byte)p.getHeader().getHardwareLengthAsInt());
-    assertEquals((byte)-1, (byte)p.getHeader().getProtocolLengthAsInt());
+    assertEquals((byte)-1, (byte)p.getHeader().getHardwareAddrLengthAsInt());
+    assertEquals((byte)-1, (byte)p.getHeader().getProtocolAddrLengthAsInt());
 
-    ab.hardwareLength((byte)-128);
-    ab.protocolLength((byte)-128);
+    ab.hardwareAddrLength((byte)-128);
+    ab.protocolAddrLength((byte)-128);
     p = ab.build();
-    assertEquals((byte)-128, (byte)p.getHeader().getHardwareLengthAsInt());
-    assertEquals((byte)-128, (byte)p.getHeader().getProtocolLengthAsInt());
+    assertEquals((byte)-128, (byte)p.getHeader().getHardwareAddrLengthAsInt());
+    assertEquals((byte)-128, (byte)p.getHeader().getProtocolAddrLengthAsInt());
   }
 
   @Test

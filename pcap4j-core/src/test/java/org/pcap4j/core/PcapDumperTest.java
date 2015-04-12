@@ -42,8 +42,8 @@ public class PcapDumperTest {
       ArpPacket.Builder ab = new ArpPacket.Builder();
       ab.hardwareType(ArpHardwareType.ETHERNET)
         .protocolType(EtherType.IPV4)
-        .hardwareLength((byte)MacAddress.SIZE_IN_BYTES)
-        .protocolLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
+        .hardwareAddrLength((byte)MacAddress.SIZE_IN_BYTES)
+        .protocolAddrLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
         .srcHardwareAddr(MacAddress.getByName("fe:00:00:00:00:01"))
         .dstHardwareAddr(MacAddress.ETHER_BROADCAST_ADDRESS)
         .srcProtocolAddr(InetAddress.getByName("192.0.2.1"))

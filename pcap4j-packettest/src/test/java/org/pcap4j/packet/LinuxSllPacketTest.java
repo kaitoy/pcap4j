@@ -51,8 +51,8 @@ public class LinuxSllPacketTest extends AbstractPacketTest {
     try {
       ab.hardwareType(ArpHardwareType.ETHERNET)
         .protocolType(EtherType.IPV4)
-        .hardwareLength((byte)MacAddress.SIZE_IN_BYTES)
-        .protocolLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
+        .hardwareAddrLength((byte)MacAddress.SIZE_IN_BYTES)
+        .protocolAddrLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
         .srcHardwareAddr(MacAddress.getByName("aa:bb:cc:dd:ee:ff"))
         .dstHardwareAddr(MacAddress.getByName("11:22:33:44:55:66"))
         .srcProtocolAddr(
@@ -72,8 +72,8 @@ public class LinuxSllPacketTest extends AbstractPacketTest {
 
     LinuxSllPacket.Builder eb = new LinuxSllPacket.Builder();
     eb.packetType(packetType)
-      .hardwareType(hardwareType)
-      .hardwareLength(hardwareLength)
+      .addressType(hardwareType)
+      .addressLength(hardwareLength)
       .address(addressField)
       .protocol(protocol)
       .payloadBuilder(ab);
@@ -121,34 +121,11 @@ public class LinuxSllPacketTest extends AbstractPacketTest {
   public void testGetHeader() {
     LinuxSllHeader h = packet.getHeader();
     assertEquals(packetType, h.getPacketType());
-    assertEquals(hardwareType, h.getHardwareType());
-    assertEquals(hardwareLength, h.getHardwareLength());
+    assertEquals(hardwareType, h.getAddressType());
+    assertEquals(hardwareLength, h.getAddressLength());
     assertEquals(address, h.getAddress());
     assertArrayEquals(addressField, h.getAddressField());
     assertEquals(protocol, h.getProtocol());
-
-    LinuxSllPacket.Builder b = packet.getBuilder();
-    LinuxSllPacket p;
-
-    b.hardwareLength((short)1);
-    p = b.build();
-    assertEquals((short)1, (short)p.getHeader().getHardwareLengthAsInt());
-
-    b.hardwareLength((short)10000);
-    p = b.build();
-    assertEquals((short)10000, (short)p.getHeader().getHardwareLengthAsInt());
-
-    b.hardwareLength((short)32767);
-    p = b.build();
-    assertEquals((short)32767, (short)p.getHeader().getHardwareLengthAsInt());
-
-    b.hardwareLength((short)-1);
-    p = b.build();
-    assertEquals((short)-1, (short)p.getHeader().getHardwareLengthAsInt());
-
-    b.hardwareLength((short)-32768);
-    p = b.build();
-    assertEquals((short)-32768, (short)p.getHeader().getHardwareLengthAsInt());
   }
 
 }

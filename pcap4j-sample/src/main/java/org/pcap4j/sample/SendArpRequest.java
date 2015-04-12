@@ -91,6 +91,7 @@ public class SendArpRequest {
 
       PacketListener listener
         = new PacketListener() {
+            @Override
             public void gotPacket(Packet packet) {
               if (packet.contains(ArpPacket.class)) {
                 ArpPacket arp = packet.get(ArpPacket.class);
@@ -110,8 +111,8 @@ public class SendArpRequest {
         arpBuilder
           .hardwareType(ArpHardwareType.ETHERNET)
           .protocolType(EtherType.IPV4)
-          .hardwareLength((byte)MacAddress.SIZE_IN_BYTES)
-          .protocolLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
+          .hardwareAddrLength((byte)MacAddress.SIZE_IN_BYTES)
+          .protocolAddrLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
           .operation(ArpOperation.REQUEST)
           .srcHardwareAddr(SRC_MAC_ADDR)
           .srcProtocolAddr(InetAddress.getByName(strSrcIpAddress))
@@ -163,6 +164,7 @@ public class SendArpRequest {
       this.listener = listener;
     }
 
+    @Override
     public void run() {
       try {
         handle.loop(COUNT, listener);

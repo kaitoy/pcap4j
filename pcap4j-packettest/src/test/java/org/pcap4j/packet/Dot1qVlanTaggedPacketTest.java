@@ -1,10 +1,8 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,8 +32,8 @@ public class Dot1qVlanTaggedPacketTest extends AbstractPacketTest {
     try {
       ab.hardwareType(ArpHardwareType.ETHERNET)
         .protocolType(EtherType.IPV4)
-        .hardwareLength((byte)MacAddress.SIZE_IN_BYTES)
-        .protocolLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
+        .hardwareAddrLength((byte)MacAddress.SIZE_IN_BYTES)
+        .protocolAddrLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
         .srcHardwareAddr(MacAddress.getByName("fe:00:00:00:00:01"))
         .dstHardwareAddr(MacAddress.ETHER_BROADCAST_ADDRESS)
         .srcProtocolAddr(

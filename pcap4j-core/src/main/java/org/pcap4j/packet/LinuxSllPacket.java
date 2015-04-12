@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2014  Pcap4J.org
+  _##  Copyright (C) 2014-2015  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -70,14 +70,14 @@ public final class LinuxSllPacket extends AbstractPacket {
     if (
          builder == null
       || builder.packetType == null
-      || builder.hardwareType == null
+      || builder.addressType == null
       || builder.address == null
       || builder.protocol == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
         .append(" builder.packetType: ").append(builder.packetType)
-        .append(" builder.hardwareType: ").append(builder.hardwareType)
+        .append(" builder.addressType: ").append(builder.addressType)
         .append(" builder.address: ").append(builder.address)
         .append(" builder.protocol: ").append(builder.protocol);
       throw new NullPointerException(sb.toString());
@@ -109,8 +109,8 @@ public final class LinuxSllPacket extends AbstractPacket {
   public static final class Builder extends AbstractBuilder {
 
     private LinuxSllPacketType packetType;
-    private ArpHardwareType hardwareType;
-    private short hardwareLength;
+    private ArpHardwareType addressType;
+    private short addressLength;
     private byte[] address;
     private EtherType protocol;
     private Packet.Builder payloadBuilder;
@@ -122,8 +122,8 @@ public final class LinuxSllPacket extends AbstractPacket {
 
     private Builder(LinuxSllPacket packet)  {
       this.packetType = packet.header.packetType;
-      this.hardwareType = packet.header.hardwareType;
-      this.hardwareLength = packet.header.hardwareLength;
+      this.addressType = packet.header.addressType;
+      this.addressLength = packet.header.addressLength;
       this.address = packet.header.addressField;
       this.protocol = packet.header.protocol;
       this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
@@ -140,21 +140,21 @@ public final class LinuxSllPacket extends AbstractPacket {
     }
 
     /**
-     * @param hardwareType
+     * @param addressType
      * @return this Builder object for method chaining.
      */
-    public Builder hardwareType(ArpHardwareType hardwareType) {
-      this.hardwareType = hardwareType;
+    public Builder addressType(ArpHardwareType addressType) {
+      this.addressType = addressType;
       return this;
     }
 
     /**
      *
-     * @param hardwareLength
+     * @param addressLength
      * @return this Builder object for method chaining.
      */
-    public Builder hardwareLength(short hardwareLength) {
-      this.hardwareLength = hardwareLength;
+    public Builder addressLength(short addressLength) {
+      this.addressLength = addressLength;
       return this;
     }
 
@@ -219,7 +219,7 @@ public final class LinuxSllPacket extends AbstractPacket {
     /**
      *
      */
-    private static final long serialVersionUID = 8284608139785829230L;
+    private static final long serialVersionUID = -4946840737268934876L;
 
     private static final int PPKTTYPE_OFFSET = 0;
     private static final int PPKTTYPE_SIZE = SHORT_SIZE_IN_BYTES;
@@ -234,8 +234,8 @@ public final class LinuxSllPacket extends AbstractPacket {
     private static final int LINUX_SLL_HEADER_SIZE = PROTOCOL_OFFSET + PROTOCOL_SIZE;
 
     private final LinuxSllPacketType packetType;
-    private final ArpHardwareType hardwareType;
-    private final short hardwareLength;
+    private final ArpHardwareType addressType;
+    private final short addressLength;
     private final byte[] addressField = new byte[ADDR_SIZE];
     private final LinkLayerAddress address;
     private final EtherType protocol;
@@ -258,26 +258,31 @@ public final class LinuxSllPacket extends AbstractPacket {
 
       this.packetType
         = LinuxSllPacketType.getInstance(ByteArrays.getShort(rawData, PPKTTYPE_OFFSET + offset));
-      this.hardwareType
+      this.addressType
         = ArpHardwareType.getInstance(ByteArrays.getShort(rawData, PHATYPE_OFFSET + offset));
-      this.hardwareLength = ByteArrays.getShort(rawData, HALEN_OFFSET + offset);
-      if (getHardwareLengthAsInt() > ADDR_SIZE) {
+      this.addressLength = ByteArrays.getShort(rawData, HALEN_OFFSET + offset);
+      if (getAddressLengthAsInt() > ADDR_SIZE) {
         StringBuilder sb = new StringBuilder(100);
-        sb.append("hardwareLength must not be longer than ")
+        sb.append("addressLength must not be longer than ")
           .append(ADDR_SIZE)
           .append(" but it is: ")
-          .append(getHardwareLengthAsInt());
+          .append(getAddressLengthAsInt());
         throw new IllegalRawDataException(sb.toString());
       }
       System.arraycopy(rawData, ADDR_OFFSET + offset, addressField, 0, ADDR_SIZE);
-      if (hardwareLength == 0) {
+      if (addressLength == 0) {
         this.address = null;
       }
       else {
         this.address
-          = ByteArrays.getLinkLayerAddress(rawData, ADDR_OFFSET + offset, getHardwareLengthAsInt());
+          = ByteArrays.getLinkLayerAddress(
+              rawData,
+              ADDR_OFFSET + offset,
+              getAddressLengthAsInt()
+            );
       }
-      this.protocol = EtherType.getInstance(ByteArrays.getShort(rawData, PROTOCOL_OFFSET + offset));
+      this.protocol
+        = EtherType.getInstance(ByteArrays.getShort(rawData, PROTOCOL_OFFSET + offset));
     }
 
     private LinuxSllHeader(Builder builder) {
@@ -289,27 +294,27 @@ public final class LinuxSllPacket extends AbstractPacket {
           .append(ByteArrays.toHexString(builder.address, " "));
         throw new IllegalArgumentException(sb.toString());
       }
-      if ((builder.hardwareLength & 0xFFFF) > ADDR_SIZE) {
+      if ((builder.addressLength & 0xFFFF) > ADDR_SIZE) {
         StringBuilder sb = new StringBuilder(100);
-        sb.append("hardwareLength & 0xFFFF must not be longer than ")
+        sb.append("addressLength & 0xFFFF must not be longer than ")
           .append(ADDR_SIZE)
           .append(" but it is: ")
-          .append(builder.hardwareLength & 0xFFFF);
+          .append(builder.addressLength & 0xFFFF);
         throw new IllegalArgumentException(sb.toString());
       }
 
       this.packetType = builder.packetType;
-      this.hardwareType = builder.hardwareType;
-      this.hardwareLength = builder.hardwareLength;
+      this.addressType = builder.addressType;
+      this.addressLength = builder.addressLength;
       System.arraycopy(builder.address, 0, addressField, 0, builder.address.length);
       this.protocol = builder.protocol;
 
-      if (hardwareLength == 0) {
+      if (addressLength == 0) {
         this.address = null;
       }
       else {
         this.address
-          = ByteArrays.getLinkLayerAddress(addressField, 0, getHardwareLengthAsInt());
+          = ByteArrays.getLinkLayerAddress(addressField, 0, getAddressLengthAsInt());
       }
     }
 
@@ -323,32 +328,32 @@ public final class LinuxSllPacket extends AbstractPacket {
 
     /**
      *
-     * @return hardwareType
+     * @return addressType
      */
-    public ArpHardwareType getHardwareType() {
-      return hardwareType;
+    public ArpHardwareType getAddressType() {
+      return addressType;
     }
 
     /**
      *
-     * @return hardwareLength
+     * @return addressLength
      */
-    public short getHardwareLength() {
-      return hardwareLength;
+    public short getAddressLength() {
+      return addressLength;
     }
 
     /**
      *
-     * @return hardwareLength
+     * @return addressLength
      */
-    public int getHardwareLengthAsInt() {
-      return 0xFFFF & hardwareLength;
+    public int getAddressLengthAsInt() {
+      return 0xFFFF & addressLength;
     }
 
 
     /**
      *
-     * @return address, or null if the hardwareLength is 0.
+     * @return address, or null if the addressLength is 0.
      */
     public LinkLayerAddress getAddress() {
       return address;
@@ -373,8 +378,8 @@ public final class LinuxSllPacket extends AbstractPacket {
     protected List<byte[]> getRawFields() {
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(ByteArrays.toByteArray(packetType.value()));
-      rawFields.add(ByteArrays.toByteArray(hardwareType.value()));
-      rawFields.add(ByteArrays.toByteArray(hardwareLength));
+      rawFields.add(ByteArrays.toByteArray(addressType.value()));
+      rawFields.add(ByteArrays.toByteArray(addressLength));
       rawFields.add(addressField);
       rawFields.add(ByteArrays.toByteArray(protocol.value()));
       return rawFields;
@@ -397,11 +402,11 @@ public final class LinuxSllPacket extends AbstractPacket {
       sb.append("  Packet Type: ")
         .append(packetType)
         .append(ls);
-      sb.append("  Hardware Type: ")
-        .append(hardwareType)
+      sb.append("  Address Type: ")
+        .append(addressType)
         .append(ls);
-      sb.append("  Hardware Length: ")
-        .append(getHardwareLengthAsInt())
+      sb.append("  Address Length: ")
+        .append(getAddressLengthAsInt())
         .append(ls);
       sb.append("  Address: ")
         .append(address)
@@ -426,16 +431,16 @@ public final class LinuxSllPacket extends AbstractPacket {
            Arrays.equals(addressField, other.addressField)
         && packetType.equals(other.packetType)
         && protocol.equals(other.protocol)
-        && hardwareType.equals(other.hardwareType)
-        && hardwareLength == other.hardwareLength;
+        && addressType.equals(other.addressType)
+        && addressLength == other.addressLength;
     }
 
     @Override
     protected int calcHashCode() {
       int result = 17;
       result = 31 * result + packetType.hashCode();
-      result = 31 * result + hardwareType.hashCode();
-      result = 31 * result + hardwareLength;
+      result = 31 * result + addressType.hashCode();
+      result = 31 * result + addressLength;
       result = 31 * result + Arrays.hashCode(addressField);
       result = 31 * result + protocol.hashCode();
       return result;

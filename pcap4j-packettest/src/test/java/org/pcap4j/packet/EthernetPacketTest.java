@@ -7,10 +7,8 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -53,8 +51,8 @@ public class EthernetPacketTest extends AbstractPacketTest {
     try {
       ab.hardwareType(ArpHardwareType.ETHERNET)
         .protocolType(EtherType.IPV4)
-        .hardwareLength((byte)MacAddress.SIZE_IN_BYTES)
-        .protocolLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
+        .hardwareAddrLength((byte)MacAddress.SIZE_IN_BYTES)
+        .protocolAddrLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
         .srcHardwareAddr(srcAddr)
         .dstHardwareAddr(dstAddr)
         .srcProtocolAddr(

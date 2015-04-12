@@ -6,6 +6,22 @@ Future
 * [Issues#34](https://github.com/kaitoy/pcap4j/issues/34): Fix LinuxSllPacket so it can be built when the address length is 0.
 
 ### Other Changes ###
+* LinuxSllHeader API changes:
+ * getHardwareType -> getAddressType
+ * getHardwareLength -> getAddressLength
+ * getHardwareLengthAsInt -> getAddressLengthAsInt
+
+* ArpHeader API changes:
+ * getHardwareLength -> getHardwareAddrLength
+ * getHardwareLengthAsInt -> getHardwareAddrLengthAsInt
+ * getProtocolLength -> getProtocolAddrLength
+ * getProtocolLengthAsInt -> getProtocolAddrLengthAsInt
+
+* Change serialization formats:
+ * org.pcap4j.packet.LinuxSllPacket
+ * org.pcap4j.packet.LinuxSllPacket.LinuxSllHeader
+ * org.pcap4j.packet.ArpPacket
+ * org.pcap4j.packet.ArpPacket.ArpHeader
 
 Release 1.4.0 (29-Mar-2015)
 ==========================
