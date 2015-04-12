@@ -269,12 +269,14 @@ public final class LinuxSllPacket extends AbstractPacket {
           .append(getHardwareLengthAsInt());
         throw new IllegalRawDataException(sb.toString());
       }
-      if (hardwareLength == 0) {
-        throw new IllegalRawDataException("hardwareLength must not be 0.");
-      }
       System.arraycopy(rawData, ADDR_OFFSET + offset, addressField, 0, ADDR_SIZE);
-      this.address
-        = ByteArrays.getLinkLayerAddress(rawData, ADDR_OFFSET + offset, getHardwareLengthAsInt());
+      if (hardwareLength == 0) {
+        this.address = null;
+      }
+      else {
+        this.address
+          = ByteArrays.getLinkLayerAddress(rawData, ADDR_OFFSET + offset, getHardwareLengthAsInt());
+      }
       this.protocol = EtherType.getInstance(ByteArrays.getShort(rawData, PROTOCOL_OFFSET + offset));
     }
 
@@ -287,6 +289,14 @@ public final class LinuxSllPacket extends AbstractPacket {
           .append(ByteArrays.toHexString(builder.address, " "));
         throw new IllegalArgumentException(sb.toString());
       }
+      if ((builder.hardwareLength & 0xFFFF) > ADDR_SIZE) {
+        StringBuilder sb = new StringBuilder(100);
+        sb.append("hardwareLength & 0xFFFF must not be longer than ")
+          .append(ADDR_SIZE)
+          .append(" but it is: ")
+          .append(builder.hardwareLength & 0xFFFF);
+        throw new IllegalArgumentException(sb.toString());
+      }
 
       this.packetType = builder.packetType;
       this.hardwareType = builder.hardwareType;
@@ -294,8 +304,8 @@ public final class LinuxSllPacket extends AbstractPacket {
       System.arraycopy(builder.address, 0, addressField, 0, builder.address.length);
       this.protocol = builder.protocol;
 
-      if (getHardwareLengthAsInt() > ADDR_SIZE) {
-        this.address = LinkLayerAddress.getByAddress(addressField);
+      if (hardwareLength == 0) {
+        this.address = null;
       }
       else {
         this.address
@@ -338,7 +348,7 @@ public final class LinuxSllPacket extends AbstractPacket {
 
     /**
      *
-     * @return address
+     * @return address, or null if the hardwareLength is 0.
      */
     public LinkLayerAddress getAddress() {
       return address;
