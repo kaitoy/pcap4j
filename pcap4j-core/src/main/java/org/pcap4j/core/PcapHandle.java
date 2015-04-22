@@ -51,7 +51,7 @@ public final class PcapHandle {
   private final ThreadLocal<Integer> timestampsMicros
     = new ThreadLocal<Integer>();
   private final ReentrantReadWriteLock handleLock = new ReentrantReadWriteLock(true);
-  private final Object compileLock = new Object();
+  private static final Object compileLock = new Object();
 
   private volatile boolean open = true;
   private volatile String filteringExpression = "";
