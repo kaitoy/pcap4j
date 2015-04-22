@@ -252,8 +252,6 @@ final class NativeMappings {
   // int pcap_activate(pcap_t *p)
   static native int pcap_activate(Pointer p);
 
-
-
   // interface mappings
   interface PcapLibrary extends Library {
 

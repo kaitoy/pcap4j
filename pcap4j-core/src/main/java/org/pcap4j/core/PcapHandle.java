@@ -1329,19 +1329,23 @@ public final class PcapHandle {
       final int tvus = pcap_pkthdr.getTvUsec(header).intValue();
       final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
 
-      executor.execute(
-        new Runnable() {
-          @Override
-          public void run() {
-            timestampsInts.set(tvs);
-            timestampsMicros.set(tvus);
-            listener.gotPacket(
-              PacketFactories.getFactory(Packet.class, DataLinkType.class)
-                .newInstance(ba, 0, ba.length, dlt)
-            );
+      try {
+        executor.execute(
+          new Runnable() {
+            @Override
+            public void run() {
+              timestampsInts.set(tvs);
+              timestampsMicros.set(tvus);
+              listener.gotPacket(
+                PacketFactories.getFactory(Packet.class, DataLinkType.class)
+                  .newInstance(ba, 0, ba.length, dlt)
+              );
+            }
           }
-        }
-      );
+        );
+      } catch (Throwable e) {
+        logger.error("The executor has thrown an exception.", e);
+      }
     }
 
   }
@@ -1366,16 +1370,20 @@ public final class PcapHandle {
       final int tvus = pcap_pkthdr.getTvUsec(header).intValue();
       final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
 
-      executor.execute(
-        new Runnable() {
-          @Override
-          public void run() {
-            timestampsInts.set(tvs);
-            timestampsMicros.set(tvus);
-            listener.gotPacket(ba);
+      try {
+        executor.execute(
+          new Runnable() {
+            @Override
+            public void run() {
+              timestampsInts.set(tvs);
+              timestampsMicros.set(tvus);
+              listener.gotPacket(ba);
+            }
           }
-        }
-      );
+        );
+      } catch (Throwable e) {
+        logger.error("The executor has thrown an exception.", e);
+      }
     }
 
   }
