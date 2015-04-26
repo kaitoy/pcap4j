@@ -1389,6 +1389,10 @@ public final class PcapHandle {
   }
 
   /**
+   * This class is used to open (i.e. create and activate) a live capture handle
+   * as {@link PcapNetworkInterface#openLive(int, PromiscuousMode, int) PcapNetworkInterface#openLive}
+   * does but with more parameters.
+   *
    * @author Kaito Yamada
    * @since pcap4j 1.2.0
    */
@@ -1489,7 +1493,7 @@ public final class PcapHandle {
     }
 
     /**
-     * @return a new PcapHandle object.
+     * @return a new PcapHandle object representing a live capture handle.
      * @throws PcapNativeException
      */
     public PcapHandle build() throws PcapNativeException {
