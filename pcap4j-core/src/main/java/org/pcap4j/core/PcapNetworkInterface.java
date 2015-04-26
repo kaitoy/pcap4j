@@ -52,12 +52,26 @@ public final class PcapNetworkInterface {
       pcapAddr != null;
       pcapAddr = pcapAddr.next
     ) {
-      short sa_family = pcapAddr.addr.getSaFamily();
+      if (
+           pcapAddr.addr == null
+        && pcapAddr.netmask == null
+        && pcapAddr.broadaddr == null
+        && pcapAddr.dstaddr == null
+      ) {
+        logger.warn("Empty pcap_addr on {} ({}). Ignore it.", name, description);
+        continue;
+      }
+
+      short sa_family = pcapAddr.addr      != null ? pcapAddr.addr.getSaFamily()
+                      : pcapAddr.netmask   != null ? pcapAddr.netmask.getSaFamily()
+                      : pcapAddr.broadaddr != null ? pcapAddr.broadaddr.getSaFamily()
+                      : pcapAddr.dstaddr   != null ? pcapAddr.dstaddr.getSaFamily()
+                                     /* default */ : Inets.AF_UNSPEC; // Never get here.
       if (sa_family == Inets.AF_INET) {
-        addresses.add(PcapIpV4Address.newInstance(pcapAddr));
+        addresses.add(PcapIpV4Address.newInstance(pcapAddr, sa_family, name));
       }
       else if (sa_family == Inets.AF_INET6) {
-        addresses.add(PcapIpV6Address.newInstance(pcapAddr));
+        addresses.add(PcapIpV6Address.newInstance(pcapAddr, sa_family, name));
       }
       else {
         if (Platform.isLinux() && sa_family == Inets.AF_PACKET) {

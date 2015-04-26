@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Pcap4J.org
+  _##  Copyright (C) 2011-2015  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -17,25 +17,25 @@ public interface PcapAddress {
 
   /**
    *
-   * @return address
+   * @return address or null
    */
   public InetAddress getAddress();
 
   /**
    *
-   * @return netmask
+   * @return netmask or null
    */
   public InetAddress getNetmask();
 
   /**
    *
-   * @return broadcast address
+   * @return broadcast address or null
    */
   public InetAddress getBroadcastAddress();
 
   /**
    *
-   * @return destination address
+   * @return destination address or null
    */
   public InetAddress getDestinationAddress();
 

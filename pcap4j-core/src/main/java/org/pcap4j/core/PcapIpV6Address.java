@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2012  Pcap4J.org
+  _##  Copyright (C) 2011-2015  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -18,12 +18,12 @@ import org.pcap4j.core.NativeMappings.sockaddr_in6;
  */
 public final class PcapIpV6Address extends AbstractPcapAddress {
 
-  private PcapIpV6Address(pcap_addr pcapAddr) {
-    super(pcapAddr);
+  private PcapIpV6Address(pcap_addr pcapAddr, short saFamily, String devName) {
+    super(pcapAddr, saFamily, devName);
   }
 
-  static PcapIpV6Address newInstance(pcap_addr pcapAddr) {
-    return new PcapIpV6Address(pcapAddr);
+  static PcapIpV6Address newInstance(pcap_addr pcapAddr, short saFamily, String devName) {
+    return new PcapIpV6Address(pcapAddr, saFamily, devName);
   }
 
   @Override
