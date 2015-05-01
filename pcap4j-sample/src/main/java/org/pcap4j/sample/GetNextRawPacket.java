@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
+import org.pcap4j.core.PcapAddress;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.core.PcapStat;
+import org.pcap4j.core.Pcaps;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.NifSelector;
 import com.sun.jna.Platform;
@@ -52,7 +54,10 @@ public class GetNextRawPacket {
     System.out.println("\n");
 
     PcapNetworkInterface nif = null;
-    if (NIF_NAME == null) {
+    if (NIF_NAME != null) {
+      nif = Pcaps.getDevByName(NIF_NAME);
+    }
+    else {
       try {
         nif = new NifSelector().selectNetworkInterface();
       } catch (IOException e) {
@@ -63,12 +68,18 @@ public class GetNextRawPacket {
       if (nif == null) {
         return;
       }
-
-      System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
     }
 
+    System.out.println(nif.getName() + " (" + nif.getDescription() + ")");
+    for (PcapAddress addr: nif.getAddresses()) {
+      if (addr.getAddress() != null) {
+        System.out.println("IP address: " + addr.getAddress());
+      }
+    }
+    System.out.println("");
+
     PcapHandle handle
-      = new PcapHandle.Builder(nif != null ? nif.getName() : NIF_NAME)
+      = new PcapHandle.Builder(nif.getName())
           .snaplen(SNAPLEN)
           .promiscuousMode(PromiscuousMode.PROMISCUOUS)
           .timeoutMillis(READ_TIMEOUT)
