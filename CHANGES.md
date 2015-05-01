@@ -4,6 +4,9 @@ Future
 
 ### Bug Fixes ###
 * [Issues#34](https://github.com/kaitoy/pcap4j/issues/34): Fix LinuxSllPacket so it can be built when the address length is 0.
+* [Issues#37](https://github.com/kaitoy/pcap4j/issues/37): Fix to properly handle pcap_address the addr field of which is null.
+* [Issues#33](https://github.com/kaitoy/pcap4j/issues/33): Re-fix it.
+* [Issues#36](https://github.com/kaitoy/pcap4j/issues/36): Fix to prevent callbacks throwing exceptions.
 
 ### Other Changes ###
 * LinuxSllHeader API changes:
