@@ -36,6 +36,11 @@ public class GetNextPacket {
   private static final int BUFFER_SIZE
     = Integer.getInteger(BUFFER_SIZE_KEY, 1 * 1024 * 1024); // [bytes]
 
+  private static final String NIF_NAME_KEY
+    = GetNextPacket.class.getName() + ".nifName";
+  private static final String NIF_NAME
+    = System.getProperty(NIF_NAME_KEY);
+
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String filter = args.length != 0 ? args[0] : "";
 
@@ -43,24 +48,27 @@ public class GetNextPacket {
     System.out.println(READ_TIMEOUT_KEY + ": " + READ_TIMEOUT);
     System.out.println(SNAPLEN_KEY + ": " + SNAPLEN);
     System.out.println(BUFFER_SIZE_KEY + ": " + BUFFER_SIZE);
+    System.out.println(NIF_NAME_KEY + ": " + NIF_NAME_KEY);
     System.out.println("\n");
 
-    PcapNetworkInterface nif;
-    try {
-      nif = new NifSelector().selectNetworkInterface();
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
+    PcapNetworkInterface nif = null;
+    if (NIF_NAME == null) {
+      try {
+        nif = new NifSelector().selectNetworkInterface();
+      } catch (IOException e) {
+        e.printStackTrace();
+        return;
+      }
 
-    if (nif == null) {
-      return;
-    }
+      if (nif == null) {
+        return;
+      }
 
-    System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
+      System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
+    }
 
     PcapHandle handle
-      = new PcapHandle.Builder(nif.getName())
+      = new PcapHandle.Builder(nif != null ? nif.getName() : NIF_NAME)
           .snaplen(SNAPLEN)
           .promiscuousMode(PromiscuousMode.PROMISCUOUS)
           .timeoutMillis(READ_TIMEOUT)
