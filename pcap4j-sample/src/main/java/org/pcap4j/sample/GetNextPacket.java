@@ -48,7 +48,7 @@ public class GetNextPacket {
     System.out.println(READ_TIMEOUT_KEY + ": " + READ_TIMEOUT);
     System.out.println(SNAPLEN_KEY + ": " + SNAPLEN);
     System.out.println(BUFFER_SIZE_KEY + ": " + BUFFER_SIZE);
-    System.out.println(NIF_NAME_KEY + ": " + NIF_NAME_KEY);
+    System.out.println(NIF_NAME_KEY + ": " + NIF_NAME);
     System.out.println("\n");
 
     PcapNetworkInterface nif = null;
