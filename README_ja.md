@@ -32,10 +32,8 @@ Pcap4J
 ダウンロード
 ------------
 
-Maven Central Repositoryからダウンロードできるようになりました。
+Maven Central Repositoryからダウンロードできる。
 
-* Pcap4J 0.9.13 (このページから配布する最後のバージョン)
- * [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
 * Pcap4J 1.4.0 (Maven Central Repositoryにある最新バージョン)
  * ソースなし: [pcap4j-distribution-1.4.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-bin.zip)
  * ソース入り: [pcap4j-distribution-1.4.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-src.zip)
@@ -98,7 +96,6 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 #### 概要 ####
 最新のJavaDocは[こちら](http://kaitoy.github.com/pcap4j/javadoc/latest/en)。
 各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22)からダウンロードできる。
-0.9.13のJavaDocは[こちら](http://kaitoy.github.com/pcap4j/javadoc/0.9.13/en)。
 
 他にも、以下のリンクから情報を得られる。
 
@@ -107,7 +104,6 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 * [pcap API と Pcap4j API の対応](/www/api_mappings.md)
 * [Learn About Packet](/www/Packet.md)
 * [Learn About Packet Factory](/www/PacketFactory.md)
-* [テストクラス](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-packettest/src/test/java/org/pcap4j/packet)
 * [サンプルクラス](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample)
 * [サポートプロトコル追加方法](/www/HowToAddProtocolSupport.md)
 
@@ -177,6 +173,11 @@ pom.xmlに以下のような記述を追加する。
 
 * jna.library.path: サーチパスを指定する。
 * org.pcap4j.core.pcapLibName: ライブラリへのフルパスを指定する。
+
+### Docker ###
+CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](https://registry.hub.docker.com/u/kaitoy/pcap4j/)にある。
+`docker pull kaitoy/pcap4j`でダウンロードし、`docker run kaitoy/pcap4j:latest`でコンテナのeth0のパケットキャプチャーを実行できる。
+このイメージはGitレポジトリにコミットがあるたびにビルドされる。
 
 ビルド
 ------

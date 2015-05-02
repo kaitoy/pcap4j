@@ -6,7 +6,7 @@ Pcap4J
 ======
 
 Pcap4J is a Java library for capturing, crafting and sending packets.
-Pcap4J wraps a native packet capture library([libpcap](http://www.tcpdump.org/) or
+Pcap4J wraps a native packet capture library ([libpcap](http://www.tcpdump.org/) or
 [WinPcap](http://www.winpcap.org/)) via [JNA](https://github.com/twall/jna)
 and provides you Java-Oriented APIs.
 
@@ -32,10 +32,8 @@ Contents
 Download
 --------
 
-Pcap4J is now available on the Maven Central Repository.
+Pcap4J is available on the Maven Central Repository.
 
-* Pcap4J 0.9.13 (last version distributed from this page)
- * [pcap4j.jar](https://github.com/downloads/kaitoy/pcap4j/pcap4j.jar)
 * Pcap4J 1.4.0 (latest version on Maven Central Repository)
  * without source: [pcap4j-distribution-1.4.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-bin.zip)
  * with    source: [pcap4j-distribution-1.4.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-src.zip)
@@ -98,7 +96,6 @@ How to use
 #### Overview ####
 The latest JavaDoc is [here](http://kaitoy.github.com/pcap4j/javadoc/latest/en).
 Each version's JavaDoc is on the [Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22).
-The version 0.9.13's JavaDoc is [here](http://kaitoy.github.com/pcap4j/javadoc/0.9.13/en).
 
 And the following resources will help you to learn how to use Pcap4j.
 
@@ -107,7 +104,6 @@ And the following resources will help you to learn how to use Pcap4j.
 * [Mapping between pcap API and Pcap4j API](/www/api_mappings.md)
 * [Learn About Packet](/www/Packet.md)
 * [Learn About Packet Factory](/www/PacketFactory.md)
-* [Test Classes](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-packettest/src/test/java/org/pcap4j/packet)
 * [Sample Classes](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample)
 * [How to add protocol support](/www/HowToAddProtocolSupport.md)
 
@@ -179,6 +175,11 @@ You can use the following Java system properties to change the default behavior.
 
 * jna.library.path: Specify the search path
 * org.pcap4j.core.pcapLibName: Specify the full path of the pcap library
+
+### Docker ###
+A Docker image for Pcap4J on CentOS is available at [Docker Hub](https://registry.hub.docker.com/u/kaitoy/pcap4j/).
+Download it by `docker pull kaitoy/pcap4j` and execute `docker run kaitoy/pcap4j:latest` to start capturing packets from eth0 on the container.
+This image is built everytime a commit is made on the Git repositry.
 
 How to build
 ------------
