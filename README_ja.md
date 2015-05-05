@@ -108,7 +108,7 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 * [サンプルクラス](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample)
 * [サポートプロトコル追加方法](/www/HowToAddProtocolSupport.md)
 
-1.1.0以前のはJ2SE 5.0以降で動く。1.2.0以降のはJ2SE 6.0以降で動く。管理者権限で実行する必要がある。
+1.1.0以前のはJ2SE 5.0以降で動く。1.2.0以降のはJ2SE 6.0以降で動く。
 UNIX系ならlibpcap 1.0.0以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。
 jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。
 
@@ -120,6 +120,10 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 * slf4j-api 1.6.4
 * logback-core 1.0.0
 * logback-classic 1.0.0
+
+Pcap4Jは管理者権限で実行する必要がある。
+ただし、Linuxの場合、javaコマンドにケーパビリティ`CAP_NET_RAW`と`CAP_NET_ADMIN`を与えれば、非rootユーザでも実行できる。
+ケーパビリティを付与するには次のコマンドを実行する: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### サンプル実行方法 ####
 以下の例を参照。

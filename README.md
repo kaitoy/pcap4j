@@ -69,9 +69,9 @@ Features
  * IPv4 (RFC791 and RFC1349) and IPv6 (RFC2460)
  * ICMPv4 (RFC792) and ICMPv6 (RFC4443, RFC4861)
  * TCP (RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21) and UDP
-* All built-in packet classes are serializable and thread-safe(practically immutable).
+* All built-in packet classes are serializable and thread-safe (practically immutable).
 * You can add a protocol support without modifying Pcap4J library itself.
-* Dumping and reading pcap-formatted files(e.g. a capture file of Wireshark).
+* Dumping and reading pcap-formatted files (e.g. a capture file of Wireshark).
 
 Supported Operating Systems
 ---------------------------
@@ -119,7 +119,9 @@ I'm using the following libraries for the test.
 * logback-core 1.0.0
 * logback-classic 1.0.0
 
-Run Pcap4J with administrator/root privileges.
+Pcap4J needs administrator/root privileges
+Or, if on Linux, you can run Pcap4J with a non-root user by granting capabilities `CAP_NET_RAW` and `CAP_NET_ADMIN`
+to your java command by the following command: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### How to run samples ####
 See the following examples:
