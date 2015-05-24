@@ -546,7 +546,7 @@ public final class PcapHandle {
   }
 
   /**
-   * @return a captured packet. May be null.
+   * @return a Packet object created from a captured packet using the packet factory. May be null.
    * @throws NotOpenException
    */
   public Packet getNextPacket() throws NotOpenException {
@@ -596,7 +596,7 @@ public final class PcapHandle {
   }
 
   /**
-   * @return a captured packet. Not null.
+   * @return a Packet object created from a captured packet using the packet factory. Not null.
    * @throws PcapNativeException
    * @throws EOFException
    * @throws TimeoutException
@@ -668,6 +668,8 @@ public final class PcapHandle {
 
   /**
    * A wrapper method for <code>int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</code>.
+   * This method creates a Packet object from a captured packet using the packet factory and
+   * passes it to <code>listener.gotPacket(Packet)</code>.
    * When a packet is captured, <code>listener.gotPacket(Packet)</code> is called in
    * the thread which called the <code>loop()</code>. And then this PcapHandle waits for
    * the thread to return from the <code>gotPacket()</code> before it retrieves the next
@@ -693,6 +695,8 @@ public final class PcapHandle {
 
   /**
    * A wrapper method for <code>int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</code>.
+   * This method creates a Packet object from a captured packet using the packet factory and
+   * passes it to <code>listener.gotPacket(Packet)</code>.
    * When a packet is captured, the
    * {@link java.util.concurrent.Executor#execute(Runnable) executor.execute()} is called
    * with a Runnable object in the thread which called the <code>loop()</code>.

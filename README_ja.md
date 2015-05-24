@@ -16,16 +16,19 @@ Pcap4J
 * [ダウンロード](#ダウンロード)
 * [開発経緯](#開発経緯)
 * [機能](#機能)
-* [対応OS](#対応os)
 * [使い方](#使い方)
- * [概要](#概要)
+ * [システム要件](#システム要件)
+  * [ライブラリ等の依存](#ライブラリ等の依存)
+  * [プラットフォーム](#プラットフォーム)
+  * [その他](#その他)
+ * [ドキュメント](#ドキュメント)
  * [サンプル実行方法](#サンプル実行方法)
  * [Mavenプロジェクトでの使用方法](#mavenプロジェクトでの使用方法)
  * [pcapライブラリのロードについて](#pcapライブラリのロードについて)
  * [Docker](#docker)
 * [ビルド](#ビルド)
+ * [Mavenコマンドでのビルド手順 (推奨)](#mavenコマンドでのビルド手順-推奨)
  * [Eclipse上でのビルド手順](#eclipse上でのビルド手順)
- * [Mavenコマンドでのビルド手順](#mavenコマンドでのビルド手順)
 * [ライセンス](#ライセンス)
 * [コンタクト](#コンタクト)
 * [おまけ](#おまけ)
@@ -73,9 +76,26 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 * ライブラリをいじらずに、対応プロトコルをユーザが追加できる。
 * pcapのダンプファイル(Wiresharkのcapture fileなど)の読み込み、書き込み。
 
-対応OS
+使い方
 ------
 
+#### システム要件 ####
+
+##### ライブラリ等の依存 #####
+1.1.0以前のはJ2SE 5.0以降で動く。1.2.0以降のはJ2SE 6.0以降で動く。
+UNIX系ならlibpcap 1.0.0以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。
+jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。
+
+動作確認に使っているバージョンは以下。
+
+* libpcap 1.1.1
+* WinPcap 4.1.2
+* jna 4.1.0
+* slf4j-api 1.6.4
+* logback-core 1.0.0
+* logback-classic 1.0.0
+
+##### プラットフォーム #####
 x86プロセッサ上の以下のOSで動作することを確認した。
 
 * Windows: XP, Vista, 7, 2003 R2, 2008, 2008 R2, and 2012
@@ -91,39 +111,30 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 
 他のアーキテクチャ/OSでも、JNAとlibpcapがサポートしていれば動く、と願う(FreeBSDはだめそう)。
 
-使い方
-------
-
-#### 概要 ####
-最新のJavaDocは[こちら](http://kaitoy.github.com/pcap4j/javadoc/latest/en)。
-各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22)からダウンロードできる。
-
-他にも、以下のリンクから情報を得られる。
-
-* [libpcapのドキュメント](http://www.tcpdump.org/pcap.html)
-* [WinPcapのドキュメント](http://www.winpcap.org/docs/default.htm)
-* [pcap API と Pcap4j API の対応](/www/api_mappings.md)
-* [Learn About Packet](/www/Packet.md)
-* [Learn About Packet Factory](/www/PacketFactory.md)
-* [サンプルクラス](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample)
-* [サポートプロトコル追加方法](/www/HowToAddProtocolSupport.md)
-
-1.1.0以前のはJ2SE 5.0以降で動く。1.2.0以降のはJ2SE 6.0以降で動く。
-UNIX系ならlibpcap 1.0.0以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。
-jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。
-
-動作確認に使っているバージョンは以下。
-
-* libpcap 1.1.1
-* WinPcap 4.1.2
-* jna 4.1.0
-* slf4j-api 1.6.4
-* logback-core 1.0.0
-* logback-classic 1.0.0
-
+##### その他 #####
 Pcap4Jは管理者権限で実行する必要がある。
 ただし、Linuxの場合、javaコマンドにケーパビリティ`CAP_NET_RAW`と`CAP_NET_ADMIN`を与えれば、非rootユーザでも実行できる。
 ケーパビリティを付与するには次のコマンドを実行する: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
+
+#### ドキュメント ####
+最新のJavaDocは[こちら](http://kaitoy.github.com/pcap4j/javadoc/latest/en)。
+各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22)からダウンロードできる。
+
+Pcap4Jのモジュール構成については[こちら](/www/pcap4j_modules.md)。
+
+Pcap4Jはlibpcap/WinPcapのラッパーなので、以下のドキュメントを読むとPcap4Jの使い方がわかる。
+
+* [Programming with pcap](http://www.tcpdump.org/pcap.html)
+* [WinPcap Manuals](http://www.winpcap.org/docs/default.htm)
+* [pcap API と Pcap4J API の対応](/www/api_mappings.md)
+
+Pcap4Jプログラムの書き方は[サンプル](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample)を見ると理解しやすい。
+
+さらにPcap4Jを理解するには以下のドキュメントを参照。
+
+* [Learn about packet class](/www/Packet.md)
+* [Learn about Packet Factory](/www/PacketFactory.md)
+* [サポートプロトコル追加方法](/www/HowToAddProtocolSupport.md)
 
 #### サンプル実行方法 ####
 以下の例を参照。

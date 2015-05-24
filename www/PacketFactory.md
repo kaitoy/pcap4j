@@ -1,23 +1,32 @@
 Packet Factory
 ==============
 
-<h3 id="static_packet_factory">PacketFactoryBinder</h3>
-[PacketFactoryBinder](https://github.com/kaitoy/pcap4j/blob/master/pcap4j-core/src/main/java/org/pcap4j/packet/factory/PacketFactoryBinder.java)
-is similar to StaticLoggerBinder of SLF4J.
-It binds [PacketFactory](https://github.com/kaitoy/pcap4j/blob/master/pcap4j-core/src/main/java/org/pcap4j/packet/factory/PacketFactory.java) implementations to the Pcap4J Core module.
+Packet Factory is used by the Pcap4J core module to create packet objects from captured packets (byte arrays).
 
-PacketFactory implementations are used to instantiate
-Packet classes (e.g. [EthernetPacket](https://github.com/kaitoy/pcap4j/blob/master/pcap4j-core/src/main/java/org/pcap4j/packet/EthernetPacket.java))
-and packet piese classes (e.g. [IpV4Rfc1349Tos](https://github.com/kaitoy/pcap4j/blob/master/pcap4j-core/src/main/java/org/pcap4j/packet/IpV4Rfc1349Tos.java))
-included in Pcap4J Core module, namely pcap4j-core.jar.
+Packet Factory is pluggable. This pluggability is made by the [Packet Factory Binder](#packet-factory-binder).
 
-PacketFactoryBinder class is included in Pcap4J Core module source but it is a dummy and removed in the assembry process.
-Actual PacketFactoryBinder class is in Static Packet Factory module (pcap4j-packetfactory-static.jar) and Properties-Based Packet Factory (pcap4j-packetfactory-propertiesbased.jar),
-which also include PacketFactory implementations.
+Pcap4J has two Packet Factory modules, [Static Packet Factory](#static-packet-factory) and [Properties-Based Packet Factory](#properties-based-packet-factory).
 
-<h3 id="static_packet_factory">Static Packet Factory</h3>
+### Packet Factory Binder ###
+Packet Factory Binder binds Packet Factory implementations to the Pcap4J core module.
+Pcap4J core module's source includes the dummy implementation of Packet Factory Binder ([src](https://github.com/kaitoy/pcap4j/blob/master/pcap4j-core/src/main/java/org/pcap4j/packet/factory/PacketFactoryBinder.java)).
+This dummy is removed when Pcap4J core module is built.
+An actual implementation of Packet Factory Binder is included in a Packet Factory module which also has Packet Factory implementations.
+
+A Packet Factory implementation is used to find a packet class (e.g. [IpV4Packet](https://github.com/kaitoy/pcap4j/blob/master/pcap4j-core/src/main/java/org/pcap4j/packet/IpV4Packet.java))
+or a packet piece class (e.g. [IpV4Rfc1349Tos](https://github.com/kaitoy/pcap4j/blob/master/pcap4j-core/src/main/java/org/pcap4j/packet/IpV4Rfc1349Tos.java))
+by a classifier (e.g. [EtherType](https://github.com/kaitoy/pcap4j/blob/master/pcap4j-core/src/main/java/org/pcap4j/packet/namednumber/EtherType.java))
+and instantiate its object.
+
+### Static Packet Factory ###
+A Packet Factory module including Packet Factory implementations which find packet and packet piece classes in static way,
+which means you can't replace packet and packet piece classes without code changes.
+This Packet Factory doesn't use Java refrection and so relatively faster than [Properties-Based Packet Factory](#properties-based-packet-factory).
+
 <img alt="Static Packet Factory" title="Static Packet Factory" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/staticPacketFactory.png" />
 
-<h3 id="properties_based_packet_factory">Properties-Based Packet Factory</h3>
-<img alt="Properties-Based Packet Factory" title="Properties-Based Packet Factory" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/propertiesBasedPacketFactory.png" />
+### Properties-Based Packet Factory ###
+A Packet Factory module including Packet Factory implementations which find packet and packet piece classes by Java properties.
+This Packet Factory heavily uses Java refrection and so relatively slower than [Static Packet Factory](#static-packet-factory).
 
+<img alt="Properties-Based Packet Factory" title="Properties-Based Packet Factory" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/propertiesBasedPacketFactory.png" />
