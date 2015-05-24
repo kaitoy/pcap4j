@@ -36,14 +36,14 @@ How to add a protocol support
   
   ```org.pcap4j.packet.Packet.classFor.org.pcap4j.packet.namednumber.TcpPort.1234 = org.pcap4j.packet.YourPacket```
   
-  Or, if you don't want to modify packet-factory.properties in the jar, add the following system properties before starting a packet capture:
+  Or, if you don't want to modify packet-factory.properties in the jar, add the following system property before starting the first packet capture:
   
   ```org.pcap4j.packet.Packet.classFor.org.pcap4j.packet.namednumber.TcpPort.1234 = org.pcap4j.packet.YourPacket```
   
   Note system properties always take precedence over properties in packet-factory.properties.
   
-  If you want to use your properties file, set the system property `org.pcap4j.packet.factory.properties` to the path to your properties file.
-  This makes the Properties-Based Packet Factory load the properties file using java.lang.ClassLoader#getResourceAsStream method and
+  If you want to use your own properties file, set the system property `org.pcap4j.packet.factory.properties` to the path to your properties file.
+  This makes the Properties-Based Packet Factory load the properties file using `java.lang.ClassLoader#getResourceAsStream` method and
   use it instead of packet-factory.properties in Properties-Based Packet Factory module.
   
   2.2. Using [Static Packet Factory](#static-packet-factory)<br>

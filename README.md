@@ -17,18 +17,18 @@ Contents
 * [Why Pcap4J was born](#why-pcap4j-was-born)
 * [Features](#features)
 * [How to use](#how-to-use)
- * [System requirements](#system-requirements)
-  * [Dependencies](#dependencies)
-  * [Platforms](#platforms)
-  * [Others](#others)
- * [Documents](#documents)
- * [How to run samples](#how-to-run-samples)
- * [How to use in Maven project](#how-to-use-in-maven-project)
- * [About pcap library loading](#about-pcap-library-loading)
- * [Docker](#docker)
+    * [System requirements](#system-requirements)
+        * [Dependencies](#dependencies)
+        * [Platforms](#platforms)
+        * [Others](#others)
+    * [Documents](#documents)
+    * [How to run samples](#how-to-run-samples)
+    * [How to use in Maven project](#how-to-use-in-maven-project)
+    * [About pcap library loading](#about-pcap-library-loading)
+    * [Docker](#docker)
 * [How to build](#how-to-build)
- * [Build procedure with Maven command (recommended)](#build-procedure-with-maven-command-recommended)
- * [Build procedure on Eclipse](#build-procedure-on-eclipse)
+    * [Build procedure with Maven command (recommended)](#build-procedure-with-maven-command-recommended)
+    * [Build procedure on Eclipse](#build-procedure-on-eclipse)
 * [License](#license)
 * [Contacts](#contacts)
 * [Extra](#extra)
@@ -39,10 +39,10 @@ Download
 Pcap4J is available on the Maven Central Repository.
 
 * Pcap4J 1.4.0 (latest version on Maven Central Repository)
- * without source: [pcap4j-distribution-1.4.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-bin.zip)
- * with    source: [pcap4j-distribution-1.4.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-src.zip)
+    * without source: [pcap4j-distribution-1.4.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-bin.zip)
+    * with    source: [pcap4j-distribution-1.4.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-src.zip)
 * Snapshot builds
- * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
+    * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
 
 Why Pcap4J was born
 -------------------
@@ -66,12 +66,12 @@ Features
   You can also craft a packet object from scratch.
 * Sending packet objects to a real network.
 * Supported protocols:
- * Ethernet, Linux SLL, raw IP, and PPP (RFC1661, RFC1662)
- * IEEE802.1Q
- * ARP
- * IPv4 (RFC791 and RFC1349) and IPv6 (RFC2460)
- * ICMPv4 (RFC792) and ICMPv6 (RFC4443, RFC4861)
- * TCP (RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21) and UDP
+    * Ethernet, Linux SLL, raw IP, and PPP (RFC1661, RFC1662)
+    * IEEE802.1Q
+    * ARP
+    * IPv4 (RFC791 and RFC1349) and IPv6 (RFC2460)
+    * ICMPv4 (RFC792) and ICMPv6 (RFC4443, RFC4861)
+    * TCP (RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21) and UDP
 * All built-in packet classes are serializable and thread-safe (practically immutable).
 * You can add a protocol support without modifying Pcap4J library itself.
 * Dumping and reading pcap-formatted files (e.g. a capture file of Wireshark).
@@ -108,12 +108,12 @@ I tested Pcap4j on the following OSes with x86 processors.
 
 * Windows: XP, Vista, 7, 2003 R2, 2008, 2008 R2, and 2012
 * Linux
- * RHEL: 5 and 6
- * CentOS: 5
- * Ubuntu: 13
+    * RHEL: 5 and 6
+    * CentOS: 5
+    * Ubuntu: 13
 * UNIX
- * Solaris: 10
- * FreeBSD: 10
+    * Solaris: 10
+    * FreeBSD: 10
 
 And tomute tested Pcap4j on Mac OS X. The report is [here](http://tomute.hateblo.jp/entry/2013/01/27/003209). Thank you, tomute!
 
@@ -184,16 +184,16 @@ Add a dependency to the pom.xml as like below:
 By default, Pcap4j loads the pcap library on the following conditions:
 
 * Windows
- * search path: The paths in the `PATH` environment variable.
- * file name: wpcap.dll
+    * search path: The paths in the `PATH` environment variable.
+    * file name: wpcap.dll
 * Linux/UNIX
- * search path: The search paths of shared libraries configured on the OS.
-   (e.g. The paths in the `LD_LIBRARY_PATH` environment variable)
- * file name: libpcap.so
+    * search path: The search paths of shared libraries configured on the OS.
+      (e.g. The paths in the `LD_LIBRARY_PATH` environment variable)
+    * file name: libpcap.so
 * Mac OS X
- * search path: The search paths of shared libraries configured on the OS.
-   (e.g. The paths in the `DYLD_LIBRARY_PATH` environment variable)
- * file name: libpcap.dylib
+    * search path: The search paths of shared libraries configured on the OS.
+      (e.g. The paths in the `DYLD_LIBRARY_PATH` environment variable)
+    * file name: libpcap.dylib
 
 You can use the following Java system properties to change the default behavior.
 

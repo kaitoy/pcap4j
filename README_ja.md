@@ -17,18 +17,18 @@ Pcap4J
 * [開発経緯](#開発経緯)
 * [機能](#機能)
 * [使い方](#使い方)
- * [システム要件](#システム要件)
-  * [ライブラリ等の依存](#ライブラリ等の依存)
-  * [プラットフォーム](#プラットフォーム)
-  * [その他](#その他)
- * [ドキュメント](#ドキュメント)
- * [サンプル実行方法](#サンプル実行方法)
- * [Mavenプロジェクトでの使用方法](#mavenプロジェクトでの使用方法)
- * [pcapライブラリのロードについて](#pcapライブラリのロードについて)
- * [Docker](#docker)
+    * [システム要件](#システム要件)
+        * [ライブラリ等の依存](#ライブラリ等の依存)
+        * [プラットフォーム](#プラットフォーム)
+        * [その他](#その他)
+    * [ドキュメント](#ドキュメント)
+    * [サンプル実行方法](#サンプル実行方法)
+    * [Mavenプロジェクトでの使用方法](#mavenプロジェクトでの使用方法)
+    * [pcapライブラリのロードについて](#pcapライブラリのロードについて)
+    * [Docker](#docker)
 * [ビルド](#ビルド)
- * [Mavenコマンドでのビルド手順 (推奨)](#mavenコマンドでのビルド手順-推奨)
- * [Eclipse上でのビルド手順](#eclipse上でのビルド手順)
+    * [Mavenコマンドでのビルド手順 (推奨)](#mavenコマンドでのビルド手順-推奨)
+    * [Eclipse上でのビルド手順](#eclipse上でのビルド手順)
 * [ライセンス](#ライセンス)
 * [コンタクト](#コンタクト)
 * [おまけ](#おまけ)
@@ -39,10 +39,10 @@ Pcap4J
 Maven Central Repositoryからダウンロードできる。
 
 * Pcap4J 1.4.0 (Maven Central Repositoryにある最新バージョン)
- * ソースなし: [pcap4j-distribution-1.4.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-bin.zip)
- * ソース入り: [pcap4j-distribution-1.4.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-src.zip)
+    * ソースなし: [pcap4j-distribution-1.4.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-bin.zip)
+    * ソース入り: [pcap4j-distribution-1.4.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.4.0/pcap4j-distribution-1.4.0-src.zip)
 * スナップショットビルド
- * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
+    * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
 
 開発経緯
 --------
@@ -66,12 +66,12 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 * 手動でパケットオブジェクトを組み立てることもできる。
 * パケットオブジェクトを現実のパケットに変換してネットワークに送信できる。
 * 以下のプロトコルに対応。
- * Ethernet、Linux SLL、raw IP、PPP (RFC1661、RFC1662)
- * IEEE802.1Q
- * ARP
- * IPv4 (RFC791、RFC1349)、IPv6 (RFC2460)
- * ICMPv4 (RFC792)、ICMPv6 (RFC4443, RFC4861)
- * TCP (RFC793、RFC2018、draft-ietf-tcpm-1323bis-21)、UDP
+    * Ethernet、Linux SLL、raw IP、PPP (RFC1661、RFC1662)
+    * IEEE802.1Q
+    * ARP
+    * IPv4 (RFC791、RFC1349)、IPv6 (RFC2460)
+    * ICMPv4 (RFC792)、ICMPv6 (RFC4443, RFC4861)
+    * TCP (RFC793、RFC2018、draft-ietf-tcpm-1323bis-21)、UDP
 * 各ビルトインパケットクラスはシリアライズに対応。スレッドセーフ(実質的に不変)。
 * ライブラリをいじらずに、対応プロトコルをユーザが追加できる。
 * pcapのダンプファイル(Wiresharkのcapture fileなど)の読み込み、書き込み。
@@ -100,12 +100,12 @@ x86プロセッサ上の以下のOSで動作することを確認した。
 
 * Windows: XP, Vista, 7, 2003 R2, 2008, 2008 R2, and 2012
 * Linux
- * RHEL: 5 and 6
- * CentOS: 5
- * Ubuntu: 13
+    * RHEL: 5 and 6
+    * CentOS: 5
+    * Ubuntu: 13
 * UNIX
- * Solaris: 10
- * FreeBSD: 10
+    * Solaris: 10
+    * FreeBSD: 10
 
 また、tomuteさんからMac OS Xで動いたとの[報告](http://tomute.hateblo.jp/entry/2013/01/27/003209)が。ありがとうございます。
 
@@ -176,14 +176,14 @@ pom.xmlに以下のような記述を追加する。
 デフォルトでは下記の条件でpcapライブラリを検索し、ロードする。
 
 * Windows
- * サーチパス: 環境変数`PATH`に含まれるパス。
- * ファイル名: wpcap.dll
+    * サーチパス: 環境変数`PATH`に含まれるパス。
+    * ファイル名: wpcap.dll
 * Linux/UNIX
- * サーチパス: OSに設定された共有ライブラリのサーチパス。例えば環境変数`LD_LIBRARY_PATH`に含まれるパス。
- * ファイル名: libpcap.so
+    * サーチパス: OSに設定された共有ライブラリのサーチパス。例えば環境変数`LD_LIBRARY_PATH`に含まれるパス。
+    * ファイル名: libpcap.so
 * Mac OS X
- * サーチパス: OSに設定された共有ライブラリのサーチパス。例えば環境変数`DYLD_LIBRARY_PATH`に含まれるパス。
- * ファイル名: libpcap.dylib
+    * サーチパス: OSに設定された共有ライブラリのサーチパス。例えば環境変数`DYLD_LIBRARY_PATH`に含まれるパス。
+    * ファイル名: libpcap.dylib
 
 カスタマイズのために、以下のJavaのシステムプロパティが使える。
 
