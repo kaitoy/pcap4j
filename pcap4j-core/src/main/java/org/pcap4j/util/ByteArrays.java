@@ -401,24 +401,24 @@ public final class ByteArrays {
     }
 
     if (bo.equals(LITTLE_ENDIAN)) {
-      return ((        (long)array[offset + 7]) << (BYTE_SIZE_IN_BITS * 7))
-        | ((0xFFL & array[offset + 6]) << (BYTE_SIZE_IN_BITS * 6))
-        | ((0xFFL & array[offset + 5]) << (BYTE_SIZE_IN_BITS * 5))
-        | ((0xFFL & array[offset + 4]) << (BYTE_SIZE_IN_BITS * 4))
-        | ((0xFFL & array[offset + 3]) << (BYTE_SIZE_IN_BITS * 3))
-        | ((0xFFL & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
-        | ((0xFFL & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
-        | ((0xFFL & array[offset    ])                           );
+      return ((  (long)array[offset + 7]) << (BYTE_SIZE_IN_BITS * 7))
+           | ((0xFFL & array[offset + 6]) << (BYTE_SIZE_IN_BITS * 6))
+           | ((0xFFL & array[offset + 5]) << (BYTE_SIZE_IN_BITS * 5))
+           | ((0xFFL & array[offset + 4]) << (BYTE_SIZE_IN_BITS * 4))
+           | ((0xFFL & array[offset + 3]) << (BYTE_SIZE_IN_BITS * 3))
+           | ((0xFFL & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
+           | ((0xFFL & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
+           | ((0xFFL & array[offset    ])                           );
     }
     else {
-      return ((        (long)array[offset    ]) << (BYTE_SIZE_IN_BITS * 7))
-        | ((0xFFL & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 6))
-        | ((0xFFL & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 5))
-        | ((0xFFL & array[offset + 3]) << (BYTE_SIZE_IN_BITS * 4))
-        | ((0xFFL & array[offset + 4]) << (BYTE_SIZE_IN_BITS * 3))
-        | ((0xFFL & array[offset + 5]) << (BYTE_SIZE_IN_BITS * 2))
-        | ((0xFFL & array[offset + 6]) << (BYTE_SIZE_IN_BITS * 1))
-        | ((0xFFL & array[offset + 7])                           );
+      return ((  (long)array[offset    ]) << (BYTE_SIZE_IN_BITS * 7))
+           | ((0xFFL & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 6))
+           | ((0xFFL & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 5))
+           | ((0xFFL & array[offset + 3]) << (BYTE_SIZE_IN_BITS * 4))
+           | ((0xFFL & array[offset + 4]) << (BYTE_SIZE_IN_BITS * 3))
+           | ((0xFFL & array[offset + 5]) << (BYTE_SIZE_IN_BITS * 2))
+           | ((0xFFL & array[offset + 6]) << (BYTE_SIZE_IN_BITS * 1))
+           | ((0xFFL & array[offset + 7])                           );
     }
   }
 
