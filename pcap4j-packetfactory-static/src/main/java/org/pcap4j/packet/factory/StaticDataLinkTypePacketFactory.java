@@ -14,7 +14,6 @@ import org.pcap4j.packet.IpPacket;
 import org.pcap4j.packet.LinuxSllPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.PppSelector;
-import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.DataLinkType;
 
 /**
@@ -51,8 +50,8 @@ extends AbstractStaticPacketFactory<DataLinkType> {
           return PppSelector.newPacket(rawData, offset, length);
         }
         @Override
-        public Class<UnknownPacket> getTargetClass() {
-          return UnknownPacket.class;
+        public Class<PppSelector> getTargetClass() {
+          return PppSelector.class;
         }
       }
     );
@@ -65,8 +64,8 @@ extends AbstractStaticPacketFactory<DataLinkType> {
           return IpPacket.newPacket(rawData, offset, length);
         }
         @Override
-        public Class<UnknownPacket> getTargetClass() {
-          return UnknownPacket.class;
+        public Class<IpPacket> getTargetClass() {
+          return IpPacket.class;
         }
       }
     );
