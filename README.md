@@ -2,6 +2,8 @@
 
 <img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/pcap4jlogo.png" height="217" width="667" />
 
+[![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg)](https://travis-ci.org/kaitoy/pcap4j)
+
 Pcap4J
 ======
 
