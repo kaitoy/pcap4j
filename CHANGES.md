@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* Add BSD (Mac OS X) loopback encapsulation support.
 
 ### Bug Fixes ###
 * [Issues#34](https://github.com/kaitoy/pcap4j/issues/34): Fix LinuxSllPacket so it can be built when the address length is 0.

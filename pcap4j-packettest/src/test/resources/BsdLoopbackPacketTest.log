@@ -1,0 +1,24 @@
+[BSD Loopback Header (4 bytes)]
+  Protocol Family: 2 (PF_INET)
+[IPv4 Header (20 bytes)]
+  Version: 4 (IPv4)
+  IHL: 5 (20 [bytes])
+  TOS: [precedence: 0 (Routine)] [tos: 0 (Default)] [mbz: 0]
+  Total length: 32 [bytes]
+  Identification: 100
+  Flags: (Reserved, Don't Fragment, More Fragment) = (false, false, false)
+  Fragment offset: 0 (0 [bytes])
+  TTL: 100
+  Protocol: 1 (ICMPv4)
+  Header checksum: 0xd275
+  Source address: /192.0.2.1
+  Destination address: /192.0.2.2
+[ICMPv4 Common Header (4 bytes)]
+  Type: 8 (Echo)
+  Code: 0 (No Code)
+  Checksum: 0xe048
+[ICMPv4 Echo Header (4 bytes)]
+  Identifier: 1234
+  SequenceNumber: 4321
+[data (4 bytes)]
+  Hex stream: 00 01 02 03

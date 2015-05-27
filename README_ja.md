@@ -68,7 +68,7 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 * 手動でパケットオブジェクトを組み立てることもできる。
 * パケットオブジェクトを現実のパケットに変換してネットワークに送信できる。
 * 以下のプロトコルに対応。
-    * Ethernet、Linux SLL、raw IP、PPP (RFC1661、RFC1662)
+    * Ethernet、Linux SLL、raw IP、PPP (RFC1661、RFC1662)、BSD (Mac OS X) loopback encapsulation
     * IEEE802.1Q
     * ARP
     * IPv4 (RFC791、RFC1349)、IPv6 (RFC2460)

@@ -27,6 +27,7 @@ import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.NamedNumber;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.packet.namednumber.PppDllProtocol;
+import org.pcap4j.packet.namednumber.ProtocolFamily;
 import org.pcap4j.packet.namednumber.TcpPort;
 import org.pcap4j.packet.namednumber.UdpPort;
 
@@ -53,6 +54,7 @@ final class PacketFactoryBinder {
     packetFactories.put(UdpPort.class, StaticUdpPortPacketFactory.getInstance());
     packetFactories.put(NotApplicable.class, StaticNotApplicablePacketFactory.getInstance());
     packetFactories.put(PppDllProtocol.class, StaticPppDllProtocolPacketFactory.getInstance());
+    packetFactories.put(ProtocolFamily.class, StaticProtocolFamilyPacketFactory.getInstance());
 
     packetpPieceFactories.put(
       IpV4Option.class,
