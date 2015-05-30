@@ -78,16 +78,6 @@ Features
 * You can add a protocol support without modifying Pcap4J library itself.
 * Dumping and reading pcap-formatted files (e.g. a capture file of Wireshark).
 
-Project Structure
------------------
-
-Pcap4J consists of the following sub projects (modules):
-
-* pcap4j-core: The core project which includes pcap API wrappers, packet classes, and so on.
-* pcap4j-packetfactory-static: The static packet factory project.
-* pcap4j-packetfactory-propertiesbased: The properties-based packet factory project.
-* pcap4j-packettest: 
-
 How to use
 ----------
 
