@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.5.0 (1-Jun-2015)
+==========================
+### New Features ###
 * Add BSD (Mac OS X) loopback encapsulation support.
 
 ### Bug Fixes ###
