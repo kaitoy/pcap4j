@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Pcap4J.org
+  _##  Copyright (C) 2012-2015  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -524,7 +524,7 @@ public final class IpV6Packet extends AbstractPacket {
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(
         ByteArrays.toByteArray(
-          version.value() << 28 | trafficClass.value() << 20 | flowLabel.value()
+          version.value() << 28 | (0xFF & trafficClass.value()) << 20 | flowLabel.value()
         )
       );
       rawFields.add(ByteArrays.toByteArray(payloadLength));
