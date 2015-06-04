@@ -3,6 +3,7 @@ Future
 ### New Features ###
 
 ### Bug Fixes ###
+* [Issues#42](https://github.com/kaitoy/pcap4j/issues/42): Fix a problem where an IpV6Packet object with a high (>127) traffic class is incorrectly converted to a byte array.
 
 ### Other Changes ###
 
