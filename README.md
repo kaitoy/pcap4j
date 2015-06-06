@@ -2,6 +2,7 @@
 
 <img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/pcap4jlogo.png" height="217" width="667" />
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution)
 [![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg)](https://travis-ci.org/kaitoy/pcap4j)
 
 Pcap4J
@@ -48,9 +49,9 @@ Pcap4J is available on the Maven Central Repository.
 
 Why Pcap4J was born
 -------------------
-I have been developing an SNMP network simulator(SNeO, available at the link below) by Java,
+I have been developing an SNMP network simulator (SNeO, available at the link below) by Java,
 which needed to capture packets and I found the [pcap](http://en.wikipedia.org/wiki/Pcap) was useful for it.
-Although there are some implementations of the pcap such as libpcap(for UNIX) and WinPcap(for Windows),
+Although there are some implementations of the pcap such as libpcap (for UNIX) and WinPcap (for Windows),
 because they are both native libraries, a Java wrapper library was necessary in order to use them for SNeO.
 I researched it and found three Java wrapper libraries for pcap: [jpcap](http://jpcap.sourceforge.net/),
 [jNetPcap](http://jnetpcap.com/), and [Jpcap](http://netresearch.ics.uci.edu/kfujii/Jpcap/doc/).
@@ -203,7 +204,7 @@ How to build
 ------------
 I'm developing Pcap4j in the following environment.
 
-* [Eclipse](http://www.eclipse.org/) Java EE IDE for Web Developers Indigo Service Release 1([Pleiades](http://mergedoc.sourceforge.jp/) All in One 3.7.1.v20110924)
+* [Eclipse](http://www.eclipse.org/) Java EE IDE for Web Developers Indigo Service Release 1 ([Pleiades](http://mergedoc.sourceforge.jp/) All in One 3.7.1.v20110924)
 * [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
 * [Apache Maven](http://maven.apache.org/) 3.0.5
 
