@@ -954,4 +954,40 @@ public final class ByteArrays {
     }
   }
 
+  /**
+   * @param arr1
+   * @param arr2
+   * @return arr1 xor arr2
+   */
+  public static byte[] xor(byte[] arr1, byte[] arr2) {
+    if (arr1 == null) {
+      throw new NullPointerException("arr1 must not be null.");
+    }
+    if (arr2 == null) {
+      throw new NullPointerException("arr2 must not be null.");
+    }
+    if (arr1.length != arr2.length) {
+      throw new IllegalArgumentException("arr1.length must equal to arr2.length.");
+    }
+
+    byte[] result = new byte[arr1.length];
+    for (int i = 0; i < arr1.length; i++) {
+      result[i] = (byte)(arr1[i] ^ arr2[i]);
+    }
+
+    return result;
+  }
+
+  /**
+   * @param arr1
+   * @param arr2
+   * @return arr1 + arr2
+   */
+  public static byte[] concatenate(byte[] arr1, byte[] arr2) {
+    byte[] result = new byte[arr1.length + arr2.length];
+    System.arraycopy(arr1, 0, result, 0, arr1.length);
+    System.arraycopy(arr2, 0, result, arr1.length, arr2.length);
+    return result;
+  }
+
 }
