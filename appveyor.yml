@@ -50,7 +50,6 @@ install:
   - ps: $path -match '[;|^][^;]*\\jdk[^;]*[;|\\Z]'
   - ps: $env:JAVA_HOME = $matches[0] -replace ';|\\bin', ''
   - cmd: echo %JAVA_HOME%
-  - ps: $env:PATH += ";$env:SystemRoot\SysWOW64"
 
 #---------------------------------#
 #       build configuration       #
@@ -65,7 +64,7 @@ before_build:
   - cmd: copy /y mvn\settings.xml %userprofile%\.m2
 
 build_script:
-  - cmd: call "%MAVEN_BIN_PATH%\mvn" deploy
+  - cmd: call "%MAVEN_BIN_PATH%\mvn" -Djna.nosys=true deploy
 
 #---------------------------------#
 #       tests configuration       #
