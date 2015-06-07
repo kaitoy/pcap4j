@@ -50,6 +50,7 @@ install:
   - ps: $path -match '[;|^][^;]*\\jdk[^;]*[;|\\Z]'
   - ps: $env:JAVA_HOME = $matches[0] -replace ';|\\bin', ''
   - cmd: echo %JAVA_HOME%
+  - ps: $env:PATH += ";$env:SystemRoot\SysWOW64"
 
 #---------------------------------#
 #       build configuration       #
