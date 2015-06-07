@@ -61,7 +61,7 @@ before_build:
   - cmd: copy /y mvn\settings.xml %userprofile%\.m2
 
 build_script:
-  - cmd: %MAVEN_BIN_PATH%\mvn deploy
+  - cmd: call %MAVEN_BIN_PATH%\mvn deploy
 
 #---------------------------------#
 #       tests configuration       #
