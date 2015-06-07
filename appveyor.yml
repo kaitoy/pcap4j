@@ -53,8 +53,8 @@ platform: Any CPU
 
 # scripts to run before build
 before_build:
-  - cmd: mkdir %userprofile%\.m2
-  - cmd: copy mvn\settings.xml %userprofile%\.m2
+  - cmd: if not exist %userprofile%\.m2 (mkdir %userprofile%\.m2)
+  - cmd: copy /y mvn\settings.xml %userprofile%\.m2
 
 build_script:
   - cmd: mvn deploy
