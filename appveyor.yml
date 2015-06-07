@@ -1,0 +1,82 @@
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+ 
+# version format
+version: 1.5.0.{build}-{branch}
+
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+
+  # blacklist
+  except:
+    - gh-pages
+
+# Do not build on tags
+skip_tags: true
+
+# Skipping commits with particular message or from user
+skip_commits:
+  message: /\[maven-release-plugin\]/
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# Operating system (build VM template)
+os: Windows Server 2012
+
+# fetch repository as zip archive
+shallow_clone: false
+
+# environment variables
+environment:
+  SONATYPE_NEXUS_USERNAME:
+    secure: DDwS0DjK9j/d79DuAlJy3A==
+  SONATYPE_NEXUS_PASSWORD:
+    secure: mr5kcUXHVYPmF+7bXPi2Ow==
+
+# scripts that run after cloning repository
+install:
+  - cmd: choco install winpcap
+  - cmd: choco install maven
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+ 
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform: Any CPU
+
+# scripts to run before build
+before_build:
+  - cmd: mkdir %userprofile%\.m2
+  - cmd: copy mvn\settings.xml %userprofile%\.m2
+
+build_script:
+  - cmd: mvn deploy
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
+test: off
+
+#---------------------------------#
+#     deployment configuration    #
+#---------------------------------#
+
+deploy: off
+
+#---------------------------------#
+#         notifications           #
+#---------------------------------#
+
+notifications:
+
+  - provider: Email
+    to: kaitoy@pcap4j.org
+    on_build_status_changed: true
