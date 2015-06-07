@@ -41,16 +41,21 @@ environment:
 
 # scripts that run after cloning repository
 install:
+  # Install WinPcap
   - cmd: choco install -y winpcap
+  # Add the directory including WinPcap dll to PATH
+  - ps: $env:PATH += ";$env:SystemRoot\SysWOW64"
+  - cmd: echo %PATH%
+  - ps: $rc = [Environment]::SetEnvironmentVariable('PATH', "$env:PATH", 'User')
+  # Install Maven
   - cmd: choco install -y maven
+  # Get the Maven bin directory path
   - ps: $env:MAVEN_BIN_PATH = [Environment]::GetEnvironmentVariable('M2', 'User')
   - cmd: echo %MAVEN_BIN_PATH%
-  - ps: $path = [Environment]::GetEnvironmentVariable('PATH', 'Process')
-  - ps: $path
-  - ps: $path -match '[;|^][^;]*\\jdk[^;]*[;|\\Z]'
+  # Set JAVA_HOME
+  - ps: $env:PATH -match '[;|^][^;]*\\jdk[^;]*[;|\\Z]'
   - ps: $env:JAVA_HOME = $matches[0] -replace ';|\\bin', ''
   - cmd: echo %JAVA_HOME%
-  - ps: $env:PATH += ";$env:SystemRoot\SysWOW64"
 
 #---------------------------------#
 #       build configuration       #
@@ -87,4 +92,6 @@ notifications:
 
   - provider: Email
     to: kaitoy@pcap4j.org
-    on_build_status_changed: true
+    on_build_success: false
+    on_build_failure: true
+
