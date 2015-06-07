@@ -44,7 +44,8 @@ install:
   - cmd: choco install -y winpcap
   - cmd: choco install -y maven
   - ps: $path = [Environment]::GetEnvironmentVariable('PATH', 'Machine')
-  - ps: $path -match '[;|^][^;]*maven[^;]*;'
+  - ps: $path
+  - ps: $path -match '[;|^][^;]*maven[^;]*[;|\\Z]'
   - ps: $maven_bin_path = $matches[0] -replace ';', ''
   - ps: $env:MAVEN_BIN_PATH=$maven_bin_path
 
@@ -61,7 +62,7 @@ before_build:
   - cmd: copy /y mvn\settings.xml %userprofile%\.m2
 
 build_script:
-  - cmd: call %MAVEN_BIN_PATH%\mvn deploy
+  - cmd: call "%MAVEN_BIN_PATH%\mvn" deploy
 
 #---------------------------------#
 #       tests configuration       #
