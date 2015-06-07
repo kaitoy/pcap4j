@@ -45,6 +45,11 @@ install:
   - cmd: choco install -y maven
   - ps: $env:MAVEN_BIN_PATH = [Environment]::GetEnvironmentVariable('M2', 'User')
   - cmd: echo %MAVEN_BIN_PATH%
+  - ps: $path = [Environment]::GetEnvironmentVariable('PATH', 'Process')
+  - ps: $path
+  - ps: $path -match '[;|^][^;]*\\jdk[^;]*[;|\\Z]'
+  - ps: $env:JAVA_HOME = $matches[0] -replace ';|\\bin', ''
+  - cmd: echo %JAVA_HOME%
 
 #---------------------------------#
 #       build configuration       #
