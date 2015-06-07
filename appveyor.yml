@@ -45,8 +45,8 @@ install:
   - cmd: choco install -y maven
   - ps: |
     [Environment]::GetEnvironmentVariable('PATH', 'Machine') -match '[;|^][^;]*maven[^;]*;'
-    $maven_bin_path = $matches[0] -replace ';', ''
-    $env:PATH += ';' + $maven_bin_path
+  - ps: $maven_bin_path = $matches[0] -replace ';', ''
+  - ps: $env:PATH += ';' + $maven_bin_path
 
 #---------------------------------#
 #       build configuration       #
