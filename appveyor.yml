@@ -44,6 +44,7 @@ install:
   # Install WinPcap
   - cmd: choco install -y winpcap
   # Add the directory including WinPcap dll to PATH
+  - cmd: dir /s /b C:\Windows\Syswow64 C:\Windows\System32|findstr wpcap
   - ps: $env:PATH += ";$env:SystemRoot\SysWOW64"
   - cmd: echo %PATH%
   - ps: $rc = [Environment]::SetEnvironmentVariable('PATH', "$env:PATH", 'User')
