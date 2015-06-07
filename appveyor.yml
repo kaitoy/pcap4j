@@ -41,8 +41,11 @@ environment:
 
 # scripts that run after cloning repository
 install:
-  - cmd: choco install winpcap
-  - cmd: choco install maven
+  - cmd: choco install -y winpcap
+  - cmd: choco install -y maven
+  - ps: [Environment]::GetEnvironmentVariable('PATH', 'Machine') -match "[;|^][^;]*maven[^;]*;"
+  - ps: $maven_bin_path = $matches[0] -replace ";", ""
+  - ps: $env:PATH += ";" + $maven_bin_path
 
 #---------------------------------#
 #       build configuration       #
