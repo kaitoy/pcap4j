@@ -52,6 +52,7 @@ install:
   - ps: $env:PATH -match '[;|^][^;]*\\jdk[^;]*[;|\\Z]'
   - ps: $env:JAVA_HOME = $matches[0] -replace ';|\\bin', ''
   - cmd: echo %JAVA_HOME%
+  - cmd: dir /s /b C:|findstr wpcap
 
 #---------------------------------#
 #       build configuration       #
