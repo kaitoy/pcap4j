@@ -43,11 +43,6 @@ environment:
 install:
   # Install WinPcap
   - cmd: choco install -y winpcap
-  # Add the directory including WinPcap dll to PATH
-  - cmd: dir /s /b C:\Windows\Syswow64 C:\Windows\System32|findstr wpcap
-  - ps: $env:PATH += ";$env:SystemRoot\SysWOW64"
-  - cmd: echo %PATH%
-  - ps: $rc = [Environment]::SetEnvironmentVariable('PATH', "$env:PATH", 'User')
   # Install Maven
   - cmd: choco install -y maven
   # Get the Maven bin directory path
@@ -71,7 +66,7 @@ before_build:
   - cmd: copy /y mvn\settings.xml %userprofile%\.m2
 
 build_script:
-  - cmd: call "%MAVEN_BIN_PATH%\mvn" -Djna.nosys=true deploy
+  - cmd: call "%MAVEN_BIN_PATH%\mvn" -Djna.nosys=true -Dorg.pcap4j.core.pcapLibName=C:\\Windows\\System32\\wpcap.dll deploy
 
 #---------------------------------#
 #       tests configuration       #
