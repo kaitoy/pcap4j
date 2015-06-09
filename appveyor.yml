@@ -27,7 +27,7 @@ skip_commits:
 #---------------------------------#
 
 # Operating system (build VM template)
-os: Windows Server 2012
+os: unstable
 
 # fetch repository as zip archive
 shallow_clone: false
@@ -52,7 +52,6 @@ install:
   - ps: $env:PATH -match '[;|^][^;]*\\jdk[^;]*[;|\\Z]'
   - ps: $env:JAVA_HOME = $matches[0] -replace ';|\\bin', ''
   - cmd: echo %JAVA_HOME%
-  - cmd: dir /s /b C:|findstr wpcap
 
 #---------------------------------#
 #       build configuration       #
@@ -67,7 +66,7 @@ before_build:
   - cmd: copy /y mvn\settings.xml %userprofile%\.m2
 
 build_script:
-  - cmd: call "%MAVEN_BIN_PATH%\mvn" -Djna.nosys=true -Dorg.pcap4j.core.pcapLibName=C:\\Windows\\System32\\wpcap.dll deploy
+  - cmd: call "%MAVEN_BIN_PATH%\mvn" deploy
 
 #---------------------------------#
 #       tests configuration       #
