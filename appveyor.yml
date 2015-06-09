@@ -42,7 +42,11 @@ environment:
 # scripts that run after cloning repository
 install:
   # Install WinPcap
-  - cmd: choco install -y winpcap
+  #- cmd: choco install -y winpcap
+  # Install nmap which includes WinPcap instead of WinPcap itself to avoid an issue where
+  # installation of autohotkey.portable which is used by choco install script for WinPcap
+  # randomly fails somehow.
+  - cmd: choco install -y nmap
   # Install Maven
   - cmd: choco install -y maven
   # Get the Maven bin directory path
