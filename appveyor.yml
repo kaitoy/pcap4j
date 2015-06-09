@@ -66,7 +66,7 @@ before_build:
   - cmd: copy /y mvn\settings.xml %userprofile%\.m2
 
 build_script:
-  - cmd: call "%MAVEN_BIN_PATH%\mvn" deploy
+  - cmd: call "%MAVEN_BIN_PATH%\mvn" -Djna.nosys=true deploy
 
 #---------------------------------#
 #       tests configuration       #
