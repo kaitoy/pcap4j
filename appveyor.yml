@@ -27,7 +27,7 @@ skip_commits:
 #---------------------------------#
 
 # Operating system (build VM template)
-os: unstable
+os: Windows Server 2012 R2
 
 # fetch repository as zip archive
 shallow_clone: false
@@ -70,6 +70,7 @@ before_build:
   - cmd: copy /y mvn\settings.xml %userprofile%\.m2
 
 build_script:
+  # Run mvn command with jna.nosys=true not to use an older jna pre-installed in AppVeyor VMs.
   - cmd: call "%MAVEN_BIN_PATH%\mvn" -Djna.nosys=true deploy
 
 #---------------------------------#
