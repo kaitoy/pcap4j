@@ -119,6 +119,9 @@ final class NativeMappings {
   // pcap_t *pcap_open_offline(const char *fname, char *errbuf)
   static native Pointer pcap_open_offline(String fname, PcapErrbuf errbuf);
 
+  // pcap_t *pcap_open_offline_with_tstamp_precision(const char *fname, u_int precision, char*errbuf);
+  static native Pointer pcap_open_offline_with_tstamp_precision(String fname, int precision, PcapErrbuf errbuf);
+
   // TODO WinPcap: pcap_t *pcap_open(const char *source, int snaplen, int flags, int read_timeout, struct pcap_rmtauth *auth, char *errbuf)
 
   // int pcap_setnonblock(pcap_t *p, int nonblock, char *errbuf)

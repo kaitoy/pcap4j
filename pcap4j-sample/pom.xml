@@ -17,6 +17,10 @@
   <dependencies>
     <dependency>
       <groupId>org.pcap4j</groupId>
+      <artifactId>pcap4j-packetfactory-static</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-core</artifactId>
     </dependency>
   </dependencies>

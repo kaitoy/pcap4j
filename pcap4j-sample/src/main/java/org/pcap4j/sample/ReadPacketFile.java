@@ -20,13 +20,13 @@ public class ReadPacketFile {
     = System.getProperty(PCAP_FILE_KEY, "src/main/resources/echoAndEchoReply.pcap");
 
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
-    PcapHandle handle = Pcaps.openOffline(PCAP_FILE);
+    PcapHandle handle = Pcaps.openOfflineWithTstampPrecision(PCAP_FILE, Pcaps.PCAP_TSTAMP_PRECISION_NANO);
 
     for (int i = 0; i < COUNT; i++) {
       try {
         Packet packet = handle.getNextPacketEx();
         Timestamp ts = new Timestamp(handle.getTimestampInts() * 1000L);
-        ts.setNanos(handle.getTimestampMicros() * 1000);
+        ts.setNanos(handle.getTimestampMicros());
 
         System.out.println(ts);
         System.out.println(packet);

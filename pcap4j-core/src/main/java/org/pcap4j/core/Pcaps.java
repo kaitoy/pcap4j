@@ -44,6 +44,11 @@ public final class Pcaps {
 //  #define PCAP_WARNING      1 /* generic warning code */
 //  #define PCAP_WARNING_PROMISC_NOTSUP 2 /* this device doesn't support promiscuous mode */
 
+//  #define PCAP_TSTAMP_PRECISION_MICRO     0       /* use timestamps with microsecond precision, default */
+//  #define PCAP_TSTAMP_PRECISION_NANO      1       /* use timestamps with nanosecond precision */
+  public static final int PCAP_TSTAMP_PRECISION_MICRO = 0;
+  public static final int PCAP_TSTAMP_PRECISION_NANO  = 1;
+
   private static final Logger logger = LoggerFactory.getLogger(Pcaps.class);
 
   private Pcaps() { throw new AssertionError(); }
@@ -208,6 +213,33 @@ public final class Pcaps {
     PcapErrbuf errbuf = new PcapErrbuf();
     Pointer handle
       = NativeMappings.pcap_open_offline(filePath, errbuf);
+
+    if (handle == null || errbuf.length() != 0) {
+      throw new PcapNativeException(errbuf.toString());
+    }
+
+    return new PcapHandle(handle);
+  }
+
+  /**
+   *
+   * @param filePath "-" means stdin
+   * @param precision PCAP_TSTAMP_PRECISION_NANO or PCAP_TSTAMP_PRECISION_MICRO
+   * @return a new PcapHandle object.
+   * @throws PcapNativeException
+   */
+  public static PcapHandle openOfflineWithTstampPrecision(
+    String filePath, int precision
+  ) throws PcapNativeException {
+    if (filePath == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("filePath: ").append(filePath);
+      throw new NullPointerException(sb.toString());
+    }
+
+    PcapErrbuf errbuf = new PcapErrbuf();
+    Pointer handle
+      = NativeMappings.pcap_open_offline_with_tstamp_precision(filePath, precision, errbuf);
 
     if (handle == null || errbuf.length() != 0) {
       throw new PcapNativeException(errbuf.toString());
