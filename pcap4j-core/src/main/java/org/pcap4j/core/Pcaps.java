@@ -212,7 +212,7 @@ public final class Pcaps {
    * @return a new PcapHandle object.
    * @throws PcapNativeException
    */
-  public static PcapHandle openOfflineWithTstampPrecision(
+  public static PcapHandle openOffline (
     String filePath, TimestampPrecision precision
   ) throws PcapNativeException {
     if (filePath == null) {

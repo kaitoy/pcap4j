@@ -21,7 +21,7 @@ public class ReadPacketFile {
     = System.getProperty(PCAP_FILE_KEY, "src/main/resources/echoAndEchoReply.pcap");
 
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
-    PcapHandle handle = Pcaps.openOfflineWithTstampPrecision(PCAP_FILE, TimestampPrecision.NANO);
+    PcapHandle handle = Pcaps.openOffline(PCAP_FILE, TimestampPrecision.NANO);
 
     for (int i = 0; i < COUNT; i++) {
       try {
