@@ -222,10 +222,17 @@ public final class Pcaps {
     }
 
     PcapErrbuf errbuf = new PcapErrbuf();
-    Pointer handle
-      = PcapLibrary.INSTANCE.pcap_open_offline_with_tstamp_precision(
-          filePath, precision.value, errbuf
-        );
+    Pointer handle;
+    try {
+      handle = PcapLibrary.INSTANCE.pcap_open_offline_with_tstamp_precision(
+                 filePath, precision.value, errbuf
+               );
+    } catch (UnsatisfiedLinkError e) {
+      throw new PcapNativeException(
+              "pcap_open_offline_with_tstamp_precision is not supported by the pcap library"
+                + " installed in this environment."
+            );
+    }
 
     if (handle == null || errbuf.length() != 0) {
       throw new PcapNativeException(errbuf.toString());
