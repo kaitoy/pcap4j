@@ -33,23 +33,6 @@ import com.sun.jna.ptr.PointerByReference;
  */
 public final class Pcaps {
 
-//  #define PCAP_ERROR      -1  /* generic error code */
-//  #define PCAP_ERROR_BREAK    -2  /* loop terminated by pcap_breakloop */
-//  #define PCAP_ERROR_NOT_ACTIVATED  -3  /* the capture needs to be activated */
-//  #define PCAP_ERROR_ACTIVATED    -4  /* the operation can't be performed on already activated captures */
-//  #define PCAP_ERROR_NO_SUCH_DEVICE -5  /* no such device exists */
-//  #define PCAP_ERROR_RFMON_NOTSUP   -6  /* this device doesn't support rfmon (monitor) mode */
-//  #define PCAP_ERROR_NOT_RFMON    -7  /* operation supported only in monitor mode */
-//  #define PCAP_ERROR_PERM_DENIED    -8  /* no permission to open the device */
-//  #define PCAP_ERROR_IFACE_NOT_UP   -9  /* interface isn't up */
-//  #define PCAP_WARNING      1 /* generic warning code */
-//  #define PCAP_WARNING_PROMISC_NOTSUP 2 /* this device doesn't support promiscuous mode */
-
-//  #define PCAP_TSTAMP_PRECISION_MICRO     0       /* use timestamps with microsecond precision, default */
-//  #define PCAP_TSTAMP_PRECISION_NANO      1       /* use timestamps with nanosecond precision */
-  public static final int PCAP_TSTAMP_PRECISION_MICRO = 0;
-  public static final int PCAP_TSTAMP_PRECISION_NANO  = 1;
-
   private static final Logger logger = LoggerFactory.getLogger(Pcaps.class);
 
   private Pcaps() { throw new AssertionError(); }
@@ -225,12 +208,12 @@ public final class Pcaps {
   /**
    *
    * @param filePath "-" means stdin
-   * @param precision PCAP_TSTAMP_PRECISION_NANO or PCAP_TSTAMP_PRECISION_MICRO
+   * @param precision
    * @return a new PcapHandle object.
    * @throws PcapNativeException
    */
   public static PcapHandle openOfflineWithTstampPrecision(
-    String filePath, int precision
+    String filePath, TimestampPrecision precision
   ) throws PcapNativeException {
     if (filePath == null) {
       StringBuilder sb = new StringBuilder();
@@ -240,7 +223,9 @@ public final class Pcaps {
 
     PcapErrbuf errbuf = new PcapErrbuf();
     Pointer handle
-      = PcapLibrary.INSTANCE.pcap_open_offline_with_tstamp_precision(filePath, precision, errbuf);
+      = PcapLibrary.INSTANCE.pcap_open_offline_with_tstamp_precision(
+          filePath, precision.value, errbuf
+        );
 
     if (handle == null || errbuf.length() != 0) {
       throw new PcapNativeException(errbuf.toString());
@@ -463,6 +448,38 @@ public final class Pcaps {
     buf.deleteCharAt(buf.length() - 1);
 
     return buf.toString();
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @version pcap4j 1.5.1
+   */
+  public static enum TimestampPrecision {
+
+    /**
+     * use timestamps with microsecond precision, default
+     */
+    MICRO(0),
+
+    /**
+     * use timestamps with nanosecond precision
+     */
+    NANO(1);
+
+    private final int value;
+
+    private TimestampPrecision(int value) {
+      this.value = value;
+    }
+
+    /**
+     *
+     * @return value
+     */
+    public int getValue() {
+      return value;
+    }
+
   }
 
 }

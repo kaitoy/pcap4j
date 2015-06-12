@@ -7,6 +7,7 @@ import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.Pcaps;
+import org.pcap4j.core.Pcaps.TimestampPrecision;
 import org.pcap4j.packet.Packet;
 
 @SuppressWarnings("javadoc")
@@ -20,7 +21,7 @@ public class ReadPacketFile {
     = System.getProperty(PCAP_FILE_KEY, "src/main/resources/echoAndEchoReply.pcap");
 
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
-    PcapHandle handle = Pcaps.openOfflineWithTstampPrecision(PCAP_FILE, Pcaps.PCAP_TSTAMP_PRECISION_NANO);
+    PcapHandle handle = Pcaps.openOfflineWithTstampPrecision(PCAP_FILE, TimestampPrecision.NANO);
 
     for (int i = 0; i < COUNT; i++) {
       try {
