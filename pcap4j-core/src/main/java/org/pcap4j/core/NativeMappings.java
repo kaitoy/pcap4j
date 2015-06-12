@@ -119,9 +119,6 @@ final class NativeMappings {
   // pcap_t *pcap_open_offline(const char *fname, char *errbuf)
   static native Pointer pcap_open_offline(String fname, PcapErrbuf errbuf);
 
-  // pcap_t *pcap_open_offline_with_tstamp_precision(const char *fname, u_int precision, char*errbuf);
-  static native Pointer pcap_open_offline_with_tstamp_precision(String fname, int precision, PcapErrbuf errbuf);
-
   // TODO WinPcap: pcap_t *pcap_open(const char *source, int snaplen, int flags, int read_timeout, struct pcap_rmtauth *auth, char *errbuf)
 
   // int pcap_setnonblock(pcap_t *p, int nonblock, char *errbuf)
@@ -265,7 +262,8 @@ final class NativeMappings {
           NATIVE_LOAD_LIBRARY_OPTIONS
         );
 
-    // The following functions can't be mapped directly because not all OSes support them.
+    // The following functions can't be mapped directly because they are supported by not all OSes
+    // or by only very new versions of pcap libraries.
 
     // int pcap_set_rfmon(pcap_t *p, int rfmon)
     int pcap_set_rfmon(Pointer p, int rfmon);
@@ -278,6 +276,9 @@ final class NativeMappings {
 
     // struct pcap_stat* pcap_stats_ex(pcap_t *p, int *pcap_stat_size)
     Pointer win_pcap_stats_ex(Pointer p, IntByReference pcap_stat_size);
+
+    // pcap_t *pcap_open_offline_with_tstamp_precision(const char *fname, u_int precision, char*errbuf);
+    Pointer pcap_open_offline_with_tstamp_precision(String fname, int precision, PcapErrbuf errbuf);
 
   }
 

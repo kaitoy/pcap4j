@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
+import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.bpf_program;
 import org.pcap4j.core.NativeMappings.pcap_if;
 import org.pcap4j.packet.namednumber.DataLinkType;
@@ -239,7 +240,7 @@ public final class Pcaps {
 
     PcapErrbuf errbuf = new PcapErrbuf();
     Pointer handle
-      = NativeMappings.pcap_open_offline_with_tstamp_precision(filePath, precision, errbuf);
+      = PcapLibrary.INSTANCE.pcap_open_offline_with_tstamp_precision(filePath, precision, errbuf);
 
     if (handle == null || errbuf.length() != 0) {
       throw new PcapNativeException(errbuf.toString());
