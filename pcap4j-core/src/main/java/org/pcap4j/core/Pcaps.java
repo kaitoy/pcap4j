@@ -215,9 +215,11 @@ public final class Pcaps {
   public static PcapHandle openOffline (
     String filePath, TimestampPrecision precision
   ) throws PcapNativeException {
-    if (filePath == null) {
-      StringBuilder sb = new StringBuilder();
-      sb.append("filePath: ").append(filePath);
+    if (filePath == null || precision == null) {
+      StringBuilder sb
+        = new StringBuilder()
+            .append("filePath: ").append(filePath)
+            .append(" precision: ").append(precision);
       throw new NullPointerException(sb.toString());
     }
 
