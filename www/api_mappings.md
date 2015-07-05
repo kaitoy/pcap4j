@@ -35,6 +35,10 @@ Mapping between pcap API and Pcap4j API
     <td>static PcapHandle org.pcap4j.core.Pcaps.openOffline(String)</td>
   </tr>
   <tr>
+    <td>pcap_t *pcap_open_offline_with_tstamp_precision(const char *, u_int, char *)</td>
+    <td>static PcapHandle org.pcap4j.core.Pcaps.openOffline(String, TimestampPrecision)</td>
+  </tr>
+  <tr>
     <td>int pcap_setnonblock(pcap_t *, int, char *)</td>
     <td>void org.pcap4j.core.PcapHandle.setBlockingMode(BlockingMode)</td>
   </tr>
@@ -48,7 +52,7 @@ Mapping between pcap API and Pcap4j API
   </tr>
   <tr>
     <td rowspan="4">void pcap_dump(u_char *, const struct pcap_pkthdr *, const u_char *)</td>
-    <td>void org.pcap4j.core.PcapDumper.dump(Packet, long, int)</td>
+    <td>void org.pcap4j.core.PcapDumper.dump(Packet, TimestampPrecision)</td>
   </tr>
   <tr>
     <td>void org.pcap4j.core.PcapDumper.dump(Packet)</td>
@@ -57,7 +61,7 @@ Mapping between pcap API and Pcap4j API
     <td>void org.pcap4j.core.PcapDumper.dumpRaw(byte[])</td>
   </tr>
   <tr>
-  <td>void org.pcap4j.core.PcapDumper.dumpRaw(byte[], long, int)</td>
+  <td>void org.pcap4j.core.PcapDumper.dumpRaw(byte[], TimestampPrecision)</td>
   </tr>
   <tr>
     <td>int pcap_dump_flush(pcap_dumper_t *)</td>
@@ -219,7 +223,7 @@ Mapping between pcap API and Pcap4j API
     <td>String org.pcap4j.core.Pcaps.libVersion()</td>
   </tr>
   <tr>
-    <td>pcap_t *pcap_create (const char *, char *)</td>
+    <td>pcap_t *pcap_create(const char *, char *)</td>
     <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
   </tr>
   <tr>
@@ -240,6 +244,10 @@ Mapping between pcap API and Pcap4j API
   </tr>
   <tr>
     <td>int pcap_set_buffer_size(pcap_t *, int)</td>
+    <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
+  </tr>
+  <tr>
+    <td>int pcap_set_tstamp_precision(pcap_t*, int)</td>
     <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
   </tr>
   <tr>
