@@ -10,7 +10,7 @@ How to add a protocol support
   And, it's recommended to write a static factory method in the packet class such as below:
   
   ```java
-  public static YourPacket newPacket(byte[] rawData) {
+  public static YourPacket newPacket(byte[] rawData, int offset, int length) {
     return new YourPacket(rawData);
   }
   ```
