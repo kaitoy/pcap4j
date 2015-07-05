@@ -3,6 +3,7 @@ Future
 ### New Features ###
 * New APIs:
     * Pcaps.openOffline(String filePath, TimestampPrecision precision)
+    * Pcaps.openDead(DataLinkType dlt, int snaplen, TimestampPrecision precision)
     * PcapHandle.getTimestampPrecision()
     * PcapHandle.Builder.timestampPrecision(TimestampPrecision timestampPrecision)
 

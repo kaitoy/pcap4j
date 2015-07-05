@@ -80,6 +80,10 @@ final class NativeMappings {
       "pcap_open_offline_with_tstamp_precision",
       "pcap_open_offline_with_tstamp_precision"
     );
+    funcMap.put(
+      "pcap_open_dead_with_tstamp_precision",
+      "pcap_open_dead_with_tstamp_precision"
+    );
     funcMap.put("pcap_set_tstamp_precision", "pcap_set_tstamp_precision");
 
     NATIVE_LOAD_LIBRARY_OPTIONS.put(
@@ -286,6 +290,9 @@ final class NativeMappings {
 
     // pcap_t *pcap_open_offline_with_tstamp_precision(const char *fname, u_int precision, char*errbuf);
     Pointer pcap_open_offline_with_tstamp_precision(String fname, int precision, PcapErrbuf errbuf);
+
+    // pcap_t *pcap_open_dead_with_tstamp_precision(int linktype, int snaplen, u_int precision);
+    Pointer pcap_open_dead_with_tstamp_precision(int linkType, int snaplen, int precision);
 
     // int pcap_set_tstamp_precision(pcap_t *p, int tstamp_precision)
     int pcap_set_tstamp_precision(Pointer p, int tstamp_precision);

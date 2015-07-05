@@ -274,6 +274,50 @@ public final class Pcaps {
 
   /**
    *
+   * @param dlt
+   * @param snaplen Snapshot length, which is the number of bytes captured for each packet.
+   * @param precision
+   * @return a new PcapHandle object.
+   * @throws PcapNativeException
+   */
+  public static PcapHandle openDead(
+    DataLinkType dlt, int snaplen, TimestampPrecision precision
+  ) throws PcapNativeException {
+    if (dlt == null || precision == null) {
+      StringBuilder sb
+        = new StringBuilder()
+            .append("dlt: ").append(dlt)
+            .append(" precision: ").append(precision);
+      throw new NullPointerException(sb.toString());
+    }
+
+    Pointer handle;
+    try {
+      handle = PcapLibrary.INSTANCE.pcap_open_dead_with_tstamp_precision(
+                 dlt.value(),
+                 snaplen,
+                 precision.getValue()
+               );
+    } catch (UnsatisfiedLinkError e) {
+      throw new PcapNativeException(
+              "pcap_open_dead_with_tstamp_precision is not supported by the pcap library"
+                + " installed in this environment."
+            );
+    }
+
+    if (handle == null) {
+      StringBuilder sb = new StringBuilder(50);
+      sb.append("Failed to open a PcapHandle. dlt: ").append(dlt)
+        .append(" snaplen: ").append(snaplen)
+        .append(" precision: ").append(precision);
+      throw new PcapNativeException(sb.toString());
+    }
+
+    return new PcapHandle(handle, precision);
+  }
+
+  /**
+   *
    * @param snaplen
    * @param dlt
    * @param bpfExpression

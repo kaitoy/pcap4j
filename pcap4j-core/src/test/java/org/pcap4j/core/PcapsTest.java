@@ -1,6 +1,9 @@
 package org.pcap4j.core;
 
 import static org.junit.Assert.*;
+import java.io.File;
+import java.net.InetAddress;
+import java.sql.Timestamp;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -9,7 +12,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pcap4j.core.PcapHandle.TimestampPrecision;
 import org.pcap4j.core.test.Constants;
+import org.pcap4j.packet.ArpPacket;
+import org.pcap4j.packet.EthernetPacket;
+import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.namednumber.ArpHardwareType;
+import org.pcap4j.packet.namednumber.ArpOperation;
 import org.pcap4j.packet.namednumber.DataLinkType;
+import org.pcap4j.packet.namednumber.EtherType;
+import org.pcap4j.util.ByteArrays;
+import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,6 +120,82 @@ public class PcapsTest {
   @Test
   public void testOpenDead() {
     // TODO fail("not yet implemented");
+  }
+
+  @Test
+  public void testOpenDeadWithTimestampPrecision() throws Exception {
+    if (!Boolean.getBoolean(Constants.ENABLE_TIMESTAMP_PRECISION_TESTS_KEY)) {
+      return;
+    }
+
+    MacAddress dstAddr = MacAddress.ETHER_BROADCAST_ADDRESS;
+    MacAddress srcAddr = MacAddress.getByName("fe:00:00:00:00:01");
+
+    ArpPacket.Builder ab
+      = new ArpPacket.Builder()
+          .hardwareType(ArpHardwareType.ETHERNET)
+          .protocolType(EtherType.IPV4)
+          .hardwareAddrLength((byte)MacAddress.SIZE_IN_BYTES)
+          .protocolAddrLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
+          .srcHardwareAddr(srcAddr)
+          .dstHardwareAddr(dstAddr)
+          .srcProtocolAddr(
+             InetAddress.getByAddress(
+               new byte[] { (byte)192, (byte)0, (byte)2, (byte)1 }
+             )
+           )
+          .dstProtocolAddr(
+             InetAddress.getByAddress(
+               new byte[] { (byte)192, (byte)0, (byte)2, (byte)2 }
+             )
+           )
+          .operation(ArpOperation.REQUEST);
+    EthernetPacket.Builder eb
+      = new EthernetPacket.Builder()
+          .dstAddr(dstAddr)
+          .srcAddr(srcAddr)
+          .type(EtherType.ARP)
+          .payloadBuilder(ab)
+          .paddingAtBuild(true);
+    Packet packet = eb.build();
+    Timestamp ts = new Timestamp(1234567890123L);
+    ts.setNanos(123456789);
+
+    PcapHandle phdMicro = Pcaps.openDead(
+      DataLinkType.EN10MB,
+      65536,
+      TimestampPrecision.MICRO
+    );
+    String tmpFile1 = File.createTempFile("pcap4jTest_", ".pcap").getAbsolutePath();
+    PcapDumper dumperMicro
+      = phdMicro.dumpOpen(tmpFile1);
+    dumperMicro.dump(packet, ts);
+    dumperMicro.close();
+    phdMicro.close();
+    PcapHandle phNano1
+      = Pcaps.openOffline(tmpFile1,TimestampPrecision.NANO);
+    phNano1.getNextRawPacket();
+    assertEquals(1234567890123L, phNano1.getTimestamp().getTime());
+    assertEquals(123456000, phNano1.getTimestamp().getNanos());
+    phNano1.close();
+
+    PcapHandle phdNano = Pcaps.openDead(
+      DataLinkType.EN10MB,
+      65536,
+      TimestampPrecision.NANO
+    );
+    String tmpFile2 = File.createTempFile("pcap4jTest_", ".pcap").getAbsolutePath();
+    PcapDumper dumperNano
+      = phdNano.dumpOpen(tmpFile2);
+    dumperNano.dump(packet, ts);
+    dumperNano.close();
+    phdNano.close();
+    PcapHandle phNano2
+      = Pcaps.openOffline(tmpFile2,TimestampPrecision.NANO);
+    phNano2.getNextRawPacket();
+    assertEquals(1234567890123L, phNano2.getTimestamp().getTime());
+    assertEquals(123456789, phNano2.getTimestamp().getNanos());
+    phNano2.close();
   }
 
   @Test
