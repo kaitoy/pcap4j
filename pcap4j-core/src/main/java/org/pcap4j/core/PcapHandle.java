@@ -11,6 +11,7 @@ import java.io.EOFException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -45,11 +46,10 @@ public final class PcapHandle {
   private static final Logger logger = LoggerFactory.getLogger(PcapHandle.class);
 
   private volatile DataLinkType dlt;
+  private final TimestampPrecision timestampPrecision;
   private final Pointer handle;
-  private final ThreadLocal<Long> timestampsInts
-    = new ThreadLocal<Long>();
-  private final ThreadLocal<Integer> timestampsMicros
-    = new ThreadLocal<Integer>();
+  private final ThreadLocal<Timestamp> timestamps
+    = new ThreadLocal<Timestamp>();
   private final ReentrantReadWriteLock handleLock = new ReentrantReadWriteLock(true);
   private static final Object compileLock = new Object();
 
@@ -66,9 +66,10 @@ public final class PcapHandle {
     }
   }
 
-  PcapHandle(Pointer handle) {
+  PcapHandle(Pointer handle, TimestampPrecision timestampPrecision) {
     this.handle = handle;
     this.dlt = getDltByNative();
+    this.timestampPrecision = timestampPrecision;
   }
 
   private PcapHandle(Builder builder) throws PcapNativeException {
@@ -117,6 +118,37 @@ public final class PcapHandle {
         if (rc != 0) {
           throw new PcapNativeException(getError(), rc);
         }
+      }
+      if (builder.timestampPrecision != null) {
+        try {
+          int rc = PcapLibrary.INSTANCE.pcap_set_tstamp_precision(
+                     handle,
+                     builder.timestampPrecision.getValue()
+                   );
+          if (rc == 0) {
+            this.timestampPrecision = builder.timestampPrecision;
+          }
+          else {
+            StringBuilder sb
+              = new StringBuilder(100)
+                  .append("The specified timestamp precision ")
+                  .append(builder.timestampPrecision)
+                  .append(" is not supported on this platform. ")
+                  .append(TimestampPrecision.MICRO)
+                  .append(" is set instead.");
+
+            logger.error(sb.toString());
+            this.timestampPrecision = TimestampPrecision.MICRO;
+          }
+        } catch (UnsatisfiedLinkError e) {
+          throw new PcapNativeException(
+                  "pcap_set_tstamp_precision is not supported by the pcap library"
+                    + " installed in this environment."
+                );
+        }
+      }
+      else {
+        this.timestampPrecision = TimestampPrecision.MICRO;
       }
 
       int rc = NativeMappings.pcap_activate(handle);
@@ -189,17 +221,17 @@ public final class PcapHandle {
   public String getFilteringExpression() {return filteringExpression; }
 
   /**
-   *
-   * @return an integer part of a timestamp of a packet captured in a current thread.
+   * @return Timestamp precision
    */
-  public Long getTimestampInts() { return timestampsInts.get(); }
+  public TimestampPrecision getTimestampPrecision() {
+    return timestampPrecision;
+  }
 
   /**
    *
-   * @return a fraction part of a timestamp of a packet captured in a current thread.
-   *         The value represents the number of microseconds or nanoseconds.
+   * @return A timestamp of a packet captured in the current thread.
    */
-  public Integer getTimestampMicros() { return timestampsMicros.get(); }
+  public Timestamp getTimestamp() { return timestamps.get(); }
 
   /**
    *
@@ -586,8 +618,7 @@ public final class PcapHandle {
 
     if (packet != null) {
       Pointer headerP = header.getPointer();
-      timestampsInts.set(pcap_pkthdr.getTvSec(headerP).longValue());
-      timestampsMicros.set(pcap_pkthdr.getTvUsec(headerP).intValue());
+      timestamps.set(buildTimestamp(headerP));
       return packet.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
     }
     else {
@@ -647,8 +678,7 @@ public final class PcapHandle {
                       );
           }
 
-          timestampsInts.set(pcap_pkthdr.getTvSec(headerP).longValue());
-          timestampsMicros.set(pcap_pkthdr.getTvUsec(headerP).intValue());
+          timestamps.set(buildTimestamp(headerP));
           return dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
         case -1:
           throw new PcapNativeException(
@@ -1006,7 +1036,7 @@ public final class PcapHandle {
       handleLock.readLock().unlock();
     }
 
-    return new PcapDumper(dumper);
+    return new PcapDumper(dumper, timestampPrecision);
   }
 
   /**
@@ -1329,8 +1359,7 @@ public final class PcapHandle {
     public void got_packet(
       Pointer args, Pointer header, final Pointer packet
     ) {
-      final long tvs = pcap_pkthdr.getTvSec(header).longValue();
-      final int tvus = pcap_pkthdr.getTvUsec(header).intValue();
+      final Timestamp ts = buildTimestamp(header);
       final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
 
       try {
@@ -1338,8 +1367,7 @@ public final class PcapHandle {
           new Runnable() {
             @Override
             public void run() {
-              timestampsInts.set(tvs);
-              timestampsMicros.set(tvus);
+              timestamps.set(ts);
               listener.gotPacket(
                 PacketFactories.getFactory(Packet.class, DataLinkType.class)
                   .newInstance(ba, 0, ba.length, dlt)
@@ -1370,8 +1398,7 @@ public final class PcapHandle {
     public void got_packet(
       Pointer args, Pointer header, final Pointer packet
     ) {
-      final long tvs = pcap_pkthdr.getTvSec(header).longValue();
-      final int tvus = pcap_pkthdr.getTvUsec(header).intValue();
+      final Timestamp ts = buildTimestamp(header);
       final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
 
       try {
@@ -1379,8 +1406,7 @@ public final class PcapHandle {
           new Runnable() {
             @Override
             public void run() {
-              timestampsInts.set(tvs);
-              timestampsMicros.set(tvus);
+              timestamps.set(ts);
               listener.gotPacket(ba);
             }
           }
@@ -1390,6 +1416,21 @@ public final class PcapHandle {
       }
     }
 
+  }
+
+  private Timestamp buildTimestamp(Pointer header) {
+    Timestamp ts = new Timestamp(pcap_pkthdr.getTvSec(header).longValue() * 1000L);
+    switch (timestampPrecision) {
+      case MICRO:
+        ts.setNanos(pcap_pkthdr.getTvUsec(header).intValue() * 1000);
+        break;
+      case NANO:
+        ts.setNanos(pcap_pkthdr.getTvUsec(header).intValue());
+        break;
+      default:
+        throw new AssertionError("Never get here.");
+    }
+    return ts;
   }
 
   /**
@@ -1412,6 +1453,7 @@ public final class PcapHandle {
     private boolean isTimeoutMillisSet = false;
     private int bufferSize;
     private boolean isBufferSizeSet = false;
+    private TimestampPrecision timestampPrecision = null;
 
     /**
      *
@@ -1497,6 +1539,18 @@ public final class PcapHandle {
     }
 
     /**
+     * @param timestampPrecision The timestamp precision.
+     *                           If this method isn't called,
+     *                           microsecond precision will be applied
+     *                           at {@link #build()}.
+     * @return this Builder object for method chaining.
+     */
+    public Builder timestampPrecision(TimestampPrecision timestampPrecision) {
+      this.timestampPrecision = timestampPrecision;
+      return this;
+    }
+
+    /**
      * @return a new PcapHandle object representing a live capture handle.
      * @throws PcapNativeException
      */
@@ -1573,6 +1627,38 @@ public final class PcapHandle {
     public int getValue() {
       return value;
     }
+  }
+
+  /**
+   * @author Kaito Yamada
+   * @version pcap4j 1.5.1
+   */
+  public static enum TimestampPrecision {
+
+    /**
+     * use timestamps with microsecond precision, default
+     */
+    MICRO(0),
+
+    /**
+     * use timestamps with nanosecond precision
+     */
+    NANO(1);
+
+    private final int value;
+
+    private TimestampPrecision(int value) {
+      this.value = value;
+    }
+
+    /**
+     *
+     * @return value
+     */
+    public int getValue() {
+      return value;
+    }
+
   }
 
 }

@@ -1,11 +1,11 @@
 package org.pcap4j.sample;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapAddress;
 import org.pcap4j.core.PcapHandle;
+import org.pcap4j.core.PcapHandle.TimestampPrecision;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
@@ -38,6 +38,11 @@ public class GetNextPacket {
   private static final int BUFFER_SIZE
     = Integer.getInteger(BUFFER_SIZE_KEY, 1 * 1024 * 1024); // [bytes]
 
+  private static final String TIMESTAMP_PRECISION_NANO_KEY
+    = GetNextPacket.class.getName() + ".timestampPrecision.nano";
+  private static final boolean TIMESTAMP_PRECISION_NANO
+    = Boolean.getBoolean(TIMESTAMP_PRECISION_NANO_KEY);
+
   private static final String NIF_NAME_KEY
     = GetNextPacket.class.getName() + ".nifName";
   private static final String NIF_NAME
@@ -50,6 +55,7 @@ public class GetNextPacket {
     System.out.println(READ_TIMEOUT_KEY + ": " + READ_TIMEOUT);
     System.out.println(SNAPLEN_KEY + ": " + SNAPLEN);
     System.out.println(BUFFER_SIZE_KEY + ": " + BUFFER_SIZE);
+    System.out.println(TIMESTAMP_PRECISION_NANO_KEY + ": " + TIMESTAMP_PRECISION_NANO);
     System.out.println(NIF_NAME_KEY + ": " + NIF_NAME);
     System.out.println("\n");
 
@@ -78,13 +84,16 @@ public class GetNextPacket {
     }
     System.out.println("");
 
-    PcapHandle handle
+    PcapHandle.Builder phb
       = new PcapHandle.Builder(nif.getName())
           .snaplen(SNAPLEN)
           .promiscuousMode(PromiscuousMode.PROMISCUOUS)
           .timeoutMillis(READ_TIMEOUT)
-          .bufferSize(BUFFER_SIZE)
-          .build();
+          .bufferSize(BUFFER_SIZE);
+    if (TIMESTAMP_PRECISION_NANO) {
+      phb.timestampPrecision(TimestampPrecision.NANO);
+    }
+    PcapHandle handle = phb.build();
 
     handle.setFilter(
       filter,
@@ -98,10 +107,7 @@ public class GetNextPacket {
         continue;
       }
       else {
-        Timestamp ts = new Timestamp(handle.getTimestampInts() * 1000L);
-        ts.setNanos(handle.getTimestampMicros() * 1000);
-
-        System.out.println(ts);
+        System.out.println(handle.getTimestamp());
         System.out.println(packet);
         num++;
         if (num >= COUNT) {

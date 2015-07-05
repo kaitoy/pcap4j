@@ -76,6 +76,11 @@ final class NativeMappings {
     funcMap.put("strioctl", "strioctl");
     funcMap.put("dos_pcap_stats_ex", "pcap_stats_ex");
     funcMap.put("win_pcap_stats_ex", "pcap_stats_ex");
+    funcMap.put(
+      "pcap_open_offline_with_tstamp_precision",
+      "pcap_open_offline_with_tstamp_precision"
+    );
+    funcMap.put("pcap_set_tstamp_precision", "pcap_set_tstamp_precision");
 
     NATIVE_LOAD_LIBRARY_OPTIONS.put(
       Library.OPTION_FUNCTION_MAPPER,
@@ -264,6 +269,8 @@ final class NativeMappings {
 
     // The following functions can't be mapped directly because they are supported by not all OSes
     // or by only very new versions of pcap libraries.
+    // If you add a method here you need to put the method to funcMap in static initialization
+    // block above.
 
     // int pcap_set_rfmon(pcap_t *p, int rfmon)
     int pcap_set_rfmon(Pointer p, int rfmon);
@@ -279,6 +286,9 @@ final class NativeMappings {
 
     // pcap_t *pcap_open_offline_with_tstamp_precision(const char *fname, u_int precision, char*errbuf);
     Pointer pcap_open_offline_with_tstamp_precision(String fname, int precision, PcapErrbuf errbuf);
+
+    // int pcap_set_tstamp_precision(pcap_t *p, int tstamp_precision)
+    int pcap_set_tstamp_precision(Pointer p, int tstamp_precision);
 
   }
 

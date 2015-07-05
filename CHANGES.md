@@ -1,11 +1,19 @@
 Future
 ======
 ### New Features ###
+* New APIs:
+    * Pcaps.openOffline(String filePath, TimestampPrecision precision)
+    * PcapHandle.getTimestampPrecision()
+    * PcapHandle.Builder.timestampPrecision(TimestampPrecision timestampPrecision)
 
 ### Bug Fixes ###
 * [Issues#42](https://github.com/kaitoy/pcap4j/issues/42): Fix a problem where an IpV6Packet object with a high (>127) traffic class is incorrectly converted to a byte array.
 
 ### Other Changes ###
+* API changes:
+    * PcapHandle.getTimestampInts() & PcapHandle.getTimestampMicros() -> PcapHandle.getTimestamp()
+    * PcapDumper.dump(Packet, long timestampSec, int timestampMicros) -> PcapDumper.dump(Packet packet, Timestamp timestamp)
+    * PcapDumper.dumpRaw(byte[] packet, long timestampSec, int timestampMicros) -> PcapDumper.dumpRaw(byte[] packet, Timestamp timestamp)
 
 Release 1.5.0 (1-Jun-2015)
 ==========================
@@ -20,21 +28,21 @@ Release 1.5.0 (1-Jun-2015)
 
 ### Other Changes ###
 * LinuxSllHeader API changes:
- * getHardwareType -> getAddressType
- * getHardwareLength -> getAddressLength
- * getHardwareLengthAsInt -> getAddressLengthAsInt
+    * getHardwareType -> getAddressType
+    * getHardwareLength -> getAddressLength
+    * getHardwareLengthAsInt -> getAddressLengthAsInt
 
 * ArpHeader API changes:
- * getHardwareLength -> getHardwareAddrLength
- * getHardwareLengthAsInt -> getHardwareAddrLengthAsInt
- * getProtocolLength -> getProtocolAddrLength
- * getProtocolLengthAsInt -> getProtocolAddrLengthAsInt
+    * getHardwareLength -> getHardwareAddrLength
+    * getHardwareLengthAsInt -> getHardwareAddrLengthAsInt
+    * getProtocolLength -> getProtocolAddrLength
+    * getProtocolLengthAsInt -> getProtocolAddrLengthAsInt
 
 * Change serialization formats:
- * org.pcap4j.packet.LinuxSllPacket
- * org.pcap4j.packet.LinuxSllPacket.LinuxSllHeader
- * org.pcap4j.packet.ArpPacket
- * org.pcap4j.packet.ArpPacket.ArpHeader
+    * org.pcap4j.packet.LinuxSllPacket
+    * org.pcap4j.packet.LinuxSllPacket.LinuxSllHeader
+    * org.pcap4j.packet.ArpPacket
+    * org.pcap4j.packet.ArpPacket.ArpHeader
 
 Release 1.4.0 (29-Mar-2015)
 ==========================
@@ -43,43 +51,43 @@ Release 1.4.0 (29-Mar-2015)
 * [Issues#28](https://github.com/kaitoy/pcap4j/issues/28): Support Linux cooked-mode capture (SLL).
 * Pluggability for FragmentedPacket and IpV6ExtUnknownPacket.
 * Add raw packet capture APIs:
- * byte[] org.pcap4j.core.PcapHandle.getNextRawPacket()
- * byte[] org.pcap4j.core.PcapHandle.getNextRawPacketEx()
- * void org.pcap4j.core.PcapHandle.loop(int, RawPacketListener)
- * void org.pcap4j.core.PcapHandle.loop(int, RawPacketListener, Executor)
- * int org.pcap4j.core.PcapHandle.dispatch(int, RawPacketListener)
- * int org.pcap4j.core.PcapHandle.dispatch(int, RawPacketListener, Executor)
- * void org.pcap4j.core.PcapDumper.dumpRaw(byte[])
- * void org.pcap4j.core.PcapDumper.dumpRaw(byte[], long, int)
+    * byte[] org.pcap4j.core.PcapHandle.getNextRawPacket()
+    * byte[] org.pcap4j.core.PcapHandle.getNextRawPacketEx()
+    * void org.pcap4j.core.PcapHandle.loop(int, RawPacketListener)
+    * void org.pcap4j.core.PcapHandle.loop(int, RawPacketListener, Executor)
+    * int org.pcap4j.core.PcapHandle.dispatch(int, RawPacketListener)
+    * int org.pcap4j.core.PcapHandle.dispatch(int, RawPacketListener, Executor)
+    * void org.pcap4j.core.PcapDumper.dumpRaw(byte[])
+    * void org.pcap4j.core.PcapDumper.dumpRaw(byte[], long, int)
 
 ### Bug Fixes ###
 * Fix a typo (flagment -> fragment) in org.pcap4j.packet.IpV4Packet.
- * IpV4Header#getFlagmentOffset() -> IpV4Header#getFragmentOffset()
- * Builder#flagmentOffset -> Builder#fragmentOffset
- * Change the serialization format of IpV4Packet and IpV4Header.
+    * IpV4Header#getFlagmentOffset() -> IpV4Header#getFragmentOffset()
+    * Builder#flagmentOffset -> Builder#fragmentOffset
+    * Change the serialization format of IpV4Packet and IpV4Header.
 * [Issues#31](https://github.com/kaitoy/pcap4j/issues/31): Fix ByteArrays.calcChecksum() so it can accept odd length data.
 * [Issues#33](https://github.com/kaitoy/pcap4j/issues/33): Mutex PcapHandle.setFilter() and PcapHandle.compileFilter() to prevent JVM crash.
 
 ### Other Changes ###
 * Property changes:
- * org.pcap4j.packet.Packet.classFor.unknownNumber -> org.pcap4j.packet.Packet.classFor.org.pcap4j.packet.namednumber.NotApplicable.0
- * org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0 -> org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0x00
- * org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.1 -> org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0x01
+    * org.pcap4j.packet.Packet.classFor.unknownNumber -> org.pcap4j.packet.Packet.classFor.org.pcap4j.packet.namednumber.NotApplicable.0
+    * org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0 -> org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0x00
+    * org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.1 -> org.pcap4j.packet.IpV6ExtOptionsPacket$IpV6Option.classFor.org.pcap4j.packet.namednumber.IpV6OptionType.0x01
 
 * Class name changes:
- * org.pcap4j.packet.namednumber.IpV6RoutingHeaderType -> org.pcap4j.packet.namednumber.IpV6RoutingType
- * org.pcap4j.packet.namednumber.IpV6OptionType.IpV6OptionTypeIdentifier -> org.pcap4j.packet.namednumber.IpV6OptionType.IpV6OptionTypeAction
+    * org.pcap4j.packet.namednumber.IpV6RoutingHeaderType -> org.pcap4j.packet.namednumber.IpV6RoutingType
+    * org.pcap4j.packet.namednumber.IpV6OptionType.IpV6OptionTypeIdentifier -> org.pcap4j.packet.namednumber.IpV6OptionType.IpV6OptionTypeAction
 
 * Method name changes:
- * org.pcap4j.packet.namednumber.IpV6OptionType.optionDataIsChangable -> org.pcap4j.packet.namednumber.IpV6OptionType.optionDataMayChange
- * org.pcap4j.packet.namednumber.IpV6OptionType.getIdentifier -> org.pcap4j.packet.namednumber.IpV6OptionType.getAction
+    * org.pcap4j.packet.namednumber.IpV6OptionType.optionDataIsChangable -> org.pcap4j.packet.namednumber.IpV6OptionType.optionDataMayChange
+    * org.pcap4j.packet.namednumber.IpV6OptionType.getIdentifier -> org.pcap4j.packet.namednumber.IpV6OptionType.getAction
 
 * Change serialization formats:
- * org.pcap4j.packet.UnknownPacket
- * org.pcap4j.packet.FragmentedPacket
- * org.pcap4j.packet.IpV6ExtRoutingPacket
- * org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6ExtRoutingHeader
- * org.pcap4j.packet.namednumber.IpV6OptionType
+    * org.pcap4j.packet.UnknownPacket
+    * org.pcap4j.packet.FragmentedPacket
+    * org.pcap4j.packet.IpV6ExtRoutingPacket
+    * org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6ExtRoutingHeader
+    * org.pcap4j.packet.namednumber.IpV6OptionType
 
 Release 1.3.0 (4-Oct-2014)
 ==========================
@@ -142,7 +150,7 @@ Release 1.2.0 (16-May-2014)
 * Required Java version changes from 5 to 6.
 * Change org.pcap4j.packet.IllegalRawDataException to checked exception.
 * Change serialization formats:
- * Change org.pcap4j.packet.IllegalRawDataException
+    * Change org.pcap4j.packet.IllegalRawDataException
 * Make compareTo methods of NamedNumber's subclasses more reasonable.
 
 Release 1.1.0 (7-Mar-2014)
@@ -160,7 +168,7 @@ Release 1.1.0 (7-Mar-2014)
 * Change org.pcap4j.packet.AbstractPacket.AbstractHeader.measureLength() to org.pcap4j.packet.AbstractPacket.AbstractHeader.calcLength()
 * Change the return value of org.pcap4j.util.PropertiesLoader#getInteger() from int to Integer.
 * Change serialization formats:
- * org.pcap4j.util.MacAddress
+    * org.pcap4j.util.MacAddress
 
 Release 1.0.0 (20-Jun-2013)
 ===========================
@@ -184,20 +192,20 @@ Release 1.0.0 (20-Jun-2013)
 * Modify org.pcap4j.core.PcapHandle and org.pcap4j.core.PcapDumper to throw NotOpenException instead of IllegalStateException.
 * Change a package of class: org.pcap4j.core.PcapHandle.BpfCompileMode -> org.pcap4j.core.BpfProgram.BpfCompileMode
 * Change class names:
- * org.pcap4j.packet.UnknownIpV4InternetTimestampData -> org.pcap4j.packet.UnknownIpV4InternetTimestampOptionData
- * org.pcap4j.packet.factory.PropertiesBasedIpV4InternetTimestampDataFactory -> org.pcap4j.packet.factory.PropertiesBasedIpV4InternetTimestampOptionDataFactory
+    * org.pcap4j.packet.UnknownIpV4InternetTimestampData -> org.pcap4j.packet.UnknownIpV4InternetTimestampOptionData
+    * org.pcap4j.packet.factory.PropertiesBasedIpV4InternetTimestampDataFactory -> org.pcap4j.packet.factory.PropertiesBasedIpV4InternetTimestampOptionDataFactory
 * Change method names:
- * org.pcap4j.core.Pcaps.getNifByName(String) -> org.pcap4j.core.Pcaps.getDevByName(String)
- * org.pcap4j.core.Pcaps.getNifByAddress(InetAddress) -> org.pcap4j.core.Pcaps.getDevByAddress(InetAddress)
+    * org.pcap4j.core.Pcaps.getNifByName(String) -> org.pcap4j.core.Pcaps.getDevByName(String)
+    * org.pcap4j.core.Pcaps.getNifByAddress(InetAddress) -> org.pcap4j.core.Pcaps.getDevByAddress(InetAddress)
 * Delete obsolete classes:
- * org.pcap4j.packet.factory.IpV4TosFactories
- * org.pcap4j.packet.factory.IpV4TosFactory
- * org.pcap4j.packet.factory.IpV6FlowLabelFactories
- * org.pcap4j.packet.factory.IpV6FlowLabelFactory
- * org.pcap4j.packet.factory.IpV6TrafficClassFactories
- * org.pcap4j.packet.factory.IpV6TrafficClassFactory
- * org.pcap4j.packet.factory.ClassifiedDataFactories
- * org.pcap4j.packet.factory.ClassifiedDataFactoriy
+    * org.pcap4j.packet.factory.IpV4TosFactories
+    * org.pcap4j.packet.factory.IpV4TosFactory
+    * org.pcap4j.packet.factory.IpV6FlowLabelFactories
+    * org.pcap4j.packet.factory.IpV6FlowLabelFactory
+    * org.pcap4j.packet.factory.IpV6TrafficClassFactories
+    * org.pcap4j.packet.factory.IpV6TrafficClassFactory
+    * org.pcap4j.packet.factory.ClassifiedDataFactories
+    * org.pcap4j.packet.factory.ClassifiedDataFactoriy
 
 Release 0.9.15 (29-May-2013)
 ============================
@@ -209,34 +217,34 @@ Release 0.9.15 (29-May-2013)
 
 ### Other Changes ###
 * Change class names:
- * org.pcap4j.core.PcapIpv4Address -> org.pcap4j.core.PcapIpV4Address
- * org.pcap4j.core.PcapIpv6Address -> org.pcap4j.core.PcapIpV6Address
+    * org.pcap4j.core.PcapIpv4Address -> org.pcap4j.core.PcapIpV4Address
+    * org.pcap4j.core.PcapIpv6Address -> org.pcap4j.core.PcapIpV6Address
 * Change property names:
- * org.pcap4j.packet.icmpv4.calcChecksumAtBuild -> org.pcap4j.packet.icmpV4.calcChecksumAtBuild
- * org.pcap4j.packet.ipv4.calcChecksumAtBuild -> org.pcap4j.packet.ipV4.calcChecksumAtBuild
- * org.pcap4j.packet.tcpv4.calcChecksumAtBuild -> org.pcap4j.packet.tcpV4.calcChecksumAtBuild
- * org.pcap4j.packet.udpv4.calcChecksumAtBuild -> org.pcap4j.packet.udpV4.calcChecksumAtBuild
- * org.pcap4j.packet.tcpv6.calcChecksumAtBuild -> org.pcap4j.packet.tcpV6.calcChecksumAtBuild
- * org.pcap4j.packet.udpv6.calcChecksumAtBuild -> org.pcap4j.packet.udpV6.calcChecksumAtBuild
+    * org.pcap4j.packet.icmpv4.calcChecksumAtBuild -> org.pcap4j.packet.icmpV4.calcChecksumAtBuild
+    * org.pcap4j.packet.ipv4.calcChecksumAtBuild -> org.pcap4j.packet.ipV4.calcChecksumAtBuild
+    * org.pcap4j.packet.tcpv4.calcChecksumAtBuild -> org.pcap4j.packet.tcpV4.calcChecksumAtBuild
+    * org.pcap4j.packet.udpv4.calcChecksumAtBuild -> org.pcap4j.packet.udpV4.calcChecksumAtBuild
+    * org.pcap4j.packet.tcpv6.calcChecksumAtBuild -> org.pcap4j.packet.tcpV6.calcChecksumAtBuild
+    * org.pcap4j.packet.udpv6.calcChecksumAtBuild -> org.pcap4j.packet.udpV6.calcChecksumAtBuild
 * Change serialization formats:
- * org.pcap4j.packet.IcmpV4CommonPacket
- * org.pcap4j.packet.IcmpV4CommonPacket.IcmpV4CommonHeader
- * org.pcap4j.packet.IcmpV4DestinationUnreachablePacket
- * org.pcap4j.packet.IcmpV4DestinationUnreachablePacket.IcmpV4DestinationUnreachableHeader
- * org.pcap4j.packet.IcmpV4ParameterProblemPacket
- * org.pcap4j.packet.IcmpV4ParameterProblemPacket.IcmpV4ParameterProblemHeader
- * org.pcap4j.packet.IcmpV4RedirectPacket
- * org.pcap4j.packet.IcmpV4RedirectPacket.IcmpV4RedirectHeader
- * org.pcap4j.packet.IcmpV4SourceQuenchPacket
- * org.pcap4j.packet.IcmpV4SourceQuenchPacket.IcmpV4SourceQuenchHeader
- * org.pcap4j.packet.IcmpV4TimeExceededPacket
- * org.pcap4j.packet.IcmpV4TimeExceededPacket.IcmpV4TimeExceededHeader
+    * org.pcap4j.packet.IcmpV4CommonPacket
+    * org.pcap4j.packet.IcmpV4CommonPacket.IcmpV4CommonHeader
+    * org.pcap4j.packet.IcmpV4DestinationUnreachablePacket
+    * org.pcap4j.packet.IcmpV4DestinationUnreachablePacket.IcmpV4DestinationUnreachableHeader
+    * org.pcap4j.packet.IcmpV4ParameterProblemPacket
+    * org.pcap4j.packet.IcmpV4ParameterProblemPacket.IcmpV4ParameterProblemHeader
+    * org.pcap4j.packet.IcmpV4RedirectPacket
+    * org.pcap4j.packet.IcmpV4RedirectPacket.IcmpV4RedirectHeader
+    * org.pcap4j.packet.IcmpV4SourceQuenchPacket
+    * org.pcap4j.packet.IcmpV4SourceQuenchPacket.IcmpV4SourceQuenchHeader
+    * org.pcap4j.packet.IcmpV4TimeExceededPacket
+    * org.pcap4j.packet.IcmpV4TimeExceededPacket.IcmpV4TimeExceededHeader
 * Move invoking packet from header to payload:
- * org.pcap4j.packet.IcmpV4DestinationUnreachablePacket
- * org.pcap4j.packet.IcmpV4ParameterProblemPacket
- * org.pcap4j.packet.IcmpV4RedirectPacket
- * org.pcap4j.packet.IcmpV4SourceQuenchPacket
- * org.pcap4j.packet.IcmpV4TimeExceededPacket
+    * org.pcap4j.packet.IcmpV4DestinationUnreachablePacket
+    * org.pcap4j.packet.IcmpV4ParameterProblemPacket
+    * org.pcap4j.packet.IcmpV4RedirectPacket
+    * org.pcap4j.packet.IcmpV4SourceQuenchPacket
+    * org.pcap4j.packet.IcmpV4TimeExceededPacket
 
 Release 0.9.14 (13-Apr-2013)
 ============================

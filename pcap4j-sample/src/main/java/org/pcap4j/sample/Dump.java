@@ -5,6 +5,7 @@ import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapDumper;
 import org.pcap4j.core.PcapHandle;
+import org.pcap4j.core.PcapHandle.TimestampPrecision;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
@@ -29,6 +30,11 @@ public class Dump {
   private static final int SNAPLEN
     = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
 
+  private static final String TIMESTAMP_PRECISION_NANO_KEY
+    = Dump.class.getName() + ".timestampPrecision.nano";
+  private static final boolean TIMESTAMP_PRECISION_NANO
+    = Boolean.getBoolean(TIMESTAMP_PRECISION_NANO_KEY);
+
   private static final String PCAP_FILE_KEY
     = Dump.class.getName() + ".pcapFile";
   private static final String PCAP_FILE
@@ -40,6 +46,7 @@ public class Dump {
     System.out.println(COUNT_KEY + ": " + COUNT);
     System.out.println(READ_TIMEOUT_KEY + ": " + READ_TIMEOUT);
     System.out.println(SNAPLEN_KEY + ": " + SNAPLEN);
+    System.out.println(TIMESTAMP_PRECISION_NANO_KEY + ": " + TIMESTAMP_PRECISION_NANO);
     System.out.println("\n");
 
     PcapNetworkInterface nif;
@@ -56,8 +63,15 @@ public class Dump {
 
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
-    PcapHandle handle
-      = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+    PcapHandle.Builder phb
+      = new PcapHandle.Builder(nif.getName())
+          .snaplen(SNAPLEN)
+          .promiscuousMode(PromiscuousMode.PROMISCUOUS)
+          .timeoutMillis(READ_TIMEOUT);
+    if (TIMESTAMP_PRECISION_NANO) {
+      phb.timestampPrecision(TimestampPrecision.NANO);
+    }
+    PcapHandle handle = phb.build();
 
     handle.setFilter(
       filter,
@@ -72,7 +86,7 @@ public class Dump {
         continue;
       }
       else {
-        dumper.dump(packet, handle.getTimestampInts(), handle.getTimestampMicros());
+        dumper.dump(packet, handle.getTimestamp());
         num++;
         if (num >= COUNT) {
           break;

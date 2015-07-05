@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 import java.io.FileInputStream;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -113,12 +114,13 @@ public class IpV4HelperTest {
 
     PcapHandle handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
-    dumper.dump(orgPacket, 0, 0);
+    Timestamp ts = new Timestamp(0);
+    dumper.dump(orgPacket, ts);
 
     List<IpV4Packet> list = new ArrayList<IpV4Packet>();
     for (IpV4Packet p: IpV4Helper.fragment((IpV4Packet)orgPacket.getPayload(), 987)) {
       EthernetPacket ep = eb.payloadBuilder(new SimpleBuilder(p)).build();
-      dumper.dump(ep, 0, 0);
+      dumper.dump(ep, ts);
       list.add(p);
     }
 

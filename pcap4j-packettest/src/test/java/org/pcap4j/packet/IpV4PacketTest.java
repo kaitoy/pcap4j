@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -402,8 +403,9 @@ public class IpV4PacketTest extends AbstractPacketTest {
 
     PcapHandle handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
-    dumper.dump(ep1, 0, 0);
-    dumper.dump(ep2, 0, 0);
+    Timestamp ts = new Timestamp(0);
+    dumper.dump(ep1, ts);
+    dumper.dump(ep2, ts);
     dumper.close();
     handle.close();
 

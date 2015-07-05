@@ -7,6 +7,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.pcap4j.core.PcapHandle.TimestampPrecision;
+import org.pcap4j.core.test.Constants;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +73,37 @@ public class PcapsTest {
   @Test
   public void testOpenOffline() {
     // TODO fail("not yet implemented");
+  }
+
+  @Test
+  public void testOpenOfflineWithTimestampPrecision() throws Exception {
+    if (!Boolean.getBoolean(Constants.ENABLE_TIMESTAMP_PRECISION_TESTS_KEY)) {
+      return;
+    }
+
+    PcapHandle phNano
+      = Pcaps.openOffline(
+          "src/test/resources/org/pcap4j/core/"
+            + "PcapsTest.testOpenOfflineWithTimestampPrecision.pcap",
+          TimestampPrecision.NANO
+        );
+    phNano.getNextRawPacket();
+    assertEquals(1434220771517L, phNano.getTimestamp().getTime());
+    assertEquals(517995677, phNano.getTimestamp().getNanos());
+    phNano.close();
+
+    PcapHandle phMicro
+      = Pcaps.openOffline(
+          "src/test/resources/org/pcap4j/core/"
+            + "PcapsTest.testOpenOfflineWithTimestampPrecision.pcap",
+          TimestampPrecision.MICRO
+        );
+    phMicro.getNextRawPacket();
+    System.out.println(phMicro.getTimestamp().getTime());
+    System.out.println(phMicro.getTimestamp().getNanos());
+    assertEquals(1434220771517L, phMicro.getTimestamp().getTime());
+    assertEquals(517995000, phMicro.getTimestamp().getNanos());
+    phMicro.close();
   }
 
   @Test

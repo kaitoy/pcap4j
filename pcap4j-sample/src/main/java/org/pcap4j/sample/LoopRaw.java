@@ -1,7 +1,6 @@
 package org.pcap4j.sample;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
@@ -68,10 +67,7 @@ public class LoopRaw {
       = new RawPacketListener() {
           @Override
           public void gotPacket(byte[] packet) {
-            Timestamp ts = new Timestamp(handle.getTimestampInts() * 1000L);
-            ts.setNanos(handle.getTimestampMicros() * 1000);
-
-            System.out.println(ts);
+            System.out.println(handle.getTimestamp());
             System.out.println(ByteArrays.toHexString(packet, " "));
           }
         };

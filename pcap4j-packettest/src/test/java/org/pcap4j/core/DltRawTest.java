@@ -9,6 +9,7 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.Timestamp;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,8 +64,9 @@ public class DltRawTest {
                         .toString();
     PcapHandle handle = Pcaps.openDead(DataLinkType.RAW, 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
-    dumper.dump(ipV4, 0, 0);
-    dumper.dump(ipV6, 0, 0);
+    Timestamp ts = new Timestamp(0);
+    dumper.dump(ipV4, ts);
+    dumper.dump(ipV6, ts);
     dumper.close();
     handle.close();
 

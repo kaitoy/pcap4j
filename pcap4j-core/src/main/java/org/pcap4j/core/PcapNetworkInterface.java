@@ -16,6 +16,7 @@ import org.pcap4j.core.NativeMappings.pcap_if;
 import org.pcap4j.core.NativeMappings.sockaddr_dl;
 import org.pcap4j.core.NativeMappings.sockaddr_ll;
 import org.pcap4j.core.NativeMappings.timeval;
+import org.pcap4j.core.PcapHandle.TimestampPrecision;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.LinkLayerAddress;
 import org.pcap4j.util.MacAddress;
@@ -270,7 +271,7 @@ public final class PcapNetworkInterface {
       }
     }
 
-    return new PcapHandle(handle);
+    return new PcapHandle(handle, TimestampPrecision.MICRO);
   }
 
   @Override

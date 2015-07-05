@@ -23,9 +23,7 @@ public class PcapFileMerger {
 
       Packet packet;
       while ((packet = handle.getNextPacket()) != null) {
-        dumper.dump(
-          packet, handle.getTimestampInts(), handle.getTimestampMicros()
-        );
+        dumper.dump(packet, handle.getTimestamp());
       }
 
       handle.close();

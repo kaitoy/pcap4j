@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
+import java.sql.Timestamp;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -108,7 +109,7 @@ public abstract class AbstractPacketTest {
 
     PcapHandle handle = Pcaps.openDead(getDataLinkType(), 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
-    dumper.dump(p, 0, 0);
+    dumper.dump(p, new Timestamp(0));
     dumper.close();
     handle.close();
 

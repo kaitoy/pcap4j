@@ -2,7 +2,6 @@ package org.pcap4j.sample;
 
 import java.io.EOFException;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.concurrent.TimeoutException;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
@@ -65,10 +64,7 @@ public class GetRawNextPacketEx {
     while (true) {
       try {
         byte[] packet = handle.getNextRawPacketEx();
-        Timestamp ts = new Timestamp(handle.getTimestampInts() * 1000L);
-        ts.setNanos(handle.getTimestampMicros() * 1000);
-
-        System.out.println(ts);
+        System.out.println(handle.getTimestamp());
         System.out.println(ByteArrays.toHexString(packet, " "));
         num++;
         if (num >= COUNT) {

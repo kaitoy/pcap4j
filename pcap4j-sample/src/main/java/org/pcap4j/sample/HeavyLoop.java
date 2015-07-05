@@ -1,7 +1,6 @@
 package org.pcap4j.sample;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.pcap4j.core.NotOpenException;
@@ -36,11 +35,9 @@ public class HeavyLoop {
 
     PacketListener listener
       = new PacketListener() {
+          @Override
           public void gotPacket(Packet packet) {
-            Timestamp ts = new Timestamp(handle.getTimestampInts() * 1000L);
-            ts.setNanos(handle.getTimestampMicros() * 1000);
-
-            System.out.println(ts);
+            System.out.println(handle.getTimestamp());
 
             System.out.println("start a heavy task");
             try {

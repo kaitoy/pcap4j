@@ -17,6 +17,7 @@ import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.bpf_program;
 import org.pcap4j.core.NativeMappings.pcap_if;
+import org.pcap4j.core.PcapHandle.TimestampPrecision;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.Inet4NetworkAddress;
@@ -202,7 +203,7 @@ public final class Pcaps {
       throw new PcapNativeException(errbuf.toString());
     }
 
-    return new PcapHandle(handle);
+    return new PcapHandle(handle, TimestampPrecision.MICRO);
   }
 
   /**
@@ -212,7 +213,7 @@ public final class Pcaps {
    * @return a new PcapHandle object.
    * @throws PcapNativeException
    */
-  public static PcapHandle openOffline (
+  public static PcapHandle openOffline(
     String filePath, TimestampPrecision precision
   ) throws PcapNativeException {
     if (filePath == null || precision == null) {
@@ -227,7 +228,7 @@ public final class Pcaps {
     Pointer handle;
     try {
       handle = PcapLibrary.INSTANCE.pcap_open_offline_with_tstamp_precision(
-                 filePath, precision.value, errbuf
+                 filePath, precision.getValue(), errbuf
                );
     } catch (UnsatisfiedLinkError e) {
       throw new PcapNativeException(
@@ -240,7 +241,7 @@ public final class Pcaps {
       throw new PcapNativeException(errbuf.toString());
     }
 
-    return new PcapHandle(handle);
+    return new PcapHandle(handle, precision);
   }
 
   /**
@@ -268,7 +269,7 @@ public final class Pcaps {
       throw new PcapNativeException(sb.toString());
     }
 
-    return new PcapHandle(handle);
+    return new PcapHandle(handle, TimestampPrecision.MICRO);
   }
 
   /**
@@ -457,38 +458,6 @@ public final class Pcaps {
     buf.deleteCharAt(buf.length() - 1);
 
     return buf.toString();
-  }
-
-  /**
-   * @author Kaito Yamada
-   * @version pcap4j 1.5.1
-   */
-  public static enum TimestampPrecision {
-
-    /**
-     * use timestamps with microsecond precision, default
-     */
-    MICRO(0),
-
-    /**
-     * use timestamps with nanosecond precision
-     */
-    NANO(1);
-
-    private final int value;
-
-    private TimestampPrecision(int value) {
-      this.value = value;
-    }
-
-    /**
-     *
-     * @return value
-     */
-    public int getValue() {
-      return value;
-    }
-
   }
 
 }
