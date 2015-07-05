@@ -31,6 +31,10 @@ Mapping between pcap API and Pcap4j API
     <td>static PcapHandle org.pcap4j.core.Pcaps.openDead(DataLinkType, int)</td>
   </tr>
   <tr>
+    <td>pcap_t *pcap_open_dead_with_tstamp_precision(int, int, u_int)</td>
+    <td>static PcapHandle org.pcap4j.core.Pcaps.openDead(DataLinkType, int, TimestampPrecision)</td>
+  </tr>
+  <tr>
     <td>pcap_t *pcap_open_offline(const char *, char *)</td>
     <td>static PcapHandle org.pcap4j.core.Pcaps.openOffline(String)</td>
   </tr>
@@ -61,7 +65,7 @@ Mapping between pcap API and Pcap4j API
     <td>void org.pcap4j.core.PcapDumper.dumpRaw(byte[])</td>
   </tr>
   <tr>
-  <td>void org.pcap4j.core.PcapDumper.dumpRaw(byte[], TimestampPrecision)</td>
+    <td>void org.pcap4j.core.PcapDumper.dumpRaw(byte[], TimestampPrecision)</td>
   </tr>
   <tr>
     <td>int pcap_dump_flush(pcap_dumper_t *)</td>
