@@ -1,16 +1,32 @@
 sudo: required
+
 language: java
-jdk:
-  - oraclejdk8
-  - oraclejdk7
-#  - openjdk7
-  - openjdk6
+
 branches:
   only:
     - master
-notifications:
-  email:
-    - kaitoy@pcap4j.org
+
+matrix:
+  include:
+    - jdk: oraclejdk8
+    - jdk: oraclejdk7
+    - jdk: openjdk6
+      env: COVERALLS=yes
+  fast_finish: true
+
 before_script:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libpcap-dev
+
+after_success:
+  - |
+    if [ "${COVERALLS}" = "yes"  ]; then
+      mvn -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true clean test cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:report
+    fi
+
+notifications:
+  email:
+    recipients:
+      - kaitoy@pcap4j.org
+    on_success: change
+    on_failure: always
