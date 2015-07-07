@@ -2,8 +2,10 @@ package org.pcap4j.core;
 
 import static org.junit.Assert.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.StringReader;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -49,6 +51,13 @@ public class DltRawTest {
     originalLineSeparator = System.setProperty("line.separator", "\r\n");
     resourceDirPath = System.getProperty(AbstractPacketTest.RESOURCE_DIR_PROP, "src/test/resources");
     tmpDirPath = System.getProperty(AbstractPacketTest.TMP_DIR_PROP, "testdata");
+
+    File tmpDir = new File(tmpDirPath);
+    if (!tmpDir.exists()) {
+      if (!tmpDir.mkdirs()) {
+        throw new IOException("Failed to make a test diectory: " + tmpDirPath);
+      }
+    }
   }
 
   @After
