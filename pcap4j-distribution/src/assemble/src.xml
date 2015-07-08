@@ -41,9 +41,13 @@
       <directory>${project.parent.basedir}</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
-        <include>**/src/**</include>
-        <include>**/pom.xml</include>
+        <include>pcap4j-*/src/**</include>
+        <include>pom.xml</include>
+        <include>pcap4j-*/pom.xml</include>
       </includes>
+      <excludes>
+        <exclude>pcap4j-test-coverage/src/**</exclude>
+      </excludes>
     </fileSet>
   </fileSets>
 </assembly>
