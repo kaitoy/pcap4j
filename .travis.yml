@@ -19,7 +19,7 @@ before_script:
   - sudo apt-get install -qq libpcap-dev
 
 after_success:
-    - [ "${COVERALLS}" = "yes"  ] && mvn -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage clean package coveralls:report
+    - if [ "${COVERALLS}" = "yes"  ]; then mvn -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage clean package coveralls:report; fi
 
 notifications:
   email:
