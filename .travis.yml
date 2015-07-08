@@ -21,7 +21,7 @@ before_script:
 after_success:
   - |
     if [ "${COVERALLS}" = "yes"  ]; then
-      mvn -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true clean test cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:report
+      mvn -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage clean package coveralls:report
     fi
 
 notifications:

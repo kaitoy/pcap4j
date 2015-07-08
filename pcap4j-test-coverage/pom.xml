@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2015  Pcap4J.org -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>pcap4j-test-coverage</artifactId>
+  <packaging>jar</packaging>
+  <name>Pcap4J Test Coverage</name>
+  <description>The dummy module to measure test coverage of Pcap4J.</description>
+
+  <parent>
+    <groupId>org.pcap4j</groupId>
+    <artifactId>pcap4j</artifactId>
+    <version>1.5.1-SNAPSHOT</version>
+  </parent>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.pcap4j</groupId>
+      <artifactId>pcap4j-core</artifactId>
+      <type>jar</type>
+      <classifier>sources</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.pcap4j</groupId>
+      <artifactId>pcap4j-packetfactory-static</artifactId>
+      <type>jar</type>
+      <classifier>sources</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.pcap4j</groupId>
+      <artifactId>pcap4j-packettest</artifactId>
+      <type>jar</type>
+      <classifier>test-sources</classifier>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+
+    <testResources>
+      <testResource>
+        <directory>src/test/java</directory>
+        <includes>
+          <include>**/*.log</include>
+          <include>**/*.obj</include>
+          <include>**/*.pcap</include>
+        </includes>
+        <filtering>false</filtering>
+      </testResource>
+    </testResources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>src</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-test</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>pcap4j-core,pcap4j-packetfactory-static</includeArtifactIds>
+              <includeClassifiers>sources</includeClassifiers>
+              <outputDirectory>${basedir}/src/main/java</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>unpack-dependencies</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>pcap4j-packettest</includeArtifactIds>
+              <includeClassifiers>test-sources</includeClassifiers>
+              <outputDirectory>${basedir}/src/test/java</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <org.pcap4j.packet.AbstractPacketTest.resourceDir>
+              target/test-classes
+            </org.pcap4j.packet.AbstractPacketTest.resourceDir>
+            <org.pcap4j.packet.AbstractPacketTest.tmpDir>
+              target/test
+            </org.pcap4j.packet.AbstractPacketTest.tmpDir>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

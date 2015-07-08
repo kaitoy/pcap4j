@@ -2,3 +2,4 @@ target/
 .project
 .classpath
 .settings/
+pcap4j-test-coverage/src/

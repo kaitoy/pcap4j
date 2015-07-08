@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (C) 2011-2013  Kaito Yamada -->
+<!-- Copyright (C) 2011-2015  Pcap4J.org -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -53,14 +53,35 @@
       </dependency>
       <dependency>
         <groupId>org.pcap4j</groupId>
+        <artifactId>pcap4j-core</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+        <classifier>sources</classifier>
+      </dependency>
+      <dependency>
+        <groupId>org.pcap4j</groupId>
         <artifactId>pcap4j-packettest</artifactId>
         <version>${project.version}</version>
         <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>org.pcap4j</groupId>
+        <artifactId>pcap4j-packettest</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+        <classifier>test-sources</classifier>
+      </dependency>
+      <dependency>
+        <groupId>org.pcap4j</groupId>
         <artifactId>pcap4j-packetfactory-static</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.pcap4j</groupId>
+        <artifactId>pcap4j-packetfactory-static</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+        <classifier>sources</classifier>
       </dependency>
       <dependency>
         <groupId>org.pcap4j</groupId>
@@ -165,6 +186,11 @@
           <version>2.8</version>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>2.6.1</version>
+        </plugin>
+        <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
           <version>1.0.0</version>
@@ -188,6 +214,16 @@
             </lifecycleMappingMetadata>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.eluder.coveralls</groupId>
+          <artifactId>coveralls-maven-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>cobertura-maven-plugin</artifactId>
+          <version>2.6</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -207,31 +243,58 @@
       </plugin>
     </plugins>
   </build>
-  
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.eluder.coveralls</groupId>
-        <artifactId>coveralls-maven-plugin</artifactId>
-        <version>3.1.0</version>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>cobertura-maven-plugin</artifactId>
-        <version>2.6</version>
-        <configuration>
-          <format>xml</format>
-          <maxmem>256m</maxmem>
-          <aggregate>true</aggregate>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>test-coverage</id>
+      <modules>
+        <module>pcap4j-test-coverage</module>
+      </modules>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>cobertura-maven-plugin</artifactId>
+            <configuration>
+              <format>xml</format>
+              <maxmem>256m</maxmem>
+              <aggregate>true</aggregate>
+              <instrumentation>
+                <excludes>
+                  <exclude>org/pcap4j/sample/**/*.class</exclude>
+                </excludes>
+              </instrumentation>
+            </configuration>
+            <executions>
+              <execution>
+                <id>cobertura</id>
+                <goals>
+                  <goal>cobertura</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.eluder.coveralls</groupId>
+            <artifactId>coveralls-maven-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <modules>
     <module>pcap4j-core</module>
