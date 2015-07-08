@@ -251,6 +251,12 @@
 
   <profiles>
     <profile>
+      <id>distribution-assembly</id>
+      <modules>
+        <module>pcap4j-distribution</module>
+      </modules>
+    </profile>
+    <profile>
       <id>test-coverage</id>
       <modules>
         <module>pcap4j-test-coverage</module>
@@ -302,6 +308,5 @@
     <module>pcap4j-packetfactory-static</module>
     <module>pcap4j-packetfactory-propertiesbased</module>
     <module>pcap4j-sample</module>
-    <module>pcap4j-distribution</module>
   </modules>
 </project>

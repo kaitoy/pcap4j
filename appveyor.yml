@@ -1,7 +1,7 @@
 #---------------------------------#
 #      general configuration      #
 #---------------------------------#
- 
+
 # version format
 version: 1.5.0.{build}-{branch}
 
@@ -60,7 +60,7 @@ install:
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
- 
+
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
 platform: Any CPU
 
@@ -71,7 +71,7 @@ before_build:
 
 build_script:
   # Run mvn command with jna.nosys=true not to use an older jna pre-installed in AppVeyor VMs.
-  - cmd: call "%MAVEN_BIN_PATH%\mvn" -Djna.nosys=true deploy
+  - cmd: call "%MAVEN_BIN_PATH%\mvn" -Djna.nosys=true -P distribution-assembly deploy
 
 #---------------------------------#
 #       tests configuration       #
@@ -90,9 +90,7 @@ deploy: off
 #---------------------------------#
 
 notifications:
-
   - provider: Email
     to: kaitoy@pcap4j.org
     on_build_success: false
     on_build_failure: true
-

@@ -16,7 +16,7 @@ RUN yum install -y libpcap \
 # Build Pcap4J.
 ENV JAVA_HOME /usr/lib/jvm/java-1.6.0-openjdk.x86_64/
 RUN cd /usr/local/src/ && git clone git://github.com/kaitoy/pcap4j.git
-RUN cd /usr/local/src/pcap4j && mvn install 2>&1 | tee build.log
+RUN cd /usr/local/src/pcap4j && mvn -P distribution-assembly install 2>&1 | tee build.log
 
 # Generate sample script.
 WORKDIR /usr/local/src/pcap4j
