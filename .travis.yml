@@ -20,11 +20,10 @@ before_script:
   - ./configure
   - make && sudo make install
   - export LD_LIBRARY_PATH=/usr/local/lib
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libcap2-bin
-  - export MVN_PATH=`which mvn`
-  - sudo setcap cap_net_raw,cap_net_admin=eip `readlink -f $MVN_PATH`
   - cd ..
+
+script:
+  sudo /usr/local/maven/bin/mvn test -B
 
 after_success:
     - if [ "${COVERALLS}" = "yes"  ]; then mvn -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage clean package coveralls:report; fi
