@@ -22,7 +22,7 @@ before_script:
   - export LD_LIBRARY_PATH=/usr/local/lib
   - sudo apt-get update -qq
   - sudo apt-get install -qq libcap2-bin
-  - sudo setcap cap_net_raw,cap_net_admin=eip $JAVA_HOME/bin/java
+  - sudo setcap cap_net_raw,cap_net_admin=eip `readlink -f $JAVA_HOME/bin/java`
   - cd ..
 
 after_success:
