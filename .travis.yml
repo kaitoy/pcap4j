@@ -15,8 +15,11 @@ matrix:
   fast_finish: true
 
 before_script:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libpcap-dev
+  - git clone -b libpcap-1.7.4 git://github.com/the-tcpdump-group/libpcap.git libpcap
+  - cd libpcap
+  - ./configure
+  - make && sudo make install
+  - cd ..
 
 after_success:
     - if [ "${COVERALLS}" = "yes"  ]; then mvn -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage clean package coveralls:report; fi
