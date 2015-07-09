@@ -22,7 +22,8 @@ before_script:
   - export LD_LIBRARY_PATH=/usr/local/lib
   - sudo apt-get update -qq
   - sudo apt-get install -qq libcap2-bin
-  - sudo setcap cap_net_raw,cap_net_admin=eip `readlink -f $MAVEN_HOME/bin/mvn`
+  - export MVN_PATH=`which mvn`
+  - sudo setcap cap_net_raw,cap_net_admin=eip `readlink -f $MVN_PATH`
   - cd ..
 
 after_success:
