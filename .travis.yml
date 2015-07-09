@@ -19,7 +19,8 @@ before_script:
   - cd libpcap
   - ./configure
   - make && sudo make install
-  - echo /usr/local/lib > /etc/ld.so.conf.d/libpcap.conf
+  - sudo echo /usr/local/lib > /etc/ld.so.conf.d/libpcap.conf
+  - sudo /sbin/ldconfig -v
   - cd ..
 
 after_success:
