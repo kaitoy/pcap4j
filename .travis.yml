@@ -18,7 +18,7 @@ cache:
   directories:
     - $HOME/.m2
 
-before_script:
+install:
   - git clone -b libpcap-1.7.4 git://github.com/the-tcpdump-group/libpcap.git libpcap
   - cd libpcap
   - ./configure
@@ -26,10 +26,13 @@ before_script:
   - cd ..
 
 script:
-  sudo /usr/local/maven/bin/mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so test -B
-
-after_success:
-    - if [ "${COVERALLS}" = "yes"  ]; then mvn -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage clean package coveralls:report; fi
+  - |
+    if [ "${COVERALLS}" = "yes"  ]
+    then
+      sudo /usr/local/maven/bin/mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage package coveralls:report
+    else
+      sudo /usr/local/maven/bin/mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B test
+    fi
 
 notifications:
   email:
