@@ -21,6 +21,9 @@ before_script:
   - make && sudo make install
   - cd ..
 
+script:
+  - mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so test -B
+
 after_success:
     - if [ "${COVERALLS}" = "yes"  ]; then mvn -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage clean package coveralls:report; fi
 
