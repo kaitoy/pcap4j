@@ -65,11 +65,11 @@ implements IpV6NeighborDiscoveryOption {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV6NeighborDiscoveryMtuOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6NeighborDiscoveryMtuOption newInstance(
     byte[] rawData, int offset, int length
@@ -259,7 +259,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
@@ -269,7 +269,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param reserved
+     * @param reserved reserved
      * @return this Builder object for method chaining.
      */
     public Builder reserved(short reserved) {
@@ -279,7 +279,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param mtu
+     * @param mtu mtu
      * @return this Builder object for method chaining.
      */
     public Builder mtu(int mtu) {

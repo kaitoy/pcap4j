@@ -36,8 +36,8 @@ extends NamedNumber<Integer, IpV4SecurityOptionTransmissionControlCode> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IpV4SecurityOptionTransmissionControlCode(Integer value, String name) {
     super(value, name);
@@ -51,7 +51,7 @@ extends NamedNumber<Integer, IpV4SecurityOptionTransmissionControlCode> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IpV4SecurityOptionTransmissionControlCode object.
    */
   public static IpV4SecurityOptionTransmissionControlCode getInstance(
@@ -67,7 +67,7 @@ extends NamedNumber<Integer, IpV4SecurityOptionTransmissionControlCode> {
 
   /**
    *
-   * @param number
+   * @param number number
    * @return a IpV4SecurityOptionTransmissionControlCode object.
    */
   public static IpV4SecurityOptionTransmissionControlCode register(

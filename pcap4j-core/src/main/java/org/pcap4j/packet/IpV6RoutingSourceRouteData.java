@@ -34,11 +34,11 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV6RoutingSourceRouteData object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6RoutingSourceRouteData newInstance(
     byte[] rawData, int offset, int length
@@ -86,8 +86,8 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
 
   /**
    *
-   * @param reserved
-   * @param addresses
+   * @param reserved reserved
+   * @param addresses addresses
    */
   public IpV6RoutingSourceRouteData(int reserved, List<Inet6Address> addresses) {
     if (addresses == null) {

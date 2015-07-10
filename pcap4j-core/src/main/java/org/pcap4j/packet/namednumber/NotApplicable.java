@@ -53,8 +53,8 @@ public final class NotApplicable extends NamedNumber<Byte, NotApplicable> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   private NotApplicable(Byte value, String name) {
     super(value, name);

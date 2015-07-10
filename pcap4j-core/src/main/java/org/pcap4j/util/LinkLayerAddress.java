@@ -23,17 +23,21 @@ public class LinkLayerAddress implements Serializable {
    */
   private static final long serialVersionUID = -2832879271594305200L;
 
-  @SuppressWarnings("javadoc")
+  /**
+   *
+   */
   protected static final Pattern HEX_SEPARATOR_PATTERN = Pattern.compile("([^0-9a-fA-F])");
 
   private final byte[] address;
 
-  @SuppressWarnings("javadoc")
+  /**
+   * @param address address
+   */
   protected LinkLayerAddress(byte[] address) { this.address = address; }
 
   /**
    *
-   * @param address
+   * @param address address
    * @return a new LinkLayerAddress object.
    */
   public static LinkLayerAddress getByAddress(byte[] address) {
@@ -42,7 +46,7 @@ public class LinkLayerAddress implements Serializable {
 
   /**
    *
-   * @param name
+   * @param name name
    * @return a new LinkLayerAddress object.
    */
   public static LinkLayerAddress getByName(String name) {
@@ -53,8 +57,8 @@ public class LinkLayerAddress implements Serializable {
 
   /**
    *
-   * @param name
-   * @param separator
+   * @param name name
+   * @param separator separator
    * @return a new LinkLayerAddress object.
    */
   public static LinkLayerAddress getByName(String name, String separator) {

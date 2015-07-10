@@ -30,11 +30,11 @@ public final class Ssh2UnimplementedPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new Ssh2UnimplementedPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Ssh2UnimplementedPacket newPacket(
     byte[] rawData, int offset, int length
@@ -89,7 +89,7 @@ public final class Ssh2UnimplementedPacket extends AbstractPacket {
 
     /**
      *
-     * @param sequenceNumber
+     * @param sequenceNumber sequenceNumber
      * @return this Builder object for method chaining.
      */
     public Builder sequenceNumber(int sequenceNumber) {

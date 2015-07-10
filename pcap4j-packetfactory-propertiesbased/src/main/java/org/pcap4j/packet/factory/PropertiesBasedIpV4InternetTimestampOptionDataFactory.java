@@ -49,14 +49,15 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
 
   /**
    *
-   * @param rawData
-   * @param offset
-   * @param length
-   * @param dataClass
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
+   * @param dataClass dataClass
    * @return a new IpV4InternetTimestampOptionData object.
-   * @throws IllegalStateException
-   * @throws IllegalArgumentException
-   * @throws NullPointerException
+   * @throws IllegalStateException if an access to the newInstance method of the dataClass fails.
+   * @throws IllegalArgumentException if an exception other than {@link IllegalRawDataException}
+   *                                  is thrown by newInstance method of the dataClass.
+   * @throws NullPointerException if any of arguments are null.
    */
   public IpV4InternetTimestampOptionData newInstance(
     byte[] rawData, int offset, int length,

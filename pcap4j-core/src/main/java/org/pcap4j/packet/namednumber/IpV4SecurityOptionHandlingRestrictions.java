@@ -34,8 +34,8 @@ extends NamedNumber<Short, IpV4SecurityOptionHandlingRestrictions> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IpV4SecurityOptionHandlingRestrictions(Short value, String name) {
     super(value, name);
@@ -43,7 +43,7 @@ extends NamedNumber<Short, IpV4SecurityOptionHandlingRestrictions> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IpV4SecurityOptionHandlingRestrictions object.
    */
   public static IpV4SecurityOptionHandlingRestrictions getInstance(
@@ -59,7 +59,7 @@ extends NamedNumber<Short, IpV4SecurityOptionHandlingRestrictions> {
 
   /**
    *
-   * @param number
+   * @param number number
    * @return a IpV4SecurityOptionHandlingRestrictions object.
    */
   public static IpV4SecurityOptionHandlingRestrictions register(

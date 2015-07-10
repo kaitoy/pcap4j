@@ -41,11 +41,11 @@ public final class TcpTimestampsOption implements TcpOption {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new TcpTimestampsOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static TcpTimestampsOption newInstance(
     byte[] rawData, int offset, int length
@@ -236,7 +236,7 @@ public final class TcpTimestampsOption implements TcpOption {
 
     /**
      *
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
@@ -246,7 +246,7 @@ public final class TcpTimestampsOption implements TcpOption {
 
     /**
      *
-     * @param tsValue
+     * @param tsValue tsValue
      * @return this Builder object for method chaining.
      */
     public Builder tsValue(int tsValue) {
@@ -256,7 +256,7 @@ public final class TcpTimestampsOption implements TcpOption {
 
     /**
      *
-     * @param tsEchoReply
+     * @param tsEchoReply tsEchoReply
      * @return this Builder object for method chaining.
      */
     public Builder tsEchoReply(int tsEchoReply) {

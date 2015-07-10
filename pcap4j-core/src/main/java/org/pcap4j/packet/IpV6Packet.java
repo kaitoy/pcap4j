@@ -42,11 +42,11 @@ public final class IpV6Packet extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV6Packet object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6Packet newPacket(
     byte[] rawData, int offset, int length
@@ -177,7 +177,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @param packet
+     * @param packet packet
      */
     public Builder(IpV6Packet packet) {
       this.version = packet.header.version;
@@ -193,7 +193,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @param version
+     * @param version version
      * @return this Builder object for method chaining.
      */
     public Builder version(IpVersion version) {
@@ -203,7 +203,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @param trafficClass
+     * @param trafficClass trafficClass
      * @return this Builder object for method chaining.
      */
     public Builder trafficClass(IpV6TrafficClass trafficClass) {
@@ -213,7 +213,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @param flowLabel
+     * @param flowLabel flowLabel
      * @return this Builder object for method chaining.
      */
     public Builder flowLabel(IpV6FlowLabel flowLabel) {
@@ -223,7 +223,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @param payloadLength
+     * @param payloadLength payloadLength
      * @return this Builder object for method chaining.
      */
     public Builder payloadLength(short payloadLength) {
@@ -233,7 +233,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @param nextHeader
+     * @param nextHeader nextHeader
      * @return this Builder object for method chaining.
      */
     public Builder nextHeader(IpNumber nextHeader) {
@@ -243,7 +243,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @param hopLimit
+     * @param hopLimit hopLimit
      * @return this Builder object for method chaining.
      */
     public Builder hopLimit(byte hopLimit) {
@@ -253,7 +253,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @param srcAddr
+     * @param srcAddr srcAddr
      * @return this Builder object for method chaining.
      */
     public Builder srcAddr(Inet6Address srcAddr) {
@@ -263,7 +263,7 @@ public final class IpV6Packet extends AbstractPacket {
 
     /**
      *
-     * @param dstAddr
+     * @param dstAddr dstAddr
      * @return this Builder object for method chaining.
      */
     public Builder dstAddr(Inet6Address dstAddr) {

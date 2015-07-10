@@ -1005,8 +1005,8 @@ public final class IpNumber extends NamedNumber<Byte, IpNumber> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IpNumber(Byte value, String name) {
     super(value, name);
@@ -1014,7 +1014,7 @@ public final class IpNumber extends NamedNumber<Byte, IpNumber> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IpNumber object.
    */
   public static IpNumber getInstance(Byte value) {
@@ -1028,7 +1028,7 @@ public final class IpNumber extends NamedNumber<Byte, IpNumber> {
 
   /**
    *
-   * @param number
+   * @param number number
    * @return a IpNumber object.
    */
   public static IpNumber register(IpNumber number) {

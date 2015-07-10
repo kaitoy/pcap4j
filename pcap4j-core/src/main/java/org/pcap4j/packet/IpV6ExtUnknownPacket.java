@@ -36,11 +36,11 @@ public final class IpV6ExtUnknownPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV6ExtUnknownPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6ExtUnknownPacket newPacket(
     byte[] rawData, int offset, int length
@@ -143,7 +143,7 @@ public final class IpV6ExtUnknownPacket extends AbstractPacket {
 
     /**
      *
-     * @param packet
+     * @param packet packet
      */
     public Builder(IpV6ExtUnknownPacket packet) {
       this.nextHeader = packet.header.nextHeader;
@@ -154,7 +154,7 @@ public final class IpV6ExtUnknownPacket extends AbstractPacket {
 
     /**
      *
-     * @param nextHeader
+     * @param nextHeader nextHeader
      * @return this Builder object for method chaining.
      */
     public Builder nextHeader(IpNumber nextHeader) {
@@ -164,7 +164,7 @@ public final class IpV6ExtUnknownPacket extends AbstractPacket {
 
     /**
      *
-     * @param hdrExtLen
+     * @param hdrExtLen hdrExtLen
      * @return this Builder object for method chaining.
      */
     public Builder hdrExtLen(byte hdrExtLen) {
@@ -174,7 +174,7 @@ public final class IpV6ExtUnknownPacket extends AbstractPacket {
 
     /**
      *
-     * @param data
+     * @param data data
      * @return this Builder object for method chaining.
      */
     public Builder data(byte[] data) {

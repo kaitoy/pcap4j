@@ -40,11 +40,11 @@ public final class TcpWindowScaleOption implements TcpOption {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new TcpWindowScaleOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static TcpWindowScaleOption newInstance(
     byte[] rawData, int offset, int length
@@ -209,7 +209,7 @@ public final class TcpWindowScaleOption implements TcpOption {
 
     /**
      *
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
@@ -219,7 +219,7 @@ public final class TcpWindowScaleOption implements TcpOption {
 
     /**
      *
-     * @param shiftCount
+     * @param shiftCount shiftCount
      * @return this Builder object for method chaining.
      */
     public Builder shiftCount(byte shiftCount) {

@@ -406,8 +406,8 @@ public final class IcmpV4Code extends NamedNumber<Byte, IcmpV4Code> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IcmpV4Code(Byte value, String name) {
     super(value, name);
@@ -416,7 +416,7 @@ public final class IcmpV4Code extends NamedNumber<Byte, IcmpV4Code> {
   /**
    *
    * @param type ICMPv4 type
-   * @param value
+   * @param value value
    * @return a IcmpV4Code object.
    */
   public static IcmpV4Code getInstance(Byte type, Byte value) {
@@ -430,8 +430,8 @@ public final class IcmpV4Code extends NamedNumber<Byte, IcmpV4Code> {
 
   /**
    *
-   * @param type
-   * @param code
+   * @param type type
+   * @param code code
    * @return a IcmpV4Code object.
    */
   public static IcmpV4Code register(IcmpV4Type type, IcmpV4Code code) {

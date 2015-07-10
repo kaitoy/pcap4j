@@ -40,11 +40,11 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return the singleton instance of Ssh2NewKeysPacket.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Ssh2NewKeysPacket newPacket(
     byte[] rawData, int offset, int length

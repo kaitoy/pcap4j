@@ -43,7 +43,7 @@ public final class Ssh2NameList implements Serializable {
 
   /**
    *
-   * @param list
+   * @param list list
    */
   public Ssh2NameList(List<String> list) {
     if (list == null) {
@@ -56,7 +56,7 @@ public final class Ssh2NameList implements Serializable {
 
   /**
    *
-   * @param names
+   * @param names names
    */
   public Ssh2NameList(String... names) {
     this.list = new ArrayList<String>();
@@ -71,10 +71,10 @@ public final class Ssh2NameList implements Serializable {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
-   * @throws IllegalRawDataException
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public Ssh2NameList(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);

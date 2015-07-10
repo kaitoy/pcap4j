@@ -30,11 +30,11 @@ public final class Ssh2DebugPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new Ssh2DebugPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Ssh2DebugPacket newPacket(
     byte[] rawData, int offset, int length
@@ -99,7 +99,7 @@ public final class Ssh2DebugPacket extends AbstractPacket {
 
     /**
      *
-     * @param alwaysDisplay
+     * @param alwaysDisplay alwaysDisplay
      * @return this Builder object for method chaining.
      */
     public Builder alwaysDisplay(Ssh2Boolean alwaysDisplay) {
@@ -109,7 +109,7 @@ public final class Ssh2DebugPacket extends AbstractPacket {
 
     /**
      *
-     * @param message
+     * @param message message
      * @return this Builder object for method chaining.
      */
     public Builder message(Ssh2String message) {
@@ -119,7 +119,7 @@ public final class Ssh2DebugPacket extends AbstractPacket {
 
     /**
      *
-     * @param languageTag
+     * @param languageTag languageTag
      * @return this Builder object for method chaining.
      */
     public Builder languageTag(Ssh2String languageTag) {

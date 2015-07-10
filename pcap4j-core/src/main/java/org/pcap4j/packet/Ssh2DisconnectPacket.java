@@ -32,11 +32,11 @@ public final class Ssh2DisconnectPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new Ssh2DisconnectPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Ssh2DisconnectPacket newPacket(
     byte[] rawData, int offset, int length
@@ -103,7 +103,7 @@ public final class Ssh2DisconnectPacket extends AbstractPacket {
 
     /**
      *
-     * @param reasonCode
+     * @param reasonCode reasonCode
      * @return this Builder object for method chaining.
      */
     public Builder reasonCode(Ssh2DisconnectionReasonCode reasonCode) {
@@ -113,7 +113,7 @@ public final class Ssh2DisconnectPacket extends AbstractPacket {
 
     /**
      *
-     * @param description
+     * @param description description
      * @return this Builder object for method chaining.
      */
     public Builder description(Ssh2String description) {
@@ -123,7 +123,7 @@ public final class Ssh2DisconnectPacket extends AbstractPacket {
 
     /**
      *
-     * @param languageTag
+     * @param languageTag languageTag
      * @return this Builder object for method chaining.
      */
     public Builder languageTag(Ssh2String languageTag) {

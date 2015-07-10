@@ -48,14 +48,14 @@ implements PacketFactory<IpV6FlowLabel, NotApplicable> {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
-   * @param clazz
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
+   * @param clazz clazz
    * @return a new IpV6FlowLabel object.
-   * @throws IllegalStateException
-   * @throws IllegalArgumentException
-   * @throws NullPointerException
+   * @throws IllegalStateException if an access to the newInstance method of the clazz fails.
+   * @throws IllegalArgumentException if an exception is thrown by newInstance method of the clazz.
+   * @throws NullPointerException if any of arguments are null.
    */
   public IpV6FlowLabel newInstance(
     byte[] rawData, int offset, int length, Class<? extends IpV6FlowLabel> clazz

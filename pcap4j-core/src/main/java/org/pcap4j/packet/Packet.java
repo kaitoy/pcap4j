@@ -59,6 +59,7 @@ public interface Packet extends Iterable<Packet>, Serializable {
    * If there are more than one objects of the specified class in this object,
    * this method returns the most outer one of them.
    *
+   * @param <T> packet
    * @param clazz the packet class of the object to get
    * @return a packet object if found; otherwise null
    */
@@ -78,6 +79,7 @@ public interface Packet extends Iterable<Packet>, Serializable {
    * Returns true if this packet is or its payload includes an object of
    * specified packet class; false otherwise.
    *
+   * @param <T> packet
    * @param clazz the packet class of the object to search for
    * @return true if this packet is or its payload includes an object of
    *         specified packet class; false otherwise
@@ -105,6 +107,7 @@ public interface Packet extends Iterable<Packet>, Serializable {
      * If there are more than one objects of the specified class in this object,
      * this method returns the most outer one of them.
      *
+     * @param <T> builder
      * @param clazz the builder class of the object to get
      * @return a builder object if found; otherwise null
      */

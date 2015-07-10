@@ -34,11 +34,11 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV6ExtFragmentPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6ExtFragmentPacket newPacket(
     byte[] rawData, int offset, int length
@@ -114,7 +114,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @param packet
+     * @param packet packet
      */
     public Builder(IpV6ExtFragmentPacket packet) {
       this.nextHeader = packet.header.nextHeader;
@@ -128,7 +128,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @param nextHeader
+     * @param nextHeader nextHeader
      * @return this Builder object for method chaining.
      */
     public Builder nextHeader(IpNumber nextHeader) {
@@ -138,7 +138,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @param reserved
+     * @param reserved reserved
      * @return this Builder object for method chaining.
      */
     public Builder reserved(byte reserved) {
@@ -148,7 +148,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @param fragmentOffset
+     * @param fragmentOffset fragmentOffset
      * @return this Builder object for method chaining.
      */
     public Builder fragmentOffset(short fragmentOffset) {
@@ -158,7 +158,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @param res
+     * @param res res
      * @return this Builder object for method chaining.
      */
     public Builder res(byte res) {
@@ -168,7 +168,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @param m
+     * @param m m
      * @return this Builder object for method chaining.
      */
     public Builder m(boolean m) {
@@ -178,7 +178,7 @@ public final class IpV6ExtFragmentPacket extends AbstractPacket {
 
     /**
      *
-     * @param identification
+     * @param identification identification
      * @return this Builder object for method chaining.
      */
     public Builder identification(int identification) {

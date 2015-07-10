@@ -288,8 +288,8 @@ public final class HttpStatusCode extends NamedNumber<Short, HttpStatusCode> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public HttpStatusCode(Short value, String name) {
     super(value, name);
@@ -328,7 +328,7 @@ public final class HttpStatusCode extends NamedNumber<Short, HttpStatusCode> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a HttpStatusCode object.
    */
   public static HttpStatusCode getInstance(Short value) {
@@ -342,7 +342,7 @@ public final class HttpStatusCode extends NamedNumber<Short, HttpStatusCode> {
 
   /**
    *
-   * @param number
+   * @param number number
    * @return a HttpStatusCode object.
    */
   public static HttpStatusCode register(HttpStatusCode number) {

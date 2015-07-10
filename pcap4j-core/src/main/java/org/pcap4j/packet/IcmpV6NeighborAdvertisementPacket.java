@@ -34,11 +34,11 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IcmpV6NeighborAdvertisementPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IcmpV6NeighborAdvertisementPacket newPacket(
     byte[] rawData, int offset, int length
@@ -108,7 +108,7 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param routerFlag
+     * @param routerFlag routerFlag
      * @return this Builder object for method chaining.
      */
     public Builder routerFlag(boolean routerFlag) {
@@ -118,7 +118,7 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param solicitedFlag
+     * @param solicitedFlag solicitedFlag
      * @return this Builder object for method chaining.
      */
     public Builder solicitedFlag(boolean solicitedFlag) {
@@ -128,7 +128,7 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param overrideFlag
+     * @param overrideFlag overrideFlag
      * @return this Builder object for method chaining.
      */
     public Builder overrideFlag(boolean overrideFlag) {
@@ -138,7 +138,7 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param reserved
+     * @param reserved reserved
      * @return this Builder object for method chaining.
      */
     public Builder reserved(int reserved) {
@@ -148,7 +148,7 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param targetAddress
+     * @param targetAddress targetAddress
      * @return this Builder object for method chaining.
      */
     public Builder targetAddress(Inet6Address targetAddress) {
@@ -158,7 +158,7 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param options
+     * @param options options
      * @return this Builder object for method chaining.
      */
     public Builder options(List<IpV6NeighborDiscoveryOption> options) {

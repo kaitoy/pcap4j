@@ -52,11 +52,11 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV4InternetTimestampOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV4InternetTimestampOption newInstance(
     byte[] rawData, int offset, int length
@@ -320,7 +320,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
 
     /**
      *
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
@@ -330,7 +330,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
 
     /**
      *
-     * @param pointer
+     * @param pointer pointer
      * @return this Builder object for method chaining.
      */
     public Builder pointer(byte pointer) {
@@ -340,7 +340,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
 
     /**
      *
-     * @param overflow
+     * @param overflow overflow
      * @return this Builder object for method chaining.
      */
     public Builder overflow(byte overflow) {
@@ -350,7 +350,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
 
     /**
      *
-     * @param flag
+     * @param flag flag
      * @return this Builder object for method chaining.
      */
     public Builder flag(IpV4InternetTimestampOptionFlag flag) {
@@ -360,7 +360,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
 
     /**
      *
-     * @param data
+     * @param data data
      * @return this Builder object for method chaining.
      */
     public Builder data(IpV4InternetTimestampOptionData data) {

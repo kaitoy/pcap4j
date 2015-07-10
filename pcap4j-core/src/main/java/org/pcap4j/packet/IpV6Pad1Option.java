@@ -48,11 +48,11 @@ public final class IpV6Pad1Option implements IpV6Option {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return the singleton instance of IpV6Pad1Option.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6Pad1Option newInstance(
     byte[] rawData, int offset, int length

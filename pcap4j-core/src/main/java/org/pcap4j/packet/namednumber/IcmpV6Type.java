@@ -270,8 +270,8 @@ public final class IcmpV6Type extends NamedNumber<Byte, IcmpV6Type> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IcmpV6Type(Byte value, String name) {
     super(value, name);
@@ -279,7 +279,7 @@ public final class IcmpV6Type extends NamedNumber<Byte, IcmpV6Type> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IcmpV6Type object.
    */
   public static IcmpV6Type getInstance(Byte value) {
@@ -293,7 +293,7 @@ public final class IcmpV6Type extends NamedNumber<Byte, IcmpV6Type> {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a IcmpV6Type object.
    */
   public static IcmpV6Type register(IcmpV6Type type) {

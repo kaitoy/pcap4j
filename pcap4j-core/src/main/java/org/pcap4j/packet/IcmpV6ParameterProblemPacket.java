@@ -31,11 +31,11 @@ extends IcmpV6InvokingPacketPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IcmpV6ParameterProblemPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IcmpV6ParameterProblemPacket newPacket(
     byte[] rawData, int offset, int length
@@ -103,7 +103,7 @@ extends IcmpV6InvokingPacketPacket {
 
     /**
      *
-     * @param pointer
+     * @param pointer pointer
      * @return this Builder object for method chaining.
      */
     public Builder pointer(int pointer) {

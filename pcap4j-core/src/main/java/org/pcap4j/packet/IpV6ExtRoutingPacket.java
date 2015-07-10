@@ -37,11 +37,11 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV6ExtRoutingPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6ExtRoutingPacket newPacket(
     byte[] rawData, int offset, int length
@@ -144,7 +144,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     /**
      *
-     * @param packet
+     * @param packet packet
      */
     public Builder(IpV6ExtRoutingPacket packet) {
       this.nextHeader = packet.header.nextHeader;
@@ -157,7 +157,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     /**
      *
-     * @param nextHeader
+     * @param nextHeader nextHeader
      * @return this Builder object for method chaining.
      */
     public Builder nextHeader(IpNumber nextHeader) {
@@ -167,7 +167,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     /**
      *
-     * @param hdrExtLen
+     * @param hdrExtLen hdrExtLen
      * @return this Builder object for method chaining.
      */
     public Builder hdrExtLen(byte hdrExtLen) {
@@ -177,7 +177,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     /**
      *
-     * @param routingType
+     * @param routingType routingType
      * @return this Builder object for method chaining.
      */
     public Builder routingType(IpV6RoutingType routingType) {
@@ -187,7 +187,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     /**
      *
-     * @param segmentsLeft
+     * @param segmentsLeft segmentsLeft
      * @return this Builder object for method chaining.
      */
     public Builder segmentsLeft(byte segmentsLeft) {
@@ -197,7 +197,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
 
     /**
      *
-     * @param data
+     * @param data data
      * @return this Builder object for method chaining.
      */
     public Builder data(IpV6RoutingData data) {

@@ -38,7 +38,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a new IpV4Rfc1349Tos object.
    */
   public static IpV4Rfc1349Tos newInstance(byte value) {
@@ -149,7 +149,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
 
     /**
      *
-     * @param precedence
+     * @param precedence precedence
      * @return this Builder object for method chaining.
      */
     public Builder precedence(IpV4TosPrecedence precedence) {
@@ -159,7 +159,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
 
     /**
      *
-     * @param tos
+     * @param tos tos
      * @return this Builder object for method chaining.
      */
     public Builder tos(IpV4TosTos tos) {
@@ -169,7 +169,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
 
     /**
      *
-     * @param mbz
+     * @param mbz mbz
      * @return this Builder object for method chaining.
      */
     public Builder mbz(boolean mbz) {

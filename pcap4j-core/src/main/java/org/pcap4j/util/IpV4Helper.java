@@ -31,8 +31,8 @@ public final class IpV4Helper {
 
   /**
    *
-   * @param packet
-   * @param mtu
+   * @param packet packet
+   * @param mtu mtu
    * @return a list containing fragmented packets.
    */
   public static List<IpV4Packet> fragment(IpV4Packet packet, int mtu) {
@@ -96,7 +96,7 @@ public final class IpV4Helper {
 
   /**
    *
-   * @param list
+   * @param list list
    * @return a defragmented packet.
    */
   public static IpV4Packet defragment(List<IpV4Packet> list) {

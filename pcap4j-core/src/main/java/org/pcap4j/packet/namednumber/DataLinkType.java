@@ -122,8 +122,8 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public DataLinkType(Integer value, String name) {
     super(value, name);
@@ -131,7 +131,7 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a DataLinkType object.
    */
   public static DataLinkType getInstance(Integer value) {
@@ -145,7 +145,7 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a DataLinkType object.
    */
   public static DataLinkType register(DataLinkType type) {

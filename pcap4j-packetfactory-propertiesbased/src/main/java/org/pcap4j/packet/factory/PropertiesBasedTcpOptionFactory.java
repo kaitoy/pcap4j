@@ -45,14 +45,15 @@ implements PacketFactory<TcpOption, TcpOptionKind> {
 
   /**
    *
-   * @param rawData
-   * @param offset
-   * @param length
-   * @param dataClass
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
+   * @param dataClass dataClass
    * @return a new TcpOption object.
-   * @throws IllegalStateException
-   * @throws IllegalArgumentException
-   * @throws NullPointerException
+   * @throws IllegalStateException if an access to the newInstance method of the dataClass fails.
+   * @throws IllegalArgumentException if an exception other than {@link IllegalRawDataException}
+   *                                  is thrown by newInstance method of the dataClass.
+   * @throws NullPointerException if any of arguments are null.
    */
   public TcpOption newInstance(
     byte[] rawData, int offset, int length, Class<? extends TcpOption> dataClass

@@ -38,8 +38,10 @@ public final class PacketFactories {
 
   /**
    *
-   * @param targetClass
-   * @param numberClass
+   * @param <T> target
+   * @param <N> number
+   * @param targetClass targetClass
+   * @param numberClass numberClass
    * @return a {@link org.pcap4j.packet.factory.PacketFactory PacketFactory} object.
    */
   public static <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getFactory(

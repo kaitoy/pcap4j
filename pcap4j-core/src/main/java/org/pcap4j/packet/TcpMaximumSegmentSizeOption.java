@@ -38,11 +38,11 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new TcpMaximumSegmentSizeOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static TcpMaximumSegmentSizeOption newInstance(
     byte[] rawData, int offset, int length
@@ -207,7 +207,7 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
 
     /**
      *
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
@@ -217,7 +217,7 @@ public final class TcpMaximumSegmentSizeOption implements TcpOption {
 
     /**
      *
-     * @param maxSegSize
+     * @param maxSegSize maxSegSize
      * @return this Builder object for method chaining.
      */
     public Builder maxSegSize(short maxSegSize) {

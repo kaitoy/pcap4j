@@ -33,11 +33,11 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new Dot1qVlanTagPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Dot1qVlanTagPacket newPacket(
     byte[] rawData, int offset, int length
@@ -119,7 +119,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
 
     /**
      *
-     * @param priority
+     * @param priority priority
      * @return this Builder object for method chaining.
      */
     public Builder priority(byte priority) {
@@ -130,7 +130,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
     /**
      * true: 1, false: 0
      *
-     * @param cfi
+     * @param cfi cfi
      * @return this Builder object for method chaining.
      */
     public Builder cfi(boolean cfi) {
@@ -140,7 +140,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
 
     /**
      *
-     * @param vid
+     * @param vid vid
      * @return this Builder object for method chaining.
      */
     public Builder vid(short vid) {
@@ -150,7 +150,7 @@ public final class Dot1qVlanTagPacket extends AbstractPacket {
 
     /**
      *
-     * @param type
+     * @param type type
      * @return this Builder object for method chaining.
      */
     public Builder type(EtherType type) {

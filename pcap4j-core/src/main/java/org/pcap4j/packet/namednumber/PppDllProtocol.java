@@ -964,9 +964,9 @@ public final class PppDllProtocol extends NamedNumber<Short, PppDllProtocol> {
 
   /**
    *
-   * @param value
-   * @param name
-   * @throws IllegalArgumentException
+   * @param value value
+   * @param name name
+   * @throws IllegalArgumentException if an invalid value is passed.
    */
   public PppDllProtocol(Short value, String name) throws IllegalArgumentException {
     super(value, name);
@@ -986,9 +986,9 @@ public final class PppDllProtocol extends NamedNumber<Short, PppDllProtocol> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a PppDllProtocol object.
-   * @throws IllegalArgumentException
+   * @throws IllegalArgumentException if an invalid value is passed.
    */
   public static PppDllProtocol getInstance(Short value) throws IllegalArgumentException {
     if (registry.containsKey(value)) {
@@ -1001,7 +1001,7 @@ public final class PppDllProtocol extends NamedNumber<Short, PppDllProtocol> {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a PppDllProtocol object.
    */
   public static PppDllProtocol register(PppDllProtocol type) {

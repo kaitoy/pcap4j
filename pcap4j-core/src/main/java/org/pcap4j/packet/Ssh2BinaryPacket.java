@@ -80,11 +80,11 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new Ssh2BinaryPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Ssh2BinaryPacket newPacket(
     byte[] rawData, int offset, int length
@@ -339,7 +339,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
 
     /**
      *
-     * @param packetLength
+     * @param packetLength packetLength
      * @return this Builder object for method chaining.
      */
     public Builder packetLength(int packetLength) {
@@ -349,7 +349,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
 
     /**
      *
-     * @param paddingLength
+     * @param paddingLength paddingLength
      * @return this Builder object for method chaining.
      */
     public Builder paddingLength(byte paddingLength) {
@@ -370,7 +370,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
 
     /**
      *
-     * @param randomPadding
+     * @param randomPadding randomPadding
      * @return this Builder object for method chaining.
      */
     public Builder randomPadding(byte[] randomPadding) {
@@ -380,7 +380,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
 
     /**
      *
-     * @param mac
+     * @param mac mac
      * @return this Builder object for method chaining.
      */
     public Builder mac(byte[] mac) {
@@ -396,7 +396,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
 
     /**
      *
-     * @param cipherBlockSize
+     * @param cipherBlockSize cipherBlockSize
      * @return this Builder object for method chaining.
      */
     public Builder cipherBlockSize(int cipherBlockSize) {
@@ -406,7 +406,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
 
     /**
      *
-     * @param paddingAtBuild
+     * @param paddingAtBuild paddingAtBuild
      * @return this Builder object for method chaining.
      */
     public Builder paddingAtBuild(boolean paddingAtBuild) {

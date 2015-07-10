@@ -34,11 +34,11 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IcmpV4CommonPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IcmpV4CommonPacket newPacket(
     byte[] rawData, int offset, int length
@@ -100,7 +100,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
 
   /**
    *
-   * @param acceptZero
+   * @param acceptZero acceptZero
    * @return true if the packet represented by this object has a valid checksum;
    *         false otherwise.
    */
@@ -146,7 +146,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
 
     /**
      *
-     * @param type
+     * @param type type
      * @return this Builder object for method chaining.
      */
     public Builder type(IcmpV4Type type) {
@@ -156,7 +156,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
 
     /**
      *
-     * @param code
+     * @param code code
      * @return this Builder object for method chaining.
      */
     public Builder code(IcmpV4Code code) {
@@ -166,7 +166,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
 
     /**
      *
-     * @param checksum
+     * @param checksum checksum
      * @return this Builder object for method chaining.
      */
     public Builder checksum(short checksum) {

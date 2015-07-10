@@ -27,7 +27,7 @@ public final class NotOpenException extends Exception {
 
   /**
    *
-   * @param message
+   * @param message message
    */
   public NotOpenException(String message){
     super(message);

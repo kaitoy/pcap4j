@@ -30,11 +30,11 @@ public final class IcmpV4ParameterProblemPacket extends IcmpV4InvokingPacketPack
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IcmpV4ParameterProblemPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IcmpV4ParameterProblemPacket newPacket(
     byte[] rawData, int offset, int length
@@ -100,7 +100,7 @@ public final class IcmpV4ParameterProblemPacket extends IcmpV4InvokingPacketPack
 
     /**
      *
-     * @param pointer
+     * @param pointer pointer
      * @return this Builder object for method chaining.
      */
     public Builder pointer(byte pointer) {
@@ -110,7 +110,7 @@ public final class IcmpV4ParameterProblemPacket extends IcmpV4InvokingPacketPack
 
     /**
      *
-     * @param unused
+     * @param unused unused
      * @return this Builder object for method chaining.
      */
     public Builder unused(int unused) {

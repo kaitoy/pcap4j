@@ -41,7 +41,7 @@ public final class Pcaps {
   /**
    *
    * @return a list of PcapNetworkInterfaces.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static
   List<PcapNetworkInterface> findAllDevs() throws PcapNativeException {
@@ -82,9 +82,9 @@ public final class Pcaps {
 
   /**
    *
-   * @param addr
+   * @param addr addr
    * @return a PcapNetworkInterface.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static PcapNetworkInterface getDevByAddress(
     InetAddress addr
@@ -109,9 +109,9 @@ public final class Pcaps {
 
   /**
    *
-   * @param name
+   * @param name name
    * @return a PcapNetworkInterface.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static PcapNetworkInterface getDevByName(
     String name
@@ -135,7 +135,7 @@ public final class Pcaps {
   /**
    *
    * @return a name of a network interface.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static String lookupDev() throws PcapNativeException {
     PcapErrbuf errbuf = new PcapErrbuf();
@@ -150,9 +150,9 @@ public final class Pcaps {
 
   /**
    *
-   * @param devName
+   * @param devName devName
    * @return an {@link org.pcap4j.util.Inet4NetworkAddress Inet4NetworkAddress} object.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static Inet4NetworkAddress lookupNet(
     String devName
@@ -184,7 +184,7 @@ public final class Pcaps {
    *
    * @param filePath "-" means stdin
    * @return a new PcapHandle object.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static PcapHandle openOffline(
     String filePath
@@ -209,9 +209,9 @@ public final class Pcaps {
   /**
    *
    * @param filePath "-" means stdin
-   * @param precision
+   * @param precision precision
    * @return a new PcapHandle object.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static PcapHandle openOffline(
     String filePath, TimestampPrecision precision
@@ -246,10 +246,10 @@ public final class Pcaps {
 
   /**
    *
-   * @param dlt
+   * @param dlt dlt
    * @param snaplen Snapshot length, which is the number of bytes captured for each packet.
    * @return a new PcapHandle object.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static PcapHandle openDead(
     DataLinkType dlt, int snaplen
@@ -274,11 +274,11 @@ public final class Pcaps {
 
   /**
    *
-   * @param dlt
+   * @param dlt dlt
    * @param snaplen Snapshot length, which is the number of bytes captured for each packet.
-   * @param precision
+   * @param precision precision
    * @return a new PcapHandle object.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static PcapHandle openDead(
     DataLinkType dlt, int snaplen, TimestampPrecision precision
@@ -318,13 +318,13 @@ public final class Pcaps {
 
   /**
    *
-   * @param snaplen
-   * @param dlt
-   * @param bpfExpression
-   * @param mode
-   * @param netmask
+   * @param snaplen snaplen
+   * @param dlt dlt
+   * @param bpfExpression bpfExpression
+   * @param mode mode
+   * @param netmask netmask
    * @return a {@link org.pcap4j.core.BpfProgram BpfProgram} object.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static BpfProgram compileFilter(
     int snaplen, DataLinkType dlt, String bpfExpression,
@@ -361,7 +361,7 @@ public final class Pcaps {
   /**
    * @param name a data link type name, which is a DLT_ name with the DLT_ removed.
    * @return a {@link org.pcap4j.packet.namednumber.DataLinkType DataLinkType} object.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static DataLinkType dataLinkNameToVal(
     String name
@@ -383,9 +383,9 @@ public final class Pcaps {
   }
 
   /**
-   * @param dlt
+   * @param dlt dlt
    * @return data link type name
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static String dataLinkTypeToName(
     DataLinkType dlt
@@ -399,9 +399,9 @@ public final class Pcaps {
   }
 
   /**
-   * @param dataLinkVal
+   * @param dataLinkVal dataLinkVal
    * @return data link type name
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static String dataLinkValToName(
     int dataLinkVal
@@ -416,9 +416,9 @@ public final class Pcaps {
   }
 
   /**
-   * @param dlt
+   * @param dlt dlt
    * @return a short description of that data link type.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static String dataLinkTypeToDescription(
     DataLinkType dlt
@@ -432,9 +432,9 @@ public final class Pcaps {
   }
 
   /**
-   * @param dataLinkVal
+   * @param dataLinkVal dataLinkVal
    * @return a short description of that data link type.
-   * @throws PcapNativeException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static String dataLinkValToDescription(
     int dataLinkVal
@@ -449,7 +449,7 @@ public final class Pcaps {
   }
 
   /**
-   * @param error
+   * @param error error
    * @return an error message.
    */
   public static String strError(int error) {
@@ -482,7 +482,7 @@ public final class Pcaps {
 
   /**
    *
-   * @param macAddr
+   * @param macAddr macAddr
    * @return a string representation of a MAC address for BPF.
    */
   public static String toBpfString(MacAddress macAddr) {

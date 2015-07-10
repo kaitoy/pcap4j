@@ -17,7 +17,7 @@ public interface PacketListener {
 
   /**
    *
-   * @param packet
+   * @param packet packet
    */
   public void gotPacket(Packet packet);
 

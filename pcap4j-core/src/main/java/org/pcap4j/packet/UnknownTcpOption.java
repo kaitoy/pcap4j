@@ -32,11 +32,11 @@ public final class UnknownTcpOption implements TcpOption {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new UnknownTcpOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static UnknownTcpOption newInstance(
     byte[] rawData, int offset, int length
@@ -208,7 +208,7 @@ public final class UnknownTcpOption implements TcpOption {
 
     /**
      *
-     * @param kind
+     * @param kind kind
      * @return this Builder object for method chaining.
      */
     public Builder kind(TcpOptionKind kind) {
@@ -218,7 +218,7 @@ public final class UnknownTcpOption implements TcpOption {
 
     /**
      *
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
@@ -228,7 +228,7 @@ public final class UnknownTcpOption implements TcpOption {
 
     /**
      *
-     * @param data
+     * @param data data
      * @return this Builder object for method chaining.
      */
     public Builder data(byte[] data) {

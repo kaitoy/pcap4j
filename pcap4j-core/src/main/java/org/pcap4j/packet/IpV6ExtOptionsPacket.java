@@ -40,10 +40,10 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
   /**
    *
-   * @param rawData
-   * @param payloadOffset
-   * @param payloadLength
-   * @param number
+   * @param rawData rawData
+   * @param payloadOffset payloadOffset
+   * @param payloadLength payloadLength
+   * @param number number
    */
   protected IpV6ExtOptionsPacket(
     byte[] rawData, int payloadOffset, int payloadLength, IpNumber number
@@ -69,7 +69,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
   /**
    *
-   * @param builder
+   * @param builder builder
    */
   protected IpV6ExtOptionsPacket(Builder builder) {
     if (
@@ -120,7 +120,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
     /**
      *
-     * @param packet
+     * @param packet packet
      */
     protected Builder(IpV6ExtOptionsPacket packet) {
       this.nextHeader = packet.getHeader().nextHeader;
@@ -131,7 +131,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
     /**
      *
-     * @param nextHeader
+     * @param nextHeader nextHeader
      * @return this Builder object for method chaining.
      */
     public Builder nextHeader(IpNumber nextHeader) {
@@ -141,7 +141,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
     /**
      *
-     * @param hdrExtLen
+     * @param hdrExtLen hdrExtLen
      * @return this Builder object for method chaining.
      */
     public Builder hdrExtLen(byte hdrExtLen) {
@@ -151,7 +151,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
     /**
      *
-     * @param options
+     * @param options options
      * @return this Builder object for method chaining.
      */
     public Builder options(List<IpV6Option> options) {
@@ -220,10 +220,10 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
     /**
      *
-     * @param rawData
-     * @param offset
-     * @param length
-     * @throws IllegalRawDataException
+     * @param rawData rawData
+     * @param offset offset
+     * @param length length
+     * @throws IllegalRawDataException if parsing the raw data fails.
      */
     protected IpV6ExtOptionsHeader(
       byte[] rawData, int offset, int length
@@ -290,7 +290,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
     /**
      *
-     * @param builder
+     * @param builder builder
      */
     protected IpV6ExtOptionsHeader(Builder builder) {
       int optLength = 0;

@@ -33,11 +33,11 @@ public final class UnknownIpV6Option implements IpV6Option {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new UnknownIpV6Option object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static UnknownIpV6Option newInstance(
     byte[] rawData, int offset, int length
@@ -207,7 +207,7 @@ public final class UnknownIpV6Option implements IpV6Option {
 
     /**
      *
-     * @param type
+     * @param type type
      * @return this Builder object for method chaining.
      */
     public Builder type(IpV6OptionType type) {
@@ -217,7 +217,7 @@ public final class UnknownIpV6Option implements IpV6Option {
 
     /**
      *
-     * @param dataLen
+     * @param dataLen dataLen
      * @return this Builder object for method chaining.
      */
     public Builder dataLen(byte dataLen) {
@@ -227,7 +227,7 @@ public final class UnknownIpV6Option implements IpV6Option {
 
     /**
      *
-     * @param data
+     * @param data data
      * @return this Builder object for method chaining.
      */
     public Builder data(byte[] data) {

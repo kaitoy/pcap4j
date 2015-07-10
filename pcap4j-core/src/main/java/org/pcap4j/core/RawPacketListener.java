@@ -16,7 +16,7 @@ public interface RawPacketListener {
 
   /**
    *
-   * @param packet
+   * @param packet packet
    */
   public void gotPacket(byte[] packet);
 

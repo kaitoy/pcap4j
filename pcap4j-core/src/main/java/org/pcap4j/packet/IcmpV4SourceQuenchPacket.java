@@ -30,11 +30,11 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4InvokingPacketPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IcmpV4SourceQuenchPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IcmpV4SourceQuenchPacket newPacket(
     byte[] rawData, int offset, int length
@@ -101,7 +101,7 @@ public final class IcmpV4SourceQuenchPacket extends IcmpV4InvokingPacketPacket {
 
     /**
      *
-     * @param unused
+     * @param unused unused
      * @return this Builder object for method chaining.
      */
     public Builder unused(int unused) {

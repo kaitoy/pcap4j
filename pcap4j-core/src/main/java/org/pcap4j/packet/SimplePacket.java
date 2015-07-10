@@ -107,7 +107,7 @@ abstract class SimplePacket extends AbstractPacket {
     }
 
     /**
-     * @param rawData
+     * @param rawData rawData
      */
     protected void setRawData(byte[] rawData) {
       this.rawData = rawData;

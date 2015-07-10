@@ -30,11 +30,11 @@ public final class Ssh2KexDhInitPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new Ssh2KexDhInitPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Ssh2KexDhInitPacket newPacket(
     byte[] rawData, int offset, int length
@@ -93,7 +93,7 @@ public final class Ssh2KexDhInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param e
+     * @param e e
      * @return this Builder object for method chaining.
      */
     public Builder e(Ssh2MpInt e) {

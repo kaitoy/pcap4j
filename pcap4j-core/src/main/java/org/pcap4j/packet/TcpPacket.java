@@ -43,11 +43,11 @@ public final class TcpPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new TcpPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static TcpPacket newPacket(
     byte[] rawData, int offset, int length
@@ -130,9 +130,9 @@ public final class TcpPacket extends AbstractPacket {
    *
    * checksum varification is necessary for IPv6(i.e. acceptZero must be false)
    *
-   * @param srcAddr
-   * @param dstAddr
-   * @param acceptZero
+   * @param srcAddr srcAddr
+   * @param dstAddr dstAddr
+   * @param acceptZero acceptZero
    * @return true if the packet represented by this object has a valid checksum;
    *         false otherwise.
    */
@@ -211,7 +211,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param packet
+     * @param packet packet
      */
     public Builder(TcpPacket packet) {
       this.srcPort = packet.header.srcPort;
@@ -236,7 +236,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param srcPort
+     * @param srcPort srcPort
      * @return this Builder object for method chaining.
      */
     public Builder srcPort(TcpPort srcPort) {
@@ -246,7 +246,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param dstPort
+     * @param dstPort dstPort
      * @return this Builder object for method chaining.
      */
     public Builder dstPort(TcpPort dstPort) {
@@ -256,7 +256,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param sequenceNumber
+     * @param sequenceNumber sequenceNumber
      * @return this Builder object for method chaining.
      */
     public Builder sequenceNumber(int sequenceNumber) {
@@ -266,7 +266,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param acknowledgmentNumber
+     * @param acknowledgmentNumber acknowledgmentNumber
      * @return this Builder object for method chaining.
      */
     public Builder acknowledgmentNumber(int acknowledgmentNumber) {
@@ -276,7 +276,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param dataOffset
+     * @param dataOffset dataOffset
      * @return this Builder object for method chaining.
      */
     public Builder dataOffset(byte dataOffset) {
@@ -286,7 +286,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param reserved
+     * @param reserved reserved
      * @return this Builder object for method chaining.
      */
     public Builder reserved(byte reserved) {
@@ -296,7 +296,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param urg
+     * @param urg urg
      * @return this Builder object for method chaining.
      */
     public Builder urg(boolean urg) {
@@ -306,7 +306,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param ack
+     * @param ack ack
      * @return this Builder object for method chaining.
      */
     public Builder ack(boolean ack) {
@@ -316,7 +316,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param psh
+     * @param psh psh
      * @return this Builder object for method chaining.
      */
     public Builder psh(boolean psh) {
@@ -326,7 +326,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param rst
+     * @param rst rst
      * @return this Builder object for method chaining.
      */
     public Builder rst(boolean rst) {
@@ -336,7 +336,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param syn
+     * @param syn syn
      * @return this Builder object for method chaining.
      */
     public Builder syn(boolean syn) {
@@ -346,7 +346,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param fin
+     * @param fin fin
      * @return this Builder object for method chaining.
      */
     public Builder fin(boolean fin) {
@@ -356,7 +356,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param window
+     * @param window window
      * @return this Builder object for method chaining.
      */
     public Builder window(short window) {
@@ -366,7 +366,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param checksum
+     * @param checksum checksum
      * @return this Builder object for method chaining.
      */
     public Builder checksum(short checksum) {
@@ -376,7 +376,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param urgentPointer
+     * @param urgentPointer urgentPointer
      * @return this Builder object for method chaining.
      */
     public Builder urgentPointer(short urgentPointer) {
@@ -386,7 +386,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param options
+     * @param options options
      * @return this Builder object for method chaining.
      */
     public Builder options(List<TcpOption> options) {
@@ -396,7 +396,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param padding
+     * @param padding padding
      * @return this Builder object for method chaining.
      */
     public Builder padding(byte[] padding) {
@@ -419,7 +419,7 @@ public final class TcpPacket extends AbstractPacket {
      *
      * used for checksum calculation.
      *
-     * @param srcAddr
+     * @param srcAddr srcAddr
      * @return this Builder object for method chaining.
      */
     public Builder srcAddr(InetAddress srcAddr) {
@@ -435,7 +435,7 @@ public final class TcpPacket extends AbstractPacket {
      * this parameter is that of the final destination.
      * (i.e. the last element of the Routing header)
      *
-     * @param dstAddr
+     * @param dstAddr dstAddr
      * @return this Builder object for method chaining.
      */
     public Builder dstAddr(InetAddress dstAddr) {
@@ -457,7 +457,7 @@ public final class TcpPacket extends AbstractPacket {
 
     /**
      *
-     * @param paddingAtBuild
+     * @param paddingAtBuild paddingAtBuild
      * @return this Builder object for method chaining.
      */
     public Builder paddingAtBuild(boolean paddingAtBuild) {

@@ -29,11 +29,11 @@ public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV6ExtHopByHopOptionsPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6ExtHopByHopOptionsPacket newPacket(
     byte[] rawData, int offset, int length

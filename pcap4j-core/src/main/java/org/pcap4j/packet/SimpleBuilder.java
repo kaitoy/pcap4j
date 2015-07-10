@@ -24,7 +24,7 @@ public final class SimpleBuilder extends AbstractBuilder {
 
   /**
    *
-   * @param packet
+   * @param packet packet
    */
   public SimpleBuilder(Packet packet) {
     this.packet = packet;
@@ -32,7 +32,7 @@ public final class SimpleBuilder extends AbstractBuilder {
 
   /**
    *
-   * @param packet
+   * @param packet packet
    * @return SimpleBuilder
    */
   public SimpleBuilder packet(Packet packet) {

@@ -15,7 +15,7 @@ import java.io.Serializable;
  *
  * @author Kaito Yamada
  * @since pcap4j 0.9.6
- * @param <T1>
+ * @param <T1> the type of value this class returns.
  */
 public final class LazyValue<T1> implements Serializable {
 
@@ -30,7 +30,7 @@ public final class LazyValue<T1> implements Serializable {
   private volatile T1 value = null;
 
   /**
-   * @param command
+   * @param command command
    */
   public LazyValue(BuildValueCommand<T1> command) {
     this.command = command;
@@ -65,7 +65,7 @@ public final class LazyValue<T1> implements Serializable {
    *
    * @author Kaito Yamada
    * @since pcap4j 0.9.6
-   * @param <T2>
+   * @param <T2> the type of value to build.
    */
   public interface BuildValueCommand<T2> {
 

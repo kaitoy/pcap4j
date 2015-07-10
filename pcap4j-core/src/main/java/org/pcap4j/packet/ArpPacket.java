@@ -35,11 +35,11 @@ public final class ArpPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new ArpPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static ArpPacket newPacket(
     byte[] rawData, int offset, int length
@@ -124,7 +124,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @param hardwareType
+     * @param hardwareType hardwareType
      * @return this Builder object for method chaining.
      */
     public Builder hardwareType(ArpHardwareType hardwareType) {
@@ -134,7 +134,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @param protocolType
+     * @param protocolType protocolType
      * @return this Builder object for method chaining.
      */
     public Builder protocolType(EtherType protocolType) {
@@ -144,7 +144,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @param hardwareAddrLength
+     * @param hardwareAddrLength hardwareAddrLength
      * @return this Builder object for method chaining.
      */
     public Builder hardwareAddrLength(byte hardwareAddrLength) {
@@ -154,7 +154,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @param protocolAddrLength
+     * @param protocolAddrLength protocolAddrLength
      * @return this Builder object for method chaining.
      */
     public Builder protocolAddrLength(byte protocolAddrLength) {
@@ -164,7 +164,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @param operation
+     * @param operation operation
      * @return this Builder object for method chaining.
      */
     public Builder operation(ArpOperation operation) {
@@ -174,7 +174,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @param srcHardwareAddr
+     * @param srcHardwareAddr srcHardwareAddr
      * @return this Builder object for method chaining.
      */
     public Builder srcHardwareAddr(MacAddress srcHardwareAddr) {
@@ -184,7 +184,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @param srcProtocolAddr
+     * @param srcProtocolAddr srcProtocolAddr
      * @return this Builder object for method chaining.
      */
     public Builder srcProtocolAddr(InetAddress srcProtocolAddr) {
@@ -194,7 +194,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @param dstHardwareAddr
+     * @param dstHardwareAddr dstHardwareAddr
      * @return this Builder object for method chaining.
      */
     public Builder dstHardwareAddr(MacAddress dstHardwareAddr) {
@@ -204,7 +204,7 @@ public final class ArpPacket extends AbstractPacket {
 
     /**
      *
-     * @param dstProtocolAddr
+     * @param dstProtocolAddr dstProtocolAddr
      * @return this Builder object for method chaining.
      */
     public Builder dstProtocolAddr(InetAddress dstProtocolAddr) {

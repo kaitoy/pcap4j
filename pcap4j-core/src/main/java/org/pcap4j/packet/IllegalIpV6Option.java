@@ -32,9 +32,9 @@ public final class IllegalIpV6Option implements IpV6Option {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IllegalIpV6Option object.
    */
   public static IllegalIpV6Option newInstance(byte[] rawData, int offset, int length) {
@@ -140,7 +140,7 @@ public final class IllegalIpV6Option implements IpV6Option {
 
     /**
      *
-     * @param type
+     * @param type type
      * @return this Builder object for method chaining.
      */
     public Builder type(IpV6OptionType type) {
@@ -150,7 +150,7 @@ public final class IllegalIpV6Option implements IpV6Option {
 
     /**
      *
-     * @param rawData
+     * @param rawData rawData
      * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {

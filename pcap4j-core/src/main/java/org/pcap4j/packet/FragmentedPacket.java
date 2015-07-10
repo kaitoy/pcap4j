@@ -25,9 +25,9 @@ public final class FragmentedPacket extends SimplePacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new FragmentedPacket object.
    */
   public static FragmentedPacket newPacket(byte[] rawData, int offset, int length) {
@@ -68,7 +68,7 @@ public final class FragmentedPacket extends SimplePacket {
 
     /**
      *
-     * @param rawData
+     * @param rawData rawData
      * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {

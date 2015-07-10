@@ -29,9 +29,9 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IllegalIpV6RoutingData object.
    */
   public static IllegalIpV6RoutingData newInstance(byte[] rawData, int offset, int length) {

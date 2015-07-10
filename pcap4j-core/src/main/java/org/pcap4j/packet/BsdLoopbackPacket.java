@@ -36,11 +36,11 @@ public final class BsdLoopbackPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new BsdLoopbackPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static BsdLoopbackPacket newPacket(
     byte[] rawData, int offset, int length
@@ -116,7 +116,7 @@ public final class BsdLoopbackPacket extends AbstractPacket {
 
     /**
      *
-     * @param protocolFamily
+     * @param protocolFamily protocolFamily
      * @return this Builder object for method chaining.
      */
     public Builder protocolFamily(ProtocolFamily protocolFamily) {

@@ -63,7 +63,7 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
+   * @param array array
    * @return a new array containing specified array's elements in reverse order.
    */
   public static byte[] reverse(byte[] array) {
@@ -76,8 +76,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
+   * @param array array
+   * @param offset offset
    * @return byte value.
    */
   public static byte getByte(byte[] array, int offset) {
@@ -87,7 +87,7 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return byte array
    */
   public static byte[] toByteArray(byte value) {
@@ -96,8 +96,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param separator
+   * @param value value
+   * @param separator separator
    * @return hex string
    */
   public static String toHexString(byte value, String separator) {
@@ -106,8 +106,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
+   * @param array array
+   * @param offset offset
    * @return short value
    */
   public static short getShort(byte[] array, int offset) {
@@ -116,9 +116,9 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
-   * @param bo
+   * @param array array
+   * @param offset offset
+   * @param bo bo
    * @return short value
    */
   public static short getShort(byte[] array, int offset, ByteOrder bo) {
@@ -144,7 +144,7 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return byte array
    */
   public static byte[] toByteArray(short value) {
@@ -153,8 +153,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param bo
+   * @param value value
+   * @param bo bo
    * @return byte array
    */
   public static byte[] toByteArray(short value, ByteOrder bo) {
@@ -174,8 +174,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param separator
+   * @param value value
+   * @param separator separator
    * @return hex string
    */
   public static String toHexString(short value, String separator) {
@@ -184,9 +184,9 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param separator
-   * @param bo
+   * @param value value
+   * @param separator separator
+   * @param bo bo
    * @return hex string
    */
   public static String toHexString(short value, String separator, ByteOrder bo) {
@@ -195,8 +195,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
+   * @param array array
+   * @param offset offset
    * @return int value.
    */
   public static int getInt(byte[] array, int offset) {
@@ -205,9 +205,9 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
-   * @param bo
+   * @param array array
+   * @param offset offset
+   * @param bo bo
    * @return int value.
    */
   public static int getInt(byte[] array, int offset, ByteOrder bo) {
@@ -232,9 +232,9 @@ public final class ByteArrays {
   }
 
   /**
-   * @param array
-   * @param offset
-   * @param length
+   * @param array array
+   * @param offset offset
+   * @param length length
    * @return int value.
    */
   public static int getInt(byte[] array, int offset, int length) {
@@ -242,10 +242,10 @@ public final class ByteArrays {
   }
 
   /**
-   * @param array
-   * @param offset
-   * @param length
-   * @param bo
+   * @param array array
+   * @param offset offset
+   * @param length length
+   * @param bo bo
    * @return int value.
    */
   public static int getInt(byte[] array, int offset, int length, ByteOrder bo) {
@@ -282,7 +282,7 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return byte array
    */
   public static byte[] toByteArray(int value) {
@@ -291,8 +291,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param bo
+   * @param value value
+   * @param bo bo
    * @return byte array
    */
   public static byte[] toByteArray(int value, ByteOrder bo) {
@@ -315,8 +315,8 @@ public final class ByteArrays {
   }
 
   /**
-   * @param value
-   * @param length
+   * @param value value
+   * @param length length
    * @return byte array
    */
   public static byte[] toByteArray(int value, int length) {
@@ -324,9 +324,9 @@ public final class ByteArrays {
   }
 
   /**
-   * @param value
-   * @param length
-   * @param bo
+   * @param value value
+   * @param length length
+   * @param bo bo
    * @return byte array
    */
   public static byte[] toByteArray(int value, int length, ByteOrder bo) {
@@ -357,8 +357,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param separator
+   * @param value value
+   * @param separator separator
    * @return hex string
    */
   public static String toHexString(int value, String separator) {
@@ -367,9 +367,9 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param separator
-   * @param bo
+   * @param value value
+   * @param separator separator
+   * @param bo bo
    * @return hex string
    */
   public static String toHexString(int value, String separator, ByteOrder bo) {
@@ -378,8 +378,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
+   * @param array array
+   * @param offset offset
    * @return long value
    */
   public static long getLong(byte[] array, int offset) {
@@ -388,9 +388,9 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
-   * @param bo
+   * @param array array
+   * @param offset offset
+   * @param bo bo
    * @return long value
    */
   public static long getLong(byte[] array, int offset, ByteOrder bo) {
@@ -424,7 +424,7 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return byte array
    */
   public static byte[] toByteArray(long value) {
@@ -433,8 +433,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param bo
+   * @param value value
+   * @param bo bo
    * @return byte array
    */
   public static byte[] toByteArray(long value, ByteOrder bo) {
@@ -466,8 +466,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param separator
+   * @param value value
+   * @param separator separator
    * @return hex string
    */
   public static String toHexString(long value, String separator) {
@@ -476,9 +476,9 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param separator
-   * @param bo
+   * @param value value
+   * @param separator separator
+   * @param bo bo
    * @return hex string
    */
   public static String toHexString(long value, String separator, ByteOrder bo) {
@@ -487,8 +487,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
+   * @param array array
+   * @param offset offset
    * @return a new MacAddress object.
    */
   public static MacAddress getMacAddress(byte[] array, int offset) {
@@ -497,9 +497,9 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
-   * @param bo
+   * @param array array
+   * @param offset offset
+   * @param bo bo
    * @return a new MacAddress object.
    */
   public static MacAddress getMacAddress(
@@ -525,7 +525,7 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return byte array
    */
   public static byte[] toByteArray(MacAddress value) {
@@ -534,8 +534,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param bo
+   * @param value value
+   * @param bo bo
    * @return byte array
    */
   public static byte[] toByteArray(MacAddress value, ByteOrder bo) {
@@ -549,9 +549,9 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
-   * @param length
+   * @param array array
+   * @param offset offset
+   * @param length length
    * @return a new LinkLayerAddress object.
    */
   public static LinkLayerAddress getLinkLayerAddress(byte[] array, int offset, int length) {
@@ -561,10 +561,10 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
-   * @param length
-   * @param bo
+   * @param array array
+   * @param offset offset
+   * @param length length
+   * @param bo bo
    * @return a new LinkLayerAddress object.
    */
   public static LinkLayerAddress getLinkLayerAddress(
@@ -590,7 +590,7 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return byte array
    */
   public static byte[] toByteArray(LinkLayerAddress value) {
@@ -599,8 +599,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param bo
+   * @param value value
+   * @param bo bo
    * @return byte array
    */
   public static byte[] toByteArray(LinkLayerAddress value, ByteOrder bo) {
@@ -614,8 +614,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
+   * @param array array
+   * @param offset offset
    * @return a new Inet4Address object.
    */
   public static Inet4Address getInet4Address(byte[] array, int offset) {
@@ -624,9 +624,9 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
-   * @param bo
+   * @param array array
+   * @param offset offset
+   * @param bo bo
    * @return a new Inet4Address object.
    */
   public static Inet4Address getInet4Address(
@@ -666,8 +666,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
+   * @param array array
+   * @param offset offset
    * @return a new Inet6Address object.
    */
   public static Inet6Address getInet6Address(byte[] array, int offset) {
@@ -676,9 +676,9 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
-   * @param bo
+   * @param array array
+   * @param offset offset
+   * @param bo bo
    * @return a new Inet6Address object.
    */
   public static Inet6Address getInet6Address(
@@ -718,7 +718,7 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return byte array
    */
   public static byte[] toByteArray(InetAddress value) {
@@ -727,8 +727,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param value
-   * @param bo
+   * @param value value
+   * @param bo bo
    * @return byte array
    */
   public static byte[] toByteArray(InetAddress value, ByteOrder bo) {
@@ -742,9 +742,9 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
-   * @param length
+   * @param array array
+   * @param offset offset
+   * @param length length
    * @return sub array
    */
   public static byte[] getSubArray(byte[] array, int offset, int length) {
@@ -757,8 +757,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param offset
+   * @param array array
+   * @param offset offset
    * @return sub array
    */
   public static byte[] getSubArray(byte[] array, int offset) {
@@ -767,8 +767,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param separator
+   * @param array array
+   * @param separator separator
    * @return hex string
    */
   public static String toHexString(byte[] array, String separator) {
@@ -788,10 +788,10 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
-   * @param separator
-   * @param offset
-   * @param length
+   * @param array array
+   * @param separator separator
+   * @param offset offset
+   * @param length length
    * @return hex string
    */
   public static String toHexString(
@@ -817,7 +817,7 @@ public final class ByteArrays {
    * A utility method to calculate the Internet checksum.
    *
    * @see <a href="https://tools.ietf.org/html/rfc1071">RFC 1071</a>
-   * @param data
+   * @param data data
    * @return checksum
    */
   public static short calcChecksum(byte[] data) {
@@ -838,8 +838,8 @@ public final class ByteArrays {
 
   /**
    *
-   * @param hexString
-   * @param separator
+   * @param hexString hexString
+   * @param separator separator
    * @return a new byte array.
    */
   public static byte[] parseByteArray(String hexString, String separator) {
@@ -910,7 +910,7 @@ public final class ByteArrays {
 
   /**
    *
-   * @param array
+   * @param array array
    * @return a clone of array
    */
   public static byte[] clone(byte[] array) {
@@ -924,9 +924,9 @@ public final class ByteArrays {
    *
    * A utility method to validate arguments which indicate a part of an array.
    *
-   * @param arr
-   * @param offset
-   * @param len
+   * @param arr arr
+   * @param offset offset
+   * @param len len
    * @throws NullPointerException if the {@code arr} is null.
    * @throws IllegalArgumentException if {@code arr} is empty or {@code len} is zero.
    * @throws ArrayIndexOutOfBoundsException if {@code offset} or {@code len} is negative,
@@ -955,8 +955,8 @@ public final class ByteArrays {
   }
 
   /**
-   * @param arr1
-   * @param arr2
+   * @param arr1 arr1
+   * @param arr2 arr2
    * @return arr1 xor arr2
    */
   public static byte[] xor(byte[] arr1, byte[] arr2) {
@@ -979,8 +979,8 @@ public final class ByteArrays {
   }
 
   /**
-   * @param arr1
-   * @param arr2
+   * @param arr1 arr1
+   * @param arr2 arr2
    * @return arr1 + arr2
    */
   public static byte[] concatenate(byte[] arr1, byte[] arr2) {
