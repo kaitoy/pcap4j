@@ -29,9 +29,9 @@ script:
   - |
     if [ "${COVERALLS}" = "yes"  ]
     then
-      sudo /usr/local/maven/bin/mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage package coveralls:report
+      sudo /usr/local/maven/bin/mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -DserviceJobId=$TRAVIS_JOB_ID -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage package coveralls:report
     else
-      sudo /usr/local/maven/bin/mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B test
+      sudo /usr/local/maven/bin/mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B install
     fi
 
 notifications:
