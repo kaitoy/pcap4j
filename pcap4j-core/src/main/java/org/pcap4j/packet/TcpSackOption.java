@@ -55,11 +55,11 @@ public final class TcpSackOption implements TcpOption {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new TcpSackOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static TcpSackOption newInstance(
     byte[] rawData, int offset, int length
@@ -262,7 +262,7 @@ public final class TcpSackOption implements TcpOption {
     }
 
     /**
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
@@ -271,7 +271,7 @@ public final class TcpSackOption implements TcpOption {
     }
 
     /**
-     * @param sacks
+     * @param sacks sacks
      * @return this Builder object for method chaining.
      */
     public Builder sacks(List<Sack> sacks) {
@@ -307,8 +307,8 @@ public final class TcpSackOption implements TcpOption {
     private final int rightEdge;
 
     /**
-     * @param leftEdge
-     * @param rightEdge
+     * @param leftEdge leftEdge
+     * @param rightEdge rightEdge
      */
     public Sack(int leftEdge, int rightEdge) {
       this.leftEdge = leftEdge;

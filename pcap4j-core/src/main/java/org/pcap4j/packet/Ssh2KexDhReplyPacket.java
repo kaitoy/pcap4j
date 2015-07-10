@@ -30,11 +30,11 @@ public final class Ssh2KexDhReplyPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new Ssh2KexDhReplyPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Ssh2KexDhReplyPacket newPacket(
     byte[] rawData, int offset, int length
@@ -101,7 +101,7 @@ public final class Ssh2KexDhReplyPacket extends AbstractPacket {
 
     /**
      *
-     * @param k_s
+     * @param k_s k_s
      * @return this Builder object for method chaining.
      */
     public Builder k_s(Ssh2String k_s) {
@@ -111,7 +111,7 @@ public final class Ssh2KexDhReplyPacket extends AbstractPacket {
 
     /**
      *
-     * @param f
+     * @param f f
      * @return this Builder object for method chaining.
      */
     public Builder f(Ssh2MpInt f) {
@@ -121,7 +121,7 @@ public final class Ssh2KexDhReplyPacket extends AbstractPacket {
 
     /**
      *
-     * @param signatureOfH
+     * @param signatureOfH signatureOfH
      * @return this Builder object for method chaining.
      */
     public Builder signatureOfH(Ssh2String signatureOfH) {

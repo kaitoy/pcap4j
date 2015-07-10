@@ -239,8 +239,8 @@ public final class Ssh2MessageNumber extends NamedNumber<Byte, Ssh2MessageNumber
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public Ssh2MessageNumber(Byte value, String name) {
     super(value, name);
@@ -248,7 +248,7 @@ public final class Ssh2MessageNumber extends NamedNumber<Byte, Ssh2MessageNumber
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a Ssh2MessageNumber object.
    */
   public static Ssh2MessageNumber getInstance(Byte value) {
@@ -262,7 +262,7 @@ public final class Ssh2MessageNumber extends NamedNumber<Byte, Ssh2MessageNumber
 
   /**
    *
-   * @param number
+   * @param number number
    * @return a Ssh2MessageNumber object.
    */
   public static Ssh2MessageNumber register(Ssh2MessageNumber number) {

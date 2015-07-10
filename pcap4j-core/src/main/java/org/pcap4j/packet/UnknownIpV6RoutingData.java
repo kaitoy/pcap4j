@@ -29,11 +29,11 @@ public final class UnknownIpV6RoutingData implements IpV6RoutingData {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new UnknownIpV6RoutingData object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static UnknownIpV6RoutingData newInstance(
     byte[] rawData, int offset, int length

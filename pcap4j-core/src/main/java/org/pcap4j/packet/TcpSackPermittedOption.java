@@ -50,11 +50,11 @@ public final class TcpSackPermittedOption implements TcpOption {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return the singleton instance of TcpSackPermittedOption.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static TcpSackPermittedOption newInstance(
     byte[] rawData, int offset, int length

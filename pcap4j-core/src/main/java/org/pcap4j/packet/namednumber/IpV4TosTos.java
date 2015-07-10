@@ -74,8 +74,8 @@ public final class IpV4TosTos extends NamedNumber<Byte, IpV4TosTos> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IpV4TosTos(Byte value, String name) {
     super(value, name);
@@ -89,7 +89,7 @@ public final class IpV4TosTos extends NamedNumber<Byte, IpV4TosTos> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IpV4TosTos object.
    */
   public static IpV4TosTos getInstance(Byte value) {
@@ -103,7 +103,7 @@ public final class IpV4TosTos extends NamedNumber<Byte, IpV4TosTos> {
 
   /**
    *
-   * @param tos
+   * @param tos tos
    * @return a IpV4TosTos object.
    */
   public static IpV4TosTos register(IpV4TosTos tos) {

@@ -100,11 +100,11 @@ implements IpV6NeighborDiscoveryOption {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV6NeighborDiscoveryPrefixInformationOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6NeighborDiscoveryPrefixInformationOption newInstance(
     byte[] rawData, int offset, int length
@@ -439,7 +439,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
@@ -449,7 +449,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param prefixLength
+     * @param prefixLength prefixLength
      * @return this Builder object for method chaining.
      */
     public Builder prefixLength(byte prefixLength) {
@@ -459,7 +459,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param onLinkFlag
+     * @param onLinkFlag onLinkFlag
      * @return this Builder object for method chaining.
      */
     public Builder onLinkFlag(boolean onLinkFlag) {
@@ -469,7 +469,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param addressConfigurationFlag
+     * @param addressConfigurationFlag addressConfigurationFlag
      * @return this Builder object for method chaining.
      */
     public Builder addressConfigurationFlag(boolean addressConfigurationFlag) {
@@ -479,7 +479,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param reserved1
+     * @param reserved1 reserved1
      * @return this Builder object for method chaining.
      */
     public Builder reserved1(byte reserved1) {
@@ -489,7 +489,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param validLifetime
+     * @param validLifetime validLifetime
      * @return this Builder object for method chaining.
      */
     public Builder validLifetime(int validLifetime) {
@@ -499,7 +499,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param preferredLifetime
+     * @param preferredLifetime preferredLifetime
      * @return this Builder object for method chaining.
      */
     public Builder preferredLifetime(int preferredLifetime) {
@@ -509,7 +509,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param reserved2
+     * @param reserved2 reserved2
      * @return this Builder object for method chaining.
      */
     public Builder reserved2(int reserved2) {
@@ -519,7 +519,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param prefix
+     * @param prefix prefix
      * @return this Builder object for method chaining.
      */
     public Builder prefix(Inet6Address prefix) {

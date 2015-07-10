@@ -103,8 +103,8 @@ public final class EtherType extends NamedNumber<Short, EtherType> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public EtherType(Short value, String name) {
     super(value, name);
@@ -112,7 +112,7 @@ public final class EtherType extends NamedNumber<Short, EtherType> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a EtherType object.
    */
   public static EtherType getInstance(Short value) {
@@ -126,7 +126,7 @@ public final class EtherType extends NamedNumber<Short, EtherType> {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a EtherType object.
    */
   public static EtherType register(EtherType type) {

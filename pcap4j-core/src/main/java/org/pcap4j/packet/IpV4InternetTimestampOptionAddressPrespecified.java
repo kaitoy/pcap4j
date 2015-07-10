@@ -51,11 +51,11 @@ implements IpV4InternetTimestampOptionData {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV4InternetTimestampOptionAddressPrespecified object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV4InternetTimestampOptionAddressPrespecified newInstance(
     byte[] rawData, int offset, int length
@@ -91,8 +91,8 @@ implements IpV4InternetTimestampOptionData {
 
   /**
    *
-   * @param address
-   * @param timestamps
+   * @param address address
+   * @param timestamps timestamps
    */
   public IpV4InternetTimestampOptionAddressPrespecified(
     Inet4Address address, List<Integer> timestamps

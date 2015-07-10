@@ -298,8 +298,8 @@ public final class ArpHardwareType extends NamedNumber<Short, ArpHardwareType> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public ArpHardwareType(Short value, String name) {
     super(value, name);
@@ -307,7 +307,7 @@ public final class ArpHardwareType extends NamedNumber<Short, ArpHardwareType> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a ArpHardwareType object.
    */
   public static ArpHardwareType getInstance(Short value) {
@@ -321,7 +321,7 @@ public final class ArpHardwareType extends NamedNumber<Short, ArpHardwareType> {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a ArpHardwareType object.
    */
   public static ArpHardwareType register(ArpHardwareType type) {

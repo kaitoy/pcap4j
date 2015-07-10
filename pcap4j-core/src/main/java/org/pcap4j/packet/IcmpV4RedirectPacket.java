@@ -31,11 +31,11 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IcmpV4RedirectPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IcmpV4RedirectPacket newPacket(
     byte[] rawData, int offset, int length
@@ -108,7 +108,7 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
 
     /**
      *
-     * @param gatewayInternetAddress
+     * @param gatewayInternetAddress gatewayInternetAddress
      * @return this Builder object for method chaining.
      */
     public Builder gatewayInternetAddress(Inet4Address gatewayInternetAddress) {

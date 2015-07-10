@@ -40,7 +40,7 @@ public final class MacAddress extends LinkLayerAddress {
 
   /**
    *
-   * @param address
+   * @param address address
    * @return a new MacAddress object.
    */
   public static MacAddress getByAddress(byte[] address) {
@@ -56,7 +56,7 @@ public final class MacAddress extends LinkLayerAddress {
 
   /**
    *
-   * @param name
+   * @param name name
    * @return a new MacAddress object.
    */
   public static MacAddress getByName(String name) {
@@ -67,8 +67,8 @@ public final class MacAddress extends LinkLayerAddress {
 
   /**
    *
-   * @param name
-   * @param separator
+   * @param name name
+   * @param separator separator
    * @return a new MacAddress object.
    */
   public static MacAddress getByName(String name, String separator) {

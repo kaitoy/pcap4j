@@ -29,11 +29,11 @@ public final class IcmpV4TimestampPacket extends IcmpIdentifiablePacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IcmpV4TimestampPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IcmpV4TimestampPacket newPacket(
     byte[] rawData, int offset, int length
@@ -100,7 +100,7 @@ public final class IcmpV4TimestampPacket extends IcmpIdentifiablePacket {
 
     /**
      *
-     * @param originateTimestamp
+     * @param originateTimestamp originateTimestamp
      * @return this Builder object for method chaining.
      */
     public Builder originateTimestamp(int originateTimestamp) {
@@ -110,7 +110,7 @@ public final class IcmpV4TimestampPacket extends IcmpIdentifiablePacket {
 
     /**
      *
-     * @param receiveTimestamp
+     * @param receiveTimestamp receiveTimestamp
      * @return this Builder object for method chaining.
      */
     public Builder receiveTimestamp(int receiveTimestamp) {
@@ -120,7 +120,7 @@ public final class IcmpV4TimestampPacket extends IcmpIdentifiablePacket {
 
     /**
      *
-     * @param transmitTimestamp
+     * @param transmitTimestamp transmitTimestamp
      * @return this Builder object for method chaining.
      */
     public Builder transmitTimestamp(int transmitTimestamp) {

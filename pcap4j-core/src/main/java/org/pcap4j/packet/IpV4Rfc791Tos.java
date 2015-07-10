@@ -40,7 +40,7 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a new IpV4Rfc791Tos object.
    */
   public static IpV4Rfc791Tos newInstance(byte value) {
@@ -201,7 +201,7 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
 
     /**
      *
-     * @param precedence
+     * @param precedence precedence
      * @return this Builder object for method chaining.
      */
     public Builder precedence(IpV4TosPrecedence precedence) {
@@ -211,7 +211,7 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
 
     /**
      *
-     * @param lowDelay
+     * @param lowDelay lowDelay
      * @return this Builder object for method chaining.
      */
     public Builder lowDelay(boolean lowDelay) {
@@ -221,7 +221,7 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
 
     /**
      *
-     * @param highThroughput
+     * @param highThroughput highThroughput
      * @return this Builder object for method chaining.
      */
     public Builder highThroughput(boolean highThroughput) {
@@ -231,7 +231,7 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
 
     /**
      *
-     * @param highRelibility
+     * @param highRelibility highRelibility
      * @return this Builder object for method chaining.
      */
     public Builder highReliability(boolean highRelibility) {
@@ -241,7 +241,7 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
 
     /**
      *
-     * @param seventhBit
+     * @param seventhBit seventhBit
      * @return this Builder object for method chaining.
      */
     public Builder seventhBit(boolean seventhBit) {
@@ -251,7 +251,7 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
 
     /**
      *
-     * @param eighthBit
+     * @param eighthBit eighthBit
      * @return this Builder object for method chaining.
      */
     public Builder eighthBit(boolean eighthBit) {

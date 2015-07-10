@@ -51,11 +51,11 @@ implements IpV6NeighborDiscoveryOption {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV6NeighborDiscoveryTargetLinkLayerAddressOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6NeighborDiscoveryTargetLinkLayerAddressOption newInstance(
     byte[] rawData, int offset, int length
@@ -259,7 +259,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
@@ -269,7 +269,7 @@ implements IpV6NeighborDiscoveryOption {
 
     /**
      *
-     * @param linkLayerAddress
+     * @param linkLayerAddress linkLayerAddress
      * @return this Builder object for method chaining.
      */
     public Builder linkLayerAddress(byte[] linkLayerAddress) {

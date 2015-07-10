@@ -32,8 +32,8 @@ import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
 import org.pcap4j.packet.namednumber.IpV6RoutingType;
-import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.packet.namednumber.NamedNumber;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.PropertiesLoader;
 
@@ -178,7 +178,8 @@ public final class PacketFactoryPropertiesLoader {
 
   /**
    *
-   * @param number
+   * @param <T> number
+   * @param number number
    * @return a class which implements Packet for a specified NamedNumber.
    */
   public <T extends NamedNumber<?, ?>> Class<? extends Packet> getPacketClass(T number) {
@@ -206,8 +207,8 @@ public final class PacketFactoryPropertiesLoader {
 
   /**
    *
-   * @param targetClass
-   * @param numberClass
+   * @param targetClass targetClass
+   * @param numberClass numberClass
    * @return a class which implements
    *         {@link org.pcap4j.packet.factory.PacketFactory PacketFactory}
    *         for specified classes.
@@ -248,7 +249,7 @@ public final class PacketFactoryPropertiesLoader {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a class which implements IpV4Option for a specified type.
    */
   public Class<? extends IpV4Option> getIpV4OptionClass(IpV4OptionType type) {
@@ -276,7 +277,7 @@ public final class PacketFactoryPropertiesLoader {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a class which implements TcpOption for a specified type.
    */
   public Class<? extends TcpOption> getTcpOptionClass(TcpOptionKind type) {
@@ -304,7 +305,7 @@ public final class PacketFactoryPropertiesLoader {
 
   /**
    *
-   * @param flag
+   * @param flag flag
    * @return a class which implements IpV4InternetTimestampOptionData
    *         for a specified flag.
    */
@@ -336,7 +337,7 @@ public final class PacketFactoryPropertiesLoader {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a class which implements IpV6Option for a specified type.
    */
   public Class<? extends IpV6Option> getIpV6OptionClass(IpV6OptionType type) {
@@ -364,7 +365,7 @@ public final class PacketFactoryPropertiesLoader {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a class which implements IpV6RoutingData for a specified type.
    */
   public Class<? extends IpV6RoutingData> getIpV6RoutingDataClass(
@@ -394,7 +395,7 @@ public final class PacketFactoryPropertiesLoader {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a class which implements IpV6NeighborDiscoveryOption for a specified type.
    */
   public Class<? extends IpV6NeighborDiscoveryOption>

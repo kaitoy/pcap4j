@@ -40,11 +40,11 @@ public final class IpV6PadNOption implements IpV6Option {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV6PadNOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6PadNOption newInstance(
     byte[] rawData, int offset, int length
@@ -218,7 +218,7 @@ public final class IpV6PadNOption implements IpV6Option {
 
     /**
      *
-     * @param dataLen
+     * @param dataLen dataLen
      * @return this Builder object for method chaining.
      */
     public Builder dataLen(byte dataLen) {
@@ -228,7 +228,7 @@ public final class IpV6PadNOption implements IpV6Option {
 
     /**
      *
-     * @param data
+     * @param data data
      * @return this Builder object for method chaining.
      */
     public Builder data(byte[] data) {

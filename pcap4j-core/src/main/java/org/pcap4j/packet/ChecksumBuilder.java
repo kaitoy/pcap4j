@@ -10,13 +10,13 @@ package org.pcap4j.packet;
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
- * @param <T>
+ * @param <T> the type of object this builder builds.
  */
 public interface ChecksumBuilder<T> {
 
   /**
    *
-   * @param correctChecksumAtBuild
+   * @param correctChecksumAtBuild correctChecksumAtBuild
    * @return ChecksumBuilder
    */
   public ChecksumBuilder<T> correctChecksumAtBuild(
@@ -25,7 +25,7 @@ public interface ChecksumBuilder<T> {
 
   /**
    *
-   * @return a new ChecksumBuilder object.
+   * @return a new object.
    */
   public T build();
 

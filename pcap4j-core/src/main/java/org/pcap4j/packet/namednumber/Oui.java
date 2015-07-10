@@ -104,8 +104,8 @@ public final class Oui extends NamedNumber<Integer, Oui> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public Oui(Integer value, String name) {
     super(value, name);
@@ -119,7 +119,7 @@ public final class Oui extends NamedNumber<Integer, Oui> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a Oui object.
    */
   public static Oui getInstance(Integer value) {
@@ -133,7 +133,7 @@ public final class Oui extends NamedNumber<Integer, Oui> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a Oui object.
    */
   public static Oui getInstance(byte[] value) {
@@ -149,7 +149,7 @@ public final class Oui extends NamedNumber<Integer, Oui> {
 
   /**
    *
-   * @param version
+   * @param version version
    * @return a Oui object.
    */
   public static Oui register(Oui version) {

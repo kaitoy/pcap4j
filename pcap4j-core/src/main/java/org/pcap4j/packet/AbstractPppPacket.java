@@ -178,7 +178,7 @@ abstract class AbstractPppPacket extends AbstractPacket {
 
     /**
      *
-     * @param protocol
+     * @param protocol protocol
      * @return this Builder object for method chaining.
      */
     public Builder protocol(PppDllProtocol protocol) {
@@ -199,7 +199,7 @@ abstract class AbstractPppPacket extends AbstractPacket {
 
     /**
      *
-     * @param pad
+     * @param pad pad
      * @return this Builder object for method chaining.
      */
     public Builder pad(byte[] pad) {

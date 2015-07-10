@@ -45,14 +45,15 @@ implements PacketFactory<Packet, NamedNumber<?, ?>> {
 
   /**
    *
-   * @param rawData
-   * @param offset
-   * @param length
-   * @param packetClass
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
+   * @param packetClass packetClass
    * @return a new Packet object.
-   * @throws IllegalStateException
-   * @throws IllegalArgumentException
-   * @throws NullPointerException
+   * @throws IllegalStateException if an access to the newInstance method of the packetClass fails.
+   * @throws IllegalArgumentException if an exception other than {@link IllegalRawDataException}
+   *                                  is thrown by newInstance method of the packetClass.
+   * @throws NullPointerException if any of arguments are null.
    */
   public Packet newInstance(
     byte[] rawData, int offset, int length, Class<? extends Packet> packetClass

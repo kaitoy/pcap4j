@@ -26,8 +26,8 @@ public final class Inet4NetworkAddress implements Serializable {
 
   /**
    *
-   * @param networkAddress
-   * @param mask
+   * @param networkAddress networkAddress
+   * @param mask mask
    */
   public Inet4NetworkAddress(Inet4Address networkAddress, Inet4Address mask) {
     this.networkAddress = networkAddress;

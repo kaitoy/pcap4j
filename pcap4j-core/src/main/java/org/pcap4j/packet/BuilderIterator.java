@@ -22,19 +22,18 @@ public final class BuilderIterator implements Iterator<Builder> {
 
   /**
    *
-   * @param b
+   * @param b b
    */
   public BuilderIterator(Builder b) {
     this.next = b;
   }
 
+  @Override
   public boolean hasNext() {
     return next != null;
   }
 
-  /**
-   * @throws NoSuchElementException
-   */
+  @Override
   public Builder next() {
     if (!hasNext()) {
       throw new NoSuchElementException();
@@ -47,8 +46,9 @@ public final class BuilderIterator implements Iterator<Builder> {
   }
 
   /**
-   * @throws UnsupportedOperationException
+   * @throws UnsupportedOperationException always.
    */
+  @Override
   public void remove() {
     throw new UnsupportedOperationException();
   }

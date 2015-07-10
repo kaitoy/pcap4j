@@ -33,11 +33,11 @@ public final class IpV4RecordRouteOption extends IpV4RouteOption {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV4RecordRouteOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV4RecordRouteOption newInstance(
     byte[] rawData, int offset, int length

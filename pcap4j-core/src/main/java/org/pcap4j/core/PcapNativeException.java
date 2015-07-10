@@ -26,7 +26,7 @@ public final class PcapNativeException extends Exception {
 
   /**
    *
-   * @param message
+   * @param message message
    */
   public PcapNativeException(String message){
     super(message);
@@ -34,8 +34,8 @@ public final class PcapNativeException extends Exception {
 
   /**
    *
-   * @param message
-   * @param returnCode
+   * @param message message
+   * @param returnCode returnCode
    */
   public PcapNativeException(String message, Integer returnCode){
     super(message);
@@ -44,8 +44,8 @@ public final class PcapNativeException extends Exception {
 
   /**
    *
-   * @param message
-   * @param cause
+   * @param message message
+   * @param cause cause
    */
   public PcapNativeException(String message, Throwable cause){
       super(message, cause);
@@ -53,7 +53,7 @@ public final class PcapNativeException extends Exception {
 
   /**
    *
-   * @param cause
+   * @param cause cause
    */
   public PcapNativeException(Throwable cause){
       super(cause);

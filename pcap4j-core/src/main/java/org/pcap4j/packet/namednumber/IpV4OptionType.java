@@ -212,8 +212,8 @@ public final class IpV4OptionType extends NamedNumber<Byte, IpV4OptionType> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IpV4OptionType(Byte value, String name) {
     super(value, name);
@@ -260,7 +260,7 @@ public final class IpV4OptionType extends NamedNumber<Byte, IpV4OptionType> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IpV4OptionType object.
    */
   public static IpV4OptionType getInstance(Byte value) {
@@ -274,7 +274,7 @@ public final class IpV4OptionType extends NamedNumber<Byte, IpV4OptionType> {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a IpV4OptionType object.
    */
   public static IpV4OptionType register(IpV4OptionType type) {

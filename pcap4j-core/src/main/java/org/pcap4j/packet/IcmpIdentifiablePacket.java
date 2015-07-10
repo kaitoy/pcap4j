@@ -55,7 +55,7 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
 
     /**
      *
-     * @param identifier
+     * @param identifier identifier
      * @return this Builder object for method chaining.
      */
     public Builder identifier(short identifier) {
@@ -65,7 +65,7 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
 
     /**
      *
-     * @param sequenceNumber
+     * @param sequenceNumber sequenceNumber
      * @return this Builder object for method chaining.
      */
     public Builder sequenceNumber(short sequenceNumber) {

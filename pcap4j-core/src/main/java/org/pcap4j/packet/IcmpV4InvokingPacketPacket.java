@@ -41,9 +41,9 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
 
   /**
    *
-   * @param rawData
-   * @param payloadOffset
-   * @param payloadLength
+   * @param rawData rawData
+   * @param payloadOffset payloadOffset
+   * @param payloadLength payloadLength
    */
   protected IcmpV4InvokingPacketPacket(byte[] rawData, int payloadOffset, int payloadLength) {
     Packet p = PacketFactories.getFactory(Packet.class, EtherType.class)
@@ -78,7 +78,7 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
 
   /**
    *
-   * @param builder
+   * @param builder builder
    */
   protected IcmpV4InvokingPacketPacket(Builder builder) {
     if (builder == null) {
@@ -110,7 +110,7 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
 
     /**
      *
-     * @param packet
+     * @param packet packet
      */
     protected Builder(IcmpV4InvokingPacketPacket packet) {
       this.payload = packet.payload;
@@ -118,7 +118,7 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
 
     /**
      *
-     * @param payload
+     * @param payload payload
      * @return this Builder object for method chaining.
      */
     public Builder payload(Packet payload) {

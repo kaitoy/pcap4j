@@ -47,14 +47,15 @@ implements PacketFactory<IpV4Tos, NotApplicable> {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
-   * @param tosClass
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
+   * @param tosClass tosClass
    * @return a new IpV4Tos object.
-   * @throws IllegalStateException
-   * @throws IllegalArgumentException
-   * @throws NullPointerException
+   * @throws IllegalStateException if an access to the newInstance method of the tosClass fails.
+   * @throws IllegalArgumentException if an exception is thrown by
+   *                                  newInstance method of the tosClass.
+   * @throws NullPointerException if any of arguments are null.
    */
   public IpV4Tos newInstance(
     byte[] rawData, int offset, int length, Class<? extends IpV4Tos> tosClass

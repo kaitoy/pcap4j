@@ -21,19 +21,18 @@ public final class PacketIterator implements Iterator<Packet> {
 
   /**
    *
-   * @param p
+   * @param p p
    */
   public PacketIterator(Packet p) {
     this.next = p;
   }
 
+  @Override
   public boolean hasNext() {
     return next != null;
   }
 
-  /**
-   * @throws NoSuchElementException
-   */
+  @Override
   public Packet next() {
     if (!hasNext()) {
       throw new NoSuchElementException();
@@ -46,8 +45,9 @@ public final class PacketIterator implements Iterator<Packet> {
   }
 
   /**
-   * @throws UnsupportedOperationException
+   * @throws UnsupportedOperationException always.
    */
+  @Override
   public void remove() {
     throw new UnsupportedOperationException();
   }

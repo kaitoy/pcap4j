@@ -62,8 +62,8 @@ extends NamedNumber<Byte, IpV4InternetTimestampOptionFlag> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IpV4InternetTimestampOptionFlag(Byte value, String name) {
     super(value, name);
@@ -76,7 +76,7 @@ extends NamedNumber<Byte, IpV4InternetTimestampOptionFlag> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IpV4InternetTimestampOptionFlag object.
    */
   public static IpV4InternetTimestampOptionFlag getInstance(Byte value) {
@@ -90,7 +90,7 @@ extends NamedNumber<Byte, IpV4InternetTimestampOptionFlag> {
 
   /**
    *
-   * @param flag
+   * @param flag flag
    * @return a IpV4InternetTimestampOptionFlag object.
    */
   public static IpV4InternetTimestampOptionFlag register(

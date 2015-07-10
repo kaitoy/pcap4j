@@ -88,8 +88,8 @@ public final class IpV4TosPrecedence extends NamedNumber<Byte, IpV4TosPrecedence
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IpV4TosPrecedence(Byte value, String name) {
     super(value, name);
@@ -103,7 +103,7 @@ public final class IpV4TosPrecedence extends NamedNumber<Byte, IpV4TosPrecedence
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IpV4TosPrecedence object.
    */
   public static IpV4TosPrecedence getInstance(Byte value) {
@@ -117,7 +117,7 @@ public final class IpV4TosPrecedence extends NamedNumber<Byte, IpV4TosPrecedence
 
   /**
    *
-   * @param precedence
+   * @param precedence precedence
    * @return a IpV4TosPrecedence object.
    */
   public static IpV4TosPrecedence register(IpV4TosPrecedence precedence) {

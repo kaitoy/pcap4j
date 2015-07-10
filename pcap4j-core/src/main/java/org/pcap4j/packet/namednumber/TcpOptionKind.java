@@ -249,8 +249,8 @@ public final class TcpOptionKind extends NamedNumber<Byte, TcpOptionKind> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public TcpOptionKind(Byte value, String name) {
     super(value, name);
@@ -258,7 +258,7 @@ public final class TcpOptionKind extends NamedNumber<Byte, TcpOptionKind> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a TcpOptionKind object.
    */
   public static TcpOptionKind getInstance(Byte value) {
@@ -272,7 +272,7 @@ public final class TcpOptionKind extends NamedNumber<Byte, TcpOptionKind> {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a TcpOptionKind object.
    */
   public static TcpOptionKind register(TcpOptionKind type) {

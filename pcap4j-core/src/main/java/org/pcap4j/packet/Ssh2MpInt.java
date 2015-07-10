@@ -45,10 +45,10 @@ public final class Ssh2MpInt implements Serializable, Comparable<Ssh2MpInt> {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
-   * @throws IllegalRawDataException
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public Ssh2MpInt(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
@@ -89,7 +89,7 @@ public final class Ssh2MpInt implements Serializable, Comparable<Ssh2MpInt> {
 
   /**
    *
-   * @param value
+   * @param value value
    */
   public Ssh2MpInt(long value) {
     byte[] valArr = ByteArrays.toByteArray(value);

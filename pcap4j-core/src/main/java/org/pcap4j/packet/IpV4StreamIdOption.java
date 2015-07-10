@@ -38,11 +38,11 @@ public final class IpV4StreamIdOption implements IpV4Option {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IpV4StreamIdOption object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV4StreamIdOption newInstance(
     byte[] rawData, int offset, int length
@@ -204,7 +204,7 @@ public final class IpV4StreamIdOption implements IpV4Option {
 
     /**
      *
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder length(byte length) {
@@ -214,7 +214,7 @@ public final class IpV4StreamIdOption implements IpV4Option {
 
     /**
      *
-     * @param streamId
+     * @param streamId streamId
      * @return this Builder object for method chaining.
      */
     public Builder streamId(short streamId) {

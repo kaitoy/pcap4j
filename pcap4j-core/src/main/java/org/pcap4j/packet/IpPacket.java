@@ -30,11 +30,11 @@ public final class IpPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new Packet object representing an IP (v4 or v6) packet.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Packet newPacket(
     byte[] rawData, int offset, int length

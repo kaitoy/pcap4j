@@ -284,8 +284,8 @@ extends NamedNumber<Byte, IpV6NeighborDiscoveryOptionType> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IpV6NeighborDiscoveryOptionType(Byte value, String name) {
     super(value, name);
@@ -293,7 +293,7 @@ extends NamedNumber<Byte, IpV6NeighborDiscoveryOptionType> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IpV6NeighborDiscoveryOptionType object.
    */
   public static IpV6NeighborDiscoveryOptionType getInstance(Byte value) {
@@ -307,7 +307,7 @@ extends NamedNumber<Byte, IpV6NeighborDiscoveryOptionType> {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a IpV6NeighborDiscoveryOptionType object.
    */
   public static IpV6NeighborDiscoveryOptionType register(IpV6NeighborDiscoveryOptionType type) {

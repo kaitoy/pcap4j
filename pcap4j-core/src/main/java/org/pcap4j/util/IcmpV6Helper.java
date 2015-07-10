@@ -23,7 +23,8 @@ public final class IcmpV6Helper {
   /**
    *
    * @param packet an IPv6 Packet
-   * @param size the target size in bytes. (i.e. MTU - <IPv6 header(s) size> - <ICMPv6 header size>)
+   * @param size the target size in bytes.
+   *        (i.e. MTU - &lt;IPv6 header(s) size&gt; - &lt;ICMPv6 header size&gt;)
    * @return a new IPv6 packet object.
    */
   public static Packet makePacketForInvokingPacketField(Packet packet, int size) {
@@ -98,7 +99,9 @@ public final class IcmpV6Helper {
   /**
    *
    * @param packet an IPv6 Packet
-   * @param size the target size in bytes. (i.e. MTU - <IPv6 header(s) size> - <ICMPv6 header size> - <IPv6 ND option(s) size>)
+   * @param size the target size in bytes.
+   *        (i.e. MTU - &lt;IPv6 header(s) size&gt; - &lt;ICMPv6 header size&gt;
+   *        - &lt;IPv6 ND option(s) size&gt;)
    * @return a new IPv6 packet object.
    */
   public static Packet makePacketForRedirectHeaderOption(Packet packet, int size) {

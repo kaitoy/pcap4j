@@ -37,11 +37,11 @@ public final class LinuxSllPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new LinuxSllPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static LinuxSllPacket newPacket(
     byte[] rawData, int offset, int length
@@ -131,7 +131,7 @@ public final class LinuxSllPacket extends AbstractPacket {
 
     /**
      *
-     * @param packetType
+     * @param packetType packetType
      * @return this Builder object for method chaining.
      */
     public Builder packetType(LinuxSllPacketType packetType) {
@@ -140,7 +140,7 @@ public final class LinuxSllPacket extends AbstractPacket {
     }
 
     /**
-     * @param addressType
+     * @param addressType addressType
      * @return this Builder object for method chaining.
      */
     public Builder addressType(ArpHardwareType addressType) {
@@ -150,7 +150,7 @@ public final class LinuxSllPacket extends AbstractPacket {
 
     /**
      *
-     * @param addressLength
+     * @param addressLength addressLength
      * @return this Builder object for method chaining.
      */
     public Builder addressLength(short addressLength) {
@@ -160,7 +160,7 @@ public final class LinuxSllPacket extends AbstractPacket {
 
     /**
      *
-     * @param address
+     * @param address address
      * @return this Builder object for method chaining.
      */
     public Builder address(byte[] address) {
@@ -170,7 +170,7 @@ public final class LinuxSllPacket extends AbstractPacket {
 
     /**
      *
-     * @param protocol
+     * @param protocol protocol
      * @return this Builder object for method chaining.
      */
     public Builder protocol(EtherType protocol) {

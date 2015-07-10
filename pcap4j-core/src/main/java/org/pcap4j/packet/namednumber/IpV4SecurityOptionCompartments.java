@@ -41,8 +41,8 @@ extends NamedNumber<Short, IpV4SecurityOptionCompartments> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IpV4SecurityOptionCompartments(Short value, String name) {
     super(value, name);
@@ -50,7 +50,7 @@ extends NamedNumber<Short, IpV4SecurityOptionCompartments> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IpV4SecurityOptionCompartments object.
    */
   public static IpV4SecurityOptionCompartments getInstance(Short value) {
@@ -64,7 +64,7 @@ extends NamedNumber<Short, IpV4SecurityOptionCompartments> {
 
   /**
    *
-   * @param number
+   * @param number number
    * @return a IpV4SecurityOptionCompartments object.
    */
   public static IpV4SecurityOptionCompartments register(

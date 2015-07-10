@@ -33,11 +33,11 @@ public final class IcmpV6RouterAdvertisementPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IcmpV6RouterAdvertisementPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IcmpV6RouterAdvertisementPacket newPacket(
     byte[] rawData, int offset, int length
@@ -110,7 +110,7 @@ public final class IcmpV6RouterAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param curHopLimit
+     * @param curHopLimit curHopLimit
      * @return this Builder object for method chaining.
      */
     public Builder curHopLimit(byte curHopLimit) {
@@ -120,7 +120,7 @@ public final class IcmpV6RouterAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param managedAddressConfigurationFlag
+     * @param managedAddressConfigurationFlag managedAddressConfigurationFlag
      * @return this Builder object for method chaining.
      */
     public Builder managedAddressConfigurationFlag(
@@ -132,7 +132,7 @@ public final class IcmpV6RouterAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param otherConfigurationFlag
+     * @param otherConfigurationFlag otherConfigurationFlag
      * @return this Builder object for method chaining.
      */
     public Builder otherConfigurationFlag(boolean otherConfigurationFlag) {
@@ -142,7 +142,7 @@ public final class IcmpV6RouterAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param reserved
+     * @param reserved reserved
      * @return this Builder object for method chaining.
      */
     public Builder reserved(byte reserved) {
@@ -152,7 +152,7 @@ public final class IcmpV6RouterAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param routerLifetime
+     * @param routerLifetime routerLifetime
      * @return this Builder object for method chaining.
      */
     public Builder routerLifetime(short routerLifetime) {
@@ -162,7 +162,7 @@ public final class IcmpV6RouterAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param reachableTime
+     * @param reachableTime reachableTime
      * @return this Builder object for method chaining.
      */
     public Builder reachableTime(int reachableTime) {
@@ -172,7 +172,7 @@ public final class IcmpV6RouterAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param retransTimer
+     * @param retransTimer retransTimer
      * @return this Builder object for method chaining.
      */
     public Builder retransTimer(int retransTimer) {
@@ -182,7 +182,7 @@ public final class IcmpV6RouterAdvertisementPacket extends AbstractPacket {
 
     /**
      *
-     * @param options
+     * @param options options
      * @return this Builder object for method chaining.
      */
     public Builder options(List<IpV6NeighborDiscoveryOption> options) {

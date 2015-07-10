@@ -30,11 +30,11 @@ public final class Ssh2ServiceRequestPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new Ssh2ServiceRequestPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Ssh2ServiceRequestPacket newPacket(
     byte[] rawData, int offset, int length
@@ -93,7 +93,7 @@ public final class Ssh2ServiceRequestPacket extends AbstractPacket {
 
     /**
      *
-     * @param serviceName
+     * @param serviceName serviceName
      * @return this Builder object for method chaining.
      */
     public Builder serviceName(Ssh2String serviceName) {

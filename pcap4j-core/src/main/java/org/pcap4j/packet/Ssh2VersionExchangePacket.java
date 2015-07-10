@@ -31,11 +31,11 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new Ssh2VersionExchangePacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Ssh2VersionExchangePacket newPacket(
     byte[] rawData, int offset, int length
@@ -104,7 +104,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
 
     /**
      *
-     * @param messages
+     * @param messages messages
      * @return this Builder object for method chaining.
      */
     public Builder messages(List<String> messages) {
@@ -114,7 +114,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
 
     /**
      *
-     * @param protoVersion
+     * @param protoVersion protoVersion
      * @return this Builder object for method chaining.
      */
     public Builder protoVersion(String protoVersion) {
@@ -124,7 +124,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
 
     /**
      *
-     * @param softwareVersion
+     * @param softwareVersion softwareVersion
      * @return this Builder object for method chaining.
      */
     public Builder softwareVersion(String softwareVersion) {
@@ -134,7 +134,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
 
     /**
      *
-     * @param comments
+     * @param comments comments
      * @return this Builder object for method chaining.
      */
     public Builder comments(String comments) {

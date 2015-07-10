@@ -32,19 +32,19 @@ public final class ProtocolFamily extends NamedNumber<Integer, ProtocolFamily> {
     = new ProtocolFamily(0, "PF_UNSPEC");
 
   /**
-   * PF_INET (IPv4). This value is set to 0xFFFF & {@link Inets#AF_INET}.
+   * PF_INET (IPv4). This value is set to 0xFFFF &amp; {@link Inets#AF_INET}.
    */
   public static final ProtocolFamily PF_INET
     = new ProtocolFamily(0xFFFF & Inets.AF_INET, "PF_INET");
 
   /**
-   * PF_LINK (Link layer interface). This value is set to 0xFFFF & {@link Inets#AF_LINK}.
+   * PF_LINK (Link layer interface). This value is set to 0xFFFF &amp; {@link Inets#AF_LINK}.
    */
   public static final ProtocolFamily PF_LINK
     = new ProtocolFamily(0xFFFF & Inets.AF_LINK, "PF_LINK");
 
   /**
-   * PF_INET6 (IPv6). This value is set to 0xFFFF & {@link Inets#AF_INET6}.
+   * PF_INET6 (IPv6). This value is set to 0xFFFF &amp; {@link Inets#AF_INET6}.
    */
   public static final ProtocolFamily PF_INET6
     = new ProtocolFamily(0xFFFF & Inets.AF_INET6, "PF_INET6");
@@ -61,8 +61,8 @@ public final class ProtocolFamily extends NamedNumber<Integer, ProtocolFamily> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public ProtocolFamily(Integer value, String name) {
     super(value, name);
@@ -70,7 +70,7 @@ public final class ProtocolFamily extends NamedNumber<Integer, ProtocolFamily> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a ProtocolFamily object.
    */
   public static ProtocolFamily getInstance(Integer value) {
@@ -84,7 +84,7 @@ public final class ProtocolFamily extends NamedNumber<Integer, ProtocolFamily> {
 
   /**
    *
-   * @param type
+   * @param type type
    * @return a ProtocolFamily object.
    */
   public static ProtocolFamily register(ProtocolFamily type) {

@@ -36,9 +36,9 @@ public class PropertiesLoader {
 
   /**
    *
-   * @param resourceName
-   * @param systemPropertiesOverPropertiesFile
-   * @param caching
+   * @param resourceName resourceName
+   * @param systemPropertiesOverPropertiesFile systemPropertiesOverPropertiesFile
+   * @param caching caching
    */
   public PropertiesLoader(
     String resourceName,
@@ -102,8 +102,8 @@ public class PropertiesLoader {
 
   /**
    *
-   * @param key
-   * @param defaultValue
+   * @param key key
+   * @param defaultValue defaultValue
    * @return a value got from a specified key.
    */
   public String getString(String key, String defaultValue) {
@@ -156,8 +156,8 @@ public class PropertiesLoader {
 
   /**
    *
-   * @param key
-   * @param defaultValue
+   * @param key key
+   * @param defaultValue defaultValue
    * @return an Integer object converted from a value got from a specified key.
    */
   public Integer getInteger(String key, Integer defaultValue) {
@@ -219,8 +219,8 @@ public class PropertiesLoader {
 
   /**
    *
-   * @param key
-   * @param defaultValue
+   * @param key key
+   * @param defaultValue defaultValue
    * @return a Boolean object converted from a value got from a specified key.
    */
   public Boolean getBoolean(String key, Boolean defaultValue) {
@@ -277,8 +277,9 @@ public class PropertiesLoader {
 
   /**
    *
-   * @param key
-   * @param defaultValue
+   * @param <T> class
+   * @param key key
+   * @param defaultValue defaultValue
    * @return a Class object converted from a value got from a specified key.
    */
   public <T> Class<? extends T> getClass(
@@ -370,8 +371,8 @@ public class PropertiesLoader {
 
   /**
    *
-   * @param key
-   * @param defaultValue
+   * @param key key
+   * @param defaultValue defaultValue
    * @return an InetAddress object converted from a value got from a specified key.
    */
   public InetAddress getInetAddress(String key, InetAddress defaultValue) {
@@ -443,8 +444,8 @@ public class PropertiesLoader {
 
   /**
    *
-   * @param key
-   * @param defaultValue
+   * @param key key
+   * @param defaultValue defaultValue
    * @return an int array converted from a value got from a specified key.
    */
   public int[] getIntArray(String key, int[] defaultValue) {

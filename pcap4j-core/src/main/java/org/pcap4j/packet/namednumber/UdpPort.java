@@ -487,7 +487,7 @@ public final class UdpPort extends NamedNumber<Short, UdpPort> {
     = new UdpPort((short)103, "Genesis Point-to-Point Trans Net");
 
   /**
-   * ACR-NEMA Digital Imag. & Comm. 300: 104
+   * ACR-NEMA Digital Imag. &amp; Comm. 300: 104
    */
   public static final UdpPort ACR_NEMA
     = new UdpPort((short)104, "ACR-NEMA Digital Imag. & Comm. 300");
@@ -4799,8 +4799,8 @@ public final class UdpPort extends NamedNumber<Short, UdpPort> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public UdpPort(Short value, String name) {
     super(value, name);
@@ -4808,7 +4808,7 @@ public final class UdpPort extends NamedNumber<Short, UdpPort> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a UdpPort object.
    */
   public static UdpPort getInstance(Short value) {
@@ -4822,7 +4822,7 @@ public final class UdpPort extends NamedNumber<Short, UdpPort> {
 
   /**
    *
-   * @param port
+   * @param port port
    * @return a UdpPort object.
    */
   public static UdpPort register(UdpPort port) {

@@ -239,7 +239,7 @@ abstract class IpV4RouteOption implements IpV4Option {
 
     /**
      *
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder<T> length(byte length) {
@@ -249,7 +249,7 @@ abstract class IpV4RouteOption implements IpV4Option {
 
     /**
      *
-     * @param pointer
+     * @param pointer pointer
      * @return this Builder object for method chaining.
      */
     public Builder<T> pointer(byte pointer) {
@@ -259,7 +259,7 @@ abstract class IpV4RouteOption implements IpV4Option {
 
     /**
      *
-     * @param routeData
+     * @param routeData routeData
      * @return this Builder object for method chaining.
      */
     public Builder<T> routeData(List<Inet4Address> routeData) {

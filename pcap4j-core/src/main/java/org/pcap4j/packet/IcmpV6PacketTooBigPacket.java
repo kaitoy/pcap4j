@@ -30,11 +30,11 @@ public final class IcmpV6PacketTooBigPacket extends IcmpV6InvokingPacketPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IcmpV6PacketTooBigPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IcmpV6PacketTooBigPacket newPacket(
     byte[] rawData, int offset, int length
@@ -101,7 +101,7 @@ public final class IcmpV6PacketTooBigPacket extends IcmpV6InvokingPacketPacket {
 
     /**
      *
-     * @param mtu
+     * @param mtu mtu
      * @return this Builder object for method chaining.
      */
     public Builder mtu(int mtu) {

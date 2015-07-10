@@ -45,7 +45,7 @@ public final class Ssh2Boolean implements Serializable {
 
   /**
    *
-   * @param rawData
+   * @param rawData rawData
    */
   public Ssh2Boolean(byte rawData) {
     this.rawData = rawData;
@@ -56,8 +56,8 @@ public final class Ssh2Boolean implements Serializable {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
+   * @param rawData rawData
+   * @param offset offset
    */
   public Ssh2Boolean(byte[] rawData, int offset) {
     ByteArrays.validateBounds(rawData, offset, 1);

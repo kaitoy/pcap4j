@@ -30,9 +30,9 @@ implements IpV4InternetTimestampOptionData {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new UnknownIpV4InternetTimestampOptionData object.
    */
   public static UnknownIpV4InternetTimestampOptionData newInstance(

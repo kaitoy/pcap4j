@@ -10,13 +10,13 @@ package org.pcap4j.packet;
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
- * @param <T>
+ * @param <T> tye type of object this builder builds.
  */
 public interface LengthBuilder<T> {
 
   /**
    *
-   * @param correctLengthAtBuild
+   * @param correctLengthAtBuild correctLengthAtBuild
    * @return LengthBuilder
    */
   public LengthBuilder<T> correctLengthAtBuild(

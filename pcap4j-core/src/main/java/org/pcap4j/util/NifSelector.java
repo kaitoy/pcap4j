@@ -28,7 +28,7 @@ public class NifSelector {
    *
    * @return a PcapNetworkInterface object which represents
    *         a selected network interface.
-   * @throws IOException
+   * @throws IOException if no network interface is available.
    */
   public
   final PcapNetworkInterface selectNetworkInterface()
@@ -51,8 +51,8 @@ public class NifSelector {
 
   /**
    *
-   * @param msg
-   * @throws IOException
+   * @param msg msg
+   * @throws IOException if fails to write.
    */
   protected void write(String msg) throws IOException {
     System.out.print(msg);
@@ -61,7 +61,7 @@ public class NifSelector {
   /**
    *
    * @return string
-   * @throws IOException
+   * @throws IOException if fails to read.
    */
   protected String read() throws IOException {
     BufferedReader reader
@@ -71,8 +71,8 @@ public class NifSelector {
 
   /**
    *
-   * @param nifs
-   * @throws IOException
+   * @param nifs nifs
+   * @throws IOException if fails to show.
    */
   protected
   void showNifList(List<PcapNetworkInterface> nifs)
@@ -106,10 +106,10 @@ public class NifSelector {
 
   /**
    *
-   * @param nifs
+   * @param nifs nifs
    * @return a PcapNetworkInterface object which represents
    *         a selected network interface.
-   * @throws IOException
+   * @throws IOException if fails in something around IO.
    */
   protected
   PcapNetworkInterface doSelect(List<PcapNetworkInterface> nifs)

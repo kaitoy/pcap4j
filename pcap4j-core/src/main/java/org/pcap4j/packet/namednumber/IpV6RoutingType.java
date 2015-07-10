@@ -60,8 +60,8 @@ public final class IpV6RoutingType extends NamedNumber<Byte, IpV6RoutingType> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IpV6RoutingType(Byte value, String name) {
     super(value, name);
@@ -69,7 +69,7 @@ public final class IpV6RoutingType extends NamedNumber<Byte, IpV6RoutingType> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IpV6RoutingHeaderType object.
    */
   public static IpV6RoutingType getInstance(Byte value) {
@@ -83,7 +83,7 @@ public final class IpV6RoutingType extends NamedNumber<Byte, IpV6RoutingType> {
 
   /**
    *
-   * @param number
+   * @param number number
    * @return a IpV6RoutingHeaderType object.
    */
   public static IpV6RoutingType register(IpV6RoutingType number) {

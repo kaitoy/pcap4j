@@ -177,8 +177,8 @@ public final class PcapHandle {
   /**
    * @param dlt a {@link org.pcap4j.packet.namednumber.DataLinkType DataLinkType}
    *        object to set
-   * @throws PcapNativeException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void setDlt(DataLinkType dlt) throws PcapNativeException, NotOpenException {
     if (dlt == null) {
@@ -236,7 +236,7 @@ public final class PcapHandle {
   /**
    *
    * @return the dimension of the packet portion (in bytes) that is delivered to the application.
-   * @throws NotOpenException
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public int getSnapshot() throws NotOpenException {
     if (!open) {
@@ -259,7 +259,7 @@ public final class PcapHandle {
   /**
    *
    * @return a {@link org.pcap4j.core.PcapHandle.SwappedType SwappedType} object.
-   * @throws NotOpenException
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public SwappedType isSwapped() throws NotOpenException {
     if (!open) {
@@ -295,7 +295,7 @@ public final class PcapHandle {
   /**
    *
    * @return the major version number of the pcap library used to write the savefile.
-   * @throws NotOpenException
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public int getMajorVersion() throws NotOpenException {
     if (!open) {
@@ -318,7 +318,7 @@ public final class PcapHandle {
   /**
    *
    * @return the minor version number of the pcap library used to write the savefile.
-   * @throws NotOpenException
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public int getMinorVersion() throws NotOpenException {
     if (!open) {
@@ -340,12 +340,12 @@ public final class PcapHandle {
 
   /**
    *
-   * @param bpfExpression
-   * @param mode
-   * @param netmask
+   * @param bpfExpression bpfExpression
+   * @param mode mode
+   * @param netmask netmask
    * @return a {@link org.pcap4j.core.BpfProgram BpfProgram} object.
-   * @throws PcapNativeException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public BpfProgram compileFilter(
     String bpfExpression, BpfCompileMode mode, Inet4Address netmask
@@ -394,12 +394,12 @@ public final class PcapHandle {
 
   /**
    *
-   * @param bpfExpression
-   * @param mode
-   * @param netmask
-   * @throws PcapNativeException
-   * @throws NotOpenException
-   * @throws NullPointerException
+   * @param bpfExpression bpfExpression
+   * @param mode mode
+   * @param netmask netmask
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
+   * @throws NullPointerException if any of arguments are null.
    */
   public void setFilter(
     String bpfExpression, BpfCompileMode mode, Inet4Address netmask
@@ -462,11 +462,11 @@ public final class PcapHandle {
 
   /**
    *
-   * @param bpfExpression
-   * @param mode
-   * @throws PcapNativeException
-   * @throws NotOpenException
-   * @throws NullPointerException
+   * @param bpfExpression bpfExpression
+   * @param mode mode
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
+   * @throws NullPointerException if any of arguments are null.
    */
   public void setFilter(
     String bpfExpression, BpfCompileMode mode
@@ -476,9 +476,10 @@ public final class PcapHandle {
 
   /**
    *
-   * @param prog
-   * @throws PcapNativeException
-   * @throws NotOpenException
+   * @param prog prog
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
+   * @throws NullPointerException if any of arguments are null.
    */
   public void setFilter(BpfProgram prog) throws PcapNativeException, NotOpenException {
     if (prog == null) {
@@ -509,9 +510,9 @@ public final class PcapHandle {
 
   /**
    *
-   * @param mode
-   * @throws PcapNativeException
-   * @throws NotOpenException
+   * @param mode mode
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void setBlockingMode(BlockingMode mode) throws PcapNativeException, NotOpenException {
     if (mode == null) {
@@ -544,8 +545,8 @@ public final class PcapHandle {
   /**
    *
    * @return blocking mode
-   * @throws PcapNativeException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public BlockingMode getBlockingMode() throws PcapNativeException, NotOpenException {
     if (!open) {
@@ -579,7 +580,7 @@ public final class PcapHandle {
 
   /**
    * @return a Packet object created from a captured packet using the packet factory. May be null.
-   * @throws NotOpenException
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public Packet getNextPacket() throws NotOpenException {
     byte[] ba = getNextRawPacket();
@@ -594,7 +595,7 @@ public final class PcapHandle {
   /**
    *
    * @return a captured packet. May be null.
-   * @throws NotOpenException
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public byte[] getNextRawPacket() throws NotOpenException {
     if (!open) {
@@ -628,10 +629,12 @@ public final class PcapHandle {
 
   /**
    * @return a Packet object created from a captured packet using the packet factory. Not null.
-   * @throws PcapNativeException
-   * @throws EOFException
-   * @throws TimeoutException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws EOFException if packets are being read from a pcap file
+   *                      and there are no more packets to read from the file.
+   * @throws TimeoutException if packets are being read from a live capture
+   *                          and the timeout expired.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public Packet getNextPacketEx()
   throws PcapNativeException, EOFException, TimeoutException, NotOpenException {
@@ -643,10 +646,12 @@ public final class PcapHandle {
   /**
    *
    * @return a captured packet. Not null.
-   * @throws PcapNativeException
-   * @throws EOFException
-   * @throws TimeoutException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws EOFException if packets are being read from a pcap file
+   *                      and there are no more packets to read from the file.
+   * @throws TimeoutException if packets are being read from a live capture
+   *                          and the timeout expired.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public byte[] getNextRawPacketEx()
   throws PcapNativeException, EOFException, TimeoutException, NotOpenException {
@@ -708,10 +713,10 @@ public final class PcapHandle {
    * @param packetCount the number of packets to capture. -1 is equivalent to infinity.
    *                    0 may result in different behaviors between platforms
    *                    and pcap library versions.
-   * @param listener
-   * @throws PcapNativeException
-   * @throws InterruptedException
-   * @throws NotOpenException
+   * @param listener listener
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void loop(
     int packetCount, PacketListener listener
@@ -738,11 +743,11 @@ public final class PcapHandle {
    * @param packetCount the number of packets to capture. -1 is equivalent to infinity.
    *                    0 may result in different behaviors between platforms
    *                    and pcap library versions.
-   * @param listener
-   * @param executor
-   * @throws PcapNativeException
-   * @throws InterruptedException
-   * @throws NotOpenException
+   * @param listener listener
+   * @param executor executor
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void loop(
     int packetCount, PacketListener listener, Executor executor
@@ -766,10 +771,10 @@ public final class PcapHandle {
    * @param packetCount the number of packets to capture. -1 is equivalent to infinity.
    *                    0 may result in different behaviors between platforms
    *                    and pcap library versions.
-   * @param listener
-   * @throws PcapNativeException
-   * @throws InterruptedException
-   * @throws NotOpenException
+   * @param listener listener
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void loop(
     int packetCount, RawPacketListener listener
@@ -794,11 +799,11 @@ public final class PcapHandle {
    * @param packetCount the number of packets to capture. -1 is equivalent to infinity.
    *                    0 may result in different behaviors between platforms
    *                    and pcap library versions.
-   * @param listener
-   * @param executor
-   * @throws PcapNativeException
-   * @throws InterruptedException
-   * @throws NotOpenException
+   * @param listener listener
+   * @param executor executor
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void loop(
     int packetCount, RawPacketListener listener, Executor executor
@@ -863,11 +868,11 @@ public final class PcapHandle {
    *                    will be processed before returning.
    *                    0 may result in different behaviors between platforms
    *                    and pcap library versions.
-   * @param listener
+   * @param listener listener
    * @return the number of captured packets.
-   * @throws PcapNativeException
-   * @throws InterruptedException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public int dispatch(
     int packetCount, PacketListener listener
@@ -886,12 +891,12 @@ public final class PcapHandle {
    *                    will be processed before returning.
    *                    0 may result in different behaviors between platforms
    *                    and pcap library versions.
-   * @param listener
-   * @param executor
+   * @param listener listener
+   * @param executor executor
    * @return the number of captured packets.
-   * @throws PcapNativeException
-   * @throws InterruptedException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public int dispatch(
     int packetCount, PacketListener listener, Executor executor
@@ -912,11 +917,11 @@ public final class PcapHandle {
    *                    will be processed before returning.
    *                    0 may result in different behaviors between platforms
    *                    and pcap library versions.
-   * @param listener
+   * @param listener listener
    * @return the number of captured packets.
-   * @throws PcapNativeException
-   * @throws InterruptedException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public int dispatch(
     int packetCount, RawPacketListener listener
@@ -935,12 +940,12 @@ public final class PcapHandle {
    *                    will be processed before returning.
    *                    0 may result in different behaviors between platforms
    *                    and pcap library versions.
-   * @param listener
-   * @param executor
+   * @param listener listener
+   * @param executor executor
    * @return the number of captured packets.
-   * @throws PcapNativeException
-   * @throws InterruptedException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public int dispatch(
     int packetCount, RawPacketListener listener, Executor executor
@@ -1008,8 +1013,8 @@ public final class PcapHandle {
    *        The dlt of the PcapHandle which captured the packets you want to dump
    *        must be the same as this dlt.
    * @return an opened PcapDumper.
-   * @throws PcapNativeException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public PcapDumper dumpOpen(String filePath) throws PcapNativeException, NotOpenException {
     if (filePath == null) {
@@ -1041,11 +1046,11 @@ public final class PcapHandle {
 
   /**
    *
-   * @param packetCount
-   * @param dumper
-   * @throws PcapNativeException
-   * @throws InterruptedException
-   * @throws NotOpenException
+   * @param packetCount packetCount
+   * @param dumper dumper
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public
   void loop(int packetCount, PcapDumper dumper)
@@ -1101,7 +1106,7 @@ public final class PcapHandle {
    * because of buffering or something.
    * As a workaround, letting this capture some bogus packets
    * after calling this method may work.
-   * @throws NotOpenException
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void breakLoop() throws NotOpenException {
     if (!open) {
@@ -1125,10 +1130,10 @@ public final class PcapHandle {
 
   /**
    *
-   * @param packet
-   * @throws PcapNativeException
-   * @throws NotOpenException
-   * @throws NullPointerException
+   * @param packet packet
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
+   * @throws NullPointerException if any of arguments are null.
    */
   public void sendPacket(Packet packet) throws PcapNativeException, NotOpenException {
     if (packet == null) {
@@ -1163,8 +1168,8 @@ public final class PcapHandle {
   /**
    *
    * @return a {@link org.pcap4j.core.PcapStat PcapStat} object.
-   * @throws PcapNativeException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public PcapStat getStats() throws PcapNativeException, NotOpenException {
     if (!open) {
@@ -1210,8 +1215,8 @@ public final class PcapHandle {
 //  /**
 //   *
 //   * @return a {@link org.pcap4j.core.PcapStatEx PcapStatEx} object.
-//   * @throws PcapNativeException
-//   * @throws NotOpenException
+//   * @throws PcapNativeException if an error occurs in the pcap native library.
+//   * @throws NotOpenException if this PcapHandle is not open.
 //   */
 //  public PcapStatEx getStatsEx() throws PcapNativeException, NotOpenException {
 //    if (!Platform.isWindows()) {
@@ -1229,8 +1234,8 @@ public final class PcapHandle {
 
   /**
    * @return a list of {@link org.pcap4j.packet.namednumber.DataLinkType DataLinkType}
-   * @throws PcapNativeException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public List<DataLinkType> listDatalinks()
   throws PcapNativeException, NotOpenException {
@@ -1269,7 +1274,7 @@ public final class PcapHandle {
   /**
    *
    * @return an error message.
-   * @throws NotOpenException
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public String getError() throws NotOpenException {
     if (!open) {
@@ -1552,7 +1557,7 @@ public final class PcapHandle {
 
     /**
      * @return a new PcapHandle object representing a live capture handle.
-     * @throws PcapNativeException
+     * @throws PcapNativeException if an error occurs in the pcap native library.
      */
     public PcapHandle build() throws PcapNativeException {
       return new PcapHandle(this);

@@ -31,11 +31,11 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new Ssh2KexInitPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Ssh2KexInitPacket newPacket(
     byte[] rawData, int offset, int length
@@ -140,7 +140,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param cookie
+     * @param cookie cookie
      * @return this Builder object for method chaining.
      */
     public Builder cookie(byte[] cookie) {
@@ -150,7 +150,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param kexAlgorithms
+     * @param kexAlgorithms kexAlgorithms
      * @return this Builder object for method chaining.
      */
     public Builder kexAlgorithms(Ssh2NameList kexAlgorithms) {
@@ -160,7 +160,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param serverHostKeyAlgorithms
+     * @param serverHostKeyAlgorithms serverHostKeyAlgorithms
      * @return this Builder object for method chaining.
      */
     public Builder serverHostKeyAlgorithms(Ssh2NameList serverHostKeyAlgorithms) {
@@ -170,7 +170,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param encryptionAlgorithmsClientToServer
+     * @param encryptionAlgorithmsClientToServer encryptionAlgorithmsClientToServer
      * @return this Builder object for method chaining.
      */
     public Builder encryptionAlgorithmsClientToServer(Ssh2NameList encryptionAlgorithmsClientToServer) {
@@ -180,7 +180,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param encryptionAlgorithmsServerToClient
+     * @param encryptionAlgorithmsServerToClient encryptionAlgorithmsServerToClient
      * @return this Builder object for method chaining.
      */
     public Builder encryptionAlgorithmsServerToClient(Ssh2NameList encryptionAlgorithmsServerToClient) {
@@ -190,7 +190,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param macAlgorithmsClientToServer
+     * @param macAlgorithmsClientToServer macAlgorithmsClientToServer
      * @return this Builder object for method chaining.
      */
     public Builder macAlgorithmsClientToServer(Ssh2NameList macAlgorithmsClientToServer) {
@@ -200,7 +200,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param macAlgorithmsServerToClient
+     * @param macAlgorithmsServerToClient macAlgorithmsServerToClient
      * @return this Builder object for method chaining.
      */
     public Builder macAlgorithmsServerToClient(Ssh2NameList macAlgorithmsServerToClient) {
@@ -210,7 +210,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param compressionAlgorithmsClientToServer
+     * @param compressionAlgorithmsClientToServer compressionAlgorithmsClientToServer
      * @return this Builder object for method chaining.
      */
     public Builder compressionAlgorithmsClientToServer(
@@ -222,7 +222,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param compressionAlgorithmsServerToClient
+     * @param compressionAlgorithmsServerToClient compressionAlgorithmsServerToClient
      * @return this Builder object for method chaining.
      */
     public Builder compressionAlgorithmsServerToClient(
@@ -234,7 +234,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param languagesClientToServer
+     * @param languagesClientToServer languagesClientToServer
      * @return this Builder object for method chaining.
      */
     public Builder languagesClientToServer(Ssh2NameList languagesClientToServer) {
@@ -244,7 +244,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param languagesServerToClient
+     * @param languagesServerToClient languagesServerToClient
      * @return this Builder object for method chaining.
      */
     public Builder languagesServerToClient(Ssh2NameList languagesServerToClient) {
@@ -254,7 +254,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param firstKexPacketFollows
+     * @param firstKexPacketFollows firstKexPacketFollows
      * @return this Builder object for method chaining.
      */
     public Builder firstKexPacketFollows(Ssh2Boolean firstKexPacketFollows) {
@@ -264,7 +264,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
 
     /**
      *
-     * @param reserved
+     * @param reserved reserved
      * @return this Builder object for method chaining.
      */
     public Builder reserved(int reserved) {

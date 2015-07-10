@@ -12,8 +12,8 @@ import java.io.Serializable;
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
- * @param <T>
- * @param <U>
+ * @param <T> number
+ * @param <U> named number
  */
 public
 abstract class NamedNumber<T extends Number, U extends NamedNumber<T, ?>>
@@ -29,8 +29,8 @@ implements Comparable<U>, Serializable {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   protected NamedNumber(T value, String name) {
     this.value = value;

@@ -156,8 +156,8 @@ extends NamedNumber<Integer, Ssh2DisconnectionReasonCode> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public Ssh2DisconnectionReasonCode(Integer value, String name) {
     super(value, name);
@@ -165,7 +165,7 @@ extends NamedNumber<Integer, Ssh2DisconnectionReasonCode> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a Ssh2DisconnectionReasonCode object.
    */
   public static Ssh2DisconnectionReasonCode getInstance(Integer value) {
@@ -179,7 +179,7 @@ extends NamedNumber<Integer, Ssh2DisconnectionReasonCode> {
 
   /**
    *
-   * @param number
+   * @param number number
    * @return a Ssh2DisconnectionReasonCode object.
    */
   public static Ssh2DisconnectionReasonCode register(Ssh2DisconnectionReasonCode number) {

@@ -25,9 +25,9 @@ public final class UnknownPacket extends SimplePacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new UnknownPacket object.
    */
   public static UnknownPacket newPacket(byte[] rawData, int offset, int length) {
@@ -68,7 +68,7 @@ public final class UnknownPacket extends SimplePacket {
 
     /**
      *
-     * @param rawData
+     * @param rawData rawData
      * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {

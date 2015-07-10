@@ -33,11 +33,11 @@ public final class IcmpV6RouterSolicitationPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IcmpV6RouterSolicitationPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IcmpV6RouterSolicitationPacket newPacket(
     byte[] rawData, int offset, int length
@@ -97,7 +97,7 @@ public final class IcmpV6RouterSolicitationPacket extends AbstractPacket {
 
     /**
      *
-     * @param reserved
+     * @param reserved reserved
      * @return this Builder object for method chaining.
      */
     public Builder reserved(int reserved) {
@@ -107,7 +107,7 @@ public final class IcmpV6RouterSolicitationPacket extends AbstractPacket {
 
     /**
      *
-     * @param options
+     * @param options options
      * @return this Builder object for method chaining.
      */
     public Builder options(List<IpV6NeighborDiscoveryOption> options) {

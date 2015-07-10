@@ -48,8 +48,8 @@ public final class PcapDumper {
 
   /**
    *
-   * @param packet
-   * @throws NotOpenException
+   * @param packet packet
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void dump(Packet packet) throws NotOpenException {
     dump(packet, new Timestamp(System.currentTimeMillis()));
@@ -57,9 +57,9 @@ public final class PcapDumper {
 
   /**
    *
-   * @param packet
-   * @param timestamp
-   * @throws NotOpenException
+   * @param packet packet
+   * @param timestamp timestamp
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void dump(Packet packet, Timestamp timestamp) throws NotOpenException {
     if (packet == null || timestamp == null) {
@@ -77,8 +77,8 @@ public final class PcapDumper {
 
   /**
    *
-   * @param packet
-   * @throws NotOpenException
+   * @param packet packet
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void dumpRaw(byte[] packet) throws NotOpenException {
     dumpRaw(packet, new Timestamp(System.currentTimeMillis()));
@@ -86,9 +86,9 @@ public final class PcapDumper {
 
   /**
    *
-   * @param packet
-   * @param timestamp
-   * @throws NotOpenException
+   * @param packet packet
+   * @param timestamp timestamp
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void dumpRaw(byte[] packet, Timestamp timestamp) throws NotOpenException {
     if (packet == null || timestamp == null) {
@@ -135,8 +135,8 @@ public final class PcapDumper {
   }
 
   /**
-   * @throws PcapNativeException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public void flush() throws PcapNativeException, NotOpenException {
     if (!open) {
@@ -163,8 +163,8 @@ public final class PcapDumper {
 
   /**
    * @return the file position for a "savefile".
-   * @throws PcapNativeException
-   * @throws NotOpenException
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
    */
   public long ftell() throws PcapNativeException, NotOpenException {
     if (!open) {

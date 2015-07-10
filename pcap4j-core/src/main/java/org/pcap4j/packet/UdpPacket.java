@@ -37,11 +37,11 @@ public final class UdpPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new UdpPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static UdpPacket newPacket(
     byte[] rawData, int offset, int length
@@ -124,9 +124,9 @@ public final class UdpPacket extends AbstractPacket {
    *
    * checksum varification is necessary for IPv6(i.e. acceptZero must be false)
    *
-   * @param srcAddr
-   * @param dstAddr
-   * @param acceptZero
+   * @param srcAddr srcAddr
+   * @param dstAddr dstAddr
+   * @param acceptZero acceptZero
    * @return true if the packet represented by this object has a valid checksum;
    *         false otherwise.
    */
@@ -191,7 +191,7 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
-     * @param packet
+     * @param packet packet
      */
     public Builder(UdpPacket packet) {
       this.srcPort = packet.header.srcPort;
@@ -203,7 +203,7 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
-     * @param srcPort
+     * @param srcPort srcPort
      * @return this Builder object for method chaining.
      */
     public Builder srcPort(UdpPort srcPort) {
@@ -213,7 +213,7 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
-     * @param dstPort
+     * @param dstPort dstPort
      * @return this Builder object for method chaining.
      */
     public Builder dstPort(UdpPort dstPort) {
@@ -223,7 +223,7 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
-     * @param length
+     * @param length length
      * @return this Builder object for method chaining.
      */
     public Builder length(short length) {
@@ -233,7 +233,7 @@ public final class UdpPacket extends AbstractPacket {
 
     /**
      *
-     * @param checksum
+     * @param checksum checksum
      * @return this Builder object for method chaining.
      */
     public Builder checksum(short checksum) {
@@ -256,7 +256,7 @@ public final class UdpPacket extends AbstractPacket {
      *
      * used for checksum calculation.
      *
-     * @param srcAddr
+     * @param srcAddr srcAddr
      * @return this Builder object for method chaining.
      */
     public Builder srcAddr(InetAddress srcAddr) {
@@ -272,7 +272,7 @@ public final class UdpPacket extends AbstractPacket {
      * this parameter is that of the final destination.
      * (i.e. the last element of the Routing header)
      *
-     * @param dstAddr
+     * @param dstAddr dstAddr
      * @return this Builder object for method chaining.
      */
     public Builder dstAddr(InetAddress dstAddr) {

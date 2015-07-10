@@ -72,8 +72,8 @@ public final class IpVersion extends NamedNumber<Byte, IpVersion> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public IpVersion(Byte value, String name) {
     super(value, name);
@@ -87,7 +87,7 @@ public final class IpVersion extends NamedNumber<Byte, IpVersion> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a IpVersion object.
    */
   public static IpVersion getInstance(Byte value) {
@@ -101,7 +101,7 @@ public final class IpVersion extends NamedNumber<Byte, IpVersion> {
 
   /**
    *
-   * @param version
+   * @param version version
    * @return a IpVersion object.
    */
   public static IpVersion register(IpVersion version) {

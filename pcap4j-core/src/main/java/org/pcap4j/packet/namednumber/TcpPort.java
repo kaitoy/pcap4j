@@ -4806,8 +4806,8 @@ public final class TcpPort extends NamedNumber<Short, TcpPort> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public TcpPort(Short value, String name) {
     super(value, name);
@@ -4815,7 +4815,7 @@ public final class TcpPort extends NamedNumber<Short, TcpPort> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a TcpPort object.
    */
   public static TcpPort getInstance(Short value) {
@@ -4829,7 +4829,7 @@ public final class TcpPort extends NamedNumber<Short, TcpPort> {
 
   /**
    *
-   * @param port
+   * @param port port
    * @return a TcpPort object.
    */
   public static TcpPort register(TcpPort port) {

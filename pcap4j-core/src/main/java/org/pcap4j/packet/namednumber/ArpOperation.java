@@ -206,8 +206,8 @@ public final class ArpOperation extends NamedNumber<Short, ArpOperation> {
 
   /**
    *
-   * @param value
-   * @param name
+   * @param value value
+   * @param name name
    */
   public ArpOperation(Short value, String name) {
     super(value, name);
@@ -215,7 +215,7 @@ public final class ArpOperation extends NamedNumber<Short, ArpOperation> {
 
   /**
    *
-   * @param value
+   * @param value value
    * @return a ArpOperation object.
    */
   public static ArpOperation getInstance(Short value) {
@@ -229,7 +229,7 @@ public final class ArpOperation extends NamedNumber<Short, ArpOperation> {
 
   /**
    *
-   * @param operation
+   * @param operation operation
    * @return a ArpOperation object.
    */
   public static ArpOperation register(ArpOperation operation) {

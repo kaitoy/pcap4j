@@ -27,7 +27,7 @@ public final class IllegalRawDataException extends Exception {
 
   /**
    *
-   * @param message
+   * @param message message
    */
   public IllegalRawDataException(String message){
     super(message);
@@ -35,8 +35,8 @@ public final class IllegalRawDataException extends Exception {
 
   /**
    *
-   * @param message
-   * @param cause
+   * @param message message
+   * @param cause cause
    */
   public IllegalRawDataException(String message, Throwable cause){
       super(message, cause);
@@ -44,7 +44,7 @@ public final class IllegalRawDataException extends Exception {
 
   /**
    *
-   * @param cause
+   * @param cause cause
    */
   public IllegalRawDataException(Throwable cause){
       super(cause);

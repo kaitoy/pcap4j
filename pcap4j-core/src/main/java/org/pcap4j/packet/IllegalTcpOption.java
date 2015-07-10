@@ -31,9 +31,9 @@ public final class IllegalTcpOption implements TcpOption {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IllegalTcpOption object.
    */
   public static IllegalTcpOption newInstance(byte[] rawData, int offset, int length) {
@@ -139,7 +139,7 @@ public final class IllegalTcpOption implements TcpOption {
 
     /**
      *
-     * @param kind
+     * @param kind kind
      * @return this Builder object for method chaining.
      */
     public Builder kind(TcpOptionKind kind) {
@@ -149,7 +149,7 @@ public final class IllegalTcpOption implements TcpOption {
 
     /**
      *
-     * @param rawData
+     * @param rawData rawData
      * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {

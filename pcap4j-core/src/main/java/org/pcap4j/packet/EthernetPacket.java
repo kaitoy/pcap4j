@@ -46,11 +46,11 @@ public final class EthernetPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new EthernetPacket object.
-   * @throws IllegalRawDataException
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static EthernetPacket newPacket(
     byte[] rawData, int offset, int length
@@ -237,7 +237,7 @@ public final class EthernetPacket extends AbstractPacket {
 
     /**
      *
-     * @param dstAddr
+     * @param dstAddr dstAddr
      * @return this Builder object for method chaining.
      */
     public Builder dstAddr(MacAddress dstAddr) {
@@ -247,7 +247,7 @@ public final class EthernetPacket extends AbstractPacket {
 
     /**
      *
-     * @param srcAddr
+     * @param srcAddr srcAddr
      * @return this Builder object for method chaining.
      */
     public Builder srcAddr(MacAddress srcAddr) {
@@ -257,7 +257,7 @@ public final class EthernetPacket extends AbstractPacket {
 
     /**
      *
-     * @param type
+     * @param type type
      * @return this Builder object for method chaining.
      */
     public Builder type(EtherType type) {
@@ -278,7 +278,7 @@ public final class EthernetPacket extends AbstractPacket {
 
     /**
      *
-     * @param pad
+     * @param pad pad
      * @return this Builder object for method chaining.
      */
     public Builder pad(byte[] pad) {
@@ -288,7 +288,7 @@ public final class EthernetPacket extends AbstractPacket {
 
     /**
      *
-     * @param paddingAtBuild
+     * @param paddingAtBuild paddingAtBuild
      * @return this Builder object for method chaining.
      */
     public Builder paddingAtBuild(boolean paddingAtBuild) {

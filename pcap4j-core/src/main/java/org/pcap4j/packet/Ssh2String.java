@@ -50,10 +50,10 @@ public final class Ssh2String implements Serializable {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
-   * @throws IllegalRawDataException
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public Ssh2String(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
@@ -96,7 +96,7 @@ public final class Ssh2String implements Serializable {
 
   /**
    *
-   * @param str
+   * @param str str
    */
   public Ssh2String(String str) {
     if (str == null) {

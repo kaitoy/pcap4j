@@ -28,11 +28,10 @@ public final class IllegalPacket extends AbstractPacket {
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
    * which may throw exceptions undocumented here.
    *
-   * @param rawData
-   * @param offset
-   * @param length
+   * @param rawData rawData
+   * @param offset offset
+   * @param length length
    * @return a new IllegalPacket object.
-   * @throws IllegalRawDataException
    */
   public static IllegalPacket newPacket(byte[] rawData, int offset, int length) {
     ByteArrays.validateBounds(rawData, offset, length);
@@ -124,7 +123,7 @@ public final class IllegalPacket extends AbstractPacket {
 
     /**
      *
-     * @param rawData
+     * @param rawData rawData
      * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {
