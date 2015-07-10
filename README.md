@@ -2,7 +2,9 @@
 
 <img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/pcap4jlogo.png" height="217" width="667" />
 
+[![Slack](http://pcap4j-slackin.herokuapp.com/badge.svg)](https://pcap4j-slackin.herokuapp.com/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution)
+
 [![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg)](https://travis-ci.org/kaitoy/pcap4j)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=master&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/master)
 [![Coverage Status](https://coveralls.io/repos/kaitoy/pcap4j/badge.svg)](https://coveralls.io/r/kaitoy/pcap4j)
