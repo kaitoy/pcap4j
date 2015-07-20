@@ -142,6 +142,7 @@ Pcap4Jプログラムの書き方は[サンプル](https://github.com/kaitoy/pca
 * [Learn about packet class](/www/Packet.md)
 * [Learn about Packet Factory](/www/PacketFactory.md)
 * [サポートプロトコル追加方法](/www/HowToAddProtocolSupport.md)
+* [kaitoy's blog](http://tbd.kaitoy.xyz/tags/pcap4j/)
 
 #### サンプル実行方法 ####
 以下の例を参照。

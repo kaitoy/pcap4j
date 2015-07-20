@@ -140,6 +140,7 @@ Learn more about Pcap4j from the following documents:
 * [Learn about packet class](/www/Packet.md)
 * [Learn about Packet Factory](/www/PacketFactory.md)
 * [How to add protocol support](/www/HowToAddProtocolSupport.md)
+* [kaitoy's blog](http://tbd.kaitoy.xyz/tags/pcap4j/)
 
 #### How to run samples ####
 See the following examples:
