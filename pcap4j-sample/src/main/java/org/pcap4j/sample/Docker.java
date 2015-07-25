@@ -147,18 +147,7 @@ public class Docker {
       if (packet == null) {
         continue;
       }
-      if (!packet.contains(IcmpV4EchoPacket.class)) {
-        continue;
-      }
-
-      Packet echo = packet.get(IcmpV4EchoPacket.class);
-      if (echo.getPayload() == null) {
-        continue;
-      }
-
-      String message = new String(echo.getPayload().getRawData());
-      System.out.println(message);
-      if (message.equals("start")) {
+      if (packet.contains(IcmpV4EchoPacket.class)) {
         break;
       }
     }
