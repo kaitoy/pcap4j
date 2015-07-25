@@ -18,7 +18,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-1.6.0-openjdk.x86_64/
 RUN cd /usr/local/src/ && git clone git://github.com/kaitoy/pcap4j.git
 RUN cd /usr/local/src/pcap4j && mvn -P distribution-assembly install 2>&1 | tee build.log
 
-# Generate sample script.
+# Collect libraries.
 WORKDIR /usr/local/src/pcap4j
 RUN mkdir bin && \
     cd pcap4j-packetfactory-static && \
@@ -26,8 +26,11 @@ RUN mkdir bin && \
     mvn -DoutputDirectory=/usr/local/src/pcap4j/bin -Dmdep.stripVersion=true -DincludeGroupIds=ch.qos.logback dependency:copy-dependencies && \
     cd ../pcap4j-distribution && \
     mvn -DoutputDirectory=/usr/local/src/pcap4j/bin -Dmdep.stripVersion=true -DincludeArtifactIds=pcap4j-packetfactory-static,pcap4j-sample dependency:copy-dependencies
+
+# Generate sample script.
 RUN echo '#!/bin/sh' > bin/runGetNextPacket.sh && \
-    echo java -cp /usr/local/src/pcap4j/bin/pcap4j-core.jar:/usr/local/src/pcap4j/bin/pcap4j-packetfactory-static.jar:/usr/local/src/pcap4j/bin/pcap4j-sample.jar:/usr/local/src/pcap4j/bin/jna.jar:/usr/local/src/pcap4j/bin/slf4j-api.jar:/usr/local/src/pcap4j/bin/logback-classic.jar:/usr/local/src/pcap4j/bin/logback-core.jar -Dorg.pcap4j.sample.GetNextPacket.nifName=eth0 org.pcap4j.sample.GetNextPacket >> bin/runGetNextPacket.sh && \
+    echo java -cp /usr/local/src/pcap4j/bin/pcap4j-core.jar:/usr/local/src/pcap4j/bin/pcap4j-packetfactory-static.jar:/usr/local/src/pcap4j/bin/pcap4j-sample.jar:/usr/local/src/pcap4j/bin/jna.jar:/usr/local/src/pcap4j/bin/slf4j-api.jar:/usr/local/src/pcap4j/bin/logback-classic.jar:/usr/local/src/pcap4j/bin/logback-core.jar -Dorg.pcap4j.sample.GetNextPacket.nifName=\$1 -Dorg.pcap4j.sample.GetNextPacket.count=\$2 org.pcap4j.sample.GetNextPacket \$3 >> bin/runGetNextPacket.sh && \
     chmod +x bin/runGetNextPacket.sh
 
-CMD ["/bin/sh", "/usr/local/src/pcap4j/bin/runGetNextPacket.sh"]
+ENTRYPOINT ["/bin/sh", "/usr/local/src/pcap4j/bin/runGetNextPacket.sh"]
+CMD ["eth0", "10"]
