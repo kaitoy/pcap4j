@@ -1,6 +1,5 @@
 package org.pcap4j.sample;
 
-import java.io.IOException;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapAddress;
@@ -13,7 +12,6 @@ import org.pcap4j.core.PcapStat;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.IcmpV4EchoPacket;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.util.NifSelector;
 import com.sun.jna.Platform;
 
 @SuppressWarnings("javadoc")
@@ -49,6 +47,11 @@ public class Docker {
   private static final String NIF_NAME
     = System.getProperty(NIF_NAME_KEY);
 
+  private static final String WAIT_KEY
+    = Docker.class.getName() + ".wait";
+  private static final boolean WAIT
+    = Boolean.getBoolean(WAIT_KEY);
+
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String filter = args.length != 0 ? args[0] : "";
 
@@ -60,23 +63,16 @@ public class Docker {
     System.out.println(NIF_NAME_KEY + ": " + NIF_NAME);
     System.out.println("\n");
 
-    waitForBridge();
+    if (WAIT) {
+      waitForPing();
+    }
 
     PcapNetworkInterface nif = null;
     if (NIF_NAME != null) {
       nif = Pcaps.getDevByName(NIF_NAME);
     }
     else {
-      try {
-        nif = new NifSelector().selectNetworkInterface();
-      } catch (IOException e) {
-        e.printStackTrace();
-        return;
-      }
-
-      if (nif == null) {
-        return;
-      }
+      nif = Pcaps.getDevByName("eth0");
     }
 
     System.out.println(nif.getName() + " (" + nif.getDescription() + ")");
@@ -130,7 +126,7 @@ public class Docker {
     handle.close();
   }
 
-  private static void waitForBridge() throws PcapNativeException, NotOpenException {
+  private static void waitForPing() throws PcapNativeException, NotOpenException {
     PcapNetworkInterface nif = Pcaps.getDevByName("eth0");
     System.out.println(nif.getName() + " (" + nif.getDescription() + ")");
     for (PcapAddress addr: nif.getAddresses()) {
@@ -166,6 +162,8 @@ public class Docker {
         break;
       }
     }
+
+    handle.close();
   }
 
 }
