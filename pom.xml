@@ -251,6 +251,13 @@
 
   <profiles>
     <profile>
+      <id>pcap4j-release</id>
+      <modules>
+        <module>pcap4j-test-coverage</module>
+        <module>pcap4j-distribution</module>
+      </modules>
+    </profile>
+    <profile>
       <id>distribution-assembly</id>
       <modules>
         <module>pcap4j-distribution</module>

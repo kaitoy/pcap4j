@@ -41,28 +41,6 @@
   </dependencies>
 
   <build>
-    <resources>
-      <resource>
-        <directory>src/main/java</directory>
-        <includes>
-          <include>**/*.properties</include>
-        </includes>
-        <filtering>false</filtering>
-      </resource>
-    </resources>
-
-    <testResources>
-      <testResource>
-        <directory>src/test/java</directory>
-        <includes>
-          <include>**/*.log</include>
-          <include>**/*.obj</include>
-          <include>**/*.pcap</include>
-        </includes>
-        <filtering>false</filtering>
-      </testResource>
-    </testResources>
-
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -75,50 +53,82 @@
           </filesets>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack-test</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <configuration>
-              <includeArtifactIds>pcap4j-core,pcap4j-packetfactory-static</includeArtifactIds>
-              <includeClassifiers>sources</includeClassifiers>
-              <outputDirectory>${basedir}/src/main/java</outputDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>unpack-dependencies</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <configuration>
-              <includeArtifactIds>pcap4j-packettest</includeArtifactIds>
-              <includeClassifiers>test-sources</includeClassifiers>
-              <outputDirectory>${basedir}/src/test/java</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <org.pcap4j.packet.AbstractPacketTest.resourceDir>
-              target/test-classes
-            </org.pcap4j.packet.AbstractPacketTest.resourceDir>
-            <org.pcap4j.packet.AbstractPacketTest.tmpDir>
-              target/test
-            </org.pcap4j.packet.AbstractPacketTest.tmpDir>
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>test-coverage</id>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/java</directory>
+            <includes>
+              <include>**/*.properties</include>
+            </includes>
+            <filtering>false</filtering>
+          </resource>
+        </resources>
+
+        <testResources>
+          <testResource>
+            <directory>src/test/java</directory>
+            <includes>
+              <include>**/*.log</include>
+              <include>**/*.obj</include>
+              <include>**/*.pcap</include>
+            </includes>
+            <filtering>false</filtering>
+          </testResource>
+        </testResources>
+
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-test</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>unpack-dependencies</goal>
+                </goals>
+                <configuration>
+                  <includeArtifactIds>pcap4j-core,pcap4j-packetfactory-static</includeArtifactIds>
+                  <includeClassifiers>sources</includeClassifiers>
+                  <outputDirectory>${basedir}/src/main/java</outputDirectory>
+                </configuration>
+              </execution>
+              <execution>
+                <id>unpack-dependencies</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>unpack-dependencies</goal>
+                </goals>
+                <configuration>
+                  <includeArtifactIds>pcap4j-packettest</includeArtifactIds>
+                  <includeClassifiers>test-sources</includeClassifiers>
+                  <outputDirectory>${basedir}/src/test/java</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <systemPropertyVariables>
+                <org.pcap4j.packet.AbstractPacketTest.resourceDir>
+                  target/test-classes
+                </org.pcap4j.packet.AbstractPacketTest.resourceDir>
+                <org.pcap4j.packet.AbstractPacketTest.tmpDir>
+                  target/test
+                </org.pcap4j.packet.AbstractPacketTest.tmpDir>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
