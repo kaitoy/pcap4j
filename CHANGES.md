@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.6.0 (1-Aug-2015)
+==========================
+### New Features ###
 * New APIs:
     * Pcaps.openOffline(String filePath, TimestampPrecision precision)
     * Pcaps.openDead(DataLinkType dlt, int snaplen, TimestampPrecision precision)
