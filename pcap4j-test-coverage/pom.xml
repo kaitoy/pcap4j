@@ -14,32 +14,6 @@
     <version>1.5.1-SNAPSHOT</version>
   </parent>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.pcap4j</groupId>
-      <artifactId>pcap4j-core</artifactId>
-      <type>jar</type>
-      <classifier>sources</classifier>
-    </dependency>
-    <dependency>
-      <groupId>org.pcap4j</groupId>
-      <artifactId>pcap4j-packetfactory-static</artifactId>
-      <type>jar</type>
-      <classifier>sources</classifier>
-    </dependency>
-    <dependency>
-      <groupId>org.pcap4j</groupId>
-      <artifactId>pcap4j-packettest</artifactId>
-      <type>jar</type>
-      <classifier>test-sources</classifier>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -59,6 +33,33 @@
   <profiles>
     <profile>
       <id>test-coverage</id>
+
+      <dependencies>
+        <dependency>
+          <groupId>org.pcap4j</groupId>
+          <artifactId>pcap4j-core</artifactId>
+          <type>jar</type>
+          <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+          <groupId>org.pcap4j</groupId>
+          <artifactId>pcap4j-packetfactory-static</artifactId>
+          <type>jar</type>
+          <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+          <groupId>org.pcap4j</groupId>
+          <artifactId>pcap4j-packettest</artifactId>
+          <type>jar</type>
+          <classifier>test-sources</classifier>
+        </dependency>
+        <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+
       <build>
         <resources>
           <resource>
