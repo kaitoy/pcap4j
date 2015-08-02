@@ -7,7 +7,9 @@
 package org.pcap4j.util;
 
 import static org.junit.Assert.*;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.sql.Timestamp;
@@ -42,7 +44,7 @@ import org.pcap4j.packet.namednumber.IpVersion;
 public class IpV4HelperTest {
 
   private String resourceDir;
-  private String tmpDir;
+  private String tmpDirPath;
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
@@ -55,7 +57,14 @@ public class IpV4HelperTest {
   @Before
   public void setUp() throws Exception {
     resourceDir = System.getProperty(AbstractPacketTest.RESOURCE_DIR_PROP, "src/test/resources");
-    tmpDir = System.getProperty(AbstractPacketTest.TMP_DIR_PROP, "testdata");
+    tmpDirPath = System.getProperty(AbstractPacketTest.TMP_DIR_PROP, "testdata");
+
+    File tmpDir = new File(tmpDirPath);
+    if (!tmpDir.exists()) {
+      if (!tmpDir.mkdirs()) {
+        throw new IOException("Failed to make a test diectory: " + tmpDirPath);
+      }
+    }
   }
 
   @After
@@ -65,7 +74,7 @@ public class IpV4HelperTest {
   @Test
   public void testFragmentDefragment() throws Exception {
     String dumpFile = new StringBuilder()
-                        .append(tmpDir).append("/")
+                        .append(tmpDirPath).append("/")
                         .append(getClass().getSimpleName()).append(".pcap")
                         .toString();
 
