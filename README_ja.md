@@ -98,7 +98,7 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 * libpcap 1.1.1
 * WinPcap 4.1.2
 * jna 4.1.0
-* slf4j-api 1.6.4
+* slf4j-api 1.7.12
 * logback-core 1.0.0
 * logback-classic 1.0.0
 

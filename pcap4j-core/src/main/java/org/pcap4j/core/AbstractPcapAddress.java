@@ -10,12 +10,16 @@ package org.pcap4j.core;
 import java.net.InetAddress;
 import org.pcap4j.core.NativeMappings.pcap_addr;
 import org.pcap4j.core.NativeMappings.sockaddr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
 abstract class AbstractPcapAddress implements PcapAddress {
+
+  private static final Logger logger = LoggerFactory.getLogger(AbstractPcapAddress.class);
 
   private final InetAddress address;
   private final InetAddress netmask;
@@ -29,9 +33,12 @@ abstract class AbstractPcapAddress implements PcapAddress {
 
     if (pcapAddr.addr != null && pcapAddr.addr.getSaFamily() != Inets.AF_UNSPEC) {
       if (pcapAddr.addr.getSaFamily() != saFamily) {
-        throwAssetion(pcapAddr, saFamily, devName);
+        warn(pcapAddr.addr.getSaFamily(), saFamily, devName, "addr");
+        this.address = null;
       }
-      this.address = ntoInetAddress(pcapAddr.addr);
+      else {
+        this.address = ntoInetAddress(pcapAddr.addr);
+      }
     }
     else {
       this.address = null;
@@ -39,9 +46,12 @@ abstract class AbstractPcapAddress implements PcapAddress {
 
     if (pcapAddr.netmask != null && pcapAddr.netmask.getSaFamily() != Inets.AF_UNSPEC) {
       if (pcapAddr.netmask.getSaFamily() != saFamily) {
-        throwAssetion(pcapAddr, saFamily, devName);
+        warn(pcapAddr.netmask.getSaFamily(), saFamily, devName, "netmask");
+        this.netmask = null;
       }
-      this.netmask = ntoInetAddress(pcapAddr.netmask);
+      else {
+        this.netmask = ntoInetAddress(pcapAddr.netmask);
+      }
     }
     else {
       this.netmask = null;
@@ -49,9 +59,12 @@ abstract class AbstractPcapAddress implements PcapAddress {
 
     if (pcapAddr.broadaddr != null && pcapAddr.broadaddr.getSaFamily() != Inets.AF_UNSPEC) {
       if (pcapAddr.broadaddr.getSaFamily() != saFamily) {
-        throwAssetion(pcapAddr, saFamily, devName);
+        warn(pcapAddr.broadaddr.getSaFamily(), saFamily, devName, "broadaddr");
+        this.broadcastAddr = null;
       }
-      this.broadcastAddr = ntoInetAddress(pcapAddr.broadaddr);
+      else {
+        this.broadcastAddr = ntoInetAddress(pcapAddr.broadaddr);
+      }
     }
     else {
       this.broadcastAddr = null;
@@ -59,25 +72,31 @@ abstract class AbstractPcapAddress implements PcapAddress {
 
     if (pcapAddr.dstaddr != null && pcapAddr.dstaddr.getSaFamily() != Inets.AF_UNSPEC) {
       if (pcapAddr.dstaddr.getSaFamily() != saFamily) {
-        throwAssetion(pcapAddr, saFamily, devName);
+        warn(pcapAddr.dstaddr.getSaFamily(), saFamily, devName, "dstaddr");
+        this.dstAddr = null;
       }
-      this.dstAddr = ntoInetAddress(pcapAddr.dstaddr);
+      else {
+        this.dstAddr = ntoInetAddress(pcapAddr.dstaddr);
+      }
     }
     else {
       this.dstAddr = null;
     }
   }
 
-  private void throwAssetion(pcap_addr pcapAddr, short saFamily, String devName) {
-    StringBuilder sb
-      = new StringBuilder(50)
-          .append("devName: ")
-          .append(devName)
-          .append(" pcapAddr.addr.getSaFamily(): ")
-          .append(pcapAddr.addr.getSaFamily())
-          .append(" saFamily: ")
-          .append(saFamily);
-    throw new AssertionError(sb.toString());
+  private void warn(
+    short actualSaFamily, short expectedSaFamily, String devName, String field
+  ) {
+    if (logger.isWarnEnabled()) {
+      logger.warn(
+        "Couldn't analyze an address. "
+          + "devName: {}, field: {}, actual saFamily: {}, expected saFamily: {}",
+        devName,
+        field,
+        actualSaFamily,
+        expectedSaFamily
+      );
+    }
   }
 
   @Override

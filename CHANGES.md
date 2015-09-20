@@ -3,6 +3,7 @@ Future
 ### New Features ###
 
 ### Bug Fixes ###
+* [Issues#46](https://github.com/kaitoy/pcap4j/issues/46): Fix a problem with openvpn's tun devices on FreeBSD.
 
 ### Other Changes ###
 
