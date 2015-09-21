@@ -228,8 +228,7 @@ public final class PcapHandle {
   }
 
   /**
-   *
-   * @return A timestamp of a packet captured in the current thread.
+   * @return the timestamp of the last packet captured by this handle in the current thread.
    */
   public Timestamp getTimestamp() { return timestamps.get(); }
 
