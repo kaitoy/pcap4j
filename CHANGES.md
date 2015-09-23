@@ -3,6 +3,14 @@ Future
 ### New Features ###
 
 ### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.6.1 (23-Sep-2015)
+==========================
+### New Features ###
+
+### Bug Fixes ###
 * [Issues#46](https://github.com/kaitoy/pcap4j/issues/46): Fix a problem with openvpn's tun devices on FreeBSD.
 
 ### Other Changes ###
