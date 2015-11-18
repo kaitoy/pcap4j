@@ -9,12 +9,10 @@ MAINTAINER Kaito Yamada <kaitoy@pcap4j.org>
 ADD https://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo /etc/yum.repos.d/epel-apache-maven.repo
 RUN yum install -y libpcap \
     git \
-    java-1.6.0-openjdk \
-    java-1.6.0-openjdk-devel \
     apache-maven
 
 # Build Pcap4J.
-ENV JAVA_HOME /usr/lib/jvm/java-1.6.0-openjdk.x86_64/
+ENV JAVA_HOME /usr/lib/jvm/java-1.7.0-openjdk.x86_64/
 RUN cd /usr/local/src/ && git clone git://github.com/kaitoy/pcap4j.git
 RUN cd /usr/local/src/pcap4j && mvn -P distribution-assembly install 2>&1 | tee build.log
 
