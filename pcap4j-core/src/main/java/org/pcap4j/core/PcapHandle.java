@@ -50,6 +50,8 @@ public final class PcapHandle {
   private final Pointer handle;
   private final ThreadLocal<Timestamp> timestamps
     = new ThreadLocal<Timestamp>();
+  private final ThreadLocal<Integer> originalLengths
+    = new ThreadLocal<Integer>();
   private final ReentrantReadWriteLock handleLock = new ReentrantReadWriteLock(true);
   private static final Object compileLock = new Object();
 
@@ -231,6 +233,12 @@ public final class PcapHandle {
    * @return the timestamp of the last packet captured by this handle in the current thread.
    */
   public Timestamp getTimestamp() { return timestamps.get(); }
+
+  /**
+   * @return the original length of the last packet
+   *         captured by this handle in the current thread.
+   */
+  public Integer getOriginalLength() { return originalLengths.get(); }
 
   /**
    *
@@ -619,6 +627,7 @@ public final class PcapHandle {
     if (packet != null) {
       Pointer headerP = header.getPointer();
       timestamps.set(buildTimestamp(headerP));
+      originalLengths.set(pcap_pkthdr.getLen(headerP));
       return packet.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
     }
     else {
@@ -683,6 +692,7 @@ public final class PcapHandle {
           }
 
           timestamps.set(buildTimestamp(headerP));
+          originalLengths.set(pcap_pkthdr.getLen(headerP));
           return dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
         case -1:
           throw new PcapNativeException(
@@ -1364,6 +1374,7 @@ public final class PcapHandle {
       Pointer args, Pointer header, final Pointer packet
     ) {
       final Timestamp ts = buildTimestamp(header);
+      final int len = pcap_pkthdr.getLen(header);
       final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
 
       try {
@@ -1372,6 +1383,7 @@ public final class PcapHandle {
             @Override
             public void run() {
               timestamps.set(ts);
+              originalLengths.set(len);
               listener.gotPacket(
                 PacketFactories.getFactory(Packet.class, DataLinkType.class)
                   .newInstance(ba, 0, ba.length, dlt)
@@ -1403,6 +1415,7 @@ public final class PcapHandle {
       Pointer args, Pointer header, final Pointer packet
     ) {
       final Timestamp ts = buildTimestamp(header);
+      final int len = pcap_pkthdr.getLen(header);
       final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
 
       try {
@@ -1411,6 +1424,7 @@ public final class PcapHandle {
             @Override
             public void run() {
               timestamps.set(ts);
+              originalLengths.set(len);
               listener.gotPacket(ba);
             }
           }

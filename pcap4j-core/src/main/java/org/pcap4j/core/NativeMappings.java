@@ -630,6 +630,7 @@ final class NativeMappings {
 
     public static final int TS_OFFSET;
     public static final int CAPLEN_OFFSET;
+    public static final int LEN_OFFSET;
 
     public timeval ts;// struct timeval
     public int caplen; // bpf_u_int32
@@ -639,6 +640,7 @@ final class NativeMappings {
       pcap_pkthdr ph = new pcap_pkthdr();
       TS_OFFSET = ph.fieldOffset("ts");
       CAPLEN_OFFSET = ph.fieldOffset("caplen");
+      LEN_OFFSET = ph.fieldOffset("len");
     }
 
     public pcap_pkthdr() {}
@@ -671,6 +673,10 @@ final class NativeMappings {
 
     static int getCaplen(Pointer p) {
       return p.getInt(CAPLEN_OFFSET);
+    }
+
+    static int getLen(Pointer p) {
+      return p.getInt(LEN_OFFSET);
     }
 
   }

@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* [Issues#49](https://github.com/kaitoy/pcap4j/issues/49): Add PcapHandle.getOriginalLength().
 
 ### Bug Fixes ###
 
