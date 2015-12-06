@@ -31,7 +31,7 @@ Contents
     * [Documents](#documents)
     * [How to run samples](#how-to-run-samples)
     * [How to use in Maven project](#how-to-use-in-maven-project)
-    * [About pcap library loading](#about-pcap-library-loading)
+    * [About native library loading](#about-native-library-loading)
     * [Docker](#docker)
 * [How to build](#how-to-build)
     * [Build procedure with Maven command (recommended)](#build-procedure-with-maven-command-recommended)
@@ -178,12 +178,12 @@ Add a dependency to the pom.xml as like below:
 </project>
 ```
 
-#### About pcap library loading ####
-By default, Pcap4j loads the pcap library on the following conditions:
+#### About native library loading ####
+By default, Pcap4j loads the native libraries on the following conditions:
 
 * Windows
     * search path: The paths in the `PATH` environment variable.
-    * file name: wpcap.dll
+    * file name: wpcap.dll and Packet.dll
 * Linux/UNIX
     * search path: The search paths of shared libraries configured on the OS.
       (e.g. The paths in the `LD_LIBRARY_PATH` environment variable)
@@ -195,8 +195,9 @@ By default, Pcap4j loads the pcap library on the following conditions:
 
 You can use the following Java system properties to change the default behavior.
 
-* jna.library.path: Specify the search path
-* org.pcap4j.core.pcapLibName: Specify the full path of the pcap library
+* jna.library.path: The search path
+* org.pcap4j.core.pcapLibName: The full path of the pcap library (wpcap.dll, libpcap.so, or libpcap.dylib)
+* (Windows only) org.pcap4j.core.packetLibName: The full path of the packet library (Packet.dll)
 
 ### Docker ###
 A Docker image for Pcap4J on CentOS is available at [Docker Hub](https://registry.hub.docker.com/u/kaitoy/pcap4j/).

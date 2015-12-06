@@ -16,12 +16,15 @@ import org.pcap4j.core.NativeMappings.pcap_if;
 import org.pcap4j.core.NativeMappings.sockaddr_dl;
 import org.pcap4j.core.NativeMappings.sockaddr_ll;
 import org.pcap4j.core.NativeMappings.timeval;
+import org.pcap4j.core.NativePacketDllMappings.PACKET_OID_DATA;
 import org.pcap4j.core.PcapHandle.TimestampPrecision;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.LinkLayerAddress;
 import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.sun.jna.Memory;
+import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
@@ -113,6 +116,13 @@ public final class PcapNetworkInterface {
             sa_family
           );
         }
+      }
+    }
+
+    if (Platform.isWindows()) {
+      MacAddress mac = getMacAddress(name);
+      if (mac != null) {
+        linkLayerAddresses.add(mac);
       }
     }
 
@@ -272,6 +282,41 @@ public final class PcapNetworkInterface {
     }
 
     return new PcapHandle(handle, TimestampPrecision.MICRO);
+  }
+
+  private MacAddress getMacAddress(String nifName) {
+    Pointer lpAdapter = NativePacketDllMappings.PacketOpenAdapter(nifName);
+
+    long hFile = -1;
+    if (lpAdapter != null) {
+      if (Pointer.SIZE == 4) {
+        hFile = lpAdapter.getInt(0);
+      }
+      else {
+        hFile = lpAdapter.getLong(0);
+      }
+    }
+    if (hFile == -1L) {
+      int err = Native.getLastError();
+      logger.error("Unable to open the NIF {}, Error Code: {}", nifName, err);
+      return null;
+    }
+
+    Memory mem = new Memory(NativePacketDllMappings.PACKET_OID_DATA_SIZE);
+    mem.clear();
+    PACKET_OID_DATA oidData = new PACKET_OID_DATA(mem);
+    oidData.Length = new NativeLong(6L);
+    oidData.Oid = new NativeLong(0x01010102L);
+    int status = NativePacketDllMappings.PacketRequest(lpAdapter, 0, oidData);
+    NativePacketDllMappings.PacketCloseAdapter(lpAdapter);
+
+    if (status == 0) {
+      logger.error("Failed to retrieve the link layer address of the NIF: {}", nifName);
+      return null;
+    }
+    else {
+      return MacAddress.getByAddress(oidData.Data);
+    }
   }
 
   @Override

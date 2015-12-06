@@ -1,7 +1,8 @@
 Future
 ======
 ### New Features ###
-* [Issues#49](https://github.com/kaitoy/pcap4j/issues/49): Add PcapHandle.getOriginalLength().
+* [Issues#48](https://github.com/kaitoy/pcap4j/issues/48): Add PcapHandle.getOriginalLength().
+* [Issues#49](https://github.com/kaitoy/pcap4j/issues/49): Mac address detection on Windows.
 
 ### Bug Fixes ###
 

@@ -31,7 +31,7 @@ Pcap4J
     * [ドキュメント](#ドキュメント)
     * [サンプル実行方法](#サンプル実行方法)
     * [Mavenプロジェクトでの使用方法](#mavenプロジェクトでの使用方法)
-    * [pcapライブラリのロードについて](#pcapライブラリのロードについて)
+    * [ネイティブライブラリのロードについて](#ネイティブライブラリのロードについて)
     * [Docker](#docker)
 * [ビルド](#ビルド)
     * [Mavenコマンドでのビルド手順 (推奨)](#mavenコマンドでのビルド手順-推奨)
@@ -180,12 +180,12 @@ pom.xmlに以下のような記述を追加する。
 </project>
 ```
 
-#### pcapライブラリのロードについて ####
-デフォルトでは下記の条件でpcapライブラリを検索し、ロードする。
+#### ネイティブライブラリのロードについて ####
+デフォルトでは下記の条件でネイティブライブラリを検索し、ロードする。
 
 * Windows
     * サーチパス: 環境変数`PATH`に含まれるパス。
-    * ファイル名: wpcap.dll
+    * ファイル名: wpcap.dllとPacket.dll
 * Linux/UNIX
     * サーチパス: OSに設定された共有ライブラリのサーチパス。例えば環境変数`LD_LIBRARY_PATH`に含まれるパス。
     * ファイル名: libpcap.so
@@ -196,7 +196,8 @@ pom.xmlに以下のような記述を追加する。
 カスタマイズのために、以下のJavaのシステムプロパティが使える。
 
 * jna.library.path: サーチパスを指定する。
-* org.pcap4j.core.pcapLibName: ライブラリへのフルパスを指定する。
+* org.pcap4j.core.pcapLibName: pcapライブラリ(wpcap.dllかlibpcap.soかlibpcap.dylib)へのフルパスを指定する。
+* (Windowsのみ) org.pcap4j.core.packetLibName: packetライブラリ(Packet.dll)へのフルパスを指定する。
 
 ### Docker ###
 CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](https://registry.hub.docker.com/u/kaitoy/pcap4j/)にある。
