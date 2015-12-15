@@ -11,7 +11,7 @@
   <parent>
     <groupId>org.pcap4j</groupId>
     <artifactId>pcap4j</artifactId>
-    <version>1.6.2-SNAPSHOT</version>
+    <version>1.6.2</version>
   </parent>
 
   <dependencies>
@@ -66,10 +66,7 @@
             <configuration>
               <target>
                 <delete>
-                  <fileset
-                    dir="${project.build.outputDirectory}"
-                    includes="**/PacketFactoryBinder.class"
-                  />
+                  <fileset dir="${project.build.outputDirectory}" includes="**/PacketFactoryBinder.class" />
                 </delete>
               </target>
             </configuration>
@@ -98,7 +95,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
