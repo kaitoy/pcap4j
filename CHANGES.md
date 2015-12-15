@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.6.2 (14-Dec-2015)
+===========================
+### New Features ###
 * [Issues#48](https://github.com/kaitoy/pcap4j/issues/48): Add PcapHandle.getOriginalLength().
 * [Issues#49](https://github.com/kaitoy/pcap4j/issues/49): Mac address detection on Windows.
 
