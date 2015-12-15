@@ -45,7 +45,7 @@ Pcap4J
 
 Maven Central Repositoryからダウンロードできる。
 
-* Pcap4J 1.6.2 (Maven Central Repositoryにある最新バージョン)
+* Pcap4J 1.6.2
     * ソースなし: [pcap4j-distribution-1.6.2-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.6.2/pcap4j-distribution-1.6.2-bin.zip)
     * ソース入り: [pcap4j-distribution-1.6.2-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.6.2/pcap4j-distribution-1.6.2-src.zip)
 * スナップショットビルド
