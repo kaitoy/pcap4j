@@ -59,6 +59,8 @@ public final class ByteArrays {
   private static final Pattern NO_SEPARATOR_HEX_STRING_PATTERN
     = Pattern.compile("\\A([0-9a-fA-F][0-9a-fA-F])+\\z");
 
+  private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
+
   private ByteArrays() { throw new AssertionError(); }
 
   /**
@@ -772,18 +774,7 @@ public final class ByteArrays {
    * @return hex string
    */
   public static String toHexString(byte[] array, String separator) {
-    StringBuffer buf = new StringBuffer();
-
-    for (int i = 0; i < array.length; i++) {
-      buf.append(String.format("%02x", array[i]));
-      buf.append(separator);
-    }
-
-    if (separator.length() != 0 && array.length > 0) {
-      buf.delete(buf.lastIndexOf(separator), buf.length());
-    }
-
-    return buf.toString();
+    return toHexString(array, separator, 0, array.length);
   }
 
   /**
@@ -799,18 +790,40 @@ public final class ByteArrays {
   ) {
     validateBounds(array, offset, length);
 
-    StringBuffer buf = new StringBuffer();
-
-    for (int i = offset; i < offset + length; i++) {
-      buf.append(String.format("%02x", array[i]));
-      buf.append(separator);
+    char[] hexChars;
+    if (separator.length() != 0) {
+      char[] sepChars = separator.toCharArray();
+      hexChars = new char[length * 2 + sepChars.length * (length - 1)];
+      int cur = 0;
+      int i = 0;
+      for (; i < length - 1; i++) {
+        int v = array[offset + i] & 0xFF;
+        hexChars[cur] = HEX_CHARS[v >>> 4];
+        cur++;
+        hexChars[cur] = HEX_CHARS[v & 0x0F];
+        cur++;
+        for (int j = 0; j < sepChars.length; j++) {
+          hexChars[cur] = sepChars[j];
+          cur++;
+        }
+      }
+      int v = array[offset + i] & 0xFF;
+      hexChars[cur] = HEX_CHARS[v >>> 4];
+      hexChars[cur + 1] = HEX_CHARS[v & 0x0F];
+    }
+    else {
+      hexChars = new char[length * 2];
+      int cur = 0;
+      for (int i = 0; i < length; i++) {
+        int v = array[offset + i] & 0xFF;
+        hexChars[cur] = HEX_CHARS[v >>> 4];
+        cur++;
+        hexChars[cur] = HEX_CHARS[v & 0x0F];
+        cur++;
+      }
     }
 
-    if (separator.length() != 0 && length > 0) {
-      buf.delete(buf.lastIndexOf(separator), buf.length());
-    }
-
-    return buf.toString();
+    return new String(hexChars);
   }
 
   /**
