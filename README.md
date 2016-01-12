@@ -101,9 +101,9 @@ I'm using the following libraries for the test.
 * logback-classic 1.0.0
 
 ##### Platforms #####
-I tested Pcap4j on the following OSes with x86 processors.
+I tested Pcap4j on the following OSes with x86 or x64 processors.
 
-* Windows: XP, Vista, 7, 2003 R2, 2008, 2008 R2, and 2012
+* Windows: XP, Vista, 7, [10](http://tbd.kaitoy.xyz/2016/01/12/pcap4j-with-four-native-libraries-on-windows10/), 2003 R2, 2008, 2008 R2, and 2012
 * Linux
     * RHEL: 5 and 6
     * CentOS: 5

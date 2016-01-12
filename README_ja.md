@@ -103,9 +103,9 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 * logback-classic 1.0.0
 
 ##### プラットフォーム #####
-x86プロセッサ上の以下のOSで動作することを確認した。
+x86かx64プロセッサ上の以下のOSで動作することを確認した。
 
-* Windows: XP, Vista, 7, 2003 R2, 2008, 2008 R2, and 2012
+* Windows: XP, Vista, 7, [10](http://tbd.kaitoy.xyz/2016/01/12/pcap4j-with-four-native-libraries-on-windows10/), 2003 R2, 2008, 2008 R2, and 2012
 * Linux
     * RHEL: 5 and 6
     * CentOS: 5
