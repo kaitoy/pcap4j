@@ -1196,26 +1196,28 @@ public final class PcapHandle {
       if (Platform.isWindows()) {
         IntByReference pcapStatSize = new IntByReference();
         Pointer psp = PcapLibrary.INSTANCE.win_pcap_stats_ex(handle, pcapStatSize);
-
-        if (pcapStatSize.getValue() != 24) {
-          throw new PcapNativeException(getError());
+        if (
+          !getError()
+            .equals("Cannot retrieve the extended statistics from a file or a TurboCap port")
+        ) {
+          if (pcapStatSize.getValue() != 24) {
+            throw new PcapNativeException(getError());
+          }
+          if (psp == null) {
+            throw new PcapNativeException(getError());
+          }
+          return new PcapStat(psp, true);
         }
-        if (psp == null) {
-          throw new PcapNativeException(getError());
-        }
-
-        return new PcapStat(psp, true);
       }
-      else {
-        pcap_stat ps = new pcap_stat();
-        ps.setAutoSynch(false);
-        int rc = NativeMappings.pcap_stats(handle, ps);
-        if (rc < 0) {
-          throw new PcapNativeException(getError(), rc);
-        }
 
-        return new PcapStat(ps.getPointer(), false);
+      pcap_stat ps = new pcap_stat();
+      ps.setAutoSynch(false);
+      int rc = NativeMappings.pcap_stats(handle, ps);
+      if (rc < 0) {
+        throw new PcapNativeException(getError(), rc);
       }
+
+      return new PcapStat(ps.getPointer(), false);
     } finally {
       handleLock.readLock().unlock();
     }
