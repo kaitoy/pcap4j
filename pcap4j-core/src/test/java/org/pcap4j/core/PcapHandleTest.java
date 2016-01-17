@@ -10,14 +10,9 @@ import org.junit.Test;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.DataLinkType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("javadoc")
 public class PcapHandleTest {
-
-  private static final Logger logger
-    = LoggerFactory.getLogger(PcapHandleTest.class);
 
   private PcapHandle ph;
 
@@ -54,6 +49,7 @@ public class PcapHandleTest {
       ph = Pcaps.openDead(DataLinkType.EN10MB, 2048);
       try {
         ph.getStats();
+        fail("getStats on a pcap_open_dead pcap_t should throw a PcapNativeException.");
       } catch (PcapNativeException e) {
         assertEquals("Statistics aren't available from a pcap_open_dead pcap_t", e.getMessage());
       }

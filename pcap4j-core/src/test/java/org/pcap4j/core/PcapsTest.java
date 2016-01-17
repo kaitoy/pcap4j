@@ -73,12 +73,11 @@ public class PcapsTest {
     try {
       dev = Pcaps.lookupDev();
     } catch (PcapNativeException e) {
-      assertEquals("no suitable device found", e.getMessage());
+      logger.info("Pcaps.lookupDev() said {}", e.getMessage());
       return;
     }
     assertNotNull(dev);
     assertTrue(dev.length() != 0);
-    logger.info(Pcaps.lookupDev());
   }
 
   @Test
