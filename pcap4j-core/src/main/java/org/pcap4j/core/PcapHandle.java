@@ -1148,7 +1148,7 @@ public final class PcapHandle {
     if (packet == null) {
       throw new NullPointerException("packet may not be null");
     }
-    send(packet.getRawData());
+    sendPacket(packet.getRawData());
   }
 
   /**
@@ -1158,7 +1158,7 @@ public final class PcapHandle {
    * @throws NotOpenException if this PcapHandle is not open.
    * @throws NullPointerException if any of arguments are null.
    */
-  public void send(byte[] bytes) throws NotOpenException, PcapNativeException {
+  public void sendPacket(byte[] bytes) throws NotOpenException, PcapNativeException {
     if (bytes == null) {
       throw new NullPointerException("bytes may not be null");
     }
