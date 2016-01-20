@@ -1,6 +1,6 @@
 [English](https://github.com/kaitoy/pcap4j)
 
-<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/pcap4j-logo-color.png" width="70%" style="margin: 0px auto; display: block;" />
+<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/logos/pcap4j-logo-color.png" width="70%" style="margin: 0px auto; display: block;" />
 
 [ロゴ](/www/logos.md)
 
