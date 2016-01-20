@@ -14,14 +14,10 @@ Logos
 ![pcap4j-logomark-grey.png](/www/images/logos/pcap4j-logomark-grey.png "Greyscale Pcap4J logomark")
 
 #### Whitish Pcap4J logo
-<div style="background-color: rgb(55, 55, 55);">
-  <img style="max-width:100%;" title="Whitish Pcap4J logo" alt="pcap4j-logo-whitish.png" src="/kaitoy/pcap4j/raw/master/www/images/logos/pcap4j-logo-whitish.png">
-</div>
+![pcap4j-logo-whitish.png](/www/images/logos/pcap4j-logo-whitish.png "Whitish Pcap4J logo")
 
 #### Whitish Pcap4J logomark
-<div style="background-color: rgb(55, 55, 55);">
-  <img style="max-width:100%;" title="Whitish Pcap4J logomark" alt="pcap4j-logomark-whitish.png" src="/kaitoy/pcap4j/raw/master/www/images/logos/pcap4j-logomark-whitish.png">
-</div>
+![pcap4j-logomark-whitish.png](/www/images/logos/pcap4j-logomark-whitish.png "Whitish Pcap4J logomark")
 
 #### Mr. Pcap4J
 ![Mr-pcap4j.png](/www/images/logos/Mr-pcap4j.png "Mr. Pcap4J")
