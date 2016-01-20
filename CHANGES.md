@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* [PR#53](https://github.com/kaitoy/pcap4j/pull/53): Add PcapHandle.sendPacket(byte[]).
 
 ### Bug Fixes ###
 
@@ -120,7 +121,7 @@ Release 1.4.0 (29-Mar-2015)
 Release 1.3.0 (4-Oct-2014)
 ==========================
 ### New Features ###
-* [Pulls#23](https://github.com/kaitoy/pcap4j/pull/23): Add support for a data link type DLT_RAW.
+* [PR#23](https://github.com/kaitoy/pcap4j/pull/23): Add support for a data link type DLT_RAW.
 
 ### Bug Fixes ###
 * [Issues#27](https://github.com/kaitoy/pcap4j/issues/27): TCP timestamp options are not captured correctly.
