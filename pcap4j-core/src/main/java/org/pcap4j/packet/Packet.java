@@ -33,7 +33,7 @@ public interface Packet extends Iterable<Packet>, Serializable {
    * Returns the Packet object representing this packet's payload.
    *
    * @return the Packet object representing this packet's payload.
-   *         May be null if the payload exist
+   *         May be null if the payload doesn't exist
    */
   public Packet getPayload();
 
