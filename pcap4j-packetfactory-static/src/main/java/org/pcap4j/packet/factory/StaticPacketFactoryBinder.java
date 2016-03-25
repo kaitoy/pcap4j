@@ -33,18 +33,16 @@ import org.pcap4j.packet.namednumber.UdpPort;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.16
+ * @since pcap4j 1.6.3
  */
-final class PacketFactoryBinder {
-
-  private static final PacketFactoryBinder INSTANCE = new PacketFactoryBinder();
+final public class StaticPacketFactoryBinder implements PacketFactoryBinder {
 
   private final Map<Class<? extends NamedNumber<?, ?>>, PacketFactory<?, ?>> packetFactories
     = new HashMap<Class<? extends NamedNumber<?, ?>>, PacketFactory<?, ?>>();
   private final Map<Class<?>, PacketFactory<?, ?>> packetpPieceFactories
     = new HashMap<Class<?>, PacketFactory<?, ?>>();
 
-  private PacketFactoryBinder() {
+  public StaticPacketFactoryBinder() {
     packetFactories.put(DataLinkType.class, StaticDataLinkTypePacketFactory.getInstance());
     packetFactories.put(EtherType.class, StaticEtherTypePacketFactory.getInstance());
     packetFactories.put(IcmpV4Type.class, StaticIcmpV4TypePacketFactory.getInstance());
@@ -94,9 +92,8 @@ final class PacketFactoryBinder {
     );
   }
 
-  public static PacketFactoryBinder getInstance() { return INSTANCE; }
-
   @SuppressWarnings("unchecked")
+  @Override
   public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {

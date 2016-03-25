@@ -16,17 +16,14 @@ import org.pcap4j.packet.namednumber.NamedNumber;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 0.9.16
+ * @since pcap4j 1.6.3
  */
-final class PacketFactoryBinder {
-
-  private static final PacketFactoryBinder INSTANCE = new PacketFactoryBinder();
+final public class PropertiesPacketFactoryBinder implements PacketFactoryBinder {
 
   private final Map<CacheKey, PacketFactory<?, ?>> cache
     = new ConcurrentHashMap<CacheKey, PacketFactory<?, ?>>();
 
-  public static PacketFactoryBinder getInstance() { return INSTANCE; }
-
+  @Override
   public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {
