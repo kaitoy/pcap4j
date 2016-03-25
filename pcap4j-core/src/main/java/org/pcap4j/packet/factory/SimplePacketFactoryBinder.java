@@ -14,7 +14,7 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */
-final class SimplePacketFactoryBinder {
+final class SimplePacketFactoryBinder implements PacketFactoryBinder {
 
   private static final SimplePacketFactoryBinder INSTANCE = new SimplePacketFactoryBinder();
 
@@ -23,6 +23,7 @@ final class SimplePacketFactoryBinder {
   public static SimplePacketFactoryBinder getInstance() { return INSTANCE; }
 
   @SuppressWarnings("unchecked")
+  @Override
   public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
     Class<T> targetClass, Class<N> numberClass
   ) {
