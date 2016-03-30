@@ -100,7 +100,7 @@ implements IpV4InternetTimestampOptionData {
     if (timestamps == null) {
       throw new NullPointerException("timestamps may not be null");
     }
-    if (address == null && timestamps.size() != 0) {
+    if (address == null && !timestamps.isEmpty()) {
       throw new IllegalArgumentException(
               "timestamps.size() must be 0 if address is null"
             );
