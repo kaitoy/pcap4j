@@ -52,7 +52,7 @@ public class GetNextRawPacket {
     System.out.println(NIF_NAME_KEY + ": " + NIF_NAME);
     System.out.println("\n");
 
-    PcapNetworkInterface nif = null;
+    PcapNetworkInterface nif;
     if (NIF_NAME != null) {
       nif = Pcaps.getDevByName(NIF_NAME);
     }

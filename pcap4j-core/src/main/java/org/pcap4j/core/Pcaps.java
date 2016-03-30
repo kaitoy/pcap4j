@@ -492,16 +492,16 @@ public final class Pcaps {
       throw new NullPointerException(sb.toString());
     }
 
-    StringBuffer buf = new StringBuffer();
+    StringBuilder builder = new StringBuilder();
     byte[] address = macAddr.getAddress();
 
     for (int i = 0; i < address.length; i++) {
-      buf.append(String.format("%02x", address[i]));
-      buf.append(":");
+      builder.append(String.format("%02x", address[i]));
+      builder.append(":");
     }
-    buf.deleteCharAt(buf.length() - 1);
+    builder.deleteCharAt(builder.length() - 1);
 
-    return buf.toString();
+    return builder.toString();
   }
 
 }
