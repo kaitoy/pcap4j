@@ -423,6 +423,8 @@ public final class IpV4Packet extends AbstractPacket {
      */
     private static final long serialVersionUID = -7583326842445453539L;
 
+    private static final Logger logger = LoggerFactory.getLogger(IpV4Header.class);
+
     private static final int VERSION_AND_IHL_OFFSET
       = 0;
     private static final int VERSION_AND_IHL_SIZE
@@ -560,11 +562,11 @@ public final class IpV4Packet extends AbstractPacket {
 
       this.options = new ArrayList<IpV4Option>();
       int currentOffsetInHeader = OPTIONS_OFFSET;
-      while (currentOffsetInHeader < headerLength) {
-        IpV4OptionType type
-          = IpV4OptionType.getInstance(rawData[currentOffsetInHeader + offset]);
-        IpV4Option newOne;
-        try {
+      try {
+        while (currentOffsetInHeader < headerLength) {
+          IpV4OptionType type
+            = IpV4OptionType.getInstance(rawData[currentOffsetInHeader + offset]);
+          IpV4Option newOne;
           newOne = PacketFactories
                      .getFactory(IpV4Option.class, IpV4OptionType.class)
                         .newInstance(
@@ -573,18 +575,16 @@ public final class IpV4Packet extends AbstractPacket {
                            headerLength - currentOffsetInHeader,
                            type
                          );
-        } catch (Exception e) {
-          break;
-        }
+          options.add(newOne);
+          currentOffsetInHeader += newOne.length();
 
-        options.add(newOne);
-        currentOffsetInHeader += newOne.length();
-
-        if (newOne.getType().equals(IpV4OptionType.END_OF_OPTION_LIST)) {
-          break;
+          if (newOne.getType().equals(IpV4OptionType.END_OF_OPTION_LIST)) {
+            break;
+          }
         }
+      } catch (Exception e) {
+        logger.info(e.getMessage());
       }
-
       int paddingLength = headerLength - currentOffsetInHeader;
       if (paddingLength != 0) {
         this.padding

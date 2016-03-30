@@ -21,6 +21,8 @@ import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.packet.namednumber.TcpPort;
 import org.pcap4j.util.ByteArrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kaito Yamada
@@ -535,7 +537,7 @@ public final class TcpPacket extends AbstractPacket {
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      */
 
-
+    private static final Logger logger = LoggerFactory.getLogger(TcpHeader.class);
     /**
      *
      */
@@ -664,11 +666,11 @@ public final class TcpPacket extends AbstractPacket {
 
       this.options = new ArrayList<TcpOption>();
       int currentOffsetInHeader = OPTIONS_OFFSET;
-      while (currentOffsetInHeader < headerLength) {
-        TcpOptionKind kind
-          = TcpOptionKind.getInstance(rawData[currentOffsetInHeader + offset]);
-        TcpOption newOne;
-        try {
+      try {
+        while (currentOffsetInHeader < headerLength) {
+          TcpOptionKind kind
+            = TcpOptionKind.getInstance(rawData[currentOffsetInHeader + offset]);
+          TcpOption newOne;
           newOne = PacketFactories
                      .getFactory(TcpOption.class, TcpOptionKind.class)
                         .newInstance(
@@ -677,16 +679,16 @@ public final class TcpPacket extends AbstractPacket {
                            headerLength - currentOffsetInHeader,
                            kind
                          );
-        } catch (Exception e) {
-          break;
-        }
 
-        options.add(newOne);
-        currentOffsetInHeader += newOne.length();
+          options.add(newOne);
+          currentOffsetInHeader += newOne.length();
 
-        if (newOne.getKind().equals(TcpOptionKind.END_OF_OPTION_LIST)) {
-          break;
+          if (newOne.getKind().equals(TcpOptionKind.END_OF_OPTION_LIST)) {
+            break;
+          }
         }
+      } catch (Exception e) {
+        logger.info(e.getMessage());
       }
 
       int paddingLength = headerLength - currentOffsetInHeader;
