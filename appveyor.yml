@@ -68,18 +68,11 @@ platform: Any CPU
 before_build:
   - cmd: if not exist %userprofile%\.m2 (mkdir %userprofile%\.m2)
   - cmd: copy /y mvn\settings.xml %userprofile%\.m2
+  - ps: if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) {$env:MAVEN_PHASE = 'deploy'} else {$env:MAVEN_PHASE = 'install'}
 
 build_script:
   # Run mvn command with jna.nosys=true not to use an older jna pre-installed in AppVeyor VMs.
-  - ps: |
-    if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER)
-    {
-      cmd /c "$env:MAVEN_BIN_PATH\mvn -Djna.nosys=true -P distribution-assembly deploy"
-    }
-    else
-    {
-      cmd /c "$env:MAVEN_BIN_PATH\mvn -Djna.nosys=true -P distribution-assembly install"
-    }
+  - cmd: call "%MAVEN_BIN_PATH%\mvn" -Djna.nosys=true -P distribution-assembly %MAVEN_PHASE%
 
 #---------------------------------#
 #       tests configuration       #
