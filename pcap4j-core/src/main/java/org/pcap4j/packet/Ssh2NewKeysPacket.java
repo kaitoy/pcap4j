@@ -66,12 +66,12 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
 
   @Override
   public boolean equals(Object obj) {
-    return ((Object)this).equals(obj);
+    return this.equals(obj);
   }
 
   @Override
   protected int calcHashCode() {
-    return ((Object)this).hashCode();
+    return this.hashCode();
   }
 
   // Override deserializer to keep singleton
@@ -171,12 +171,12 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
 
     @Override
     public boolean equals(Object obj) {
-      return ((Object)this).equals(obj);
+      return this.equals(obj);
     }
 
     @Override
     protected int calcHashCode() {
-      return ((Object)this).hashCode();
+      return this.hashCode();
     }
 
     // Override deserializer to keep singleton

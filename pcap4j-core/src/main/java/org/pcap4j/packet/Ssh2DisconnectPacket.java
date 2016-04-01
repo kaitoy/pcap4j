@@ -194,7 +194,7 @@ public final class Ssh2DisconnectPacket extends AbstractPacket {
       int currentOffset = 1 + offset;
       int remainingLength = length - 1;
       this.reasonCode
-        = Ssh2DisconnectionReasonCode.getInstance((ByteArrays.getInt(rawData, currentOffset)));
+        = Ssh2DisconnectionReasonCode.getInstance(ByteArrays.getInt(rawData, currentOffset));
       currentOffset += INT_SIZE_IN_BYTES;
       remainingLength -= INT_SIZE_IN_BYTES;
       this.description = new Ssh2String(rawData, currentOffset, remainingLength);
