@@ -71,7 +71,15 @@ before_build:
 
 build_script:
   # Run mvn command with jna.nosys=true not to use an older jna pre-installed in AppVeyor VMs.
-  - cmd: call "%MAVEN_BIN_PATH%\mvn" -Djna.nosys=true -P distribution-assembly install
+  - ps: |
+  if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER)
+  {
+    cmd /c "$env:MAVEN_BIN_PATH\mvn -Djna.nosys=true -P distribution-assembly deploy"
+  }
+  else
+  {
+    cmd /c "$env:MAVEN_BIN_PATH\mvn -Djna.nosys=true -P distribution-assembly install"
+  }
 
 #---------------------------------#
 #       tests configuration       #
@@ -83,8 +91,7 @@ test: off
 #     deployment configuration    #
 #---------------------------------#
 
-deploy:
-  - ps: if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) { cmd /c "$env:MAVEN_BIN_PATH\mvn -Djna.nosys=true -P distribution-assembly deploy" }
+deploy: off
 
 #---------------------------------#
 #         notifications           #
