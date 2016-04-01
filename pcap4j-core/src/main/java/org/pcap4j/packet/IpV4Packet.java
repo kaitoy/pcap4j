@@ -583,8 +583,9 @@ public final class IpV4Packet extends AbstractPacket {
           }
         }
       } catch (Exception e) {
-        logger.info(e.getMessage());
+        logger.error("Exception occurred during analyzing IPv4 options: ", e);
       }
+
       int paddingLength = headerLength - currentOffsetInHeader;
       if (paddingLength != 0) {
         this.padding

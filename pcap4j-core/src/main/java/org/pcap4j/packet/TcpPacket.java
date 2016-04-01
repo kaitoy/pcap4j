@@ -688,7 +688,7 @@ public final class TcpPacket extends AbstractPacket {
           }
         }
       } catch (Exception e) {
-        logger.info(e.getMessage());
+        logger.error("Exception occurred during analyzing TCP options: ", e);
       }
 
       int paddingLength = headerLength - currentOffsetInHeader;
