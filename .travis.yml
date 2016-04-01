@@ -2,6 +2,9 @@ sudo: required
 
 language: java
 
+addons:
+  hostname: pcap4j-test
+
 branches:
   only:
     - master
