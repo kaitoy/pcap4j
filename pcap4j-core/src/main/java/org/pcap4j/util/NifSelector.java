@@ -40,7 +40,7 @@ public class NifSelector {
       throw new IOException(e.getMessage());
     }
 
-    if (allDevs == null || allDevs.size() == 0) {
+    if (allDevs == null || allDevs.isEmpty()) {
       throw new IOException("No NIF to capture.");
     }
 
