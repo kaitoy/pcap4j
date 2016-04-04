@@ -193,7 +193,7 @@ final class NativeMappings {
   static native void  pcap_freecode(bpf_program fp);
 
   // int pcap_sendpacket(pcap_t *p, const u_char *buf, int size)
-  static native int pcap_sendpacket(Pointer p, byte buf[], int size);
+  static native int pcap_sendpacket(Pointer p, byte[] buf, int size);
 
   // void pcap_close(pcap_t *p)
   static native void pcap_close(Pointer p);

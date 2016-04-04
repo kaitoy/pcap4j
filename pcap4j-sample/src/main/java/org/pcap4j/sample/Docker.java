@@ -67,7 +67,7 @@ public class Docker {
       waitForPing();
     }
 
-    PcapNetworkInterface nif = null;
+    PcapNetworkInterface nif;
     if (NIF_NAME != null) {
       nif = Pcaps.getDevByName(NIF_NAME);
     }

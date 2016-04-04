@@ -46,7 +46,7 @@ public final class LazyValue<T1> implements Serializable {
       synchronized (thisLock) {
         result = value;
         if (result == null) {
-          result = value = command.buildValue();
+          value = command.buildValue();
         }
       }
     }
