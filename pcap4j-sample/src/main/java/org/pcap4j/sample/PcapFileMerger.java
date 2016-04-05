@@ -10,6 +10,8 @@ import org.pcap4j.packet.Packet;
 @SuppressWarnings("javadoc")
 public class PcapFileMerger {
 
+  private PcapFileMerger() {}
+
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     // args: pcap file list
 

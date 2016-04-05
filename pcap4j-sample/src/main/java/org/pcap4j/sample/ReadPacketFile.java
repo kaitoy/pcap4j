@@ -19,6 +19,8 @@ public class ReadPacketFile {
   private static final String PCAP_FILE
     = System.getProperty(PCAP_FILE_KEY, "src/main/resources/echoAndEchoReply.pcap");
 
+  private ReadPacketFile() {}
+
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     PcapHandle handle;
     try {

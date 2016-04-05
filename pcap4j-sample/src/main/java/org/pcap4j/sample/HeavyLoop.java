@@ -15,6 +15,8 @@ import org.pcap4j.util.NifSelector;
 @SuppressWarnings("javadoc")
 public class HeavyLoop {
 
+  private HeavyLoop() {}
+
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     PcapNetworkInterface nif;
     try {

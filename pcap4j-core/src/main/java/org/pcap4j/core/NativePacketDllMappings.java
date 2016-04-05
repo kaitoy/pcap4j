@@ -47,6 +47,8 @@ final class NativePacketDllMappings {
   // VOID PacketCloseAdapter(LPADAPTER lpAdapter)
   static native void PacketCloseAdapter(Pointer lpAdapter);
 
+  private NativePacketDllMappings() {}
+
   // struct _PACKET_OID_DATA {
   //     ULONG Oid;       ///< OID code. See the Microsoft DDK documentation or the file ntddndis.h
   //                      ///< for a complete list of valid codes.

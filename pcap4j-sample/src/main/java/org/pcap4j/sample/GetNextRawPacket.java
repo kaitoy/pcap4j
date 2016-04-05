@@ -42,6 +42,8 @@ public class GetNextRawPacket {
   private static final String NIF_NAME
     = System.getProperty(NIF_NAME_KEY);
 
+  private GetNextRawPacket() {}
+
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String filter = args.length != 0 ? args[0] : "";
 

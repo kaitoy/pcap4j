@@ -31,6 +31,8 @@ public class Loop {
   private static final int SNAPLEN
     = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
 
+  private Loop() {}
+
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String filter = args.length != 0 ? args[0] : "";
 
