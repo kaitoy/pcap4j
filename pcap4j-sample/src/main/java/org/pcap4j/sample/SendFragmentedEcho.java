@@ -59,6 +59,8 @@ public class SendFragmentedEcho {
   private static final int MTU
     = Integer.getInteger(MTU_KEY, 1403); // [bytes]
 
+  private SendFragmentedEcho() {}
+
   public static void main(String[] args) throws PcapNativeException {
     String strSrcIpAddress = args[0]; // for InetAddress.getByName()
     String strSrcMacAddress = args[1]; // e.g. 12:34:56:ab:cd:ef

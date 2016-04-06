@@ -41,6 +41,8 @@ public class IcmpV4ErrReplyer {
 
   private static MacAddress MAC_ADDR = MacAddress.getByName("fe:00:00:00:00:01");
 
+  private IcmpV4ErrReplyer() {}
+
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String strAddress = args[0];
     String strType = args[1]; // 3(DESTINATION_UNREACHABLE) or 11(TIME_EXCEEDED) or 12(PARAMETER_PROBLEM)

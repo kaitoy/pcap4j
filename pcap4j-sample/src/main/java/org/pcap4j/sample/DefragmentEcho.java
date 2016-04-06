@@ -23,6 +23,8 @@ public class DefragmentEcho {
   private static final String PCAP_FILE
     = System.getProperty(PCAP_FILE_KEY, "src/main/resources/flagmentedEcho.pcap");
 
+  private DefragmentEcho() {}
+
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     PcapHandle handle = Pcaps.openOffline(PCAP_FILE);
 

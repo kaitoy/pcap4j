@@ -52,6 +52,8 @@ public class Docker {
   private static final boolean WAIT
     = Boolean.getBoolean(WAIT_KEY);
 
+  private Docker() {}
+
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String filter = args.length != 0 ? args[0] : "";
 

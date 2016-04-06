@@ -48,6 +48,8 @@ public class GetNextPacket {
   private static final String NIF_NAME
     = System.getProperty(NIF_NAME_KEY);
 
+  private GetNextPacket() {}
+
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String filter = args.length != 0 ? args[0] : "";
 
