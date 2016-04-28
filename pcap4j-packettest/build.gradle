@@ -1,0 +1,37 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
+archivesBaseName = 'pcap4j-packettest'
+description = 'Tests of Pcap4J packet classes.'
+
+configurations {
+  testJar
+}
+
+dependencies {
+  testCompile project(':pcap4j-core')
+  testCompile "junit:junit:${junitVer}"
+}
+
+jar.enabled = false
+test.enabled = false
+
+task jarTests(type: Jar, dependsOn: testClasses) {
+  classifier = 'tests'
+  from sourceSets.test.output
+}
+testClasses.finalizedBy jarTests
+
+artifacts {
+  archives jarTests
+  testJar jarTests
+}
+
+// remove the output of jar task from archives
+configurations.archives.artifacts.with { artifacts ->
+  artifacts.remove artifacts.find { !it.classifier }
+}

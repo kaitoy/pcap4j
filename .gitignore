@@ -1,12 +1,16 @@
-target/
+# Eclipse
 .project
 .classpath
 .settings/
+bin/
+
+# Maven
+target/
 pcap4j-test-coverage/src/
 
+# Gradle
 build/
 .gradle/
-bin/
 gradle-app.setting
 .gradletasknamecache
 

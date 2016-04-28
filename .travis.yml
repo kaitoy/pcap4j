@@ -2,19 +2,13 @@ sudo: required
 
 language: java
 
-addons:
-  hostname: pcap4j-test
-
 branches:
-  only:
-    - master
+  except:
+    - gh-pages
 
 matrix:
   include:
     - jdk: oraclejdk8
-    - jdk: oraclejdk7
-    - jdk: openjdk6
-      env: COVERALLS=yes
   fast_finish: true
 
 cache:
@@ -29,13 +23,10 @@ install:
   - cd ..
 
 script:
-  - |
-    if [ "${COVERALLS}" = "yes"  ]
-    then
-      sudo /usr/local/maven/bin/mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -DserviceJobId=$TRAVIS_JOB_ID -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage package coveralls:report
-    else
-      sudo /usr/local/maven/bin/mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B install
-    fi
+  - ./gradlew build jacocoTestReport
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email:

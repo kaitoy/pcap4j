@@ -1,0 +1,36 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
+archivesBaseName = 'pcap4j-packetfactory-propertiesbased'
+description = 'Properties-Based Packet Factory.'
+
+configurations {
+  packetTests {
+    transitive = false
+  }
+}
+
+dependencies {
+  compile project(':pcap4j-core')
+  packetTests project(path: ':pcap4j-packettest', configuration: 'testJar')
+  testRuntime "ch.qos.logback:logback-core:${logbackVer}"
+  testRuntime "ch.qos.logback:logback-classic:${logbackVer}"
+  testRuntime "junit:junit:${junitVer}"
+}
+
+task extractTests(type: Copy, dependsOn: [testClasses, ':pcap4j-packettest:jarTests']) {
+  from {
+    configurations.packetTests.collect { zipTree it }
+  }
+  into sourceSets.test.output.classesDir
+}
+
+test {
+  dependsOn extractTests
+  systemProperties['org.pcap4j.packet.AbstractPacketTest.resourceDir'] = sourceSets.test.output.classesDir
+  systemProperties['org.pcap4j.packet.AbstractPacketTest.tmpDir'] = temporaryDir
+}

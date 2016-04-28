@@ -1,0 +1,105 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+  }
+}
+
+allprojects {
+  apply plugin: 'java'
+
+  javadoc {
+    def currentYear = Calendar.getInstance().get Calendar.YEAR
+    options.with {
+      locale 'en_US'
+      encoding 'UTF-8'
+      charSet 'UTF-8'
+      author true
+      windowTitle "Pcap4J ${project.version}"
+      header "Pcap4J ${project.version}"
+      docTitle "Pcap4J ${project.version} API Documentation"
+      footer 'https://github.com/kaitoy/pcap4j'
+      bottom "Copyright &copy; 2011 - ${currentYear} Pcap4J.org. All rights reserved."
+      showFromProtected()
+      addStringOption 'Xdoclint:all,-reference', '-quiet'
+    }
+  }
+
+  group = 'org.pcap4j'
+  version = '2.0.0-SNAPSHOT'
+
+  [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+
+  repositories {
+    jcenter()
+  }
+}
+
+subprojects {
+  if (project.hasProperty('javadoc')) {
+    project.javadoc.enabled = false
+  }
+}
+
+archivesBaseName = 'pcap4j'
+description = 'A Java library for capturing, crafting and sending packets.'
+
+configurations {
+  javadocJar
+}
+
+dependencies {
+  // for javadoc task
+  compile "org.slf4j:slf4j-api:${slf4jVer}"
+  compile "net.java.dev.jna:jna:${jnaVer}"
+}
+
+jar.enabled = false
+
+task jarJavadoc(type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
+// aggregated javadoc
+javadoc {
+  def srcDirs = []
+  subprojects.each { proj ->
+    srcDirs.addAll proj.sourceSets.main.java.srcDirs
+  }
+  source srcDirs
+}
+
+artifacts {
+  // jarJavadoc.archivePath instead of jarJavadoc so that build task doesn't depend on javadoc task.
+  javadocJar jarJavadoc.archivePath
+}
+
+// remove the output of jar task from archives
+configurations.archives.artifacts.with { artifacts ->
+  artifacts.remove artifacts.find { !it.classifier }
+}
+
+// dist task
+apply from: 'gradle/distribution.gradle'
+
+// JCenter
+if (gradle.startParameter.taskNames.contains('bintrayUpload')) {
+  apply from: 'gradle/bintray.gradle'
+}
+
+// code coverage
+if (gradle.startParameter.taskNames.contains('jacocoTestReport')) {
+  apply from: 'gradle/jacoco.gradle'
+}

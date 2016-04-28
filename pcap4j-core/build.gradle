@@ -1,0 +1,25 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
+archivesBaseName = 'pcap4j-core'
+description = 'The core module of Pcap4J.'
+
+dependencies {
+  compile "org.slf4j:slf4j-api:${slf4jVer}"
+  compile "net.java.dev.jna:jna:${jnaVer}"
+  testCompile "junit:junit:${junitVer}"
+  testRuntime "ch.qos.logback:logback-core:${logbackVer}"
+  testRuntime "ch.qos.logback:logback-classic:${logbackVer}"
+}
+
+compileJava << {
+  delete "${destinationDir}/org/pcap4j/packet/factory/PacketFactoryBinder.class"
+}
+
+test {
+  systemProperties['org.pcap4j.core.PcapDumperTest.tmpDir'] = temporaryDir
+}

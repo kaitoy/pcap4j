@@ -1,0 +1,50 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
+allprojects {
+  if (
+       name != 'pcap4j-distribution'
+    && name != 'pcap4j-sample'
+    && name != 'pcap4j-packettest'
+  ) {
+    apply plugin: 'jacoco'
+    jacocoTestReport {
+      reports {
+        html.enabled = true
+        xml.enabled = true
+        csv.enabled = false
+      }
+    }
+  }
+}
+
+subprojects {
+  if (project.hasProperty('jacocoTestReport')) {
+    project.jacocoTestReport.enabled = false
+  }
+}
+
+jacocoTestReport {
+  def reportingProjs = subprojects.findAll { it.hasProperty 'jacocoTestReport' }
+  def sourceDirList = []
+  def classDirList = []
+  def execDataList = []
+  reportingProjs.each {
+    dependsOn it.test
+    sourceDirList.add files(it.sourceSets.main.java.srcDirs)
+    classDirList.add it.sourceSets.main.output
+    execDataList.add it.jacocoTestReport.executionData
+  }
+  sourceDirectories = files sourceDirList
+  classDirectories = files classDirList
+  executionData = files execDataList
+
+  // remove PacketFactoryBinder becuase Jacoco can't process classes that have the same name
+  classDirectories = files(classDirectories.files.collect {
+    fileTree(dir: it,  exclude: ['**/PacketFactoryBinder*.class'])
+  })
+}

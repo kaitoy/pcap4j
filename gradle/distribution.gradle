@@ -1,0 +1,46 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
+configurations {
+  distribution {
+    transitive = false
+  }
+}
+
+dependencies {
+  distribution project(path: ':', configuration: 'javadocJar')
+  distribution project(':pcap4j-core')
+  distribution project(':pcap4j-packetfactory-static')
+  distribution project(':pcap4j-packetfactory-propertiesbased')
+  distribution project(':pcap4j-sample')
+}
+
+def depProjs = configurations.distribution.dependencies
+  .findAll({ it instanceof ProjectDependency })
+  .collect { it.dependencyProject }
+task dist(
+  type: Zip,
+  dependsOn: depProjs.collect { if (it == rootProject) it.jarJavadoc else it.jar },
+) {
+  destinationDir = project.buildDir
+  baseName = archivesBaseName
+  version = project.version
+  classifier = 'distribution'
+  extension = 'zip'
+  from {[
+    configurations.distribution,
+    "${rootProject.projectDir}/README_ja.md",
+    "${rootProject.projectDir}/README.md",
+    "${rootProject.projectDir}/CHANGES.md",
+    "${rootProject.projectDir}/LICENSE",
+  ]}
+}
+
+artifacts {
+  // dist.archivePath instead of dist so that build task doesn't depend on dist task.
+  distribution dist.archivePath
+}

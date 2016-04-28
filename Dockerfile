@@ -6,15 +6,11 @@ FROM centos:6
 MAINTAINER Kaito Yamada <kaitoy@pcap4j.org>
 
 # Install packages.
-ADD https://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo /etc/yum.repos.d/epel-apache-maven.repo
-RUN yum install -y libpcap \
-    git \
-    apache-maven
+RUN yum install -y libpcap git
 
 # Build Pcap4J.
-ENV JAVA_HOME /usr/lib/jvm/java-1.7.0-openjdk.x86_64/
 RUN cd /usr/local/src/ && git clone git://github.com/kaitoy/pcap4j.git
-RUN cd /usr/local/src/pcap4j && mvn -P distribution-assembly install 2>&1 | tee build.log
+RUN cd /usr/local/src/pcap4j && ./gradlew build 2>&1 | tee build.log
 
 # Collect libraries.
 WORKDIR /usr/local/src/pcap4j
