@@ -3,3 +3,10 @@ target/
 .classpath
 .settings/
 pcap4j-test-coverage/src/
+
+build/
+.gradle/
+bin/
+gradle-app.setting
+.gradletasknamecache
+
