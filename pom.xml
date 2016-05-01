@@ -149,7 +149,6 @@
             <windowtitle>${project.name} ${project.version}</windowtitle>
             <bottom>Copyright &amp;#169; 2011&amp;#x2013;{currentYear} Pcap4J.org. All rights reserved.</bottom>
             <show>protected</show>
-            <excludePackageNames>org.pcap4j.sample</excludePackageNames>
           </configuration>
         </plugin>
         <plugin>
@@ -287,6 +286,9 @@
                   <goal>aggregate-jar</goal>
                 </goals>
                 <phase>package</phase>
+                <configuration>
+                  <excludePackageNames>org.pcap4j.sample</excludePackageNames>
+                </configuration>
               </execution>
               <execution>
                 <id>attach-javadocs</id>
