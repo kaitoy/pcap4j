@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.6.3 (1-May-2016)
+==========================
+### New Features ###
 * [PR#53](https://github.com/kaitoy/pcap4j/pull/53): Add PcapHandle.sendPacket(byte[]).
 
 ### Bug Fixes ###

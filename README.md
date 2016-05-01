@@ -47,9 +47,9 @@ Download
 
 Pcap4J is available on the Maven Central Repository.
 
-* Pcap4J 1.6.2
-    * without source: [pcap4j-distribution-1.6.2-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.6.2/pcap4j-distribution-1.6.2-bin.zip)
-    * with    source: [pcap4j-distribution-1.6.2-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.6.2/pcap4j-distribution-1.6.2-src.zip)
+* Pcap4J 1.6.3
+    * without source: [pcap4j-distribution-1.6.3-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.6.3/pcap4j-distribution-1.6.3-bin.zip)
+    * with    source: [pcap4j-distribution-1.6.3-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.6.3/pcap4j-distribution-1.6.3-src.zip)
 * Snapshot builds
     * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
 
@@ -167,12 +167,12 @@ Add a dependency to the pom.xml as like below:
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-core</artifactId>
-      <version>1.6.2</version>
+      <version>1.6.3</version>
     </dependency>
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-packetfactory-static</artifactId>
-      <version>1.6.2</version>
+      <version>1.6.3</version>
     </dependency>
        ...
   </dependencies>
