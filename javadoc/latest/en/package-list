@@ -4,5 +4,4 @@ org.pcap4j.packet
 org.pcap4j.packet.constant
 org.pcap4j.packet.factory
 org.pcap4j.packet.namednumber
-org.pcap4j.sample
 org.pcap4j.util
