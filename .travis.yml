@@ -7,7 +7,7 @@ addons:
 
 branches:
   only:
-    - master
+    - v1
 
 matrix:
   include:

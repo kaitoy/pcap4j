@@ -9,7 +9,7 @@ version: '{build}-{branch}'
 branches:
   # whitelist
   only:
-    - master
+    - v1
 
   # blacklist
   except:
