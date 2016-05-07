@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.sun.jna.Callback;
 import com.sun.jna.Function;
 import com.sun.jna.FunctionMapper;
@@ -257,6 +258,9 @@ final class NativeMappings {
 
   // int pcap_set_buffer_size(pcap_t *p, int buffer_size)
   static native int pcap_set_buffer_size(Pointer p, int buffer_size);
+
+  // int pcap_setdirection(pcap_t *, pcap_direction_t)
+  static native int pcap_setdirection(Pointer p, int pcap_direction);
 
   // int pcap_activate(pcap_t *p)
   static native int pcap_activate(Pointer p);

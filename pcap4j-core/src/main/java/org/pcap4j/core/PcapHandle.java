@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
@@ -30,6 +31,7 @@ import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
@@ -153,9 +155,16 @@ public final class PcapHandle {
         this.timestampPrecision = TimestampPrecision.MICRO;
       }
 
-      int rc = NativeMappings.pcap_activate(handle);
-      if (rc < 0) {
-        throw new PcapNativeException(getError(), rc);
+      int activateRc = NativeMappings.pcap_activate(handle);
+      if (activateRc < 0) {
+        throw new PcapNativeException(getError(), activateRc);
+      }
+
+      if (builder.direction != null) {
+        int rc = NativeMappings.pcap_setdirection(handle, builder.direction.getValue());
+        if (rc < 0) {
+          throw new PcapNativeException("Failed to set direction: " + getError(), rc);
+        }
       }
     } catch (NotOpenException e) {
       throw new AssertionError("Never get here.");
@@ -227,6 +236,41 @@ public final class PcapHandle {
    */
   public TimestampPrecision getTimestampPrecision() {
     return timestampPrecision;
+  }
+
+  /**
+   * Set direction flag, which controls whether we accept only incoming
+   * packets, only outgoing packets, or both.
+   * Note that, depending on the platform, some or all direction arguments
+   * might not be supported.
+   *
+   * @param direction direction to set.
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
+   */
+  public void setDirection(PcapDirection direction) throws PcapNativeException, NotOpenException {
+    if (direction == null) {
+      throw new NullPointerException("direction must not be null.");
+    }
+    if (!open) {
+      throw new NotOpenException();
+    }
+
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    try {
+      if (!open) {
+        throw new NotOpenException();
+      }
+
+      int rc = NativeMappings.pcap_setdirection(handle, direction.getValue());
+      if (rc < 0) {
+        throw new PcapNativeException("Failed to set direction: " + getError(), rc);
+      }
+    } finally {
+      handleLock.readLock().unlock();
+    }
   }
 
   /**
@@ -1487,6 +1531,7 @@ public final class PcapHandle {
     private int bufferSize;
     private boolean isBufferSizeSet = false;
     private TimestampPrecision timestampPrecision = null;
+    private PcapDirection direction = null;
 
     /**
      *
@@ -1580,6 +1625,22 @@ public final class PcapHandle {
      */
     public Builder timestampPrecision(TimestampPrecision timestampPrecision) {
       this.timestampPrecision = timestampPrecision;
+      return this;
+    }
+
+    /**
+     * Set direction flag, which controls whether we accept only incoming
+     * packets, only outgoing packets, or both.
+     * Note that, depending on the platform, some or all direction arguments
+     * might not be supported.
+     *
+     * @param direction The direction of packets to capture.
+     *                  If this method isn't called,
+     *                  no packets will be filtered by their direction.
+     * @return this Builder object for method chaining.
+     */
+    public Builder direction(PcapDirection direction) {
+      this.direction = direction;
       return this;
     }
 
@@ -1686,6 +1747,52 @@ public final class PcapHandle {
 
     /**
      *
+     * @return value
+     */
+    public int getValue() {
+      return value;
+    }
+
+  }
+
+  /**
+   * Direction of packets.
+   *
+   * <pre>
+   * typedef enum {
+   *   PCAP_D_INOUT = 0,
+   *   PCAP_D_IN,
+   *   PCAP_D_OUT
+   * } pcap_direction_t;
+   * </pre>
+   *
+   * @author Kaito Yamada
+   * @version pcap4j 1.6.4
+   */
+  public static enum PcapDirection {
+
+    /**
+     * Both inbound and outbound.
+     */
+    INOUT(0),
+
+    /**
+     * Inbound only.
+     */
+    IN(1),
+
+    /**
+     * Outbound only,
+     */
+    OUT(2);
+
+    private final int value;
+
+    private PcapDirection(int value) {
+      this.value = value;
+    }
+
+    /**
      * @return value
      */
     public int getValue() {

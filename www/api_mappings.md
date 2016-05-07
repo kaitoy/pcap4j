@@ -258,6 +258,13 @@ Mapping between pcap API and Pcap4j API
     <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
   </tr>
   <tr>
+    <td rowspan="2">int pcap_setdirection(pcap_t *, pcap_direction_t)</td>
+    <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
+  </tr>
+  <tr>
+    <td>void org.pcap4j.core.PcapHandle.setDirection(PcapDirection)</td>
+  </tr>
+  <tr>
     <td>int pcap_activate(pcap_t *)</td>
     <td>Internally used by org.pcap4j.core.PcapHandle.Builder</td>
   </tr>

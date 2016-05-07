@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* [Issues#61](https://github.com/kaitoy/pcap4j/issues/61): Packet direction capture support
 
 ### Bug Fixes ###
 
