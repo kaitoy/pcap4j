@@ -1,14 +1,14 @@
 [English](https://github.com/kaitoy/pcap4j)
 
-<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/logos/pcap4j-logo-color.png" width="70%" style="margin: 0px auto; display: block;" />
+<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/v1/www/images/logos/pcap4j-logo-color.png" width="70%" style="margin: 0px auto; display: block;" />
 
-[ロゴ](/www/logos.md)
+[ロゴ](https://github.com/kaitoy/pcap4j/blob/v1/www/logos.md)
 
 [![Slack](http://pcap4j-slackin.herokuapp.com/badge.svg)](https://pcap4j-slackin.herokuapp.com/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution)
 
-[![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg)](https://travis-ci.org/kaitoy/pcap4j)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=master&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/master)
+[![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg?branch=v1)](https://travis-ci.org/kaitoy/pcap4j)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=v1&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/v1)
 [![Coverage Status](https://coveralls.io/repos/kaitoy/pcap4j/badge.svg)](https://coveralls.io/r/kaitoy/pcap4j)
 
 Pcap4J
@@ -126,31 +126,31 @@ Pcap4Jは管理者権限で実行する必要がある。
 ケーパビリティを付与するには次のコマンドを実行する: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### ドキュメント ####
-最新のJavaDocは[こちら](http://kaitoy.github.com/pcap4j/javadoc/latest/en)。
+最新のJavaDocは[こちら](http://www.javadoc.io/doc/org.pcap4j/pcap4j/1.6.3)。
 各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22)からダウンロードできる。
 
-Pcap4Jのモジュール構成については[こちら](/www/pcap4j_modules.md)。
+Pcap4Jのモジュール構成については[こちら](https://github.com/kaitoy/pcap4j/blob/v1/www/pcap4j_modules.md)。
 
 Pcap4Jはlibpcap/WinPcapのラッパーなので、以下のドキュメントを読むとPcap4Jの使い方がわかる。
 
 * [Programming with pcap](http://www.tcpdump.org/pcap.html)
 * [WinPcap Manuals](http://www.winpcap.org/docs/default.htm)
-* [pcap API と Pcap4J API の対応](/www/api_mappings.md)
+* [pcap API と Pcap4J API の対応](https://github.com/kaitoy/pcap4j/blob/v1/www/api_mappings.md)
 
-Pcap4Jプログラムの書き方は[サンプル](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample)を見ると理解しやすい。
+Pcap4Jプログラムの書き方は[サンプル](https://github.com/kaitoy/pcap4j/tree/v1/pcap4j-sample/src/main/java/org/pcap4j/sample)を見ると理解しやすい。
 
 さらにPcap4Jを理解するには以下のドキュメントを参照。
 
-* [Learn about packet class](/www/Packet.md)
-* [Learn about Packet Factory](/www/PacketFactory.md)
-* [サポートプロトコル追加方法](/www/HowToAddProtocolSupport.md)
+* [Learn about packet class](https://github.com/kaitoy/pcap4j/blob/v1/www/Packet.md)
+* [Learn about Packet Factory](https://github.com/kaitoy/pcap4j/blob/v1/www/PacketFactory.md)
+* [サポートプロトコル追加方法](https://github.com/kaitoy/pcap4j/blob/v1/www/HowToAddProtocolSupport.md)
 * [kaitoy's blog](http://tbd.kaitoy.xyz/tags/pcap4j/)
 
 #### サンプル実行方法 ####
 以下の例を参照。
 
-* [org.pcap4j.sample.Loop](/www/sample_Loop_ja.md)
-* [org.pcap4j.sample.SendArpRequest](/www/sample_SendArpRequest_ja.md)
+* [org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/blob/v1/www/sample_Loop_ja.md)
+* [org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/blob/v1/www/sample_SendArpRequest_ja.md)
 
 Eclipse上でpcap4j-sampleにあるサンプルを実行する場合、
 その実行構成のクラスパスタブのユーザー・エントリーの最初に、
@@ -229,7 +229,7 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
    Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
 5. Pcap4Jのレポジトリのダウンロード:<br>
    Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-   インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
+   インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/v1)でダウンロードして展開する。
 6. ビルド:<br>
    プロジェクトのルートディレクトリに`cd`して、`mvn install` を実行する。
    unit testを通すためにはAdministrator/root権限が必要。
@@ -251,7 +251,7 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
    Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
 5. Pcap4Jのレポジトリのダウンロード:<br>
    Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-   インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
+   インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/v1)でダウンロードして展開する。
 6. プロジェクトのインポート:<br>
    EclipseのGUIで、***ファイル ＞ インポート*** を開き、
    ***一般 ＞ 既存プロジェクトをワークスペースへ***でPcap4Jの全プロジェクトをインポートする。

@@ -1,4 +1,4 @@
-[org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample/SendArpRequest.java) is
+[org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/tree/v1/pcap4j-sample/src/main/java/org/pcap4j/sample/SendArpRequest.java) is
 a sample class which sends ARP request and resolves an IP address to a MAC address.
 In the following example, this sample is executed on Linux to resolve 192.168.209.1.
 

@@ -22,7 +22,7 @@ Pcap4j consists of the following modules:
 To run a Pcap4J application, pcap4j-core's artifact is always needed.
 
 pcap4j-packetfactory-static and pcap4j-packetfactory-propertiesbased are Packet Factory modules.
-An artifact of either of them is needed for packet analysis. Without Packet Factory modules, Pcap4J always returns a [UnknownPacket](https://github.com/kaitoy/pcap4j/blob/master/pcap4j-core/src/main/java/org/pcap4j/packet/UnknownPacket.java) object when it captures a packet.
-Learn more about Packet Factory [here](/www/PacketFactory.md).
+An artifact of either of them is needed for packet analysis. Without Packet Factory modules, Pcap4J always returns a [UnknownPacket](https://github.com/kaitoy/pcap4j/blob/v1/pcap4j-core/src/main/java/org/pcap4j/packet/UnknownPacket.java) object when it captures a packet.
+Learn more about Packet Factory [here](https://github.com/kaitoy/pcap4j/blob/v1/www/PacketFactory.md).
 
 The other modules' artifacts are not needed when you run a Pcap4J application.
