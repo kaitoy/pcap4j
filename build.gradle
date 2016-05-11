@@ -94,6 +94,11 @@ configurations.archives.artifacts.with { artifacts ->
 // dist task
 apply from: 'gradle/distribution.gradle'
 
+// genScriptForDocker task
+if (gradle.startParameter.taskNames.contains('genScriptForDocker')) {
+  apply from: 'gradle/genScriptForDocker.gradle'
+}
+
 // JCenter
 if (gradle.startParameter.taskNames.contains('bintrayUpload')) {
   apply from: 'gradle/bintray.gradle'
