@@ -28,18 +28,21 @@ os: Windows Server 2012 R2
 shallow_clone: true
 
 cache:
-  - C:\Users\appveyor\.gradle
+  - C:\Users\appveyor\.gradle/wrapper
+  - C:\Users\appveyor\.gradle/native
+  - C:\Users\appveyor\.gradle/daemon
+#  - C:\Users\appveyor\.gradle/caches
 
 # environment variables
-#environment:
-#  SONATYPE_NEXUS_USERNAME:
-#    secure: DDwS0DjK9j/d79DuAlJy3A==
-#  SONATYPE_NEXUS_PASSWORD:
-#    secure: mr5kcUXHVYPmF+7bXPi2Ow==
+environment:
+  SONATYPE_NEXUS_USERNAME:
+    secure: DDwS0DjK9j/d79DuAlJy3A==
+  SONATYPE_NEXUS_PASSWORD:
+    secure: mr5kcUXHVYPmF+7bXPi2Ow==
 
 environment:
   matrix:
-  - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+#  - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
   - JAVA_HOME: C:\Program Files (x86)\Java\jdk1.8.0
 
 # scripts that run after cloning repository
@@ -77,7 +80,13 @@ test_script:
 #     deployment configuration    #
 #---------------------------------#
 
-deploy: off
+deploy_script:
+  - cmd: >-
+      if "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
+        gradlew.bat uploadArchives --info --no-daemon -Psonatype_user=%SONATYPE_NEXUS_USERNAME% -Psonatype_password=%SONATYPE_NEXUS_PASSWORD%
+      ) else (
+        echo skipping deploy.
+      )
 
 #---------------------------------#
 #         notifications           #

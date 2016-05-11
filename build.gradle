@@ -104,9 +104,12 @@ if (gradle.startParameter.taskNames.contains('genScriptForDocker')) {
   apply from: 'gradle/genScriptForDocker.gradle'
 }
 
-// JCenter
-if (gradle.startParameter.taskNames.contains('bintrayUpload')) {
-  apply from: 'gradle/bintray.gradle'
+// upload
+if (
+     gradle.startParameter.taskNames.contains('bintrayUpload')
+  || gradle.startParameter.taskNames.contains('uploadArchives')
+) {
+  apply from: 'gradle/upload.gradle'
 }
 
 // code coverage

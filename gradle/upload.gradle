@@ -40,6 +40,20 @@ allprojects {
     }
   }
 
+  // snapshots to Sonatype
+  uploadArchives {
+    repositories.mavenDeployer {
+      configuration = configurations.archives
+      repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+        authentication(
+          userName: project.findProperty('sonatype_user'),
+          password: project.findProperty('sonatype_password'),
+        )
+      }
+    }
+  }
+
+  // releases to JCenter
   bintray {
     user = findProperty 'bintray_user'
     key = findProperty 'bintray_apikey'
