@@ -1,4 +1,4 @@
-sudo: required
+sudo: false
 
 language: java
 
@@ -13,17 +13,22 @@ matrix:
 
 cache:
   directories:
-    - $HOME/.m2
+    - $HOME/.gradle/wrapper
+    - $HOME/.gradle/native
+    - $HOME/.gradle/daemon
+#    - $HOME/.gradle/caches
 
 install:
-  - git clone -b libpcap-1.7.4 git://github.com/the-tcpdump-group/libpcap.git libpcap
+  - git clone -b libpcap-1.7 git://github.com/the-tcpdump-group/libpcap.git libpcap
   - cd libpcap
   - ./configure
-  - make && sudo make install
+  - make shared
+  - mv libpcap.so.* libpcap.so
+  - export LIBPCAP=`pwd`/libpcap.so
   - cd ..
 
 script:
-  - ./gradlew build jacocoTestReport
+  - ./gradlew build jacocoTestReport -Dorg.pcap4j.core.pcapLibName=$LIBPCAP -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
