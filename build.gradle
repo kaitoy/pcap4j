@@ -94,6 +94,11 @@ configurations.archives.artifacts.with { artifacts ->
 // dist task
 apply from: 'gradle/distribution.gradle'
 
+// genScript task
+if (gradle.startParameter.taskNames.contains('genScript')) {
+  apply from: 'gradle/genScript.gradle'
+}
+
 // genScriptForDocker task
 if (gradle.startParameter.taskNames.contains('genScriptForDocker')) {
   apply from: 'gradle/genScriptForDocker.gradle'
