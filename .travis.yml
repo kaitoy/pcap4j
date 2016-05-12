@@ -28,6 +28,7 @@ install:
   - cd ..
 
 script:
+  # sudo is needed for some unit tests.
   - sudo ./gradlew build jacocoTestReport -Dorg.pcap4j.core.pcapLibName=$LIBPCAP -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true
 
 after_success:
