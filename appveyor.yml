@@ -77,12 +77,12 @@ test_script:
 #---------------------------------#
 
 deploy_script:
-  - cmd: >-
-      if "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
-        gradlew.bat uploadArchives --info --no-daemon -Psonatype_user=%SONATYPE_NEXUS_USERNAME% -Psonatype_password=%SONATYPE_NEXUS_PASSWORD%
-      ) else (
-        echo skipping deploy.
-      )
+  - ps: >-
+      if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) {
+        ./gradlew.bat uploadArchives --info --no-daemon -Psonatype_user=$env:SONATYPE_NEXUS_USERNAME -Psonatype_password=$env:SONATYPE_NEXUS_PASSWORD
+      } else {
+        echo "skipping deploy."
+      }
 
 #---------------------------------#
 #         notifications           #
