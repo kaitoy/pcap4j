@@ -39,11 +39,7 @@ environment:
     secure: DDwS0DjK9j/d79DuAlJy3A==
   SONATYPE_NEXUS_PASSWORD:
     secure: mr5kcUXHVYPmF+7bXPi2Ow==
-
-environment:
-  matrix:
-#  - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
-  - JAVA_HOME: C:\Program Files (x86)\Java\jdk1.8.0
+  JAVA_HOME: C:\Program Files (x86)\Java\jdk1.8.0
 
 # scripts that run after cloning repository
 install:
