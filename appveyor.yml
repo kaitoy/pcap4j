@@ -28,10 +28,10 @@ os: Windows Server 2012 R2
 shallow_clone: true
 
 cache:
-  - C:\Users\appveyor\.gradle/wrapper
-  - C:\Users\appveyor\.gradle/native
-  - C:\Users\appveyor\.gradle/daemon
-#  - C:\Users\appveyor\.gradle/caches
+  - C:\Users\appveyor\.gradle\wrapper
+  - C:\Users\appveyor\.gradle\native
+  - C:\Users\appveyor\.gradle\daemon
+#  - C:\Users\appveyor\.gradle\caches
 
 # environment variables
 environment:
