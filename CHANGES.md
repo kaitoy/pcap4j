@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.6.4 (13-May-2016)
+===========================
+### New Features ###
 * [Issues#61](https://github.com/kaitoy/pcap4j/issues/61): Packet direction capture support
 
 ### Bug Fixes ###
