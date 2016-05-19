@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2015  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,9 +8,11 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
@@ -62,18 +64,31 @@ public final class EthernetPacket extends AbstractPacket {
   private EthernetPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     this.header = new EthernetHeader(rawData, offset, length);
 
-    int payloadAndPadLength = length - header.length();
-    if (payloadAndPadLength > 0) {
+    if ((header.getType().value() & 0xFFFF) <= EtherType.IEEE802_3_MAX_LENGTH) {
+      int payloadLength = header.getType().value();
+      int padLength = length - header.length() - payloadLength;
       int payloadOffset = offset + header.length();
-      this.payload
-        = PacketFactories.getFactory(Packet.class, EtherType.class)
-            .newInstance(rawData, payloadOffset, payloadAndPadLength, header.getType());
 
-      int padLength = payloadAndPadLength - payload.length();
+      if (padLength < 0) {
+        throw new IllegalRawDataException(
+                "The value of the ether type (length) field seems to be wrong: "
+                  + header.getType().value()
+              );
+      }
+
+      if (payloadLength > 0) {
+        this.payload
+          = PacketFactories.getFactory(Packet.class, EtherType.class)
+              .newInstance(rawData, payloadOffset, payloadLength, header.getType());
+      }
+      else { // payloadLength == 0
+        this.payload = null;
+      }
+
       if (padLength > 0) {
         this.pad
           = ByteArrays.getSubArray(
-              rawData, payloadOffset + payload.length(), padLength
+              rawData, payloadOffset + payloadLength, padLength
             );
       }
       else {
@@ -81,8 +96,28 @@ public final class EthernetPacket extends AbstractPacket {
       }
     }
     else {
-      this.payload = null;
-      this.pad = new byte[0];
+      int payloadAndPadLength = length - header.length();
+      if (payloadAndPadLength > 0) {
+        int payloadOffset = offset + header.length();
+        this.payload
+          = PacketFactories.getFactory(Packet.class, EtherType.class)
+              .newInstance(rawData, payloadOffset, payloadAndPadLength, header.getType());
+
+        int padLength = payloadAndPadLength - payload.length();
+        if (padLength > 0) {
+          this.pad
+            = ByteArrays.getSubArray(
+                rawData, payloadOffset + payload.length(), padLength
+              );
+        }
+        else {
+          this.pad = new byte[0];
+        }
+      }
+      else {
+        this.payload = null;
+        this.pad = new byte[0];
+      }
     }
   }
 

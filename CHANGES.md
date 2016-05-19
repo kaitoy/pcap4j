@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* Support LLC and SNAP.
 
 ### Bug Fixes ###
 

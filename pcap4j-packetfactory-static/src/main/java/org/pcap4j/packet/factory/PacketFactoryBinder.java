@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2015  Pcap4J.org
+  _##  Copyright (C) 2013-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -9,6 +9,7 @@ package org.pcap4j.packet.factory;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IpV4InternetTimestampOption;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
@@ -24,6 +25,7 @@ import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IcmpV4Type;
 import org.pcap4j.packet.namednumber.IcmpV6Type;
 import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.packet.namednumber.LlcNumber;
 import org.pcap4j.packet.namednumber.NamedNumber;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.packet.namednumber.PppDllProtocol;
@@ -47,6 +49,7 @@ final class PacketFactoryBinder {
   private PacketFactoryBinder() {
     packetFactories.put(DataLinkType.class, StaticDataLinkTypePacketFactory.getInstance());
     packetFactories.put(EtherType.class, StaticEtherTypePacketFactory.getInstance());
+    packetFactories.put(LlcNumber.class, StaticLlcNumberPacketFactory.getInstance());
     packetFactories.put(IcmpV4Type.class, StaticIcmpV4TypePacketFactory.getInstance());
     packetFactories.put(IcmpV6Type.class, StaticIcmpV6TypePacketFactory.getInstance());
     packetFactories.put(IpNumber.class, StaticIpNumberPacketFactory.getInstance());

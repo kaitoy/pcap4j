@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -27,6 +27,7 @@ import org.pcap4j.packet.UnknownIpV6Option;
 import org.pcap4j.packet.UnknownIpV6RoutingData;
 import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.UnknownTcpOption;
+import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
@@ -183,11 +184,19 @@ public final class PacketFactoryPropertiesLoader {
    * @return a class which implements Packet for a specified NamedNumber.
    */
   public <T extends NamedNumber<?, ?>> Class<? extends Packet> getPacketClass(T number) {
+    String val = number.valueAsString();
+    if (number instanceof EtherType) {
+      EtherType et = (EtherType) number;
+      if ((et.value() & 0xFFFF) <= EtherType.IEEE802_3_MAX_LENGTH) {
+        val = "LLC";
+      }
+    }
+
     StringBuilder sb = new StringBuilder(110);
     sb.append(PACKET_CLASS_KEY_BASE)
       .append(number.getClass().getName())
       .append(".")
-      .append(number.valueAsString());
+      .append(val);
     return loader.<Packet>getClass(
              sb.toString(),
              getUnknownPacketClass()

@@ -1,0 +1,13 @@
+[Subnetwork Access Protocol header (5 bytes)]
+  OUI: 00-00-0c (Cisco)
+  Protocol ID: 0x0806 (ARP)
+[ARP Header (28 bytes)]
+  Hardware type: 1 (Ethernet (10Mb))
+  Protocol type: 0x0800 (IPv4)
+  Hardware address length: 6 [bytes]
+  Protocol address length: 4 [bytes]
+  Operation: 1 (REQUEST)
+  Source hardware address: fe:00:00:00:00:01
+  Source protocol address: /192.0.2.1
+  Destination hardware address: ff:ff:ff:ff:ff:ff
+  Destination protocol address: /192.0.2.2

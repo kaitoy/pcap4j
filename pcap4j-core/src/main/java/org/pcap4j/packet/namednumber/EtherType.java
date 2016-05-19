@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2015  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -9,6 +9,7 @@ package org.pcap4j.packet.namednumber;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -24,6 +25,11 @@ public final class EtherType extends NamedNumber<Short, EtherType> {
    *
    */
   private static final long serialVersionUID = 7866667243677334444L;
+
+  /**
+   *
+   */
+  public static final int IEEE802_3_MAX_LENGTH = 1500;
 
   /**
    * IPv4: 0x0800
@@ -119,6 +125,9 @@ public final class EtherType extends NamedNumber<Short, EtherType> {
     if (registry.containsKey(value)) {
       return registry.get(value);
     }
+    else if ((value & 0xFFFF) <= IEEE802_3_MAX_LENGTH) {
+      return new EtherType(value, "Length");
+    }
     else {
       return new EtherType(value, "unknown");
     }
@@ -145,6 +154,20 @@ public final class EtherType extends NamedNumber<Short, EtherType> {
   @Override
   public int compareTo(EtherType o) {
     return value().compareTo(o.value());
+  }
+
+  @Override
+  public String toString() {
+    if ((value() & 0xFFFF) <= IEEE802_3_MAX_LENGTH) {
+      StringBuilder sb = new StringBuilder(70);
+      return sb.append("Length (")
+               .append(value() & 0xFFFF)
+               .append(" bytes)")
+               .toString();
+    }
+    else {
+      return super.toString();
+    }
   }
 
 }

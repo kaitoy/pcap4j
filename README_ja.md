@@ -76,6 +76,7 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 * パケットオブジェクトを現実のパケットに変換してネットワークに送信できる。
 * 以下のプロトコルに対応。
     * Ethernet、Linux SLL、raw IP、PPP (RFC1661、RFC1662)、BSD (Mac OS X) loopback encapsulation
+    * LLC、SNAP
     * IEEE802.1Q
     * ARP
     * IPv4 (RFC791、RFC1349)、IPv6 (RFC2460)

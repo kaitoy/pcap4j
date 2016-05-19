@@ -1,0 +1,4 @@
+[Logical Link Control header (4 bytes)]
+  DSAP: 0 (NULL LSAP)
+  SSAP: 0 (NULL LSAP)
+  Control: [receive sequence number: 10] [P/F bit: 0] [send sequence number: 100]
