@@ -124,7 +124,7 @@ public final class PacketFactoryPropertiesLoader {
    *
    */
   public static final String UNKNOWN_IPV6_ROUTING_DATA_KEY
-    = IPV6_OPTION_CLASS_KEY_BASE + "unknownNumber";
+    = IPV6_ROUTING_DATA_CLASS_KEY_BASE + "unknownNumber";
 
   /**
    *
