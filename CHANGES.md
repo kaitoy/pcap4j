@@ -2,6 +2,7 @@ Future
 ======
 ### New Features ###
 * Support LLC and SNAP.
+* Support Radiotap.
 
 ### Bug Fixes ###
 

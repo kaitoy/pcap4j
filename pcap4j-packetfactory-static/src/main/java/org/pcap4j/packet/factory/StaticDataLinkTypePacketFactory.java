@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2015  Pcap4J.org
+  _##  Copyright (C) 2012-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -15,6 +15,7 @@ import org.pcap4j.packet.IpPacket;
 import org.pcap4j.packet.LinuxSllPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.PppSelector;
+import org.pcap4j.packet.RadiotapPacket;
 import org.pcap4j.packet.namednumber.DataLinkType;
 
 /**
@@ -95,6 +96,20 @@ extends AbstractStaticPacketFactory<DataLinkType> {
         @Override
         public Class<LinuxSllPacket> getTargetClass() {
           return LinuxSllPacket.class;
+        }
+      }
+    );
+    instantiaters.put(
+      DataLinkType.IEEE802_11_RADIO, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return RadiotapPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<RadiotapPacket> getTargetClass() {
+          return RadiotapPacket.class;
         }
       }
     );

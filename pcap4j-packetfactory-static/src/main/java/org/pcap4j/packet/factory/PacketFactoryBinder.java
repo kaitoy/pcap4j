@@ -19,6 +19,7 @@ import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
 import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
 import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
 import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.EtherType;
@@ -94,6 +95,10 @@ final class PacketFactoryBinder {
     packetpPieceFactories.put(
       IpV6FlowLabel.class,
       StaticIpV6FlowLabelFactory.getInstance()
+    );
+    packetpPieceFactories.put(
+      RadiotapDataField.class,
+      StaticRadiotapDataFieldFactory.getInstance()
     );
   }
 

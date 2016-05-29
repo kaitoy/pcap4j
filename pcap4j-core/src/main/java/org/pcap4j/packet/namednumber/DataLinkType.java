@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2015  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -9,7 +9,9 @@ package org.pcap4j.packet.namednumber;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.pcap4j.Pcap4jPropertiesLoader;
+
 import com.sun.jna.Platform;
 
 /**
@@ -86,6 +88,15 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
     = new DataLinkType(113, "Linux cooked-mode capture");
 
   /**
+   * Radiotap: 127
+   * - Header for 802.11 plus a number of bits of link-layer information
+   * including radio information, used by some recent BSD drivers as
+   * well as the madwifi Atheros driver for Linux.
+   */
+  public static final DataLinkType IEEE802_11_RADIO
+    = new DataLinkType(127, "Radiotap");
+
+  /**
    * DOCSIS MAC frames: 143
    */
   public static final DataLinkType DOCSIS
@@ -117,6 +128,7 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
     registry.put(PPP_SERIAL.value(), PPP_SERIAL);
     registry.put(IEEE802_11.value(), IEEE802_11);
     registry.put(LINUX_SLL.value(), LINUX_SLL);
+    registry.put(IEEE802_11_RADIO.value(), IEEE802_11_RADIO);
     registry.put(DOCSIS.value(), DOCSIS);
   }
 
