@@ -8,6 +8,7 @@
 package org.pcap4j.packet.factory;
 
 import org.pcap4j.packet.BsdLoopbackPacket;
+import org.pcap4j.packet.Dot11Selector;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.HdlcPppPacket;
 import org.pcap4j.packet.IllegalRawDataException;
@@ -82,6 +83,20 @@ extends AbstractStaticPacketFactory<DataLinkType> {
         @Override
         public Class<HdlcPppPacket> getTargetClass() {
           return HdlcPppPacket.class;
+        }
+      }
+    );
+    instantiaters.put(
+      DataLinkType.IEEE802_11, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return Dot11Selector.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<Dot11Selector> getTargetClass() {
+          return Dot11Selector.class;
         }
       }
     );

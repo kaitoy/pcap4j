@@ -23,6 +23,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.DataLinkType;
+import org.pcap4j.packet.namednumber.Dot11FrameType;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IcmpV4Type;
 import org.pcap4j.packet.namednumber.IcmpV6Type;
@@ -62,6 +63,7 @@ final class PacketFactoryBinder {
     packetFactories.put(NotApplicable.class, StaticNotApplicablePacketFactory.getInstance());
     packetFactories.put(PppDllProtocol.class, StaticPppDllProtocolPacketFactory.getInstance());
     packetFactories.put(ProtocolFamily.class, StaticProtocolFamilyPacketFactory.getInstance());
+    packetFactories.put(Dot11FrameType.class, StaticDot11FrameTypePacketFactory.getInstance());
 
     packetpPieceFactories.put(
       IpV4Option.class,

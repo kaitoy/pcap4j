@@ -16,6 +16,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.util.regex.Pattern;
 import java.util.zip.Adler32;
+import java.util.zip.CRC32;
 
 /**
  * @author Kaito Yamada
@@ -884,6 +885,18 @@ public final class ByteArrays {
     }
 
     return (short)~sum;
+  }
+
+  /**
+   * A utility method to calculate CRC-32 checksum.
+   *
+   * @param data data
+   * @return checksum
+   */
+  public static int calcCrc32Checksum(byte[] data) {
+    CRC32 crc32 = new CRC32();
+    crc32.update(data);
+    return (int) crc32.getValue();
   }
 
   /**

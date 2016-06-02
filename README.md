@@ -76,6 +76,8 @@ Features
 * Sending packet objects to a real network.
 * Supported protocols:
     * Ethernet, Linux SLL, raw IP, PPP (RFC1661, RFC1662), BSD (Mac OS X) loopback encapsulation, and Radiotap
+    * IEEE 802.11
+        * Probe Request
     * LLC and SNAP
     * IEEE802.1Q
     * ARP

@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* Support IEEE 802.11 Probe Request.
 
 ### Bug Fixes ###
 
