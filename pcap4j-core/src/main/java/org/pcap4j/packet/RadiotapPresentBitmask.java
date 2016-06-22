@@ -76,10 +76,10 @@ public final class RadiotapPresentBitmask implements Serializable {
   private RadiotapPresentBitmask(
     byte[] rawData, int offset, int length, int bitNumOffset, String namespace
   ) throws IllegalRawDataException {
-    if (offset + ByteArrays.INT_SIZE_IN_BYTES > length) {
+    if (ByteArrays.INT_SIZE_IN_BYTES > length) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapPresentBitmask (")
-        .append(offset + ByteArrays.INT_SIZE_IN_BYTES)
+        .append(ByteArrays.INT_SIZE_IN_BYTES)
         .append(" bytes). data: ")
         .append(ByteArrays.toHexString(rawData, " "))
         .append(", offset: ")
