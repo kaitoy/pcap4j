@@ -348,8 +348,14 @@ public final class RadiotapPacket extends AbstractPacket {
       int nextFieldOffset = nextPresentOffset;
       PacketFactory<RadiotapDataField, RadiotapPresentBitNumber> factory
         = PacketFactories.getFactory(RadiotapDataField.class, RadiotapPresentBitNumber.class);
+      Class<? extends RadiotapDataField> unknownDataFieldClass = factory.getTargetClass();
+      boolean breaking = false;
       try {
         for (RadiotapPresentBitmask mask: presentBitmasks) {
+          if (breaking) {
+            break;
+          }
+
           for (RadiotapPresentBitNumber num: mask.getBitNumbers()) {
             int alignment = num.getRequiredAlignment();
             int padSize = alignment - (nextPresentOffset % alignment);
@@ -394,6 +400,11 @@ public final class RadiotapPacket extends AbstractPacket {
             int fieldLen = field.length();
             nextFieldOffset += fieldLen;
             remainingLength -= fieldLen;
+
+            if (field.getClass().equals(unknownDataFieldClass)) {
+              breaking = true;
+              break;
+            }
           }
         }
       } catch (Exception e) {
