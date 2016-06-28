@@ -18,12 +18,17 @@ import java.util.List;
 import org.pcap4j.packet.AbstractPacket;
 import org.pcap4j.packet.ChecksumBuilder;
 import org.pcap4j.packet.IllegalRawDataException;
+import org.pcap4j.packet.namednumber.GtpVersion;
+import org.pcap4j.packet.namednumber.GtpCode;
+import org.pcap4j.packet.namednumber.GtpMSGType;
+import org.pcap4j.packet.IncorrectGTPVersionException;
+import org.pcap4j.packet.IncorrectGTPCodeException;
+import org.pcap4j.packet.IncorrectMSGTypeException;
 import org.pcap4j.packet.LengthBuilder;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.PacketPropertiesLoader;
 import org.pcap4j.packet.factory.PacketFactories;
-import org.pcap4j.packet.namednumber.IpNumber;
-import org.pcap4j.packet.namednumber.UdpPort;
+
 import org.pcap4j.util.ByteArrays;
 
 /**
