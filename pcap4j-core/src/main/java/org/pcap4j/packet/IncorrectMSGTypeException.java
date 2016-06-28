@@ -1,4 +1,4 @@
-package org.pcap4j.packet
+package org.pcap4j.packet;
 
 /**
 * @author waveform
