@@ -1,9 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Pcap4J.org
+  _##  Copyright (C) 2016  Pcap4J.org
   _##
   _##########################################################################
 */
+
+package nokia3;
 
 import static org.pcap4j.util.ByteArrays.*;
 
@@ -41,13 +43,13 @@ public final class GtpPacket extends AbstractPacket {
   /**
    * A static factory method.
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * which may throw exceprotocol_typeions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
    * @param length length
    * @return a new GtpPacket object.
-   * @throws IllegalRawDataException if parsing the raw data fails.
+   * @throws IllegalRawDataExceprotocol_typeion if parsing the raw data fails.
    */
   public static GtpPacket newPacket(
     byte[] rawData, int offset, int length
@@ -114,9 +116,9 @@ public final class GtpPacket extends AbstractPacket {
    *
    * 
    *
-   *
-   * 
-   * 
+   * @param srcAddr srcAddr
+   * @param dstAddr dstAddr
+   * @param acceprotocol_typeZero acceprotocol_typeZero
    * @return true if the packet represented by this object has a valid checksum;
    *         false otherwise.
    */
@@ -135,13 +137,13 @@ public final class GtpPacket extends AbstractPacket {
   class Builder extends AbstractBuilder
   implements LengthBuilder<GtpPacket> {
 
-	private byte version;
-    private boolean pt;
+	private GtpVersion version;
+    private GtpCode protocol_type;
     private boolean reserved_x;
     private boolean seq;
     private boolean ext;
     private boolean pn;
-    private byte message_type;
+    private GtpMSGType message_type;
     private short length;
     private int te_id;
     private short seq_num;
@@ -161,7 +163,7 @@ public final class GtpPacket extends AbstractPacket {
      * @param packet packet
      */
     public Builder(GtpPacket packet) {
-      this.pt = packet.header.pt;
+      this.protocol_type = packet.header.protocol_type;
       this.version = packet.header.version;
       this.reserved_x = packet.header.reserved_x;
       this.length = packet.header.length;
@@ -178,11 +180,11 @@ public final class GtpPacket extends AbstractPacket {
 
     /**
      *
-     * @param pt pt
+     * @param protocol_type protocol_type
      * @return this Builder object for method chaining.
      */
-    public Builder pt(boolean pt) {
-      this.pt = pt;
+    public Builder protocol_type(GtpCode protocol_type) {
+      this.protocol_type = GtpCode.getInstance(version, protocol_type.value());
       return this;
     }
 
@@ -241,8 +243,9 @@ public final class GtpPacket extends AbstractPacket {
      * @param message_type message_type
      * @return this Builder object for method chaining.
      */
-    public Builder message_type(byte message_type) {
-      this.message_type = message_type;
+    public Builder message_type(GtpMSGType message_type) {
+     
+      this.message_type = GtpMSGType.getInstance(this.protocol_type,message_type.value());
       return this;
     }
 
@@ -291,8 +294,8 @@ public final class GtpPacket extends AbstractPacket {
     * @param version version
     * @return this Builder object for method chaining.
     */
-   public Builder version(byte version) {
-     this.version = version;
+   public Builder version(GtpVersion version) {
+     this.version = GtpVersion.getInstance(version.value());
      return this;
    }
 
@@ -425,13 +428,13 @@ public final class GtpPacket extends AbstractPacket {
     private static final int IPV4_PSEUDO_HEADER_SIZE = 12;
     private static final int IPV6_PSEUDO_HEADER_SIZE = 40;
 
-    private byte version;
-    private final boolean pt;
+    private final GtpVersion version;
+    private final GtpCode protocol_type;
     private final boolean reserved_x;
     private final boolean seq;
     private final boolean ext;
     private final boolean pn;
-    private final byte message_type;
+    private final GtpMSGType message_type;
     private final short length;
     private final int te_id;
     private final short seq_num;
@@ -453,14 +456,14 @@ public final class GtpPacket extends AbstractPacket {
         throw new IllegalRawDataException(sb.toString());
       }
       byte first_octet_flags=ByteArrays.getByte(rawData, FIRST_OCTET_OFFSET+offset);
-      this.version = (byte) ((first_octet_flags & 0x0e0)>>5);
-      this.pt = (first_octet_flags & 0x10)!=0;
-      this.reserved_x = (first_octet_flags & 0x08)!=0;
-      this.ext = (first_octet_flags & 0x04)!=0;
-      this.seq = (first_octet_flags & 0x02)!=0;
+      this.version = GtpVersion.getInstance((byte) ((first_octet_flags & 0x0e0)>>5));
+      this.protocol_type = GtpCode.getInstance(version,(byte)((first_octet_flags & 0x10)>>4));
+      this.reserved_x = ((first_octet_flags & 0x08)>>3)!=0;
+      this.ext = ((first_octet_flags & 0x04)>>2)!=0;
+      this.seq = ((first_octet_flags & 0x02)>>1)!=0;
       this.pn = (first_octet_flags & 0x01)!=0;
       
-      this.message_type=ByteArrays.getByte(rawData, MSG_TYPE_OFFSET+offset);
+      this.message_type=GtpMSGType.getInstance(protocol_type,ByteArrays.getByte(rawData, MSG_TYPE_OFFSET+offset));
       
       this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET+offset);
       
@@ -475,7 +478,7 @@ public final class GtpPacket extends AbstractPacket {
     }
 
     private GtpHeader(Builder builder, byte[] payload) {
-    	this.pt = builder.pt;
+    	this.protocol_type = builder.protocol_type;
     	this.version = builder.version;
         this.reserved_x = builder.reserved_x;
         this.message_type= builder.message_type;
@@ -505,10 +508,10 @@ public final class GtpPacket extends AbstractPacket {
 
     /**
      *
-     * @return pt
+     * @return protocol_type
      */
-    public boolean getpt() {
-      return pt;
+    public GtpCode getprotocol_type() {
+      return protocol_type;
     }
 
     /**
@@ -547,7 +550,7 @@ public final class GtpPacket extends AbstractPacket {
     *
     * @return message_type
     */
-   public byte getmsgtype() {
+   public GtpMSGType getmsgtype() {
      return message_type;
    }
 
@@ -589,7 +592,7 @@ public final class GtpPacket extends AbstractPacket {
     *
     * @return version
     */
-   public byte getversion() {
+   public GtpVersion getversion() {
      return version;
    }
    
@@ -610,25 +613,83 @@ public final class GtpPacket extends AbstractPacket {
     }
 
     @Override
-    protected List<byte[]> getRawFields() 
+    protected List<byte[]> getRawFields()
     {
-      byte flags=(byte)0;
-      flags = (byte) (flags | (version << 5));
-      if(pt){flags = (byte) (flags | 0x010);}
-      if(reserved_x){flags = (byte) (flags | 0x08);}
-      if(ext){flags =(byte) (flags | 0x04);}
-      if(seq){flags = (byte) (flags | 0x02);}
-      if(pn){flags = (byte) (flags | 0x01);}
-      List<byte[]> rawFields = new ArrayList<byte[]>();
-      rawFields.add(ByteArrays.toByteArray(flags));
-      rawFields.add(ByteArrays.toByteArray(message_type));
-      rawFields.add(ByteArrays.toByteArray(length));
-      rawFields.add(ByteArrays.toByteArray(te_id));
-      rawFields.add(ByteArrays.toByteArray(seq_num));
-      rawFields.add(ByteArrays.toByteArray(npd_num));
-      rawFields.add(ByteArrays.toByteArray(nxt_ext));
-      return rawFields;
+    	byte flags=(byte)0;
+      
+    	  try{
+    		  
+    		  illegal_gtp_version(version);
+    		  flags = (byte) (flags | (version.value() << 5));
+    		
+    	  }catch(IncorrectGTPVersionException e){
+    		  System.err.println(e.getMessage());
+    	  }
+    	  try{
+    		  
+    		  illegal_gtp_code(protocol_type);
+    		  flags = (byte) (flags | (protocol_type.value()<<4));
+    		  
+    	  }catch(IncorrectGTPCodeException e){
+    		  System.err.println(e.getMessage());
+    		 
+    	  }
+    	  if(reserved_x){flags = (byte) (flags | 0x08);}
+          if(ext){flags =(byte) (flags | 0x04);}
+          if(seq){flags = (byte) (flags | 0x02);}
+          if(pn){flags = (byte) (flags | 0x01);}
+          List<byte[]> rawFields = new ArrayList<byte[]>();
+          rawFields.add(ByteArrays.toByteArray(flags));
+    	  try{
+    		  
+    		  illegal_gtp_msg(message_type);
+    		  rawFields.add(ByteArrays.toByteArray(message_type.value()));
+    		  
+    	  }catch(IncorrectMSGTypeException e){
+    		  System.err.println(e.getMessage());
+    	  }
+    	  rawFields.add(ByteArrays.toByteArray(length));
+          rawFields.add(ByteArrays.toByteArray(te_id));
+          rawFields.add(ByteArrays.toByteArray(seq_num));
+          rawFields.add(ByteArrays.toByteArray(npd_num));
+          rawFields.add(ByteArrays.toByteArray(nxt_ext));
+          return rawFields;
     }
+    
+    private void illegal_gtp_version(GtpVersion version)throws IncorrectGTPVersionException
+    {
+    	if(version ==null)
+    	{
+    		throw new IncorrectGTPVersionException("Incorrect GTP version "+version);
+    	}
+    }
+    
+    private void illegal_gtp_code(GtpCode code)throws IncorrectGTPCodeException
+    {
+    	if(code ==null)
+    	{
+    		throw new IncorrectGTPCodeException("GTP code type not supported by "+version);
+    	}
+    }
+    
+    private void illegal_gtp_msg(GtpMSGType msgtype)throws IncorrectMSGTypeException
+    {
+    	if(msgtype ==null)
+    	{
+    		throw new IncorrectMSGTypeException("GTP message type not supported by "+protocol_type);
+    	}
+    }
+      
+      
+     
+      
+      
+      
+     
+     
+     
+      
+    
 
     @Override
     public int length() {
@@ -648,7 +709,7 @@ public final class GtpPacket extends AbstractPacket {
         .append(getversion())
         .append(ls);
       sb.append("  Protocol Type: ")
-        .append(getpt())
+        .append(getprotocol_type())
         .append(ls);
       sb.append("  Reserved Flag: ")
       	.append(getreserved_x())
@@ -703,7 +764,7 @@ public final class GtpPacket extends AbstractPacket {
           
            length == other.length
         && version == other.version
-        && pt == other.pt
+        && protocol_type == other.protocol_type
         && reserved_x == other.reserved_x
         && ext == other.ext
         && seq == other.seq
@@ -718,13 +779,13 @@ public final class GtpPacket extends AbstractPacket {
     @Override
     protected int calcHashCode() {
       int result = 17;
-      result = 31 * result + version;
-      result = 31 * result + (pt?1231:1237);
+      result = 31 * result + version.hashCode();
+      result = 31 * result + protocol_type.hashCode();
       result = 31 * result + (reserved_x?1231:1237);
       result = 31 * result + (ext?1231:1237);
       result = 31 * result + (seq?1231:1237);
       result = 31 * result + (pn?1231:1237);
-      result = 31 * result + message_type;
+      result = 31 * result + message_type.hashCode();
       result = 31 * result + seq_num;
       result = 31 * result + npd_num;
       result = 31 * result + nxt_ext;
