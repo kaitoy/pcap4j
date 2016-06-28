@@ -5,7 +5,7 @@
   _##########################################################################
 */
 
-package package org.pcap4j.packet;
+package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
 
