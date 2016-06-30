@@ -358,7 +358,7 @@ public final class RadiotapPacket extends AbstractPacket {
 
           for (RadiotapPresentBitNumber num: mask.getBitNumbers()) {
             int alignment = num.getRequiredAlignment();
-            int padSize = alignment - (nextPresentOffset % alignment);
+            int padSize = alignment - ((nextFieldOffset - offset) % alignment);
             if (padSize != alignment) {
               if (remainingLength < padSize) {
                 StringBuilder sb = new StringBuilder(200);
