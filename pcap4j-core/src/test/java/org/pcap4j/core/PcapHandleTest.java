@@ -2,6 +2,7 @@ package org.pcap4j.core;
 
 import static org.junit.Assert.*;
 
+import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +14,11 @@ import org.junit.Test;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.PcapHandle.PcapDirection;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
+import org.pcap4j.packet.IcmpV4CommonPacket;
 import org.pcap4j.packet.IcmpV4EchoPacket;
 import org.pcap4j.packet.IcmpV4EchoReplyPacket;
 import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.UdpPacket;
 import org.pcap4j.packet.namednumber.DataLinkType;
 
 @SuppressWarnings("javadoc")
@@ -254,6 +257,63 @@ public class PcapHandleTest {
       assertTrue(packets.get(0).contains(IcmpV4EchoReplyPacket.class));
       assertTrue(packets.get(1).contains(IcmpV4EchoReplyPacket.class));
       assertTrue(packets.get(2).contains(IcmpV4EchoReplyPacket.class));
+    }
+  }
+
+  @Test
+  public void testSetFilterIcmp() throws Exception {
+    PcapHandle handle = null;
+    try {
+      handle
+        = Pcaps.openOffline(
+            "src/test/resources/org/pcap4j/core/udp_tcp_icmp.pcap"
+          );
+      handle.setFilter("icmp", BpfCompileMode.OPTIMIZE);
+      int count = 0;
+      try {
+        while (true) {
+          Packet p = handle.getNextPacketEx();
+          assertNotNull(p.get(IcmpV4CommonPacket.class));
+          count++;
+        }
+      } catch (EOFException e) {}
+      assertEquals(1, count);
+    } finally {
+      if (handle != null) {
+        handle.close();
+      }
+    }
+  }
+
+  @Test
+  public void testSetFilterUdp() throws Exception {
+    PcapHandle handle = null;
+    BpfProgram prog = null;
+    try {
+      handle
+        = Pcaps.openOffline(
+            "src/test/resources/org/pcap4j/core/udp_tcp_icmp.pcap"
+          );
+      prog = handle.compileFilter(
+        "udp", BpfCompileMode.OPTIMIZE, PcapHandle.PCAP_NETMASK_UNKNOWN
+      );
+      handle.setFilter(prog);
+      int count = 0;
+      try {
+        while (true) {
+          Packet p = handle.getNextPacketEx();
+          assertNotNull(p.get(UdpPacket.class));
+          count++;
+        }
+      } catch (EOFException e) {}
+      assertEquals(1, count);
+    } finally {
+      if (handle != null) {
+        handle.close();
+      }
+      if (prog != null) {
+        prog.free();
+      }
     }
   }
 
