@@ -60,11 +60,16 @@ public final class PcapHandle {
   private volatile boolean open = true;
   private volatile String filteringExpression = "";
 
-  private static final Inet4Address WILDCARD_MASK;
+  /**
+   *  The netmask used for {@link #setFilter(String, BpfCompileMode, Inet4Address) setFilter}
+   *  or {@link #compileFilter(String, BpfCompileMode, Inet4Address) compileFilter} when you
+   *  don't know what netmask you should use.
+   */
+  public static final Inet4Address PCAP_NETMASK_UNKNOWN;
 
   static {
     try {
-      WILDCARD_MASK = (Inet4Address)InetAddress.getByName("0.0.0.0");
+      PCAP_NETMASK_UNKNOWN = (Inet4Address)InetAddress.getByName("255.255.255.255");
     } catch (UnknownHostException e) {
       throw new AssertionError("never get here");
     }
@@ -522,7 +527,7 @@ public final class PcapHandle {
   public void setFilter(
     String bpfExpression, BpfCompileMode mode
   ) throws PcapNativeException, NotOpenException {
-    setFilter(bpfExpression, mode, WILDCARD_MASK);
+    setFilter(bpfExpression, mode, PCAP_NETMASK_UNKNOWN);
   }
 
   /**
