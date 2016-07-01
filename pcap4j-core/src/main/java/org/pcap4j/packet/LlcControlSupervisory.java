@@ -60,7 +60,7 @@ public final class LlcControlSupervisory implements LlcControl {
         .append(ByteArrays.toHexString(value, " "));
       throw new IllegalRawDataException(sb.toString());
     }
-    System.out.println(ByteArrays.toHexString(value, ""));
+
     this.receiveSequenceNumber = (byte) ((value >> 1) & 0x7F);
     if ((value & 0x0001) == 0) {
       this.pfBit = false;
