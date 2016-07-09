@@ -48,7 +48,7 @@ install:
   # randomly fails somehow.
   - cmd: choco install -y nmap
   # Install Maven
-  - cmd: choco install -y maven
+  - cmd: choco install -y maven -version 3.2.5
   # Get the Maven bin directory path
   - ps: $env:MAVEN_BIN_PATH = [Environment]::GetEnvironmentVariable('M2', 'User')
   - cmd: echo %MAVEN_BIN_PATH%
