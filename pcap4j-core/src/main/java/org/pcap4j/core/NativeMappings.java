@@ -716,7 +716,9 @@ final class NativeMappings {
     public int bf_len; // u_int
     public bpf_insn.ByReference bf_insns; // struct bpf_insn *
 
-    public bpf_program() {}
+    public bpf_program() {
+      setAutoSynch(false);
+    }
 
     @Override
     protected List<String> getFieldOrder() {
@@ -735,7 +737,9 @@ final class NativeMappings {
     public byte jf; // u_char
     public int k; // bpf_u_int32
 
-    public bpf_insn() {}
+    public bpf_insn()  {
+      setAutoSynch(false);
+    }
 
     public static
     class ByReference

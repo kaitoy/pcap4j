@@ -5,6 +5,7 @@ Future
 * Support Radiotap.
 
 ### Bug Fixes ###
+* [Issues#64](https://github.com/kaitoy/pcap4j/issues/64): JVM crash in the finalizer of BpfProgram.
 
 ### Other Changes ###
 
