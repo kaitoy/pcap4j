@@ -13,6 +13,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Radiotap TX attenuation field.
  * Transmit power expressed as unitless distance from max power set at factory calibration.
  * 0 is max power. Monotonically nondecreasing with lower power levels.
  *

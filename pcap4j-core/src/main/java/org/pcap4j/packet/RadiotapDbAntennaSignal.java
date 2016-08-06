@@ -11,6 +11,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Radiotap dB antenna signal field.
  * RF signal power at the antenna, decibel difference from an arbitrary, fixed reference.
  * This field contains a single unsigned 8-bit value.
  *

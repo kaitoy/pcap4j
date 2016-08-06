@@ -13,6 +13,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Radiotap Channel field.
  * Tx/Rx frequency in MHz and flags.
  *
  * @see <a href="http://www.radiotap.org/defined-fields/Rate">Radiotap</a>

@@ -13,6 +13,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Pad between Radiotap fields.
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */

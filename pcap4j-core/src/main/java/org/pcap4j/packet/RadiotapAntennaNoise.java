@@ -11,6 +11,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Radiotap Antenna noise field.
  * RF noise power at the antenna.
  * This field contains a single signed 8-bit value,
  * which indicates the RF signal power at the antenna, in decibels difference from 1mW.

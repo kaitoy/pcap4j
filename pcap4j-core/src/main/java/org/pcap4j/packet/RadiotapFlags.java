@@ -11,6 +11,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Radiotap Flags field.
  * Properties of transmitted and received frames.
  *
  * @see <a href="http://www.radiotap.org/defined-fields/Flags">Radiotap</a>

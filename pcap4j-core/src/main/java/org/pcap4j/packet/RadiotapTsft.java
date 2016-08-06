@@ -14,6 +14,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Radiotap TSFT field.
  * Value in microseconds of the MAC's 64-bit 802.11 Time Synchronization Function timer
  * when the first bit of the MPDU arrived at the MAC. For received frames only.
  *

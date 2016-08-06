@@ -11,6 +11,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Radiotap Rate field.
  * TX/RX data rate.
  *
  * @see <a href="http://www.radiotap.org/defined-fields/Rate">Radiotap</a>

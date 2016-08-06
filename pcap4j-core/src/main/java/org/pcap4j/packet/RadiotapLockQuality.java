@@ -13,6 +13,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Radiotap Lock quality field.
  * Quality of Barker code lock.
  * Unitless. Monotonically nondecreasing with "better" lock strength.
  * Called "Signal Quality" in datasheets.

@@ -11,6 +11,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Radiotap FHSS field.
  * The hop set and pattern for frequency-hopping radios.
  *
  * @see <a href="http://www.radiotap.org/defined-fields/FHSS">Radiotap</a>

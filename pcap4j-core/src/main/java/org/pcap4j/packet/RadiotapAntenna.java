@@ -11,6 +11,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Radiotap Antenna field.
  * Unitless indication of the Rx/Tx antenna for this packet.
  * The first antenna is antenna 0.
  *

@@ -11,6 +11,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
 import org.pcap4j.util.ByteArrays;
 
 /**
+ * Radiotap dBm TX power field.
  * Transmit power expressed as dBm (decibels from a 1 milliwatt reference).
  * This is the absolute power level measured at the antenna port.
  *
