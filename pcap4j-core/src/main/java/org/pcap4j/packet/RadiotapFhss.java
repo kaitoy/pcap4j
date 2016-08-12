@@ -81,9 +81,19 @@ public final class RadiotapFhss implements RadiotapDataField {
   public byte getHopSet() { return hopSet; }
 
   /**
+   * @return hopSet
+   */
+  public int getHopSetAsInt() { return hopSet & 0xFF; }
+
+  /**
    * @return hopPattern
    */
   public byte getHopPattern() { return hopPattern; }
+
+  /**
+   * @return hopPattern
+   */
+  public int getHopPatternAsInt() { return hopPattern & 0xFF; }
 
   @Override
   public int length() {
@@ -105,12 +115,22 @@ public final class RadiotapFhss implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[FHSS: [Hop set: ")
-      .append(ByteArrays.toHexString(hopSet, ""))
-      .append("], [Hop pattern: ")
-      .append(ByteArrays.toHexString(hopPattern, ""))
-      .append("]]");
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("FHSS: ")
+      .append(ls)
+      .append(indent).append("  Hop set: ")
+      .append(getHopSetAsInt())
+      .append(ls)
+      .append(indent).append("  Hop pattern: ")
+      .append(getHopPatternAsInt())
+      .append(ls);
 
     return sb.toString();
   }

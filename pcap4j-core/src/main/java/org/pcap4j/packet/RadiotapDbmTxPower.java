@@ -102,10 +102,20 @@ public final class RadiotapDbmTxPower implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[TX power: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("dBm TX power: ")
+      .append(ls)
+      .append(indent).append("  TX power: ")
       .append(txPower)
-      .append(" dBm]");
+      .append(" dBm")
+      .append(ls);
 
     return sb.toString();
   }

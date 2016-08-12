@@ -75,10 +75,19 @@ public final class UnknownRadiotapDataField implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Data: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("Unknown Data: ")
+      .append(ls)
+      .append(indent).append("  Data: ")
       .append(ByteArrays.toHexString(rawData, ""))
-      .append("]");
+      .append(ls);
 
     return sb.toString();
   }

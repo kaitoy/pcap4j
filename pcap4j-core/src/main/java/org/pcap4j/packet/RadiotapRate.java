@@ -99,10 +99,20 @@ public final class RadiotapRate implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Rate: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("Rate: ")
+      .append(ls)
+      .append(indent).append("  Rate: ")
       .append(getRateAsInt() * 500)
-      .append(" Kbps]");
+      .append(" Kbps")
+      .append(ls);
 
     return sb.toString();
   }

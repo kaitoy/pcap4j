@@ -175,24 +175,40 @@ public final class RadiotapFlags implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Flags: [CFP: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("Flags: ")
+      .append(ls)
+      .append(indent).append("  CFP: ")
       .append(cfp)
-      .append("], [Short Preamble: ")
+      .append(ls)
+      .append(indent).append("  Short Preamble: ")
       .append(shortPreamble)
-      .append("], [WEP: ")
+      .append(ls)
+      .append(indent).append("  WEP: ")
       .append(wepEncrypted)
-      .append("], [Fragmented: ")
+      .append(ls)
+      .append(indent).append("  Fragmented: ")
       .append(fragmented)
-      .append("], [FCS: ")
+      .append(ls)
+      .append(indent).append("  FCS: ")
       .append(includingFcs)
-      .append("], [PAD: ")
+      .append(ls)
+      .append(indent).append("  PAD: ")
       .append(padding)
-      .append("], [Bad FCS: ")
+      .append(ls)
+      .append(indent).append("  Bad FCS: ")
       .append(badFcs)
-      .append("], [Short Guard Interval: ")
+      .append(ls)
+      .append(indent).append("  Short Guard Interval: ")
       .append(shortGuardInterval)
-      .append("]]");
+      .append(ls);
 
     return sb.toString();
   }

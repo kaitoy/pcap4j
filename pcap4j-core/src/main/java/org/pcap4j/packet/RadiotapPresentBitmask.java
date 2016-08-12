@@ -227,22 +227,36 @@ public final class RadiotapPresentBitmask implements Serializable {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  /**
+   * @param indent indent
+   * @return String representation of this object.
+   */
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Fields Present: ");
-    for (RadiotapPresentBitNumber num: bitNumbers) {
-      sb.append(num)
-        .append(", ");
-    }
-    sb.delete(sb.length() - 2, sb.length())
-      .append("] [Radiotap NS Next: ")
-      .append(radiotapNamespaceNext)
-      .append("] [Vendor NS Next: ")
-      .append(vendorNamespaceNext)
-      .append("] [Another Bitmap Follows: ")
-      .append(anotherBitmapFollows)
-      .append("] [Bitmap: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("Present Bitmask (")
       .append(ByteArrays.toHexString(getRawData(), " "))
-      .append("]");
+      .append("):")
+      .append(ls)
+      .append(indent).append("  Present Fields: ")
+      .append(ls);
+    for (RadiotapPresentBitNumber num: bitNumbers) {
+      sb.append(indent).append("    ").append(num)
+        .append(ls);
+    }
+    sb.append(indent).append("  Radiotap NS Next: ")
+      .append(radiotapNamespaceNext)
+      .append(ls)
+      .append(indent).append("  Vendor NS Next: ")
+      .append(vendorNamespaceNext)
+      .append(ls)
+      .append(indent).append("  Another Bitmap Follows: ")
+      .append(anotherBitmapFollows)
+      .append(ls);
 
     return sb.toString();
   }

@@ -286,42 +286,68 @@ public final class RadiotapChannel implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Channel: [Frequency: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("Channel: ")
+      .append(ls)
+      .append(indent).append("  Frequency: ")
       .append(getFrequencyAsInt())
-      .append(" MHz], [LSB of flags: ")
+      .append(" MHz")
+      .append(ls)
+      .append(indent).append("  LSB of flags: ")
       .append(lsbOfFlags)
-      .append("], [2nd LSB of flags: ")
+      .append(ls)
+      .append(indent).append("  2nd LSB of flags: ")
       .append(secondLsbOfFlags)
-      .append("], [3rd LSB of flags: ")
+      .append(ls)
+      .append(indent).append("  3rd LSB of flags: ")
       .append(thirdLsbOfFlags)
-      .append("], [4th LSB of flags: ")
+      .append(ls)
+      .append(indent).append("  4th LSB of flags: ")
       .append(fourthLsbOfFlags)
-      .append("], [Turbo: ")
+      .append(ls)
+      .append(indent).append("  Turbo: ")
       .append(turbo)
-      .append("], [CCK: ")
+      .append(ls)
+      .append(indent).append("  CCK: ")
       .append(cck)
-      .append("], [OFDM: ")
+      .append(ls)
+      .append(indent).append("  OFDM: ")
       .append(ofdm)
-      .append("], [2 GHz spectrum: ")
+      .append(ls)
+      .append(indent).append("  2 GHz spectrum: ")
       .append(twoGhzSpectrum)
-      .append("], [5 GHz spectrum: ")
+      .append(ls)
+      .append(indent).append("  5 GHz spectrum: ")
       .append(fiveGhzSpectrum)
-      .append("], [Only passive scan: ")
+      .append(ls)
+      .append(indent).append("  Only passive scan: ")
       .append(onlyPassiveScan)
-      .append("], [Dynamic CCK-OFDM: ")
+      .append(ls)
+      .append(indent).append("  Dynamic CCK-OFDM: ")
       .append(dynamicCckOfdm)
-      .append("], [GFSK: ")
+      .append(ls)
+      .append(indent).append("  GFSK: ")
       .append(gfsk)
-      .append("], [GSM: ")
+      .append(ls)
+      .append(indent).append("  GSM: ")
       .append(gsm)
-      .append("], [Static Turbo: ")
+      .append(ls)
+      .append(indent).append("  Static Turbo: ")
       .append(staticTurbo)
-      .append("], [Half rate: ")
+      .append(ls)
+      .append(indent).append("  Half rate: ")
       .append(halfRate)
-      .append("], [Quarter rate: ")
+      .append(ls)
+      .append(indent).append("  Quarter rate: ")
       .append(quarterRate)
-      .append("]]");
+      .append(ls);
 
     return sb.toString();
   }

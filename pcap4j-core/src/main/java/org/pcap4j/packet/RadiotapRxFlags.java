@@ -263,40 +263,64 @@ public final class RadiotapRxFlags implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[RX flags: [LSB: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("RX flags: ")
+      .append(ls)
+      .append(indent).append("  LSB: ")
       .append(lsb)
-      .append("], [Bad PLCP CRC: ")
+      .append(ls)
+      .append(indent).append("  Bad PLCP CRC: ")
       .append(badPlcpCrc)
-      .append("], [3rd LSB: ")
+      .append(ls)
+      .append(indent).append("  3rd LSB: ")
       .append(thirdLsb)
-      .append("], [4th LSB: ")
+      .append(ls)
+      .append(indent).append("  4th LSB: ")
       .append(fourthLsb)
-      .append("], [5th LSB: ")
+      .append(ls)
+      .append(indent).append("  5th LSB: ")
       .append(fifthLsb)
-      .append("], [6th LSB: ")
+      .append(ls)
+      .append(indent).append("  6th LSB: ")
       .append(sixthLsb)
-      .append("], [7th LSB: ")
+      .append(ls)
+      .append(indent).append("  7th LSB: ")
       .append(seventhLsb)
-      .append("], [8th LSB: ")
+      .append(ls)
+      .append(indent).append("  8th LSB: ")
       .append(eighthLsb)
-      .append("], [9th LSB: ")
+      .append(ls)
+      .append(indent).append("  9th LSB: ")
       .append(ninthLsb)
-      .append("], [10th LSB: ")
+      .append(ls)
+      .append(indent).append("  10th LSB: ")
       .append(tenthLsb)
-      .append("], [11th LSB: ")
+      .append(ls)
+      .append(indent).append("  11th LSB: ")
       .append(eleventhLsb)
-      .append("], [12th LSB: ")
+      .append(ls)
+      .append(indent).append("  12th LSB: ")
       .append(twelvethLsb)
-      .append("], [13th LSB: ")
+      .append(ls)
+      .append(indent).append("  13th LSB: ")
       .append(thirteenthLsb)
-      .append("], [14th LSB: ")
+      .append(ls)
+      .append(indent).append("  14th LSB: ")
       .append(fourteenthLsb)
-      .append("], [15th LSB: ")
+      .append(ls)
+      .append(indent).append("  15th LSB: ")
       .append(fifteenthLsb)
-      .append("], [16th LSB: ")
+      .append(ls)
+      .append(indent).append("  16th LSB: ")
       .append(sixteenthLsb)
-      .append("]]");
+      .append(ls);
 
     return sb.toString();
   }

@@ -100,10 +100,20 @@ public final class RadiotapDbAntennaNoise implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Antenna noise: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("dB antenna noise: ")
+      .append(ls)
+      .append(indent).append("  Antenna noise: ")
       .append(getAntennaNoiseAsInt())
-      .append(" dB]");
+      .append(" dB")
+      .append(ls);
 
     return sb.toString();
   }

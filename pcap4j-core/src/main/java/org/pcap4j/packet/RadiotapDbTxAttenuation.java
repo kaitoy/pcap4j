@@ -102,10 +102,20 @@ public final class RadiotapDbTxAttenuation implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[TX attenuation: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("dB TX attenuation: ")
+      .append(ls)
+      .append(indent).append("  TX attenuation: ")
       .append(getTxAttenuationAsInt())
-      .append(" dB]");
+      .append(" dB")
+      .append(ls);
 
     return sb.toString();
   }

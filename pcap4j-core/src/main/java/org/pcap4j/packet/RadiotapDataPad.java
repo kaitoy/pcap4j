@@ -76,10 +76,19 @@ public final class RadiotapDataPad implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Pad: ")
-      .append(ByteArrays.toHexString(pad, ""))
-      .append("]");
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("Data Pad: ")
+      .append(ls)
+      .append(indent).append("  Pad: ")
+      .append(ByteArrays.toHexString(pad, " "))
+      .append(ls);
 
     return sb.toString();
   }

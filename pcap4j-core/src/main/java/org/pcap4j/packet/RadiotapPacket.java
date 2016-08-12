@@ -529,16 +529,12 @@ public final class RadiotapPacket extends AbstractPacket {
         .append(getLengthAsInt())
         .append(ls);
       for (RadiotapPresentBitmask mask: presentBitmasks) {
-        sb.append("  Present Bitmask: ")
-          .append(mask)
-          .append(ls);
+        sb.append(mask.toString("  "));
       }
       sb.append("  Data Fields: ")
         .append(ls);
       for (RadiotapDataField field: dataFields) {
-        sb.append("    ")
-          .append(field)
-          .append(ls);
+        sb.append(field.toString("  "));
       }
 
       return sb.toString();
@@ -595,6 +591,12 @@ public final class RadiotapPacket extends AbstractPacket {
      * @return raw data
      */
     public byte[] getRawData();
+
+    /**
+     * @param indent indent
+     * @return String representation of this object.
+     */
+    public String toString(String indent);
 
   }
 

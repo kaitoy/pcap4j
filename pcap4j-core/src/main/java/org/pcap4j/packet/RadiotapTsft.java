@@ -123,10 +123,20 @@ public final class RadiotapTsft implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[MAC timestamp: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("TSFT: ")
+      .append(ls)
+      .append(indent).append("  MAC timestamp: ")
       .append(macTimestamp)
-      .append(" microseconds]");
+      .append(" microseconds")
+      .append(ls);
 
     return sb.toString();
   }

@@ -105,10 +105,19 @@ public final class RadiotapLockQuality implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Lock quality: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("Lock quality: ")
+      .append(ls)
+      .append(indent).append("  Lock quality: ")
       .append(getLockQualityAsInt())
-      .append("]");
+      .append(ls);
 
     return sb.toString();
   }

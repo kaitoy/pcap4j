@@ -100,10 +100,19 @@ public final class RadiotapAntenna implements RadiotapDataField {
 
   @Override
   public String toString() {
+    return toString("");
+  }
+
+  @Override
+  public String toString(String indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Antenna: ")
+    String ls = System.getProperty("line.separator");
+
+    sb.append(indent).append("Antenna: ")
+      .append(ls)
+      .append(indent).append("  Antenna: ")
       .append(getAntennaAsInt())
-      .append("]");
+      .append(ls);
 
     return sb.toString();
   }
