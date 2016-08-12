@@ -25,15 +25,15 @@ public final class RadiotapChannel implements RadiotapDataField {
   /**
    *
    */
-  private static final long serialVersionUID = -3015189452751015438L;
+  private static final long serialVersionUID = 3645927613193110605L;
 
   private static final int LENGTH = 4;
 
   private final short frequency;
-  private final boolean lsb;
-  private final boolean secondLsb;
-  private final boolean thirdLsb;
-  private final boolean fourthLsb;
+  private final boolean lsbOfFlags;
+  private final boolean secondLsbOfFlags;
+  private final boolean thirdLsbOfFlags;
+  private final boolean fourthLsbOfFlags;
   private final boolean turbo;
   private final boolean cck;
   private final boolean ofdm;
@@ -80,10 +80,10 @@ public final class RadiotapChannel implements RadiotapDataField {
     }
 
     this.frequency = ByteArrays.getShort(rawData, offset, ByteOrder.LITTLE_ENDIAN);
-    this.lsb = (rawData[offset + 2] & 0x01) != 0;
-    this.secondLsb = (rawData[offset + 2] & 0x02) != 0;
-    this.thirdLsb = (rawData[offset + 2] & 0x04) != 0;
-    this.fourthLsb = (rawData[offset + 2] & 0x08) != 0;
+    this.lsbOfFlags = (rawData[offset + 2] & 0x01) != 0;
+    this.secondLsbOfFlags = (rawData[offset + 2] & 0x02) != 0;
+    this.thirdLsbOfFlags = (rawData[offset + 2] & 0x04) != 0;
+    this.fourthLsbOfFlags = (rawData[offset + 2] & 0x08) != 0;
     this.turbo = (rawData[offset + 2] & 0x10) != 0;
     this.cck = (rawData[offset + 2] & 0x20) != 0;
     this.ofdm = (rawData[offset + 2] & 0x40) != 0;
@@ -104,10 +104,10 @@ public final class RadiotapChannel implements RadiotapDataField {
     }
 
     this.frequency = builder.frequency;
-    this.lsb = builder.lsb;
-    this.secondLsb = builder.secondLsb;
-    this.thirdLsb = builder.thirdLsb;
-    this.fourthLsb = builder.fourthLsb;
+    this.lsbOfFlags = builder.lsbOfFlags;
+    this.secondLsbOfFlags = builder.secondLsbOfFlags;
+    this.thirdLsbOfFlags = builder.thirdLsbOfFlags;
+    this.fourthLsbOfFlags = builder.fourthLsbOfFlags;
     this.turbo = builder.turbo;
     this.cck = builder.cck;
     this.ofdm = builder.ofdm;
@@ -137,31 +137,31 @@ public final class RadiotapChannel implements RadiotapDataField {
   public int getFrequencyAsInt() { return frequency & 0xFFFF; }
 
   /**
-   * @return lsbtrue if the LSB is set to 1; otherwise false.
+   * @return true if the LSB of the flags field is set to 1; otherwise false.
    */
-  public boolean getLsb() {
-    return lsb;
+  public boolean getLsbOfFlags() {
+    return lsbOfFlags;
   }
 
   /**
-   * @return true if the second LSB is set to 1; otherwise false.
+   * @return true if the second LSB of the flags field is set to 1; otherwise false.
    */
-  public boolean getSecondLsb() {
-    return secondLsb;
+  public boolean getSecondLsbOfFlags() {
+    return secondLsbOfFlags;
   }
 
   /**
-   * @return true if the third LSB is set to 1; otherwise false.
+   * @return true if the third LSB of the flags field is set to 1; otherwise false.
    */
-  public boolean getThirdLsb() {
-    return thirdLsb;
+  public boolean getThirdLsbOfFlags() {
+    return thirdLsbOfFlags;
   }
 
   /**
-   * @return true if the fourth LSB is set to 1; otherwise false.
+   * @return true if the fourth LSB of the flags field is set to 1; otherwise false.
    */
-  public boolean getFourthLsb() {
-    return fourthLsb;
+  public boolean getFourthLsbOfFlags() {
+    return fourthLsbOfFlags;
   }
 
   /**
@@ -260,10 +260,10 @@ public final class RadiotapChannel implements RadiotapDataField {
       ByteArrays.toByteArray(frequency, ByteOrder.LITTLE_ENDIAN), 0,
       data, 0, ByteArrays.SHORT_SIZE_IN_BYTES
     );
-    if (lsb) { data[2] |= 0x01; }
-    if (secondLsb) { data[2] |= 0x02; }
-    if (thirdLsb) { data[2] |= 0x04; }
-    if (fourthLsb) { data[2] |= 0x08; }
+    if (lsbOfFlags) { data[2] |= 0x01; }
+    if (secondLsbOfFlags) { data[2] |= 0x02; }
+    if (thirdLsbOfFlags) { data[2] |= 0x04; }
+    if (fourthLsbOfFlags) { data[2] |= 0x08; }
     if (turbo) { data[2] |= 0x10; }
     if (cck) { data[2] |= 0x20; }
     if (ofdm) { data[2] |= 0x40; }
@@ -289,14 +289,14 @@ public final class RadiotapChannel implements RadiotapDataField {
     StringBuilder sb = new StringBuilder();
     sb.append("[Channel: [Frequency: ")
       .append(getFrequencyAsInt())
-      .append(" MHz], [LSB: ")
-      .append(lsb)
-      .append("], [2nd LSB: ")
-      .append(secondLsb)
-      .append("], [3rd LSB: ")
-      .append(thirdLsb)
-      .append("], [4th LSB: ")
-      .append(fourthLsb)
+      .append(" MHz], [LSB of flags: ")
+      .append(lsbOfFlags)
+      .append("], [2nd LSB of flags: ")
+      .append(secondLsbOfFlags)
+      .append("], [3rd LSB of flags: ")
+      .append(thirdLsbOfFlags)
+      .append("], [4th LSB of flags: ")
+      .append(fourthLsbOfFlags)
       .append("], [Turbo: ")
       .append(turbo)
       .append("], [CCK: ")
@@ -333,18 +333,18 @@ public final class RadiotapChannel implements RadiotapDataField {
     result = prime * result + (cck ? 1231 : 1237);
     result = prime * result + (dynamicCckOfdm ? 1231 : 1237);
     result = prime * result + (fiveGhzSpectrum ? 1231 : 1237);
-    result = prime * result + (fourthLsb ? 1231 : 1237);
+    result = prime * result + (fourthLsbOfFlags ? 1231 : 1237);
     result = prime * result + frequency;
     result = prime * result + (gfsk ? 1231 : 1237);
     result = prime * result + (gsm ? 1231 : 1237);
     result = prime * result + (halfRate ? 1231 : 1237);
-    result = prime * result + (lsb ? 1231 : 1237);
+    result = prime * result + (lsbOfFlags ? 1231 : 1237);
     result = prime * result + (ofdm ? 1231 : 1237);
     result = prime * result + (onlyPassiveScan ? 1231 : 1237);
     result = prime * result + (quarterRate ? 1231 : 1237);
-    result = prime * result + (secondLsb ? 1231 : 1237);
+    result = prime * result + (secondLsbOfFlags ? 1231 : 1237);
     result = prime * result + (staticTurbo ? 1231 : 1237);
-    result = prime * result + (thirdLsb ? 1231 : 1237);
+    result = prime * result + (thirdLsbOfFlags ? 1231 : 1237);
     result = prime * result + (turbo ? 1231 : 1237);
     result = prime * result + (twoGhzSpectrum ? 1231 : 1237);
     return result;
@@ -365,7 +365,7 @@ public final class RadiotapChannel implements RadiotapDataField {
       return false;
     if (fiveGhzSpectrum != other.fiveGhzSpectrum)
       return false;
-    if (fourthLsb != other.fourthLsb)
+    if (fourthLsbOfFlags != other.fourthLsbOfFlags)
       return false;
     if (frequency != other.frequency)
       return false;
@@ -375,7 +375,7 @@ public final class RadiotapChannel implements RadiotapDataField {
       return false;
     if (halfRate != other.halfRate)
       return false;
-    if (lsb != other.lsb)
+    if (lsbOfFlags != other.lsbOfFlags)
       return false;
     if (ofdm != other.ofdm)
       return false;
@@ -383,11 +383,11 @@ public final class RadiotapChannel implements RadiotapDataField {
       return false;
     if (quarterRate != other.quarterRate)
       return false;
-    if (secondLsb != other.secondLsb)
+    if (secondLsbOfFlags != other.secondLsbOfFlags)
       return false;
     if (staticTurbo != other.staticTurbo)
       return false;
-    if (thirdLsb != other.thirdLsb)
+    if (thirdLsbOfFlags != other.thirdLsbOfFlags)
       return false;
     if (turbo != other.turbo)
       return false;
@@ -403,10 +403,10 @@ public final class RadiotapChannel implements RadiotapDataField {
   public static final class Builder {
 
     private short frequency;
-    private boolean lsb;
-    private boolean secondLsb;
-    private boolean thirdLsb;
-    private boolean fourthLsb;
+    private boolean lsbOfFlags;
+    private boolean secondLsbOfFlags;
+    private boolean thirdLsbOfFlags;
+    private boolean fourthLsbOfFlags;
     private boolean turbo;
     private boolean cck;
     private boolean ofdm;
@@ -427,10 +427,10 @@ public final class RadiotapChannel implements RadiotapDataField {
 
     private Builder(RadiotapChannel obj) {
       this.frequency = obj.frequency;
-      this.lsb = obj.lsb;
-      this.secondLsb = obj.secondLsb;
-      this.thirdLsb = obj.thirdLsb;
-      this.fourthLsb = obj.fourthLsb;
+      this.lsbOfFlags = obj.lsbOfFlags;
+      this.secondLsbOfFlags = obj.secondLsbOfFlags;
+      this.thirdLsbOfFlags = obj.thirdLsbOfFlags;
+      this.fourthLsbOfFlags = obj.fourthLsbOfFlags;
       this.turbo = obj.turbo;
       this.cck = obj.cck;
       this.ofdm = obj.ofdm;
@@ -455,38 +455,38 @@ public final class RadiotapChannel implements RadiotapDataField {
     }
 
     /**
-     * @param lsb lsb
+     * @param lsbOfFlags lsbOfFlags
      * @return this Builder object for method chaining.
      */
-    public Builder lsb(boolean lsb) {
-      this.lsb = lsb;
+    public Builder lsbOfFlags(boolean lsbOfFlags) {
+      this.lsbOfFlags = lsbOfFlags;
       return this;
     }
 
     /**
-     * @param secondLsb secondLsb
+     * @param secondLsbOfFlags secondLsbOfFlags
      * @return this Builder object for method chaining.
      */
-    public Builder secondLsb(boolean secondLsb) {
-      this.secondLsb = secondLsb;
+    public Builder secondLsbOfFlags(boolean secondLsbOfFlags) {
+      this.secondLsbOfFlags = secondLsbOfFlags;
       return this;
     }
 
     /**
-     * @param thirdLsb thirdLsb
+     * @param thirdLsbOfFlags thirdLsbOfFlags
      * @return this Builder object for method chaining.
      */
-    public Builder thirdLsb(boolean thirdLsb) {
-      this.thirdLsb = thirdLsb;
+    public Builder thirdLsbOfFlags(boolean thirdLsbOfFlags) {
+      this.thirdLsbOfFlags = thirdLsbOfFlags;
       return this;
     }
 
     /**
-     * @param fourthLsb fourthLsb
+     * @param fourthLsbOfFlags fourthLsbOfFlags
      * @return this Builder object for method chaining.
      */
-    public Builder fourthLsb(boolean fourthLsb) {
-      this.fourthLsb = fourthLsb;
+    public Builder fourthLsbOfFlags(boolean fourthLsbOfFlags) {
+      this.fourthLsbOfFlags = fourthLsbOfFlags;
       return this;
     }
 
