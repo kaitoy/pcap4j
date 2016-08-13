@@ -10,7 +10,7 @@ package org.pcap4j.packet;
 import java.math.BigInteger;
 import java.nio.ByteOrder;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -22,7 +22,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapTsft implements RadiotapDataField {
+public final class RadiotapDataTsft implements RadiotapData {
 
   /**
    *
@@ -44,14 +44,14 @@ public final class RadiotapTsft implements RadiotapDataField {
    * @return a new RadiotapTsft object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapTsft newInstance(
+  public static RadiotapDataTsft newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapTsft(rawData, offset, length);
+    return new RadiotapDataTsft(rawData, offset, length);
   }
 
-  private RadiotapTsft(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataTsft(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapTsft (")
@@ -81,7 +81,7 @@ public final class RadiotapTsft implements RadiotapDataField {
         );
   }
 
-  private RadiotapTsft(Builder builder) {
+  private RadiotapDataTsft(Builder builder) {
     if (
          builder == null
       || builder.macTimestamp == null
@@ -150,7 +150,7 @@ public final class RadiotapTsft implements RadiotapDataField {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    RadiotapTsft other = (RadiotapTsft) obj;
+    RadiotapDataTsft other = (RadiotapDataTsft) obj;
     return macTimestamp.equals(other.macTimestamp);
   }
 
@@ -167,7 +167,7 @@ public final class RadiotapTsft implements RadiotapDataField {
      */
     public Builder() {}
 
-    private Builder(RadiotapTsft obj) {
+    private Builder(RadiotapDataTsft obj) {
       this.macTimestamp = obj.macTimestamp;
     }
 
@@ -183,8 +183,8 @@ public final class RadiotapTsft implements RadiotapDataField {
     /**
      * @return a new RadiotapTsft object.
      */
-    public RadiotapTsft build() {
-      return new RadiotapTsft(this);
+    public RadiotapDataTsft build() {
+      return new RadiotapDataTsft(this);
     }
 
   }

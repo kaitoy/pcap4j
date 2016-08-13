@@ -9,14 +9,14 @@ package org.pcap4j.packet;
 
 import java.util.Arrays;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class UnknownRadiotapDataField implements RadiotapDataField {
+public final class IllegalRadiotapData implements RadiotapData {
 
   /**
    *
@@ -35,16 +35,16 @@ public final class UnknownRadiotapDataField implements RadiotapDataField {
    * @param length length
    * @return a new UnknownRadiotapDataField object.
    */
-  public static UnknownRadiotapDataField newInstance(byte[] rawData, int offset, int length) {
+  public static IllegalRadiotapData newInstance(byte[] rawData, int offset, int length) {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new UnknownRadiotapDataField(rawData, offset, length);
+    return new IllegalRadiotapData(rawData, offset, length);
   }
 
-  private UnknownRadiotapDataField(byte[] rawData, int offset, int length) {
+  private IllegalRadiotapData(byte[] rawData, int offset, int length) {
     this.rawData = ByteArrays.getSubArray(rawData, offset, length);
   }
 
-  private UnknownRadiotapDataField(Builder builder) {
+  private IllegalRadiotapData(Builder builder) {
     if (
          builder == null
       || builder.rawData == null
@@ -83,9 +83,9 @@ public final class UnknownRadiotapDataField implements RadiotapDataField {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Unknown Data: ")
+    sb.append(indent).append("Illegal Data: ")
       .append(ls)
-      .append(indent).append("  Data: ")
+      .append(indent).append("  data: ")
       .append(ByteArrays.toHexString(rawData, ""))
       .append(ls);
 
@@ -101,7 +101,7 @@ public final class UnknownRadiotapDataField implements RadiotapDataField {
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    UnknownRadiotapDataField other = (UnknownRadiotapDataField) obj;
+    IllegalRadiotapData other = (IllegalRadiotapData) obj;
     return Arrays.equals(rawData, other.rawData);
   }
 
@@ -118,7 +118,7 @@ public final class UnknownRadiotapDataField implements RadiotapDataField {
      */
     public Builder() {}
 
-    private Builder(UnknownRadiotapDataField obj) {
+    private Builder(IllegalRadiotapData obj) {
       this.rawData = obj.rawData;
     }
 
@@ -134,8 +134,8 @@ public final class UnknownRadiotapDataField implements RadiotapDataField {
     /**
      * @return a new UnknownRadiotapDataField object.
      */
-    public UnknownRadiotapDataField build() {
-      return new UnknownRadiotapDataField(this);
+    public IllegalRadiotapData build() {
+      return new IllegalRadiotapData(this);
     }
 
   }

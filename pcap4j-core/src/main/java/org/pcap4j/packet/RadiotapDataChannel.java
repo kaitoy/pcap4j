@@ -9,7 +9,7 @@ package org.pcap4j.packet;
 
 import java.nio.ByteOrder;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -20,7 +20,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapChannel implements RadiotapDataField {
+public final class RadiotapDataChannel implements RadiotapData {
 
   /**
    *
@@ -58,14 +58,14 @@ public final class RadiotapChannel implements RadiotapDataField {
    * @return a new RadiotapChannel object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapChannel newInstance(
+  public static RadiotapDataChannel newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapChannel(rawData, offset, length);
+    return new RadiotapDataChannel(rawData, offset, length);
   }
 
-  private RadiotapChannel(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataChannel(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapChannel (")
@@ -98,7 +98,7 @@ public final class RadiotapChannel implements RadiotapDataField {
     this.quarterRate = (rawData[offset + 3] & 0x80) != 0;
   }
 
-  private RadiotapChannel(Builder builder) {
+  private RadiotapDataChannel(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder is null.");
     }
@@ -384,7 +384,7 @@ public final class RadiotapChannel implements RadiotapDataField {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    RadiotapChannel other = (RadiotapChannel) obj;
+    RadiotapDataChannel other = (RadiotapDataChannel) obj;
     if (cck != other.cck)
       return false;
     if (dynamicCckOfdm != other.dynamicCckOfdm)
@@ -451,7 +451,7 @@ public final class RadiotapChannel implements RadiotapDataField {
      */
     public Builder() {}
 
-    private Builder(RadiotapChannel obj) {
+    private Builder(RadiotapDataChannel obj) {
       this.frequency = obj.frequency;
       this.lsbOfFlags = obj.lsbOfFlags;
       this.secondLsbOfFlags = obj.secondLsbOfFlags;
@@ -627,8 +627,8 @@ public final class RadiotapChannel implements RadiotapDataField {
     /**
      * @return a new RadiotapChannel object.
      */
-    public RadiotapChannel build() {
-      return new RadiotapChannel(this);
+    public RadiotapDataChannel build() {
+      return new RadiotapDataChannel(this);
     }
 
   }

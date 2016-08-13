@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -18,7 +18,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapRxFlags implements RadiotapDataField {
+public final class RadiotapDataRxFlags implements RadiotapData {
 
   /**
    *
@@ -55,14 +55,14 @@ public final class RadiotapRxFlags implements RadiotapDataField {
    * @return a new RadiotapRxFlags object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapRxFlags newInstance(
+  public static RadiotapDataRxFlags newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapRxFlags(rawData, offset, length);
+    return new RadiotapDataRxFlags(rawData, offset, length);
   }
 
-  private RadiotapRxFlags(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataRxFlags(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapRxFlags (")
@@ -94,7 +94,7 @@ public final class RadiotapRxFlags implements RadiotapDataField {
     this.sixteenthLsb = (rawData[offset + 1] & 0x80) != 0;
   }
 
-  private RadiotapRxFlags(Builder builder) {
+  private RadiotapDataRxFlags(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder is null.");
     }
@@ -356,7 +356,7 @@ public final class RadiotapRxFlags implements RadiotapDataField {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    RadiotapRxFlags other = (RadiotapRxFlags) obj;
+    RadiotapDataRxFlags other = (RadiotapDataRxFlags) obj;
     if (sixthLsb != other.sixthLsb)
       return false;
     if (eleventhLsb != other.eleventhLsb)
@@ -420,7 +420,7 @@ public final class RadiotapRxFlags implements RadiotapDataField {
      */
     public Builder() {}
 
-    private Builder(RadiotapRxFlags obj) {
+    private Builder(RadiotapDataRxFlags obj) {
       this.lsb = obj.lsb;
       this.badPlcpCrc = obj.badPlcpCrc;
       this.thirdLsb = obj.thirdLsb;
@@ -586,8 +586,8 @@ public final class RadiotapRxFlags implements RadiotapDataField {
     /**
      * @return a new RadiotapRxFlags object.
      */
-    public RadiotapRxFlags build() {
-      return new RadiotapRxFlags(this);
+    public RadiotapDataRxFlags build() {
+      return new RadiotapDataRxFlags(this);
     }
 
   }

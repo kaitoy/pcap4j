@@ -7,28 +7,29 @@
 
 package org.pcap4j.packet;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
- * Radiotap Antenna field.
- * Unitless indication of the Rx/Tx antenna for this packet.
- * The first antenna is antenna 0.
+ * Radiotap Antenna signal field.
+ * RF signal power at the antenna.
+ * This field contains a single signed 8-bit value,
+ * which indicates the RF signal power at the antenna, in decibels difference from 1mW.
  *
- * @see <a href="http://www.radiotap.org/defined-fields/Antenna">Radiotap</a>
+ * @see <a href="http://www.radiotap.org/defined-fields/Antenna%20signal">Radiotap</a>
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapAntenna implements RadiotapDataField {
+public final class RadiotapDataAntennaSignal implements RadiotapData {
 
   /**
    *
    */
-  private static final long serialVersionUID = -4959721095331063491L;
+  private static final long serialVersionUID = -358697672561390506L;
 
   private static final int LENGTH = 1;
 
-  private final byte antenna;
+  private final byte antennaSignal;
 
   /**
    * A static factory method.
@@ -38,20 +39,22 @@ public final class RadiotapAntenna implements RadiotapDataField {
    * @param rawData rawData
    * @param offset offset
    * @param length length
-   * @return a new RadiotapRate object.
+   * @return a new RadiotapAntennaSignal object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapAntenna newInstance(
+  public static RadiotapDataAntennaSignal newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapAntenna(rawData, offset, length);
+    return new RadiotapDataAntennaSignal(rawData, offset, length);
   }
 
-  private RadiotapAntenna(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataAntennaSignal(
+    byte[] rawData, int offset, int length
+  ) throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
-      sb.append("The data is too short to build a RadiotapRate (")
+      sb.append("The data is too short to build a RadiotapAntennaSignal (")
         .append(LENGTH)
         .append(" bytes). data: ")
         .append(ByteArrays.toHexString(rawData, " "))
@@ -62,26 +65,26 @@ public final class RadiotapAntenna implements RadiotapDataField {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.antenna = ByteArrays.getByte(rawData, offset);
+    this.antennaSignal = ByteArrays.getByte(rawData, offset);
   }
 
-  private RadiotapAntenna(Builder builder) {
+  private RadiotapDataAntennaSignal(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder is null.");
     }
 
-    this.antenna = builder.antenna;
+    this.antennaSignal = builder.antennaSignal;
   }
 
   /**
-   * @return antenna
+   * @return antennaSignal (unit: dBm)
    */
-  public byte getAntenna() { return antenna; }
+  public byte getAntennaSignal() { return antennaSignal; }
 
   /**
-   * @return antenna
+   * @return antennaSignal (unit: dBm)
    */
-  public int getAntennaAsInt() { return antenna & 0xFF; }
+  public int getAntennaSignalAsInt() { return antennaSignal; }
 
   @Override
   public int length() {
@@ -90,7 +93,7 @@ public final class RadiotapAntenna implements RadiotapDataField {
 
   @Override
   public byte[] getRawData() {
-    return ByteArrays.toByteArray(antenna);
+    return ByteArrays.toByteArray(antennaSignal);
   }
 
   /**
@@ -108,10 +111,11 @@ public final class RadiotapAntenna implements RadiotapDataField {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Antenna: ")
+    sb.append(indent).append("Antenna signal: ")
       .append(ls)
-      .append(indent).append("  Antenna: ")
-      .append(getAntennaAsInt())
+      .append(indent).append("  Antenna signal: ")
+      .append(antennaSignal)
+      .append(" dBm")
       .append(ls);
 
     return sb.toString();
@@ -119,15 +123,15 @@ public final class RadiotapAntenna implements RadiotapDataField {
 
   @Override
   public int hashCode() {
-    return antenna;
+    return antennaSignal;
   }
 
   @Override
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    RadiotapAntenna other = (RadiotapAntenna) obj;
-    return antenna == other.antenna;
+    RadiotapDataAntennaSignal other = (RadiotapDataAntennaSignal) obj;
+    return antennaSignal == other.antennaSignal;
   }
 
   /**
@@ -136,31 +140,31 @@ public final class RadiotapAntenna implements RadiotapDataField {
    */
   public static final class Builder {
 
-    private byte antenna;
+    private byte antennaSignal;
 
     /**
      *
      */
     public Builder() {}
 
-    private Builder(RadiotapAntenna obj) {
-      this.antenna = obj.antenna;
+    private Builder(RadiotapDataAntennaSignal obj) {
+      this.antennaSignal = obj.antennaSignal;
     }
 
     /**
-     * @param antenna antenna
+     * @param antennaSignal antennaSignal
      * @return this Builder object for method chaining.
      */
-    public Builder antenna(byte antenna) {
-      this.antenna = antenna;
+    public Builder antennaSignal(byte antennaSignal) {
+      this.antennaSignal = antennaSignal;
       return this;
     }
 
     /**
-     * @return a new RadiotapRate object.
+     * @return a new RadiotapAntennaSignal object.
      */
-    public RadiotapAntenna build() {
-      return new RadiotapAntenna(this);
+    public RadiotapDataAntennaSignal build() {
+      return new RadiotapDataAntennaSignal(this);
     }
 
   }

@@ -10,28 +10,28 @@ package org.pcap4j.packet.factory;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pcap4j.packet.IllegalRadiotapDataField;
+import org.pcap4j.packet.IllegalRadiotapData;
 import org.pcap4j.packet.IllegalRawDataException;
-import org.pcap4j.packet.RadiotapAMpduStatus;
-import org.pcap4j.packet.RadiotapAntenna;
-import org.pcap4j.packet.RadiotapAntennaNoise;
-import org.pcap4j.packet.RadiotapAntennaSignal;
-import org.pcap4j.packet.RadiotapChannel;
-import org.pcap4j.packet.RadiotapDbAntennaNoise;
-import org.pcap4j.packet.RadiotapDbAntennaSignal;
-import org.pcap4j.packet.RadiotapDbTxAttenuation;
-import org.pcap4j.packet.RadiotapDbmTxPower;
-import org.pcap4j.packet.RadiotapFhss;
-import org.pcap4j.packet.RadiotapFlags;
-import org.pcap4j.packet.RadiotapLockQuality;
-import org.pcap4j.packet.RadiotapMcs;
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
-import org.pcap4j.packet.RadiotapRate;
-import org.pcap4j.packet.RadiotapRxFlags;
-import org.pcap4j.packet.RadiotapTsft;
-import org.pcap4j.packet.RadiotapTxAttenuation;
-import org.pcap4j.packet.RadiotapVht;
-import org.pcap4j.packet.UnknownRadiotapDataField;
+import org.pcap4j.packet.RadiotapDataAMpduStatus;
+import org.pcap4j.packet.RadiotapDataAntenna;
+import org.pcap4j.packet.RadiotapDataAntennaNoise;
+import org.pcap4j.packet.RadiotapDataAntennaSignal;
+import org.pcap4j.packet.RadiotapDataChannel;
+import org.pcap4j.packet.RadiotapDataDbAntennaNoise;
+import org.pcap4j.packet.RadiotapDataDbAntennaSignal;
+import org.pcap4j.packet.RadiotapDataDbTxAttenuation;
+import org.pcap4j.packet.RadiotapDataDbmTxPower;
+import org.pcap4j.packet.RadiotapDataFhss;
+import org.pcap4j.packet.RadiotapDataFlags;
+import org.pcap4j.packet.RadiotapDataLockQuality;
+import org.pcap4j.packet.RadiotapDataMcs;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
+import org.pcap4j.packet.RadiotapDataRate;
+import org.pcap4j.packet.RadiotapDataRxFlags;
+import org.pcap4j.packet.RadiotapDataTsft;
+import org.pcap4j.packet.RadiotapDataTxAttenuation;
+import org.pcap4j.packet.RadiotapDataVht;
+import org.pcap4j.packet.UnknownRadiotapData;
 import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
 
 /**
@@ -39,7 +39,7 @@ import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
  * @since pcap4j 1.6.5
  */
 public final class StaticRadiotapDataFieldFactory
-implements PacketFactory<RadiotapDataField, RadiotapPresentBitNumber> {
+implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
 
   private static final StaticRadiotapDataFieldFactory INSTANCE
     = new StaticRadiotapDataFieldFactory();
@@ -50,252 +50,252 @@ implements PacketFactory<RadiotapDataField, RadiotapPresentBitNumber> {
     instantiaters.put(
       RadiotapPresentBitNumber.TSFT, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapTsft.newInstance(rawData, offset, length);
+          return RadiotapDataTsft.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapTsft> getTargetClass() {
-          return RadiotapTsft.class;
+        public Class<RadiotapDataTsft> getTargetClass() {
+          return RadiotapDataTsft.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.FLAGS, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapFlags.newInstance(rawData, offset, length);
+          return RadiotapDataFlags.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapFlags> getTargetClass() {
-          return RadiotapFlags.class;
+        public Class<RadiotapDataFlags> getTargetClass() {
+          return RadiotapDataFlags.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.RATE, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapRate.newInstance(rawData, offset, length);
+          return RadiotapDataRate.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapRate> getTargetClass() {
-          return RadiotapRate.class;
+        public Class<RadiotapDataRate> getTargetClass() {
+          return RadiotapDataRate.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.CHANNEL, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapChannel.newInstance(rawData, offset, length);
+          return RadiotapDataChannel.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapChannel> getTargetClass() {
-          return RadiotapChannel.class;
+        public Class<RadiotapDataChannel> getTargetClass() {
+          return RadiotapDataChannel.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.FHSS, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapFhss.newInstance(rawData, offset, length);
+          return RadiotapDataFhss.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapFhss> getTargetClass() {
-          return RadiotapFhss.class;
+        public Class<RadiotapDataFhss> getTargetClass() {
+          return RadiotapDataFhss.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.ANTENNA_SIGNAL, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapAntennaSignal.newInstance(rawData, offset, length);
+          return RadiotapDataAntennaSignal.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapAntennaSignal> getTargetClass() {
-          return RadiotapAntennaSignal.class;
+        public Class<RadiotapDataAntennaSignal> getTargetClass() {
+          return RadiotapDataAntennaSignal.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.ANTENNA_NOISE, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapAntennaNoise.newInstance(rawData, offset, length);
+          return RadiotapDataAntennaNoise.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapAntennaNoise> getTargetClass() {
-          return RadiotapAntennaNoise.class;
+        public Class<RadiotapDataAntennaNoise> getTargetClass() {
+          return RadiotapDataAntennaNoise.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.LOCK_QUALITY, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapLockQuality.newInstance(rawData, offset, length);
+          return RadiotapDataLockQuality.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapLockQuality> getTargetClass() {
-          return RadiotapLockQuality.class;
+        public Class<RadiotapDataLockQuality> getTargetClass() {
+          return RadiotapDataLockQuality.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.TX_ATTENUATION, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapTxAttenuation.newInstance(rawData, offset, length);
+          return RadiotapDataTxAttenuation.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapTxAttenuation> getTargetClass() {
-          return RadiotapTxAttenuation.class;
+        public Class<RadiotapDataTxAttenuation> getTargetClass() {
+          return RadiotapDataTxAttenuation.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.DB_TX_ATTENUATION, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapDbTxAttenuation.newInstance(rawData, offset, length);
+          return RadiotapDataDbTxAttenuation.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapDbTxAttenuation> getTargetClass() {
-          return RadiotapDbTxAttenuation.class;
+        public Class<RadiotapDataDbTxAttenuation> getTargetClass() {
+          return RadiotapDataDbTxAttenuation.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.DBM_TX_POWER, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapDbmTxPower.newInstance(rawData, offset, length);
+          return RadiotapDataDbmTxPower.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapDbmTxPower> getTargetClass() {
-          return RadiotapDbmTxPower.class;
+        public Class<RadiotapDataDbmTxPower> getTargetClass() {
+          return RadiotapDataDbmTxPower.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.ANTENNA, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapAntenna.newInstance(rawData, offset, length);
+          return RadiotapDataAntenna.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapAntenna> getTargetClass() {
-          return RadiotapAntenna.class;
+        public Class<RadiotapDataAntenna> getTargetClass() {
+          return RadiotapDataAntenna.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.DB_ANTENNA_SIGNAL, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapDbAntennaSignal.newInstance(rawData, offset, length);
+          return RadiotapDataDbAntennaSignal.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapDbAntennaSignal> getTargetClass() {
-          return RadiotapDbAntennaSignal.class;
+        public Class<RadiotapDataDbAntennaSignal> getTargetClass() {
+          return RadiotapDataDbAntennaSignal.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.DB_ANTENNA_NOISE, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapDbAntennaNoise.newInstance(rawData, offset, length);
+          return RadiotapDataDbAntennaNoise.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapDbAntennaNoise> getTargetClass() {
-          return RadiotapDbAntennaNoise.class;
+        public Class<RadiotapDataDbAntennaNoise> getTargetClass() {
+          return RadiotapDataDbAntennaNoise.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.RX_FLAGS, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapRxFlags.newInstance(rawData, offset, length);
+          return RadiotapDataRxFlags.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapRxFlags> getTargetClass() {
-          return RadiotapRxFlags.class;
+        public Class<RadiotapDataRxFlags> getTargetClass() {
+          return RadiotapDataRxFlags.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.MCS, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapMcs.newInstance(rawData, offset, length);
+          return RadiotapDataMcs.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapMcs> getTargetClass() {
-          return RadiotapMcs.class;
+        public Class<RadiotapDataMcs> getTargetClass() {
+          return RadiotapDataMcs.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.A_MPDU_STATUS, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapAMpduStatus.newInstance(rawData, offset, length);
+          return RadiotapDataAMpduStatus.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapAMpduStatus> getTargetClass() {
-          return RadiotapAMpduStatus.class;
+        public Class<RadiotapDataAMpduStatus> getTargetClass() {
+          return RadiotapDataAMpduStatus.class;
         }
       }
     );
     instantiaters.put(
       RadiotapPresentBitNumber.VHT, new Instantiater() {
         @Override
-        public RadiotapDataField newInstance(
+        public RadiotapData newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return RadiotapVht.newInstance(rawData, offset, length);
+          return RadiotapDataVht.newInstance(rawData, offset, length);
         }
         @Override
-        public Class<RadiotapVht> getTargetClass() {
-          return RadiotapVht.class;
+        public Class<RadiotapDataVht> getTargetClass() {
+          return RadiotapDataVht.class;
         }
       }
     );
@@ -310,7 +310,7 @@ implements PacketFactory<RadiotapDataField, RadiotapPresentBitNumber> {
   }
 
   @Override
-  public RadiotapDataField newInstance(
+  public RadiotapData newInstance(
     byte[] rawData, int offset, int length, RadiotapPresentBitNumber number
   ) {
     if (rawData == null || number == null) {
@@ -328,19 +328,19 @@ implements PacketFactory<RadiotapDataField, RadiotapPresentBitNumber> {
         return instantiater.newInstance(rawData, offset, length);
       }
     } catch (IllegalRawDataException e) {
-      return IllegalRadiotapDataField.newInstance(rawData, offset, length);
+      return IllegalRadiotapData.newInstance(rawData, offset, length);
     }
 
     return newInstance(rawData, offset, length);
   }
 
   @Override
-  public RadiotapDataField newInstance(byte[] rawData, int offset, int length) {
-    return UnknownRadiotapDataField.newInstance(rawData, offset, length);
+  public RadiotapData newInstance(byte[] rawData, int offset, int length) {
+    return UnknownRadiotapData.newInstance(rawData, offset, length);
   }
 
   @Override
-  public Class<? extends RadiotapDataField> getTargetClass(RadiotapPresentBitNumber number) {
+  public Class<? extends RadiotapData> getTargetClass(RadiotapPresentBitNumber number) {
     if (number == null) {
       throw new NullPointerException("number must not be null.");
     }
@@ -349,17 +349,17 @@ implements PacketFactory<RadiotapDataField, RadiotapPresentBitNumber> {
   }
 
   @Override
-  public Class<? extends RadiotapDataField> getTargetClass() {
-    return UnknownRadiotapDataField.class;
+  public Class<? extends RadiotapData> getTargetClass() {
+    return UnknownRadiotapData.class;
   }
 
   private static interface Instantiater {
 
-    public RadiotapDataField newInstance(
+    public RadiotapData newInstance(
       byte [] rawData, int offset, int length
     ) throws IllegalRawDataException;
 
-    public Class<? extends RadiotapDataField> getTargetClass();
+    public Class<? extends RadiotapData> getTargetClass();
 
   }
 

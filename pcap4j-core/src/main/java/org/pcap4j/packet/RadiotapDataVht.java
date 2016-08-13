@@ -10,7 +10,7 @@ package org.pcap4j.packet;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.packet.namednumber.RadiotapVhtBandwidth;
 import org.pcap4j.util.ByteArrays;
 
@@ -21,7 +21,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapVht implements RadiotapDataField {
+public final class RadiotapDataVht implements RadiotapData {
 
   /**
    *
@@ -73,14 +73,14 @@ public final class RadiotapVht implements RadiotapDataField {
    * @return a new RadiotapVht object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapVht newInstance(
+  public static RadiotapDataVht newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapVht(rawData, offset, length);
+    return new RadiotapDataVht(rawData, offset, length);
   }
 
-  private RadiotapVht(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataVht(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapVht (")
@@ -141,7 +141,7 @@ public final class RadiotapVht implements RadiotapDataField {
     this.partialAid = ByteArrays.getShort(rawData, offset + 10, ByteOrder.LITTLE_ENDIAN);
   }
 
-  private RadiotapVht(Builder builder) {
+  private RadiotapDataVht(Builder builder) {
     if (
          builder == null
       || builder.bandwidth == null
@@ -684,7 +684,7 @@ public final class RadiotapVht implements RadiotapDataField {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    RadiotapVht other = (RadiotapVht) obj;
+    RadiotapDataVht other = (RadiotapDataVht) obj;
     if (!bandwidth.equals(other.bandwidth))
       return false;
     if (bandwidthKnown != other.bandwidthKnown)
@@ -793,7 +793,7 @@ public final class RadiotapVht implements RadiotapDataField {
      */
     public Builder() {}
 
-    private Builder(RadiotapVht obj) {
+    private Builder(RadiotapDataVht obj) {
       this.stbcKnown = obj.stbcKnown;
       this.txopPsNotAllowedKnown = obj.txopPsNotAllowedKnown;
       this.guardIntervalKnown = obj.guardIntervalKnown;
@@ -1109,8 +1109,8 @@ public final class RadiotapVht implements RadiotapDataField {
     /**
      * @return a new RadiotapVht object.
      */
-    public RadiotapVht build() {
-      return new RadiotapVht(this);
+    public RadiotapDataVht build() {
+      return new RadiotapDataVht(this);
     }
 
   }

@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -18,7 +18,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapFlags implements RadiotapDataField {
+public final class RadiotapDataFlags implements RadiotapData {
 
   /**
    *
@@ -47,14 +47,14 @@ public final class RadiotapFlags implements RadiotapDataField {
    * @return a new RadiotapFlags object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapFlags newInstance(
+  public static RadiotapDataFlags newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapFlags(rawData, offset, length);
+    return new RadiotapDataFlags(rawData, offset, length);
   }
 
-  private RadiotapFlags(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataFlags(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < 1) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapFlags (")
@@ -78,7 +78,7 @@ public final class RadiotapFlags implements RadiotapDataField {
     this.shortGuardInterval = (rawData[offset] & 0x80) != 0;
   }
 
-  private RadiotapFlags(Builder builder) {
+  private RadiotapDataFlags(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder is null.");
     }
@@ -236,7 +236,7 @@ public final class RadiotapFlags implements RadiotapDataField {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    RadiotapFlags other = (RadiotapFlags) obj;
+    RadiotapDataFlags other = (RadiotapDataFlags) obj;
     if (badFcs != other.badFcs)
       return false;
     if (cfp != other.cfp)
@@ -276,7 +276,7 @@ public final class RadiotapFlags implements RadiotapDataField {
      */
     public Builder() {}
 
-    private Builder(RadiotapFlags obj) {
+    private Builder(RadiotapDataFlags obj) {
       this.cfp = obj.cfp;
     }
 
@@ -355,8 +355,8 @@ public final class RadiotapFlags implements RadiotapDataField {
     /**
      * @return a new RadiotapFlags object.
      */
-    public RadiotapFlags build() {
-      return new RadiotapFlags(this);
+    public RadiotapDataFlags build() {
+      return new RadiotapDataFlags(this);
     }
 
   }

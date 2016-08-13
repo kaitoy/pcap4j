@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -18,7 +18,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapFhss implements RadiotapDataField {
+public final class RadiotapDataFhss implements RadiotapData {
 
   /**
    *
@@ -41,14 +41,14 @@ public final class RadiotapFhss implements RadiotapDataField {
    * @return a new RadiotapFhss object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapFhss newInstance(
+  public static RadiotapDataFhss newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapFhss(rawData, offset, length);
+    return new RadiotapDataFhss(rawData, offset, length);
   }
 
-  private RadiotapFhss(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataFhss(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapFhss (")
@@ -66,7 +66,7 @@ public final class RadiotapFhss implements RadiotapDataField {
     this.hopPattern = ByteArrays.getByte(rawData, offset + 1);
   }
 
-  private RadiotapFhss(Builder builder) {
+  private RadiotapDataFhss(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder is null.");
     }
@@ -152,7 +152,7 @@ public final class RadiotapFhss implements RadiotapDataField {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    RadiotapFhss other = (RadiotapFhss) obj;
+    RadiotapDataFhss other = (RadiotapDataFhss) obj;
     if (hopPattern != other.hopPattern)
       return false;
     if (hopSet != other.hopSet)
@@ -174,7 +174,7 @@ public final class RadiotapFhss implements RadiotapDataField {
      */
     public Builder() {}
 
-    private Builder(RadiotapFhss obj) {
+    private Builder(RadiotapDataFhss obj) {
       this.hopSet = obj.hopSet;
       this.hopPattern = obj.hopPattern;
     }
@@ -200,8 +200,8 @@ public final class RadiotapFhss implements RadiotapDataField {
     /**
      * @return a new RadiotapFhss object.
      */
-    public RadiotapFhss build() {
-      return new RadiotapFhss(this);
+    public RadiotapDataFhss build() {
+      return new RadiotapDataFhss(this);
     }
 
   }

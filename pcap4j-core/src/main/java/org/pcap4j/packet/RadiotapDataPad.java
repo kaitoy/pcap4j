@@ -9,7 +9,7 @@ package org.pcap4j.packet;
 
 import java.util.Arrays;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -17,7 +17,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapDataPad implements RadiotapDataField {
+public final class RadiotapDataPad implements RadiotapData {
 
   /**
    *
@@ -84,9 +84,9 @@ public final class RadiotapDataPad implements RadiotapDataField {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Data Pad: ")
+    sb.append(indent).append("Pad: ")
       .append(ls)
-      .append(indent).append("  Pad: ")
+      .append(indent).append("  data: ")
       .append(ByteArrays.toHexString(pad, " "))
       .append(ls);
 

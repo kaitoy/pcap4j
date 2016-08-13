@@ -7,28 +7,30 @@
 
 package org.pcap4j.packet;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import java.nio.ByteOrder;
+
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
- * Radiotap dB antenna signal field.
- * RF signal power at the antenna, decibel difference from an arbitrary, fixed reference.
- * This field contains a single unsigned 8-bit value.
+ * Radiotap TX attenuation field.
+ * Transmit power expressed as unitless distance from max power set at factory calibration.
+ * 0 is max power. Monotonically nondecreasing with lower power levels.
  *
- * @see <a href="http://www.radiotap.org/defined-fields/dB%20antenna%20signal">Radiotap</a>
+ * @see <a href="http://www.radiotap.org/defined-fields/TX%20attenuation">Radiotap</a>
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapDbAntennaSignal implements RadiotapDataField {
+public final class RadiotapDataTxAttenuation implements RadiotapData {
 
   /**
    *
    */
-  private static final long serialVersionUID = 6965646323859387882L;
+  private static final long serialVersionUID = 8847948493831117966L;
 
-  private static final int LENGTH = 1;
+  private static final int LENGTH = 2;
 
-  private final byte antennaSignal;
+  private final short txAttenuation;
 
   /**
    * A static factory method.
@@ -38,20 +40,20 @@ public final class RadiotapDbAntennaSignal implements RadiotapDataField {
    * @param rawData rawData
    * @param offset offset
    * @param length length
-   * @return a new RadiotapDbAntennaSignal object.
+   * @return a new RadiotapTxAttenuation object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapDbAntennaSignal newInstance(
+  public static RadiotapDataTxAttenuation newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapDbAntennaSignal(rawData, offset, length);
+    return new RadiotapDataTxAttenuation(rawData, offset, length);
   }
 
-  private RadiotapDbAntennaSignal(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataTxAttenuation(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
-      sb.append("The data is too short to build a RadiotapDbAntennaSignal (")
+      sb.append("The data is too short to build a RadiotapTxAttenuation (")
         .append(LENGTH)
         .append(" bytes). data: ")
         .append(ByteArrays.toHexString(rawData, " "))
@@ -62,26 +64,26 @@ public final class RadiotapDbAntennaSignal implements RadiotapDataField {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.antennaSignal = ByteArrays.getByte(rawData, offset);
+    this.txAttenuation = ByteArrays.getShort(rawData, offset, ByteOrder.LITTLE_ENDIAN);
   }
 
-  private RadiotapDbAntennaSignal(Builder builder) {
+  private RadiotapDataTxAttenuation(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder is null.");
     }
 
-    this.antennaSignal = builder.antennaSignal;
+    this.txAttenuation = builder.txAttenuation;
   }
 
   /**
-   * @return antennaSignal (unit: dB)
+   * @return txAttenuation
    */
-  public byte getAntennaSignal() { return antennaSignal; }
+  public short getTxAttenuation() { return txAttenuation; }
 
   /**
-   * @return antennaSignal (unit: dB)
+   * @return txAttenuation
    */
-  public int getAntennaSignalAsInt() { return antennaSignal & 0xFF; }
+  public int getTxAttenuationAsInt() { return txAttenuation & 0xFFFF; }
 
   @Override
   public int length() {
@@ -90,7 +92,7 @@ public final class RadiotapDbAntennaSignal implements RadiotapDataField {
 
   @Override
   public byte[] getRawData() {
-    return ByteArrays.toByteArray(antennaSignal);
+    return ByteArrays.toByteArray(txAttenuation, ByteOrder.LITTLE_ENDIAN);
   }
 
   /**
@@ -108,11 +110,10 @@ public final class RadiotapDbAntennaSignal implements RadiotapDataField {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("dB antenna signal: ")
+    sb.append(indent).append("TX attenuation: ")
       .append(ls)
-      .append(indent).append("  Antenna signal: ")
-      .append(getAntennaSignalAsInt())
-      .append(" dB")
+      .append(indent).append("  TX attenuation: ")
+      .append(getTxAttenuationAsInt())
       .append(ls);
 
     return sb.toString();
@@ -120,15 +121,15 @@ public final class RadiotapDbAntennaSignal implements RadiotapDataField {
 
   @Override
   public int hashCode() {
-    return antennaSignal;
+    return txAttenuation;
   }
 
   @Override
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    RadiotapDbAntennaSignal other = (RadiotapDbAntennaSignal) obj;
-    return antennaSignal == other.antennaSignal;
+    RadiotapDataTxAttenuation other = (RadiotapDataTxAttenuation) obj;
+    return txAttenuation == other.txAttenuation;
   }
 
   /**
@@ -137,31 +138,31 @@ public final class RadiotapDbAntennaSignal implements RadiotapDataField {
    */
   public static final class Builder {
 
-    private byte antennaSignal;
+    private short txAttenuation;
 
     /**
      *
      */
     public Builder() {}
 
-    private Builder(RadiotapDbAntennaSignal obj) {
-      this.antennaSignal = obj.antennaSignal;
+    private Builder(RadiotapDataTxAttenuation obj) {
+      this.txAttenuation = obj.txAttenuation;
     }
 
     /**
-     * @param antennaSignal antennaSignal
+     * @param txAttenuation txAttenuation
      * @return this Builder object for method chaining.
      */
-    public Builder antennaSignal(byte antennaSignal) {
-      this.antennaSignal = antennaSignal;
+    public Builder txAttenuation(short txAttenuation) {
+      this.txAttenuation = txAttenuation;
       return this;
     }
 
     /**
-     * @return a new RadiotapDbAntennaSignal object.
+     * @return a new RadiotapTxAttenuation object.
      */
-    public RadiotapDbAntennaSignal build() {
-      return new RadiotapDbAntennaSignal(this);
+    public RadiotapDataTxAttenuation build() {
+      return new RadiotapDataTxAttenuation(this);
     }
 
   }

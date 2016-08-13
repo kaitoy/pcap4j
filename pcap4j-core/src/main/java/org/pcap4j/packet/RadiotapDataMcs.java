@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -17,7 +17,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapMcs implements RadiotapDataField {
+public final class RadiotapDataMcs implements RadiotapData {
 
   /**
    *
@@ -54,14 +54,14 @@ public final class RadiotapMcs implements RadiotapDataField {
    * @return a new RadiotapMcs object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapMcs newInstance(
+  public static RadiotapDataMcs newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapMcs(rawData, offset, length);
+    return new RadiotapDataMcs(rawData, offset, length);
   }
 
-  private RadiotapMcs(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataMcs(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapMcs (")
@@ -119,7 +119,7 @@ public final class RadiotapMcs implements RadiotapDataField {
     this.mcsRateIndex = rawData[offset + 2];
   }
 
-  private RadiotapMcs(Builder builder) {
+  private RadiotapDataMcs(Builder builder) {
     if (
          builder == null
       || builder.bandwidth == null
@@ -402,7 +402,7 @@ public final class RadiotapMcs implements RadiotapDataField {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    RadiotapMcs other = (RadiotapMcs) obj;
+    RadiotapDataMcs other = (RadiotapDataMcs) obj;
     if (bandwidth != other.bandwidth)
       return false;
     if (bandwidthKnown != other.bandwidthKnown)
@@ -463,7 +463,7 @@ public final class RadiotapMcs implements RadiotapDataField {
      */
     public Builder() {}
 
-    private Builder(RadiotapMcs obj) {
+    private Builder(RadiotapDataMcs obj) {
       this.bandwidthKnown = obj.bandwidthKnown;
       this.mcsIndexKnown = obj.mcsIndexKnown;
       this.guardIntervalKnown = obj.guardIntervalKnown;
@@ -619,8 +619,8 @@ public final class RadiotapMcs implements RadiotapDataField {
     /**
      * @return a new RadiotapMcs object.
      */
-    public RadiotapMcs build() {
-      return new RadiotapMcs(this);
+    public RadiotapDataMcs build() {
+      return new RadiotapDataMcs(this);
     }
 
   }

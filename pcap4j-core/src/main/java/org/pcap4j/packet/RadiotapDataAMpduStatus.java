@@ -9,7 +9,7 @@ package org.pcap4j.packet;
 
 import java.nio.ByteOrder;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -19,7 +19,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapAMpduStatus implements RadiotapDataField {
+public final class RadiotapDataAMpduStatus implements RadiotapData {
 
   /**
    *
@@ -60,14 +60,14 @@ public final class RadiotapAMpduStatus implements RadiotapDataField {
    * @return a new RadiotapAMpduStatus object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapAMpduStatus newInstance(
+  public static RadiotapDataAMpduStatus newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapAMpduStatus(rawData, offset, length);
+    return new RadiotapDataAMpduStatus(rawData, offset, length);
   }
 
-  private RadiotapAMpduStatus(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataAMpduStatus(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapAMpduStatus (")
@@ -102,7 +102,7 @@ public final class RadiotapAMpduStatus implements RadiotapDataField {
     this.reserved = rawData[offset + 7];
   }
 
-  private RadiotapAMpduStatus(Builder builder) {
+  private RadiotapDataAMpduStatus(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder is null.");
     }
@@ -415,7 +415,7 @@ public final class RadiotapAMpduStatus implements RadiotapDataField {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    RadiotapAMpduStatus other = (RadiotapAMpduStatus) obj;
+    RadiotapDataAMpduStatus other = (RadiotapDataAMpduStatus) obj;
     if (delimiterCrcError != other.delimiterCrcError)
       return false;
     if (delimiterCrcValue != other.delimiterCrcValue)
@@ -488,7 +488,7 @@ public final class RadiotapAMpduStatus implements RadiotapDataField {
      */
     public Builder() {}
 
-    private Builder(RadiotapAMpduStatus obj) {
+    private Builder(RadiotapDataAMpduStatus obj) {
       this.referenceNumber = obj.referenceNumber;
       this.driverReportsZeroLengthSubframes = obj.driverReportsZeroLengthSubframes;
       this.zeroLengthSubframe = obj.zeroLengthSubframe;
@@ -684,8 +684,8 @@ public final class RadiotapAMpduStatus implements RadiotapDataField {
     /**
      * @return a new RadiotapAMpduStatus object.
      */
-    public RadiotapAMpduStatus build() {
-      return new RadiotapAMpduStatus(this);
+    public RadiotapDataAMpduStatus build() {
+      return new RadiotapDataAMpduStatus(this);
     }
 
   }

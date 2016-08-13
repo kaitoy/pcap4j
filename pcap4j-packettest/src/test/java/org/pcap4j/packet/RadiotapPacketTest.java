@@ -15,9 +15,9 @@ import java.util.List;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.pcap4j.packet.RadiotapMcs.Bandwidth;
-import org.pcap4j.packet.RadiotapMcs.HtFormat;
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapDataMcs.Bandwidth;
+import org.pcap4j.packet.RadiotapDataMcs.HtFormat;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.packet.RadiotapPacket.RadiotapHeader;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
@@ -36,13 +36,13 @@ public class RadiotapPacketTest extends AbstractPacketTest {
   private final byte version;
   private final byte pad;
   private final List<RadiotapPresentBitmask> presentBitmasks;
-  private final List<RadiotapDataField> dataFields;
+  private final List<RadiotapData> dataFields;
 
   public RadiotapPacketTest() {
     this.version = 0;
     this.pad = 22;
     this.presentBitmasks = new ArrayList<RadiotapPresentBitmask>();
-    this.dataFields = new ArrayList<RadiotapDataField>();
+    this.dataFields = new ArrayList<RadiotapData>();
 
     List<RadiotapPresentBitNumber> bitNumbers = new ArrayList<RadiotapPresentBitNumber>();
     bitNumbers.add(RadiotapPresentBitNumber.TSFT);
@@ -69,13 +69,13 @@ public class RadiotapPacketTest extends AbstractPacketTest {
           .bitNumbers(bitNumbers);
     presentBitmasks.add(rpb.build());
 
-    RadiotapTsft.Builder tsft
-      = new RadiotapTsft.Builder()
+    RadiotapDataTsft.Builder tsft
+      = new RadiotapDataTsft.Builder()
           .macTimestamp(new BigInteger("12345678912345678910"));
     dataFields.add(tsft.build());
 
-    RadiotapFlags.Builder flags
-      = new RadiotapFlags.Builder()
+    RadiotapDataFlags.Builder flags
+      = new RadiotapDataFlags.Builder()
           .cfp(true)
           .shortPreamble(true)
           .wepEncrypted(false)
@@ -86,13 +86,13 @@ public class RadiotapPacketTest extends AbstractPacketTest {
           .shortGuardInterval(false);
     dataFields.add(flags.build());
 
-    RadiotapRate.Builder rate
-      = new RadiotapRate.Builder()
+    RadiotapDataRate.Builder rate
+      = new RadiotapDataRate.Builder()
           .rate((byte) 111);
     dataFields.add(rate.build());
 
-    RadiotapChannel.Builder channel
-      = new RadiotapChannel.Builder()
+    RadiotapDataChannel.Builder channel
+      = new RadiotapDataChannel.Builder()
           .frequency((short) 12345)
           .lsbOfFlags(true)
           .secondLsbOfFlags(true)
@@ -112,59 +112,59 @@ public class RadiotapPacketTest extends AbstractPacketTest {
           .quarterRate(false);
     dataFields.add(channel.build());
 
-    RadiotapFhss.Builder fhss
-      = new RadiotapFhss.Builder()
+    RadiotapDataFhss.Builder fhss
+      = new RadiotapDataFhss.Builder()
           .hopSet((byte) 0xaa)
           .hopPattern((byte) 0xbb);
     dataFields.add(fhss.build());
 
-    RadiotapAntennaSignal.Builder antennaSignal
-      = new RadiotapAntennaSignal.Builder()
+    RadiotapDataAntennaSignal.Builder antennaSignal
+      = new RadiotapDataAntennaSignal.Builder()
           .antennaSignal((byte) 0xcc);
     dataFields.add(antennaSignal.build());
 
-    RadiotapAntennaNoise.Builder antennaNoise
-      = new RadiotapAntennaNoise.Builder()
+    RadiotapDataAntennaNoise.Builder antennaNoise
+      = new RadiotapDataAntennaNoise.Builder()
           .antennaNoise((byte) 0xdd);
     dataFields.add(antennaNoise.build());
 
-    RadiotapLockQuality.Builder lockQuality
-      = new RadiotapLockQuality.Builder()
+    RadiotapDataLockQuality.Builder lockQuality
+      = new RadiotapDataLockQuality.Builder()
           .lockQuality((short) 0xabcd);
     dataFields.add(lockQuality.build());
 
-    RadiotapTxAttenuation.Builder txAttenuation
-      = new RadiotapTxAttenuation.Builder()
+    RadiotapDataTxAttenuation.Builder txAttenuation
+      = new RadiotapDataTxAttenuation.Builder()
           .txAttenuation((short) 0xdcba);
     dataFields.add(txAttenuation.build());
 
-    RadiotapDbTxAttenuation.Builder dbTxAttenuation
-      = new RadiotapDbTxAttenuation.Builder()
+    RadiotapDataDbTxAttenuation.Builder dbTxAttenuation
+      = new RadiotapDataDbTxAttenuation.Builder()
           .txAttenuation((short) 0xaaff);
     dataFields.add(dbTxAttenuation.build());
 
-    RadiotapDbmTxPower.Builder dbmTxPower
-      = new RadiotapDbmTxPower.Builder()
+    RadiotapDataDbmTxPower.Builder dbmTxPower
+      = new RadiotapDataDbmTxPower.Builder()
           .txPower((byte) 0xaf);
     dataFields.add(dbmTxPower.build());
 
-    RadiotapAntenna.Builder antenna
-      = new RadiotapAntenna.Builder()
+    RadiotapDataAntenna.Builder antenna
+      = new RadiotapDataAntenna.Builder()
           .antenna((byte) 0xfa);
     dataFields.add(antenna.build());
 
-    RadiotapDbAntennaSignal.Builder dbAntennaSignal
-      = new RadiotapDbAntennaSignal.Builder()
+    RadiotapDataDbAntennaSignal.Builder dbAntennaSignal
+      = new RadiotapDataDbAntennaSignal.Builder()
           .antennaSignal((byte) 111);
     dataFields.add(dbAntennaSignal.build());
 
-    RadiotapDbAntennaNoise.Builder dbAntennaNoise
-      = new RadiotapDbAntennaNoise.Builder()
+    RadiotapDataDbAntennaNoise.Builder dbAntennaNoise
+      = new RadiotapDataDbAntennaNoise.Builder()
           .antennaNoise((byte) 100);
     dataFields.add(dbAntennaNoise.build());
 
-    RadiotapRxFlags.Builder rxFlags
-      = new RadiotapRxFlags.Builder()
+    RadiotapDataRxFlags.Builder rxFlags
+      = new RadiotapDataRxFlags.Builder()
           .lsb(true)
           .badPlcpCrc(false)
           .thirdLsb(true)
@@ -183,8 +183,8 @@ public class RadiotapPacketTest extends AbstractPacketTest {
           .sixteenthLsb(true);
     dataFields.add(rxFlags.build());
 
-    RadiotapMcs.Builder mcs
-      = new RadiotapMcs.Builder()
+    RadiotapDataMcs.Builder mcs
+      = new RadiotapDataMcs.Builder()
           .bandwidthKnown(true)
           .mcsIndexKnown(true)
           .guardIntervalKnown(true)
@@ -207,8 +207,8 @@ public class RadiotapPacketTest extends AbstractPacketTest {
           .pad(new byte[] { 1, 2, 3});
     dataFields.add(dataPad.build());
 
-    RadiotapAMpduStatus.Builder aMpduStatus
-      = new RadiotapAMpduStatus.Builder()
+    RadiotapDataAMpduStatus.Builder aMpduStatus
+      = new RadiotapDataAMpduStatus.Builder()
           .referenceNumber(987654321)
           .driverReportsZeroLengthSubframes(false)
           .zeroLengthSubframe(false)
@@ -230,8 +230,8 @@ public class RadiotapPacketTest extends AbstractPacketTest {
           .reserved((byte) 99);
     dataFields.add(aMpduStatus.build());
 
-    RadiotapVht.Builder vht
-      = new RadiotapVht.Builder()
+    RadiotapDataVht.Builder vht
+      = new RadiotapDataVht.Builder()
           .stbcKnown(true)
           .txopPsNotAllowedKnown(true)
           .guardIntervalKnown(true)

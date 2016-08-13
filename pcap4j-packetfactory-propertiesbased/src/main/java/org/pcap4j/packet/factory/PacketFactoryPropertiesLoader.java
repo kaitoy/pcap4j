@@ -19,7 +19,7 @@ import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
 import org.pcap4j.packet.IpV6SimpleFlowLabel;
 import org.pcap4j.packet.IpV6SimpleTrafficClass;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.UnknownIpV4InternetTimestampOptionData;
 import org.pcap4j.packet.UnknownIpV4Option;
@@ -27,7 +27,7 @@ import org.pcap4j.packet.UnknownIpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.UnknownIpV6Option;
 import org.pcap4j.packet.UnknownIpV6RoutingData;
 import org.pcap4j.packet.UnknownPacket;
-import org.pcap4j.packet.UnknownRadiotapDataField;
+import org.pcap4j.packet.UnknownRadiotapData;
 import org.pcap4j.packet.UnknownTcpOption;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
@@ -142,7 +142,7 @@ public final class PacketFactoryPropertiesLoader {
    *
    */
   public static final String RADIOTAP_DATA_FIELD_CLASS_KEY_BASE
-    = RadiotapDataField.class.getName() + ".classFor.";
+    = RadiotapData.class.getName() + ".classFor.";
 
   /**
    *
@@ -452,14 +452,14 @@ public final class PacketFactoryPropertiesLoader {
    * @param num num
    * @return a class which implements RadiotapDataField for a specified type.
    */
-  public Class<? extends RadiotapDataField>
+  public Class<? extends RadiotapData>
   getRadiotapDataFieldClass(RadiotapPresentBitNumber num) {
     StringBuilder sb = new StringBuilder(120);
     sb.append(RADIOTAP_DATA_FIELD_CLASS_KEY_BASE)
       .append(num.getClass().getName())
       .append(".")
       .append(num.valueAsString());
-    return loader.<RadiotapDataField>getClass(
+    return loader.<RadiotapData>getClass(
              sb.toString(),
              getUnknownRadiotapDataFieldClass()
            );
@@ -469,11 +469,11 @@ public final class PacketFactoryPropertiesLoader {
    *
    * @return a class which implements RadiotapDataField for an unknown type.
    */
-  public Class<? extends RadiotapDataField>
+  public Class<? extends RadiotapData>
   getUnknownRadiotapDataFieldClass() {
-    return loader.<RadiotapDataField>getClass(
+    return loader.<RadiotapData>getClass(
              UNKNOWN_RADIOTAP_DATA_FIELD_KEY,
-             UnknownRadiotapDataField.class
+             UnknownRadiotapData.class
            );
   }
 

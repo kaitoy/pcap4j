@@ -7,28 +7,31 @@
 
 package org.pcap4j.packet;
 
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import java.nio.ByteOrder;
+
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
- * Radiotap dBm TX power field.
- * Transmit power expressed as dBm (decibels from a 1 milliwatt reference).
- * This is the absolute power level measured at the antenna port.
+ * Radiotap Lock quality field.
+ * Quality of Barker code lock.
+ * Unitless. Monotonically nondecreasing with "better" lock strength.
+ * Called "Signal Quality" in datasheets.
  *
- * @see <a href="http://www.radiotap.org/defined-fields/dBm%20TX%20power">Radiotap</a>
+ * @see <a href="http://www.radiotap.org/defined-fields/Lock%20quality">Radiotap</a>
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapDbmTxPower implements RadiotapDataField {
+public final class RadiotapDataLockQuality implements RadiotapData {
 
   /**
    *
    */
-  private static final long serialVersionUID = -7046612192280202993L;
+  private static final long serialVersionUID = -7889325752343077807L;
 
-  private static final int LENGTH = 1;
+  private static final int LENGTH = 2;
 
-  private final byte txPower;
+  private final short lockQuality;
 
   /**
    * A static factory method.
@@ -38,22 +41,22 @@ public final class RadiotapDbmTxPower implements RadiotapDataField {
    * @param rawData rawData
    * @param offset offset
    * @param length length
-   * @return a new RadiotapDbmTxPower object.
+   * @return a new RadiotapLockQuality object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapDbmTxPower newInstance(
+  public static RadiotapDataLockQuality newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapDbmTxPower(rawData, offset, length);
+    return new RadiotapDataLockQuality(rawData, offset, length);
   }
 
-  private RadiotapDbmTxPower(
+  private RadiotapDataLockQuality(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
-      sb.append("The data is too short to build a RadiotapDbmTxPower (")
+      sb.append("The data is too short to build a RadiotapLockQuality (")
         .append(LENGTH)
         .append(" bytes). data: ")
         .append(ByteArrays.toHexString(rawData, " "))
@@ -64,26 +67,26 @@ public final class RadiotapDbmTxPower implements RadiotapDataField {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.txPower = ByteArrays.getByte(rawData, offset);
+    this.lockQuality = ByteArrays.getShort(rawData, offset, ByteOrder.LITTLE_ENDIAN);
   }
 
-  private RadiotapDbmTxPower(Builder builder) {
+  private RadiotapDataLockQuality(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder is null.");
     }
 
-    this.txPower = builder.txPower;
+    this.lockQuality = builder.lockQuality;
   }
 
   /**
-   * @return txPower (unit: dBm)
+   * @return lockQuality
    */
-  public byte getTxPower() { return txPower; }
+  public short getLockQuality() { return lockQuality; }
 
   /**
-   * @return txPower (unit: dBm)
+   * @return lockQuality
    */
-  public int getTxPowerAsInt() { return txPower; }
+  public int getLockQualityAsInt() { return lockQuality & 0xFFFF; }
 
   @Override
   public int length() {
@@ -92,7 +95,7 @@ public final class RadiotapDbmTxPower implements RadiotapDataField {
 
   @Override
   public byte[] getRawData() {
-    return ByteArrays.toByteArray(txPower);
+    return ByteArrays.toByteArray(lockQuality, ByteOrder.LITTLE_ENDIAN);
   }
 
   /**
@@ -110,11 +113,10 @@ public final class RadiotapDbmTxPower implements RadiotapDataField {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("dBm TX power: ")
+    sb.append(indent).append("Lock quality: ")
       .append(ls)
-      .append(indent).append("  TX power: ")
-      .append(txPower)
-      .append(" dBm")
+      .append(indent).append("  Lock quality: ")
+      .append(getLockQualityAsInt())
       .append(ls);
 
     return sb.toString();
@@ -122,15 +124,15 @@ public final class RadiotapDbmTxPower implements RadiotapDataField {
 
   @Override
   public int hashCode() {
-    return txPower;
+    return lockQuality;
   }
 
   @Override
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    RadiotapDbmTxPower other = (RadiotapDbmTxPower) obj;
-    return txPower == other.txPower;
+    RadiotapDataLockQuality other = (RadiotapDataLockQuality) obj;
+    return lockQuality == other.lockQuality;
   }
 
   /**
@@ -139,31 +141,31 @@ public final class RadiotapDbmTxPower implements RadiotapDataField {
    */
   public static final class Builder {
 
-    private byte txPower;
+    private short lockQuality;
 
     /**
      *
      */
     public Builder() {}
 
-    private Builder(RadiotapDbmTxPower obj) {
-      this.txPower = obj.txPower;
+    private Builder(RadiotapDataLockQuality obj) {
+      this.lockQuality = obj.lockQuality;
     }
 
     /**
-     * @param txPower txPower
+     * @param lockQuality lockQuality
      * @return this Builder object for method chaining.
      */
-    public Builder txPower(byte txPower) {
-      this.txPower = txPower;
+    public Builder lockQuality(short lockQuality) {
+      this.lockQuality = lockQuality;
       return this;
     }
 
     /**
-     * @return a new RadiotapDbmTxPower object.
+     * @return a new RadiotapLockQuality object.
      */
-    public RadiotapDbmTxPower build() {
-      return new RadiotapDbmTxPower(this);
+    public RadiotapDataLockQuality build() {
+      return new RadiotapDataLockQuality(this);
     }
 
   }

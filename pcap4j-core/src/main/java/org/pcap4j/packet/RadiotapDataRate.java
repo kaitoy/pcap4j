@@ -7,30 +7,27 @@
 
 package org.pcap4j.packet;
 
-import java.nio.ByteOrder;
-
-import org.pcap4j.packet.RadiotapPacket.RadiotapDataField;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
- * Radiotap dB TX attenuation field.
- * Transmit power expressed as decibel distance from max power set at factory calibration.
- * 0 is max power. Monotonically nondecreasing with lower power levels.
+ * Radiotap Rate field.
+ * TX/RX data rate.
  *
- * @see <a href="http://www.radiotap.org/defined-fields/dB%20TX%20attenuation">Radiotap</a>
+ * @see <a href="http://www.radiotap.org/defined-fields/Rate">Radiotap</a>
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class RadiotapDbTxAttenuation implements RadiotapDataField {
+public final class RadiotapDataRate implements RadiotapData {
 
   /**
    *
    */
-  private static final long serialVersionUID = -3813324361353987917L;
+  private static final long serialVersionUID = 3381222627210403160L;
 
-  private static final int LENGTH = 2;
+  private static final int LENGTH = 1;
 
-  private final short txAttenuation;
+  private final byte rate;
 
   /**
    * A static factory method.
@@ -40,20 +37,20 @@ public final class RadiotapDbTxAttenuation implements RadiotapDataField {
    * @param rawData rawData
    * @param offset offset
    * @param length length
-   * @return a new RadiotapDbTxAttenuation object.
+   * @return a new RadiotapRate object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapDbTxAttenuation newInstance(
+  public static RadiotapDataRate newInstance(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new RadiotapDbTxAttenuation(rawData, offset, length);
+    return new RadiotapDataRate(rawData, offset, length);
   }
 
-  private RadiotapDbTxAttenuation(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataRate(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
-      sb.append("The data is too short to build a RadiotapDbTxAttenuation (")
+      sb.append("The data is too short to build a RadiotapRate (")
         .append(LENGTH)
         .append(" bytes). data: ")
         .append(ByteArrays.toHexString(rawData, " "))
@@ -64,26 +61,26 @@ public final class RadiotapDbTxAttenuation implements RadiotapDataField {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.txAttenuation = ByteArrays.getShort(rawData, offset, ByteOrder.LITTLE_ENDIAN);
+    this.rate = ByteArrays.getByte(rawData, offset);
   }
 
-  private RadiotapDbTxAttenuation(Builder builder) {
+  private RadiotapDataRate(Builder builder) {
     if (builder == null) {
       throw new NullPointerException("builder is null.");
     }
 
-    this.txAttenuation = builder.txAttenuation;
+    this.rate = builder.rate;
   }
 
   /**
-   * @return txAttenuation (unit: dB)
+   * @return rate (unit: 500 Kbps)
    */
-  public short getTxAttenuation() { return txAttenuation; }
+  public byte getRate() { return rate; }
 
   /**
-   * @return txAttenuation (unit: dB)
+   * @return rate (unit: 500 Kbps)
    */
-  public int getTxAttenuationAsInt() { return txAttenuation & 0xFFFF; }
+  public int getRateAsInt() { return rate & 0xFF; }
 
   @Override
   public int length() {
@@ -92,7 +89,7 @@ public final class RadiotapDbTxAttenuation implements RadiotapDataField {
 
   @Override
   public byte[] getRawData() {
-    return ByteArrays.toByteArray(txAttenuation, ByteOrder.LITTLE_ENDIAN);
+    return ByteArrays.toByteArray(rate);
   }
 
   /**
@@ -110,11 +107,11 @@ public final class RadiotapDbTxAttenuation implements RadiotapDataField {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("dB TX attenuation: ")
+    sb.append(indent).append("Rate: ")
       .append(ls)
-      .append(indent).append("  TX attenuation: ")
-      .append(getTxAttenuationAsInt())
-      .append(" dB")
+      .append(indent).append("  Rate: ")
+      .append(getRateAsInt() * 500)
+      .append(" Kbps")
       .append(ls);
 
     return sb.toString();
@@ -122,15 +119,15 @@ public final class RadiotapDbTxAttenuation implements RadiotapDataField {
 
   @Override
   public int hashCode() {
-    return txAttenuation;
+    return rate;
   }
 
   @Override
   public boolean equals(Object obj) {
     if (obj == this) { return true; }
     if (!this.getClass().isInstance(obj)) { return false; }
-    RadiotapDbTxAttenuation other = (RadiotapDbTxAttenuation) obj;
-    return txAttenuation == other.txAttenuation;
+    RadiotapDataRate other = (RadiotapDataRate) obj;
+    return rate == other.rate;
   }
 
   /**
@@ -139,31 +136,31 @@ public final class RadiotapDbTxAttenuation implements RadiotapDataField {
    */
   public static final class Builder {
 
-    private short txAttenuation;
+    private byte rate;
 
     /**
      *
      */
     public Builder() {}
 
-    private Builder(RadiotapDbTxAttenuation obj) {
-      this.txAttenuation = obj.txAttenuation;
+    private Builder(RadiotapDataRate obj) {
+      this.rate = obj.rate;
     }
 
     /**
-     * @param txAttenuation txAttenuation
+     * @param rate rate
      * @return this Builder object for method chaining.
      */
-    public Builder txAttenuation(short txAttenuation) {
-      this.txAttenuation = txAttenuation;
+    public Builder rate(byte rate) {
+      this.rate = rate;
       return this;
     }
 
     /**
-     * @return a new RadiotapDbTxAttenuation object.
+     * @return a new RadiotapRate object.
      */
-    public RadiotapDbTxAttenuation build() {
-      return new RadiotapDbTxAttenuation(this);
+    public RadiotapDataRate build() {
+      return new RadiotapDataRate(this);
     }
 
   }
