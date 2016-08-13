@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.6.5 (12-Aug-2016)
+===========================
+### New Features ###
 * Support LLC and SNAP.
 * Support Radiotap.
 
