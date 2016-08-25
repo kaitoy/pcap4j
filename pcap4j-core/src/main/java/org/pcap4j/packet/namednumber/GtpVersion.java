@@ -13,8 +13,9 @@ import java.util.Map;
 /**
  * GTP version
  *
- * @author waveform
- * @since pcap4j 0.9.11
+ * @see <a href="http://www.etsi.org/deliver/etsi_ts/129000_129099/129060/12.06.00_60/ts_129060v120600p.pdf">ETSI TS 129 060 V12.6.0</a>
+ * @author Waveform
+ * @since pcap4j 1.6.6
  */
 public final class GtpVersion extends NamedNumber<Byte, GtpVersion> {
 
@@ -24,13 +25,13 @@ public final class GtpVersion extends NamedNumber<Byte, GtpVersion> {
   private static final long serialVersionUID = -6737808159892354431L;
 
   /**
-   * Version 1 [GTP-U , GTP-C , GTP']
+   * Version 1: 1
    */
   public static final GtpVersion GTPv1
     = new GtpVersion((byte)1, "GTPv1");
 
   /**
-   * Version 2 [GTP-C , GTP']
+   * Version 2: 2
    */
   public static final GtpVersion GTPv2
     = new GtpVersion((byte)2, "GTPv2");
@@ -44,7 +45,6 @@ public final class GtpVersion extends NamedNumber<Byte, GtpVersion> {
   }
 
   /**
-   *
    * @param value value
    * @param name name
    */
@@ -53,7 +53,6 @@ public final class GtpVersion extends NamedNumber<Byte, GtpVersion> {
   }
 
   /**
-   *
    * @param value value
    * @return a GtpVersion object.
    */
@@ -67,7 +66,6 @@ public final class GtpVersion extends NamedNumber<Byte, GtpVersion> {
   }
 
   /**
-   *
    * @param version version
    * @return a GtpVersion object.
    */

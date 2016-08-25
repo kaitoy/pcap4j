@@ -11,10 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * GTP version
+ * GTP code
  *
- * @author waveform
- *
+ * @see <a href="http://www.etsi.org/deliver/etsi_ts/129000_129099/129060/12.06.00_60/ts_129060v120600p.pdf">ETSI TS 129 060 V12.6.0</a>
+ * @author Waveform
+ * @since pcap4j 1.6.6
  */
 public final class GtpCode extends NamedNumber<Byte, GtpCode> {
 

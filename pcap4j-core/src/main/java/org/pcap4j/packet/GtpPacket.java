@@ -18,8 +18,11 @@ import org.pcap4j.packet.namednumber.GtpVersion;
 import org.pcap4j.util.ByteArrays;
 
 /**
- * @author Waveform
+ * GTPv1 Packet.
  *
+ * @see <a href="http://www.etsi.org/deliver/etsi_ts/129000_129099/129060/12.06.00_60/ts_129060v120600p.pdf">ETSI TS 129 060 V12.6.0</a>
+ * @author Waveform
+ * @since pcap4j 1.6.6
  */
 public final class GtpPacket extends AbstractPacket {
 
@@ -106,7 +109,7 @@ public final class GtpPacket extends AbstractPacket {
 
   /**
    * @author Waveform
-   *
+   * @since pcap4j 1.6.6
    */
   public static final class Builder extends AbstractBuilder implements LengthBuilder<GtpPacket> {
 
@@ -285,66 +288,42 @@ public final class GtpPacket extends AbstractPacket {
   }
 
   /**
-   * @author Waveform
+   * GTPv1 Header
    *
+   * <pre style="white-space: pre;">
+   *   8     7     6     5     4     3     2     1
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |    Version    |  PT  | (*) |  E  |  S  |  PN  |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |                 Message Type                  |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |              Length (1st Octet)               |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |              Length (2nd Octet)               |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |    Tunnel Endpoint Identifier (1st Octet)     |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |    Tunnel Endpoint Identifier (2nd Octet)     |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |    Tunnel Endpoint Identifier (3rd Octet)     |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |    Tunnel Endpoint Identifier (4th Octet)     |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |          Sequence Number (1st Octet)          |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |          Sequence Number (2nd Octet)          |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |                 N-PDU Number                  |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * |          Next Extension Header Type           |
+   * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   * </pre>
+   *
+   * @see <a href="http://www.etsi.org/deliver/etsi_ts/129000_129099/129060/12.06.00_60/ts_129060v120600p.pdf">ETSI TS 129 060 V12.6.0</a>
+   * @author Waveform
+   * @since pcap4j 1.6.6
    */
   public static final class GtpHeader extends AbstractHeader {
-
-    /*
-     *                  GTP-U Header format
-     *
-     *   8     7     6     5     4     3     2     1
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |    Version    |  PT  | (*) |  E  |  S  |  PN  |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |                 Message Type                  |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |              Length (1st Octet)               |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |              Length (2nd Octet)               |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |    Tunnel Endpoint Identifier (1st Octet)     |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |    Tunnel Endpoint Identifier (2nd Octet)     |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |    Tunnel Endpoint Identifier (3rd Octet)     |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |    Tunnel Endpoint Identifier (4th Octet)     |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |          Sequence Number (1st Octet)          |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |          Sequence Number (2nd Octet)          |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |                 N-PDU Number                  |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |          Next Extension Header Type           |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     */
-
-    /*
-     *             Extension Header Format
-     *
-     * 8                                               1
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |           Extension Header Length             |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |           Extension Header Content            |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |             Next Extension Header             |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     *
-     *           UDP Extension Pseudo Header
-     *
-     * 8                                               1
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |                     0x40                      |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |            UDP Source Port Number             |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     * |             Next Extension Header             |
-     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     *
-     */
 
     /**
      *

@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ICMPv4 Code
+ * GTPv1 Message Type
  *
- * @see <a href="http://www.etsi.org/deliver/etsi_ts/129000_129099/129060/12.06.00_60/ts_129060v120600p.pdf">ETSI</a>
+ * @see <a href="http://www.etsi.org/deliver/etsi_ts/129000_129099/129060/12.06.00_60/ts_129060v120600p.pdf">ETSI TS 129 060 V12.6.0</a>
  * @author Waveform
- *
+ * @since pcap4j 1.6.6
  */
 public final class GtpMSGType extends NamedNumber<Byte, GtpMSGType> {
 
@@ -534,6 +534,11 @@ public final class GtpMSGType extends NamedNumber<Byte, GtpMSGType> {
     super(value, name);
   }
 
+  /**
+   * @param code code
+   * @param value value
+   * @return a GtpMSGType object.
+   */
   public static GtpMSGType getInstance(GtpCode code, Byte value) {
     if (registry.containsKey(code) && registry.get(code).containsKey(value)) {
       return registry.get(code).get(value);
