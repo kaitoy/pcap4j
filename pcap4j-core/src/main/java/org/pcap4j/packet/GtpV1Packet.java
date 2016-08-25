@@ -35,13 +35,13 @@ public final class GtpV1Packet extends AbstractPacket {
   /**
    * A static factory method.
    * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceprotocol_typeions undocumented here.
+   * which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
    * @param length length
    * @return a new GtpV1Packet object.
-   * @throws IllegalRawDataExceprotocol_typeion if parsing the raw data fails.
+   * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static GtpV1Packet newPacket(
     byte[] rawData, int offset, int length
@@ -112,17 +112,17 @@ public final class GtpV1Packet extends AbstractPacket {
   public static final class Builder extends AbstractBuilder implements LengthBuilder<GtpV1Packet> {
 
     private GtpVersion version;
-    private boolean protocol_type;
-    private boolean reserved_x;
-    private boolean seq;
-    private boolean ext;
-    private boolean pn;
-    private GtpV1MessageType message_type;
+    private boolean protocolType;
+    private boolean reserved;
+    private boolean sequenceNumberFlag;
+    private boolean extensionHeaderFlag;
+    private boolean nPduNumberFlag;
+    private GtpV1MessageType messageType;
     private short length;
-    private int te_id;
-    private short seq_num;
-    private byte npd_num;
-    private byte nxt_ext;
+    private int teid;
+    private Short sequenceNumber;
+    private Byte nPduNumber;
+    private Byte nextExtensionHeaderType;
     private boolean correctLengthAtBuild;
     private Packet.Builder payloadBuilder;
 
@@ -136,36 +136,36 @@ public final class GtpV1Packet extends AbstractPacket {
      * @param packet packet
      */
     public Builder(GtpV1Packet packet) {
-      this.protocol_type = packet.header.protocol_type;
+      this.protocolType = packet.header.protocolType;
       this.version = packet.header.version;
-      this.reserved_x = packet.header.reserved_x;
+      this.reserved = packet.header.reserved;
       this.length = packet.header.length;
-      this.message_type= packet.header.message_type;
-      this.pn = packet.header.pn;
-      this.seq_num = packet.header.seq_num;
-      this.npd_num = packet.header.npd_num;
-      this.nxt_ext = packet.header.nxt_ext;
-      this.seq = packet.header.seq;
-      this.te_id = packet.header.te_id;
-      this.ext = packet.header.ext;
+      this.messageType= packet.header.messageType;
+      this.nPduNumberFlag = packet.header.nPduNumberFlag;
+      this.sequenceNumber = packet.header.sequenceNumber;
+      this.nPduNumber = packet.header.nPduNumber;
+      this.nextExtensionHeaderType = packet.header.nextExtensionHeaderType;
+      this.sequenceNumberFlag = packet.header.sequenceNumberFlag;
+      this.teid = packet.header.teid;
+      this.extensionHeaderFlag = packet.header.extensionHeaderFlag;
       this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
 
     /**
-     * @param protocol_type protocol_type
+     * @param protocolType protocolType
      * @return this Builder object for method chaining.
      */
-    public Builder protocol_type(boolean protocol_type) {
-      this.protocol_type = protocol_type;
+    public Builder protocolType(boolean protocolType) {
+      this.protocolType = protocolType;
       return this;
     }
 
     /**
-     * @param reserved_x reserved_x
+     * @param reserved reserved
      * @return this Builder object for method chaining.
      */
-    public Builder reserverd_x(boolean reserved_x) {
-      this.reserved_x = reserved_x;;
+    public Builder reserved(boolean reserved) {
+      this.reserved = reserved;
       return this;
     }
 
@@ -179,74 +179,74 @@ public final class GtpV1Packet extends AbstractPacket {
     }
 
     /**
-     * @param ext ext
+     * @param extensionHeaderFlag extensionHeaderFlag
      * @return this Builder object for method chaining.
      */
-    public Builder ext(boolean ext) {
-      this.ext = ext;
+    public Builder extensionHeaderFlag(boolean extensionHeaderFlag) {
+      this.extensionHeaderFlag = extensionHeaderFlag;
       return this;
     }
 
     /**
-     * @param seq seq
+     * @param sequenceNumberFlag sequenceNumberFlag
      * @return this Builder object for method chaining.
      */
-    public Builder seq(boolean seq) {
-      this.seq = seq;
+    public Builder sequenceNumberFlag(boolean sequenceNumberFlag) {
+      this.sequenceNumberFlag = sequenceNumberFlag;
       return this;
     }
 
     /**
-     * @param pn pn
+     * @param nPduNumberFlag nPduNumberFlag
      * @return this Builder object for method chaining.
      */
-    public Builder pn(boolean pn) {
-      this.pn = pn;
+    public Builder nPduNumberFlag(boolean nPduNumberFlag) {
+      this.nPduNumberFlag = nPduNumberFlag;
       return this;
     }
 
     /**
-     * @param message_type message_type
+     * @param messageType messageType
      * @return this Builder object for method chaining.
      */
-    public Builder message_type(GtpV1MessageType message_type) {
-      this.message_type = message_type;
+    public Builder messageType(GtpV1MessageType messageType) {
+      this.messageType = messageType;
       return this;
     }
 
     /**
-     * @param te_id te_id
+     * @param teid teid
      * @return this Builder object for method chaining.
      */
-    public Builder te_id(int te_id) {
-      this.te_id = te_id;
+    public Builder teid(int teid) {
+      this.teid = teid;
       return this;
     }
 
     /**
-     * @param seq_num seq_num
+     * @param sequenceNumber sequenceNumber
      * @return this Builder object for method chaining.
      */
-    public Builder seq_num(short seq_num) {
-      this.seq_num = seq_num;
+    public Builder sequenceNumber(short sequenceNumber) {
+      this.sequenceNumber = sequenceNumber;
       return this;
     }
 
     /**
-     * @param npd_num npd_num
+     * @param nPduNumber nPduNumber
      * @return this Builder object for method chaining.
      */
-    public Builder npd_num(byte npd_num) {
-      this.npd_num= npd_num;
+    public Builder nPduNumber(byte nPduNumber) {
+      this.nPduNumber= nPduNumber;
       return this;
     }
 
     /**
-     * @param nxt_ext nxt_ext
+     * @param nextExtensionHeaderType nextExtensionHeaderType
      * @return this Builder object for method chaining.
      */
-    public Builder nxt_ext(byte nxt_ext) {
-      this.nxt_ext = nxt_ext;
+    public Builder nextExtensionHeaderType(byte nextExtensionHeaderType) {
+      this.nextExtensionHeaderType = nextExtensionHeaderType;
       return this;
     }
 
@@ -344,32 +344,32 @@ public final class GtpV1Packet extends AbstractPacket {
     private static final int TUNNEL_ID_SIZE
       = INT_SIZE_IN_BYTES;
     private static final int SEQ_OFFSET
-    = TUNNEL_ID_OFFSET + TUNNEL_ID_SIZE;
+      = TUNNEL_ID_OFFSET + TUNNEL_ID_SIZE;
     private static final int SEQ_SIZE
-    = SHORT_SIZE_IN_BYTES;
+      = SHORT_SIZE_IN_BYTES;
     private static final int NPDU_OFFSET
-    = SEQ_OFFSET + SEQ_SIZE;
+      = SEQ_OFFSET + SEQ_SIZE;
     private static final int NPDU_SIZE
-    = BYTE_SIZE_IN_BYTES;
+      = BYTE_SIZE_IN_BYTES;
     private static final int NEXT_HEADER_OFFSET
-    = NPDU_OFFSET + NPDU_SIZE;
+      = NPDU_OFFSET + NPDU_SIZE;
     private static final int NEXT_HEADER_SIZE
-    = BYTE_SIZE_IN_BYTES;
+      = BYTE_SIZE_IN_BYTES;
     private static final int GTP_HEADER_SIZE
       = NEXT_HEADER_OFFSET + NEXT_HEADER_SIZE;
 
     private final GtpVersion version;
-    private final boolean protocol_type;
-    private final boolean reserved_x;
-    private final boolean seq;
-    private final boolean ext;
-    private final boolean pn;
-    private final GtpV1MessageType message_type;
+    private final boolean protocolType;
+    private final boolean reserved;
+    private final boolean extensionHeaderFlag;
+    private final boolean sequenceNumberFlag;
+    private final boolean nPduNumberFlag;
+    private final GtpV1MessageType messageType;
     private final short length;
-    private final int te_id;
-    private final short seq_num;
-    private final byte npd_num;
-    private final byte nxt_ext;
+    private final int teid;
+    private final Short sequenceNumber;
+    private final Byte nPduNumber;
+    private final Byte nextExtensionHeaderType;
 
     private GtpHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
       if (length < GTP_HEADER_SIZE) {
@@ -385,40 +385,40 @@ public final class GtpV1Packet extends AbstractPacket {
         throw new IllegalRawDataException(sb.toString());
       }
 
-      byte first_octet_flags = ByteArrays.getByte(rawData, FIRST_OCTET_OFFSET + offset);
-      this.version = GtpVersion.getInstance((first_octet_flags >> 5) & 0x07);
-      this.protocol_type = (first_octet_flags & 0x10) != 0;
-      this.reserved_x = ((first_octet_flags & 0x08) >> 3) != 0;
-      this.ext = ((first_octet_flags & 0x04) >> 2) != 0;
-      this.seq = ((first_octet_flags & 0x02) >> 1) != 0;
-      this.pn = (first_octet_flags & 0x01)!=0;
+      byte firstOctet = ByteArrays.getByte(rawData, FIRST_OCTET_OFFSET + offset);
+      this.version = GtpVersion.getInstance((firstOctet >> 5) & 0x07);
+      this.protocolType = (firstOctet & 0x10) != 0;
+      this.reserved = ((firstOctet & 0x08) >> 3) != 0;
+      this.extensionHeaderFlag = ((firstOctet & 0x04) >> 2) != 0;
+      this.sequenceNumberFlag = ((firstOctet & 0x02) >> 1) != 0;
+      this.nPduNumberFlag = (firstOctet & 0x01)!=0;
 
-      this.message_type
+      this.messageType
         = GtpV1MessageType.getInstance(ByteArrays.getByte(rawData, MSG_TYPE_OFFSET + offset));
 
-      this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET+offset);
+      this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET + offset);
 
-      this.te_id = ByteArrays.getInt(rawData, TUNNEL_ID_OFFSET+offset);
+      this.teid = ByteArrays.getInt(rawData, TUNNEL_ID_OFFSET + offset);
 
-      this.seq_num = ByteArrays.getShort(rawData, SEQ_OFFSET+offset);
+      this.sequenceNumber = ByteArrays.getShort(rawData, SEQ_OFFSET + offset);
 
-      this.npd_num = ByteArrays.getByte(rawData, NPDU_OFFSET+offset);
+      this.nPduNumber = ByteArrays.getByte(rawData, NPDU_OFFSET + offset);
 
-      this.nxt_ext = ByteArrays.getByte(rawData, NEXT_HEADER_OFFSET+offset);
+      this.nextExtensionHeaderType = ByteArrays.getByte(rawData, NEXT_HEADER_OFFSET + offset);
     }
 
     private GtpHeader(Builder builder, byte[] payload) {
-      this.protocol_type = builder.protocol_type;
+      this.protocolType = builder.protocolType;
       this.version = builder.version;
-      this.reserved_x = builder.reserved_x;
-      this.message_type= builder.message_type;
-      this.pn = builder.pn;
-      this.seq_num = builder.seq_num;
-      this.npd_num = builder.npd_num;
-      this.nxt_ext = builder.nxt_ext;
-      this.seq = builder.seq;
-      this.te_id = builder.te_id;
-      this.ext = builder.ext;
+      this.reserved = builder.reserved;
+      this.messageType= builder.messageType;
+      this.nPduNumberFlag = builder.nPduNumberFlag;
+      this.sequenceNumber = builder.sequenceNumber;
+      this.nPduNumber = builder.nPduNumber;
+      this.nextExtensionHeaderType = builder.nextExtensionHeaderType;
+      this.sequenceNumberFlag = builder.sequenceNumberFlag;
+      this.teid = builder.teid;
+      this.extensionHeaderFlag = builder.extensionHeaderFlag;
 
       if (builder.correctLengthAtBuild) {
         this.length = (short)((payload.length + getLength()));
@@ -426,85 +426,6 @@ public final class GtpV1Packet extends AbstractPacket {
       else {
         this.length = builder.length;
       }
-    }
-
-    /**
-     * @return true if the Protocol Type field is set to 1 (GTP); false otherwise (GTP').
-     */
-    public boolean getprotocol_type() {
-      return protocol_type;
-    }
-
-    /**
-     *
-     * @return reserved_x
-     */
-    public boolean getreserved_x() {
-      return reserved_x;
-    }
-
-    /**
-     *
-     * @return ext
-     */
-    public boolean getext() {
-      return ext;
-    }
-
-    /**
-     *
-     * @return seq
-     */
-    public boolean getseq() {
-      return seq;
-    }
-
-    /**
-     *
-     * @return pn
-     */
-    public boolean getpn() {
-      return pn;
-    }
-
-    /**
-     *
-     * @return message_type
-     */
-    public GtpV1MessageType getmsgtype() {
-      return message_type;
-    }
-
-    /**
-     *
-     * @return te_id
-     */
-    public int getteid() {
-      return te_id;
-    }
-
-    /**
-     *
-     * @return seq_num
-     */
-    public short getseqnum() {
-      return seq_num;
-    }
-
-    /**
-     *
-     * @return npd_num
-     */
-    public byte getnpdnum() {
-      return npd_num;
-    }
-
-    /**
-     *
-     * @return nxt_ext
-     */
-    public byte getnxtext() {
-      return nxt_ext;
     }
 
     /**
@@ -516,11 +437,53 @@ public final class GtpV1Packet extends AbstractPacket {
     }
 
     /**
+     * @return true if the Protocol Type field is set to 1 (GTP); false otherwise (GTP').
+     */
+    public boolean getProtocolType() {
+      return protocolType;
+    }
+
+    /**
+     * @return true if the reserved field is set to 1; false otherwise.
+     */
+    public boolean getReserved() {
+      return reserved;
+    }
+
+    /**
+     * @return true if the extension header flag is set to 1; false otherwise.
+     */
+    public boolean isExtensionHeaderFieldPresent() {
+      return extensionHeaderFlag;
+    }
+
+    /**
+     * @return true if the sequence number flag is set to 1; false otherwise.
+     */
+    public boolean isSequenceNumberFieldPresent() {
+      return sequenceNumberFlag;
+    }
+
+    /**
+     * @return true if the N-PDU number flag is set to 1; false otherwise.
+     */
+    public boolean isNPduNumberFieldPresent() {
+      return nPduNumberFlag;
+    }
+
+    /**
      *
+     * @return messageType
+     */
+    public GtpV1MessageType getMessageType() {
+      return messageType;
+    }
+
+    /**
      * @return length
      */
     public short getLength() {
-      return SEQ_SIZE+NPDU_SIZE+NEXT_HEADER_SIZE;
+      return length;
     }
 
     /**
@@ -531,22 +494,81 @@ public final class GtpV1Packet extends AbstractPacket {
       return 0xFFFF & length;
     }
 
+    /**
+     * @return teid
+     */
+    public int getTeid() {
+      return teid;
+    }
+
+    /**
+     * @return teid
+     */
+    public long getTeidAsLong() {
+      return teid & 0xFFFFFFFFL;
+    }
+
+    /**
+     * @return sequenceNumber. May be null.
+     */
+    public Short getSequenceNumber() {
+      return sequenceNumber;
+    }
+
+    /**
+     * @return sequenceNumber. May be null.
+     */
+    public Integer getSequenceNumberAsInt() {
+      if (sequenceNumber == null) {
+        return null;
+      }
+      else {
+        return sequenceNumber & 0xFFFF;
+      }
+    }
+
+    /**
+     * @return nPduNumber. May be null.
+     */
+    public Byte getNPduNumber() {
+      return nPduNumber;
+    }
+
+    /**
+     * @return nPduNumber. May be null.
+     */
+    public Integer getNPduNumberAsInt() {
+      if (nPduNumber == null) {
+        return null;
+      }
+      else {
+        return nPduNumber & 0xFF;
+      }
+    }
+
+    /**
+     * @return nextExtensionHeaderType. May be null.
+     */
+    public Byte getNextExtensionHeaderType() {
+      return nextExtensionHeaderType;
+    }
+
     @Override
     protected List<byte[]> getRawFields() {
       byte flags = (byte) (version.getValue() << 5);
-      if (protocol_type) { flags |= 0x10; }
-      if (reserved_x) { flags = (byte) (flags | 0x08); }
-      if (ext) { flags =(byte) (flags | 0x04); }
-      if (seq) { flags = (byte) (flags | 0x02); }
-      if (pn) { flags = (byte) (flags | 0x01); }
+      if (protocolType) { flags |= 0x10; }
+      if (reserved) { flags = (byte) (flags | 0x08); }
+      if (extensionHeaderFlag) { flags =(byte) (flags | 0x04); }
+      if (sequenceNumberFlag) { flags = (byte) (flags | 0x02); }
+      if (nPduNumberFlag) { flags = (byte) (flags | 0x01); }
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(ByteArrays.toByteArray(flags));
-      rawFields.add(ByteArrays.toByteArray(message_type.value()));
+      rawFields.add(ByteArrays.toByteArray(messageType.value()));
       rawFields.add(ByteArrays.toByteArray(length));
-      rawFields.add(ByteArrays.toByteArray(te_id));
-      rawFields.add(ByteArrays.toByteArray(seq_num));
-      rawFields.add(ByteArrays.toByteArray(npd_num));
-      rawFields.add(ByteArrays.toByteArray(nxt_ext));
+      rawFields.add(ByteArrays.toByteArray(teid));
+      rawFields.add(ByteArrays.toByteArray(sequenceNumber));
+      rawFields.add(ByteArrays.toByteArray(nPduNumber));
+      rawFields.add(ByteArrays.toByteArray(nextExtensionHeaderType));
       return rawFields;
     }
 
@@ -565,50 +587,48 @@ public final class GtpV1Packet extends AbstractPacket {
         .append(" bytes)]")
         .append(ls);
       sb.append("  Version: ")
-        .append(getversion())
+        .append(version)
         .append(ls);
       sb.append("  Protocol Type: ")
-        .append(protocol_type ? "GTP" : "GTP'")
+        .append(protocolType ? "GTP" : "GTP'")
         .append(ls);
       sb.append("  Reserved Flag: ")
-        .append(getreserved_x())
+        .append(reserved)
         .append(ls);
       sb.append("  Extension Flag: ")
-        .append(getext())
+        .append(extensionHeaderFlag)
         .append(ls);
-
       sb.append("  Sequence Flag: ")
-        .append(getseq())
+        .append(sequenceNumberFlag)
         .append(ls);
-
       sb.append("  NPDU Flag: ")
-        .append(getpn())
+        .append(nPduNumberFlag)
         .append(ls);
-
       sb.append("  Message Type: ")
-        .append(getmsgtype())
+        .append(messageType)
         .append(ls);
-
       sb.append("  Length: ")
         .append(getLengthAsInt())
         .append(" [bytes]")
         .append(ls);
-
       sb.append("  Tunnel ID: ")
-        .append(getteid())
+        .append(getTeidAsLong())
         .append(ls);
-
-      sb.append("  Sequence Number: ")
-        .append(getseqnum())
-        .append(ls);
-
-      sb.append("  NPDU Number: ")
-        .append(getnpdnum())
-        .append(ls);
-
-      sb.append("  Next Extension Header: ")
-        .append(getnxtext())
-        .append(ls);
+      if (sequenceNumber != null) {
+        sb.append("  Sequence Number: ")
+          .append(getSequenceNumberAsInt())
+          .append(ls);
+      }
+      if (nPduNumber != null) {
+        sb.append("  NPDU Number: ")
+          .append(getNPduNumberAsInt())
+          .append(ls);
+      }
+      if (nextExtensionHeaderType != null) {
+        sb.append("  Next Extension Header: ")
+          .append(getNextExtensionHeaderType())
+          .append(ls);
+      }
 
       return sb.toString();
     }
@@ -622,31 +642,31 @@ public final class GtpV1Packet extends AbstractPacket {
       return
            length == other.length
         && version == other.version
-        && protocol_type == other.protocol_type
-        && reserved_x == other.reserved_x
-        && ext == other.ext
-        && seq == other.seq
-        && pn == other.pn
-        && message_type == other.message_type
-        && te_id == other.te_id
-        && seq_num == other.seq_num
-        && npd_num == other.npd_num
-        && nxt_ext == other.nxt_ext;
+        && protocolType == other.protocolType
+        && reserved == other.reserved
+        && extensionHeaderFlag == other.extensionHeaderFlag
+        && sequenceNumberFlag == other.sequenceNumberFlag
+        && nPduNumberFlag == other.nPduNumberFlag
+        && messageType == other.messageType
+        && teid == other.teid
+        && sequenceNumber == other.sequenceNumber
+        && nPduNumber == other.nPduNumber
+        && nextExtensionHeaderType == other.nextExtensionHeaderType;
     }
 
     @Override
     protected int calcHashCode() {
       int result = 17;
       result = 31 * result + version.hashCode();
-      result = 31 * result + (protocol_type ? 1231 : 1237);
-      result = 31 * result + (reserved_x ? 1231 : 1237);
-      result = 31 * result + (ext ? 1231 : 1237);
-      result = 31 * result + (seq ? 1231 : 1237);
-      result = 31 * result + (pn ? 1231 : 1237);
-      result = 31 * result + message_type.hashCode();
-      result = 31 * result + seq_num;
-      result = 31 * result + npd_num;
-      result = 31 * result + nxt_ext;
+      result = 31 * result + (protocolType ? 1231 : 1237);
+      result = 31 * result + (reserved ? 1231 : 1237);
+      result = 31 * result + (extensionHeaderFlag ? 1231 : 1237);
+      result = 31 * result + (sequenceNumberFlag ? 1231 : 1237);
+      result = 31 * result + (nPduNumberFlag ? 1231 : 1237);
+      result = 31 * result + messageType.hashCode();
+      result = 31 * result + sequenceNumber;
+      result = 31 * result + nPduNumber;
+      result = 31 * result + nextExtensionHeaderType;
       result = 31 * result + length;
       return result;
     }
