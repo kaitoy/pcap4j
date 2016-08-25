@@ -634,41 +634,71 @@ public final class GtpV1Packet extends AbstractPacket {
     }
 
     @Override
-    public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
-
-      GtpV1Header other = (GtpV1Header)obj;
-      return
-           length == other.length
-        && version == other.version
-        && protocolType == other.protocolType
-        && reserved == other.reserved
-        && extensionHeaderFlag == other.extensionHeaderFlag
-        && sequenceNumberFlag == other.sequenceNumberFlag
-        && nPduNumberFlag == other.nPduNumberFlag
-        && messageType == other.messageType
-        && teid == other.teid
-        && sequenceNumber == other.sequenceNumber
-        && nPduNumber == other.nPduNumber
-        && nextExtensionHeaderType == other.nextExtensionHeaderType;
+    protected int calcHashCode() {
+      final int prime = 31;
+      int result = super.hashCode();
+      result = prime * result + (extensionHeaderFlag ? 1231 : 1237);
+      result = prime * result + length;
+      result = prime * result + messageType.hashCode();
+      result = prime * result + ((nPduNumber == null) ? 0 : nPduNumber.hashCode());
+      result = prime * result + (nPduNumberFlag ? 1231 : 1237);
+      result = prime * result
+          + ((nextExtensionHeaderType == null) ? 0 : nextExtensionHeaderType.hashCode());
+      result = prime * result + (protocolType ? 1231 : 1237);
+      result = prime * result + (reserved ? 1231 : 1237);
+      result = prime * result + ((sequenceNumber == null) ? 0 : sequenceNumber.hashCode());
+      result = prime * result + (sequenceNumberFlag ? 1231 : 1237);
+      result = prime * result + teid;
+      result = prime * result + version.hashCode();
+      return result;
     }
 
     @Override
-    protected int calcHashCode() {
-      int result = 17;
-      result = 31 * result + version.hashCode();
-      result = 31 * result + (protocolType ? 1231 : 1237);
-      result = 31 * result + (reserved ? 1231 : 1237);
-      result = 31 * result + (extensionHeaderFlag ? 1231 : 1237);
-      result = 31 * result + (sequenceNumberFlag ? 1231 : 1237);
-      result = 31 * result + (nPduNumberFlag ? 1231 : 1237);
-      result = 31 * result + messageType.hashCode();
-      result = 31 * result + sequenceNumber;
-      result = 31 * result + nPduNumber;
-      result = 31 * result + nextExtensionHeaderType;
-      result = 31 * result + length;
-      return result;
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (!super.equals(obj))
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      GtpV1Header other = (GtpV1Header) obj;
+      if (extensionHeaderFlag != other.extensionHeaderFlag)
+        return false;
+      if (length != other.length)
+        return false;
+      if (!messageType.equals(other.messageType))
+        return false;
+      if (nPduNumber == null) {
+        if (other.nPduNumber != null)
+          return false;
+      }
+      else if (!nPduNumber.equals(other.nPduNumber))
+        return false;
+      if (nPduNumberFlag != other.nPduNumberFlag)
+        return false;
+      if (nextExtensionHeaderType == null) {
+        if (other.nextExtensionHeaderType != null)
+          return false;
+      }
+      else if (!nextExtensionHeaderType.equals(other.nextExtensionHeaderType))
+        return false;
+      if (protocolType != other.protocolType)
+        return false;
+      if (reserved != other.reserved)
+        return false;
+      if (sequenceNumber == null) {
+        if (other.sequenceNumber != null)
+          return false;
+      }
+      else if (!sequenceNumber.equals(other.sequenceNumber))
+        return false;
+      if (sequenceNumberFlag != other.sequenceNumberFlag)
+        return false;
+      if (teid != other.teid)
+        return false;
+      if (version != other.version)
+        return false;
+      return true;
     }
 
   }
