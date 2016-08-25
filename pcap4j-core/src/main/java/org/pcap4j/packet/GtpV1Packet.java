@@ -12,7 +12,7 @@ import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pcap4j.packet.namednumber.GtpMSGType;
+import org.pcap4j.packet.namednumber.GtpV1MessageType;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -22,7 +22,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Waveform
  * @since pcap4j 1.6.6
  */
-public final class GtpPacket extends AbstractPacket {
+public final class GtpV1Packet extends AbstractPacket {
 
   /**
    *
@@ -40,17 +40,17 @@ public final class GtpPacket extends AbstractPacket {
    * @param rawData rawData
    * @param offset offset
    * @param length length
-   * @return a new GtpPacket object.
+   * @return a new GtpV1Packet object.
    * @throws IllegalRawDataExceprotocol_typeion if parsing the raw data fails.
    */
-  public static GtpPacket newPacket(
+  public static GtpV1Packet newPacket(
     byte[] rawData, int offset, int length
   ) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
-    return new GtpPacket(rawData, offset, length);
+    return new GtpV1Packet(rawData, offset, length);
   }
 
-  private GtpPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private GtpV1Packet(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     this.header = new GtpHeader(rawData, offset, length);
 
     int payloadLength = header.getLengthAsInt() - header.length();
@@ -73,7 +73,7 @@ public final class GtpPacket extends AbstractPacket {
     }
   }
 
-  private GtpPacket(Builder builder) {
+  private GtpV1Packet(Builder builder) {
     if (
       builder == null
     ) {
@@ -109,7 +109,7 @@ public final class GtpPacket extends AbstractPacket {
    * @author Waveform
    * @since pcap4j 1.6.6
    */
-  public static final class Builder extends AbstractBuilder implements LengthBuilder<GtpPacket> {
+  public static final class Builder extends AbstractBuilder implements LengthBuilder<GtpV1Packet> {
 
     private GtpVersion version;
     private boolean protocol_type;
@@ -117,7 +117,7 @@ public final class GtpPacket extends AbstractPacket {
     private boolean seq;
     private boolean ext;
     private boolean pn;
-    private GtpMSGType message_type;
+    private GtpV1MessageType message_type;
     private short length;
     private int te_id;
     private short seq_num;
@@ -135,7 +135,7 @@ public final class GtpPacket extends AbstractPacket {
      *
      * @param packet packet
      */
-    public Builder(GtpPacket packet) {
+    public Builder(GtpV1Packet packet) {
       this.protocol_type = packet.header.protocol_type;
       this.version = packet.header.version;
       this.reserved_x = packet.header.reserved_x;
@@ -209,7 +209,7 @@ public final class GtpPacket extends AbstractPacket {
      * @param message_type message_type
      * @return this Builder object for method chaining.
      */
-    public Builder message_type(GtpMSGType message_type) {
+    public Builder message_type(GtpV1MessageType message_type) {
       this.message_type = message_type;
       return this;
     }
@@ -278,8 +278,8 @@ public final class GtpPacket extends AbstractPacket {
     }
 
     @Override
-    public GtpPacket build() {
-      return new GtpPacket(this);
+    public GtpV1Packet build() {
+      return new GtpV1Packet(this);
     }
 
   }
@@ -364,7 +364,7 @@ public final class GtpPacket extends AbstractPacket {
     private final boolean seq;
     private final boolean ext;
     private final boolean pn;
-    private final GtpMSGType message_type;
+    private final GtpV1MessageType message_type;
     private final short length;
     private final int te_id;
     private final short seq_num;
@@ -394,7 +394,7 @@ public final class GtpPacket extends AbstractPacket {
       this.pn = (first_octet_flags & 0x01)!=0;
 
       this.message_type
-        = GtpMSGType.getInstance(ByteArrays.getByte(rawData, MSG_TYPE_OFFSET + offset));
+        = GtpV1MessageType.getInstance(ByteArrays.getByte(rawData, MSG_TYPE_OFFSET + offset));
 
       this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET+offset);
 
@@ -471,7 +471,7 @@ public final class GtpPacket extends AbstractPacket {
      *
      * @return message_type
      */
-    public GtpMSGType getmsgtype() {
+    public GtpV1MessageType getmsgtype() {
       return message_type;
     }
 
@@ -560,7 +560,7 @@ public final class GtpPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[GTP Header (")
+      sb.append("[GTPv1 Header (")
         .append(length())
         .append(" bytes)]")
         .append(ls);
