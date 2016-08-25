@@ -140,7 +140,7 @@ public final class GtpV1Packet extends AbstractPacket {
       this.version = packet.header.version;
       this.reserved = packet.header.reserved;
       this.length = packet.header.length;
-      this.messageType= packet.header.messageType;
+      this.messageType = packet.header.messageType;
       this.nPduNumberFlag = packet.header.nPduNumberFlag;
       this.sequenceNumber = packet.header.sequenceNumber;
       this.nPduNumber = packet.header.nPduNumber;
@@ -227,7 +227,7 @@ public final class GtpV1Packet extends AbstractPacket {
      * @param sequenceNumber sequenceNumber
      * @return this Builder object for method chaining.
      */
-    public Builder sequenceNumber(short sequenceNumber) {
+    public Builder sequenceNumber(Short sequenceNumber) {
       this.sequenceNumber = sequenceNumber;
       return this;
     }
@@ -236,7 +236,7 @@ public final class GtpV1Packet extends AbstractPacket {
      * @param nPduNumber nPduNumber
      * @return this Builder object for method chaining.
      */
-    public Builder nPduNumber(byte nPduNumber) {
+    public Builder nPduNumber(Byte nPduNumber) {
       this.nPduNumber= nPduNumber;
       return this;
     }
@@ -245,7 +245,7 @@ public final class GtpV1Packet extends AbstractPacket {
      * @param nextExtensionHeaderType nextExtensionHeaderType
      * @return this Builder object for method chaining.
      */
-    public Builder nextExtensionHeaderType(byte nextExtensionHeaderType) {
+    public Builder nextExtensionHeaderType(Byte nextExtensionHeaderType) {
       this.nextExtensionHeaderType = nextExtensionHeaderType;
       return this;
     }
@@ -392,18 +392,12 @@ public final class GtpV1Packet extends AbstractPacket {
       this.extensionHeaderFlag = ((firstOctet & 0x04) >> 2) != 0;
       this.sequenceNumberFlag = ((firstOctet & 0x02) >> 1) != 0;
       this.nPduNumberFlag = (firstOctet & 0x01)!=0;
-
       this.messageType
         = GtpV1MessageType.getInstance(ByteArrays.getByte(rawData, MSG_TYPE_OFFSET + offset));
-
       this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET + offset);
-
       this.teid = ByteArrays.getInt(rawData, TUNNEL_ID_OFFSET + offset);
-
       this.sequenceNumber = ByteArrays.getShort(rawData, SEQ_OFFSET + offset);
-
       this.nPduNumber = ByteArrays.getByte(rawData, NPDU_OFFSET + offset);
-
       this.nextExtensionHeaderType = ByteArrays.getByte(rawData, NEXT_HEADER_OFFSET + offset);
     }
 
