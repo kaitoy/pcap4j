@@ -29,7 +29,7 @@ public final class GtpV1Packet extends AbstractPacket {
    */
   private static final long serialVersionUID = 4638029542367352625L;
 
-  private final GtpHeader header;
+  private final GtpV1Header header;
   private final Packet payload;
 
   /**
@@ -51,7 +51,7 @@ public final class GtpV1Packet extends AbstractPacket {
   }
 
   private GtpV1Packet(byte[] rawData, int offset, int length) throws IllegalRawDataException {
-    this.header = new GtpHeader(rawData, offset, length);
+    this.header = new GtpV1Header(rawData, offset, length);
 
     int payloadLength = header.getLengthAsInt() - header.length();
     if (payloadLength < 0) {
@@ -84,14 +84,14 @@ public final class GtpV1Packet extends AbstractPacket {
     }
 
     this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
-    this.header = new GtpHeader(
+    this.header = new GtpV1Header(
                     builder,
                     payload != null ? payload.getRawData() : new byte[0]
                   );
   }
 
   @Override
-  public GtpHeader getHeader() {
+  public GtpV1Header getHeader() {
     return header;
   }
 
@@ -320,7 +320,7 @@ public final class GtpV1Packet extends AbstractPacket {
    * @author Waveform
    * @since pcap4j 1.6.6
    */
-  public static final class GtpHeader extends AbstractHeader {
+  public static final class GtpV1Header extends AbstractHeader {
 
     /**
      *
@@ -355,7 +355,7 @@ public final class GtpV1Packet extends AbstractPacket {
       = NPDU_OFFSET + NPDU_SIZE;
     private static final int NEXT_HEADER_SIZE
       = BYTE_SIZE_IN_BYTES;
-    private static final int GTP_HEADER_SIZE
+    private static final int GTP_V1_HEADER_SIZE
       = NEXT_HEADER_OFFSET + NEXT_HEADER_SIZE;
 
     private final GtpVersion version;
@@ -371,11 +371,11 @@ public final class GtpV1Packet extends AbstractPacket {
     private final Byte nPduNumber;
     private final Byte nextExtensionHeaderType;
 
-    private GtpHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
-      if (length < GTP_HEADER_SIZE) {
+    private GtpV1Header(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+      if (length < GTP_V1_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
-        sb.append("The data is too short to build a GTP header(")
-          .append(GTP_HEADER_SIZE)
+        sb.append("The data is too short to build a GTPv1 header(")
+          .append(GTP_V1_HEADER_SIZE)
           .append(" bytes). data: ")
           .append(ByteArrays.toHexString(rawData, " "))
           .append(", offset: ")
@@ -407,7 +407,7 @@ public final class GtpV1Packet extends AbstractPacket {
       this.nextExtensionHeaderType = ByteArrays.getByte(rawData, NEXT_HEADER_OFFSET + offset);
     }
 
-    private GtpHeader(Builder builder, byte[] payload) {
+    private GtpV1Header(Builder builder, byte[] payload) {
       this.protocolType = builder.protocolType;
       this.version = builder.version;
       this.reserved = builder.reserved;
@@ -574,7 +574,7 @@ public final class GtpV1Packet extends AbstractPacket {
 
     @Override
     public int length() {
-      return GTP_HEADER_SIZE;
+      return GTP_V1_HEADER_SIZE;
     }
 
     @Override
@@ -638,7 +638,7 @@ public final class GtpV1Packet extends AbstractPacket {
       if (obj == this) { return true; }
       if (!this.getClass().isInstance(obj)) { return false; }
 
-      GtpHeader other = (GtpHeader)obj;
+      GtpV1Header other = (GtpV1Header)obj;
       return
            length == other.length
         && version == other.version
