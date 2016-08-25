@@ -560,55 +560,21 @@ public final class GtpPacket extends AbstractPacket {
     @Override
     protected List<byte[]> getRawFields() {
       byte flags = (byte)0;
-
-      try {
-        illegal_gtp_version(version);
-        flags = (byte) (flags | (version.value() << 5));
-      } catch(IncorrectGTPVersionException e){
-        System.err.println(e.getMessage());
-      }
-      try {
-        illegal_gtp_code(protocol_type);
-        flags = (byte) (flags | (protocol_type.value()<<4));
-      } catch(IncorrectGTPCodeException e){
-        System.err.println(e.getMessage());
-      }
+      flags = (byte) (flags | (version.value() << 5));
+      flags = (byte) (flags | (protocol_type.value()<<4));
       if (reserved_x) { flags = (byte) (flags | 0x08); }
       if (ext) { flags =(byte) (flags | 0x04); }
       if (seq) { flags = (byte) (flags | 0x02); }
       if (pn) { flags = (byte) (flags | 0x01); }
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(ByteArrays.toByteArray(flags));
-      try {
-        illegal_gtp_msg(message_type);
-        rawFields.add(ByteArrays.toByteArray(message_type.value()));
-      } catch (IncorrectMSGTypeException e){
-        System.err.println(e.getMessage());
-      }
+      rawFields.add(ByteArrays.toByteArray(message_type.value()));
       rawFields.add(ByteArrays.toByteArray(length));
       rawFields.add(ByteArrays.toByteArray(te_id));
       rawFields.add(ByteArrays.toByteArray(seq_num));
       rawFields.add(ByteArrays.toByteArray(npd_num));
       rawFields.add(ByteArrays.toByteArray(nxt_ext));
       return rawFields;
-    }
-
-    private void illegal_gtp_version(GtpVersion version) throws IncorrectGTPVersionException {
-      if (version == null) {
-        throw new IncorrectGTPVersionException("Incorrect GTP version " + version);
-      }
-    }
-
-    private void illegal_gtp_code(GtpCode code) throws IncorrectGTPCodeException {
-      if (code == null) {
-        throw new IncorrectGTPCodeException("GTP code type not supported by "+version);
-      }
-    }
-
-    private void illegal_gtp_msg(GtpMSGType msgtype) throws IncorrectMSGTypeException {
-      if(msgtype == null) {
-        throw new IncorrectMSGTypeException("GTP message type not supported by "+protocol_type);
-      }
     }
 
     @Override
