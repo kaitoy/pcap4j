@@ -10,13 +10,11 @@ package org.pcap4j.packet.namednumber;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pcap4j.packet.namednumber.NamedNumber;
-
 /**
  * GTP version
  *
  * @author waveform
- * 
+ *
  */
 public final class GtpCode extends NamedNumber<Byte, GtpCode> {
 
@@ -36,31 +34,27 @@ public final class GtpCode extends NamedNumber<Byte, GtpCode> {
    */
   public static final GtpCode GTP_C
     = new GtpCode((byte)1, "GTP_C");
-  
+
   /**
    * [GTP']
    */
   public static final GtpCode GTP_
     = new GtpCode((byte)0, "GTP'");
- 
- 
+
   private static  Map<Byte , GtpCode> map ;
   private static final Map<GtpVersion , Map<Byte, GtpCode>> registry
     = new HashMap<GtpVersion , Map<Byte, GtpCode>>();
 
   static {
-	
-	map = new HashMap<Byte , GtpCode>();
-	map.put(GTP_U.value(),GTP_U);
-	map.put(GTP_C.value(),GTP_C);
-	map.put(GTP_.value(), GTP_);
-	registry.put(GtpVersion.GTPv1,map);
-	map = new HashMap<Byte , GtpCode>();
-	map.put(GTP_C.value(),GTP_C);
-	map.put(GTP_.value(),GTP_);
-    registry.put(GtpVersion.GTPv2,map);
-    
-   
+    map = new HashMap<Byte , GtpCode>();
+    map.put(GTP_U.value(), GTP_U);
+    map.put(GTP_C.value(), GTP_C);
+    map.put(GTP_.value(), GTP_);
+    registry.put(GtpVersion.GTPv1, map);
+    map = new HashMap<Byte , GtpCode>();
+    map.put(GTP_C.value(), GTP_C);
+    map.put(GTP_.value(), GTP_);
+    registry.put(GtpVersion.GTPv2, map);
   }
 
   /**
@@ -93,12 +87,11 @@ public final class GtpCode extends NamedNumber<Byte, GtpCode> {
    * @param code code
    * @return a GtpCode object.
    */
-  public static GtpCode register(GtpVersion version ,GtpCode code) {
-	Map<Byte , GtpCode>map = new HashMap<Byte , GtpCode>();
-	map.put(code.value(), code);
-    registry.put(version,map);
+  public static GtpCode register(GtpVersion version, GtpCode code) {
+  Map<Byte , GtpCode>map = new HashMap<Byte , GtpCode>();
+  map.put(code.value(), code);
+    registry.put(version, map);
     return code;
-   
   }
 
   @Override
@@ -112,6 +105,3 @@ public final class GtpCode extends NamedNumber<Byte, GtpCode> {
   }
 
 }
-
-
-

@@ -10,8 +10,6 @@ package org.pcap4j.packet.namednumber;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pcap4j.packet.namednumber.NamedNumber;
-
 /**
  * GTP version
  *
@@ -37,15 +35,12 @@ public final class GtpVersion extends NamedNumber<Byte, GtpVersion> {
   public static final GtpVersion GTPv2
     = new GtpVersion((byte)2, "GTPv2");
 
- 
-
   private static final Map<Byte, GtpVersion> registry
     = new HashMap<Byte, GtpVersion>();
 
   static {
-    registry.put(GTPv1.value(),GTPv1);
-    registry.put(GTPv2.value(),GTPv2);
-   
+    registry.put(GTPv1.value(), GTPv1);
+    registry.put(GTPv2.value(), GTPv2);
   }
 
   /**
@@ -91,5 +86,3 @@ public final class GtpVersion extends NamedNumber<Byte, GtpVersion> {
   }
 
 }
-
-
