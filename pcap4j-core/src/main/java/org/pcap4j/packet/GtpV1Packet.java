@@ -12,6 +12,7 @@ import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pcap4j.packet.namednumber.GtpV1ExtensionHeaderType;
 import org.pcap4j.packet.namednumber.GtpV1MessageType;
 import org.pcap4j.util.ByteArrays;
 
@@ -122,7 +123,7 @@ public final class GtpV1Packet extends AbstractPacket {
     private int teid;
     private Short sequenceNumber;
     private Byte nPduNumber;
-    private Byte nextExtensionHeaderType;
+    private GtpV1ExtensionHeaderType nextExtensionHeaderType;
     private boolean correctLengthAtBuild;
     private Packet.Builder payloadBuilder;
 
@@ -245,7 +246,7 @@ public final class GtpV1Packet extends AbstractPacket {
      * @param nextExtensionHeaderType nextExtensionHeaderType
      * @return this Builder object for method chaining.
      */
-    public Builder nextExtensionHeaderType(Byte nextExtensionHeaderType) {
+    public Builder nextExtensionHeaderType(GtpV1ExtensionHeaderType nextExtensionHeaderType) {
       this.nextExtensionHeaderType = nextExtensionHeaderType;
       return this;
     }
@@ -369,7 +370,7 @@ public final class GtpV1Packet extends AbstractPacket {
     private final int teid;
     private final Short sequenceNumber;
     private final Byte nPduNumber;
-    private final Byte nextExtensionHeaderType;
+    private final GtpV1ExtensionHeaderType nextExtensionHeaderType;
 
     private GtpV1Header(byte[] rawData, int offset, int length) throws IllegalRawDataException {
       if (length < GTP_V1_HEADER_SIZE) {
@@ -398,7 +399,8 @@ public final class GtpV1Packet extends AbstractPacket {
       this.teid = ByteArrays.getInt(rawData, TUNNEL_ID_OFFSET + offset);
       this.sequenceNumber = ByteArrays.getShort(rawData, SEQ_OFFSET + offset);
       this.nPduNumber = ByteArrays.getByte(rawData, NPDU_OFFSET + offset);
-      this.nextExtensionHeaderType = ByteArrays.getByte(rawData, NEXT_HEADER_OFFSET + offset);
+      this.nextExtensionHeaderType
+        = GtpV1ExtensionHeaderType.getInstance(rawData[NEXT_HEADER_OFFSET + offset]);
     }
 
     private GtpV1Header(Builder builder, byte[] payload) {
@@ -543,7 +545,7 @@ public final class GtpV1Packet extends AbstractPacket {
     /**
      * @return nextExtensionHeaderType. May be null.
      */
-    public Byte getNextExtensionHeaderType() {
+    public GtpV1ExtensionHeaderType getNextExtensionHeaderType() {
       return nextExtensionHeaderType;
     }
 
@@ -562,7 +564,7 @@ public final class GtpV1Packet extends AbstractPacket {
       rawFields.add(ByteArrays.toByteArray(teid));
       rawFields.add(ByteArrays.toByteArray(sequenceNumber));
       rawFields.add(ByteArrays.toByteArray(nPduNumber));
-      rawFields.add(ByteArrays.toByteArray(nextExtensionHeaderType));
+      rawFields.add(ByteArrays.toByteArray(nextExtensionHeaderType.value()));
       return rawFields;
     }
 
