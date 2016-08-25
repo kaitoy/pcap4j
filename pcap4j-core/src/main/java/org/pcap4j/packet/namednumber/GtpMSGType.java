@@ -426,103 +426,77 @@ public final class GtpMSGType extends NamedNumber<Byte, GtpMSGType> {
   public static final GtpMSGType G_PDU
     = new GtpMSGType((byte)255, "G_PDU");
 
-  private static final Map<GtpCode, Map<Byte, GtpMSGType>> registry
-    = new HashMap<GtpCode, Map<Byte, GtpMSGType>>();
+  private static final Map<Byte, GtpMSGType> registry
+    = new HashMap<Byte, GtpMSGType>();
 
   static {
-    Map<Byte, GtpMSGType> map;
-
-    map = new HashMap<Byte, GtpMSGType>();
-    map.put(Echo_Request.value(), Echo_Request);
-    map.put(Echo_Response.value(), Echo_Response);
-    registry.put(GtpCode.GTP_U, map);
-    registry.put(GtpCode.GTP_C, map);
-    registry.put(GtpCode.GTP_, map);
-    map = new HashMap<Byte, GtpMSGType>();
-    map.put(Version_Not_Supported.value(), Version_Not_Supported);
-    registry.put(GtpCode.GTP_, map);
-    registry.put(GtpCode.GTP_C, map);
-    map = new HashMap<Byte, GtpMSGType>();
-    map.put(Node_Alive_Request.value(), Node_Alive_Request);
-    map.put(Node_Alive_Response.value(), Node_Alive_Response);
-    map.put(Redirection_Request.value(), Redirection_Request);
-    map.put(Redirection_Response.value(), Redirection_Response);
-    registry.put(GtpCode.GTP_, map);
-    map = new HashMap<Byte, GtpMSGType>();
-    map.put(Create_PDP_Context_Request.value(), Create_PDP_Context_Request);
-    map.put(Create_PDP_Context_Response.value(), Create_PDP_Context_Response);
-    map.put(Update_PDP_Context_Request.value(), Update_PDP_Context_Request);
-    map.put(Update_PDP_Context_Response.value(), Update_PDP_Context_Response);
-    map.put(Delete_PDP_Context_Request.value(), Delete_PDP_Context_Request);
-    map.put(Delete_PDP_Context_Response.value(), Delete_PDP_Context_Response);
-    map.put(Initiate_PDP_Context_Activation_Request.value(), Initiate_PDP_Context_Activation_Request);
-    map.put(Initiate_PDP_Context_Activation_Response.value(), Initiate_PDP_Context_Activation_Response);
-    registry.put(GtpCode.GTP_C, map);
-    map = new HashMap<Byte, GtpMSGType>();
-    map.put(Error_Indication.value(), Error_Indication);
-    registry.put(GtpCode.GTP_U, map);
-    map = new HashMap<Byte, GtpMSGType>();
-    map.put(PDU_Notification_Request.value(), PDU_Notification_Request);
-    map.put(PDU_Notification_Response.value(), PDU_Notification_Response);
-    map.put(PDU_Notification_Reject_Request.value(), PDU_Notification_Reject_Request);
-    map.put(PDU_Notification_Reject_Response.value(), PDU_Notification_Reject_Response);
-    registry.put(GtpCode.GTP_C, map);
-    map = new HashMap<Byte, GtpMSGType>();
-    map.put(Supported_Extension_Headers_Notification.value(), Supported_Extension_Headers_Notification);
-    registry.put(GtpCode.GTP_C, map);
-    registry.put(GtpCode.GTP_U, map);
-    map = new HashMap<Byte, GtpMSGType>();
-    map.put(Send_Routing_Information_for_GPRS_Request.value(), Send_Routing_Information_for_GPRS_Request);
-    map.put(Send_Routing_Information_for_GPRS_Response.value(), Send_Routing_Information_for_GPRS_Response);
-    map.put(Failure_Report_Request.value(), Failure_Report_Request);
-    map.put(Failure_Report_Response.value(), Failure_Report_Response);
-    map.put(Note_MS_GPRS_Present_Request.value(), Note_MS_GPRS_Present_Request);
-    map.put(Note_MS_GPRS_Present_Response.value(), Note_MS_GPRS_Present_Response);
-    map.put(Identification_Request.value(), Identification_Request);
-    map.put(Identification_Response.value(), Identification_Response);
-    map.put(SGSN_Context_Request.value(), SGSN_Context_Request);
-    map.put(SGSN_Context_Response.value(), SGSN_Context_Response);
-    map.put(SGSN_Context_Acknowledge.value(), SGSN_Context_Acknowledge);
-    map.put(Forward_Relocation_Request.value(), Forward_Relocation_Request);
-    map.put(Forward_Relocation_Response.value(), Forward_Relocation_Response);
-    map.put(Forward_Relocation_Complete.value(), Forward_Relocation_Complete);
-    map.put(Forward_Relocation_Complete_Acknowledge.value(), Forward_Relocation_Complete_Acknowledge);
-    map.put(Relocation_Cancel_Request.value(), Relocation_Cancel_Request);
-    map.put(Relocation_Cancel_Response.value(), Relocation_Cancel_Response);
-    map.put(Forward_SNRS_Context.value(), Forward_SNRS_Context);
-    map.put(Forward_SNRS_Context_Acknowledge.value(), Forward_SNRS_Context_Acknowledge);
-    map.put(RAN_Information_Relay.value(), RAN_Information_Relay);
-    map.put(MBMS_Notification_Request.value(), MBMS_Notification_Request);
-    map.put(MBMS_Notification_Response.value(), MBMS_Notification_Response);
-    map.put(MBMS_Notification_Reject_Request.value(), MBMS_Notification_Reject_Request);
-    map.put(MBMS_Notification_Reject_Response.value(), MBMS_Notification_Reject_Response);
-    map.put(Create_MBMS_Context_Request.value(), Create_MBMS_Context_Request);
-    map.put(Create_MBMS_Context_Response.value(), Create_MBMS_Context_Response);
-    map.put(Update_MBMS_Context_Request.value(), Update_MBMS_Context_Request);
-    map.put(Update_MBMS_Context_Response.value(), Update_MBMS_Context_Response);
-    map.put(Delete_MBMS_Context_Request.value(), Delete_MBMS_Context_Request);
-    map.put(Delete_MBMS_Context_Response.value(), Delete_MBMS_Context_Response);
-    map.put(MBMS_Registration_Request.value(), MBMS_Registration_Request);
-    map.put(MBMS_Registration_Response.value(), MBMS_Registration_Response);
-    map.put(MBMS_De_Registration_Request.value(), MBMS_De_Registration_Request);
-    map.put(MBMS_De_Registration_Response.value(), MBMS_De_Registration_Response);
-    map.put(MBMS_Session_Start_Request.value(), MBMS_Session_Start_Request);
-    map.put(MBMS_Session_Start_Response.value(), MBMS_Session_Start_Response);
-    map.put(MBMS_Session_Stop_Request.value(), MBMS_Session_Stop_Request);
-    map.put(MBMS_Session_Stop_Response.value(), MBMS_Session_Stop_Response);
-    map.put(MBMS_Session_Update_Request.value(), MBMS_Session_Update_Request);
-    map.put(MBMS_Session_Update_Response.value(), MBMS_Session_Update_Response);
-    map.put(MS_Info_Change_Notification_Request.value(), MS_Info_Change_Notification_Request);
-    map.put(MS_Info_Change_Notification_Response.value(), MS_Info_Change_Notification_Response);
-    registry.put(GtpCode.GTP_C, map);
-    map = new HashMap<Byte, GtpMSGType>();
-    map.put(Data_Record_Transfer_Request.value(), Data_Record_Transfer_Request);
-    map.put(Data_Record_Transfer_Response.value(), Data_Record_Transfer_Response);
-    registry.put(GtpCode.GTP_, map);
-    map = new HashMap<Byte, GtpMSGType>();
-    map.put(End_Marker.value(), End_Marker);
-    map.put(G_PDU.value(), G_PDU);
-    registry.put(GtpCode.GTP_U, map);
+    registry.put(Echo_Request.value(), Echo_Request);
+    registry.put(Echo_Response.value(), Echo_Response);
+    registry.put(Version_Not_Supported.value(), Version_Not_Supported);
+    registry.put(Node_Alive_Request.value(), Node_Alive_Request);
+    registry.put(Node_Alive_Response.value(), Node_Alive_Response);
+    registry.put(Redirection_Request.value(), Redirection_Request);
+    registry.put(Redirection_Response.value(), Redirection_Response);
+    registry.put(Create_PDP_Context_Request.value(), Create_PDP_Context_Request);
+    registry.put(Create_PDP_Context_Response.value(), Create_PDP_Context_Response);
+    registry.put(Update_PDP_Context_Request.value(), Update_PDP_Context_Request);
+    registry.put(Update_PDP_Context_Response.value(), Update_PDP_Context_Response);
+    registry.put(Delete_PDP_Context_Request.value(), Delete_PDP_Context_Request);
+    registry.put(Delete_PDP_Context_Response.value(), Delete_PDP_Context_Response);
+    registry.put(Initiate_PDP_Context_Activation_Request.value(), Initiate_PDP_Context_Activation_Request);
+    registry.put(Initiate_PDP_Context_Activation_Response.value(), Initiate_PDP_Context_Activation_Response);
+    registry.put(Error_Indication.value(), Error_Indication);
+    registry.put(PDU_Notification_Request.value(), PDU_Notification_Request);
+    registry.put(PDU_Notification_Response.value(), PDU_Notification_Response);
+    registry.put(PDU_Notification_Reject_Request.value(), PDU_Notification_Reject_Request);
+    registry.put(PDU_Notification_Reject_Response.value(), PDU_Notification_Reject_Response);
+    registry.put(Supported_Extension_Headers_Notification.value(), Supported_Extension_Headers_Notification);
+    registry.put(Send_Routing_Information_for_GPRS_Request.value(), Send_Routing_Information_for_GPRS_Request);
+    registry.put(Send_Routing_Information_for_GPRS_Response.value(), Send_Routing_Information_for_GPRS_Response);
+    registry.put(Failure_Report_Request.value(), Failure_Report_Request);
+    registry.put(Failure_Report_Response.value(), Failure_Report_Response);
+    registry.put(Note_MS_GPRS_Present_Request.value(), Note_MS_GPRS_Present_Request);
+    registry.put(Note_MS_GPRS_Present_Response.value(), Note_MS_GPRS_Present_Response);
+    registry.put(Identification_Request.value(), Identification_Request);
+    registry.put(Identification_Response.value(), Identification_Response);
+    registry.put(SGSN_Context_Request.value(), SGSN_Context_Request);
+    registry.put(SGSN_Context_Response.value(), SGSN_Context_Response);
+    registry.put(SGSN_Context_Acknowledge.value(), SGSN_Context_Acknowledge);
+    registry.put(Forward_Relocation_Request.value(), Forward_Relocation_Request);
+    registry.put(Forward_Relocation_Response.value(), Forward_Relocation_Response);
+    registry.put(Forward_Relocation_Complete.value(), Forward_Relocation_Complete);
+    registry.put(Forward_Relocation_Complete_Acknowledge.value(), Forward_Relocation_Complete_Acknowledge);
+    registry.put(Relocation_Cancel_Request.value(), Relocation_Cancel_Request);
+    registry.put(Relocation_Cancel_Response.value(), Relocation_Cancel_Response);
+    registry.put(Forward_SNRS_Context.value(), Forward_SNRS_Context);
+    registry.put(Forward_SNRS_Context_Acknowledge.value(), Forward_SNRS_Context_Acknowledge);
+    registry.put(RAN_Information_Relay.value(), RAN_Information_Relay);
+    registry.put(MBMS_Notification_Request.value(), MBMS_Notification_Request);
+    registry.put(MBMS_Notification_Response.value(), MBMS_Notification_Response);
+    registry.put(MBMS_Notification_Reject_Request.value(), MBMS_Notification_Reject_Request);
+    registry.put(MBMS_Notification_Reject_Response.value(), MBMS_Notification_Reject_Response);
+    registry.put(Create_MBMS_Context_Request.value(), Create_MBMS_Context_Request);
+    registry.put(Create_MBMS_Context_Response.value(), Create_MBMS_Context_Response);
+    registry.put(Update_MBMS_Context_Request.value(), Update_MBMS_Context_Request);
+    registry.put(Update_MBMS_Context_Response.value(), Update_MBMS_Context_Response);
+    registry.put(Delete_MBMS_Context_Request.value(), Delete_MBMS_Context_Request);
+    registry.put(Delete_MBMS_Context_Response.value(), Delete_MBMS_Context_Response);
+    registry.put(MBMS_Registration_Request.value(), MBMS_Registration_Request);
+    registry.put(MBMS_Registration_Response.value(), MBMS_Registration_Response);
+    registry.put(MBMS_De_Registration_Request.value(), MBMS_De_Registration_Request);
+    registry.put(MBMS_De_Registration_Response.value(), MBMS_De_Registration_Response);
+    registry.put(MBMS_Session_Start_Request.value(), MBMS_Session_Start_Request);
+    registry.put(MBMS_Session_Start_Response.value(), MBMS_Session_Start_Response);
+    registry.put(MBMS_Session_Stop_Request.value(), MBMS_Session_Stop_Request);
+    registry.put(MBMS_Session_Stop_Response.value(), MBMS_Session_Stop_Response);
+    registry.put(MBMS_Session_Update_Request.value(), MBMS_Session_Update_Request);
+    registry.put(MBMS_Session_Update_Response.value(), MBMS_Session_Update_Response);
+    registry.put(MS_Info_Change_Notification_Request.value(), MS_Info_Change_Notification_Request);
+    registry.put(MS_Info_Change_Notification_Response.value(), MS_Info_Change_Notification_Response);
+    registry.put(Data_Record_Transfer_Request.value(), Data_Record_Transfer_Request);
+    registry.put(Data_Record_Transfer_Response.value(), Data_Record_Transfer_Response);
+    registry.put(End_Marker.value(), End_Marker);
+    registry.put(G_PDU.value(), G_PDU);
   }
 
   /**
@@ -535,34 +509,24 @@ public final class GtpMSGType extends NamedNumber<Byte, GtpMSGType> {
   }
 
   /**
-   * @param code code
    * @param value value
    * @return a GtpMSGType object.
    */
-  public static GtpMSGType getInstance(GtpCode code, Byte value) {
-    if (registry.containsKey(code) && registry.get(code).containsKey(value)) {
-      return registry.get(code).get(value);
+  public static GtpMSGType getInstance(Byte value) {
+    if (registry.containsKey(value)) {
+      return registry.get(value);
     }
     else {
-      return null;//new GtpMSGType(value, "unknown");
+      return new GtpMSGType(value, "unknown");
     }
   }
 
   /**
-   * @param code code
-   * @param msg msg
+   * @param type type
    * @return a GtpMSGType object.
    */
-  public static GtpMSGType register(GtpCode code, GtpMSGType msg) {
-    if (registry.containsKey(code.value())) {
-      return registry.get(code.value()).put(msg.value(), msg);
-    }
-    else {
-      Map<Byte, GtpMSGType> map = new HashMap<Byte, GtpMSGType>();
-      map.put(msg.value(), msg);
-      registry.put(code, map);
-      return null;
-    }
+  public static GtpMSGType register(GtpMSGType type) {
+    return registry.put(type.value(), type);
   }
 
   @Override
