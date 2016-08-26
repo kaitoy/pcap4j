@@ -14,6 +14,11 @@ package org.pcap4j.packet;
 public enum GtpVersion {
 
   /**
+   * v0
+   */
+  V0(0),
+
+  /**
    * v1
    */
   V1(1),
