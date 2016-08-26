@@ -12,8 +12,10 @@ import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.GtpV1ExtensionHeaderType;
 import org.pcap4j.packet.namednumber.GtpV1MessageType;
+import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -55,7 +57,15 @@ public final class GtpV1Packet extends AbstractPacket {
   private GtpV1Packet(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     this.header = new GtpV1Header(rawData, offset, length);
 
-    int payloadLength = header.getLengthAsInt() - header.length();
+    int payloadLength = header.getLengthAsInt();
+    if (
+         header.isExtensionHeaderFieldPresent()
+      || header.isSequenceNumberFieldPresent()
+      || header.isNPduNumberFieldPresent()
+    ) {
+      payloadLength -= 4;
+    }
+
     if (payloadLength < 0) {
       throw new IllegalRawDataException(
               "The value of length field seems to be wrong: "
@@ -63,12 +73,18 @@ public final class GtpV1Packet extends AbstractPacket {
             );
     }
 
-    if (payloadLength > length - header.length()) {
-      payloadLength = length - header.length();
-    }
-
     if (payloadLength != 0) {
-      this.payload = null;
+      GtpV1ExtensionHeaderType type = header.getNextExtensionHeaderType();
+      if (type != null) {
+        this.payload
+          = PacketFactories.getFactory(Packet.class, GtpV1ExtensionHeaderType.class)
+              .newInstance(rawData, offset + header.length(), payloadLength, type);
+      }
+      else {
+        this.payload
+          = PacketFactories.getFactory(Packet.class, NotApplicable.class)
+              .newInstance(rawData, offset + header.length(), payloadLength, NotApplicable.UNKNOWN);
+      }
     }
     else {
       this.payload = null;
