@@ -587,10 +587,10 @@ public final class GtpV1Packet extends AbstractPacket {
     protected List<byte[]> getRawFields() {
       byte flags = (byte) (version.getValue() << 5);
       if (protocolType) { flags |= 0x10; }
-      if (reserved) { flags = (byte) (flags | 0x08); }
-      if (extensionHeaderFlag) { flags =(byte) (flags | 0x04); }
-      if (sequenceNumberFlag) { flags = (byte) (flags | 0x02); }
-      if (nPduNumberFlag) { flags = (byte) (flags | 0x01); }
+      if (reserved) { flags |= 0x08; }
+      if (extensionHeaderFlag) { flags |= 0x04; }
+      if (sequenceNumberFlag) { flags |= 0x02; }
+      if (nPduNumberFlag) { flags |= 0x01; }
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(ByteArrays.toByteArray(flags));
       rawFields.add(ByteArrays.toByteArray(messageType.value()));
