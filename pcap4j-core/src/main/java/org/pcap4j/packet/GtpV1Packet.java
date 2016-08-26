@@ -478,7 +478,7 @@ public final class GtpV1Packet extends AbstractPacket {
      *
      * @return version
      */
-    public GtpVersion getversion() {
+    public GtpVersion getVersion() {
       return version;
     }
 
