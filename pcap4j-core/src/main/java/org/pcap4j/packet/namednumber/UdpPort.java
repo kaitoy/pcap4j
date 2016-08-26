@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2015  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -4110,6 +4110,24 @@ public final class UdpPort extends NamedNumber<Short, UdpPort> {
   public static final UdpPort SURF
     = new UdpPort((short)1010, "surf");
 
+  /**
+   * GTP-C: 2123
+   */
+  public static final UdpPort GTP_C
+    = new UdpPort((short)2123, "GTP-C");
+
+  /**
+   * GTP-U: 2152
+   */
+  public static final UdpPort GTP_U
+    = new UdpPort((short)2152, "GTP-U");
+
+  /**
+   * GTP': 2152
+   */
+  public static final UdpPort GTP_PRIME
+    = new UdpPort((short)3386, "GTP'");
+
   private static final Map<Short, UdpPort> registry
     = new HashMap<Short, UdpPort>();
 
@@ -4795,6 +4813,9 @@ public final class UdpPort extends NamedNumber<Short, UdpPort> {
     registry.put(APPLIX.value(), APPLIX);
     registry.put(CADLOCK2.value(), CADLOCK2);
     registry.put(SURF.value(), SURF);
+    registry.put(GTP_C.value(), GTP_C);
+    registry.put(GTP_U.value(), GTP_U);
+    registry.put(GTP_PRIME.value(), GTP_PRIME);
   }
 
   /**
