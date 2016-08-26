@@ -27,475 +27,475 @@ public final class GtpV1MessageType extends NamedNumber<Byte, GtpV1MessageType> 
   /**
    * Message type 1 (Echo Request)
    */
-  public static final GtpV1MessageType Echo_Request
-    = new GtpV1MessageType((byte)1, "Echo_Request");
+  public static final GtpV1MessageType ECHO_REQUEST
+    = new GtpV1MessageType((byte)1, "Echo Request");
 
   /**
    * Message type 2 (Echo Response)
    */
-  public static final GtpV1MessageType Echo_Response
-    = new GtpV1MessageType((byte)2, "Echo_Response");
+  public static final GtpV1MessageType ECHO_RESPONSE
+    = new GtpV1MessageType((byte)2, "Echo Response");
 
   /**
    * Message type 3 (Version not Supported)
    */
-  public static final GtpV1MessageType Version_Not_Supported
-    = new GtpV1MessageType((byte)3, "Version_Not_Supported");
+  public static final GtpV1MessageType VERSION_NOT_SUPPORTED
+    = new GtpV1MessageType((byte)3, "Version Not Supported");
 
   /**
    * Message type 4 (Node Alive Request)
    */
-  public static final GtpV1MessageType Node_Alive_Request
-    = new GtpV1MessageType((byte)4, "Node_Alive_Request");
+  public static final GtpV1MessageType NODE_ALIVE_REQUEST
+    = new GtpV1MessageType((byte)4, "Node Alive Request");
 
   /**
    * Message type 5 (Node Alive Response)
    */
-  public static final GtpV1MessageType Node_Alive_Response
-    = new GtpV1MessageType((byte)5, "Node_Alive_Response");
+  public static final GtpV1MessageType NODE_ALIVE_RESPONSE
+    = new GtpV1MessageType((byte)5, "Node Alive Response");
 
   /**
    * Message type 6 (Redirection Request)
    */
-  public static final GtpV1MessageType Redirection_Request
-    = new GtpV1MessageType((byte)6, "Redirection_Request");
+  public static final GtpV1MessageType REDIRECTION_REQUEST
+    = new GtpV1MessageType((byte)6, "Redirection Request");
 
   /**
    * Message type 7 (Redirection Response)
    */
-  public static final GtpV1MessageType Redirection_Response
-    = new GtpV1MessageType((byte)7, "Redirection_Response");
+  public static final GtpV1MessageType REDIRECTION_RESPONSE
+    = new GtpV1MessageType((byte)7, "Redirection Response");
 
   /**
    * Message type 16 (Create PDP Context Request)
    */
-  public static final GtpV1MessageType Create_PDP_Context_Request
-    = new GtpV1MessageType((byte)16, "Create_PDP_Context_Request");
+  public static final GtpV1MessageType CREATE_PDP_CONTEXT_REQUEST
+    = new GtpV1MessageType((byte)16, "Create PDP Context Request");
 
   /**
    * Message type 17 (Create PDP Context Response)
    */
-  public static final GtpV1MessageType Create_PDP_Context_Response
-    = new GtpV1MessageType((byte)17, "Create_PDP_Context_Response");
+  public static final GtpV1MessageType CREATE_PDP_CONTEXT_RESPONSE
+    = new GtpV1MessageType((byte)17, "Create PDP Context Response");
 
   /**
    * Message type 18 (Update PDP Context Request)
    */
-  public static final GtpV1MessageType Update_PDP_Context_Request
-    = new GtpV1MessageType((byte)18, "Update_PDP_Context_Request");
+  public static final GtpV1MessageType UPDATE_PDP_CONTEXT_REQUEST
+    = new GtpV1MessageType((byte)18, "Update PDP Context Request");
 
   /**
    * Message type 19 (Update PDP Context Response)
    */
-  public static final GtpV1MessageType Update_PDP_Context_Response
-    = new GtpV1MessageType((byte)19, "Update_PDP_Context_Response");
+  public static final GtpV1MessageType UPDATE_PDP_CONTEXT_RESPONSE
+    = new GtpV1MessageType((byte)19, "Update PDP Context Response");
 
   /**
    * Message type 20 (Delete PDP Context Request)
    */
-  public static final GtpV1MessageType Delete_PDP_Context_Request
-    = new GtpV1MessageType((byte)20, "Delete_PDP_Context_Request");
+  public static final GtpV1MessageType DELETE_PDP_CONTEXT_REQUEST
+    = new GtpV1MessageType((byte)20, "Delete PDP Context Request");
 
   /**
    * Message type 21 (Delete PDP Context Response)
    */
-  public static final GtpV1MessageType Delete_PDP_Context_Response
-    = new GtpV1MessageType((byte)21, "Delete_PDP_Context_Response");
+  public static final GtpV1MessageType DELETE_PDP_CONTEXT_RESPONSE
+    = new GtpV1MessageType((byte)21, "Delete PDP Context Response");
 
   /**
    * Message type 22 (Initiate PDP Context Activation Request)
    */
-  public static final GtpV1MessageType Initiate_PDP_Context_Activation_Request
-    = new GtpV1MessageType((byte)22, "Initiate_PDP_Context_Activation_Request");
+  public static final GtpV1MessageType INITIATE_PDP_CONTEXT_ACTIVATION_REQUEST
+    = new GtpV1MessageType((byte)22, "Initiate PDP Context Activation Request");
 
   /**
    * Message type 23 (Initiate PDP Context Activation Response)
    */
-  public static final GtpV1MessageType Initiate_PDP_Context_Activation_Response
-    = new GtpV1MessageType((byte)22, "Initiate_PDP_Context_Activation_Response");
+  public static final GtpV1MessageType INITIATE_PDP_CONTEXT_ACTIVATION_RESPONSE
+    = new GtpV1MessageType((byte)22, "Initiate PDP Context Activation Response");
 
   /**
    * Message type 26 (Error Indication)
    */
-  public static final GtpV1MessageType Error_Indication
-    = new GtpV1MessageType((byte)26, "Error_Indication");
+  public static final GtpV1MessageType ERROR_INDICATION
+    = new GtpV1MessageType((byte)26, "Error Indication");
 
   /**
    * Message type 27 (PDU Notification Request)
    */
-  public static final GtpV1MessageType PDU_Notification_Request
-    = new GtpV1MessageType((byte)27, "PDU_Notification_Request");
+  public static final GtpV1MessageType PDU_NOTIFICATION_REQUEST
+    = new GtpV1MessageType((byte)27, "PDU Notification Request");
 
   /**
    * Message type 28 (PDU Notification Response)
    */
-  public static final GtpV1MessageType PDU_Notification_Response
-    = new GtpV1MessageType((byte)28, "PDU_Notification_Response");
+  public static final GtpV1MessageType PDU_NOTIFICATION_RESPONSE
+    = new GtpV1MessageType((byte)28, "PDU Notification Response");
 
   /**
    * Message type 29 (PDU Notification Reject Request)
    */
-  public static final GtpV1MessageType PDU_Notification_Reject_Request
-    = new GtpV1MessageType((byte)29, "PDU_Notification_Reject_Request");
+  public static final GtpV1MessageType PDU_NOTIFICATION_REJECT_REQUEST
+    = new GtpV1MessageType((byte)29, "PDU Notification Reject Request");
 
   /**
    * Message type 30 (PDU Notification Reject Response)
    */
-  public static final GtpV1MessageType PDU_Notification_Reject_Response
-    = new GtpV1MessageType((byte)30, "PDU_Notification_Reject_Response");
+  public static final GtpV1MessageType PDU_NOTIFICATION_REJECT_RESPONSE
+    = new GtpV1MessageType((byte)30, "PDU Notification Reject Response");
 
   /**
    * Message type 31 (Supported Extension Headers Notification)
    */
-  public static final GtpV1MessageType Supported_Extension_Headers_Notification
-    = new GtpV1MessageType((byte)31, "Supported_Extension_Headers_Notification");
+  public static final GtpV1MessageType SUPPORTED_EXTENSION_HEADERS_NOTIFICATION
+    = new GtpV1MessageType((byte)31, "Supported Extension Headers Notification");
 
   /**
    * Message type 32 (Send Routing Information for GPRS Request)
    */
-  public static final GtpV1MessageType Send_Routing_Information_for_GPRS_Request
-    = new GtpV1MessageType((byte)32, "Send_Routing_Information_for_GPRS_Request");
+  public static final GtpV1MessageType SEND_ROUTING_INFORMATION_FOR_GPRS_REQUEST
+    = new GtpV1MessageType((byte)32, "Send Routing Information for GPRS Request");
 
   /**
    * Message type 33 (Send Routing Information for GPRS Response)
    */
-  public static final GtpV1MessageType Send_Routing_Information_for_GPRS_Response
-    = new GtpV1MessageType((byte)33, "Send_Routing_Information_for_GPRS_Response");
+  public static final GtpV1MessageType SEND_ROUTING_INFORMATION_FOR_GPRS_RESPONSE
+    = new GtpV1MessageType((byte)33, "Send Routing Information for GPRS Response");
 
   /**
    * Message type 34 (Failure Report Request)
    */
-  public static final GtpV1MessageType Failure_Report_Request
-    = new GtpV1MessageType((byte)34, "Failure_Report_Request");
+  public static final GtpV1MessageType FAILURE_REPORT_REQUEST
+    = new GtpV1MessageType((byte)34, "Failure Report Request");
 
   /**
    * Message type 35 (Failure Report Response)
    */
-  public static final GtpV1MessageType Failure_Report_Response
-    = new GtpV1MessageType((byte)35, "Failure_Report_Response");
+  public static final GtpV1MessageType FAILURE_REPORT_RESPONSE
+    = new GtpV1MessageType((byte)35, "Failure Report Response");
 
   /**
    * Message type 36 (Note MS GPRS Present Request )
    */
-  public static final GtpV1MessageType Note_MS_GPRS_Present_Request
-    = new GtpV1MessageType((byte)36, "Note_MS_GPRS_Present_Request");
+  public static final GtpV1MessageType NOTE_MS_GPRS_PRESENT_REQUEST
+    = new GtpV1MessageType((byte)36, "Note MS GPRS Present Request");
 
   /**
    * Message type 37 (Note MS GPRS Present Response)
    */
-  public static final GtpV1MessageType Note_MS_GPRS_Present_Response
-    = new GtpV1MessageType((byte)37, "Note_MS_GPRS_Present_Response");
+  public static final GtpV1MessageType NOTE_MS_GPRS_PRESENT_RESPONSE
+    = new GtpV1MessageType((byte)37, "Note MS GPRS Present Response");
 
   /**
    * Message type 48 (Identification Request)
    */
-  public static final GtpV1MessageType Identification_Request
-    = new GtpV1MessageType((byte)48, "Identification_Request");
+  public static final GtpV1MessageType IDENTIFICATION_REQUEST
+    = new GtpV1MessageType((byte)48, "Identification Request");
 
   /**
    * Message type 49 (Identification Response)
    */
-  public static final GtpV1MessageType Identification_Response
-    = new GtpV1MessageType((byte)49, "Identification_Response");
+  public static final GtpV1MessageType IDENTIFICATION_RESPONSE
+    = new GtpV1MessageType((byte)49, "Identification Response");
 
   /**
    * Message type 50 (SGSN Context Request)
    */
-  public static final GtpV1MessageType SGSN_Context_Request
-    = new GtpV1MessageType((byte)50, "SGSN_Context_Request");
+  public static final GtpV1MessageType SGSN_CONTEXT_REQUEST
+    = new GtpV1MessageType((byte)50, "SGSN Context Request");
 
   /**
    * Message type 51 (SGSN Context Response)
    */
-  public static final GtpV1MessageType SGSN_Context_Response
-    = new GtpV1MessageType((byte)51, "SGSN_Context_Response");
+  public static final GtpV1MessageType SGSN_CONTEXT_RESPONSE
+    = new GtpV1MessageType((byte)51, "SGSN Context Response");
 
   /**
    * Message type 52 (SGSN Context Acknowledge)
    */
-  public static final GtpV1MessageType SGSN_Context_Acknowledge
-    = new GtpV1MessageType((byte)52, "SGSN_Context_Acknowledge");
+  public static final GtpV1MessageType SGSN_CONTEXT_ACKNOWLEDGE
+    = new GtpV1MessageType((byte)52, "SGSN Context Acknowledge");
 
   /**
    * Message type 53 (Forward Relocation Request)
    */
-  public static final GtpV1MessageType Forward_Relocation_Request
-    = new GtpV1MessageType((byte)53, "Forward_Relocation_Request");
+  public static final GtpV1MessageType FORWARD_RELOCATION_REQUEST
+    = new GtpV1MessageType((byte)53, "Forward Relocation Request");
 
   /**
    * Message type 54 (Forward Relocation Response)
    */
-  public static final GtpV1MessageType Forward_Relocation_Response
-    = new GtpV1MessageType((byte)54, "Forward_Relocation_Response");
+  public static final GtpV1MessageType FORWARD_RELOCATION_RESPONSE
+    = new GtpV1MessageType((byte)54, "Forward Relocation Response");
 
   /**
    * Message type 55 (Forward Relocation Complete)
    */
-  public static final GtpV1MessageType Forward_Relocation_Complete
-    = new GtpV1MessageType((byte)55, "Forward_Relocation_Complete");
+  public static final GtpV1MessageType FORWARD_RELOCATION_COMPLETE
+    = new GtpV1MessageType((byte)55, "Forward Relocation Complete");
 
   /**
    * Message type 56 (Relocation Cancel Request)
    */
-  public static final GtpV1MessageType Relocation_Cancel_Request
-    = new GtpV1MessageType((byte)56, "Relocation_Cancel_Request");
+  public static final GtpV1MessageType RELOCATION_CANCEL_REQUEST
+    = new GtpV1MessageType((byte)56, "Relocation Cancel Request");
 
   /**
    * Message type 57 (Relocation Cancel Response)
    */
-  public static final GtpV1MessageType Relocation_Cancel_Response
-    = new GtpV1MessageType((byte)57, "Relocation_Cancel_Response");
+  public static final GtpV1MessageType RELOCATION_CANCEL_RESPONSE
+    = new GtpV1MessageType((byte)57, "Relocation Cancel Response");
 
   /**
    * Message type 58 (Forward SNRS Context)
    */
-  public static final GtpV1MessageType Forward_SNRS_Context
-    = new GtpV1MessageType((byte)58, "Forward_SNRS_Context");
+  public static final GtpV1MessageType FORWARD_SNRS_CONTEXT
+    = new GtpV1MessageType((byte)58, "Forward SNRS Context");
 
   /**
    * Message type 59 (Forward Relocation Complete Acknowledge)
    */
-  public static final GtpV1MessageType Forward_Relocation_Complete_Acknowledge
-    = new GtpV1MessageType((byte)59, "Forward_Relocation_Complete_Acknowledge");
+  public static final GtpV1MessageType FORWARD_RELOCATION_COMPLETE_ACKNOWLEDGE
+    = new GtpV1MessageType((byte)59, "Forward Relocation Complete Acknowledge");
 
   /**
    * Message type 60 (Forward SNRS Context Acknowledge)
    */
-  public static final GtpV1MessageType Forward_SNRS_Context_Acknowledge
-    = new GtpV1MessageType((byte)60, "Forward_SNRS_Context_Acknowledge");
+  public static final GtpV1MessageType FORWARD_SNRS_CONTEXT_ACKNOWLEDGE
+    = new GtpV1MessageType((byte)60, "Forward SNRS Context Acknowledge");
 
   /**
    * Message type 70 (RAN Information Relay)
    */
-  public static final GtpV1MessageType RAN_Information_Relay
-    = new GtpV1MessageType((byte)70, "RAN_Information_Relay");
+  public static final GtpV1MessageType RAN_INFORMATION_RELAY
+    = new GtpV1MessageType((byte)70, "RAN Information Relay");
 
   /**
    * Message type 96 (MBMS Notification Request)
    */
-  public static final GtpV1MessageType MBMS_Notification_Request
-    = new GtpV1MessageType((byte)96, "MBMS_Notification_Request");
+  public static final GtpV1MessageType MBMS_NOTIFICATION_REQUEST
+    = new GtpV1MessageType((byte)96, "MBMS Notification Request");
 
   /**
    * Message type 97 (MBMS Notification Response)
    */
-  public static final GtpV1MessageType MBMS_Notification_Response
-    = new GtpV1MessageType((byte)97, "MBMS_Notification_Response");
+  public static final GtpV1MessageType MBMS_NOTIFICATION_RESPONSE
+    = new GtpV1MessageType((byte)97, "MBMS Notification Response");
 
   /**
    * Message type 98 (MBMS Notification Reject Request)
    */
-  public static final GtpV1MessageType MBMS_Notification_Reject_Request
-    = new GtpV1MessageType((byte)98, "MBMS_Notification_Request");
+  public static final GtpV1MessageType MBMS_NOTIFICATION_REJECT_REQUEST
+    = new GtpV1MessageType((byte)98, "MBMS Notification Request");
 
   /**
    * Message type 99 (MBMS Notification Reject Response)
    */
-  public static final GtpV1MessageType MBMS_Notification_Reject_Response
-    = new GtpV1MessageType((byte)99, "MBMS_Notification_Response");
+  public static final GtpV1MessageType MBMS_NOTIFICATION_REJECT_RESPONSE
+    = new GtpV1MessageType((byte)99, "MBMS Notification Response");
 
   /**
    * Message type 100 (Create MBMS Context Request)
    */
-  public static final GtpV1MessageType Create_MBMS_Context_Request
-    = new GtpV1MessageType((byte)100, "Create_MBMS_Context_Request");
+  public static final GtpV1MessageType CREATE_MBMS_CONTEXT_REQUEST
+    = new GtpV1MessageType((byte)100, "Create MBMS Context Request");
 
   /**
    * Message type 101 (Create MBMS Context Response)
    */
-  public static final GtpV1MessageType Create_MBMS_Context_Response
-    = new GtpV1MessageType((byte)101, "Create_MBMS_Context_Response");
+  public static final GtpV1MessageType CREATE_MBMS_CONTEXT_RESPONSE
+    = new GtpV1MessageType((byte)101, "Create MBMS Context Response");
 
   /**
    * Message type 102 (Update MBMS Context Request)
    */
-  public static final GtpV1MessageType Update_MBMS_Context_Request
-    = new GtpV1MessageType((byte)102, "Update_MBMS_Context_Request");
+  public static final GtpV1MessageType UPDATE_MBMS_CONTEXT_REQUEST
+    = new GtpV1MessageType((byte)102, "Update MBMS Context Request");
 
   /**
    * Message type 103 (Update MBMS Context Response)
    */
-  public static final GtpV1MessageType Update_MBMS_Context_Response
-    = new GtpV1MessageType((byte)103, "Update_MBMS_Context_Response");
+  public static final GtpV1MessageType UPDATE_MBMS_CONTEXT_RESPONSE
+    = new GtpV1MessageType((byte)103, "Update MBMS Context Response");
 
   /**
    * Message type 104 (Delete MBMS Context Request)
    */
-  public static final GtpV1MessageType Delete_MBMS_Context_Request
-    = new GtpV1MessageType((byte)104, "Delete_MBMS_Context_Request");
+  public static final GtpV1MessageType DELETE_MBMS_CONTEXT_REQUEST
+    = new GtpV1MessageType((byte)104, "Delete MBMS Context Request");
 
   /**
    * Message type 105 (Delete MBMS Context Response)
    */
-  public static final GtpV1MessageType Delete_MBMS_Context_Response
-    = new GtpV1MessageType((byte)105, "Delete_MBMS_Context_Response");
+  public static final GtpV1MessageType DELETE_MBMS_CONTEXT_RESPONSE
+    = new GtpV1MessageType((byte)105, "Delete MBMS Context Response");
 
   /**
    * Message type 112 (MBMS Registration Request)
    */
-  public static final GtpV1MessageType MBMS_Registration_Request
-    = new GtpV1MessageType((byte)112, "MBMS_Registration_Request");
+  public static final GtpV1MessageType MBMS_REGISTRATION_REQUEST
+    = new GtpV1MessageType((byte)112, "MBMS Registration Request");
 
   /**
    * Message type 113 (MBMS Registration Response)
    */
-  public static final GtpV1MessageType MBMS_Registration_Response
-    = new GtpV1MessageType((byte)113, "MBMS_Registration_Response");
+  public static final GtpV1MessageType MBMS_REGISTRATION_RESPONSE
+    = new GtpV1MessageType((byte)113, "MBMS Registration Response");
 
   /**
    * Message type 114 (MBMS De-Registration Request)
    */
-  public static final GtpV1MessageType MBMS_De_Registration_Request
-    = new GtpV1MessageType((byte)114, "MBMS_De_Registration_Request");
+  public static final GtpV1MessageType MBMS_DE_REGISTRATION_REQUEST
+    = new GtpV1MessageType((byte)114, "MBMS De Registration Request");
 
   /**
    * Message type 115 (MBMS De-Registration Response)
    */
-  public static final GtpV1MessageType MBMS_De_Registration_Response
-    = new GtpV1MessageType((byte)115, "MBMS_De_Registration_Response");
+  public static final GtpV1MessageType MBMS_DE_REGISTRATION_RESPONSE
+    = new GtpV1MessageType((byte)115, "MBMS De Registration Response");
 
   /**
    * Message type 116 (MBMS Session Start Request)
    */
-  public static final GtpV1MessageType MBMS_Session_Start_Request
-    = new GtpV1MessageType((byte)116, "MBMS_Session_Start_Request");
+  public static final GtpV1MessageType MBMS_SESSION_START_REQUEST
+    = new GtpV1MessageType((byte)116, "MBMS Session Start Request");
 
   /**
    * Message type 117 (MBMS Session Start Response)
    */
-  public static final GtpV1MessageType MBMS_Session_Start_Response
-    = new GtpV1MessageType((byte)117, "MBMS_Session_Start_Response");
+  public static final GtpV1MessageType MBMS_SESSION_START_RESPONSE
+    = new GtpV1MessageType((byte)117, "MBMS Session Start Response");
 
   /**
    * Message type 118 (MBMS Session Stop Request)
    */
-  public static final GtpV1MessageType MBMS_Session_Stop_Request
-    = new GtpV1MessageType((byte)118, "MBMS_Session_Stop_Request");
+  public static final GtpV1MessageType MBMS_SESSION_STOP_REQUEST
+    = new GtpV1MessageType((byte)118, "MBMS Session Stop Request");
 
   /**
    * Message type 119 (MBMS Registration Response)
    */
-  public static final GtpV1MessageType MBMS_Session_Stop_Response
-    = new GtpV1MessageType((byte)119, "MBMS_Session_Stop_Response");
+  public static final GtpV1MessageType MBMS_SESSION_STOP_RESPONSE
+    = new GtpV1MessageType((byte)119, "MBMS Session Stop Response");
 
   /**
    * Message type 120 (MBMS Session Update Request)
    */
-  public static final GtpV1MessageType MBMS_Session_Update_Request
-    = new GtpV1MessageType((byte)120, "MBMS_Session_Update_Request");
+  public static final GtpV1MessageType MBMS_SESSION_UPDATE_REQUEST
+    = new GtpV1MessageType((byte)120, "MBMS Session Update Request");
 
   /**
    * Message type 121 (MBMS Session Update Response)
    */
-  public static final GtpV1MessageType MBMS_Session_Update_Response
-    = new GtpV1MessageType((byte)121, "MBMS_Session_Update_Response");
+  public static final GtpV1MessageType MBMS_SESSION_UPDATE_RESPONSE
+    = new GtpV1MessageType((byte)121, "MBMS Session Update Response");
 
   /**
    * Message type 128 (MS Info Change Notification Request)
    */
-  public static final GtpV1MessageType MS_Info_Change_Notification_Request
-    = new GtpV1MessageType((byte)128, "MS_Info_Change_Notification_Request");
+  public static final GtpV1MessageType MS_INFO_CHANGE_NOTIFICATION_REQUEST
+    = new GtpV1MessageType((byte)128, "MS Info Change Notification Request");
 
   /**
    * Message type 129 (MS Info Change Notification Response)
    */
-  public static final GtpV1MessageType MS_Info_Change_Notification_Response
-    = new GtpV1MessageType((byte)129, "MS_Info_Change_Notification_Response");
+  public static final GtpV1MessageType MS_INFO_CHANGE_NOTIFICATION_RESPONSE
+    = new GtpV1MessageType((byte)129, "MS Info Change Notification Response");
 
   /**
    * Message type 240 (Data Record Transfer Request)
    */
-  public static final GtpV1MessageType Data_Record_Transfer_Request
-    = new GtpV1MessageType((byte)240, "Data_Record_Transfer_Request");
+  public static final GtpV1MessageType DATA_RECORD_TRANSFER_REQUEST
+    = new GtpV1MessageType((byte)240, "Data Record Transfer Request");
 
   /**
    * Message type 241 (Data Record Transfer Response)
    */
-  public static final GtpV1MessageType Data_Record_Transfer_Response
-    = new GtpV1MessageType((byte)241, "Data_Record_Transfer_Response");
+  public static final GtpV1MessageType DATA_RECORD_TRANSFER_RESPONSE
+    = new GtpV1MessageType((byte)241, "Data Record Transfer Response");
 
   /**
    * Message type 254 (End Marker)
    */
-  public static final GtpV1MessageType End_Marker
-    = new GtpV1MessageType((byte)254, "End_Marker");
+  public static final GtpV1MessageType END_MARKER
+    = new GtpV1MessageType((byte)254, "End Marker");
 
   /**
    * Message type 255 (G-PDU)
    */
   public static final GtpV1MessageType G_PDU
-    = new GtpV1MessageType((byte)255, "G_PDU");
+    = new GtpV1MessageType((byte)255, "G-PDU");
 
   private static final Map<Byte, GtpV1MessageType> registry
     = new HashMap<Byte, GtpV1MessageType>();
 
   static {
-    registry.put(Echo_Request.value(), Echo_Request);
-    registry.put(Echo_Response.value(), Echo_Response);
-    registry.put(Version_Not_Supported.value(), Version_Not_Supported);
-    registry.put(Node_Alive_Request.value(), Node_Alive_Request);
-    registry.put(Node_Alive_Response.value(), Node_Alive_Response);
-    registry.put(Redirection_Request.value(), Redirection_Request);
-    registry.put(Redirection_Response.value(), Redirection_Response);
-    registry.put(Create_PDP_Context_Request.value(), Create_PDP_Context_Request);
-    registry.put(Create_PDP_Context_Response.value(), Create_PDP_Context_Response);
-    registry.put(Update_PDP_Context_Request.value(), Update_PDP_Context_Request);
-    registry.put(Update_PDP_Context_Response.value(), Update_PDP_Context_Response);
-    registry.put(Delete_PDP_Context_Request.value(), Delete_PDP_Context_Request);
-    registry.put(Delete_PDP_Context_Response.value(), Delete_PDP_Context_Response);
-    registry.put(Initiate_PDP_Context_Activation_Request.value(), Initiate_PDP_Context_Activation_Request);
-    registry.put(Initiate_PDP_Context_Activation_Response.value(), Initiate_PDP_Context_Activation_Response);
-    registry.put(Error_Indication.value(), Error_Indication);
-    registry.put(PDU_Notification_Request.value(), PDU_Notification_Request);
-    registry.put(PDU_Notification_Response.value(), PDU_Notification_Response);
-    registry.put(PDU_Notification_Reject_Request.value(), PDU_Notification_Reject_Request);
-    registry.put(PDU_Notification_Reject_Response.value(), PDU_Notification_Reject_Response);
-    registry.put(Supported_Extension_Headers_Notification.value(), Supported_Extension_Headers_Notification);
-    registry.put(Send_Routing_Information_for_GPRS_Request.value(), Send_Routing_Information_for_GPRS_Request);
-    registry.put(Send_Routing_Information_for_GPRS_Response.value(), Send_Routing_Information_for_GPRS_Response);
-    registry.put(Failure_Report_Request.value(), Failure_Report_Request);
-    registry.put(Failure_Report_Response.value(), Failure_Report_Response);
-    registry.put(Note_MS_GPRS_Present_Request.value(), Note_MS_GPRS_Present_Request);
-    registry.put(Note_MS_GPRS_Present_Response.value(), Note_MS_GPRS_Present_Response);
-    registry.put(Identification_Request.value(), Identification_Request);
-    registry.put(Identification_Response.value(), Identification_Response);
-    registry.put(SGSN_Context_Request.value(), SGSN_Context_Request);
-    registry.put(SGSN_Context_Response.value(), SGSN_Context_Response);
-    registry.put(SGSN_Context_Acknowledge.value(), SGSN_Context_Acknowledge);
-    registry.put(Forward_Relocation_Request.value(), Forward_Relocation_Request);
-    registry.put(Forward_Relocation_Response.value(), Forward_Relocation_Response);
-    registry.put(Forward_Relocation_Complete.value(), Forward_Relocation_Complete);
-    registry.put(Forward_Relocation_Complete_Acknowledge.value(), Forward_Relocation_Complete_Acknowledge);
-    registry.put(Relocation_Cancel_Request.value(), Relocation_Cancel_Request);
-    registry.put(Relocation_Cancel_Response.value(), Relocation_Cancel_Response);
-    registry.put(Forward_SNRS_Context.value(), Forward_SNRS_Context);
-    registry.put(Forward_SNRS_Context_Acknowledge.value(), Forward_SNRS_Context_Acknowledge);
-    registry.put(RAN_Information_Relay.value(), RAN_Information_Relay);
-    registry.put(MBMS_Notification_Request.value(), MBMS_Notification_Request);
-    registry.put(MBMS_Notification_Response.value(), MBMS_Notification_Response);
-    registry.put(MBMS_Notification_Reject_Request.value(), MBMS_Notification_Reject_Request);
-    registry.put(MBMS_Notification_Reject_Response.value(), MBMS_Notification_Reject_Response);
-    registry.put(Create_MBMS_Context_Request.value(), Create_MBMS_Context_Request);
-    registry.put(Create_MBMS_Context_Response.value(), Create_MBMS_Context_Response);
-    registry.put(Update_MBMS_Context_Request.value(), Update_MBMS_Context_Request);
-    registry.put(Update_MBMS_Context_Response.value(), Update_MBMS_Context_Response);
-    registry.put(Delete_MBMS_Context_Request.value(), Delete_MBMS_Context_Request);
-    registry.put(Delete_MBMS_Context_Response.value(), Delete_MBMS_Context_Response);
-    registry.put(MBMS_Registration_Request.value(), MBMS_Registration_Request);
-    registry.put(MBMS_Registration_Response.value(), MBMS_Registration_Response);
-    registry.put(MBMS_De_Registration_Request.value(), MBMS_De_Registration_Request);
-    registry.put(MBMS_De_Registration_Response.value(), MBMS_De_Registration_Response);
-    registry.put(MBMS_Session_Start_Request.value(), MBMS_Session_Start_Request);
-    registry.put(MBMS_Session_Start_Response.value(), MBMS_Session_Start_Response);
-    registry.put(MBMS_Session_Stop_Request.value(), MBMS_Session_Stop_Request);
-    registry.put(MBMS_Session_Stop_Response.value(), MBMS_Session_Stop_Response);
-    registry.put(MBMS_Session_Update_Request.value(), MBMS_Session_Update_Request);
-    registry.put(MBMS_Session_Update_Response.value(), MBMS_Session_Update_Response);
-    registry.put(MS_Info_Change_Notification_Request.value(), MS_Info_Change_Notification_Request);
-    registry.put(MS_Info_Change_Notification_Response.value(), MS_Info_Change_Notification_Response);
-    registry.put(Data_Record_Transfer_Request.value(), Data_Record_Transfer_Request);
-    registry.put(Data_Record_Transfer_Response.value(), Data_Record_Transfer_Response);
-    registry.put(End_Marker.value(), End_Marker);
+    registry.put(ECHO_REQUEST.value(), ECHO_REQUEST);
+    registry.put(ECHO_RESPONSE.value(), ECHO_RESPONSE);
+    registry.put(VERSION_NOT_SUPPORTED.value(), VERSION_NOT_SUPPORTED);
+    registry.put(NODE_ALIVE_REQUEST.value(), NODE_ALIVE_REQUEST);
+    registry.put(NODE_ALIVE_RESPONSE.value(), NODE_ALIVE_RESPONSE);
+    registry.put(REDIRECTION_REQUEST.value(), REDIRECTION_REQUEST);
+    registry.put(REDIRECTION_RESPONSE.value(), REDIRECTION_RESPONSE);
+    registry.put(CREATE_PDP_CONTEXT_REQUEST.value(), CREATE_PDP_CONTEXT_REQUEST);
+    registry.put(CREATE_PDP_CONTEXT_RESPONSE.value(), CREATE_PDP_CONTEXT_RESPONSE);
+    registry.put(UPDATE_PDP_CONTEXT_REQUEST.value(), UPDATE_PDP_CONTEXT_REQUEST);
+    registry.put(UPDATE_PDP_CONTEXT_RESPONSE.value(), UPDATE_PDP_CONTEXT_RESPONSE);
+    registry.put(DELETE_PDP_CONTEXT_REQUEST.value(), DELETE_PDP_CONTEXT_REQUEST);
+    registry.put(DELETE_PDP_CONTEXT_RESPONSE.value(), DELETE_PDP_CONTEXT_RESPONSE);
+    registry.put(INITIATE_PDP_CONTEXT_ACTIVATION_REQUEST.value(), INITIATE_PDP_CONTEXT_ACTIVATION_REQUEST);
+    registry.put(INITIATE_PDP_CONTEXT_ACTIVATION_RESPONSE.value(), INITIATE_PDP_CONTEXT_ACTIVATION_RESPONSE);
+    registry.put(ERROR_INDICATION.value(), ERROR_INDICATION);
+    registry.put(PDU_NOTIFICATION_REQUEST.value(), PDU_NOTIFICATION_REQUEST);
+    registry.put(PDU_NOTIFICATION_RESPONSE.value(), PDU_NOTIFICATION_RESPONSE);
+    registry.put(PDU_NOTIFICATION_REJECT_REQUEST.value(), PDU_NOTIFICATION_REJECT_REQUEST);
+    registry.put(PDU_NOTIFICATION_REJECT_RESPONSE.value(), PDU_NOTIFICATION_REJECT_RESPONSE);
+    registry.put(SUPPORTED_EXTENSION_HEADERS_NOTIFICATION.value(), SUPPORTED_EXTENSION_HEADERS_NOTIFICATION);
+    registry.put(SEND_ROUTING_INFORMATION_FOR_GPRS_REQUEST.value(), SEND_ROUTING_INFORMATION_FOR_GPRS_REQUEST);
+    registry.put(SEND_ROUTING_INFORMATION_FOR_GPRS_RESPONSE.value(), SEND_ROUTING_INFORMATION_FOR_GPRS_RESPONSE);
+    registry.put(FAILURE_REPORT_REQUEST.value(), FAILURE_REPORT_REQUEST);
+    registry.put(FAILURE_REPORT_RESPONSE.value(), FAILURE_REPORT_RESPONSE);
+    registry.put(NOTE_MS_GPRS_PRESENT_REQUEST.value(), NOTE_MS_GPRS_PRESENT_REQUEST);
+    registry.put(NOTE_MS_GPRS_PRESENT_RESPONSE.value(), NOTE_MS_GPRS_PRESENT_RESPONSE);
+    registry.put(IDENTIFICATION_REQUEST.value(), IDENTIFICATION_REQUEST);
+    registry.put(IDENTIFICATION_RESPONSE.value(), IDENTIFICATION_RESPONSE);
+    registry.put(SGSN_CONTEXT_REQUEST.value(), SGSN_CONTEXT_REQUEST);
+    registry.put(SGSN_CONTEXT_RESPONSE.value(), SGSN_CONTEXT_RESPONSE);
+    registry.put(SGSN_CONTEXT_ACKNOWLEDGE.value(), SGSN_CONTEXT_ACKNOWLEDGE);
+    registry.put(FORWARD_RELOCATION_REQUEST.value(), FORWARD_RELOCATION_REQUEST);
+    registry.put(FORWARD_RELOCATION_RESPONSE.value(), FORWARD_RELOCATION_RESPONSE);
+    registry.put(FORWARD_RELOCATION_COMPLETE.value(), FORWARD_RELOCATION_COMPLETE);
+    registry.put(FORWARD_RELOCATION_COMPLETE_ACKNOWLEDGE.value(), FORWARD_RELOCATION_COMPLETE_ACKNOWLEDGE);
+    registry.put(RELOCATION_CANCEL_REQUEST.value(), RELOCATION_CANCEL_REQUEST);
+    registry.put(RELOCATION_CANCEL_RESPONSE.value(), RELOCATION_CANCEL_RESPONSE);
+    registry.put(FORWARD_SNRS_CONTEXT.value(), FORWARD_SNRS_CONTEXT);
+    registry.put(FORWARD_SNRS_CONTEXT_ACKNOWLEDGE.value(), FORWARD_SNRS_CONTEXT_ACKNOWLEDGE);
+    registry.put(RAN_INFORMATION_RELAY.value(), RAN_INFORMATION_RELAY);
+    registry.put(MBMS_NOTIFICATION_REQUEST.value(), MBMS_NOTIFICATION_REQUEST);
+    registry.put(MBMS_NOTIFICATION_RESPONSE.value(), MBMS_NOTIFICATION_RESPONSE);
+    registry.put(MBMS_NOTIFICATION_REJECT_REQUEST.value(), MBMS_NOTIFICATION_REJECT_REQUEST);
+    registry.put(MBMS_NOTIFICATION_REJECT_RESPONSE.value(), MBMS_NOTIFICATION_REJECT_RESPONSE);
+    registry.put(CREATE_MBMS_CONTEXT_REQUEST.value(), CREATE_MBMS_CONTEXT_REQUEST);
+    registry.put(CREATE_MBMS_CONTEXT_RESPONSE.value(), CREATE_MBMS_CONTEXT_RESPONSE);
+    registry.put(UPDATE_MBMS_CONTEXT_REQUEST.value(), UPDATE_MBMS_CONTEXT_REQUEST);
+    registry.put(UPDATE_MBMS_CONTEXT_RESPONSE.value(), UPDATE_MBMS_CONTEXT_RESPONSE);
+    registry.put(DELETE_MBMS_CONTEXT_REQUEST.value(), DELETE_MBMS_CONTEXT_REQUEST);
+    registry.put(DELETE_MBMS_CONTEXT_RESPONSE.value(), DELETE_MBMS_CONTEXT_RESPONSE);
+    registry.put(MBMS_REGISTRATION_REQUEST.value(), MBMS_REGISTRATION_REQUEST);
+    registry.put(MBMS_REGISTRATION_RESPONSE.value(), MBMS_REGISTRATION_RESPONSE);
+    registry.put(MBMS_DE_REGISTRATION_REQUEST.value(), MBMS_DE_REGISTRATION_REQUEST);
+    registry.put(MBMS_DE_REGISTRATION_RESPONSE.value(), MBMS_DE_REGISTRATION_RESPONSE);
+    registry.put(MBMS_SESSION_START_REQUEST.value(), MBMS_SESSION_START_REQUEST);
+    registry.put(MBMS_SESSION_START_RESPONSE.value(), MBMS_SESSION_START_RESPONSE);
+    registry.put(MBMS_SESSION_STOP_REQUEST.value(), MBMS_SESSION_STOP_REQUEST);
+    registry.put(MBMS_SESSION_STOP_RESPONSE.value(), MBMS_SESSION_STOP_RESPONSE);
+    registry.put(MBMS_SESSION_UPDATE_REQUEST.value(), MBMS_SESSION_UPDATE_REQUEST);
+    registry.put(MBMS_SESSION_UPDATE_RESPONSE.value(), MBMS_SESSION_UPDATE_RESPONSE);
+    registry.put(MS_INFO_CHANGE_NOTIFICATION_REQUEST.value(), MS_INFO_CHANGE_NOTIFICATION_REQUEST);
+    registry.put(MS_INFO_CHANGE_NOTIFICATION_RESPONSE.value(), MS_INFO_CHANGE_NOTIFICATION_RESPONSE);
+    registry.put(DATA_RECORD_TRANSFER_REQUEST.value(), DATA_RECORD_TRANSFER_REQUEST);
+    registry.put(DATA_RECORD_TRANSFER_RESPONSE.value(), DATA_RECORD_TRANSFER_RESPONSE);
+    registry.put(END_MARKER.value(), END_MARKER);
     registry.put(G_PDU.value(), G_PDU);
   }
 
