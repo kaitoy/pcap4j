@@ -76,11 +76,14 @@ public final class GtpV1Packet extends AbstractPacket {
 
   private GtpV1Packet(Builder builder) {
     if (
-      builder == null
+         builder == null
+      || builder.version == null
+      || builder.messageType == null
     ) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder);
-
+      sb.append("builder: ").append(builder)
+        .append(", builder.version: ").append(builder.version)
+        .append(", builder.messageType: ").append(builder.messageType);
       throw new NullPointerException(sb.toString());
     }
 
@@ -344,6 +347,8 @@ public final class GtpV1Packet extends AbstractPacket {
       = LENGTH_OFFSET + LENGTH_SIZE;
     private static final int TUNNEL_ID_SIZE
       = INT_SIZE_IN_BYTES;
+    private static final int GTP_V1_HEADER_MIM_SIZE
+      = TUNNEL_ID_OFFSET + TUNNEL_ID_SIZE;
     private static final int SEQ_OFFSET
       = TUNNEL_ID_OFFSET + TUNNEL_ID_SIZE;
     private static final int SEQ_SIZE
@@ -356,7 +361,7 @@ public final class GtpV1Packet extends AbstractPacket {
       = NPDU_OFFSET + NPDU_SIZE;
     private static final int NEXT_HEADER_SIZE
       = BYTE_SIZE_IN_BYTES;
-    private static final int GTP_V1_HEADER_SIZE
+    private static final int GTP_V1_HEADER_MAX_SIZE
       = NEXT_HEADER_OFFSET + NEXT_HEADER_SIZE;
 
     private final GtpVersion version;
@@ -373,10 +378,10 @@ public final class GtpV1Packet extends AbstractPacket {
     private final GtpV1ExtensionHeaderType nextExtensionHeaderType;
 
     private GtpV1Header(byte[] rawData, int offset, int length) throws IllegalRawDataException {
-      if (length < GTP_V1_HEADER_SIZE) {
+      if (length < GTP_V1_HEADER_MIM_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build a GTPv1 header(")
-          .append(GTP_V1_HEADER_SIZE)
+          .append(GTP_V1_HEADER_MIM_SIZE)
           .append(" bytes). data: ")
           .append(ByteArrays.toHexString(rawData, " "))
           .append(", offset: ")
@@ -397,10 +402,31 @@ public final class GtpV1Packet extends AbstractPacket {
         = GtpV1MessageType.getInstance(ByteArrays.getByte(rawData, MSG_TYPE_OFFSET + offset));
       this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET + offset);
       this.teid = ByteArrays.getInt(rawData, TUNNEL_ID_OFFSET + offset);
-      this.sequenceNumber = ByteArrays.getShort(rawData, SEQ_OFFSET + offset);
-      this.nPduNumber = ByteArrays.getByte(rawData, NPDU_OFFSET + offset);
-      this.nextExtensionHeaderType
-        = GtpV1ExtensionHeaderType.getInstance(rawData[NEXT_HEADER_OFFSET + offset]);
+
+      if (sequenceNumberFlag | nPduNumberFlag | extensionHeaderFlag) {
+        if (length < GTP_V1_HEADER_MAX_SIZE) {
+          StringBuilder sb = new StringBuilder(80);
+          sb.append("The data is too short to build a GTPv1 header(")
+            .append(GTP_V1_HEADER_MAX_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
+          throw new IllegalRawDataException(sb.toString());
+        }
+
+        this.sequenceNumber = ByteArrays.getShort(rawData, SEQ_OFFSET + offset);
+        this.nPduNumber = ByteArrays.getByte(rawData, NPDU_OFFSET + offset);
+        this.nextExtensionHeaderType
+          = GtpV1ExtensionHeaderType.getInstance(rawData[NEXT_HEADER_OFFSET + offset]);
+      }
+      else {
+        this.sequenceNumber = null;
+        this.nPduNumber = null;
+        this.nextExtensionHeaderType = null;
+      }
     }
 
     private GtpV1Header(Builder builder, byte[] payload) {
@@ -562,15 +588,33 @@ public final class GtpV1Packet extends AbstractPacket {
       rawFields.add(ByteArrays.toByteArray(messageType.value()));
       rawFields.add(ByteArrays.toByteArray(length));
       rawFields.add(ByteArrays.toByteArray(teid));
-      rawFields.add(ByteArrays.toByteArray(sequenceNumber));
-      rawFields.add(ByteArrays.toByteArray(nPduNumber));
-      rawFields.add(ByteArrays.toByteArray(nextExtensionHeaderType.value()));
+      if (sequenceNumber != null) {
+        rawFields.add(ByteArrays.toByteArray(sequenceNumber));
+      }
+      if (nPduNumber != null) {
+        rawFields.add(ByteArrays.toByteArray(nPduNumber));
+      }
+      if (nextExtensionHeaderType != null) {
+        rawFields.add(ByteArrays.toByteArray(nextExtensionHeaderType.value()));
+      }
       return rawFields;
     }
 
     @Override
     public int length() {
-      return GTP_V1_HEADER_SIZE;
+      int len = GTP_V1_HEADER_MIM_SIZE;
+
+      if (sequenceNumber != null) {
+        len += SHORT_SIZE_IN_BYTES;
+      }
+      if (nPduNumber != null) {
+        len += BYTE_SIZE_IN_BYTES;
+      }
+      if (nextExtensionHeaderType != null) {
+        len += BYTE_SIZE_IN_BYTES;
+      }
+
+      return len;
     }
 
     @Override
