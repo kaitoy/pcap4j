@@ -21,6 +21,7 @@ import org.pcap4j.util.ByteArrays;
  *
  * @see <a href="http://www.etsi.org/deliver/etsi_ts/129000_129099/129060/12.06.00_60/ts_129060v120600p.pdf">ETSI TS 129 060 V12.6.0</a>
  * @author Waveform
+ * @author Kaito Yamada
  * @since pcap4j 1.6.6
  */
 public final class GtpV1Packet extends AbstractPacket {
@@ -90,7 +91,7 @@ public final class GtpV1Packet extends AbstractPacket {
     this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new GtpV1Header(
                     builder,
-                    payload != null ? payload.getRawData() : new byte[0]
+                    payload != null ? payload.length() : 0
                   );
   }
 
@@ -111,6 +112,7 @@ public final class GtpV1Packet extends AbstractPacket {
 
   /**
    * @author Waveform
+   * @author Kaito Yamada
    * @since pcap4j 1.6.6
    */
   public static final class Builder extends AbstractBuilder implements LengthBuilder<GtpV1Packet> {
@@ -322,6 +324,7 @@ public final class GtpV1Packet extends AbstractPacket {
    *
    * @see <a href="http://www.etsi.org/deliver/etsi_ts/129000_129099/129060/12.06.00_60/ts_129060v120600p.pdf">ETSI TS 129 060 V12.6.0</a>
    * @author Waveform
+   * @author Kaito Yamada
    * @since pcap4j 1.6.6
    */
   public static final class GtpV1Header extends AbstractHeader {
@@ -429,7 +432,7 @@ public final class GtpV1Packet extends AbstractPacket {
       }
     }
 
-    private GtpV1Header(Builder builder, byte[] payload) {
+    private GtpV1Header(Builder builder, int payloadLen) {
       this.protocolType = builder.protocolType;
       this.version = builder.version;
       this.reserved = builder.reserved;
@@ -443,7 +446,12 @@ public final class GtpV1Packet extends AbstractPacket {
       this.extensionHeaderFlag = builder.extensionHeaderFlag;
 
       if (builder.correctLengthAtBuild) {
-        this.length = (short)((payload.length + getLength()));
+        if (sequenceNumberFlag | nPduNumberFlag | extensionHeaderFlag) {
+          this.length = (short) (payloadLen + 4);
+        }
+        else {
+          this.length = (short) payloadLen;
+        }
       }
       else {
         this.length = builder.length;
@@ -601,7 +609,7 @@ public final class GtpV1Packet extends AbstractPacket {
     }
 
     @Override
-    public int length() {
+    protected int calcLength() {
       int len = GTP_V1_HEADER_MIM_SIZE;
 
       if (sequenceNumber != null) {
