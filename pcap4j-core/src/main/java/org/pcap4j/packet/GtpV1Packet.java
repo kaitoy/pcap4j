@@ -700,7 +700,7 @@ public final class GtpV1Packet extends AbstractPacket {
     @Override
     protected int calcHashCode() {
       final int prime = 31;
-      int result = super.hashCode();
+      int result = 17;
       result = prime * result + (extensionHeaderFlag ? 1231 : 1237);
       result = prime * result + length;
       result = prime * result + messageType.hashCode();
@@ -721,9 +721,7 @@ public final class GtpV1Packet extends AbstractPacket {
     public boolean equals(Object obj) {
       if (this == obj)
         return true;
-      if (!super.equals(obj))
-        return false;
-      if (getClass() != obj.getClass())
+      if (!this.getClass().isInstance(obj))
         return false;
       GtpV1Header other = (GtpV1Header) obj;
       if (extensionHeaderFlag != other.extensionHeaderFlag)
