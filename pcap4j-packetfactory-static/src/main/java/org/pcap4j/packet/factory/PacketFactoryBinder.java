@@ -109,7 +109,13 @@ final class PacketFactoryBinder {
     Class<T> targetClass, Class<N> numberClass
   ) {
     if (Packet.class.isAssignableFrom(targetClass)) {
-      return (PacketFactory<T, N>)packetFactories.get(numberClass);
+      PacketFactory<T, N> factory = (PacketFactory<T, N>) packetFactories.get(numberClass);
+      if (factory != null) {
+        return factory;
+      }
+      else {
+        return (PacketFactory<T, N>) StaticUnknownPacketFactory.getInstance();
+      }
     }
     return (PacketFactory<T, N>)packetpPieceFactories.get(targetClass);
   }
