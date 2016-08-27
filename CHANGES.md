@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* Support GTPv1 (only GTP-U and GTP-C header)
 
 ### Bug Fixes ###
 
