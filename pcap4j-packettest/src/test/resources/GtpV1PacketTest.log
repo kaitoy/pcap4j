@@ -1,0 +1,15 @@
+[GTPv1 Header (12 bytes)]
+  Version: V1
+  Protocol Type: GTP
+  Reserved Flag: false
+  Extension Flag: false
+  Sequence Flag: true
+  NPDU Flag: true
+  Message Type: 2 (Echo Response)
+  Length: 8 [bytes]
+  Tunnel ID: 1234567890
+  Sequence Number: 4321
+  NPDU Number: 222
+  Next Extension Header: 0xc0 (PDCP PDU number)
+[data (4 bytes)]
+  Hex stream: 00 01 02 03
