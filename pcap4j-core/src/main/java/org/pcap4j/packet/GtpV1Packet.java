@@ -95,11 +95,13 @@ public final class GtpV1Packet extends AbstractPacket {
     if (
          builder == null
       || builder.version == null
+      || builder.protocolType == null
       || builder.messageType == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ").append(builder)
         .append(", builder.version: ").append(builder.version)
+        .append(", builder.protocolType: ").append(builder.protocolType)
         .append(", builder.messageType: ").append(builder.messageType);
       throw new NullPointerException(sb.toString());
     }
@@ -134,7 +136,7 @@ public final class GtpV1Packet extends AbstractPacket {
   public static final class Builder extends AbstractBuilder implements LengthBuilder<GtpV1Packet> {
 
     private GtpVersion version;
-    private boolean protocolType;
+    private ProtocolType protocolType;
     private boolean reserved;
     private boolean sequenceNumberFlag;
     private boolean extensionHeaderFlag;
@@ -177,7 +179,7 @@ public final class GtpV1Packet extends AbstractPacket {
      * @param protocolType protocolType
      * @return this Builder object for method chaining.
      */
-    public Builder protocolType(boolean protocolType) {
+    public Builder protocolType(ProtocolType protocolType) {
       this.protocolType = protocolType;
       return this;
     }
@@ -384,7 +386,7 @@ public final class GtpV1Packet extends AbstractPacket {
       = NEXT_HEADER_OFFSET + NEXT_HEADER_SIZE;
 
     private final GtpVersion version;
-    private final boolean protocolType;
+    private final ProtocolType protocolType;
     private final boolean reserved;
     private final boolean extensionHeaderFlag;
     private final boolean sequenceNumberFlag;
@@ -412,7 +414,7 @@ public final class GtpV1Packet extends AbstractPacket {
 
       byte firstOctet = ByteArrays.getByte(rawData, FIRST_OCTET_OFFSET + offset);
       this.version = GtpVersion.getInstance((firstOctet >> 5) & 0x07);
-      this.protocolType = (firstOctet & 0x10) != 0;
+      this.protocolType = ProtocolType.getInstance((firstOctet & 0x10) != 0);
       this.reserved = ((firstOctet & 0x08) >> 3) != 0;
       this.extensionHeaderFlag = ((firstOctet & 0x04) >> 2) != 0;
       this.sequenceNumberFlag = ((firstOctet & 0x02) >> 1) != 0;
@@ -483,9 +485,9 @@ public final class GtpV1Packet extends AbstractPacket {
     }
 
     /**
-     * @return true if the Protocol Type field is set to 1 (GTP); false otherwise (GTP').
+     * @return protocolType.
      */
-    public boolean getProtocolType() {
+    public ProtocolType getProtocolType() {
       return protocolType;
     }
 
@@ -602,7 +604,7 @@ public final class GtpV1Packet extends AbstractPacket {
     @Override
     protected List<byte[]> getRawFields() {
       byte flags = (byte) (version.getValue() << 5);
-      if (protocolType) { flags |= 0x10; }
+      if (protocolType.getValue()) { flags |= 0x10; }
       if (reserved) { flags |= 0x08; }
       if (extensionHeaderFlag) { flags |= 0x04; }
       if (sequenceNumberFlag) { flags |= 0x02; }
@@ -654,7 +656,7 @@ public final class GtpV1Packet extends AbstractPacket {
         .append(version)
         .append(ls);
       sb.append("  Protocol Type: ")
-        .append(protocolType ? "GTP" : "GTP'")
+        .append(protocolType)
         .append(ls);
       sb.append("  Reserved Flag: ")
         .append(reserved)
@@ -708,7 +710,7 @@ public final class GtpV1Packet extends AbstractPacket {
       result = prime * result + (nPduNumberFlag ? 1231 : 1237);
       result = prime * result
           + ((nextExtensionHeaderType == null) ? 0 : nextExtensionHeaderType.hashCode());
-      result = prime * result + (protocolType ? 1231 : 1237);
+      result = prime * result + protocolType.hashCode();
       result = prime * result + (reserved ? 1231 : 1237);
       result = prime * result + ((sequenceNumber == null) ? 0 : sequenceNumber.hashCode());
       result = prime * result + (sequenceNumberFlag ? 1231 : 1237);
@@ -761,6 +763,58 @@ public final class GtpV1Packet extends AbstractPacket {
       if (version != other.version)
         return false;
       return true;
+    }
+
+  }
+
+  /**
+   * GTP Protocol Type
+   *
+   * @see <a href="http://www.etsi.org/deliver/etsi_ts/129000_129099/129060/12.06.00_60/ts_129060v120600p.pdf">ETSI TS 129 060 V12.6.0</a>
+   * @author Kaito Yamada
+   * @since pcap4j 1.6.6
+   */
+  public enum ProtocolType {
+
+    /**
+     * GTP': false
+     */
+    GTP_PRIME(false),
+
+    /**
+     * GTP: true
+     */
+    GTP(true);
+
+    private final boolean value;
+
+    private ProtocolType(boolean value) {
+      this.value = value;
+    }
+
+    /**
+     * @param value value
+     * @return a ProtocolType object.
+     */
+    public static ProtocolType getInstance(boolean value) {
+      for (ProtocolType ver: values()) {
+        if (ver.value == value) {
+          return ver;
+        }
+      }
+      throw new IllegalArgumentException("Invalid value: " + value);
+    }
+
+    /**
+     * @return true if GTP; false otherwise (GTP').
+     */
+    public boolean getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return value ? "GTP" : "GTP'";
     }
 
   }
