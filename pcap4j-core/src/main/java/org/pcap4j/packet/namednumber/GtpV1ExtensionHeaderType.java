@@ -117,7 +117,7 @@ public final class GtpV1ExtensionHeaderType extends NamedNumber<Byte, GtpV1Exten
 
   @Override
   public String valueAsString() {
-    return ByteArrays.toHexString(value(), "");
+    return "0x" + ByteArrays.toHexString(value(), "");
   }
 
   @Override
