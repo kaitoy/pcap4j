@@ -1,14 +1,13 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Pcap4J.org
+  _##  Copyright (C) 2016  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ public final class SctpPacket extends AbstractPacket {
    *
    */
   private static final long serialVersionUID = -1082956644945517426L;
-  
+
   private final SctpHeader header;
   private final Packet payload;
 
@@ -211,7 +210,7 @@ public final class SctpPacket extends AbstractPacket {
      */
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -8223170335586535940L;
 

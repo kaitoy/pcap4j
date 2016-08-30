@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2015  Pcap4J.org
+  _##  Copyright (C) 2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -20,10 +20,10 @@ import java.util.Map;
 public final class SctpPort extends NamedNumber<Short, SctpPort> {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 8265462534894583620L;
-  
+
 
   /**
    * Discard: 9
