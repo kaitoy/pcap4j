@@ -1,0 +1,7 @@
+[SCTP Header (12 bytes)]
+  Source port: 0 (unknown)
+  Destination port: 80 (HTTP)
+  Verification tag: 0xfadefade
+  Checksum: 0xabcdabcd
+[data (4 bytes)]
+  Hex stream: 00 01 02 03
