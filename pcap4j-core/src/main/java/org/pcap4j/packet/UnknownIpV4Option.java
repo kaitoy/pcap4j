@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Pcap4J.org
+  _##  Copyright (C) 2012-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
+
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.util.ByteArrays;
@@ -61,10 +62,11 @@ public final class UnknownIpV4Option implements IpV4Option {
 
     this.type = IpV4OptionType.getInstance(rawData[offset]);
     this.length = rawData[1 + offset];
-    if (length < this.length) {
+    int lengthFieldAsInt = getLengthAsInt();
+    if (length < lengthFieldAsInt) {
       StringBuilder sb = new StringBuilder(100);
-      sb.append("The raw data is too short to build this option(")
-        .append(this.length)
+      sb.append("The raw data is too short to build this option (")
+        .append(lengthFieldAsInt)
         .append("). data: ")
         .append(ByteArrays.toHexString(rawData, " "))
         .append(", offset: ")
@@ -74,7 +76,7 @@ public final class UnknownIpV4Option implements IpV4Option {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.data = ByteArrays.getSubArray(rawData, 2 + offset, this.length - 2);
+    this.data = ByteArrays.getSubArray(rawData, 2 + offset, lengthFieldAsInt - 2);
   }
 
   private UnknownIpV4Option(Builder builder) {
