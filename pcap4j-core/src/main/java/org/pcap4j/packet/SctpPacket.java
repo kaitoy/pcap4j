@@ -78,10 +78,7 @@ public final class SctpPacket extends AbstractPacket {
     }
 
     this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
-    this.header = new SctpHeader(
-                    builder,
-                    payload != null ? payload.getRawData() : new byte[0]
-                  );
+    this.header = new SctpHeader(builder);
   }
 
   @Override
@@ -99,18 +96,27 @@ public final class SctpPacket extends AbstractPacket {
     return new Builder(this);
   }
 
+
+  /**
+   * @return true if the checksum in this header is valid; false otherwise.
+   */
+  public boolean hasValidChecksum() {
+    return header.calcChecksum() == header.checksum;
+  }
+
   /**
    * @author Jeff Myers (myersj@gmail.com)
    * @since pcap4j 1.6.6
    */
   public static final
-  class Builder extends AbstractBuilder {
+  class Builder extends AbstractBuilder implements ChecksumBuilder<SctpPacket>{
 
     private SctpPort srcPort;
     private SctpPort dstPort;
     private int verificationTag;
     private int checksum;
     private List<SctpChunk> chunks;
+    private boolean correctChecksumAtBuild;
     private Packet.Builder payloadBuilder;
 
     /**
@@ -177,6 +183,12 @@ public final class SctpPacket extends AbstractPacket {
      */
     public Builder chunks(List<SctpChunk> chunks) {
       this.chunks = chunks;
+      return this;
+    }
+
+    @Override
+    public Builder correctChecksumAtBuild(boolean correctChecksumAtBuild) {
+      this.correctChecksumAtBuild = correctChecksumAtBuild;
       return this;
     }
 
@@ -299,16 +311,46 @@ public final class SctpPacket extends AbstractPacket {
       }
     }
 
-    private SctpHeader(Builder builder, byte[] payload) {
+    private SctpHeader(Builder builder) {
       this.srcPort = builder.srcPort;
       this.dstPort = builder.dstPort;
       this.verificationTag = builder.verificationTag;
-      this.checksum = builder.checksum;
       if (builder.chunks != null) {
         this.chunks = new ArrayList<SctpChunk>(builder.chunks);
       }
       else {
         this.chunks = Collections.emptyList();
+      }
+
+      if (builder.correctChecksumAtBuild) {
+        this.checksum = calcChecksum();
+      }
+      else {
+        this.checksum = builder.checksum;
+      }
+    }
+
+    private int calcChecksum() {
+      byte[] data = new byte[length()];
+
+      // If call getRawData() here, rawData will be cached with
+      // an invalid checksum in some cases.
+      // To avoid it, use buildRawData() instead.
+      System.arraycopy(buildRawData(), 0, data, 0, data.length);
+
+      for (int i = 0; i < CHECKSUM_SIZE; i++) {
+        data[CHECKSUM_OFFSET + i] = (byte) 0;
+      }
+
+      if (PacketPropertiesLoader.getInstance().sctpCalcChecksumByAdler32()) {
+        return ByteArrays.calcAdler32Checksum(data);
+      }
+      else {
+        int crc = ByteArrays.calcCrc32cChecksum(data);
+        return   (crc << 24)
+               | (crc & 0x0000FF00) << 8
+               | (crc & 0x00FF0000) >> 8
+               | (crc & 0xFF000000) >>> 24;
       }
     }
 

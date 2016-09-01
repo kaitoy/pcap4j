@@ -136,4 +136,17 @@ public class SctpPacketTest extends AbstractPacketTest {
     assertEquals(chunks, h.getChunks());
   }
 
+
+  @Test
+  public void testHasValidChecksum() {
+    SctpPacket.Builder b = packet.getBuilder();
+    SctpPacket p = b.correctChecksumAtBuild(false).build();
+
+    assertFalse(packet.hasValidChecksum());
+
+    b.correctChecksumAtBuild(true);
+    p = b.build();
+    assertTrue(p.hasValidChecksum());
+  }
+
 }
