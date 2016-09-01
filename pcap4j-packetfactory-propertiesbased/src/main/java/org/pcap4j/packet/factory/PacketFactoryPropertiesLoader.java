@@ -20,6 +20,7 @@ import org.pcap4j.packet.IpV6SimpleFlowLabel;
 import org.pcap4j.packet.IpV6SimpleTrafficClass;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
+import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.UnknownIpV4InternetTimestampOptionData;
 import org.pcap4j.packet.UnknownIpV4Option;
@@ -28,6 +29,7 @@ import org.pcap4j.packet.UnknownIpV6Option;
 import org.pcap4j.packet.UnknownIpV6RoutingData;
 import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.UnknownRadiotapData;
+import org.pcap4j.packet.UnknownSctpChunk;
 import org.pcap4j.packet.UnknownTcpOption;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
@@ -38,6 +40,7 @@ import org.pcap4j.packet.namednumber.IpV6RoutingType;
 import org.pcap4j.packet.namednumber.NamedNumber;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
+import org.pcap4j.packet.namednumber.SctpChunkType;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.PropertiesLoader;
 
@@ -149,6 +152,18 @@ public final class PacketFactoryPropertiesLoader {
    */
   public static final String UNKNOWN_RADIOTAP_DATA_FIELD_KEY
     = RADIOTAP_DATA_FIELD_CLASS_KEY_BASE + "unknownNumber";
+
+  /**
+   *
+   */
+  public static final String SCTP_CHUNK_CLASS_KEY_BASE
+    = SctpChunk.class.getName() + ".classFor.";
+
+  /**
+   *
+   */
+  public static final String UNKNOWN_SCTP_CHUNK_KEY
+    = SCTP_CHUNK_CLASS_KEY_BASE + "unknownNumber";
 
   /**
    *
@@ -474,6 +489,34 @@ public final class PacketFactoryPropertiesLoader {
     return loader.<RadiotapData>getClass(
              UNKNOWN_RADIOTAP_DATA_FIELD_KEY,
              UnknownRadiotapData.class
+           );
+  }
+
+  /**
+   *
+   * @param type type
+   * @return a class which implements SctpChunk for a specified type.
+   */
+  public Class<? extends SctpChunk> getSctpChunkClass(SctpChunkType type) {
+    StringBuilder sb = new StringBuilder(120);
+    sb.append(SCTP_CHUNK_CLASS_KEY_BASE)
+      .append(type.getClass().getName())
+      .append(".")
+      .append(type.valueAsString());
+    return loader.<SctpChunk>getClass(
+             sb.toString(),
+             getUnknownSctpChunkClass()
+           );
+  }
+
+  /**
+   *
+   * @return a class which implements SctpChunk for an unknown type.
+   */
+  public Class<? extends SctpChunk> getUnknownSctpChunkClass() {
+    return loader.<SctpChunk>getClass(
+             UNKNOWN_SCTP_CHUNK_KEY,
+             UnknownSctpChunk.class
            );
   }
 

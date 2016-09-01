@@ -20,6 +20,7 @@ import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
 import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
+import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.EtherType;
@@ -101,6 +102,10 @@ final class PacketFactoryBinder {
     packetpPieceFactories.put(
       RadiotapData.class,
       StaticRadiotapDataFieldFactory.getInstance()
+    );
+    packetpPieceFactories.put(
+      SctpChunk.class,
+      StaticSctpChunkFactory.getInstance()
     );
   }
 

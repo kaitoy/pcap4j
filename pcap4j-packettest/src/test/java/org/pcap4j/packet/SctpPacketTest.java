@@ -1,18 +1,22 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.SctpPacket.SctpHeader;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
+import org.pcap4j.packet.namednumber.SctpChunkType;
 import org.pcap4j.packet.namednumber.SctpPort;
 import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
@@ -28,8 +32,7 @@ public class SctpPacketTest extends AbstractPacketTest {
   private final SctpPort dstPort;
   private final int verificationTag;
   private final int checksum;
-  private final Inet6Address srcAddr;
-  private final Inet6Address dstAddr;
+  private final List<SctpChunk> chunks;
   private final SctpPacket packet;
 
   public SctpPacketTest() throws Exception {
@@ -37,24 +40,23 @@ public class SctpPacketTest extends AbstractPacketTest {
     this.dstPort = SctpPort.HTTP;
     this.verificationTag = 0xFADEFADE;
     this.checksum = 0xABCDABCD;
-    try {
-      this.srcAddr
-        = (Inet6Address)InetAddress.getByName("2001:db8::3:2:1");
-      this.dstAddr
-        = (Inet6Address)InetAddress.getByName("2001:db8::3:2:2");
-    } catch (UnknownHostException e) {
-      throw new AssertionError();
-    }
-
-    UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
-    unknownb.rawData(new byte[] { (byte)0, (byte)1, (byte)2, (byte)3 });
+    this.chunks = new ArrayList<SctpChunk>();
+    chunks.add(
+      new UnknownSctpChunk.Builder()
+        .type(SctpChunkType.SHUTDOWN)
+        .flags((byte)0xaf)
+        .value(new byte[] {1, 2, 3, 4})
+        .correctLengthAtBuild(true)
+        .paddingAtBuild(true)
+        .build()
+    );
 
     SctpPacket.Builder b = new SctpPacket.Builder();
     b.dstPort(dstPort)
      .srcPort(srcPort)
      .verificationTag(verificationTag)
      .checksum(checksum)
-     .payloadBuilder(unknownb);
+     .chunks(chunks);
 
     this.packet = b.build();
   }
@@ -66,6 +68,15 @@ public class SctpPacketTest extends AbstractPacketTest {
 
   @Override
   protected Packet getWholePacket() {
+    Inet6Address srcAddr;
+    Inet6Address dstAddr;
+    try {
+      srcAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:1");
+      dstAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:2");
+    } catch (UnknownHostException e) {
+      throw new AssertionError();
+    }
+
     IpV6Packet.Builder IpV6b = new IpV6Packet.Builder();
     IpV6b.version(IpVersion.IPV6)
          .trafficClass(IpV6SimpleTrafficClass.newInstance((byte)0x12))
@@ -103,7 +114,7 @@ public class SctpPacketTest extends AbstractPacketTest {
   @Test
   public void testNewPacket() {
     try {
-    	SctpPacket p = SctpPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
+      SctpPacket p = SctpPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
@@ -122,6 +133,7 @@ public class SctpPacketTest extends AbstractPacketTest {
     assertEquals(dstPort, h.getDstPort());
     assertEquals(verificationTag, h.getVerificationTag());
     assertEquals(checksum, h.getChecksum());
+    assertEquals(chunks, h.getChunks());
   }
 
 }
