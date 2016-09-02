@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.pcap4j.packet.factory.PacketFactories;
-import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.SctpChunkType;
 import org.pcap4j.packet.namednumber.SctpPort;
 import org.pcap4j.util.ByteArrays;
@@ -301,9 +300,6 @@ public final class SctpPacket extends AbstractPacket {
           int newOneLen = newOne.length();
           offset += newOneLen;
           length -= newOneLen;
-          if (newOne.getType().equals(IpV4OptionType.END_OF_OPTION_LIST)) {
-            break;
-          }
         }
       } catch (Exception e) {
         logger.error("Exception occurred during analyzing SCTP chunks: ", e);
