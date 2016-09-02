@@ -81,7 +81,7 @@ Features
     * ARP
     * IPv4 (RFC791 and RFC1349) and IPv6 (RFC2460)
     * ICMPv4 (RFC792) and ICMPv6 (RFC4443, RFC4861)
-    * TCP (RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21) and UDP
+    * TCP (RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21), UDP, and SCTP (only common header)
     * GTPv1 (only GTP-U and GTP-C header)
 * All built-in packet classes are serializable and thread-safe (practically immutable).
 * You can add a protocol support without modifying Pcap4J library itself.

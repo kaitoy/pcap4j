@@ -81,7 +81,7 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
     * ARP
     * IPv4 (RFC791、RFC1349)、IPv6 (RFC2460)
     * ICMPv4 (RFC792)、ICMPv6 (RFC4443, RFC4861)
-    * TCP (RFC793、RFC2018、draft-ietf-tcpm-1323bis-21)、UDP
+    * TCP (RFC793、RFC2018、draft-ietf-tcpm-1323bis-21)、UDP、SCTP (共通ヘッダのみ)
     * GTPv1 (GTP-UとGTP-Cのヘッダのみ)
 * 各ビルトインパケットクラスはシリアライズに対応。スレッドセーフ(実質的に不変)。
 * ライブラリをいじらずに、対応プロトコルをユーザが追加できる。
