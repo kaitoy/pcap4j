@@ -16,7 +16,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.6.6
  */
-public final class GtpPacket extends AbstractPacket {
+public final class GtpSelector extends AbstractPacket {
 
   /**
    *
@@ -58,7 +58,7 @@ public final class GtpPacket extends AbstractPacket {
     }
   }
 
-  private GtpPacket() { throw new AssertionError(); }
+  private GtpSelector() { throw new AssertionError(); }
 
   @Override
   public Builder getBuilder() {

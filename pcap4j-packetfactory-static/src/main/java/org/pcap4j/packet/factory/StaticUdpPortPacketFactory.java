@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet.factory;
 
-import org.pcap4j.packet.GtpPacket;
+import org.pcap4j.packet.GtpSelector;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.UdpPort;
@@ -29,11 +29,11 @@ extends AbstractStaticPacketFactory<UdpPort> {
         public Packet newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return GtpPacket.newPacket(rawData, offset, length);
+          return GtpSelector.newPacket(rawData, offset, length);
         }
         @Override
-        public Class<GtpPacket> getTargetClass() {
-          return GtpPacket.class;
+        public Class<GtpSelector> getTargetClass() {
+          return GtpSelector.class;
         }
       }
     );
@@ -43,11 +43,11 @@ extends AbstractStaticPacketFactory<UdpPort> {
         public Packet newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return GtpPacket.newPacket(rawData, offset, length);
+          return GtpSelector.newPacket(rawData, offset, length);
         }
         @Override
-        public Class<GtpPacket> getTargetClass() {
-          return GtpPacket.class;
+        public Class<GtpSelector> getTargetClass() {
+          return GtpSelector.class;
         }
       }
     );
@@ -57,11 +57,11 @@ extends AbstractStaticPacketFactory<UdpPort> {
         public Packet newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return GtpPacket.newPacket(rawData, offset, length);
+          return GtpSelector.newPacket(rawData, offset, length);
         }
         @Override
-        public Class<GtpPacket> getTargetClass() {
-          return GtpPacket.class;
+        public Class<GtpSelector> getTargetClass() {
+          return GtpSelector.class;
         }
       }
     );
