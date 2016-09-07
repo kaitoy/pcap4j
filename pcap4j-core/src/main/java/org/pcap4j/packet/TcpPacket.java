@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.io.Serializable;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -15,6 +16,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
@@ -1146,7 +1148,7 @@ public final class TcpPacket extends AbstractPacket {
   /**
    * The interface representing a TCP option.
    * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * Classes which imprement this interface must implement the following method:
+   * classes which imprement this interface must implement the following method:
    * {@code public static TcpOption newInstance(byte[] rawData, int offset, int length)
    * throws IllegalRawDataException}
    *

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,10 +8,12 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.io.Serializable;
 import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IcmpV6Code;
 import org.pcap4j.packet.namednumber.IcmpV6Type;
@@ -478,7 +480,7 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
   /**
    * The interface representing an IPv6 neighbor discovery option.
    * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * Classes which imprement this interface must implement the following method:
+   * classes which imprement this interface must implement the following method:
    * {@code public static IpV6NeighborDiscoveryOption newInstance(byte[] rawData, int offset, int length)
    * throws IllegalRawDataException}
    *
