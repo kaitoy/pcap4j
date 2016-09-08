@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.6.6 (7-Sep-2016)
+==========================
+### New Features ###
 * Support GTPv1 (only GTP-U and GTP-C header)
 * Support SCTP (only common header)
 
