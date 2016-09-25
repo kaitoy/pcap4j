@@ -8,8 +8,8 @@ import java.net.InetAddress;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.pcap4j.packet.GtpV1Packet.ProtocolType;
 import org.pcap4j.packet.GtpV1Packet.GtpV1Header;
+import org.pcap4j.packet.GtpV1Packet.ProtocolType;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.GtpV1ExtensionHeaderType;
 import org.pcap4j.packet.namednumber.GtpV1MessageType;
@@ -141,11 +141,6 @@ public class GtpV1PacketTest extends AbstractPacketTest {
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
     }
-  }
-
-  @Test
-  public void testNewPacketRandom() {
-      RandomPacketTester.testClass(UdpPacket.class, packet);
   }
 
   @Test
