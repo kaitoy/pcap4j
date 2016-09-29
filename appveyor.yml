@@ -43,15 +43,20 @@ environment:
 install:
   # Install WinPcap
   #- cmd: choco install -y winpcap
+
   # Install nmap which includes WinPcap instead of WinPcap itself to avoid an issue where
   # installation of autohotkey.portable which is used by choco install script for WinPcap
   # randomly fails somehow.
   - cmd: choco install -y nmap
+
   # Install Maven
-  - cmd: choco install -y maven -version 3.2.5
+  # - cmd: choco install -y maven -version 3.2.5
   # Get the Maven bin directory path
-  - ps: $env:MAVEN_BIN_PATH = [Environment]::GetEnvironmentVariable('M2', 'User')
-  - cmd: echo %MAVEN_BIN_PATH%
+  # - ps: $env:MAVEN_BIN_PATH = [Environment]::GetEnvironmentVariable('M2', 'User')
+  # - cmd: echo %MAVEN_BIN_PATH%
+
+  # Use pre-installed Maven instead
+
   # Set JAVA_HOME
   - ps: $env:PATH -match '[;|^][^;]*\\jdk[^;]*[;|\\Z]'
   - ps: $env:JAVA_HOME = $matches[0] -replace ';|\\bin', ''
@@ -72,7 +77,7 @@ before_build:
 
 build_script:
   # Run mvn command with jna.nosys=true not to use an older jna pre-installed in AppVeyor VMs.
-  - cmd: call "%MAVEN_BIN_PATH%\mvn" -Djna.nosys=true -P distribution-assembly %MAVEN_PHASE%
+  - cmd: call mvn -Djna.nosys=true -P distribution-assembly %MAVEN_PHASE%
 
 #---------------------------------#
 #       tests configuration       #
