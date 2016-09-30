@@ -753,7 +753,9 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *         is set to 1; otherwise supportedRxMcsIndexes[x] is set to false.
    */
   public boolean[] getSupportedRxMcsIndexes() {
-    return supportedRxMcsIndexes;
+    boolean[] clone = new boolean[77];
+    System.arraycopy(supportedRxMcsIndexes, 0, clone, 0, clone.length);
+    return clone;
   }
 
   /**
