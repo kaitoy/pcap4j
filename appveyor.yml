@@ -77,7 +77,7 @@ before_build:
 
 build_script:
   # Run mvn command with jna.nosys=true not to use an older jna pre-installed in AppVeyor VMs.
-  - cmd: call mvn -Djna.nosys=true -P -Djna.library.path=C:\Windows\System32\Npcap distribution-assembly %MAVEN_PHASE%
+  - cmd: call mvn -Djna.nosys=true -Djna.library.path=C:\Windows\System32\Npcap -P distribution-assembly %MAVEN_PHASE%
 
 #---------------------------------#
 #       tests configuration       #
