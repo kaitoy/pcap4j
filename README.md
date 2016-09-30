@@ -206,6 +206,9 @@ You can use the following Java system properties to change the default behavior.
 * (Windows only) org.pcap4j.core.packetLibName: The full path of the packet library (Packet.dll)
 
 ### Docker ###
+
+[![](https://images.microbadger.com/badges/image/kaitoy/pcap4j.svg)](https://microbadger.com/images/kaitoy/pcap4j)
+
 A Docker image for Pcap4J on CentOS is available at [Docker Hub](https://registry.hub.docker.com/u/kaitoy/pcap4j/).
 
 Download it by `docker pull kaitoy/pcap4j` and execute `docker run kaitoy/pcap4j:latest` to start capturing packets from eth0 on the container.
