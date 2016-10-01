@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class IpV4Packet extends AbstractPacket {
+public final class IpV4Packet extends AbstractPacket implements IpPacket {
 
   // http://tools.ietf.org/html/rfc791
 
@@ -401,7 +401,7 @@ public final class IpV4Packet extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class IpV4Header extends AbstractHeader {
+  public static final class IpV4Header extends AbstractHeader implements IpHeader {
 
     /*  0                              16                            31
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -686,10 +686,7 @@ public final class IpV4Packet extends AbstractPacket {
       return ByteArrays.calcChecksum(data);
     }
 
-    /**
-     *
-     * @return version
-     */
+    @Override
     public IpVersion getVersion() {
       return version;
     }
@@ -814,18 +811,12 @@ public final class IpV4Packet extends AbstractPacket {
       return headerChecksum;
     }
 
-    /**
-     *
-     * @return srcAddr
-     */
+    @Override
     public Inet4Address getSrcAddr() {
       return srcAddr;
     }
 
-    /**
-     *
-     * @return dstAddr
-     */
+    @Override
     public Inet4Address getDstAddr() {
       return dstAddr;
     }

@@ -2,10 +2,12 @@ Future
 ======
 ### New Features ###
 * Support IEEE 802.11 Probe Request.
+* IpV4Packet and IpV6Packet implement IpPacket interface.
 
 ### Bug Fixes ###
 
 ### Other Changes ###
+* Change a class name: org.pcap4j.packet.IpPacket -> org.pcap4j.packet.IpSelector
 
 Release 1.6.6 (7-Sep-2016)
 ==========================

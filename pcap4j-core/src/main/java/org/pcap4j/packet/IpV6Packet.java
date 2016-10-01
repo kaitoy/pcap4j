@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  * @author Kaito Yamada
  * @since pcap4j 0.9.10
  */
-public final class IpV6Packet extends AbstractPacket {
+public final class IpV6Packet extends AbstractPacket implements IpPacket {
 
   /**
    *
@@ -301,7 +301,7 @@ public final class IpV6Packet extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public static final class IpV6Header extends AbstractHeader {
+  public static final class IpV6Header extends AbstractHeader implements IpHeader {
 
     /*
      * 0                               16                              32
@@ -441,10 +441,7 @@ public final class IpV6Packet extends AbstractPacket {
       }
     }
 
-    /**
-     *
-     * @return version
-     */
+    @Override
     public IpVersion getVersion() {
       return version;
     }
@@ -505,18 +502,12 @@ public final class IpV6Packet extends AbstractPacket {
       return 0xFF & hopLimit;
     }
 
-    /**
-     *
-     * @return srcAddr
-     */
+    @Override
     public Inet6Address getSrcAddr() {
       return srcAddr;
     }
 
-    /**
-     *
-     * @return dstAddr
-     */
+    @Override
     public Inet6Address getDstAddr() {
       return dstAddr;
     }

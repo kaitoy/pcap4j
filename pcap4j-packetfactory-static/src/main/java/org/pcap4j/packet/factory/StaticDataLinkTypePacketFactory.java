@@ -12,7 +12,7 @@ import org.pcap4j.packet.Dot11Selector;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.HdlcPppPacket;
 import org.pcap4j.packet.IllegalRawDataException;
-import org.pcap4j.packet.IpPacket;
+import org.pcap4j.packet.IpSelector;
 import org.pcap4j.packet.LinuxSllPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.PppSelector;
@@ -64,11 +64,11 @@ extends AbstractStaticPacketFactory<DataLinkType> {
         public Packet newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return IpPacket.newPacket(rawData, offset, length);
+          return IpSelector.newPacket(rawData, offset, length);
         }
         @Override
-        public Class<IpPacket> getTargetClass() {
-          return IpPacket.class;
+        public Class<IpSelector> getTargetClass() {
+          return IpSelector.class;
         }
       }
     );
