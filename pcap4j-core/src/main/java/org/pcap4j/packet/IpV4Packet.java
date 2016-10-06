@@ -795,10 +795,7 @@ public final class IpV4Packet extends AbstractPacket implements IpPacket {
       return 0xFF & ttl;
     }
 
-    /**
-     *
-     * @return protocol
-     */
+    @Override
     public IpNumber getProtocol() {
       return protocol;
     }

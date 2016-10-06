@@ -9,6 +9,7 @@ package org.pcap4j.packet;
 
 import java.net.InetAddress;
 
+import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 
 /**
@@ -34,6 +35,11 @@ public interface IpPacket extends Packet {
      * @return version
      */
     public IpVersion getVersion();
+
+    /**
+     * @return an IpNumber object which indicates the protocol of the following header.
+     */
+    public IpNumber getProtocol();
 
     /**
      * @return srcAddr

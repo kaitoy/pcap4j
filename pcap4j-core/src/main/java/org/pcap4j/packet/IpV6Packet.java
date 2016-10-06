@@ -486,6 +486,11 @@ public final class IpV6Packet extends AbstractPacket implements IpPacket {
       return nextHeader;
     }
 
+    @Override
+    public IpNumber getProtocol() {
+      return nextHeader;
+    }
+
     /**
      *
      * @return hopLimit
