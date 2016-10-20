@@ -1,0 +1,177 @@
+[Radiotap header (64 bytes)]
+  Version: 0
+  Pad: 22
+  Length: 64
+  Present Bitmask (ff 7f 38 00):
+    Present Fields: 
+      0 (TSFT)
+      1 (Flags)
+      2 (Rate)
+      3 (Channel)
+      4 (FHSS)
+      5 (Antenna signal)
+      6 (Antenna noise)
+      7 (Lock quality)
+      8 (TX attenuation)
+      9 (dB TX attenuation)
+      10 (dBm TX power)
+      11 (Antenna)
+      12 (dB antenna signal)
+      13 (dB antenna noise)
+      14 (RX flags)
+      19 (MCS)
+      20 (A-MPDU status)
+      21 (VHT)
+    Radiotap NS Next: false
+    Vendor NS Next: false
+    Another Bitmap Follows: false
+  Data Fields: 
+    TSFT: 
+      MAC timestamp: 12345678912345678910 microseconds
+    Flags: 
+      CFP: true
+      Short Preamble: true
+      WEP: false
+      Fragmented: false
+      FCS: true
+      PAD: true
+      Bad FCS: false
+      Short Guard Interval: false
+    Rate: 
+      Rate: 55500 Kbps
+    Channel: 
+      Frequency: 12345 MHz
+      LSB of flags: true
+      2nd LSB of flags: true
+      3rd LSB of flags: true
+      4th LSB of flags: false
+      Turbo: false
+      CCK: false
+      OFDM: true
+      2 GHz spectrum: true
+      5 GHz spectrum: true
+      Only passive scan: false
+      Dynamic CCK-OFDM: false
+      GFSK: false
+      GSM: true
+      Static Turbo: true
+      Half rate: true
+      Quarter rate: false
+    FHSS: 
+      Hop set: 170
+      Hop pattern: 187
+    Antenna signal: 
+      Antenna signal: -52 dBm
+    Antenna noise: 
+      Antenna noise: -35 dBm
+    Lock quality: 
+      Lock quality: 43981
+    TX attenuation: 
+      TX attenuation: 56506
+    dB TX attenuation: 
+      TX attenuation: 43775 dB
+    dBm TX power: 
+      TX power: -81 dBm
+    Antenna: 
+      Antenna: 250
+    dB antenna signal: 
+      Antenna signal: 111 dB
+    dB antenna noise: 
+      Antenna noise: 100 dB
+    RX flags: 
+      LSB: true
+      Bad PLCP CRC: false
+      3rd LSB: true
+      4th LSB: true
+      5th LSB: false
+      6th LSB: false
+      7th LSB: true
+      8th LSB: true
+      9th LSB: true
+      10th LSB: false
+      11th LSB: false
+      12th LSB: false
+      13th LSB: true
+      14th LSB: true
+      15th LSB: true
+      16th LSB: true
+    MCS: 
+      bandwidth known: true
+      MCS index known: true
+      guard interval known: true
+      HT format known: true
+      FEC type known: true
+      STBC known: true
+      Ness known: true
+      Ness data known: true
+      bandwidth: 2 (20L)
+      short guard interval: true
+      HT format: MIXED
+      FEC type: LDPC
+      Number of STBC streams: 1
+      Ness: false
+      MCS rate index: 123
+    Pad: 
+      data: 01 02 03
+    A-MPDU status: 
+      reference number: 987654321
+      driver reports 0-length subframes: false
+      0-length subframe: false
+      last subframe is known: true
+      last subframe: true
+      delimiter CRC error: false
+      delimiter CRC value is known: true
+      10th MSB of flags: false
+      9th MSB of flags: false
+      8th MSB of flags: true
+      7th MSB of flags: true
+      6th MSB of flags: false
+      5th MSB of flags: true
+      4th MSB of flags: false
+      3rd MSB of flags: false
+      2nd MSB of flags: true
+      MSB of flags: true
+      delimiter CRC value: 0x37
+      reserved: 0x63
+    VHT: 
+      STBC known: true
+      TXOP_PS_NOT_ALLOWED known: true
+      Guard interval known: true
+      Short GI NSYM disambiguation known: true
+      LDPC extra OFDM symbol known: true
+      Beamformed known: true
+      Bandwidth known: true
+      Group ID known: true
+      Partial AID known: true
+      7th MSB of known: false
+      6th MSB of known: true
+      5th MSB of known: true
+      4th MSB of known: false
+      3rd MSB of known: true
+      2nd MSB of known: true
+      MSB of known: false
+      STBC: false
+      TXOP_PS_NOT_ALLOWED: false
+      Short Guard interval: true
+      Short GI NSYM disambiguation: true
+      LDPC extra OFDM symbol: false
+      Beamformed: true
+      2nd MSB of flags: false
+      MSB of flags: true
+      Bandwidth: 22 (20ULL)
+      NSS-0: 4
+      NSS-1: 3
+      NSS-2: 2
+      NSS-3: 1
+      MCS-0: 1
+      MCS-1: 2
+      MCS-2: 3
+      MCS-3: 4
+      FEC-0: BCC
+      FEC-1: LDPC
+      FEC-2: LDPC
+      FEC-3: BCC
+      Group ID: 111
+      Partial AID: 12321
+[data (8 bytes)]
+  Hex stream: 00 01 02 03 04 05 06 07

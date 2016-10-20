@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Pcap4J.org
+  _##  Copyright (C) 2012-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,7 +8,9 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.io.Serializable;
+
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
@@ -384,7 +386,7 @@ public final class IpV4InternetTimestampOption implements IpV4Option {
   /**
    * The interface representing an IPv4 internet timestamp option data.
    * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * Classes which imprement this interface must implement the following method:
+   * classes which imprement this interface must implement the following method:
    * {@code public static IpV4InternetTimestampData newInstance(byte[] rawData, int offset, int length)
    * throws IllegalRawDataException}
    *

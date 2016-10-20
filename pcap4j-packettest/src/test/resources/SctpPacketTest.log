@@ -1,0 +1,7 @@
+[SCTP Header (20 bytes)]
+  Source port: 0 (unknown)
+  Destination port: 80 (HTTP)
+  Verification tag: 0xfadefade
+  Checksum: 0xabcdabcd
+  Chunks:
+    [Type: 7 (Shutdown), Flags: 0xaf, Length: 8 bytes, Value: 0x01020304]

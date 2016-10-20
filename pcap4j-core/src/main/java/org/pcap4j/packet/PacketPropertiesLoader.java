@@ -71,6 +71,13 @@ public final class PacketPropertiesLoader {
     = PacketPropertiesLoader.class.getPackage().getName()
         + ".udpV6.calcChecksumAtBuild";
 
+  /**
+   *
+   */
+  public static final String SCTP_CALC_CHECKSUM_BY_ADLER32_KEY
+    = PacketPropertiesLoader.class.getPackage().getName()
+        + ".sctp.calcChecksumByAdler32";
+
   private static final PacketPropertiesLoader INSTANCE
     = new PacketPropertiesLoader();
 
@@ -168,6 +175,17 @@ public final class PacketPropertiesLoader {
   public boolean udpV6CalcChecksum() {
     return loader.getBoolean(
              UDPV6_CALC_CHECKSUM_KEY,
+             Boolean.FALSE
+           ).booleanValue();
+  }
+
+  /**
+   *
+   * @return a value of the property.
+   */
+  public boolean sctpCalcChecksumByAdler32() {
+    return loader.getBoolean(
+             SCTP_CALC_CHECKSUM_BY_ADLER32_KEY,
              Boolean.FALSE
            ).booleanValue();
   }

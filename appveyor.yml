@@ -45,6 +45,7 @@ environment:
 install:
   # Install WinPcap
   #- cmd: choco install -y winpcap
+
   # Install nmap which includes WinPcap instead of WinPcap itself to avoid an issue where
   # installation of autohotkey.portable which is used by choco install script for WinPcap
   # randomly fails somehow.
@@ -63,14 +64,14 @@ platform: Any CPU
 
 build_script:
   # jna.nosys=true is not to use an older jna pre-installed in AppVeyor VMs.
-  - gradlew.bat assemble --info --no-daemon -Djna.nosys=true
+  - cmd: gradlew.bat assemble --info --no-daemon -Djna.nosys=true -Djna.library.path=C:\Windows\System32\Npcap
 
 #---------------------------------#
 #       tests configuration       #
 #---------------------------------#
 
 test_script:
-  - gradlew.bat test --info --no-daemon -Djna.nosys=true
+  - cmd: gradlew.bat test --info --no-daemon -Djna.nosys=true -Djna.library.path=C:\Windows\System32\Npcap
 
 #---------------------------------#
 #     deployment configuration    #

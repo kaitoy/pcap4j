@@ -1,14 +1,14 @@
 [Japanese](/README_ja.md)
 
-<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/logos/pcap4j-logo-color.png" width="70%" style="margin: 0px auto; display: block;" />
+<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/v1/www/images/logos/pcap4j-logo-color.png" width="70%" style="margin: 0px auto; display: block;" />
 
-[Logos](/www/logos.md)
+[Logos](https://github.com/kaitoy/pcap4j/blob/v1/www/logos.md)
 
 [![Slack](http://pcap4j-slackin.herokuapp.com/badge.svg)](https://pcap4j-slackin.herokuapp.com/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution)
 
-[![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg)](https://travis-ci.org/kaitoy/pcap4j)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=master&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/master)
+[![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg?branch=v1)](https://travis-ci.org/kaitoy/pcap4j)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=v1&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/v1)
 [![Coverage Status](https://coveralls.io/repos/kaitoy/pcap4j/badge.svg)](https://coveralls.io/r/kaitoy/pcap4j)
 
 Pcap4J
@@ -47,9 +47,9 @@ Download
 
 Pcap4J is available on the Maven Central Repository.
 
-* Pcap4J 1.6.3
-    * without source: [pcap4j-distribution-1.6.3-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.6.3/pcap4j-distribution-1.6.3-bin.zip)
-    * with    source: [pcap4j-distribution-1.6.3-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.6.3/pcap4j-distribution-1.6.3-src.zip)
+* Pcap4J 1.6.6
+    * without source: [pcap4j-distribution-1.6.6-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.6.6/pcap4j-distribution-1.6.6-bin.zip)
+    * with    source: [pcap4j-distribution-1.6.6-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.6.6/pcap4j-distribution-1.6.6-src.zip)
 * Snapshot builds
     * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
 
@@ -75,12 +75,16 @@ Features
   You can also craft a packet object from scratch.
 * Sending packet objects to a real network.
 * Supported protocols:
-    * Ethernet, Linux SLL, raw IP, PPP (RFC1661, RFC1662), and BSD (Mac OS X) loopback encapsulation
+    * Ethernet, Linux SLL, raw IP, PPP (RFC1661, RFC1662), BSD (Mac OS X) loopback encapsulation, and Radiotap
+    * IEEE 802.11
+        * Probe Request
+    * LLC and SNAP
     * IEEE802.1Q
     * ARP
     * IPv4 (RFC791 and RFC1349) and IPv6 (RFC2460)
     * ICMPv4 (RFC792) and ICMPv6 (RFC4443, RFC4861)
-    * TCP (RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21) and UDP
+    * TCP (RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21), UDP, and SCTP (only common header)
+    * GTPv1 (only GTP-U and GTP-C header)
 * All built-in packet classes are serializable and thread-safe (practically immutable).
 * You can add a protocol support without modifying Pcap4J library itself.
 * Dumping and reading pcap-formatted files (e.g. a capture file of Wireshark).
@@ -124,31 +128,31 @@ Or, if on Linux, you can run Pcap4J with a non-root user by granting capabilitie
 to your java command by the following command: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### Documents ####
-The latest JavaDoc is [here](http://kaitoy.github.com/pcap4j/javadoc/latest/en).
+The latest JavaDoc is [here](http://www.javadoc.io/doc/org.pcap4j/pcap4j/1.6.6).
 Each version's JavaDoc is on the [Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22).
 
-Refer to [here](/www/pcap4j_modules.md) for information about Pcap4J modules.
+Refer to [here](https://github.com/kaitoy/pcap4j/blob/v1/www/pcap4j_modules.md) for information about Pcap4J modules.
 
 Because Pcap4J is a wrapper library of libpcap/WinPcap, the following documents help you to understand how to use Pcap4J.
 
 * [Programming with pcap](http://www.tcpdump.org/pcap.html)
 * [WinPcap Manuals](http://www.winpcap.org/docs/default.htm)
-* [Mapping between pcap API and Pcap4J API](/www/api_mappings.md)
+* [Mapping between pcap API and Pcap4J API](https://github.com/kaitoy/pcap4j/blob/v1/www/api_mappings.md)
 
-You can learn how to write Pcap4J programs from [samples](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample).
+You can learn how to write Pcap4J programs from [samples](https://github.com/kaitoy/pcap4j/tree/v1/pcap4j-sample/src/main/java/org/pcap4j/sample).
 
 Learn more about Pcap4j from the following documents:
 
-* [Learn about packet class](/www/Packet.md)
-* [Learn about Packet Factory](/www/PacketFactory.md)
-* [How to add protocol support](/www/HowToAddProtocolSupport.md)
+* [Learn about packet class](https://github.com/kaitoy/pcap4j/blob/v1/www/Packet.md)
+* [Learn about Packet Factory](https://github.com/kaitoy/pcap4j/blob/v1/www/PacketFactory.md)
+* [How to add protocol support](https://github.com/kaitoy/pcap4j/blob/v1/www/HowToAddProtocolSupport.md)
 * [kaitoy's blog](http://tbd.kaitoy.xyz/tags/pcap4j/)
 
 #### How to run samples ####
 See the following examples:
 
-* [org.pcap4j.sample.Loop](/www/sample_Loop.md)
-* [org.pcap4j.sample.SendArpRequest](/www/sample_SendArpRequest.md)
+* [org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/blob/v1/www/Packet.md)
+* [org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/blob/v1/www/sample_SendArpRequest.md)
 
 If you want to run a sample in pcap4j-sample on Eclipse,
 add pcap4j-packetfactory-static or pcap4j-packetfactory-propertiesbased project
@@ -167,12 +171,12 @@ Add a dependency to the pom.xml as like below:
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-core</artifactId>
-      <version>1.6.3</version>
+      <version>1.6.6</version>
     </dependency>
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-packetfactory-static</artifactId>
-      <version>1.6.3</version>
+      <version>1.6.6</version>
     </dependency>
        ...
   </dependencies>
@@ -202,6 +206,9 @@ You can use the following Java system properties to change the default behavior.
 * (Windows only) org.pcap4j.core.packetLibName: The full path of the packet library (Packet.dll)
 
 ### Docker ###
+
+[![](https://images.microbadger.com/badges/image/kaitoy/pcap4j.svg)](https://microbadger.com/images/kaitoy/pcap4j)
+
 A Docker image for Pcap4J on CentOS is available at [Docker Hub](https://registry.hub.docker.com/u/kaitoy/pcap4j/).
 
 Download it by `docker pull kaitoy/pcap4j` and execute `docker run kaitoy/pcap4j:latest` to start capturing packets from eth0 on the container.
@@ -230,7 +237,7 @@ I'm developing Pcap4j in the following environment.
    This step is optional.
 5. Clone the Pcap4J repository:<br>
    If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
-   Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
+   Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/v1) and extract it.
 6. Build:<br>
    Open a command prompt/a terminal, `cd` to the project root directory,
    and execute `mvn install`.
@@ -255,7 +262,7 @@ I'm developing Pcap4j in the following environment.
    This step is optional.
 5. Clone the Pcap4J repository:<br>
    If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
-   Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
+   Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/v1) and extract it.
 6. Import the project into Eclipse:<br>
    In the Eclipse, select ***File > Import*** to open the import wizard.
    Then, select ***General > Existing Projects into Workspace*** and

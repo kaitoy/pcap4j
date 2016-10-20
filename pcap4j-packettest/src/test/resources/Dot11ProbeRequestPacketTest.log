@@ -1,0 +1,286 @@
+[IEEE802.11 Probe Request header (179 bytes)]
+  Frame Control:
+    Protocol Version: V0
+    Type/Subtype: 4 (Probe request)
+    To DS: true
+    From DS: false
+    More Fragments: false
+    Retry: true
+    Power Management: false
+    More Data: false
+    Protected Frame: false
+    Order: true
+  Duration: 1234
+  Address1: aa:bb:cc:dd:ee:ff
+  Address2: ff:aa:ff:aa:ff:aa
+  Address3: 11:22:33:44:55:66
+  Sequence Control: [Fragment Number: 10, Sequence Number: 2748]
+  HT Control:
+    Link Adaptation Control: [VHT_MFB: false, TRQ: true, ASELI: false, MAI: [MRQ: true, MSI: 2], MFSI: 3, MFB: 123]
+    Calibration Position: 3 (sounding complete)
+    Calibration Sequence: 3
+    Bit 20: true
+    Bit 21: false
+    CSI/Steering: 2 (Noncompressed beamforming)
+    NDP Announcement: false
+    Bit 25: true
+    Bit 26: false
+    Bit 27: false
+    Bit 28: true
+    Bit 29: true
+    AC Constraint: true
+    RDG/More PPDU: false
+  Tags:
+    SSID:
+      Element ID: 0 (SSID)
+      Length: 8 bytes
+      SSID: hogehoge
+    Supported Rates:
+      Element ID: 1 (Supported rates)
+      Length: 5 bytes
+      Supported Rate: 8.0 Mbit/sec (basic)
+      BSS Membership Selector: 127 (HT PHY) (basic)
+      Supported Rate: 16.0 Mbit/sec (basic)
+      BSS Membership Selector: 127 (HT PHY) (non-basic)
+      Supported Rate: 24.0 Mbit/sec (non-basic)
+    Request:
+      Element ID: 10 (Request)
+      Length: 3 bytes
+      Requested Element: 108 (Advertisement Protocol)
+      Requested Element: 68 (BSS AC Access Delay)
+      Requested Element: 112 (Emergency Alert Identifier)
+    Extended Supported Rates:
+      Element ID: 50 (Extended Supported Rates)
+      Length: 2 bytes
+      BSS Membership Selector: 127 (HT PHY) (non-basic)
+      Supported Rate: 55.5 Mbit/sec (basic)
+    DSSS Parameter Set:
+      Element ID: 3 (DSSS Parameter Set)
+      Length: 1 bytes
+      Current Channel: 153
+    Supported Operating Classes:
+      Element ID: 59 (Supported Operating Classes)
+      Length: 6 bytes
+      Current Operating Class: 238
+      Operating Class: 5
+      Operating Class: 4
+      Operating Class: 3
+      Operating Class: 2
+      Operating Class: 1
+    HT Capabilities:
+      Element ID: 45 (HT Capabilities)
+      Length: 26 bytes
+      HT Capabilities Info:
+        LDPC Coding is Supported: false
+        Supported Channel Width Set: 20 MHz and 40 MHz
+        SM Power Save: 1 (DYNAMIC)
+        HT-Greenfield is Supported: false
+        Short GI for 20 MHz is Supported: true
+        Short GI for 40 MHz is Supported: false
+        Tx STBC is Supported: true
+        Rx STBC Support: 1 (One spatial stream is supported)
+        HT-Delayed Block Ack is Supported: false
+        Max A-MSDU Length: 1 (7935 octets) octets
+        DSSS/CCK Mode in 40 MHz is Supported: true
+        Bit 13: false
+        40 MHz is Intolerant: true
+        L-SIG TXOP Protection is Supported: false
+      A-MPDU Parameters:
+        Max A-MPDU Length: 2 (32767 octets) octets
+        Min MPDU Start Spacing: 5 (4 us)
+        Bit 5: true
+        Bit 6: false
+        Bit 7: true
+      Supported MCS Set:
+        Supported Rx MCS Indexes: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75
+        Bit 77: false
+        Bit 78: false
+        Bit 79: true
+        Rx Highest Supported Data Rate: 1000 Mb/s
+        Bit 90: false
+        Bit 91: false
+        Bit 92: true
+        Bit 93: false
+        Bit 94: false
+        Bit 95: true
+        Tx MCS Set is Defined: false
+        Tx Rx MCS Set Not Equal: false
+        Tx Max Number Spatial Streams Supported: 2 (3 spatial stream)
+        Tx Unequal Modulation is Supported: true
+        Bit 101: false
+        Bit 102: false
+        Bit 103: true
+        Bit 104: false
+        Bit 105: false
+        Bit 106: true
+        Bit 107: false
+        Bit 108: false
+        Bit 109: true
+        Bit 110: false
+        Bit 111: false
+        Bit 112: true
+        Bit 113: false
+        Bit 114: false
+        Bit 115: true
+        Bit 116: false
+        Bit 117: false
+        Bit 118: true
+        Bit 119: false
+        Bit 120: false
+        Bit 121: true
+        Bit 122: false
+        Bit 123: false
+        Bit 124: true
+        Bit 125: false
+        Bit 126: false
+        Bit 127: true
+      HT Extended Capabilities:
+        PCO is Supported: false
+        PCO Transition Time: 2 (1.5 ms)
+        Bit 3: false
+        Bit 4: true
+        Bit 5: false
+        Bit 6: false
+        Bit 7: true
+        MCS Feedback: 2 (Only unsolicited)
+        HT Control Field is Support: false
+        RD Responder is Supported: false
+        Bit 12: true
+        Bit 13: false
+        Bit 14: false
+        Bit 15: true
+      Transmit Beamforming Capabilities:
+        Implicit Tx Beamforming Receiving is Supported: false
+        Rx Staggered Sounding is Supported: false
+        Tx Staggered Sounding is Supported: true
+        Rx NDP is Supported: false
+        Tx NDP is Supported: false
+        Implicit Tx Beamforming is Supported: true
+        Calibration: 1 (Respond)
+        Explicit CSI Tx Beamforming is Supported: false
+        Explicit Noncompressed Steering is Supported: false
+        Explicit Compressed Steering is Supported: true
+        Explicit Tx Beamforming CSI Feedback: 1 (Delayed)
+        Explicit Noncompressed Beamforming Feedback: 3 (Delayed and immediate)
+        Explicit Compressed Beamforming Feedback: 2 (Immediate)
+        Min Grouping: 1 (Groups of 1, 2)
+        CSI Number of Beamformer Antennas Supported: 1 (2 Tx antenna sounding)
+        Noncompressed Steering Number of Beamformer Antennas Supported: 3 (4 Tx antenna sounding)
+        Compressed Steering Number of Beamformer Antennas Supported: 0 (Single Tx antenna sounding)
+        CSI Max Number of Rows Beamformer Supported: 2 (3 rows of CSI)
+        Channel Estimation: 1 (2 space-time streams)
+        Bit 29: false
+        Bit 30: false
+        Bit 31: true
+      ASEL Capabilities:
+        Antenna Selection is Supported: false
+        Explicit CSI Feedback Based Tx ASEL is Supported: false
+        Antenna Indices Feedback Based Tx ASEL is Supported: true
+        Explicit CSI Feedback is Supported: false
+        Antenna Indices Feedback is Supported: false
+        Rx ASEL is Supported: true
+        Tx Sounding PPDUs is Supported: false
+        Bit 7: false
+    20/40 BSS Coexistence:
+      Element ID: 72 (20/40 BSS Coexistence)
+      Length: 1 bytes
+      Information Requested: false
+      40 MHz Intolerant: false
+      20 MHz BSS Width Requested: true
+      OBSS Scanning Exemption Requested: false
+      OBSS Scanning Exemption Granted: false
+      Bit 5: true
+      Bit 6: true
+      Bit 7: true
+    Extended Capabilities:
+      Element ID: 127 (Extended Capabilities)
+      Length: 9 bytes
+      20/40 BSS Coexistence Management Supported: false
+      Bit1: false
+      Extended Channel Switching Supported: true
+      Bit3: false
+      PSMP Operation Supported: false
+      Bit5: true
+      Scheduled PSMP Supported: false
+      Event Activated: false
+      Diagnostics Activated: true
+      Multicast Diagnostics Activated: false
+      Location Tracking Activated: false
+      FMS Activated: true
+      Proxy ARP Service Activated: false
+      Collocated Interference Reporting Activated: false
+      RM Civic Measurement Activated: true
+      RM LCI Measurement Activated: false
+      TFS Activated: false
+      WNM Sleep Mode Activated: true
+      TIM Broadcast Activated: false
+      BSS Transition Activated: false
+      QoS Traffic Capability Activated: true
+      AC Station Count Activated: false
+      Multi BSS ID Activated: false
+      Timing Measurement Activated: true
+      Channel Usage Activated: false
+      SSID List Activated: false
+      DMS Activated: true
+      UTC TSF Offset Activated: false
+      TDLS Peer U-APSD Buffer STA Supported: false
+      TDLS Peer PSM Supported: true
+      TDLS Channel Switching Activated: false
+      Interworking Service Activated: false
+      QoS Map Activated: true
+      EBR Activated: false
+      SSPN Interface Activated: false
+      Bit35: true
+      MSGCF Activated: false
+      TDLS Supported: false
+      TDLS Prohibited: true
+      TDLS Channel Switching Prohibited: false
+      Rejecting Unadmitted Traffic: false
+      Service Interval Granularity: 6 (35 ms)
+      RM Identifier Measurement Activated: false
+      U-APSD Coexistence Activated: false
+      WNM-Notification Activated: true
+      Bit47: false
+      UTF-8 SSID: false
+      Bit49: true
+      Bit50: false
+      Bit51: false
+      Bit52: true
+      Bit53: false
+      Bit54: false
+      Bit55: true
+      Trailing Data: 0x1234
+    SSID List:
+      Element ID: 84 (SSID List)
+      Length: 27 bytes
+      SSID: abcde
+      SSID: fooooooooooooooooo
+    Channel Usage:
+      Element ID: 97 (Channel Usage)
+      Length: 7 bytes
+      Usage Mode: 0 (Noninfrastructure IEEE 802.11 network)
+      Channel Entry: [Operating Class: 1, Channel: 16]
+      Channel Entry: [Operating Class: 2, Channel: 32]
+      Channel Entry: [Operating Class: 3, Channel: 48]
+    Interworking:
+      Element ID: 107 (Interworking)
+      Length: 9 bytes
+      Access Network Type: 0 (Private network)
+      Internet Accessible: false
+      ASRA: true
+      ESR: false
+      UESA: true
+      Venue Info: Business/Police Station (0x0204)
+      HESSID: 0x0a0b0c0d0e0f
+    Mesh ID:
+      Element ID: 114 (Mesh ID)
+      Length: 6 bytes
+      Mesh ID: P@0   (0x504030201000)
+    Vendor Specific:
+      Element ID: 221 (Vendor Specific)
+      Length: 5 bytes
+      Information: 0x0101010101
+    Vendor Specific:
+      Element ID: 221 (Vendor Specific)
+      Length: 6 bytes
+      Information: 0x020202020202

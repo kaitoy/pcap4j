@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -19,6 +19,8 @@ import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
 import org.pcap4j.packet.IpV6SimpleFlowLabel;
 import org.pcap4j.packet.IpV6SimpleTrafficClass;
 import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
+import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.UnknownIpV4InternetTimestampOptionData;
 import org.pcap4j.packet.UnknownIpV4Option;
@@ -26,7 +28,10 @@ import org.pcap4j.packet.UnknownIpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.UnknownIpV6Option;
 import org.pcap4j.packet.UnknownIpV6RoutingData;
 import org.pcap4j.packet.UnknownPacket;
+import org.pcap4j.packet.UnknownRadiotapData;
+import org.pcap4j.packet.UnknownSctpChunk;
 import org.pcap4j.packet.UnknownTcpOption;
+import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
@@ -34,6 +39,8 @@ import org.pcap4j.packet.namednumber.IpV6OptionType;
 import org.pcap4j.packet.namednumber.IpV6RoutingType;
 import org.pcap4j.packet.namednumber.NamedNumber;
 import org.pcap4j.packet.namednumber.NotApplicable;
+import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
+import org.pcap4j.packet.namednumber.SctpChunkType;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.PropertiesLoader;
 
@@ -120,7 +127,7 @@ public final class PacketFactoryPropertiesLoader {
    *
    */
   public static final String UNKNOWN_IPV6_ROUTING_DATA_KEY
-    = IPV6_OPTION_CLASS_KEY_BASE + "unknownNumber";
+    = IPV6_ROUTING_DATA_CLASS_KEY_BASE + "unknownNumber";
 
   /**
    *
@@ -133,6 +140,30 @@ public final class PacketFactoryPropertiesLoader {
    */
   public static final String UNKNOWN_IPV6_NEIGHBOR_DISCOVERY_OPTION_KEY
     = IPV6_NEIGHBOR_DISCOVERY_OPTION_CLASS_KEY_BASE + "unknownNumber";
+
+  /**
+   *
+   */
+  public static final String RADIOTAP_DATA_FIELD_CLASS_KEY_BASE
+    = RadiotapData.class.getName() + ".classFor.";
+
+  /**
+   *
+   */
+  public static final String UNKNOWN_RADIOTAP_DATA_FIELD_KEY
+    = RADIOTAP_DATA_FIELD_CLASS_KEY_BASE + "unknownNumber";
+
+  /**
+   *
+   */
+  public static final String SCTP_CHUNK_CLASS_KEY_BASE
+    = SctpChunk.class.getName() + ".classFor.";
+
+  /**
+   *
+   */
+  public static final String UNKNOWN_SCTP_CHUNK_KEY
+    = SCTP_CHUNK_CLASS_KEY_BASE + "unknownNumber";
 
   /**
    *
@@ -183,11 +214,19 @@ public final class PacketFactoryPropertiesLoader {
    * @return a class which implements Packet for a specified NamedNumber.
    */
   public <T extends NamedNumber<?, ?>> Class<? extends Packet> getPacketClass(T number) {
+    String val = number.valueAsString();
+    if (number instanceof EtherType) {
+      EtherType et = (EtherType) number;
+      if ((et.value() & 0xFFFF) <= EtherType.IEEE802_3_MAX_LENGTH) {
+        val = "LLC";
+      }
+    }
+
     StringBuilder sb = new StringBuilder(110);
     sb.append(PACKET_CLASS_KEY_BASE)
       .append(number.getClass().getName())
       .append(".")
-      .append(number.valueAsString());
+      .append(val);
     return loader.<Packet>getClass(
              sb.toString(),
              getUnknownPacketClass()
@@ -420,6 +459,64 @@ public final class PacketFactoryPropertiesLoader {
     return loader.<IpV6NeighborDiscoveryOption>getClass(
              UNKNOWN_IPV6_NEIGHBOR_DISCOVERY_OPTION_KEY,
              UnknownIpV6NeighborDiscoveryOption.class
+           );
+  }
+
+  /**
+   *
+   * @param num num
+   * @return a class which implements RadiotapDataField for a specified type.
+   */
+  public Class<? extends RadiotapData>
+  getRadiotapDataFieldClass(RadiotapPresentBitNumber num) {
+    StringBuilder sb = new StringBuilder(120);
+    sb.append(RADIOTAP_DATA_FIELD_CLASS_KEY_BASE)
+      .append(num.getClass().getName())
+      .append(".")
+      .append(num.valueAsString());
+    return loader.<RadiotapData>getClass(
+             sb.toString(),
+             getUnknownRadiotapDataFieldClass()
+           );
+  }
+
+  /**
+   *
+   * @return a class which implements RadiotapDataField for an unknown type.
+   */
+  public Class<? extends RadiotapData>
+  getUnknownRadiotapDataFieldClass() {
+    return loader.<RadiotapData>getClass(
+             UNKNOWN_RADIOTAP_DATA_FIELD_KEY,
+             UnknownRadiotapData.class
+           );
+  }
+
+  /**
+   *
+   * @param type type
+   * @return a class which implements SctpChunk for a specified type.
+   */
+  public Class<? extends SctpChunk> getSctpChunkClass(SctpChunkType type) {
+    StringBuilder sb = new StringBuilder(120);
+    sb.append(SCTP_CHUNK_CLASS_KEY_BASE)
+      .append(type.getClass().getName())
+      .append(".")
+      .append(type.valueAsString());
+    return loader.<SctpChunk>getClass(
+             sb.toString(),
+             getUnknownSctpChunkClass()
+           );
+  }
+
+  /**
+   *
+   * @return a class which implements SctpChunk for an unknown type.
+   */
+  public Class<? extends SctpChunk> getUnknownSctpChunkClass() {
+    return loader.<SctpChunk>getClass(
+             UNKNOWN_SCTP_CHUNK_KEY,
+             UnknownSctpChunk.class
            );
   }
 

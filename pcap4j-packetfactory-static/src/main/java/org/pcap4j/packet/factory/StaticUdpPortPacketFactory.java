@@ -1,12 +1,15 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Pcap4J.org
+  _##  Copyright (C) 2013-2016  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
 
+import org.pcap4j.packet.GtpSelector;
+import org.pcap4j.packet.IllegalRawDataException;
+import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.UdpPort;
 
 /**
@@ -20,20 +23,48 @@ extends AbstractStaticPacketFactory<UdpPort> {
     = new StaticUdpPortPacketFactory();
 
   private StaticUdpPortPacketFactory() {
-//    instantiaters.put(
-//      UdpPort.SNMP, new PacketInstantiater() {
-//        @Override
-//        public Packet newInstance(
-//          byte[] rawData, int offset, int length
-//        ) throws IllegalRawDataException {
-//          return SnmpPacket.newPacket(rawData, offset, length);
-//        }
-//        @Override
-//        public Class<SnmpPacket> getTargetClass() {
-//          return SnmpPacket.class;
-//        }
-//      }
-//    );
+    instantiaters.put(
+      UdpPort.GTP_C, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return GtpSelector.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<GtpSelector> getTargetClass() {
+          return GtpSelector.class;
+        }
+      }
+    );
+    instantiaters.put(
+      UdpPort.GTP_U, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return GtpSelector.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<GtpSelector> getTargetClass() {
+          return GtpSelector.class;
+        }
+      }
+    );
+    instantiaters.put(
+      UdpPort.GTP_PRIME, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return GtpSelector.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<GtpSelector> getTargetClass() {
+          return GtpSelector.class;
+        }
+      }
+    );
   };
 
   /**

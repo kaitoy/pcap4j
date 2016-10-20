@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2015  Pcap4J.org
+  _##  Copyright (C) 2012-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,13 +8,15 @@
 package org.pcap4j.packet.factory;
 
 import org.pcap4j.packet.BsdLoopbackPacket;
+import org.pcap4j.packet.Dot11Selector;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.HdlcPppPacket;
 import org.pcap4j.packet.IllegalRawDataException;
-import org.pcap4j.packet.IpPacket;
+import org.pcap4j.packet.IpSelector;
 import org.pcap4j.packet.LinuxSllPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.PppSelector;
+import org.pcap4j.packet.RadiotapPacket;
 import org.pcap4j.packet.namednumber.DataLinkType;
 
 /**
@@ -62,11 +64,11 @@ extends AbstractStaticPacketFactory<DataLinkType> {
         public Packet newInstance(
           byte[] rawData, int offset, int length
         ) throws IllegalRawDataException {
-          return IpPacket.newPacket(rawData, offset, length);
+          return IpSelector.newPacket(rawData, offset, length);
         }
         @Override
-        public Class<IpPacket> getTargetClass() {
-          return IpPacket.class;
+        public Class<IpSelector> getTargetClass() {
+          return IpSelector.class;
         }
       }
     );
@@ -85,6 +87,20 @@ extends AbstractStaticPacketFactory<DataLinkType> {
       }
     );
     instantiaters.put(
+      DataLinkType.IEEE802_11, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return Dot11Selector.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<Dot11Selector> getTargetClass() {
+          return Dot11Selector.class;
+        }
+      }
+    );
+    instantiaters.put(
       DataLinkType.LINUX_SLL, new PacketInstantiater() {
         @Override
         public Packet newInstance(
@@ -95,6 +111,20 @@ extends AbstractStaticPacketFactory<DataLinkType> {
         @Override
         public Class<LinuxSllPacket> getTargetClass() {
           return LinuxSllPacket.class;
+        }
+      }
+    );
+    instantiaters.put(
+      DataLinkType.IEEE802_11_RADIO, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return RadiotapPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<RadiotapPacket> getTargetClass() {
+          return RadiotapPacket.class;
         }
       }
     );

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,12 +8,15 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.packet.factory.PacketFactories;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.UdpPort;
 import org.pcap4j.util.ByteArrays;
@@ -66,9 +69,20 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     if (payloadLength != 0) { // payloadLength is positive.
+      PacketFactory<Packet, UdpPort> factory
+        = PacketFactories.getFactory(Packet.class, UdpPort.class);
+      Class<? extends Packet> class4UnknownPort = factory.getTargetClass();
+      Class<? extends Packet> class4DstPort = factory.getTargetClass(header.getDstPort());
+      UdpPort serverPort;
+      if (class4DstPort.equals(class4UnknownPort)) {
+        serverPort = header.getSrcPort();
+      }
+      else {
+        serverPort = header.getDstPort();
+      }
       this.payload
         = PacketFactories.getFactory(Packet.class, UdpPort.class)
-            .newInstance(rawData, offset + header.length(), payloadLength, header.getDstPort());
+            .newInstance(rawData, offset + header.length(), payloadLength, serverPort);
     }
     else {
       this.payload = null;

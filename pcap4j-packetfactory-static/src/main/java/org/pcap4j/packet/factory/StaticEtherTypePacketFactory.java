@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Pcap4J.org
+  _##  Copyright (C) 2012-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -9,9 +9,11 @@ package org.pcap4j.packet.factory;
 
 import org.pcap4j.packet.ArpPacket;
 import org.pcap4j.packet.Dot1qVlanTagPacket;
+import org.pcap4j.packet.IllegalPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV4Packet;
 import org.pcap4j.packet.IpV6Packet;
+import org.pcap4j.packet.LlcPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.EtherType;
 
@@ -90,6 +92,37 @@ extends AbstractStaticPacketFactory<EtherType> {
    */
   public static StaticEtherTypePacketFactory getInstance() {
     return INSTANCE;
+  }
+
+  @Override
+  public Packet newInstance(byte[] rawData, int offset, int length, EtherType number) {
+    if (rawData == null || number == null) {
+      StringBuilder sb = new StringBuilder(40);
+      sb.append("rawData: ")
+        .append(rawData)
+        .append(" number: ")
+        .append(number);
+      throw new NullPointerException(sb.toString());
+    }
+
+    PacketInstantiater instantiater = instantiaters.get(number);
+    if (instantiater != null) {
+      try {
+        return instantiater.newInstance(rawData, offset, length);
+      } catch (IllegalRawDataException e) {
+        return IllegalPacket.newPacket(rawData, offset, length);
+      }
+    }
+
+    if ((number.value() & 0xFFFF) <= EtherType.IEEE802_3_MAX_LENGTH) {
+      try {
+        return LlcPacket.newPacket(rawData, offset, length);
+      } catch (IllegalRawDataException e) {
+        IllegalPacket.newPacket(rawData, offset, length);
+      }
+    }
+
+    return newInstance(rawData, offset, length);
   }
 
 }

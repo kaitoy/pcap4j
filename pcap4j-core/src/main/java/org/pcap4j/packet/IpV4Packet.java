@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,11 +8,13 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.io.Serializable;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
@@ -26,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class IpV4Packet extends AbstractPacket {
+public final class IpV4Packet extends AbstractPacket implements IpPacket {
 
   // http://tools.ietf.org/html/rfc791
 
@@ -399,7 +401,7 @@ public final class IpV4Packet extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class IpV4Header extends AbstractHeader {
+  public static final class IpV4Header extends AbstractHeader implements IpHeader {
 
     /*  0                              16                            31
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -684,10 +686,7 @@ public final class IpV4Packet extends AbstractPacket {
       return ByteArrays.calcChecksum(data);
     }
 
-    /**
-     *
-     * @return version
-     */
+    @Override
     public IpVersion getVersion() {
       return version;
     }
@@ -796,10 +795,7 @@ public final class IpV4Packet extends AbstractPacket {
       return 0xFF & ttl;
     }
 
-    /**
-     *
-     * @return protocol
-     */
+    @Override
     public IpNumber getProtocol() {
       return protocol;
     }
@@ -812,18 +808,12 @@ public final class IpV4Packet extends AbstractPacket {
       return headerChecksum;
     }
 
-    /**
-     *
-     * @return srcAddr
-     */
+    @Override
     public Inet4Address getSrcAddr() {
       return srcAddr;
     }
 
-    /**
-     *
-     * @return dstAddr
-     */
+    @Override
     public Inet4Address getDstAddr() {
       return dstAddr;
     }
@@ -1021,7 +1011,7 @@ public final class IpV4Packet extends AbstractPacket {
   /**
    * The interface representing an IPv4 option.
    * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * Classes which imprement this interface must implement the following method:
+   * classes which imprement this interface must implement the following method:
    * {@code public static IpV4Option newInstance(byte[] rawData, int offset, int length)
    * throws IllegalRawDataException}
    *
@@ -1053,7 +1043,7 @@ public final class IpV4Packet extends AbstractPacket {
   /**
    * The interface representing an IPv4 TOS.
    * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * Classes which imprement this interface must implement the following method:
+   * classes which imprement this interface must implement the following method:
    * {@code public static IpV4Tos newInstance(byte value)}
    *
    * @author Kaito Yamada

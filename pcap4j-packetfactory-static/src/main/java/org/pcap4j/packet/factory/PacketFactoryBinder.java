@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2015  Pcap4J.org
+  _##  Copyright (C) 2013-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -9,6 +9,7 @@ package org.pcap4j.packet.factory;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IpV4InternetTimestampOption;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
@@ -18,16 +19,21 @@ import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
 import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
 import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
 import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.RadiotapPacket.RadiotapData;
+import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.DataLinkType;
+import org.pcap4j.packet.namednumber.Dot11FrameType;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IcmpV4Type;
 import org.pcap4j.packet.namednumber.IcmpV6Type;
 import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.packet.namednumber.LlcNumber;
 import org.pcap4j.packet.namednumber.NamedNumber;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.packet.namednumber.PppDllProtocol;
 import org.pcap4j.packet.namednumber.ProtocolFamily;
+import org.pcap4j.packet.namednumber.SctpPort;
 import org.pcap4j.packet.namednumber.TcpPort;
 import org.pcap4j.packet.namednumber.UdpPort;
 
@@ -47,14 +53,17 @@ final class PacketFactoryBinder {
   private PacketFactoryBinder() {
     packetFactories.put(DataLinkType.class, StaticDataLinkTypePacketFactory.getInstance());
     packetFactories.put(EtherType.class, StaticEtherTypePacketFactory.getInstance());
+    packetFactories.put(LlcNumber.class, StaticLlcNumberPacketFactory.getInstance());
     packetFactories.put(IcmpV4Type.class, StaticIcmpV4TypePacketFactory.getInstance());
     packetFactories.put(IcmpV6Type.class, StaticIcmpV6TypePacketFactory.getInstance());
     packetFactories.put(IpNumber.class, StaticIpNumberPacketFactory.getInstance());
     packetFactories.put(TcpPort.class, StaticTcpPortPacketFactory.getInstance());
     packetFactories.put(UdpPort.class, StaticUdpPortPacketFactory.getInstance());
+    packetFactories.put(SctpPort.class, StaticSctpPortPacketFactory.getInstance());
     packetFactories.put(NotApplicable.class, StaticNotApplicablePacketFactory.getInstance());
     packetFactories.put(PppDllProtocol.class, StaticPppDllProtocolPacketFactory.getInstance());
     packetFactories.put(ProtocolFamily.class, StaticProtocolFamilyPacketFactory.getInstance());
+    packetFactories.put(Dot11FrameType.class, StaticDot11FrameTypePacketFactory.getInstance());
 
     packetpPieceFactories.put(
       IpV4Option.class,
@@ -92,6 +101,14 @@ final class PacketFactoryBinder {
       IpV6FlowLabel.class,
       StaticIpV6FlowLabelFactory.getInstance()
     );
+    packetpPieceFactories.put(
+      RadiotapData.class,
+      StaticRadiotapDataFieldFactory.getInstance()
+    );
+    packetpPieceFactories.put(
+      SctpChunk.class,
+      StaticSctpChunkFactory.getInstance()
+    );
   }
 
   public static PacketFactoryBinder getInstance() { return INSTANCE; }
@@ -101,7 +118,13 @@ final class PacketFactoryBinder {
     Class<T> targetClass, Class<N> numberClass
   ) {
     if (Packet.class.isAssignableFrom(targetClass)) {
-      return (PacketFactory<T, N>)packetFactories.get(numberClass);
+      PacketFactory<T, N> factory = (PacketFactory<T, N>) packetFactories.get(numberClass);
+      if (factory != null) {
+        return factory;
+      }
+      else {
+        return (PacketFactory<T, N>) StaticUnknownPacketFactory.getInstance();
+      }
     }
     return (PacketFactory<T, N>)packetpPieceFactories.get(targetClass);
   }

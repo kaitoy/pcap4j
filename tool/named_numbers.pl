@@ -23,7 +23,7 @@ if ((not $registry) and (not defined $class_name)) {
   exit 1;
 }
 
-$cast = $cast ? "($cast)" : $cast;
+$cast = $cast ? "($cast) " : $cast;
 
 while (my $line = <>) {
   chomp $line;

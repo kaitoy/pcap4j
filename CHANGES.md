@@ -1,6 +1,39 @@
 Future
 ======
 ### New Features ###
+* Support IEEE 802.11 Probe Request.
+* IpV4Packet and IpV6Packet implement IpPacket interface.
+
+### Bug Fixes ###
+
+### Other Changes ###
+* Change a class name: org.pcap4j.packet.IpPacket -> org.pcap4j.packet.IpSelector
+
+Release 1.6.6 (7-Sep-2016)
+==========================
+### New Features ###
+* Support GTPv1 (only GTP-U and GTP-C header)
+* Support SCTP (only common header)
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.6.5 (12-Aug-2016)
+===========================
+### New Features ###
+* Support LLC and SNAP.
+* Support Radiotap.
+
+### Bug Fixes ###
+* [Issues#64](https://github.com/kaitoy/pcap4j/issues/64): JVM crash in the finalizer of BpfProgram.
+
+### Other Changes ###
+
+Release 1.6.4 (13-May-2016)
+===========================
+### New Features ###
+* [Issues#61](https://github.com/kaitoy/pcap4j/issues/61): Packet direction capture support
 
 ### Bug Fixes ###
 

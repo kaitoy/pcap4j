@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Pcap4J.org
+  _##  Copyright (C) 2012-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -15,6 +15,7 @@ import org.pcap4j.packet.IpV6ExtFragmentPacket;
 import org.pcap4j.packet.IpV6ExtHopByHopOptionsPacket;
 import org.pcap4j.packet.IpV6ExtRoutingPacket;
 import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.SctpPacket;
 import org.pcap4j.packet.TcpPacket;
 import org.pcap4j.packet.UdpPacket;
 import org.pcap4j.packet.UnknownPacket;
@@ -154,6 +155,20 @@ extends AbstractStaticPacketFactory<IpNumber> {
         @Override
         public Class<UnknownPacket> getTargetClass() {
           return UnknownPacket.class;
+        }
+      }
+    );
+    instantiaters.put(
+      IpNumber.SCTP, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return SctpPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<SctpPacket> getTargetClass() {
+          return SctpPacket.class;
         }
       }
     );
