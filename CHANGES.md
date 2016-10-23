@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.7.0 (23-Oct-2016)
+===========================
+### New Features ###
 * Support IEEE 802.11 Probe Request.
 * IpV4Packet and IpV6Packet implement IpPacket interface.
 
