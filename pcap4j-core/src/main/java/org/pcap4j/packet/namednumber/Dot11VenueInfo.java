@@ -26,7 +26,7 @@ import org.pcap4j.util.ByteArrays;
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @see Dot11VenueGroup
  * @author Kaito Yamada
- * @since pcap4j 1.6.7
+ * @since pcap4j 1.7.0
  */
 public final class Dot11VenueInfo extends NamedNumber<Short, Dot11VenueInfo> {
 

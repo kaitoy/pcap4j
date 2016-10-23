@@ -26,7 +26,7 @@ import org.pcap4j.util.ByteArrays;
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
- * @since pcap4j 1.6.7
+ * @since pcap4j 1.7.0
  */
 public final class Dot11LinkAdaptationControl implements Serializable {
 
@@ -336,7 +336,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
    * </pre>
    *
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static final class Mai implements Serializable {
 
@@ -444,7 +444,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
    * <pre>
    *
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static final class Aselc implements Serializable {
 
@@ -542,7 +542,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum AselCommand {
 
@@ -636,7 +636,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static final class Builder {
 

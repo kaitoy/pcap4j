@@ -16,7 +16,7 @@ import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 1.6.7
+ * @since pcap4j 1.7.0
  */
 public final class IpSelector extends AbstractPacket {
 

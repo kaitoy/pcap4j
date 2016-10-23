@@ -16,7 +16,7 @@ import org.pcap4j.packet.namednumber.IpVersion;
  * The interface representing an IP packet.
  *
  * @author Kaito Yamada
- * @since pcap4j 1.6.7
+ * @since pcap4j 1.7.0
  */
 public interface IpPacket extends Packet {
 
@@ -27,7 +27,7 @@ public interface IpPacket extends Packet {
    * The interface representing an IP packet's header.
    *
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public interface IpHeader extends Header {
 

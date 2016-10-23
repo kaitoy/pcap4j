@@ -14,7 +14,7 @@ import org.pcap4j.packet.namednumber.Dot11FrameType;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 1.6.7
+ * @since pcap4j 1.7.0
  */
 public final class StaticDot11FrameTypePacketFactory
 extends AbstractStaticPacketFactory<Dot11FrameType> {

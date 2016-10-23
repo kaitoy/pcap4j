@@ -21,7 +21,7 @@ import org.pcap4j.util.MacAddress;
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
- * @since pcap4j 1.6.7
+ * @since pcap4j 1.7.0
  */
 public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
 
@@ -80,7 +80,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static final class Builder extends Dot11ManagementPacket.Builder {
 
@@ -465,7 +465,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static final class Dot11ProbeRequestHeader extends Dot11ManagementHeader {
 
