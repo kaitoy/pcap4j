@@ -8,8 +8,8 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
+
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.LazyValue;
 import org.pcap4j.util.LazyValue.BuildValueCommand;
@@ -184,36 +184,6 @@ public abstract class AbstractPacket implements Packet {
   }
 
   @Override
-  public Iterator<Packet> iterator() {
-    return new PacketIterator(this);
-  }
-
-  @Override
-  public <T extends Packet> T get(Class<T> clazz) {
-    for (Packet p: this) {
-      if (clazz.isInstance(p)) {
-        return clazz.cast(p);
-      }
-    }
-    return null;
-  }
-
-  @Override
-  public Packet getOuterOf(Class<? extends Packet> clazz) {
-    for (Packet p: this) {
-      if (clazz.isInstance(p.getPayload())) {
-        return p;
-      }
-    }
-    return null;
-  }
-
-  @Override
-  public <T extends Packet> boolean contains(Class<T> clazz) {
-    return get(clazz) != null;
-  }
-
-  @Override
   public abstract Builder getBuilder();
 
   /**
@@ -347,31 +317,6 @@ public abstract class AbstractPacket implements Packet {
    * @version pcap4j 0.9.9
    */
   public static abstract class AbstractBuilder implements Builder {
-
-    @Override
-    public Iterator<Builder> iterator() {
-      return new BuilderIterator(this);
-    }
-
-    @Override
-    public <T extends Builder> T get(Class<T> clazz) {
-      for (Builder b: this) {
-        if (clazz.isInstance(b)) {
-          return clazz.cast(b);
-        }
-      }
-      return null;
-    }
-
-    @Override
-    public Builder getOuterOf(Class<? extends Builder> clazz) {
-      for (Builder b: this) {
-        if (clazz.isInstance(b.getPayloadBuilder())) {
-          return b;
-        }
-      }
-      return null;
-    }
 
     @Override
     public AbstractBuilder payloadBuilder(Builder payloadBuilder) {

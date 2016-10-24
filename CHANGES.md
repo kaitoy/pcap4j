@@ -6,6 +6,8 @@ Future (2.0.0)
 ### Bug Fixes ###
 
 ### Other Changes ###
+* The default implementations of Packet's iterator(), get(), getOuterOf(), and contains() are moved from AbstractPacket to Packet itself.
+* The default implementations of Packet.Builder's iterator(), get(), and getOuterOf() are moved from AbstractBuilder to Packet.Builder itself.
 
 Release 1.7.0 (23-Oct-2016)
 ===========================
