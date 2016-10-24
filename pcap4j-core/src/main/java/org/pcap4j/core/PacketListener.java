@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012  Pcap4J.org
+  _##  Copyright (C) 2012-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -13,6 +13,7 @@ import org.pcap4j.packet.Packet;
  * @author Kaito Yamada
  * @since pcap4j 0.9.8
  */
+@FunctionalInterface
 public interface PacketListener {
 
   /**
