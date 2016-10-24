@@ -3,6 +3,7 @@ package org.pcap4j.sample;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
@@ -54,31 +55,28 @@ public class GetNextPacketEx {
 
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
-    PcapHandle handle
-      = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+    try (PcapHandle handle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT)) {
+      handle.setFilter(
+        filter,
+        BpfCompileMode.OPTIMIZE
+      );
 
-    handle.setFilter(
-      filter,
-      BpfCompileMode.OPTIMIZE
-    );
-
-    int num = 0;
-    while (true) {
-      try {
-        Packet packet = handle.getNextPacketEx();
-        System.out.println(handle.getTimestamp());
-        System.out.println(packet);
-        num++;
-        if (num >= COUNT) {
-          break;
+      int num = 0;
+      while (true) {
+        try {
+          Packet packet = handle.getNextPacketEx();
+          System.out.println(handle.getTimestamp());
+          System.out.println(packet);
+          num++;
+          if (num >= COUNT) {
+            break;
+          }
+        } catch (TimeoutException e) {
+        } catch (EOFException e) {
+          e.printStackTrace();
         }
-      } catch (TimeoutException e) {
-      } catch (EOFException e) {
-        e.printStackTrace();
       }
     }
-
-    handle.close();
   }
 
 }

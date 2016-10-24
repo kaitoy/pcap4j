@@ -1,6 +1,7 @@
-Future
-======
+Future (2.0.0)
+==============
 ### New Features ###
+* PcapHandle and PcapDumper implement AutoCloseable.
 
 ### Bug Fixes ###
 

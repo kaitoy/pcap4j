@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2015 Pcap4J.org
+  _##  Copyright (C) 2012-2016 Pcap4J.org
   _##
   _##########################################################################
 */
@@ -9,6 +9,7 @@ package org.pcap4j.core;
 
 import java.sql.Timestamp;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.core.NativeMappings.timeval;
 import org.pcap4j.core.PcapHandle.TimestampPrecision;
@@ -16,6 +17,7 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 
@@ -23,7 +25,7 @@ import com.sun.jna.Pointer;
  * @author Kaito Yamada
  * @since pcap4j 0.9.9
  */
-public final class PcapDumper {
+public final class PcapDumper implements AutoCloseable {
 
   private static final Logger logger = LoggerFactory.getLogger(PcapDumper.class);
 
@@ -193,8 +195,9 @@ public final class PcapDumper {
   }
 
   /**
-   *
+   * Closes this PcapDumper.
    */
+  @Override
   public void close() {
     if (!open) {
       logger.warn("Already closed.");

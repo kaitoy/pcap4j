@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2015  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -43,7 +43,7 @@ import com.sun.jna.ptr.PointerByReference;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class PcapHandle {
+public final class PcapHandle implements AutoCloseable {
 
   private static final Logger logger = LoggerFactory.getLogger(PcapHandle.class);
 
@@ -1370,6 +1370,7 @@ public final class PcapHandle {
   /**
    * Closes this PcapHandle.
    */
+  @Override
   public void close() {
     if (!open) {
       logger.warn("Already closed.");
