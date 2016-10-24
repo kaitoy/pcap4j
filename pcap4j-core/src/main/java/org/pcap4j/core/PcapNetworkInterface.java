@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -9,6 +9,7 @@ package org.pcap4j.core;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.pcap_addr;
@@ -23,6 +24,7 @@ import org.pcap4j.util.LinkLayerAddress;
 import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
@@ -330,6 +332,10 @@ public final class PcapNetworkInterface {
       sb.append("] address: [").append(addr.getAddress());
     }
 
+    for (LinkLayerAddress addr: linkLayerAddresses) {
+      sb.append("] link layer address: [").append(addr.getAddress());
+    }
+
     sb.append("] loopBack: [").append(loopBack)
       .append("]");
     sb.append("] local: [").append(local)
@@ -339,18 +345,54 @@ public final class PcapNetworkInterface {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) { return true; }
-    if (!(obj instanceof PcapNetworkInterface)) { return false; }
-
-    PcapNetworkInterface other = (PcapNetworkInterface)obj;
-    return    this.name.equals(other.getName())
-           && this.local == other.isLocal();
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + addresses.hashCode();
+    result = prime * result + ((description == null) ? 0 : description.hashCode());
+    result = prime * result + linkLayerAddresses.hashCode();
+    result = prime * result + (local ? 1231 : 1237);
+    result = prime * result + (loopBack ? 1231 : 1237);
+    result = prime * result + name.hashCode();
+    return result;
   }
 
   @Override
-  public int hashCode() {
-    return toString().hashCode();
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (!(obj instanceof PcapNetworkInterface)) {
+      return false;
+    }
+    PcapNetworkInterface other = (PcapNetworkInterface) obj;
+    if (!addresses.equals(other.addresses)) {
+      return false;
+    }
+    if (description == null) {
+      if (other.description != null) {
+        return false;
+      }
+    }
+    else if (!description.equals(other.description)) {
+      return false;
+    }
+    if (!linkLayerAddresses.equals(other.linkLayerAddresses)) {
+      return false;
+    }
+    if (local != other.local) {
+      return false;
+    }
+    if (loopBack != other.loopBack) {
+      return false;
+    }
+    if (!name.equals(other.name)) {
+      return false;
+    }
+    return true;
   }
 
 }

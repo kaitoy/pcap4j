@@ -117,7 +117,7 @@ import org.pcap4j.util.ByteArrays;
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
- * @since pcap4j 1.6.7
+ * @since pcap4j 1.7.0
  */
 public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
 
@@ -2548,7 +2548,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum SmPowerSaveMode {
 
@@ -2615,7 +2615,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum StbcSupport {
 
@@ -2691,7 +2691,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum AMsduLength {
 
@@ -2757,7 +2757,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum AMpduLength {
 
@@ -2833,7 +2833,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum MpduStartSpacing {
 
@@ -2929,7 +2929,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum NumSpatialStreams {
 
@@ -3005,7 +3005,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum PcoTransitionTime {
 
@@ -3081,7 +3081,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum McsFeedbackCapability {
 
@@ -3157,7 +3157,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum Calibration {
 
@@ -3236,7 +3236,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum BeamformingFeedbackCapability {
 
@@ -3312,7 +3312,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum Grouping {
 
@@ -3391,7 +3391,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum NumBeamformerAntennas {
 
@@ -3467,7 +3467,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum CsiNumRows {
 
@@ -3543,7 +3543,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum ChannelEstimationCapability {
 
@@ -3616,7 +3616,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static final class Builder extends Dot11InformationElement.Builder {
 

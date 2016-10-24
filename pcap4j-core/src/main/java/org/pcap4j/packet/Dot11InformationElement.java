@@ -24,7 +24,7 @@ import org.pcap4j.util.ByteArrays;
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
- * @since pcap4j 1.6.7
+ * @since pcap4j 1.7.0
  */
 public abstract class Dot11InformationElement implements Serializable {
 
@@ -158,7 +158,7 @@ public abstract class Dot11InformationElement implements Serializable {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static abstract class
   Builder implements LengthBuilder<Dot11InformationElement> {

@@ -19,7 +19,7 @@ import org.pcap4j.packet.namednumber.Dot11InformationElementId;
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
- * @since pcap4j 1.6.7
+ * @since pcap4j 1.7.0
  */
 public abstract class Dot11AbstractSupportedRatesElement extends Dot11InformationElement {
 
@@ -190,7 +190,7 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public interface Datum extends Serializable {
 
@@ -203,7 +203,7 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static final class Rate implements Datum {
 
@@ -295,7 +295,7 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static final class BssMembershipSelector implements Datum {
 
@@ -378,7 +378,7 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static abstract class Builder extends Dot11InformationElement.Builder {
 

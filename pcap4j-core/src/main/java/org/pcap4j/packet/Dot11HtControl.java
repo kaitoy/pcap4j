@@ -32,7 +32,7 @@ import org.pcap4j.util.ByteArrays;
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
- * @since pcap4j 1.6.7
+ * @since pcap4j 1.7.0
  */
 public final class Dot11HtControl implements Serializable {
 
@@ -442,7 +442,7 @@ public final class Dot11HtControl implements Serializable {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum CalibrationPosition {
 
@@ -518,7 +518,7 @@ public final class Dot11HtControl implements Serializable {
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static enum CsiOrSteering {
 
@@ -591,7 +591,7 @@ public final class Dot11HtControl implements Serializable {
 
   /**
    * @author Kaito Yamada
-   * @since pcap4j 1.6.7
+   * @since pcap4j 1.7.0
    */
   public static final class Builder {
 
