@@ -33,6 +33,12 @@ implements Comparable<U>, Serializable {
    * @param name name
    */
   protected NamedNumber(T value, String name) {
+    if (value == null) {
+      throw new IllegalArgumentException("value is null.");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("name is null.");
+    }
     this.value = value;
     this.name = name;
   }
