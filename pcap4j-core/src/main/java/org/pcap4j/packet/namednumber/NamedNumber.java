@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2015  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -78,15 +78,33 @@ implements Comparable<U>, Serializable {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
-    return this.value.equals(this.getClass().cast(obj).value());
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + name.hashCode();
+    result = prime * result + value.hashCode();
+    return result;
   }
 
   @Override
-  public int hashCode() {
-    return value.hashCode();
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    NamedNumber<?, ?> other = (NamedNumber<?, ?>) obj;
+    if (!name.equals(other.name)) {
+      return false;
+    }
+    if (!value.equals(other.value)) {
+      return false;
+    }
+    return true;
   }
 
 }
