@@ -4123,7 +4123,7 @@ public final class UdpPort extends NamedNumber<Short, UdpPort> {
     = new UdpPort((short)2152, "GTP-U");
 
   /**
-   * GTP': 2152
+   * GTP': 3386
    */
   public static final UdpPort GTP_PRIME
     = new UdpPort((short)3386, "GTP'");
