@@ -1,6 +1,7 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -29,8 +30,6 @@ public class RandomPacketTester {
     /**
      * @param clazz			The Packet class to test
      * @param original		A packet of the right type with data in it
-     * @throws NoSuchMethodException
-     * @throws SecurityException
      */
     public static void testClass(Class<? extends Packet> clazz, Packet original) {
         Method newPacket = null;
