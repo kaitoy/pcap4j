@@ -2,12 +2,16 @@ Future (2.0.0)
 ==============
 ### New Features ###
 * PcapHandle and PcapDumper implement AutoCloseable.
+* Simplify PacketFactory API.
+    * newInstance(byte[], int, int, N) changes to newInstance(byte[], int, int, N...).
+    * newInstance(byte[], int, int), getTargetClass(N), and getTargetClass() are removed.
 
 ### Bug Fixes ###
 
 ### Other Changes ###
 * The default implementations of Packet's iterator(), get(), getOuterOf(), and contains() are moved from AbstractPacket to Packet itself.
 * The default implementations of Packet.Builder's iterator(), get(), and getOuterOf() are moved from AbstractBuilder to Packet.Builder itself.
+* NotApplicable.UNKNOWN_IPV6_NEXT_EXTENTION changes to UnknownIpV6Extension instance.
 
 Release 1.7.0 (23-Oct-2016)
 ===========================

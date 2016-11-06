@@ -19,6 +19,7 @@ import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.packet.namednumber.NotApplicable;
+import org.pcap4j.packet.namednumber.UnknownIpV6Extension;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,30 +84,18 @@ public final class IpV6Packet extends AbstractPacket implements IpPacket {
     if (payloadLength != 0) { // payloadLength is positive.
       PacketFactory<Packet, IpNumber> factory
         = PacketFactories.getFactory(Packet.class, IpNumber.class);
-      Class<? extends Packet> nextPacketClass = factory.getTargetClass(header.getNextHeader());
-      Packet nextPacket;
-      if (nextPacketClass.equals(factory.getTargetClass())) {
-          nextPacket
-            = PacketFactories.getFactory(Packet.class, NotApplicable.class)
-                .newInstance(
-                   rawData,
-                   offset + header.length(),
-                   payloadLength,
-                   NotApplicable.UNKNOWN_IP_V6_EXTENSION
-                 );
-          if (nextPacket instanceof IllegalPacket) {
-            nextPacket = factory.newInstance(rawData, offset + header.length(), payloadLength);
-          }
+      Packet nextPacket
+          = factory
+              .newInstance(
+                 rawData,
+                 offset + header.length(),
+                 payloadLength,
+                 header.getNextHeader(),
+                 UnknownIpV6Extension.getInstance()
+               );
+      if (nextPacket instanceof IllegalPacket) {
+        nextPacket = factory.newInstance(rawData, offset + header.length(), payloadLength);
       }
-      else {
-        nextPacket
-          = factory.newInstance(
-              rawData,
-              offset + header.length(),
-              payloadLength, header.getNextHeader()
-              );
-      }
-
       this.payload = nextPacket;
     }
     else {

@@ -7,6 +7,8 @@
 
 package org.pcap4j.packet.factory;
 
+import java.io.ObjectStreamException;
+
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.NamedNumber;
@@ -15,13 +17,13 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @author Kaito Yamada
  * @since pcap4j 1.6.6
  */
-public final class StaticUnknownPacketFactory
-implements PacketFactory<Packet, NamedNumber<?, ?>> {
+public final class StaticUnknownPacketFactory implements PacketFactory<Packet, NamedNumber<?, ?>> {
 
   private static final StaticUnknownPacketFactory INSTANCE = new StaticUnknownPacketFactory();
 
+  private StaticUnknownPacketFactory() {}
+
   /**
-   *
    * @return the singleton instance of StaticUnknownPacketFactory.
    */
   public static StaticUnknownPacketFactory getInstance() {
@@ -29,23 +31,14 @@ implements PacketFactory<Packet, NamedNumber<?, ?>> {
   }
 
   @Override
-  public Packet newInstance(byte[] rawData, int offset, int length, NamedNumber<?, ?> number) {
+  public Packet newInstance(byte[] rawData, int offset, int length, NamedNumber<?, ?>... numbers) {
     return UnknownPacket.newPacket(rawData, offset, length);
   }
 
-  @Override
-  public Packet newInstance(byte[] rawData, int offset, int length) {
-    return UnknownPacket.newPacket(rawData, offset, length);
-  }
-
-  @Override
-  public Class<? extends Packet> getTargetClass(NamedNumber<?, ?> number) {
-    return UnknownPacket.class;
-  }
-
-  @Override
-  public Class<? extends Packet> getTargetClass() {
-    return UnknownPacket.class;
+  // Override deserializer to keep singleton
+  @SuppressWarnings("static-method")
+  private Object readResolve() throws ObjectStreamException {
+    return INSTANCE;
   }
 
 }

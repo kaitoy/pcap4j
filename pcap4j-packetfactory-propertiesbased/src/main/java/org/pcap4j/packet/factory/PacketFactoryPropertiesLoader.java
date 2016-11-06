@@ -7,6 +7,8 @@
 
 package org.pcap4j.packet.factory;
 
+import java.io.ObjectStreamException;
+
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
@@ -551,6 +553,12 @@ public final class PacketFactoryPropertiesLoader {
              IPV6_FLOW_LABEL_CLASS_KEY,
              IpV6SimpleFlowLabel.class
            );
+  }
+
+  // Override deserializer to keep singleton
+  @SuppressWarnings("static-method")
+  private Object readResolve() throws ObjectStreamException {
+    return INSTANCE;
   }
 
 }

@@ -348,7 +348,6 @@ public final class RadiotapPacket extends AbstractPacket {
       int nextFieldOffset = nextPresentOffset;
       PacketFactory<RadiotapData, RadiotapPresentBitNumber> factory
         = PacketFactories.getFactory(RadiotapData.class, RadiotapPresentBitNumber.class);
-      Class<? extends RadiotapData> unknownDataFieldClass = factory.getTargetClass();
       boolean breaking = false;
       try {
         for (RadiotapPresentBitmask mask: presentBitmasks) {
@@ -361,14 +360,8 @@ public final class RadiotapPacket extends AbstractPacket {
             int padSize = alignment - ((nextFieldOffset - offset) % alignment);
             if (padSize != alignment) {
               if (remainingLength < padSize) {
-                StringBuilder sb = new StringBuilder(200);
-                sb.append("Not enough length for a RadiotapDataPad: ")
-                  .append(ByteArrays.toHexString(rawData, " "))
-                  .append(", offset: ")
-                  .append(offset)
-                  .append(", length: ")
-                  .append(length);
-                throw new IllegalRawDataException(sb.toString());
+                breaking = true;
+                break;
               }
 
               RadiotapData pad
@@ -378,15 +371,9 @@ public final class RadiotapPacket extends AbstractPacket {
               remainingLength -= padSize;
             }
 
-            if (remainingLength <= 0) {
-              StringBuilder sb = new StringBuilder(200);
-              sb.append("No data is remaining for a RadiotapDataField: ")
-                .append(ByteArrays.toHexString(rawData, " "))
-                .append(", offset: ")
-                .append(offset)
-                .append(", length: ")
-                .append(length);
-              throw new IllegalRawDataException(sb.toString());
+            if (remainingLength == 0) {
+              breaking = true;
+              break;
             }
 
             RadiotapData field
@@ -400,11 +387,6 @@ public final class RadiotapPacket extends AbstractPacket {
             int fieldLen = field.length();
             nextFieldOffset += fieldLen;
             remainingLength -= fieldLen;
-
-            if (field.getClass().equals(unknownDataFieldClass)) {
-              breaking = true;
-              break;
-            }
           }
         }
       } catch (Exception e) {

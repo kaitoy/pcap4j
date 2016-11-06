@@ -14,11 +14,9 @@ import org.junit.Test;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.PcapHandle.PcapDirection;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
-import org.pcap4j.packet.IcmpV4CommonPacket;
 import org.pcap4j.packet.IcmpV4EchoPacket;
 import org.pcap4j.packet.IcmpV4EchoReplyPacket;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.UdpPacket;
 import org.pcap4j.packet.namednumber.DataLinkType;
 
 @SuppressWarnings("javadoc")
@@ -273,7 +271,9 @@ public class PcapHandleTest {
       try {
         while (true) {
           Packet p = handle.getNextPacketEx();
-          assertNotNull(p.get(IcmpV4CommonPacket.class));
+          assertNotNull(p);
+          byte[] rawData = p.getRawData();
+          assertEquals(60, rawData.length);
           count++;
         }
       } catch (EOFException e) {}
@@ -302,7 +302,9 @@ public class PcapHandleTest {
       try {
         while (true) {
           Packet p = handle.getNextPacketEx();
-          assertNotNull(p.get(UdpPacket.class));
+          assertNotNull(p);
+          byte[] rawData = p.getRawData();
+          assertEquals(66, rawData.length);
           count++;
         }
       } catch (EOFException e) {}

@@ -7,9 +7,13 @@
 
 package org.pcap4j.packet.factory;
 
+import java.io.ObjectStreamException;
+
 import org.pcap4j.packet.Dot11ProbeRequestPacket;
+import org.pcap4j.packet.IllegalPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.Dot11FrameType;
 
 /**
@@ -17,33 +21,42 @@ import org.pcap4j.packet.namednumber.Dot11FrameType;
  * @since pcap4j 1.7.0
  */
 public final class StaticDot11FrameTypePacketFactory
-extends AbstractStaticPacketFactory<Dot11FrameType> {
+implements PacketFactory<Packet, Dot11FrameType> {
 
   private static final StaticDot11FrameTypePacketFactory INSTANCE
     = new StaticDot11FrameTypePacketFactory();
 
-  private StaticDot11FrameTypePacketFactory() {
-    instantiaters.put(
-      Dot11FrameType.PROBE_REQUEST, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return Dot11ProbeRequestPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<Dot11ProbeRequestPacket> getTargetClass() {
-          return Dot11ProbeRequestPacket.class;
-        }
-      }
-    );
-  };
+  private StaticDot11FrameTypePacketFactory() {}
 
   /**
-   *
    * @return the singleton instance of StaticDot11FrameTypePacketFactory.
    */
   public static StaticDot11FrameTypePacketFactory getInstance() {
+    return INSTANCE;
+  }
+
+  @Override
+  public Packet newInstance(byte[] rawData, int offset, int length, Dot11FrameType... numbers) {
+    if (rawData == null) {
+      throw new NullPointerException("rawData is null.");
+    }
+
+    try {
+      for (Dot11FrameType num: numbers) {
+        switch (Byte.toUnsignedInt(num.value())) {
+          case 4:
+            return Dot11ProbeRequestPacket.newPacket(rawData, offset, length);
+        }
+      }
+      return UnknownPacket.newPacket(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalPacket.newPacket(rawData, offset, length);
+    }
+  }
+
+  // Override deserializer to keep singleton
+  @SuppressWarnings("static-method")
+  private Object readResolve() throws ObjectStreamException {
     return INSTANCE;
   }
 

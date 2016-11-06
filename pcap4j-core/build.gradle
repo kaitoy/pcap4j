@@ -14,9 +14,6 @@ dependencies {
   testCompile "junit:junit:${junitVer}"
   testRuntime "ch.qos.logback:logback-core:${logbackVer}"
   testRuntime "ch.qos.logback:logback-classic:${logbackVer}"
-  testRuntime("org.pcap4j:pcap4j-packetfactory-static:1.6.3") {
-    exclude group: 'org.pcap4j', module: 'pcap4j-core'
-  }
 }
 
 compileJava << {

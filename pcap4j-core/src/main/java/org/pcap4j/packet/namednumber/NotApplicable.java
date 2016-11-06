@@ -46,12 +46,6 @@ public final class NotApplicable extends NamedNumber<Byte, NotApplicable> {
     = new NotApplicable((byte)3, "Encrypted");
 
   /**
-   * Unknown IPv6 Extension: 4
-   */
-  public static final NotApplicable UNKNOWN_IP_V6_EXTENSION
-    = new NotApplicable((byte)4, "Unknown IPv6 Extension");
-
-  /**
    *
    * @param value value
    * @param name name
