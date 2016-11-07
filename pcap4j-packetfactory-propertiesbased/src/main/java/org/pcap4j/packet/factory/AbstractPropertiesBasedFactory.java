@@ -69,7 +69,9 @@ implements PacketFactory<T, N> {
       throw new IllegalStateException(e);
     } catch (InvocationTargetException e) {
       if (e.getTargetException() instanceof IllegalRawDataException) {
-        return newIllegalData(rawData, offset, length);
+        return newIllegalData(
+                 rawData, offset, length, (IllegalRawDataException) e.getTargetException()
+               );
       }
       throw new IllegalArgumentException(e);
     }
@@ -100,8 +102,11 @@ implements PacketFactory<T, N> {
    * @param rawData rawData
    * @param offset offset
    * @param length length
+   * @param cause cause
    * @return a new object.
    */
-  protected abstract T newIllegalData(byte[] rawData, int offset, int length);
+  protected abstract T newIllegalData(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  );
 
 }

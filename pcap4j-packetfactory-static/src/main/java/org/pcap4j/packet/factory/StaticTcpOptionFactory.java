@@ -67,7 +67,7 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
       }
       return UnknownTcpOption.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalTcpOption.newInstance(rawData, offset, length);
+      return IllegalTcpOption.newInstance(rawData, offset, length, e);
     }
   }
 

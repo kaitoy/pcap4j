@@ -5,6 +5,16 @@ Future (2.0.0)
 * Simplify PacketFactory API.
     * newInstance(byte[], int, int, N) changes to newInstance(byte[], int, int, N...).
     * newInstance(byte[], int, int), getTargetClass(N), and getTargetClass() are removed.
+* The following classes implement the new interface IllegalRawDataHolder to hold IllegalRawDataException.
+    * org.pcap4j.packet.IllegalIpV4InternetTimestampOptionData
+    * org.pcap4j.packet.IllegalIpV4Option
+    * org.pcap4j.packet.IllegalIpV6NeighborDiscoveryOption
+    * org.pcap4j.packet.IllegalIpV6Option
+    * org.pcap4j.packet.IllegalIpV6RoutingData
+    * org.pcap4j.packet.IllegalPacket (actually implements IllegalRawDataPacket extending IllegalRawDataHolder and Packet)
+    * org.pcap4j.packet.IllegalRadiotapData
+    * org.pcap4j.packet.IllegalSctpChunk
+    * org.pcap4j.packet.IllegalTcpOption
 
 ### Bug Fixes ###
 
@@ -12,6 +22,16 @@ Future (2.0.0)
 * The default implementations of Packet's iterator(), get(), getOuterOf(), and contains() are moved from AbstractPacket to Packet itself.
 * The default implementations of Packet.Builder's iterator(), get(), and getOuterOf() are moved from AbstractBuilder to Packet.Builder itself.
 * NotApplicable.UNKNOWN_IPV6_NEXT_EXTENTION changes to UnknownIpV6Extension instance.
+* Change serialization formats:
+    * org.pcap4j.packet.IllegalIpV4InternetTimestampOptionData
+    * org.pcap4j.packet.IllegalIpV4Option
+    * org.pcap4j.packet.IllegalIpV6NeighborDiscoveryOption
+    * org.pcap4j.packet.IllegalIpV6Option
+    * org.pcap4j.packet.IllegalIpV6RoutingData
+    * org.pcap4j.packet.IllegalPacket
+    * org.pcap4j.packet.IllegalRadiotapData
+    * org.pcap4j.packet.IllegalSctpChunk
+    * org.pcap4j.packet.IllegalTcpOption
 
 Release 1.7.0 (23-Oct-2016)
 ===========================

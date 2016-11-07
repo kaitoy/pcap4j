@@ -48,7 +48,7 @@ public final class StaticSctpChunkFactory implements PacketFactory<SctpChunk, Sc
 //      }
       return UnknownSctpChunk.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalSctpChunk.newInstance(rawData, offset, length);
+      return IllegalSctpChunk.newInstance(rawData, offset, length, e);
     }
   }
 

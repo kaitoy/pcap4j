@@ -10,6 +10,7 @@ package org.pcap4j.packet.factory;
 import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.IllegalRadiotapData;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
 
@@ -50,8 +51,10 @@ extends AbstractPropertiesBasedFactory<RadiotapData, RadiotapPresentBitNumber> {
   }
 
   @Override
-  protected RadiotapData newIllegalData(byte[] rawData, int offset, int length) {
-    return IllegalRadiotapData.newInstance(rawData, offset, length);
+  protected RadiotapData newIllegalData(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    return IllegalRadiotapData.newInstance(rawData, offset, length, cause);
   }
 
   // Override deserializer to keep singleton

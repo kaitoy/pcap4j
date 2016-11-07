@@ -9,6 +9,7 @@ package org.pcap4j.packet.factory;
 
 import java.io.ObjectStreamException;
 
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IllegalTcpOption;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
@@ -47,8 +48,10 @@ extends AbstractPropertiesBasedFactory<TcpOption, TcpOptionKind> {
   }
 
   @Override
-  protected TcpOption newIllegalData(byte[] rawData, int offset, int length) {
-    return IllegalTcpOption.newInstance(rawData, offset, length);
+  protected TcpOption newIllegalData(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    return IllegalTcpOption.newInstance(rawData, offset, length, cause);
   }
 
   // Override deserializer to keep singleton

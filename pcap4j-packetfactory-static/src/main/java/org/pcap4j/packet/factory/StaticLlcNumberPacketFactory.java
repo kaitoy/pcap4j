@@ -52,7 +52,7 @@ public final class StaticLlcNumberPacketFactory implements PacketFactory<Packet,
       }
       return UnknownPacket.newPacket(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalPacket.newPacket(rawData, offset, length);
+      return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
 

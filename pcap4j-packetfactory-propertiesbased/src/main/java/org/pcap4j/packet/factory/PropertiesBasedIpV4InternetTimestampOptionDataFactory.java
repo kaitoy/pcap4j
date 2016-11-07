@@ -10,6 +10,7 @@ package org.pcap4j.packet.factory;
 import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.IllegalIpV4InternetTimestampOptionData;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 
@@ -55,8 +56,10 @@ extends AbstractPropertiesBasedFactory<
   }
 
   @Override
-  protected IpV4InternetTimestampOptionData newIllegalData(byte[] rawData, int offset, int length) {
-    return IllegalIpV4InternetTimestampOptionData.newInstance(rawData, offset, length);
+  protected IpV4InternetTimestampOptionData newIllegalData(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    return IllegalIpV4InternetTimestampOptionData.newInstance(rawData, offset, length, cause);
   }
 
   // Override deserializer to keep singleton

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Pcap4J.org
+  _##  Copyright (C) 2012-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
+
 import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
 import org.pcap4j.util.ByteArrays;
 
@@ -15,14 +16,15 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
-public final class IllegalIpV6RoutingData implements IpV6RoutingData {
+public final class IllegalIpV6RoutingData implements IpV6RoutingData, IllegalRawDataHolder {
 
   /**
    *
    */
-  private static final long serialVersionUID = -6359533865311266265L;
+  private static final long serialVersionUID = -7203099918284013972L;
 
   private final byte[] rawData;
+  private final IllegalRawDataException cause;
 
   /**
    * A static factory method.
@@ -32,16 +34,25 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData {
    * @param rawData rawData
    * @param offset offset
    * @param length length
+   * @param cause cause
    * @return a new IllegalIpV6RoutingData object.
    */
-  public static IllegalIpV6RoutingData newInstance(byte[] rawData, int offset, int length) {
+  public static IllegalIpV6RoutingData newInstance(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    if (cause == null) {
+      throw new NullPointerException("cause is null.");
+    }
     ByteArrays.validateBounds(rawData, offset, length);
-    return new IllegalIpV6RoutingData(rawData, offset, length);
+    return new IllegalIpV6RoutingData(rawData, offset, length, cause);
   }
 
-  private IllegalIpV6RoutingData(byte[] rawData, int offset, int length) {
+  private IllegalIpV6RoutingData(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
     this.rawData = new byte[length];
     System.arraycopy(rawData, offset, this.rawData, 0, length);
+    this.cause = cause;
   }
 
   @Override
@@ -55,26 +66,49 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData {
   }
 
   @Override
+  public IllegalRawDataException getCause() {
+    return cause;
+  }
+
+  @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[illegal data: ")
       .append(ByteArrays.toHexString(rawData, ""))
+      .append("] [cause: ")
+      .append(cause)
       .append("]");
     return sb.toString();
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
-
-    IllegalIpV6RoutingData other = (IllegalIpV6RoutingData)obj;
-    return Arrays.equals(other.rawData, rawData);
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + cause.hashCode();
+    result = prime * result + Arrays.hashCode(rawData);
+    return result;
   }
 
   @Override
-  public int hashCode() {
-    return Arrays.hashCode(rawData);
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    IllegalIpV6RoutingData other = (IllegalIpV6RoutingData) obj;
+    if (!cause.equals(other.cause)) {
+      return false;
+    }
+    if (!Arrays.equals(rawData, other.rawData)) {
+      return false;
+    }
+    return true;
   }
 
 }

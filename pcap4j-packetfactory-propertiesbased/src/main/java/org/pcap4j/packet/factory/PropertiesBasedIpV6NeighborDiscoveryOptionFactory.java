@@ -11,6 +11,7 @@ import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IllegalIpV6NeighborDiscoveryOption;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 
 /**
@@ -54,8 +55,10 @@ extends AbstractPropertiesBasedFactory<IpV6NeighborDiscoveryOption, IpV6Neighbor
   }
 
   @Override
-  protected IpV6NeighborDiscoveryOption newIllegalData(byte[] rawData, int offset, int length) {
-    return IllegalIpV6NeighborDiscoveryOption.newInstance(rawData, offset, length);
+  protected IpV6NeighborDiscoveryOption newIllegalData(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    return IllegalIpV6NeighborDiscoveryOption.newInstance(rawData, offset, length, cause);
   }
 
   // Override deserializer to keep singleton

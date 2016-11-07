@@ -48,14 +48,14 @@ abstract class IcmpV6InvokingPacketPacket extends AbstractPacket {
     Packet p = PacketFactories.getFactory(Packet.class, EtherType.class)
                  .newInstance(rawData, payloadOffset, payloadLength, EtherType.IPV6);
 
-    if (p instanceof IllegalPacket) {
+    if (p instanceof IllegalRawDataPacket) {
       this.payload = p;
       return;
     }
-    else if (p.contains(IllegalPacket.class)) {
+    else if (p.contains(IllegalRawDataPacket.class)) {
       Packet.Builder builder = p.getBuilder();
-      byte[] ipRawData = p.get(IllegalPacket.class).getRawData();
-      builder.getOuterOf(IllegalPacket.Builder.class)
+      byte[] ipRawData = p.get(IllegalRawDataPacket.class).getRawData();
+      builder.getOuterOf(IllegalRawDataPacket.Builder.class)
                 .payloadBuilder(
                   PacketFactories.getFactory(Packet.class, NotApplicable.class)
                     .newInstance(ipRawData, 0, ipRawData.length, NotApplicable.UNKNOWN)

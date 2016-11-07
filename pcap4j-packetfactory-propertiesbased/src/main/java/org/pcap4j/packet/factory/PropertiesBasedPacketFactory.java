@@ -10,6 +10,7 @@ package org.pcap4j.packet.factory;
 import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.IllegalPacket;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.NamedNumber;
 
@@ -45,8 +46,10 @@ extends AbstractPropertiesBasedFactory<Packet, NamedNumber<?, ?>> {
   }
 
   @Override
-  protected Packet newIllegalData(byte[] rawData, int offset, int length) {
-    return IllegalPacket.newPacket(rawData, offset, length);
+  protected Packet newIllegalData(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    return IllegalPacket.newPacket(rawData, offset, length, cause);
   }
 
   // Override deserializer to keep singleton

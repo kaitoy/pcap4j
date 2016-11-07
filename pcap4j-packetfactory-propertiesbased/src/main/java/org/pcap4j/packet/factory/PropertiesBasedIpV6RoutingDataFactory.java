@@ -10,6 +10,7 @@ package org.pcap4j.packet.factory;
 import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.IllegalIpV6RoutingData;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
 import org.pcap4j.packet.namednumber.IpV6RoutingType;
 
@@ -50,8 +51,10 @@ extends AbstractPropertiesBasedFactory<IpV6RoutingData, IpV6RoutingType> {
   }
 
   @Override
-  protected IpV6RoutingData newIllegalData(byte[] rawData, int offset, int length) {
-    return IllegalIpV6RoutingData.newInstance(rawData, offset, length);
+  protected IpV6RoutingData newIllegalData(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    return IllegalIpV6RoutingData.newInstance(rawData, offset, length, cause);
   }
 
   // Override deserializer to keep singleton

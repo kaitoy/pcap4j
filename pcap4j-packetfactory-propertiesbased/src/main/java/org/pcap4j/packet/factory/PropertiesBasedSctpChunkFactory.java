@@ -9,6 +9,7 @@ package org.pcap4j.packet.factory;
 
 import java.io.ObjectStreamException;
 
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IllegalSctpChunk;
 import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.namednumber.SctpChunkType;
@@ -46,8 +47,10 @@ extends AbstractPropertiesBasedFactory<SctpChunk, SctpChunkType> {
   }
 
   @Override
-  protected SctpChunk newIllegalData(byte[] rawData, int offset, int length) {
-    return IllegalSctpChunk.newInstance(rawData, offset, length);
+  protected SctpChunk newIllegalData(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    return IllegalSctpChunk.newInstance(rawData, offset, length, cause);
   }
 
   // Override deserializer to keep singleton

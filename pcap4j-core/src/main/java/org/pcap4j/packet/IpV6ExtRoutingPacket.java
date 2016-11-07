@@ -69,7 +69,7 @@ public final class IpV6ExtRoutingPacket extends AbstractPacket {
                header.getNextHeader(),
                UnknownIpV6Extension.getInstance()
              );
-      if (nextPacket instanceof IllegalPacket) {
+      if (nextPacket instanceof IllegalRawDataPacket) {
         nextPacket = factory.newInstance(rawData, offset + header.length(), payloadLength);
       }
       this.payload = nextPacket;

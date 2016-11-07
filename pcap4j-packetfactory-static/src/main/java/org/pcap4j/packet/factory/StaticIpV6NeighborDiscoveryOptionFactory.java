@@ -67,7 +67,7 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
       }
       return UnknownIpV6NeighborDiscoveryOption.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalIpV6NeighborDiscoveryOption.newInstance(rawData, offset, length);
+      return IllegalIpV6NeighborDiscoveryOption.newInstance(rawData, offset, length, e);
     }
   }
 

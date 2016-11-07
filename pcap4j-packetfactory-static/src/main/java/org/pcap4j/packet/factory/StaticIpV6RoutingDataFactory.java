@@ -52,7 +52,7 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
       }
       return UnknownIpV6RoutingData.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalIpV6RoutingData.newInstance(rawData, offset, length);
+      return IllegalIpV6RoutingData.newInstance(rawData, offset, length, e);
     }
   }
 

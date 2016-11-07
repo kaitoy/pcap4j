@@ -1,9 +1,11 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -147,6 +149,7 @@ public class IcmpV4DestinationUnreachablePacketTest extends AbstractPacketTest {
     assertTrue(p.getPayload().contains(IcmpV4EchoPacket.class));
     assertFalse(p.getPayload().contains(UnknownPacket.class));
     assertFalse(p.getPayload().contains(IllegalPacket.class));
+    assertFalse(p.getPayload().contains(IllegalRawDataPacket.class));
   }
 
   @Test

@@ -7,6 +7,10 @@
 
 package org.pcap4j.packet.factory;
 
+import org.pcap4j.packet.IllegalRawDataException;
+import org.pcap4j.packet.IllegalRawDataHolder;
+import org.pcap4j.packet.IllegalRawDataPacket;
+import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.NamedNumber;
 
 /**
@@ -28,6 +32,11 @@ public interface PacketFactory<T, N extends NamedNumber<?, ?>> {
    * to the number for each of them in the order given. The class this method first find will be
    * instantiated and returned. If no class is found, this method behaves in the same way as no
    * number was given.
+   *
+   * This method doesn't throw {@link IllegalRawDataException}. Instead, if an
+   * IllegalRawDataException occurred during a packet dissection, this instantiates
+   * {@link IllegalRawDataPacket} (if T is {@link Packet}) or {@link IllegalRawDataHolder}
+   * (if T is not {@link Packet}) and returns it.
    *
    * @param rawData a byte array including data this method will use for building a T instance.
    * @param offset offset of the data in the rawData.

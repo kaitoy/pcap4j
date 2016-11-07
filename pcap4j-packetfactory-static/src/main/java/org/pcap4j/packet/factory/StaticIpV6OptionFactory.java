@@ -53,7 +53,7 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
       }
       return UnknownIpV6Option.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalIpV6Option.newInstance(rawData, offset, length);
+      return IllegalIpV6Option.newInstance(rawData, offset, length, e);
     }
   }
 

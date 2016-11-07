@@ -60,7 +60,7 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
       }
       return UnknownIpV4InternetTimestampOptionData.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalIpV4InternetTimestampOptionData.newInstance(rawData, offset, length);
+      return IllegalIpV4InternetTimestampOptionData.newInstance(rawData, offset, length, e);
     }
   }
 

@@ -58,7 +58,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
              rawData, payloadOffset, payloadLength,
              number, UnknownIpV6Extension.getInstance()
            );
-    if (nextPacket instanceof IllegalPacket) {
+    if (nextPacket instanceof IllegalRawDataPacket) {
       nextPacket = factory.newInstance(rawData, payloadOffset, payloadLength);
     }
     this.payload = nextPacket;

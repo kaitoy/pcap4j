@@ -10,6 +10,7 @@ package org.pcap4j.packet.factory;
 import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.IllegalIpV4Option;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 
@@ -47,8 +48,10 @@ extends AbstractPropertiesBasedFactory<IpV4Option, IpV4OptionType> {
   }
 
   @Override
-  protected IpV4Option newIllegalData(byte[] rawData, int offset, int length) {
-    return IllegalIpV4Option.newInstance(rawData, offset, length);
+  protected IpV4Option newIllegalData(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    return IllegalIpV4Option.newInstance(rawData, offset, length, cause);
   }
 
   // Override deserializer to keep singleton

@@ -70,7 +70,7 @@ public final class StaticIpV4OptionFactory implements PacketFactory<IpV4Option, 
       }
       return UnknownIpV4Option.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalIpV4Option.newInstance(rawData, offset, length);
+      return IllegalIpV4Option.newInstance(rawData, offset, length, e);
     }
   }
 

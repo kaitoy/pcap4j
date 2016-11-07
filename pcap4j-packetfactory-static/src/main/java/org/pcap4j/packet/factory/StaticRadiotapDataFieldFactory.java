@@ -103,7 +103,7 @@ implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
       }
       return UnknownRadiotapData.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalRadiotapData.newInstance(rawData, offset, length);
+      return IllegalRadiotapData.newInstance(rawData, offset, length, e);
     }
   }
 
