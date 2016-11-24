@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -10,7 +10,6 @@ package org.pcap4j.packet;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.NotApplicable;
-import org.pcap4j.util.IcmpV4Helper;
 
 /**
  * @author Kaito Yamada
@@ -51,7 +50,6 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
 
     if (p instanceof IllegalPacket) {
       this.payload = p;
-      return;
     }
     else if (p.contains(IllegalPacket.class)) {
       Packet.Builder builder = p.getBuilder();
@@ -70,10 +68,11 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
           ((ChecksumBuilder<?>)b).correctChecksumAtBuild(false);
         }
       }
-      p = builder.build();
+      this.payload = builder.build();
     }
-
-    this.payload = IcmpV4Helper.makePacketForInvokingPacketField(p);
+    else {
+      this.payload = p;
+    }
   }
 
   /**
