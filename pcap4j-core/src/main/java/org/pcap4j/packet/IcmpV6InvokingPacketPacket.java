@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -50,7 +50,6 @@ abstract class IcmpV6InvokingPacketPacket extends AbstractPacket {
 
     if (p instanceof IllegalRawDataPacket) {
       this.payload = p;
-      return;
     }
     else if (p.contains(IllegalRawDataPacket.class)) {
       Packet.Builder builder = p.getBuilder();
@@ -69,10 +68,11 @@ abstract class IcmpV6InvokingPacketPacket extends AbstractPacket {
           ((ChecksumBuilder<?>)b).correctChecksumAtBuild(false);
         }
       }
-      p = builder.build();
+      this.payload = builder.build();
     }
-
-    this.payload = p;
+    else {
+      this.payload = p;
+    }
   }
 
   /**
