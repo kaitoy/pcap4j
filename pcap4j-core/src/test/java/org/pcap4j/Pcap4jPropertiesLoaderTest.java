@@ -1,4 +1,4 @@
-package org.pcap4j.core;
+package org.pcap4j;
 
 import com.sun.jna.Platform;
 import org.junit.Before;
