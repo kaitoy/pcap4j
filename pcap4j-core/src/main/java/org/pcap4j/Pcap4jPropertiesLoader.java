@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2014  Pcap4J.org
+  _##  Copyright (C) 2014-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,6 +8,8 @@
 package org.pcap4j;
 
 import org.pcap4j.util.PropertiesLoader;
+
+import com.sun.jna.Platform;
 
 /**
  * @author Kaito Yamada
@@ -49,6 +51,16 @@ public final class Pcap4jPropertiesLoader {
     */
    public static final String DLT_RAW_KEY = KEY_PREFIX + ".dlt.raw";
 
+   private static final int AF_INET_DEFAULT = 2;
+   private static final int AF_PACKET_DEFAULT = 17;
+   private static final int AF_LINK_DEFAULT = 18;
+   private static final int DLT_RAW_DEFAULT = 12;
+   private static final int DLT_RAW_OPENBSD = 14;
+   private static final int AF_INET6_DEFAULT = 23;
+   private static final int AF_INET6_LINUX = 10;
+   private static final int AF_INET6_FREEBSD = 28;
+   private static final int AF_INET6_MAC = 30;
+
    private static final Pcap4jPropertiesLoader INSTANCE = new Pcap4jPropertiesLoader();
 
    private PropertiesLoader loader
@@ -77,8 +89,8 @@ public final class Pcap4jPropertiesLoader {
    */
   public Integer getAfInet() {
     return loader.getInteger(
-             AF_INET_KEY ,
-             null
+             AF_INET_KEY,
+             AF_INET_DEFAULT
            );
   }
 
@@ -88,8 +100,8 @@ public final class Pcap4jPropertiesLoader {
    */
   public Integer getAfInet6() {
     return loader.getInteger(
-             AF_INET6_KEY ,
-             null
+             AF_INET6_KEY,
+             getDefaultAfInet6()
            );
   }
 
@@ -100,8 +112,8 @@ public final class Pcap4jPropertiesLoader {
    */
   public Integer getAfPacket() {
     return loader.getInteger(
-             AF_PACKET_KEY ,
-             null
+             AF_PACKET_KEY,
+             AF_PACKET_DEFAULT
            );
   }
 
@@ -112,11 +124,10 @@ public final class Pcap4jPropertiesLoader {
    */
   public Integer getAfLink() {
     return loader.getInteger(
-             AF_LINK_KEY ,
-             null
+             AF_LINK_KEY,
+             AF_LINK_DEFAULT
            );
   }
-
 
   /**
    * DLT_RAW
@@ -125,9 +136,39 @@ public final class Pcap4jPropertiesLoader {
    */
   public Integer getDltRaw() {
     return loader.getInteger(
-             DLT_RAW_KEY ,
-             null
+             DLT_RAW_KEY,
+             getDefaultDltRaw()
            );
+  }
+
+  /**
+   * @return The default address family for IPv6 addresses (platform specific)
+   */
+  private int getDefaultAfInet6() {
+    switch (Platform.getOSType()) {
+      case Platform.MAC:
+        return AF_INET6_MAC;
+      case Platform.FREEBSD:
+      case Platform.KFREEBSD:
+        return AF_INET6_FREEBSD;
+      case Platform.LINUX:
+      case Platform.ANDROID:
+        return AF_INET6_LINUX;
+      default:
+        return AF_INET6_DEFAULT;
+    }
+  }
+
+  /**
+   * @return The default value for DLT_RAW (platform specific)
+   */
+  private int getDefaultDltRaw() {
+    switch (Platform.getOSType()) {
+      case Platform.OPENBSD:
+        return DLT_RAW_OPENBSD;
+      default:
+        return DLT_RAW_DEFAULT;
+    }
   }
 
 }
