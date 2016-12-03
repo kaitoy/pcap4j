@@ -17,7 +17,6 @@ import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.pcap4j.Pcap4jPropertiesLoader.PCAP4J_PROPERTIES_PATH_KEY;
 
 @RunWith(Parameterized.class)
 @PrepareForTest(Platform.class)
@@ -87,7 +86,7 @@ public class Pcap4jPropertiesLoaderTest {
     }
 
     private int getExpectedDefaultAfInet6() {
-        switch (Platform.getOSType()) {
+        switch (osType) {
             case Platform.MAC:
                 return 30;
             case Platform.FREEBSD:
@@ -102,7 +101,7 @@ public class Pcap4jPropertiesLoaderTest {
     }
 
     private int getExpectedDefaultDltRaw() {
-        switch (Platform.getOSType()) {
+        switch (osType) {
             case Platform.OPENBSD:
                 return 14;
             default:
