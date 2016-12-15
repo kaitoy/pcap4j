@@ -33,7 +33,7 @@ genScript << {
   if (OperatingSystem.current().isWindows()) {
     new File("${scriptDir}/capture.bat").withWriter { out ->
       out.println "@echo off"
-      out.println "%JAVA_HOME%\\bin\\java -cp ${String.join ';', jars.toArray(new String[0])} org.pcap4j.sample.Loop"
+      out.println "\"%JAVA_HOME%\\bin\\java\" -cp ${String.join ';', jars.toArray(new String[0])} org.pcap4j.sample.Loop"
     }
   }
   else {
