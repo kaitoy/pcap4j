@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013  Pcap4J.org
+  _##  Copyright (C) 2013-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -18,6 +18,7 @@ public final class BpfProgram {
   private final bpf_program program;
   private final String expression;
   private volatile boolean freed = false;
+  private final Object lock = new Object();
 
   BpfProgram(bpf_program program, String expression) {
     this.program = program;
@@ -49,8 +50,16 @@ public final class BpfProgram {
    *
    */
   public void free() {
-    NativeMappings.pcap_freecode(program);
-    freed = true;
+    if (freed) {
+      return;
+    }
+    synchronized (lock) {
+      if (freed) {
+        return;
+      }
+      NativeMappings.pcap_freecode(program);
+      freed = true;
+    }
   }
 
   @Override
