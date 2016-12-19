@@ -17,6 +17,9 @@ buildscript {
 allprojects {
   apply plugin: 'java'
 
+  group = 'org.pcap4j'
+  version = '2.0.0-SNAPSHOT'
+
   javadoc {
     def currentYear = Calendar.getInstance().get Calendar.YEAR
     options.with {
@@ -34,9 +37,6 @@ allprojects {
     }
   }
 
-  group = 'org.pcap4j'
-  version = '2.0.0-SNAPSHOT'
-
   [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
@@ -52,9 +52,11 @@ allprojects {
   }
 }
 
-subprojects {
-  if (project.hasProperty('javadoc')) {
-    project.javadoc.enabled = false
+if (!gradle.startParameter.taskNames.find({ it.endsWith('javadoc') })) {
+  subprojects {
+    if (project.hasProperty('javadoc')) {
+      project.javadoc.enabled = false
+    }
   }
 }
 
