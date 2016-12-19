@@ -19,17 +19,15 @@ cache:
 #    - $HOME/.gradle/caches
 
 install:
-  - git clone -b libpcap-1.7 git://github.com/the-tcpdump-group/libpcap.git libpcap
+  - git clone -b libpcap-1.7.4 git://github.com/the-tcpdump-group/libpcap.git libpcap
   - cd libpcap
   - ./configure
-  - make shared
-  - mv libpcap.so.* libpcap.so
-  - export LIBPCAP=`pwd`/libpcap.so
+  - make && sudo make install
   - cd ..
 
 script:
   # sudo is needed for some unit tests.
-  - sudo ./gradlew build jacocoTestReport -Dorg.pcap4j.core.pcapLibName=$LIBPCAP -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true
+  - sudo ./gradlew build jacocoTestReport -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
