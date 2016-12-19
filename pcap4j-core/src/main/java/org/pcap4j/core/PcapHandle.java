@@ -61,8 +61,8 @@ public final class PcapHandle implements AutoCloseable {
   private volatile String filteringExpression = "";
 
   /**
-   *  The netmask used for {@link #setFilter(String, BpfCompileMode, Inet4Address) setFilter}
-   *  or {@link #compileFilter(String, BpfCompileMode, Inet4Address) compileFilter} when you
+   *  The netmask used for {@link #setFilter(String, BpfProgram.BpfCompileMode, Inet4Address)}
+   *  or {@link #compileFilter(String, BpfProgram.BpfCompileMode, Inet4Address)} when you
    *  don't know what netmask you should use.
    */
   public static final Inet4Address PCAP_NETMASK_UNKNOWN;

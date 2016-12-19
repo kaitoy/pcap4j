@@ -23,7 +23,7 @@ import org.pcap4j.util.ByteArrays;
  * |               Sequence Number                 |
  * +-----+-----+-----+-----+-----+-----+-----+-----+
  * }
- * <pre>
+ * </pre>
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada

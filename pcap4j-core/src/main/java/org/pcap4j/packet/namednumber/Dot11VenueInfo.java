@@ -21,7 +21,7 @@ import org.pcap4j.util.ByteArrays;
  * |Venue Group|Venue Type |
  * +-----------+-----------+
  * }
- * <pre>
+ * </pre>
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @see Dot11VenueGroup
