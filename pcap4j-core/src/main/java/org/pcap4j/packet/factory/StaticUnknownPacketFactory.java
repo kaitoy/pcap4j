@@ -7,6 +7,8 @@
 
 package org.pcap4j.packet.factory;
 
+import java.io.ObjectStreamException;
+
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.NamedNumber;
@@ -19,19 +21,24 @@ public final class StaticUnknownPacketFactory implements PacketFactory<Packet, N
 
   private static final StaticUnknownPacketFactory INSTANCE = new StaticUnknownPacketFactory();
 
-  private StaticUnknownPacketFactory() {};
+  private StaticUnknownPacketFactory() {}
 
   /**
-   *
    * @return the singleton instance of StaticUnknownPacketFactory.
    */
-  public static StaticUnknownPacketFactory getInstance() { return INSTANCE; }
+  public static StaticUnknownPacketFactory getInstance() {
+    return INSTANCE;
+  }
 
   @Override
-  public Packet newInstance(
-    byte[] rawData, int offset, int length, NamedNumber<?, ?>... numbers
-  ) {
+  public Packet newInstance(byte[] rawData, int offset, int length, NamedNumber<?, ?>... numbers) {
     return UnknownPacket.newPacket(rawData, offset, length);
+  }
+
+  // Override deserializer to keep singleton
+  @SuppressWarnings("static-method")
+  private Object readResolve() throws ObjectStreamException {
+    return INSTANCE;
   }
 
 }
