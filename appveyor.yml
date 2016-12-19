@@ -13,10 +13,6 @@ branches:
 # Do not build on tags
 skip_tags: true
 
-# Skipping commits with particular message or from user
-#skip_commits:
-#  message: /\[maven-release-plugin\]/
-
 #---------------------------------#
 #    environment configuration    #
 #---------------------------------#
