@@ -31,7 +31,7 @@ task extractTests(type: Copy, dependsOn: [testClasses, ':pcap4j-packettest:jarTe
 
 test {
   dependsOn extractTests
-  systemProperties System.properties
+  systemProperties System.getProperties().findAll({ it.key.startsWith 'org.pcap4j.' })
   systemProperty 'org.pcap4j.packet.AbstractPacketTest.resourceDir', sourceSets.test.output.classesDir
   systemProperty 'org.pcap4j.packet.AbstractPacketTest.tmpDir', temporaryDir
 }

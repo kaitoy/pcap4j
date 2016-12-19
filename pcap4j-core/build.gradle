@@ -21,6 +21,6 @@ compileJava << {
 }
 
 test {
-  systemProperties System.properties
+  systemProperties System.getProperties().findAll({ it.key.startsWith 'org.pcap4j.' })
   systemProperty 'org.pcap4j.core.PcapDumperTest.tmpDir', temporaryDir
 }
