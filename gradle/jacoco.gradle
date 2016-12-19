@@ -7,8 +7,7 @@
 
 allprojects {
   if (
-       name != 'pcap4j-distribution'
-    && name != 'pcap4j-sample'
+       name != 'pcap4j-sample'
     && name != 'pcap4j-packettest'
   ) {
     apply plugin: 'jacoco'
