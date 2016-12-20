@@ -14,12 +14,10 @@ import org.junit.Test;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.PcapHandle.PcapDirection;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
-import org.pcap4j.packet.IcmpV4CommonPacket;
-import org.pcap4j.packet.IpV4Packet;
 import org.pcap4j.packet.LinuxSllPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.DataLinkType;
-import org.pcap4j.packet.namednumber.IcmpV4Type;
+import org.pcap4j.packet.namednumber.LinuxSllPacketType;
 
 @SuppressWarnings("javadoc")
 public class PcapHandleTest {
@@ -216,10 +214,8 @@ public class PcapHandleTest {
 
       for (Packet packet: packets) {
         byte[] rawData = packet.getRawData();
-        rawData = LinuxSllPacket.newPacket(rawData, 0, rawData.length).getPayload().getRawData();
-        rawData = IpV4Packet.newPacket(rawData, 0, rawData.length).getPayload().getRawData();
-        IcmpV4CommonPacket icmp = IcmpV4CommonPacket.newPacket(rawData, 0, rawData.length);
-        assertEquals(IcmpV4Type.ECHO, icmp.getHeader().getType());
+        LinuxSllPacket sll = LinuxSllPacket.newPacket(rawData, 0, rawData.length);
+        assertEquals(LinuxSllPacketType.LINUX_SLL_OUTGOING, sll.getHeader().getPacketType());
       }
     }
     else {
@@ -262,10 +258,8 @@ public class PcapHandleTest {
 
       for (Packet packet: packets) {
         byte[] rawData = packet.getRawData();
-        rawData = LinuxSllPacket.newPacket(rawData, 0, rawData.length).getPayload().getRawData();
-        rawData = IpV4Packet.newPacket(rawData, 0, rawData.length).getPayload().getRawData();
-        IcmpV4CommonPacket icmp = IcmpV4CommonPacket.newPacket(rawData, 0, rawData.length);
-        assertEquals(IcmpV4Type.ECHO_REPLY, icmp.getHeader().getType());
+        LinuxSllPacket sll = LinuxSllPacket.newPacket(rawData, 0, rawData.length);
+        assertEquals(LinuxSllPacketType.LINUX_SLL_HOST, sll.getHeader().getPacketType());
       }
     }
   }
