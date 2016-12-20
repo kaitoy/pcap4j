@@ -9,7 +9,7 @@
 
 [![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg?branch=master)](https://travis-ci.org/kaitoy/pcap4j)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=master&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/master)
-[![Coverage Status](https://coveralls.io/repos/kaitoy/pcap4j/badge.svg)](https://coveralls.io/r/kaitoy/pcap4j)
+[![codecov](https://codecov.io/gh/kaitoy/pcap4j/branch/master/graph/badge.svg)](https://codecov.io/gh/kaitoy/pcap4j)
 
 Pcap4J
 ======
@@ -51,7 +51,7 @@ Maven Central Repositoryからダウンロードできる。
     * ソースなし: [pcap4j-distribution-1.7.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.7.0/pcap4j-distribution-1.7.0-bin.zip)
     * ソース入り: [pcap4j-distribution-1.7.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.7.0/pcap4j-distribution-1.7.0-src.zip)
 * スナップショットビルド
-    * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
+    * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j/
 
 開発経緯
 --------
