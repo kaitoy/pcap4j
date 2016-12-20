@@ -138,7 +138,7 @@ public class PropertiesLoader {
           );
         }
         else {
-          logger.warn(
+          logger.info(
             "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, defaultValue}
           );
@@ -201,7 +201,7 @@ public class PropertiesLoader {
           }
         }
         else {
-          logger.warn(
+          logger.info(
             "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, defaultValue}
           );
@@ -259,7 +259,7 @@ public class PropertiesLoader {
           );
         }
         else {
-          logger.warn(
+          logger.info(
             "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, defaultValue}
           );
@@ -353,7 +353,7 @@ public class PropertiesLoader {
           }
         }
         else {
-          logger.warn(
+          logger.info(
             "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, defaultValue}
           );
@@ -426,7 +426,7 @@ public class PropertiesLoader {
           }
         }
         else {
-          logger.warn(
+          logger.info(
             "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, defaultValue}
           );
@@ -508,7 +508,7 @@ public class PropertiesLoader {
           }
         }
         else {
-          logger.warn(
+          logger.info(
             "[{}] Could not get value by {}, use default value: {}",
             new Object[] {resourceName, key, Arrays.toString(defaultValue)}
           );
