@@ -15,8 +15,8 @@ Pcap4J
 ======
 
 Pcap4J is a Java library for capturing, crafting and sending packets.
-Pcap4J wraps a native packet capture library ([libpcap](http://www.tcpdump.org/) or
-[WinPcap](http://www.winpcap.org/)) via [JNA](https://github.com/twall/jna)
+Pcap4J wraps a native packet capture library ([libpcap](http://www.tcpdump.org/),
+[WinPcap](http://www.winpcap.org/), or [Npcap](https://github.com/nmap/npcap)) via [JNA](https://github.com/twall/jna)
 and provides you Java-Oriented APIs.
 
 Contents
@@ -96,7 +96,7 @@ How to use
 
 ##### Dependencies #####
 Pcap4j 1.1.0 or older needs J2SE 5.0+. Pcap4j 1.2.0 or newer needs J2SE 6.0+.
-And also libpcap 1.0.0+ or WinPcap 3.0+, jna, slf4j-api, and an implementation of logger for slf4j are required.
+And also a pcap native library (libpcap 1.0.0+, WinPcap 3.0+, or Npcap), jna, slf4j-api, and an implementation of logger for slf4j are required.
 I'm using the following libraries for the test.
 
 * libpcap 1.1.1
@@ -133,7 +133,7 @@ Each version's JavaDoc is on the [Maven Central Repository](http://search.maven.
 
 Refer to [here](https://github.com/kaitoy/pcap4j/blob/master/www/pcap4j_modules.md) for information about Pcap4J modules.
 
-Because Pcap4J is a wrapper library of libpcap/WinPcap, the following documents help you to understand how to use Pcap4J.
+Because Pcap4J is a wrapper of a pcap native library, the following documents help you to understand how to use Pcap4J.
 
 * [Programming with pcap](http://www.tcpdump.org/pcap.html)
 * [WinPcap Manuals](http://www.winpcap.org/docs/default.htm)
@@ -224,9 +224,10 @@ I'm developing Pcap4j in the following environment.
 * [Apache Maven](http://maven.apache.org/) 3.0.5
 
 #### Build procedure with Maven command (recommended) ####
-1. Install WinPcap or libpcap:<br>
+1. Install libpcap, WinPcap, or Npcap:<br>
    Install WinPcap (if Windows) or libpcap (if Linux/UNIX).
    It's needed for the unit tests which are run during a build.
+   If you use Npcap, which is an alternative to WinPcap, it needs to be installed with `WinPcap Compatible Mode` on.
 2. Install JDK 1.6+:<br>
    Download and install JDK 1.6 (or newer), and set the environment variable ***JAVA_HOME*** properly.
 3. Install Maven<br>
@@ -244,9 +245,10 @@ I'm developing Pcap4j in the following environment.
    Note Administrator/root privileges are needed for the unit tests.
 
 #### Build procedure on Eclipse ####
-1. Install WinPcap or libpcap:<br>
+1. Install libpcap, WinPcap, or Npcap:<br>
    Install WinPcap (if Windows) or libpcap (if Linux/UNIX).
    It's needed for the unit tests which are run during a build.
+   If you use Npcap, which is an alternative to WinPcap, it needs to be installed with `WinPcap Compatible Mode` on.
 2. Setup Eclipse 3.7+:<br>
    Install JDK for Eclipse.
    Then download an archived ***Eclipse IDE for Java Developers*** from
