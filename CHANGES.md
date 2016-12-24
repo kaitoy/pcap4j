@@ -5,6 +5,7 @@ Future
 ### Bug Fixes ###
 
 ### Other Changes ###
+* [PR#78](https://github.com/kaitoy/pcap4j/pull/78) [Issues#75](https://github.com/kaitoy/pcap4j/issues/75): Change PropertiesLoader to log with INFO instead of WARN when it returns the default value.
 
 Release 1.7.0 (23-Oct-2016)
 ===========================
