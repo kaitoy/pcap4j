@@ -12,8 +12,6 @@ import java.util.Map;
 
 import org.pcap4j.Pcap4jPropertiesLoader;
 
-import com.sun.jna.Platform;
-
 /**
  * Pcap Data Link Type
  *
@@ -107,17 +105,7 @@ public final class DataLinkType extends NamedNumber<Integer, DataLinkType> {
 
   static {
     Integer raw = Pcap4jPropertiesLoader.getInstance().getDltRaw();
-    if (raw != null) {
-      RAW = new DataLinkType(raw, "RAW");
-    }
-    else {
-      if (Platform.isOpenBSD()) {
-        RAW = new DataLinkType(14, "RAW");
-      }
-      else {
-        RAW = new DataLinkType(12, "RAW");
-      }
-    }
+    RAW = new DataLinkType(raw, "RAW");
 
     registry.put(NULL.value(), NULL);
     registry.put(EN10MB.value(), EN10MB);

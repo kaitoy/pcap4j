@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2015  Pcap4J.org
+  _##  Copyright (C) 2011-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -11,11 +11,11 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 import org.pcap4j.Pcap4jPropertiesLoader;
 import org.pcap4j.core.NativeMappings.in6_addr;
 import org.pcap4j.core.NativeMappings.in_addr;
 import org.pcap4j.util.ByteArrays;
-import com.sun.jna.Platform;
 
 /**
  * @author Kaito Yamada
@@ -75,48 +75,10 @@ public final class Inets {
   public static final short AF_LINK;
 
   static {
-    Integer afInet = Pcap4jPropertiesLoader.getInstance().getAfInet();
-    if (afInet != null) {
-      AF_INET = (short)afInet.intValue();
-    }
-    else {
-      AF_INET = 2;
-    }
-
-    Integer afInet6 = Pcap4jPropertiesLoader.getInstance().getAfInet6();
-    if (afInet6 != null) {
-      AF_INET6 = (short)afInet6.intValue();
-    }
-    else {
-      if (Platform.isMac()) {
-        AF_INET6 = 30;
-      }
-      else if (Platform.isFreeBSD()) {
-        AF_INET6 = 28;
-      }
-      else if (Platform.isLinux()) {
-        AF_INET6 = 10;
-      }
-      else {
-        AF_INET6 = 23;
-      }
-    }
-
-    Integer afPacket = Pcap4jPropertiesLoader.getInstance().getAfPacket();
-    if (afPacket != null) {
-      AF_PACKET = (short)afPacket.intValue();
-    }
-    else {
-      AF_PACKET = 17;
-    }
-
-    Integer afLink = Pcap4jPropertiesLoader.getInstance().getAfLink();
-    if (afLink != null) {
-      AF_LINK = (short)afLink.intValue();
-    }
-    else {
-      AF_LINK = 18;
-    }
+    AF_INET = Pcap4jPropertiesLoader.getInstance().getAfInet().shortValue();
+    AF_INET6 = Pcap4jPropertiesLoader.getInstance().getAfInet6().shortValue();
+    AF_PACKET = Pcap4jPropertiesLoader.getInstance().getAfPacket().shortValue();
+    AF_LINK = Pcap4jPropertiesLoader.getInstance().getAfLink().shortValue();
   }
 
   private Inets() { throw new AssertionError(); }
