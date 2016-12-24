@@ -15,8 +15,8 @@ Pcap4J
 ======
 
 パケットをキャプチャ・作成・送信するためのJavaライブラリ。
-ネイティブのパケットキャプチャライブラリである[libpcap](http://www.tcpdump.org/)
-または[WinPcap](http://www.winpcap.org/)を[JNA](https://github.com/twall/jna)を
+ネイティブのパケットキャプチャライブラリである[libpcap](http://www.tcpdump.org/)、
+[WinPcap](http://www.winpcap.org/)、または[Npcap](https://github.com/nmap/npcap)を[JNA](https://github.com/twall/jna)を
 使ってラッピングして、JavaらしいAPIに仕上げたもの。
 
 目次
@@ -96,7 +96,7 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 
 ##### ライブラリ等の依存 #####
 1.1.0以前のはJ2SE 5.0以降で動く。1.2.0以降のはJ2SE 6.0以降で動く。
-UNIX系ならlibpcap 1.0.0以降、WindowsならWinPcap (多分)3.0以降がインストールされている必要がある。
+UNIX系ならlibpcap 1.0.0以降、WindowsならWinPcap (多分)3.0以降かNpcapがインストールされている必要がある。
 jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。
 
 動作確認に使っているバージョンは以下。
@@ -135,7 +135,7 @@ Pcap4Jは管理者権限で実行する必要がある。
 
 Pcap4Jのモジュール構成については[こちら](https://github.com/kaitoy/pcap4j/blob/v1/www/pcap4j_modules.md)。
 
-Pcap4Jはlibpcap/WinPcapのラッパーなので、以下のドキュメントを読むとPcap4Jの使い方がわかる。
+Pcap4Jはpcapネイティブライブラリのラッパーなので、以下のドキュメントを読むとPcap4Jの使い方がわかる。
 
 * [Programming with pcap](http://www.tcpdump.org/pcap.html)
 * [WinPcap Manuals](http://www.winpcap.org/docs/default.htm)
@@ -224,9 +224,10 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 * [Apache Maven](http://maven.apache.org/) 3.0.5
 
 #### Mavenコマンドでのビルド手順 (推奨) ####
-1. WinPcap/libpcapインストール:<br>
+1. WinPcap/Npcap/libpcapインストール:<br>
    WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
    ビルド時に実行されるunit testで必要なので。
+   WinPcapの代わりにNpcapを使う場合、インストール時に`WinPcap Compatible Mode`をオンにする。
 2. JDK 1.6+インストール:<br>
    JDKの1.6以上をダウンロードしてインストール。JAVA_HOMEを設定する。
 3. Mavenインストール:<br>
@@ -242,9 +243,10 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
    unit testを通すためにはAdministrator/root権限が必要。
 
 #### Eclipse上でのビルド手順 ####
-1. WinPcap/libpcapインストール:<br>
+1. WinPcap/Npcap/libpcapインストール:<br>
    WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
    ビルド時に実行されるunit testで必要なので。
+   WinPcapの代わりにNpcapを使う場合、インストール時に`WinPcap Compatible Mode`をオンにする。
 2. Eclipseインストール:<br>
    [Eclipse.org](http://www.eclipse.org/downloads/)あたりでダウンロードして解凍するだけ。
 3. M2Eインストール:<br>
