@@ -17,61 +17,61 @@ import com.sun.jna.Platform;
  */
 public final class Pcap4jPropertiesLoader {
 
-   private static final String KEY_PREFIX
-     = Pcap4jPropertiesLoader.class.getPackage().getName();
+  private static final String KEY_PREFIX
+    = Pcap4jPropertiesLoader.class.getPackage().getName();
 
-   /**
-    *
-    */
-   public static final String PCAP4J_PROPERTIES_PATH_KEY
-     = KEY_PREFIX + ".properties";
+  /**
+   *
+   */
+  public static final String PCAP4J_PROPERTIES_PATH_KEY
+    = KEY_PREFIX + ".properties";
 
-   /**
-    *
-    */
-   public static final String AF_INET_KEY = KEY_PREFIX + ".af.inet";
+  /**
+   *
+   */
+  public static final String AF_INET_KEY = KEY_PREFIX + ".af.inet";
 
-   /**
-    *
-    */
-   public static final String AF_INET6_KEY = KEY_PREFIX + ".af.inet6";
+  /**
+   *
+   */
+  public static final String AF_INET6_KEY = KEY_PREFIX + ".af.inet6";
 
-   /**
-    *
-    */
-   public static final String AF_PACKET_KEY = KEY_PREFIX + ".af.packet";
+  /**
+   *
+   */
+  public static final String AF_PACKET_KEY = KEY_PREFIX + ".af.packet";
 
-   /**
-    *
-    */
-   public static final String AF_LINK_KEY = KEY_PREFIX + ".af.link";
+  /**
+   *
+   */
+  public static final String AF_LINK_KEY = KEY_PREFIX + ".af.link";
 
-   /**
-    *
-    */
-   public static final String DLT_RAW_KEY = KEY_PREFIX + ".dlt.raw";
+  /**
+   *
+   */
+  public static final String DLT_RAW_KEY = KEY_PREFIX + ".dlt.raw";
 
-   private static final int AF_INET_DEFAULT = 2;
-   private static final int AF_PACKET_DEFAULT = 17;
-   private static final int AF_LINK_DEFAULT = 18;
-   private static final int DLT_RAW_DEFAULT = 12;
-   private static final int DLT_RAW_OPENBSD = 14;
-   private static final int AF_INET6_DEFAULT = 23;
-   private static final int AF_INET6_LINUX = 10;
-   private static final int AF_INET6_FREEBSD = 28;
-   private static final int AF_INET6_MAC = 30;
+  private static final int AF_INET_DEFAULT = 2;
+  private static final int AF_PACKET_DEFAULT = 17;
+  private static final int AF_LINK_DEFAULT = 18;
+  private static final int DLT_RAW_DEFAULT = 12;
+  private static final int DLT_RAW_OPENBSD = 14;
+  private static final int AF_INET6_DEFAULT = 23;
+  private static final int AF_INET6_LINUX = 10;
+  private static final int AF_INET6_FREEBSD = 28;
+  private static final int AF_INET6_MAC = 30;
 
-   private static final Pcap4jPropertiesLoader INSTANCE = new Pcap4jPropertiesLoader();
+  private static final Pcap4jPropertiesLoader INSTANCE = new Pcap4jPropertiesLoader();
 
-   private PropertiesLoader loader
-     = new PropertiesLoader(
-         System.getProperty(
-           PCAP4J_PROPERTIES_PATH_KEY,
-           KEY_PREFIX.replace('.', '/') + "/pcap4j.properties"
-         ),
-         true,
-         true
-       );
+  private PropertiesLoader loader
+    = new PropertiesLoader(
+        System.getProperty(
+          PCAP4J_PROPERTIES_PATH_KEY,
+          KEY_PREFIX.replace('.', '/') + "/pcap4j.properties"
+        ),
+        true,
+        true
+      );
 
   private Pcap4jPropertiesLoader() {}
 
