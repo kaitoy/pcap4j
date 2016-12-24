@@ -3,6 +3,8 @@ Future
 ### New Features ###
 
 ### Bug Fixes ###
+* [Issues#76](https://github.com/kaitoy/pcap4j/issues/76): NullPointerException when dissecting an ICMP error packet.
+* [Issues#80](https://github.com/kaitoy/pcap4j/issues/80): Intermittent SIGSEGV in finalizer for BpfProgram.
 
 ### Other Changes ###
 * [PR#78](https://github.com/kaitoy/pcap4j/pull/78) [Issues#75](https://github.com/kaitoy/pcap4j/issues/75): Change PropertiesLoader to log with INFO instead of WARN when it returns the default value.
