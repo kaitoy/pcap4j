@@ -76,7 +76,6 @@ public final class Pcap4jPropertiesLoader {
   private Pcap4jPropertiesLoader() {}
 
   /**
-   *
    * @return the singleton instance of Pcap4jPropertiesLoader.
    */
   public static Pcap4jPropertiesLoader getInstance() {
@@ -84,8 +83,7 @@ public final class Pcap4jPropertiesLoader {
   }
 
   /**
-   *
-   * @return address family number for IPv4 addresses.
+   * @return address family number for IPv4 addresses. Never null.
    */
   public Integer getAfInet() {
     return loader.getInteger(
@@ -95,8 +93,7 @@ public final class Pcap4jPropertiesLoader {
   }
 
   /**
-   *
-   * @return address family numbers for IPv6 addresses.
+   * @return address family numbers for IPv6 addresses. Never null.
    */
   public Integer getAfInet6() {
     return loader.getInteger(
@@ -108,7 +105,7 @@ public final class Pcap4jPropertiesLoader {
   /**
    * For Linux
    *
-   * @return address family numbers for link layer addresses.
+   * @return address family numbers for link layer addresses. Never null.
    */
   public Integer getAfPacket() {
     return loader.getInteger(
@@ -120,7 +117,7 @@ public final class Pcap4jPropertiesLoader {
   /**
    * For BSD including Mac OS X
    *
-   * @return address family numbers for link layer addresses.
+   * @return address family numbers for link layer addresses. Never null.
    */
   public Integer getAfLink() {
     return loader.getInteger(
@@ -132,7 +129,7 @@ public final class Pcap4jPropertiesLoader {
   /**
    * DLT_RAW
    *
-   * @return the value of DLT_RAW
+   * @return the value of DLT_RAW. Never null.
    */
   public Integer getDltRaw() {
     return loader.getInteger(
