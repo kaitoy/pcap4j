@@ -664,8 +664,8 @@ public final class Dot11LinkAdaptationControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder vhtMfb(boolean vhtMfb) {
-     this.vhtMfb = vhtMfb;
-     return this;
+      this.vhtMfb = vhtMfb;
+      return this;
     }
 
     /**
@@ -673,8 +673,8 @@ public final class Dot11LinkAdaptationControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder trq(boolean trq) {
-     this.trq = trq;
-     return this;
+      this.trq = trq;
+      return this;
     }
 
     /**
@@ -683,8 +683,8 @@ public final class Dot11LinkAdaptationControl implements Serializable {
      * @see #ASELI
      */
     public Builder maiOrAseli(byte maiOrAseli) {
-     this.maiOrAseli = maiOrAseli;
-     return this;
+      this.maiOrAseli = maiOrAseli;
+      return this;
     }
 
     /**
@@ -692,8 +692,8 @@ public final class Dot11LinkAdaptationControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder maiOrAseli(Mai maiOrAseli) {
-     this.maiOrAseli = maiOrAseli.getRawData();
-     return this;
+      this.maiOrAseli = maiOrAseli.getRawData();
+      return this;
     }
 
     /**
@@ -701,8 +701,8 @@ public final class Dot11LinkAdaptationControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder mfsi(byte mfsi) {
-     this.mfsi = mfsi;
-     return this;
+      this.mfsi = mfsi;
+      return this;
     }
 
     /**
@@ -710,8 +710,8 @@ public final class Dot11LinkAdaptationControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder mfbOrAselc(byte mfbOrAselc) {
-     this.mfbOrAselc = mfbOrAselc;
-     return this;
+      this.mfbOrAselc = mfbOrAselc;
+      return this;
     }
 
     /**
@@ -719,8 +719,8 @@ public final class Dot11LinkAdaptationControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder mfbOrAselc(Aselc mfbOrAselc) {
-     this.mfbOrAselc = mfbOrAselc.getRawData();
-     return this;
+      this.mfbOrAselc = mfbOrAselc.getRawData();
+      return this;
     }
 
     /**

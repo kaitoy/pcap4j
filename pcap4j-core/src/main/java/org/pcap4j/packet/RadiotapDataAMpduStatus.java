@@ -515,8 +515,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder referenceNumber(int referenceNumber) {
-     this.referenceNumber = referenceNumber;
-     return this;
+      this.referenceNumber = referenceNumber;
+      return this;
     }
 
     /**
@@ -524,8 +524,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder driverReportsZeroLengthSubframes(boolean driverReportsZeroLengthSubframes) {
-     this.driverReportsZeroLengthSubframes = driverReportsZeroLengthSubframes;
-     return this;
+      this.driverReportsZeroLengthSubframes = driverReportsZeroLengthSubframes;
+      return this;
     }
 
     /**
@@ -533,8 +533,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder zeroLengthSubframe(boolean zeroLengthSubframe) {
-     this.zeroLengthSubframe = zeroLengthSubframe;
-     return this;
+      this.zeroLengthSubframe = zeroLengthSubframe;
+      return this;
     }
 
     /**
@@ -542,8 +542,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder lastSubframeKnown(boolean lastSubframeKnown) {
-     this.lastSubframeKnown = lastSubframeKnown;
-     return this;
+      this.lastSubframeKnown = lastSubframeKnown;
+      return this;
     }
 
     /**
@@ -551,8 +551,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder lastSubframe(boolean lastSubframe) {
-     this.lastSubframe = lastSubframe;
-     return this;
+      this.lastSubframe = lastSubframe;
+      return this;
     }
 
     /**
@@ -560,8 +560,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder delimiterCrcError(boolean delimiterCrcError) {
-     this.delimiterCrcError = delimiterCrcError;
-     return this;
+      this.delimiterCrcError = delimiterCrcError;
+      return this;
     }
 
     /**
@@ -569,8 +569,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder delimiterCrcValueKnown(boolean delimiterCrcValueKnown) {
-     this.delimiterCrcValueKnown = delimiterCrcValueKnown;
-     return this;
+      this.delimiterCrcValueKnown = delimiterCrcValueKnown;
+      return this;
     }
 
     /**
@@ -578,8 +578,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder tenthMsbOfFlags(boolean tenthMsbOfFlags) {
-     this.tenthMsbOfFlags = tenthMsbOfFlags;
-     return this;
+      this.tenthMsbOfFlags = tenthMsbOfFlags;
+      return this;
     }
 
     /**
@@ -587,8 +587,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder ninthMsbOfFlags(boolean ninthMsbOfFlags) {
-     this.ninthMsbOfFlags = ninthMsbOfFlags;
-     return this;
+      this.ninthMsbOfFlags = ninthMsbOfFlags;
+      return this;
     }
 
     /**
@@ -596,8 +596,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder eighthMsbOfFlags(boolean eighthMsbOfFlags) {
-     this.eighthMsbOfFlags = eighthMsbOfFlags;
-     return this;
+      this.eighthMsbOfFlags = eighthMsbOfFlags;
+      return this;
     }
 
     /**
@@ -605,8 +605,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder seventhMsbOfFlags(boolean seventhMsbOfFlags) {
-     this.seventhMsbOfFlags = seventhMsbOfFlags;
-     return this;
+      this.seventhMsbOfFlags = seventhMsbOfFlags;
+      return this;
     }
 
     /**
@@ -614,8 +614,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder sixthMsbOfFlags(boolean sixthMsbOfFlags) {
-     this.sixthMsbOfFlags = sixthMsbOfFlags;
-     return this;
+      this.sixthMsbOfFlags = sixthMsbOfFlags;
+      return this;
     }
 
     /**
@@ -623,8 +623,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder fifthMsbOfFlags(boolean fifthMsbOfFlags) {
-     this.fifthMsbOfFlags = fifthMsbOfFlags;
-     return this;
+      this.fifthMsbOfFlags = fifthMsbOfFlags;
+      return this;
     }
 
     /**
@@ -632,8 +632,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder fourthMsbOfFlags(boolean fourthMsbOfFlags) {
-     this.fourthMsbOfFlags = fourthMsbOfFlags;
-     return this;
+      this.fourthMsbOfFlags = fourthMsbOfFlags;
+      return this;
     }
 
     /**
@@ -641,8 +641,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder thirdMsbOfFlags(boolean thirdMsbOfFlags) {
-     this.thirdMsbOfFlags = thirdMsbOfFlags;
-     return this;
+      this.thirdMsbOfFlags = thirdMsbOfFlags;
+      return this;
     }
 
     /**
@@ -650,8 +650,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder secondMsbOfFlags(boolean secondMsbOfFlags) {
-     this.secondMsbOfFlags = secondMsbOfFlags;
-     return this;
+      this.secondMsbOfFlags = secondMsbOfFlags;
+      return this;
     }
 
     /**
@@ -659,8 +659,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder msbOfFlags(boolean msbOfFlags) {
-     this.msbOfFlags = msbOfFlags;
-     return this;
+      this.msbOfFlags = msbOfFlags;
+      return this;
     }
 
     /**
@@ -668,8 +668,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder delimiterCrcValue(byte delimiterCrcValue) {
-     this.delimiterCrcValue = delimiterCrcValue;
-     return this;
+      this.delimiterCrcValue = delimiterCrcValue;
+      return this;
     }
 
     /**
@@ -677,8 +677,8 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder reserved(byte reserved) {
-     this.reserved = reserved;
-     return this;
+      this.reserved = reserved;
+      return this;
     }
 
     /**

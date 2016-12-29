@@ -377,8 +377,8 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder accessnetworkType(Dot11AccessNetworkType accessnetworkType) {
-     this.accessnetworkType = accessnetworkType;
-     return this;
+      this.accessnetworkType = accessnetworkType;
+      return this;
     }
 
     /**
@@ -386,8 +386,8 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder internet(boolean internet) {
-     this.internet = internet;
-     return this;
+      this.internet = internet;
+      return this;
     }
 
     /**
@@ -395,8 +395,8 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder asra(boolean asra) {
-     this.asra = asra;
-     return this;
+      this.asra = asra;
+      return this;
     }
 
     /**
@@ -404,8 +404,8 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder esr(boolean esr) {
-     this.esr = esr;
-     return this;
+      this.esr = esr;
+      return this;
     }
 
     /**
@@ -413,8 +413,8 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder uesa(boolean uesa) {
-     this.uesa = uesa;
-     return this;
+      this.uesa = uesa;
+      return this;
     }
 
     /**
@@ -422,8 +422,8 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder venueInfo(Dot11VenueInfo venueInfo) {
-     this.venueInfo = venueInfo;
-     return this;
+      this.venueInfo = venueInfo;
+      return this;
     }
 
     /**
@@ -431,8 +431,8 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder hessid(byte[] hessid) {
-     this.hessid = hessid;
-     return this;
+      this.hessid = hessid;
+      return this;
     }
 
     @Override

@@ -154,8 +154,8 @@ public final class IllegalSctpChunk implements SctpChunk {
      * @return this Builder object for method chaining.
      */
     public Builder type(SctpChunkType type) {
-     this.type = type;
-     return this;
+      this.type = type;
+      return this;
     }
 
     /**
@@ -163,8 +163,8 @@ public final class IllegalSctpChunk implements SctpChunk {
      * @return this Builder object for method chaining.
      */
     public Builder rawData(byte[] rawData) {
-     this.rawData = rawData;
-     return this;
+      this.rawData = rawData;
+      return this;
     }
 
     /**
