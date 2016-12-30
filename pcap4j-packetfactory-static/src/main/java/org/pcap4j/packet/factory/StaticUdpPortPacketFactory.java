@@ -7,6 +7,7 @@
 
 package org.pcap4j.packet.factory;
 
+import org.pcap4j.packet.DnsPacket;
 import org.pcap4j.packet.GtpSelector;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
@@ -62,6 +63,20 @@ extends AbstractStaticPacketFactory<UdpPort> {
         @Override
         public Class<GtpSelector> getTargetClass() {
           return GtpSelector.class;
+        }
+      }
+    );
+    instantiaters.put(
+      UdpPort.DOMAIN, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return DnsPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<DnsPacket> getTargetClass() {
+          return DnsPacket.class;
         }
       }
     );

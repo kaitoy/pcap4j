@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* Support DNS (RFC1035 and RFC3596)
 
 ### Bug Fixes ###
 * [Issues#76](https://github.com/kaitoy/pcap4j/issues/76): NullPointerException when dissecting an ICMP error packet.

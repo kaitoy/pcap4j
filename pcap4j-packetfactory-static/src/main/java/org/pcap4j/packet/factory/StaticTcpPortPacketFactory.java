@@ -1,12 +1,15 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2016  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
 
+import org.pcap4j.packet.DnsPacket;
+import org.pcap4j.packet.IllegalRawDataException;
+import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.TcpPort;
 
 /**
@@ -20,20 +23,20 @@ extends AbstractStaticPacketFactory<TcpPort> {
     = new StaticTcpPortPacketFactory();
 
   private StaticTcpPortPacketFactory() {
-//    instantiaters.put(
-//      TcpPort.HTTP, new PacketInstantiater() {
-//        @Override
-//        public Packet newInstance(
-//          byte[] rawData, int offset, int length
-//        ) throws IllegalRawDataException {
-//          return HttpPacket.newPacket(rawData, offset, length);
-//        }
-//        @Override
-//        public Class<HttpPacket> getTargetClass() {
-//          return HttpPacket.class;
-//        }
-//      }
-//    );
+    instantiaters.put(
+      TcpPort.DOMAIN, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return DnsPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<DnsPacket> getTargetClass() {
+          return DnsPacket.class;
+        }
+      }
+    );
   };
 
   /**
