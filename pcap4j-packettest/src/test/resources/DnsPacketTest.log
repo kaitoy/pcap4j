@@ -1,0 +1,200 @@
+[DNS Header (1145 bytes)]
+  ID: 0x2fc9
+  QR: response
+  OPCODE: 2 (Status)
+  Authoritative Answer: false
+  Truncated: false
+  Recursion Desired: true
+  Recursion Available: true
+  Reserved Bit: 0
+  Authentic Data: true
+  Checking Disabled: false
+  RCODE: 9 (Not Authorized)
+  QDCOUNT: 1
+  ANCOUNT: 5
+  NSCOUNT: 6
+  ARCOUNT: 7
+  Question:
+    QNAME: hoge.co.jp
+    QTYPE: 1 (A (Host address))
+    QCLASS: 1 (Internet (IN))
+  Answer:
+    NAME: hoge.co.jp
+    TYPE: 1 (A (Host address))
+    CLASS: 255 (ANY)
+    TTL: 123123
+    RDLENGTH: 4
+    RDATA:
+      A RDATA:
+        ADDRESS: 1.2.3.4
+  Answer:
+    NAME: hoge.co.jp
+    TYPE: 28 (AAAA (IP6 Address))
+    CLASS: 255 (ANY)
+    TTL: 123123
+    RDLENGTH: 16
+    RDATA:
+      AAAA RDATA:
+        ADDRESS: 2001:db8:0:0:0:3:2:1
+  Answer:
+    NAME: hoge.co.jp
+    TYPE: 5 (CNAME (Canonical name for an alias))
+    CLASS: 255 (ANY)
+    TTL: 123123
+    RDLENGTH: 6
+    RDATA:
+      CNAME RDATA:
+        CNAME: www.hoge.co.jp (name: www, pointer: 12)
+  Answer:
+    NAME: hoge.co.jp
+    TYPE: 13 (HINFO (Host information))
+    CLASS: 255 (ANY)
+    TTL: 123123
+    RDLENGTH: 20
+    RDATA:
+      HINFO RDATA:
+        CPU: AWESOME CPU
+        OS: Windows
+  Answer:
+    NAME: hoge.co.jp
+    TYPE: 7 (MB (Mailbox domain name))
+    CLASS: 255 (ANY)
+    TTL: 123123
+    RDLENGTH: 6
+    RDATA:
+      MB RDATA:
+        MADNAME: www.hoge.co.jp (name: www, pointer: 12)
+  Authority:
+    NAME: hoge.co.jp
+    TYPE: 3 (MD (Mail destination))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 6
+    RDATA:
+      MD RDATA:
+        MADNAME: www.hoge.co.jp (name: www, pointer: 12)
+  Authority:
+    NAME: hoge.co.jp
+    TYPE: 4 (MF (Mail forwarder))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 6
+    RDATA:
+      MF RDATA:
+        MADNAME: www.hoge.co.jp (name: www, pointer: 12)
+  Authority:
+    NAME: hoge.co.jp
+    TYPE: 8 (MG (Mail group member))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 6
+    RDATA:
+      MG RDATA:
+        MGMNAME: www.hoge.co.jp (name: www, pointer: 12)
+  Authority:
+    NAME: hoge.co.jp
+    TYPE: 14 (MINFO (Mailbox or mail list information))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 21
+    RDATA:
+      MINFO RDATA:
+        RMAILBX: foo.org
+        EMAILBX: hoge.co.jp
+  Authority:
+    NAME: hoge.co.jp
+    TYPE: 9 (MR (Mail rename domain name))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 9
+    RDATA:
+      MR RDATA:
+        NEWNAME: foo.org
+  Authority:
+    NAME: hoge.co.jp
+    TYPE: 15 (MX (Mail exchange))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 11
+    RDATA:
+      MX RDATA:
+        PREFERENCE: -11111
+        EXCHANGE: foo.org
+  Additional:
+    NAME: hoge.co.jp
+    TYPE: 2 (NS (Authoritative name server))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 9
+    RDATA:
+      NS RDATA:
+        NSDNAME: foo.org
+  Additional:
+    NAME: hoge.co.jp
+    TYPE: 10 (NULL (Null RR))
+    CLASS: 255 (ANY)
+    TTL: 123456
+    RDLENGTH: 9
+    RDATA:
+      NULL RDATA:
+        data: 010203040506070809
+  Additional:
+    NAME: hoge.co.jp
+    TYPE: 12 (PTR (Domain name pointer))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 9
+    RDATA:
+      PTR RDATA:
+        PTRDNAME: foo.org
+  Additional:
+    NAME: hoge.co.jp
+    TYPE: 6 (SOA (Start of a zone of authority))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 41
+    RDATA:
+      SOA RDATA:
+        MNAME: hoge.co.jp
+        RNAME: foo.org
+        SERIAL: 11111111
+        REFRESH: 22222222
+        RETRY: 33333333
+        EXPIRE: 44444444
+        MINIMUM: 55555555
+  Additional:
+    NAME: hoge.co.jp
+    TYPE: 16 (TXT (Text strings))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 24
+    RDATA:
+      TXT RDATA:
+        TEXT: Pen
+        TEXT: Pineapple
+        TEXT: Apple
+        TEXT: Pen
+  Additional:
+    NAME: hoge.co.jp
+    TYPE: 11 (WKS (Well known service description))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 12
+    RDATA:
+      WKS RDATA:
+        ADDRESS: 4.3.2.1
+        PROTOCOL: 17 (UDP)
+        BIT MAP: 0x00000000810010
+        PORTS: 32, 39, 51
+  Additional:
+    NAME: hoge.co.jp
+    TYPE: 11 (WKS (Well known service description))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 506
+    RDATA:
+      WKS RDATA:
+        ADDRESS: 2.3.2.3
+        PROTOCOL: 6 (TCP)
+        BIT MAP: 0x000008000000000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080
+        PORTS: 20, 300, 4000

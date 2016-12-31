@@ -213,8 +213,8 @@ public final class Dot11SequenceControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder fragmentNumber(byte fragmentNumber) {
-     this.fragmentNumber = fragmentNumber;
-     return this;
+      this.fragmentNumber = fragmentNumber;
+      return this;
     }
 
     /**
@@ -222,8 +222,8 @@ public final class Dot11SequenceControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder sequenceNumber(short sequenceNumber) {
-     this.sequenceNumber = sequenceNumber;
-     return this;
+      this.sequenceNumber = sequenceNumber;
+      return this;
     }
 
     /**

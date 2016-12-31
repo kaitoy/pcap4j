@@ -81,6 +81,8 @@ final class PacketFactoryBinder {
         return (PacketFactory<T, N>) StaticRadiotapDataFieldFactory.getInstance();
       case "org.pcap4j.packet.SctpPacket$SctpChunk":
         return (PacketFactory<T, N>) StaticSctpChunkFactory.getInstance();
+      case "org.pcap4j.packet.DnsResourceRecord$DnsRData":
+        return (PacketFactory<T, N>) StaticDnsRDataFactory.getInstance();
       default:
         throw new IllegalStateException("Unsupported target: " + targetClass);
     }

@@ -637,8 +637,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder linkAdaptationControl(Dot11LinkAdaptationControl linkAdaptationControl) {
-     this.linkAdaptationControl = linkAdaptationControl;
-     return this;
+      this.linkAdaptationControl = linkAdaptationControl;
+      return this;
     }
 
     /**
@@ -646,8 +646,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder calibrationPosition(CalibrationPosition calibrationPosition) {
-     this.calibrationPosition = calibrationPosition;
-     return this;
+      this.calibrationPosition = calibrationPosition;
+      return this;
     }
 
     /**
@@ -655,8 +655,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder calibrationSequence(byte calibrationSequence) {
-     this.calibrationSequence = calibrationSequence;
-     return this;
+      this.calibrationSequence = calibrationSequence;
+      return this;
     }
 
     /**
@@ -664,8 +664,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder bit20(boolean bit20) {
-     this.bit20 = bit20;
-     return this;
+      this.bit20 = bit20;
+      return this;
     }
 
     /**
@@ -673,8 +673,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder bit21(boolean bit21) {
-     this.bit21 = bit21;
-     return this;
+      this.bit21 = bit21;
+      return this;
     }
 
     /**
@@ -682,8 +682,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder csiOrSteering(CsiOrSteering csiOrSteering) {
-     this.csiOrSteering = csiOrSteering;
-     return this;
+      this.csiOrSteering = csiOrSteering;
+      return this;
     }
 
     /**
@@ -691,8 +691,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder ndpAnnouncement(boolean ndpAnnouncement) {
-     this.ndpAnnouncement = ndpAnnouncement;
-     return this;
+      this.ndpAnnouncement = ndpAnnouncement;
+      return this;
     }
 
     /**
@@ -700,8 +700,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder bit25(boolean bit25) {
-     this.bit25 = bit25;
-     return this;
+      this.bit25 = bit25;
+      return this;
     }
 
     /**
@@ -709,8 +709,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder bit26(boolean bit26) {
-     this.bit26 = bit26;
-     return this;
+      this.bit26 = bit26;
+      return this;
     }
 
     /**
@@ -718,8 +718,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder bit27(boolean bit27) {
-     this.bit27 = bit27;
-     return this;
+      this.bit27 = bit27;
+      return this;
     }
 
     /**
@@ -727,8 +727,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder bit28(boolean bit28) {
-     this.bit28 = bit28;
-     return this;
+      this.bit28 = bit28;
+      return this;
     }
 
     /**
@@ -736,8 +736,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder bit29(boolean bit29) {
-     this.bit29 = bit29;
-     return this;
+      this.bit29 = bit29;
+      return this;
     }
 
     /**
@@ -745,8 +745,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder acConstraint(boolean acConstraint) {
-     this.acConstraint = acConstraint;
-     return this;
+      this.acConstraint = acConstraint;
+      return this;
     }
 
     /**
@@ -754,8 +754,8 @@ public final class Dot11HtControl implements Serializable {
      * @return this Builder object for method chaining.
      */
     public Builder rdgOrMorePpdu(boolean rdgOrMorePpdu) {
-     this.rdgOrMorePpdu = rdgOrMorePpdu;
-     return this;
+      this.rdgOrMorePpdu = rdgOrMorePpdu;
+      return this;
     }
 
     /**

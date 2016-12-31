@@ -9,6 +9,7 @@ package org.pcap4j.packet.factory;
 
 import java.io.ObjectStreamException;
 
+import org.pcap4j.packet.DnsResourceRecord.DnsRData;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
@@ -24,6 +25,7 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.TcpPacket.TcpOption;
+import org.pcap4j.packet.UnknownDnsRData;
 import org.pcap4j.packet.UnknownIpV4InternetTimestampOptionData;
 import org.pcap4j.packet.UnknownIpV4Option;
 import org.pcap4j.packet.UnknownIpV6NeighborDiscoveryOption;
@@ -33,6 +35,7 @@ import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.UnknownRadiotapData;
 import org.pcap4j.packet.UnknownSctpChunk;
 import org.pcap4j.packet.UnknownTcpOption;
+import org.pcap4j.packet.namednumber.DnsResourceRecordType;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
@@ -166,6 +169,18 @@ public final class PacketFactoryPropertiesLoader {
    */
   public static final String UNKNOWN_SCTP_CHUNK_KEY
     = SCTP_CHUNK_CLASS_KEY_BASE + "unknownNumber";
+
+  /**
+   *
+   */
+  public static final String DNS_RDATA_CLASS_KEY_BASE
+    = DnsRData.class.getName() + ".classFor.";
+
+  /**
+   *
+   */
+  public static final String UNKNOWN_DNS_RDATA_KEY
+    = DNS_RDATA_CLASS_KEY_BASE + "unknownNumber";
 
   /**
    *
@@ -519,6 +534,34 @@ public final class PacketFactoryPropertiesLoader {
     return loader.<SctpChunk>getClass(
              UNKNOWN_SCTP_CHUNK_KEY,
              UnknownSctpChunk.class
+           );
+  }
+
+  /**
+   *
+   * @param type type
+   * @return a class which implements DnsRData for a specified type.
+   */
+  public Class<? extends DnsRData> getDnsRDataClass(DnsResourceRecordType type) {
+    StringBuilder sb = new StringBuilder(120);
+    sb.append(DNS_RDATA_CLASS_KEY_BASE)
+      .append(type.getClass().getName())
+      .append(".")
+      .append(type.valueAsString());
+    return loader.<DnsRData>getClass(
+             sb.toString(),
+             getUnknownDnsRDataClass()
+           );
+  }
+
+  /**
+   *
+   * @return a class which implements DnsRData for an unknown type.
+   */
+  public Class<? extends DnsRData> getUnknownDnsRDataClass() {
+    return loader.<DnsRData>getClass(
+             UNKNOWN_DNS_RDATA_KEY,
+             UnknownDnsRData.class
            );
   }
 

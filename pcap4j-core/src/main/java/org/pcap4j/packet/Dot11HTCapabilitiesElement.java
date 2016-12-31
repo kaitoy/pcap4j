@@ -3860,8 +3860,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder ldpcCodingSupported(boolean ldpcCodingSupported) {
-     this.ldpcCodingSupported = ldpcCodingSupported;
-     return this;
+      this.ldpcCodingSupported = ldpcCodingSupported;
+      return this;
     }
 
     /**
@@ -3869,8 +3869,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder both20and40MhzSupported(boolean both20and40MhzSupported) {
-     this.both20and40MhzSupported = both20and40MhzSupported;
-     return this;
+      this.both20and40MhzSupported = both20and40MhzSupported;
+      return this;
     }
 
     /**
@@ -3878,8 +3878,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder smPowerSaveMode(SmPowerSaveMode smPowerSaveMode) {
-     this.smPowerSaveMode = smPowerSaveMode;
-     return this;
+      this.smPowerSaveMode = smPowerSaveMode;
+      return this;
     }
 
     /**
@@ -3887,8 +3887,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder htGreenfieldSupported(boolean htGreenfieldSupported) {
-     this.htGreenfieldSupported = htGreenfieldSupported;
-     return this;
+      this.htGreenfieldSupported = htGreenfieldSupported;
+      return this;
     }
 
     /**
@@ -3896,8 +3896,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder shortGiFor20MhzSupported(boolean shortGiFor20MhzSupported) {
-     this.shortGiFor20MhzSupported = shortGiFor20MhzSupported;
-     return this;
+      this.shortGiFor20MhzSupported = shortGiFor20MhzSupported;
+      return this;
     }
 
     /**
@@ -3905,8 +3905,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder shortGiFor40MhzSupported(boolean shortGiFor40MhzSupported) {
-     this.shortGiFor40MhzSupported = shortGiFor40MhzSupported;
-     return this;
+      this.shortGiFor40MhzSupported = shortGiFor40MhzSupported;
+      return this;
     }
 
     /**
@@ -3914,8 +3914,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder txStbcSupported(boolean txStbcSupported) {
-     this.txStbcSupported = txStbcSupported;
-     return this;
+      this.txStbcSupported = txStbcSupported;
+      return this;
     }
 
     /**
@@ -3923,8 +3923,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder rxStbcSupport(StbcSupport rxStbcSupport) {
-     this.rxStbcSupport = rxStbcSupport;
-     return this;
+      this.rxStbcSupport = rxStbcSupport;
+      return this;
     }
 
     /**
@@ -3932,8 +3932,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder htDelayedBlockAckSupported(boolean htDelayedBlockAckSupported) {
-     this.htDelayedBlockAckSupported = htDelayedBlockAckSupported;
-     return this;
+      this.htDelayedBlockAckSupported = htDelayedBlockAckSupported;
+      return this;
     }
 
     /**
@@ -3941,8 +3941,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder maxAMsduLength(AMsduLength maxAMsduLength) {
-     this.maxAMsduLength = maxAMsduLength;
-     return this;
+      this.maxAMsduLength = maxAMsduLength;
+      return this;
     }
 
     /**
@@ -3950,8 +3950,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder dsssCckModeIn40MhzSupported(boolean dsssCckModeIn40MhzSupported) {
-     this.dsssCckModeIn40MhzSupported = dsssCckModeIn40MhzSupported;
-     return this;
+      this.dsssCckModeIn40MhzSupported = dsssCckModeIn40MhzSupported;
+      return this;
     }
 
     /**
@@ -3959,8 +3959,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit13OfHtCapabilitiesInfo(boolean bit13OfHtCapabilitiesInfo) {
-     this.bit13OfHtCapabilitiesInfo = bit13OfHtCapabilitiesInfo;
-     return this;
+      this.bit13OfHtCapabilitiesInfo = bit13OfHtCapabilitiesInfo;
+      return this;
     }
 
     /**
@@ -3968,8 +3968,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder fortyMhzIntolerant(boolean fortyMhzIntolerant) {
-     this.fortyMhzIntolerant = fortyMhzIntolerant;
-     return this;
+      this.fortyMhzIntolerant = fortyMhzIntolerant;
+      return this;
     }
 
     /**
@@ -3977,8 +3977,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder lSigTxopProtectionSupported(boolean lSigTxopProtectionSupported) {
-     this.lSigTxopProtectionSupported = lSigTxopProtectionSupported;
-     return this;
+      this.lSigTxopProtectionSupported = lSigTxopProtectionSupported;
+      return this;
     }
 
     /**
@@ -3986,8 +3986,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder maxAMpduLength(AMpduLength maxAMpduLength) {
-     this.maxAMpduLength = maxAMpduLength;
-     return this;
+      this.maxAMpduLength = maxAMpduLength;
+      return this;
     }
 
     /**
@@ -3995,8 +3995,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder minMpduStartSpacing(MpduStartSpacing minMpduStartSpacing) {
-     this.minMpduStartSpacing = minMpduStartSpacing;
-     return this;
+      this.minMpduStartSpacing = minMpduStartSpacing;
+      return this;
     }
 
     /**
@@ -4004,8 +4004,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit5OfAMpduParameters(boolean bit5OfAMpduParameters) {
-     this.bit5OfAMpduParameters = bit5OfAMpduParameters;
-     return this;
+      this.bit5OfAMpduParameters = bit5OfAMpduParameters;
+      return this;
     }
 
     /**
@@ -4013,8 +4013,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit6OfAMpduParameters(boolean bit6OfAMpduParameters) {
-     this.bit6OfAMpduParameters = bit6OfAMpduParameters;
-     return this;
+      this.bit6OfAMpduParameters = bit6OfAMpduParameters;
+      return this;
     }
 
     /**
@@ -4022,8 +4022,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit7OfAMpduParameters(boolean bit7OfAMpduParameters) {
-     this.bit7OfAMpduParameters = bit7OfAMpduParameters;
-     return this;
+      this.bit7OfAMpduParameters = bit7OfAMpduParameters;
+      return this;
     }
 
     /**
@@ -4031,8 +4031,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder supportedRxMcsIndexes(boolean[] supportedRxMcsIndexes) {
-     this.supportedRxMcsIndexes = supportedRxMcsIndexes;
-     return this;
+      this.supportedRxMcsIndexes = supportedRxMcsIndexes;
+      return this;
     }
 
     /**
@@ -4040,8 +4040,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit77OfSupportedMcsSet(boolean bit77OfSupportedMcsSet) {
-     this.bit77OfSupportedMcsSet = bit77OfSupportedMcsSet;
-     return this;
+      this.bit77OfSupportedMcsSet = bit77OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4049,8 +4049,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit78OfSupportedMcsSet(boolean bit78OfSupportedMcsSet) {
-     this.bit78OfSupportedMcsSet = bit78OfSupportedMcsSet;
-     return this;
+      this.bit78OfSupportedMcsSet = bit78OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4058,8 +4058,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit79OfSupportedMcsSet(boolean bit79OfSupportedMcsSet) {
-     this.bit79OfSupportedMcsSet = bit79OfSupportedMcsSet;
-     return this;
+      this.bit79OfSupportedMcsSet = bit79OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4068,8 +4068,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder rxHighestSupportedDataRate(short rxHighestSupportedDataRate) {
-     this.rxHighestSupportedDataRate = rxHighestSupportedDataRate;
-     return this;
+      this.rxHighestSupportedDataRate = rxHighestSupportedDataRate;
+      return this;
     }
 
     /**
@@ -4077,8 +4077,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit90OfSupportedMcsSet(boolean bit90OfSupportedMcsSet) {
-     this.bit90OfSupportedMcsSet = bit90OfSupportedMcsSet;
-     return this;
+      this.bit90OfSupportedMcsSet = bit90OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4086,8 +4086,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit91OfSupportedMcsSet(boolean bit91OfSupportedMcsSet) {
-     this.bit91OfSupportedMcsSet = bit91OfSupportedMcsSet;
-     return this;
+      this.bit91OfSupportedMcsSet = bit91OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4095,8 +4095,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit92OfSupportedMcsSet(boolean bit92OfSupportedMcsSet) {
-     this.bit92OfSupportedMcsSet = bit92OfSupportedMcsSet;
-     return this;
+      this.bit92OfSupportedMcsSet = bit92OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4104,8 +4104,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit93OfSupportedMcsSet(boolean bit93OfSupportedMcsSet) {
-     this.bit93OfSupportedMcsSet = bit93OfSupportedMcsSet;
-     return this;
+      this.bit93OfSupportedMcsSet = bit93OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4113,8 +4113,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit94OfSupportedMcsSet(boolean bit94OfSupportedMcsSet) {
-     this.bit94OfSupportedMcsSet = bit94OfSupportedMcsSet;
-     return this;
+      this.bit94OfSupportedMcsSet = bit94OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4122,8 +4122,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit95OfSupportedMcsSet(boolean bit95OfSupportedMcsSet) {
-     this.bit95OfSupportedMcsSet = bit95OfSupportedMcsSet;
-     return this;
+      this.bit95OfSupportedMcsSet = bit95OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4131,8 +4131,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder txMcsSetDefined(boolean txMcsSetDefined) {
-     this.txMcsSetDefined = txMcsSetDefined;
-     return this;
+      this.txMcsSetDefined = txMcsSetDefined;
+      return this;
     }
 
     /**
@@ -4140,8 +4140,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder txRxMcsSetNotEqual(boolean txRxMcsSetNotEqual) {
-     this.txRxMcsSetNotEqual = txRxMcsSetNotEqual;
-     return this;
+      this.txRxMcsSetNotEqual = txRxMcsSetNotEqual;
+      return this;
     }
 
     /**
@@ -4151,8 +4151,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder txMaxNumSpatialStreamsSupported(
       NumSpatialStreams txMaxNumSpatialStreamsSupported
     ) {
-     this.txMaxNumSpatialStreamsSupported = txMaxNumSpatialStreamsSupported;
-     return this;
+      this.txMaxNumSpatialStreamsSupported = txMaxNumSpatialStreamsSupported;
+      return this;
     }
 
     /**
@@ -4160,8 +4160,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder txUnequalModulationSupported(boolean txUnequalModulationSupported) {
-     this.txUnequalModulationSupported = txUnequalModulationSupported;
-     return this;
+      this.txUnequalModulationSupported = txUnequalModulationSupported;
+      return this;
     }
 
     /**
@@ -4169,8 +4169,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit101OfSupportedMcsSet(boolean bit101OfSupportedMcsSet) {
-     this.bit101OfSupportedMcsSet = bit101OfSupportedMcsSet;
-     return this;
+      this.bit101OfSupportedMcsSet = bit101OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4178,8 +4178,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit102OfSupportedMcsSet(boolean bit102OfSupportedMcsSet) {
-     this.bit102OfSupportedMcsSet = bit102OfSupportedMcsSet;
-     return this;
+      this.bit102OfSupportedMcsSet = bit102OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4187,8 +4187,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit103OfSupportedMcsSet(boolean bit103OfSupportedMcsSet) {
-     this.bit103OfSupportedMcsSet = bit103OfSupportedMcsSet;
-     return this;
+      this.bit103OfSupportedMcsSet = bit103OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4196,8 +4196,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit104OfSupportedMcsSet(boolean bit104OfSupportedMcsSet) {
-     this.bit104OfSupportedMcsSet = bit104OfSupportedMcsSet;
-     return this;
+      this.bit104OfSupportedMcsSet = bit104OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4205,8 +4205,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit105OfSupportedMcsSet(boolean bit105OfSupportedMcsSet) {
-     this.bit105OfSupportedMcsSet = bit105OfSupportedMcsSet;
-     return this;
+      this.bit105OfSupportedMcsSet = bit105OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4214,8 +4214,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit106OfSupportedMcsSet(boolean bit106OfSupportedMcsSet) {
-     this.bit106OfSupportedMcsSet = bit106OfSupportedMcsSet;
-     return this;
+      this.bit106OfSupportedMcsSet = bit106OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4223,8 +4223,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit107OfSupportedMcsSet(boolean bit107OfSupportedMcsSet) {
-     this.bit107OfSupportedMcsSet = bit107OfSupportedMcsSet;
-     return this;
+      this.bit107OfSupportedMcsSet = bit107OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4232,8 +4232,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit108OfSupportedMcsSet(boolean bit108OfSupportedMcsSet) {
-     this.bit108OfSupportedMcsSet = bit108OfSupportedMcsSet;
-     return this;
+      this.bit108OfSupportedMcsSet = bit108OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4241,8 +4241,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit109OfSupportedMcsSet(boolean bit109OfSupportedMcsSet) {
-     this.bit109OfSupportedMcsSet = bit109OfSupportedMcsSet;
-     return this;
+      this.bit109OfSupportedMcsSet = bit109OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4250,8 +4250,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit110OfSupportedMcsSet(boolean bit110OfSupportedMcsSet) {
-     this.bit110OfSupportedMcsSet = bit110OfSupportedMcsSet;
-     return this;
+      this.bit110OfSupportedMcsSet = bit110OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4259,8 +4259,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit111OfSupportedMcsSet(boolean bit111OfSupportedMcsSet) {
-     this.bit111OfSupportedMcsSet = bit111OfSupportedMcsSet;
-     return this;
+      this.bit111OfSupportedMcsSet = bit111OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4268,8 +4268,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit112OfSupportedMcsSet(boolean bit112OfSupportedMcsSet) {
-     this.bit112OfSupportedMcsSet = bit112OfSupportedMcsSet;
-     return this;
+      this.bit112OfSupportedMcsSet = bit112OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4277,8 +4277,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit113OfSupportedMcsSet(boolean bit113OfSupportedMcsSet) {
-     this.bit113OfSupportedMcsSet = bit113OfSupportedMcsSet;
-     return this;
+      this.bit113OfSupportedMcsSet = bit113OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4286,8 +4286,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit114OfSupportedMcsSet(boolean bit114OfSupportedMcsSet) {
-     this.bit114OfSupportedMcsSet = bit114OfSupportedMcsSet;
-     return this;
+      this.bit114OfSupportedMcsSet = bit114OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4295,8 +4295,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit115OfSupportedMcsSet(boolean bit115OfSupportedMcsSet) {
-     this.bit115OfSupportedMcsSet = bit115OfSupportedMcsSet;
-     return this;
+      this.bit115OfSupportedMcsSet = bit115OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4304,8 +4304,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit116OfSupportedMcsSet(boolean bit116OfSupportedMcsSet) {
-     this.bit116OfSupportedMcsSet = bit116OfSupportedMcsSet;
-     return this;
+      this.bit116OfSupportedMcsSet = bit116OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4313,8 +4313,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit117OfSupportedMcsSet(boolean bit117OfSupportedMcsSet) {
-     this.bit117OfSupportedMcsSet = bit117OfSupportedMcsSet;
-     return this;
+      this.bit117OfSupportedMcsSet = bit117OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4322,8 +4322,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit118OfSupportedMcsSet(boolean bit118OfSupportedMcsSet) {
-     this.bit118OfSupportedMcsSet = bit118OfSupportedMcsSet;
-     return this;
+      this.bit118OfSupportedMcsSet = bit118OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4331,8 +4331,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit119OfSupportedMcsSet(boolean bit119OfSupportedMcsSet) {
-     this.bit119OfSupportedMcsSet = bit119OfSupportedMcsSet;
-     return this;
+      this.bit119OfSupportedMcsSet = bit119OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4340,8 +4340,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit120OfSupportedMcsSet(boolean bit120OfSupportedMcsSet) {
-     this.bit120OfSupportedMcsSet = bit120OfSupportedMcsSet;
-     return this;
+      this.bit120OfSupportedMcsSet = bit120OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4349,8 +4349,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit121OfSupportedMcsSet(boolean bit121OfSupportedMcsSet) {
-     this.bit121OfSupportedMcsSet = bit121OfSupportedMcsSet;
-     return this;
+      this.bit121OfSupportedMcsSet = bit121OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4358,8 +4358,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit122OfSupportedMcsSet(boolean bit122OfSupportedMcsSet) {
-     this.bit122OfSupportedMcsSet = bit122OfSupportedMcsSet;
-     return this;
+      this.bit122OfSupportedMcsSet = bit122OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4367,8 +4367,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit123OfSupportedMcsSet(boolean bit123OfSupportedMcsSet) {
-     this.bit123OfSupportedMcsSet = bit123OfSupportedMcsSet;
-     return this;
+      this.bit123OfSupportedMcsSet = bit123OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4376,8 +4376,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit124OfSupportedMcsSet(boolean bit124OfSupportedMcsSet) {
-     this.bit124OfSupportedMcsSet = bit124OfSupportedMcsSet;
-     return this;
+      this.bit124OfSupportedMcsSet = bit124OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4385,8 +4385,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit125OfSupportedMcsSet(boolean bit125OfSupportedMcsSet) {
-     this.bit125OfSupportedMcsSet = bit125OfSupportedMcsSet;
-     return this;
+      this.bit125OfSupportedMcsSet = bit125OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4394,8 +4394,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit126OfSupportedMcsSet(boolean bit126OfSupportedMcsSet) {
-     this.bit126OfSupportedMcsSet = bit126OfSupportedMcsSet;
-     return this;
+      this.bit126OfSupportedMcsSet = bit126OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4403,8 +4403,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit127OfSupportedMcsSet(boolean bit127OfSupportedMcsSet) {
-     this.bit127OfSupportedMcsSet = bit127OfSupportedMcsSet;
-     return this;
+      this.bit127OfSupportedMcsSet = bit127OfSupportedMcsSet;
+      return this;
     }
 
     /**
@@ -4412,8 +4412,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder pcoSupported(boolean pcoSupported) {
-     this.pcoSupported = pcoSupported;
-     return this;
+      this.pcoSupported = pcoSupported;
+      return this;
     }
 
     /**
@@ -4421,8 +4421,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder pcoTransitionTime(PcoTransitionTime pcoTransitionTime) {
-     this.pcoTransitionTime = pcoTransitionTime;
-     return this;
+      this.pcoTransitionTime = pcoTransitionTime;
+      return this;
     }
 
     /**
@@ -4430,8 +4430,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit3OfHtExtendedCapabilities(boolean bit3OfHtExtendedCapabilities) {
-     this.bit3OfHtExtendedCapabilities = bit3OfHtExtendedCapabilities;
-     return this;
+      this.bit3OfHtExtendedCapabilities = bit3OfHtExtendedCapabilities;
+      return this;
     }
 
     /**
@@ -4439,8 +4439,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit4OfHtExtendedCapabilities(boolean bit4OfHtExtendedCapabilities) {
-     this.bit4OfHtExtendedCapabilities = bit4OfHtExtendedCapabilities;
-     return this;
+      this.bit4OfHtExtendedCapabilities = bit4OfHtExtendedCapabilities;
+      return this;
     }
 
     /**
@@ -4448,8 +4448,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit5OfHtExtendedCapabilities(boolean bit5OfHtExtendedCapabilities) {
-     this.bit5OfHtExtendedCapabilities = bit5OfHtExtendedCapabilities;
-     return this;
+      this.bit5OfHtExtendedCapabilities = bit5OfHtExtendedCapabilities;
+      return this;
     }
 
     /**
@@ -4457,8 +4457,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit6OfHtExtendedCapabilities(boolean bit6OfHtExtendedCapabilities) {
-     this.bit6OfHtExtendedCapabilities = bit6OfHtExtendedCapabilities;
-     return this;
+      this.bit6OfHtExtendedCapabilities = bit6OfHtExtendedCapabilities;
+      return this;
     }
 
     /**
@@ -4466,8 +4466,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit7OfHtExtendedCapabilities(boolean bit7OfHtExtendedCapabilities) {
-     this.bit7OfHtExtendedCapabilities = bit7OfHtExtendedCapabilities;
-     return this;
+      this.bit7OfHtExtendedCapabilities = bit7OfHtExtendedCapabilities;
+      return this;
     }
 
     /**
@@ -4475,8 +4475,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder mcsFeedbackCapability(McsFeedbackCapability mcsFeedbackCapability) {
-     this.mcsFeedbackCapability = mcsFeedbackCapability;
-     return this;
+      this.mcsFeedbackCapability = mcsFeedbackCapability;
+      return this;
     }
 
     /**
@@ -4484,8 +4484,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder htControlFieldSupported(boolean htControlFieldSupported) {
-     this.htControlFieldSupported = htControlFieldSupported;
-     return this;
+      this.htControlFieldSupported = htControlFieldSupported;
+      return this;
     }
 
     /**
@@ -4493,8 +4493,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder rdResponderSupported(boolean rdResponderSupported) {
-     this.rdResponderSupported = rdResponderSupported;
-     return this;
+      this.rdResponderSupported = rdResponderSupported;
+      return this;
     }
 
     /**
@@ -4502,8 +4502,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit12OfHtExtendedCapabilities(boolean bit12OfHtExtendedCapabilities) {
-     this.bit12OfHtExtendedCapabilities = bit12OfHtExtendedCapabilities;
-     return this;
+      this.bit12OfHtExtendedCapabilities = bit12OfHtExtendedCapabilities;
+      return this;
     }
 
     /**
@@ -4511,8 +4511,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit13OfHtExtendedCapabilities(boolean bit13OfHtExtendedCapabilities) {
-     this.bit13OfHtExtendedCapabilities = bit13OfHtExtendedCapabilities;
-     return this;
+      this.bit13OfHtExtendedCapabilities = bit13OfHtExtendedCapabilities;
+      return this;
     }
 
     /**
@@ -4520,8 +4520,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit14OfHtExtendedCapabilities(boolean bit14OfHtExtendedCapabilities) {
-     this.bit14OfHtExtendedCapabilities = bit14OfHtExtendedCapabilities;
-     return this;
+      this.bit14OfHtExtendedCapabilities = bit14OfHtExtendedCapabilities;
+      return this;
     }
 
     /**
@@ -4529,8 +4529,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit15OfHtExtendedCapabilities(boolean bit15OfHtExtendedCapabilities) {
-     this.bit15OfHtExtendedCapabilities = bit15OfHtExtendedCapabilities;
-     return this;
+      this.bit15OfHtExtendedCapabilities = bit15OfHtExtendedCapabilities;
+      return this;
     }
 
     /**
@@ -4540,8 +4540,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder implicitTxBeamformingReceivingSupported(
       boolean implicitTxBeamformingReceivingSupported
     ) {
-     this.implicitTxBeamformingReceivingSupported = implicitTxBeamformingReceivingSupported;
-     return this;
+      this.implicitTxBeamformingReceivingSupported = implicitTxBeamformingReceivingSupported;
+      return this;
     }
 
     /**
@@ -4549,8 +4549,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder rxStaggeredSoundingSupported(boolean rxStaggeredSoundingSupported) {
-     this.rxStaggeredSoundingSupported = rxStaggeredSoundingSupported;
-     return this;
+      this.rxStaggeredSoundingSupported = rxStaggeredSoundingSupported;
+      return this;
     }
 
     /**
@@ -4558,8 +4558,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder txStaggeredSoundingSupported(boolean txStaggeredSoundingSupported) {
-     this.txStaggeredSoundingSupported = txStaggeredSoundingSupported;
-     return this;
+      this.txStaggeredSoundingSupported = txStaggeredSoundingSupported;
+      return this;
     }
 
     /**
@@ -4567,8 +4567,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder rxNdpSupported(boolean rxNdpSupported) {
-     this.rxNdpSupported = rxNdpSupported;
-     return this;
+      this.rxNdpSupported = rxNdpSupported;
+      return this;
     }
 
     /**
@@ -4576,8 +4576,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder txNdpSupported(boolean txNdpSupported) {
-     this.txNdpSupported = txNdpSupported;
-     return this;
+      this.txNdpSupported = txNdpSupported;
+      return this;
     }
 
     /**
@@ -4585,8 +4585,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder implicitTxBeamformingSupported(boolean implicitTxBeamformingSupported) {
-     this.implicitTxBeamformingSupported = implicitTxBeamformingSupported;
-     return this;
+      this.implicitTxBeamformingSupported = implicitTxBeamformingSupported;
+      return this;
     }
 
     /**
@@ -4594,8 +4594,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder calibration(Calibration calibration) {
-     this.calibration = calibration;
-     return this;
+      this.calibration = calibration;
+      return this;
     }
 
     /**
@@ -4603,8 +4603,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder explicitCsiTxBeamformingSupported(boolean explicitCsiTxBeamformingSupported) {
-     this.explicitCsiTxBeamformingSupported = explicitCsiTxBeamformingSupported;
-     return this;
+      this.explicitCsiTxBeamformingSupported = explicitCsiTxBeamformingSupported;
+      return this;
     }
 
     /**
@@ -4614,8 +4614,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder explicitNoncompressedSteeringSupported(
       boolean explicitNoncompressedSteeringSupported
     ) {
-     this.explicitNoncompressedSteeringSupported = explicitNoncompressedSteeringSupported;
-     return this;
+      this.explicitNoncompressedSteeringSupported = explicitNoncompressedSteeringSupported;
+      return this;
     }
 
     /**
@@ -4625,8 +4625,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder explicitCompressedSteeringSupported(
       boolean explicitCompressedSteeringSupported
     ) {
-     this.explicitCompressedSteeringSupported = explicitCompressedSteeringSupported;
-     return this;
+      this.explicitCompressedSteeringSupported = explicitCompressedSteeringSupported;
+      return this;
     }
 
     /**
@@ -4636,8 +4636,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder explicitTxBeamformingCsiFeedbackCapability(
       BeamformingFeedbackCapability explicitTxBeamformingCsiFeedbackCapability
     ) {
-     this.explicitTxBeamformingCsiFeedbackCapability = explicitTxBeamformingCsiFeedbackCapability;
-     return this;
+      this.explicitTxBeamformingCsiFeedbackCapability = explicitTxBeamformingCsiFeedbackCapability;
+      return this;
     }
 
     /**
@@ -4647,9 +4647,9 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder explicitNoncompressedBeamformingFeedbackCapability(
       BeamformingFeedbackCapability explicitNoncompressedBeamformingFeedbackCapability
     ) {
-     this.explicitNoncompressedBeamformingFeedbackCapability
+      this.explicitNoncompressedBeamformingFeedbackCapability
        = explicitNoncompressedBeamformingFeedbackCapability;
-     return this;
+      return this;
     }
 
     /**
@@ -4659,9 +4659,9 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder explicitCompressedBeamformingFeedbackCapability(
       BeamformingFeedbackCapability explicitCompressedBeamformingFeedbackCapability
     ) {
-     this.explicitCompressedBeamformingFeedbackCapability
+      this.explicitCompressedBeamformingFeedbackCapability
        = explicitCompressedBeamformingFeedbackCapability;
-     return this;
+      return this;
     }
 
     /**
@@ -4669,8 +4669,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder minGrouping(Grouping minGrouping) {
-     this.minGrouping = minGrouping;
-     return this;
+      this.minGrouping = minGrouping;
+      return this;
     }
 
     /**
@@ -4680,8 +4680,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder csiNumBeamformerAntennasSupported(
       NumBeamformerAntennas csiNumBeamformerAntennasSupported
     ) {
-     this.csiNumBeamformerAntennasSupported = csiNumBeamformerAntennasSupported;
-     return this;
+      this.csiNumBeamformerAntennasSupported = csiNumBeamformerAntennasSupported;
+      return this;
     }
 
     /**
@@ -4691,9 +4691,9 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder noncompressedSteeringNumBeamformerAntennasSupported(
       NumBeamformerAntennas noncompressedSteeringNumBeamformerAntennasSupported
     ) {
-     this.noncompressedSteeringNumBeamformerAntennasSupported
+      this.noncompressedSteeringNumBeamformerAntennasSupported
        = noncompressedSteeringNumBeamformerAntennasSupported;
-     return this;
+      return this;
     }
 
     /**
@@ -4703,9 +4703,9 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder compressedSteeringNumBeamformerAntennasSupported(
       NumBeamformerAntennas compressedSteeringNumBeamformerAntennasSupported
     ) {
-     this.compressedSteeringNumBeamformerAntennasSupported
+      this.compressedSteeringNumBeamformerAntennasSupported
        = compressedSteeringNumBeamformerAntennasSupported;
-     return this;
+      return this;
     }
 
     /**
@@ -4713,8 +4713,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder csiMaxNumRowsBeamformerSupported(CsiNumRows csiMaxNumRowsBeamformerSupported) {
-     this.csiMaxNumRowsBeamformerSupported = csiMaxNumRowsBeamformerSupported;
-     return this;
+      this.csiMaxNumRowsBeamformerSupported = csiMaxNumRowsBeamformerSupported;
+      return this;
     }
 
     /**
@@ -4724,8 +4724,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder channelEstimationCapability(
       ChannelEstimationCapability channelEstimationCapability
     ) {
-     this.channelEstimationCapability = channelEstimationCapability;
-     return this;
+      this.channelEstimationCapability = channelEstimationCapability;
+      return this;
     }
 
     /**
@@ -4735,8 +4735,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder bit29OfTransmitBeamformingCapabilities(
       boolean bit29OfTransmitBeamformingCapabilities
     ) {
-     this.bit29OfTransmitBeamformingCapabilities = bit29OfTransmitBeamformingCapabilities;
-     return this;
+      this.bit29OfTransmitBeamformingCapabilities = bit29OfTransmitBeamformingCapabilities;
+      return this;
     }
 
     /**
@@ -4746,8 +4746,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder bit30OfTransmitBeamformingCapabilities(
       boolean bit30OfTransmitBeamformingCapabilities
     ) {
-     this.bit30OfTransmitBeamformingCapabilities = bit30OfTransmitBeamformingCapabilities;
-     return this;
+      this.bit30OfTransmitBeamformingCapabilities = bit30OfTransmitBeamformingCapabilities;
+      return this;
     }
 
     /**
@@ -4757,8 +4757,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder bit31OfTransmitBeamformingCapabilities(
       boolean bit31OfTransmitBeamformingCapabilities
     ) {
-     this.bit31OfTransmitBeamformingCapabilities = bit31OfTransmitBeamformingCapabilities;
-     return this;
+      this.bit31OfTransmitBeamformingCapabilities = bit31OfTransmitBeamformingCapabilities;
+      return this;
     }
 
     /**
@@ -4766,8 +4766,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder antennaSelectionSupported(boolean antennaSelectionSupported) {
-     this.antennaSelectionSupported = antennaSelectionSupported;
-     return this;
+      this.antennaSelectionSupported = antennaSelectionSupported;
+      return this;
     }
 
     /**
@@ -4777,8 +4777,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder explicitCsiFeedbackBasedTxAselSupported(
       boolean explicitCsiFeedbackBasedTxAselSupported
     ) {
-     this.explicitCsiFeedbackBasedTxAselSupported = explicitCsiFeedbackBasedTxAselSupported;
-     return this;
+      this.explicitCsiFeedbackBasedTxAselSupported = explicitCsiFeedbackBasedTxAselSupported;
+      return this;
     }
 
     /**
@@ -4788,8 +4788,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     public Builder antennaIndicesFeedbackBasedTxAselSupported(
       boolean antennaIndicesFeedbackBasedTxAselSupported
     ) {
-     this.antennaIndicesFeedbackBasedTxAselSupported = antennaIndicesFeedbackBasedTxAselSupported;
-     return this;
+      this.antennaIndicesFeedbackBasedTxAselSupported = antennaIndicesFeedbackBasedTxAselSupported;
+      return this;
     }
 
     /**
@@ -4797,8 +4797,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder explicitCsiFeedbackSupported(boolean explicitCsiFeedbackSupported) {
-     this.explicitCsiFeedbackSupported = explicitCsiFeedbackSupported;
-     return this;
+      this.explicitCsiFeedbackSupported = explicitCsiFeedbackSupported;
+      return this;
     }
 
     /**
@@ -4806,8 +4806,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder antennaIndicesFeedbackSupported(boolean antennaIndicesFeedbackSupported) {
-     this.antennaIndicesFeedbackSupported = antennaIndicesFeedbackSupported;
-     return this;
+      this.antennaIndicesFeedbackSupported = antennaIndicesFeedbackSupported;
+      return this;
     }
 
     /**
@@ -4815,8 +4815,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder rxAselSupported(boolean rxAselSupported) {
-     this.rxAselSupported = rxAselSupported;
-     return this;
+      this.rxAselSupported = rxAselSupported;
+      return this;
     }
 
     /**
@@ -4824,8 +4824,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder txSoundingPpdusSupported(boolean txSoundingPpdusSupported) {
-     this.txSoundingPpdusSupported = txSoundingPpdusSupported;
-     return this;
+      this.txSoundingPpdusSupported = txSoundingPpdusSupported;
+      return this;
     }
 
     /**
@@ -4833,8 +4833,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit7OfAselCapability(boolean bit7OfAselCapability) {
-     this.bit7OfAselCapability = bit7OfAselCapability;
-     return this;
+      this.bit7OfAselCapability = bit7OfAselCapability;
+      return this;
     }
 
     @Override

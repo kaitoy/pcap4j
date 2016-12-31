@@ -9,6 +9,7 @@ package org.pcap4j.packet.factory;
 
 import java.io.ObjectStreamException;
 
+import org.pcap4j.packet.DnsPacket;
 import org.pcap4j.packet.GtpSelector;
 import org.pcap4j.packet.IllegalPacket;
 import org.pcap4j.packet.IllegalRawDataException;
@@ -43,6 +44,8 @@ public final class StaticUdpPortPacketFactory implements PacketFactory<Packet, U
     try {
       for (UdpPort num: numbers) {
         switch (Short.toUnsignedInt(num.value())) {
+          case 53:
+            return DnsPacket.newPacket(rawData, offset, length);
           case 2123:
             return GtpSelector.newPacket(rawData, offset, length);
           case 2152:

@@ -832,8 +832,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder stbcKnown(boolean stbcKnown) {
-     this.stbcKnown = stbcKnown;
-     return this;
+      this.stbcKnown = stbcKnown;
+      return this;
     }
 
     /**
@@ -841,8 +841,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder txopPsNotAllowedKnown(boolean txopPsNotAllowedKnown) {
-     this.txopPsNotAllowedKnown = txopPsNotAllowedKnown;
-     return this;
+      this.txopPsNotAllowedKnown = txopPsNotAllowedKnown;
+      return this;
     }
 
     /**
@@ -850,8 +850,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder guardIntervalKnown(boolean guardIntervalKnown) {
-     this.guardIntervalKnown = guardIntervalKnown;
-     return this;
+      this.guardIntervalKnown = guardIntervalKnown;
+      return this;
     }
 
     /**
@@ -859,8 +859,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder shortGiNsymDisambiguationKnown(boolean shortGiNsymDisambiguationKnown) {
-     this.shortGiNsymDisambiguationKnown = shortGiNsymDisambiguationKnown;
-     return this;
+      this.shortGiNsymDisambiguationKnown = shortGiNsymDisambiguationKnown;
+      return this;
     }
 
     /**
@@ -868,8 +868,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder ldpcExtraOfdmSymbolKnown(boolean ldpcExtraOfdmSymbolKnown) {
-     this.ldpcExtraOfdmSymbolKnown = ldpcExtraOfdmSymbolKnown;
-     return this;
+      this.ldpcExtraOfdmSymbolKnown = ldpcExtraOfdmSymbolKnown;
+      return this;
     }
 
     /**
@@ -877,8 +877,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder beamformedKnown(boolean beamformedKnown) {
-     this.beamformedKnown = beamformedKnown;
-     return this;
+      this.beamformedKnown = beamformedKnown;
+      return this;
     }
 
     /**
@@ -886,8 +886,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder bandwidthKnown(boolean bandwidthKnown) {
-     this.bandwidthKnown = bandwidthKnown;
-     return this;
+      this.bandwidthKnown = bandwidthKnown;
+      return this;
     }
 
     /**
@@ -895,8 +895,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder groupIdKnown(boolean groupIdKnown) {
-     this.groupIdKnown = groupIdKnown;
-     return this;
+      this.groupIdKnown = groupIdKnown;
+      return this;
     }
 
     /**
@@ -904,8 +904,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder partialAidKnown(boolean partialAidKnown) {
-     this.partialAidKnown = partialAidKnown;
-     return this;
+      this.partialAidKnown = partialAidKnown;
+      return this;
     }
 
     /**
@@ -913,8 +913,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder seventhMsbOfKnown(boolean seventhMsbOfKnown) {
-     this.seventhMsbOfKnown = seventhMsbOfKnown;
-     return this;
+      this.seventhMsbOfKnown = seventhMsbOfKnown;
+      return this;
     }
 
     /**
@@ -922,8 +922,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder sixthMsbOfKnown(boolean sixthMsbOfKnown) {
-     this.sixthMsbOfKnown = sixthMsbOfKnown;
-     return this;
+      this.sixthMsbOfKnown = sixthMsbOfKnown;
+      return this;
     }
 
     /**
@@ -931,8 +931,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder fifthMsbOfKnown(boolean fifthMsbOfKnown) {
-     this.fifthMsbOfKnown = fifthMsbOfKnown;
-     return this;
+      this.fifthMsbOfKnown = fifthMsbOfKnown;
+      return this;
     }
 
     /**
@@ -940,8 +940,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder fourthMsbOfKnown(boolean fourthMsbOfKnown) {
-     this.fourthMsbOfKnown = fourthMsbOfKnown;
-     return this;
+      this.fourthMsbOfKnown = fourthMsbOfKnown;
+      return this;
     }
 
     /**
@@ -949,8 +949,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder thirdMsbOfKnown(boolean thirdMsbOfKnown) {
-     this.thirdMsbOfKnown = thirdMsbOfKnown;
-     return this;
+      this.thirdMsbOfKnown = thirdMsbOfKnown;
+      return this;
     }
 
     /**
@@ -958,8 +958,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder secondMsbOfKnown(boolean secondMsbOfKnown) {
-     this.secondMsbOfKnown = secondMsbOfKnown;
-     return this;
+      this.secondMsbOfKnown = secondMsbOfKnown;
+      return this;
     }
 
     /**
@@ -967,8 +967,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder msbOfKnown(boolean msbOfKnown) {
-     this.msbOfKnown = msbOfKnown;
-     return this;
+      this.msbOfKnown = msbOfKnown;
+      return this;
     }
 
     /**
@@ -976,8 +976,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder stbc(boolean stbc) {
-     this.stbc = stbc;
-     return this;
+      this.stbc = stbc;
+      return this;
     }
 
     /**
@@ -985,8 +985,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder txopPsNotAllowed(boolean txopPsNotAllowed) {
-     this.txopPsNotAllowed = txopPsNotAllowed;
-     return this;
+      this.txopPsNotAllowed = txopPsNotAllowed;
+      return this;
     }
 
     /**
@@ -994,8 +994,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder shortGuardInterval(boolean shortGuardInterval) {
-     this.shortGuardInterval = shortGuardInterval;
-     return this;
+      this.shortGuardInterval = shortGuardInterval;
+      return this;
     }
 
     /**
@@ -1003,8 +1003,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder shortGiNsymDisambiguation(boolean shortGiNsymDisambiguation) {
-     this.shortGiNsymDisambiguation = shortGiNsymDisambiguation;
-     return this;
+      this.shortGiNsymDisambiguation = shortGiNsymDisambiguation;
+      return this;
     }
 
     /**
@@ -1012,8 +1012,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder ldpcExtraOfdmSymbol(boolean ldpcExtraOfdmSymbol) {
-     this.ldpcExtraOfdmSymbol = ldpcExtraOfdmSymbol;
-     return this;
+      this.ldpcExtraOfdmSymbol = ldpcExtraOfdmSymbol;
+      return this;
     }
 
     /**
@@ -1021,8 +1021,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder beamformed(boolean beamformed) {
-     this.beamformed = beamformed;
-     return this;
+      this.beamformed = beamformed;
+      return this;
     }
 
     /**
@@ -1030,8 +1030,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder secondMsbOfFlags(boolean secondMsbOfFlags) {
-     this.secondMsbOfFlags = secondMsbOfFlags;
-     return this;
+      this.secondMsbOfFlags = secondMsbOfFlags;
+      return this;
     }
 
     /**
@@ -1039,8 +1039,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder msbOfFlags(boolean msbOfFlags) {
-     this.msbOfFlags = msbOfFlags;
-     return this;
+      this.msbOfFlags = msbOfFlags;
+      return this;
     }
 
     /**
@@ -1048,8 +1048,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder bandwidth(RadiotapVhtBandwidth bandwidth) {
-     this.bandwidth = bandwidth;
-     return this;
+      this.bandwidth = bandwidth;
+      return this;
     }
 
     /**
@@ -1057,8 +1057,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder mcses(byte[] mcses) {
-     this.mcses = mcses;
-     return this;
+      this.mcses = mcses;
+      return this;
     }
 
     /**
@@ -1066,8 +1066,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder nsses(byte[] nsses) {
-     this.nsses = nsses;
-     return this;
+      this.nsses = nsses;
+      return this;
     }
 
     /**
@@ -1075,8 +1075,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder fecTypes(RadiotapFecType[] fecTypes) {
-     this.fecTypes = fecTypes;
-     return this;
+      this.fecTypes = fecTypes;
+      return this;
     }
 
     /**
@@ -1084,8 +1084,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder unusedInCoding(byte unusedInCoding) {
-     this.unusedInCoding = unusedInCoding;
-     return this;
+      this.unusedInCoding = unusedInCoding;
+      return this;
     }
 
     /**
@@ -1093,8 +1093,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder groupId(byte groupId) {
-     this.groupId = groupId;
-     return this;
+      this.groupId = groupId;
+      return this;
     }
 
     /**
@@ -1102,8 +1102,8 @@ public final class RadiotapDataVht implements RadiotapData {
      * @return this Builder object for method chaining.
      */
     public Builder partialAid(short partialAid) {
-     this.partialAid = partialAid;
-     return this;
+      this.partialAid = partialAid;
+      return this;
     }
 
     /**

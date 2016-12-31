@@ -23,6 +23,7 @@ Future (2.0.0)
 * The default implementations of Packet.Builder's iterator(), get(), and getOuterOf() are moved from AbstractBuilder to Packet.Builder itself.
 * NotApplicable.UNKNOWN_IPV6_NEXT_EXTENTION changes to UnknownIpV6Extension instance.
 * Change serialization formats:
+    * org.pcap4j.packet.IllegalDnsRData
     * org.pcap4j.packet.IllegalIpV4InternetTimestampOptionData
     * org.pcap4j.packet.IllegalIpV4Option
     * org.pcap4j.packet.IllegalIpV6NeighborDiscoveryOption
@@ -36,6 +37,7 @@ Future (2.0.0)
 Release 1.7.1
 ===========================
 ### New Features ###
+* Support DNS (RFC1035 and RFC3596)
 
 ### Bug Fixes ###
 * [Issues#76](https://github.com/kaitoy/pcap4j/issues/76): NullPointerException when dissecting an ICMP error packet.

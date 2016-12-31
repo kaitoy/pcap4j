@@ -9,6 +9,9 @@ package org.pcap4j.packet.factory;
 
 import java.io.ObjectStreamException;
 
+import org.pcap4j.packet.DnsPacket;
+import org.pcap4j.packet.IllegalPacket;
+import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.TcpPort;
@@ -37,18 +40,17 @@ public final class StaticTcpPortPacketFactory implements PacketFactory<Packet, T
       throw new NullPointerException("rawData is null.");
     }
 
-    return UnknownPacket.newPacket(rawData, offset, length);
-//    try {
-//      for (TcpPort num: numbers) {
-//        switch (Short.toUnsignedInt(num.value())) {
-//          case 80:
-//            return HttpPacket.newPacket(rawData, offset, length);
-//        }
-//      }
-//      return UnknownPacket.newPacket(rawData, offset, length);
-//    } catch (IllegalRawDataException e) {
-//      return IllegalPacket.newPacket(rawData, offset, length, e);
-//    }
+    try {
+      for (TcpPort num: numbers) {
+        switch (Short.toUnsignedInt(num.value())) {
+          case 53:
+            return DnsPacket.newPacket(rawData, offset, length);
+        }
+      }
+      return UnknownPacket.newPacket(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalPacket.newPacket(rawData, offset, length, e);
+    }
   }
 
   // Override deserializer to keep singleton
