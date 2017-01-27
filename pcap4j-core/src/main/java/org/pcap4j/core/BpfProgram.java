@@ -47,7 +47,9 @@ public final class BpfProgram {
   }
 
   /**
-   *
+   * Releases the resource this object holds in the native memory.
+   * This method takes effect only at the first call, and does nothing at later calls.
+   * It's required to call this method before this object is GCed in order to avoid memory leak.
    */
   public void free() {
     if (freed) {
@@ -60,12 +62,6 @@ public final class BpfProgram {
       NativeMappings.pcap_freecode(program);
       freed = true;
     }
-  }
-
-  @Override
-  protected void finalize() throws Throwable {
-    super.finalize();
-    free();
   }
 
   /**

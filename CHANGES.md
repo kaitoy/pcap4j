@@ -22,6 +22,7 @@ Future (2.0.0)
 * The default implementations of Packet's iterator(), get(), getOuterOf(), and contains() are moved from AbstractPacket to Packet itself.
 * The default implementations of Packet.Builder's iterator(), get(), and getOuterOf() are moved from AbstractBuilder to Packet.Builder itself.
 * NotApplicable.UNKNOWN_IPV6_NEXT_EXTENTION changes to UnknownIpV6Extension instance.
+* Remove the finalizer from BpfProgram for more stability ([Issues#80](https://github.com/kaitoy/pcap4j/issues/80)). BpfProgram#free(), which was called in the finalizer, now needs to be called explicitly.
 * Change serialization formats:
     * org.pcap4j.packet.IllegalDnsRData
     * org.pcap4j.packet.IllegalIpV4InternetTimestampOptionData
