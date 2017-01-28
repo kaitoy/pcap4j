@@ -1,0 +1,19 @@
+machine:
+  java:
+    version:
+      oraclejdk8
+
+  pre:
+    - git clone -b libpcap-1.7.4 git://github.com/the-tcpdump-group/libpcap.git libpcap
+    - ./configure
+        pwd: libpcap
+    - make && sudo make install
+        pwd: libpcap
+
+dependencies:
+  override:
+    - mvn install -Dmaven.test.skip=true
+
+test:
+  override:
+    - sudo mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B test
