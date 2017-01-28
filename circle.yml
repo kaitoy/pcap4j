@@ -13,7 +13,7 @@ machine:
 
 dependencies:
   override:
-    - mvn install -Dmaven.test.skip=true
+    - mvn install -DskipTests
 
 test:
   override:
