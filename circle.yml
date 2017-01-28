@@ -5,9 +5,9 @@ machine:
 
   pre:
     - git clone -b libpcap-1.7.4 git://github.com/the-tcpdump-group/libpcap.git libpcap
-    - ./configure
+    - ./configure:
         pwd: libpcap
-    - make && sudo make install
+    - make && sudo make install:
         pwd: libpcap
 
 dependencies:
