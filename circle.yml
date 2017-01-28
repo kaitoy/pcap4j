@@ -4,6 +4,7 @@ machine:
       oraclejdk8
 
   pre:
+    - sudo apt-get update; sudo apt-get install flex
     - git clone -b libpcap-1.7.4 git://github.com/the-tcpdump-group/libpcap.git libpcap
     - ./configure:
         pwd: libpcap
