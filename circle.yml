@@ -17,4 +17,4 @@ dependencies:
 
 test:
   override:
-    - sudo mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B test
+    - sudo /usr/local/apache-maven/bin/mvn -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B test
