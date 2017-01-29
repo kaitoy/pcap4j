@@ -8,7 +8,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution)
 
 [![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg?branch=master)](https://travis-ci.org/kaitoy/pcap4j)
-[![CircleCI](https://circleci.com/gh/kaitoy/pcap4j.svg?style=svg)](https://circleci.com/gh/kaitoy/pcap4j)
+[![CircleCI](https://circleci.com/gh/kaitoy/pcap4j/tree/master.svg?style=svg)](https://circleci.com/gh/kaitoy/pcap4j/tree/master)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=master&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/master)
 [![codecov](https://codecov.io/gh/kaitoy/pcap4j/branch/master/graph/badge.svg)](https://codecov.io/gh/kaitoy/pcap4j)
 
