@@ -187,6 +187,10 @@ final class NativeMappings {
     int optimize, int mask
   );
 
+
+  // u_int	bpf_filter(const struct bpf_insn *, const u_char *, u_int, u_int)
+  static native int bpf_filter(bpf_insn.ByReference bpf_insn, byte[] packet, int wirelen, int buflen);
+
   // int pcap_setfilter(pcap_t *p, struct bpf_program *fp)
   static native int pcap_setfilter(Pointer p, bpf_program fp);
 
