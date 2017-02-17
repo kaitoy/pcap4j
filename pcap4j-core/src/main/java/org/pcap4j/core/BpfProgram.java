@@ -43,7 +43,7 @@ public final class BpfProgram {
    * Return true if the packet given passes the filter that is built from this program.
    *
    * @param packet the packet to apply the filter on
-   * @return true if the packet passes the filter; false otherwise
+   * @return true if this program is not freed and the packet passes the filter; false otherwise.
    */
   public boolean applyFilter(Packet packet) {
     return applyFilter(packet.getRawData());
@@ -54,7 +54,7 @@ public final class BpfProgram {
    * Return true if the packet given passes the filter that is built from this program.
    *
    * @param packet the packet to apply the filter on
-   * @return true if the packet passes the filter; false otherwise
+   * @return true if this program is not freed and the packet passes the filter; false otherwise.
    */
   public boolean applyFilter(byte[] packet) {
     return applyFilter(packet, packet.length, packet.length);
@@ -64,17 +64,24 @@ public final class BpfProgram {
    * Apply the filter on a given packet.
    * Return true if the packet given passes the filter that is built from this program.
    *
+   *
    * @param packet a byte array including the packet to apply the filter on
    * @param orgPacketLen the length of the original packet
    * @param packetLen the length of the packet present
-   * @return true if the packet passes the filter; false otherwise
+   * @return true if this program is not freed and the packet passes the filter; false otherwise.
    */
   public boolean applyFilter(byte[] packet, int orgPacketLen, int packetLen) {
-    if (program.bf_insns == null) {
-      program.read();
-    }
+    synchronized (lock) {
+      if (freed) {
+        return false;
+      }
 
-    return NativeMappings.bpf_filter(program.bf_insns, packet, orgPacketLen, packetLen) != 0;
+      if (program.bf_insns == null) {
+        program.read();
+      }
+
+      return NativeMappings.bpf_filter(program.bf_insns, packet, orgPacketLen, packetLen) != 0;
+    }
   }
 
   /**
