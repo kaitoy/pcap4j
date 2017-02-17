@@ -42,7 +42,7 @@ public final class BpfProgram {
    * Return true if the packet given passes the filter that is built from this program.
    *
    * @param packet the packet to apply the filter on
-   * @return true if the packet passes the filter
+   * @return true if the packet passes the filter; false otherwise
    */
   public boolean applyFilter(byte[] packet) {
     return applyFilter(packet, packet.length, packet.length);
@@ -52,16 +52,17 @@ public final class BpfProgram {
    * Apply the filter on a given packet.
    * Return true if the packet given passes the filter that is built from this program.
    *
-   * @param packet the packet to apply the filter on
-   * @param buflen the buffer len to use
-   * @return true if the packet passes the filter
+   * @param packet a byte array including the packet to apply the filter on
+   * @param orgPacketLen the length of the original packet
+   * @param packetLen the length of the packet present
+   * @return true if the packet passes the filter; false otherwise
    */
-  public boolean applyFilter(byte[] packet, int wirelen, int buflen) {
+  public boolean applyFilter(byte[] packet, int orgPacketLen, int packetLen) {
     if (program.bf_insns == null) {
       program.read();
     }
 
-    return NativeMappings.bpf_filter(program.bf_insns, packet, wirelen, buflen) != 0;
+    return NativeMappings.bpf_filter(program.bf_insns, packet, orgPacketLen, packetLen) != 0;
   }
 
   /**
