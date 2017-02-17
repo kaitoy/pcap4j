@@ -135,6 +135,16 @@ Mapping between pcap API and Pcap4j API
     <td>BpfProgram org.pcap4j.core.Pcaps.compileFilter(int, DataLinkType, String, BpfCompileMode, Inet4Address)</td>
   </tr>
   <tr>
+    <td rowspan="3">u_int bpf_filter(const struct bpf_insn *, const u_char *, u_int, u_int)</td>
+    <td>void org.pcap4j.core.BpfProgram.applyFilter(Packet)</td>
+  </tr>
+  <tr>
+    <td>void org.pcap4j.core.BpfProgram.applyFilter(byte[])</td>
+  </tr>
+  <tr>
+    <td>void org.pcap4j.core.BpfProgram.applyFilter(byte[], int, int)</td>
+  </tr>
+  <tr>
     <td rowspan="3">int pcap_setfilter(pcap_t *, struct bpf_program *)</td>
     <td>void org.pcap4j.core.PcapHandle.setFilter(String, BpfCompileMode, Inet4Address)</td>
   </tr>

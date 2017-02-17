@@ -8,6 +8,7 @@
 package org.pcap4j.core;
 
 import org.pcap4j.core.NativeMappings.bpf_program;
+import org.pcap4j.packet.Packet;
 
 /**
  * @author Kaito Yamada
@@ -35,6 +36,52 @@ public final class BpfProgram {
    */
   public String getExpression() {
     return expression;
+  }
+
+  /**
+   * Apply the filter on a given packet.
+   * Return true if the packet given passes the filter that is built from this program.
+   *
+   * @param packet the packet to apply the filter on
+   * @return true if this program is not freed and the packet passes the filter; false otherwise.
+   */
+  public boolean applyFilter(Packet packet) {
+    return applyFilter(packet.getRawData());
+  }
+
+  /**
+   * Apply the filter on a given packet.
+   * Return true if the packet given passes the filter that is built from this program.
+   *
+   * @param packet the packet to apply the filter on
+   * @return true if this program is not freed and the packet passes the filter; false otherwise.
+   */
+  public boolean applyFilter(byte[] packet) {
+    return applyFilter(packet, packet.length, packet.length);
+  }
+
+  /**
+   * Apply the filter on a given packet.
+   * Return true if the packet given passes the filter that is built from this program.
+   *
+   *
+   * @param packet a byte array including the packet to apply the filter on
+   * @param orgPacketLen the length of the original packet
+   * @param packetLen the length of the packet present
+   * @return true if this program is not freed and the packet passes the filter; false otherwise.
+   */
+  public boolean applyFilter(byte[] packet, int orgPacketLen, int packetLen) {
+    synchronized (lock) {
+      if (freed) {
+        return false;
+      }
+
+      if (program.bf_insns == null) {
+        program.read();
+      }
+
+      return NativeMappings.bpf_filter(program.bf_insns, packet, orgPacketLen, packetLen) != 0;
+    }
   }
 
   /**
