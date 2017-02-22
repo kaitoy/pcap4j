@@ -1207,7 +1207,20 @@ public final class PcapHandle {
    * @throws NotOpenException if this PcapHandle is not open.
    * @throws NullPointerException if any of arguments are null.
    */
-  public void sendPacket(byte[] bytes) throws NotOpenException, PcapNativeException {
+  public void sendPacket(final byte[] bytes) throws NotOpenException, PcapNativeException {
+      sendPacket(bytes,
+                 bytes.length);
+  }
+  
+  /**
+   *
+   * @param bytes raw bytes
+   * @param len length
+   * @throws PcapNativeException if an error occurs in the pcap native library.
+   * @throws NotOpenException if this PcapHandle is not open.
+   * @throws NullPointerException if any of arguments are null.
+   */
+  public void sendPacket(final byte[] bytes, final int len) throws NotOpenException, PcapNativeException {
     if (bytes == null) {
       throw new NullPointerException("bytes may not be null");
     }
@@ -1224,7 +1237,7 @@ public final class PcapHandle {
         throw new NotOpenException();
       }
 
-      int rc = NativeMappings.pcap_sendpacket(handle, bytes, bytes.length);
+      int rc = NativeMappings.pcap_sendpacket(handle, bytes, len);
       if (rc < 0) {
         throw new PcapNativeException(
                 "Error occured in pcap_sendpacket(): " + getError(),
