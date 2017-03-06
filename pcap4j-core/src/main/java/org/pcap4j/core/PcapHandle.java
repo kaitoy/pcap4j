@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2015  Pcap4J.org
+  _##  Copyright (C) 2011-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -1207,11 +1207,10 @@ public final class PcapHandle {
    * @throws NotOpenException if this PcapHandle is not open.
    * @throws NullPointerException if any of arguments are null.
    */
-  public void sendPacket(final byte[] bytes) throws NotOpenException, PcapNativeException {
-      sendPacket(bytes,
-                 bytes.length);
+  public void sendPacket(byte[] bytes) throws NotOpenException, PcapNativeException {
+    sendPacket(bytes, bytes.length);
   }
-  
+
   /**
    *
    * @param bytes raw bytes
@@ -1220,7 +1219,7 @@ public final class PcapHandle {
    * @throws NotOpenException if this PcapHandle is not open.
    * @throws NullPointerException if any of arguments are null.
    */
-  public void sendPacket(final byte[] bytes, final int len) throws NotOpenException, PcapNativeException {
+  public void sendPacket(byte[] bytes, int len) throws NotOpenException, PcapNativeException {
     if (bytes == null) {
       throw new NullPointerException("bytes may not be null");
     }
