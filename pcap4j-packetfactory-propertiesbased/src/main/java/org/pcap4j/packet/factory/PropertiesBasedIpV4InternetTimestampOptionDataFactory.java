@@ -62,10 +62,4 @@ extends AbstractPropertiesBasedFactory<
     return IllegalIpV4InternetTimestampOptionData.newInstance(rawData, offset, length, cause);
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

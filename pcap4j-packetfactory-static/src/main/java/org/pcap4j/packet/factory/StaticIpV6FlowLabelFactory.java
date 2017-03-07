@@ -53,10 +53,4 @@ implements PacketFactory<IpV6FlowLabel, NotApplicable> {
     return IpV6SimpleFlowLabel.newInstance(ByteArrays.getInt(rawData, offset));
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

@@ -53,10 +53,4 @@ public final class StaticTcpPortPacketFactory implements PacketFactory<Packet, T
     }
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

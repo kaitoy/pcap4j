@@ -37,10 +37,4 @@ public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NotApp
     return IpV4Rfc1349Tos.newInstance(rawData[offset]);
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

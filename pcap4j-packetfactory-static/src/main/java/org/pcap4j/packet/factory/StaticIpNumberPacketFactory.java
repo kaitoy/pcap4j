@@ -87,10 +87,4 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
     }
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

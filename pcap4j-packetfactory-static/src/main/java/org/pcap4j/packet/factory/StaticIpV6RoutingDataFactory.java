@@ -56,10 +56,4 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
     }
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

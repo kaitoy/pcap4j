@@ -54,10 +54,4 @@ extends AbstractPropertiesBasedFactory<TcpOption, TcpOptionKind> {
     return IllegalTcpOption.newInstance(rawData, offset, length, cause);
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

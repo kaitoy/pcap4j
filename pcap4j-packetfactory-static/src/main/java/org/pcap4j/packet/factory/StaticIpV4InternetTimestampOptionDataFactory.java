@@ -64,10 +64,4 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
     }
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

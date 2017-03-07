@@ -55,10 +55,4 @@ implements PacketFactory<Packet, Ssh2MessageNumber> {
     }
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

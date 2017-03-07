@@ -83,10 +83,4 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
     }
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

@@ -55,10 +55,4 @@ extends AbstractPropertiesBasedFactory<IpV6Option, IpV6OptionType> {
     return IllegalIpV6Option.newInstance(rawData, offset, length, cause);
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

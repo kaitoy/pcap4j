@@ -54,10 +54,4 @@ implements PacketFactory<Packet, Dot11FrameType> {
     }
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

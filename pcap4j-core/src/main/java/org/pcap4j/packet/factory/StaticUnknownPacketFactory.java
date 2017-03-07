@@ -35,10 +35,4 @@ public final class StaticUnknownPacketFactory implements PacketFactory<Packet, N
     return UnknownPacket.newPacket(rawData, offset, length);
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

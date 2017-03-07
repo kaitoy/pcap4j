@@ -57,10 +57,4 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
     }
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

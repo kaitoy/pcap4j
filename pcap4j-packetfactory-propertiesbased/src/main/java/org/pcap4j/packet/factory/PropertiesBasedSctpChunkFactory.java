@@ -53,10 +53,4 @@ extends AbstractPropertiesBasedFactory<SctpChunk, SctpChunkType> {
     return IllegalSctpChunk.newInstance(rawData, offset, length, cause);
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

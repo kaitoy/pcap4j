@@ -52,10 +52,4 @@ public final class StaticSctpChunkFactory implements PacketFactory<SctpChunk, Sc
     }
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

@@ -41,10 +41,4 @@ implements PacketFactory<IpV6TrafficClass, NotApplicable> {
     return IpV6SimpleTrafficClass.newInstance(rawData[offset]);
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

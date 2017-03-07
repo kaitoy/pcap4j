@@ -52,10 +52,4 @@ extends AbstractPropertiesBasedFactory<Packet, NamedNumber<?, ?>> {
     return IllegalPacket.newPacket(rawData, offset, length, cause);
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

@@ -56,10 +56,4 @@ implements PacketFactory<Packet, NotApplicable> {
     return UnknownPacket.newPacket(rawData, offset, length);
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

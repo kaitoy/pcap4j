@@ -57,10 +57,4 @@ extends AbstractPropertiesBasedFactory<IpV6RoutingData, IpV6RoutingType> {
     return IllegalIpV6RoutingData.newInstance(rawData, offset, length, cause);
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }

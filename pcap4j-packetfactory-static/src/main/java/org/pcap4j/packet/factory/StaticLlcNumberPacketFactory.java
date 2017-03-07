@@ -56,10 +56,4 @@ public final class StaticLlcNumberPacketFactory implements PacketFactory<Packet,
     }
   }
 
-  // Override deserializer to keep singleton
-  @SuppressWarnings("static-method")
-  private Object readResolve() throws ObjectStreamException {
-    return INSTANCE;
-  }
-
 }
