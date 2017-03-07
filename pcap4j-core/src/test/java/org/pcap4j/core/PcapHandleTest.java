@@ -5,6 +5,10 @@ import static org.junit.Assert.*;
 import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,7 +23,9 @@ import org.pcap4j.packet.IcmpV4EchoPacket;
 import org.pcap4j.packet.IcmpV4EchoReplyPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.UdpPacket;
+import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.DataLinkType;
+import org.pcap4j.util.ByteArrays;
 
 @SuppressWarnings("javadoc")
 public class PcapHandleTest {
@@ -314,6 +320,135 @@ public class PcapHandleTest {
       if (prog != null) {
         prog.free();
       }
+    }
+  }
+
+  @Test
+  public void testSendPacket() throws Exception {
+    if (System.getenv("TRAVIS") != null) {
+      // run only on Travis CI
+      PcapNetworkInterface nif = Pcaps.getDevByName("lo");
+      final PcapHandle handle = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
+      byte[] sendingRawPacket = new byte[50];
+      sendingRawPacket[0] = 1;
+      sendingRawPacket[1] = 2;
+      sendingRawPacket[2] = 3;
+      sendingRawPacket[3] = 4;
+      sendingRawPacket[4] = 5;
+      Packet sendingPacket = UnknownPacket.newPacket(sendingRawPacket, 0, sendingRawPacket.length);
+
+      ExecutorService pool = Executors.newSingleThreadExecutor();
+      final byte[] result = new byte[sendingRawPacket.length];
+      final FutureTask<byte[]> future
+        = new FutureTask<byte[]>(
+            new Runnable() {
+
+              @Override
+              public void run() {}
+
+            },
+            result
+          );
+      pool.execute(
+        new Runnable() {
+
+          @Override
+          public void run() {
+            try {
+              handle.loop(
+                -1,
+                new RawPacketListener() {
+
+                  @Override
+                  public void gotPacket(byte[] p) {
+                    if (p[0] == 1 && p[1] == 2 && p[2] == 3 && p[3] == 4 && p[4] == 5) {
+                      assertEquals(result.length, p.length);
+                      System.arraycopy(p, 0, result, 0, result.length);
+                      future.run();
+                    }
+                  }
+
+                }
+              );
+            } catch (PcapNativeException e) {
+            } catch (InterruptedException e) {
+            } catch (NotOpenException e) {
+            }
+          }
+
+        }
+      );
+
+      Thread.sleep(1000);
+      handle.sendPacket(sendingPacket);
+      future.get(5, TimeUnit.SECONDS);
+      handle.breakLoop();
+      handle.close();
+      assertArrayEquals(sendingRawPacket, result);
+    }
+  }
+
+  @Test
+  public void testSendPacketWithLen() throws Exception {
+    if (System.getenv("TRAVIS") != null) {
+      // run only on Travis CI
+      PcapNetworkInterface nif = Pcaps.getDevByName("lo");
+      final PcapHandle handle = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
+      byte[] sendingRawPacket = new byte[100];
+      sendingRawPacket[0] = 1;
+      sendingRawPacket[1] = 2;
+      sendingRawPacket[2] = 3;
+      sendingRawPacket[3] = 4;
+      sendingRawPacket[4] = 5;
+
+      ExecutorService pool = Executors.newSingleThreadExecutor();
+      final byte[] result = new byte[50];
+      final FutureTask<byte[]> future
+        = new FutureTask<byte[]>(
+            new Runnable() {
+
+              @Override
+              public void run() {}
+
+            },
+            result
+          );
+      pool.execute(
+        new Runnable() {
+
+          @Override
+          public void run() {
+            try {
+              handle.loop(
+                -1,
+                new RawPacketListener() {
+
+                  @Override
+                  public void gotPacket(byte[] p) {
+                    if (p[0] == 1 && p[1] == 2 && p[2] == 3 && p[3] == 4 && p[4] == 5) {
+                      assertEquals(result.length, p.length);
+                      System.arraycopy(p, 0, result, 0, result.length);
+                      future.run();
+                    }
+                  }
+
+                }
+              );
+            } catch (PcapNativeException e) {
+            } catch (InterruptedException e) {
+            } catch (NotOpenException e) {
+            }
+          }
+
+        }
+      );
+
+      Thread.sleep(1000);
+      handle.sendPacket(sendingRawPacket, result.length);
+      future.get(5, TimeUnit.SECONDS);
+      handle.breakLoop();
+      handle.close();
+      assertArrayEquals(ByteArrays.getSubArray(sendingRawPacket, 0, result.length), result);
     }
   }
 
