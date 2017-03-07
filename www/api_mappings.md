@@ -159,11 +159,14 @@ Mapping between pcap API and Pcap4j API
     <td>void org.pcap4j.core.BpfProgram.free()</td>
   </tr>
   <tr>
-    <td rowspan="2">int pcap_sendpacket(pcap_t *, const u_char *, int)</td>
+    <td rowspan="3">int pcap_sendpacket(pcap_t *, const u_char *, int)</td>
     <td>void org.pcap4j.core.PcapHandle.sendPacket(Packet)</td>
   </tr>
   <tr>
     <td>void org.pcap4j.core.PcapHandle.sendPacket(byte[])</td>
+  </tr>
+  <tr>
+    <td>void org.pcap4j.core.PcapHandle.sendPacket(byte[], int)</td>
   </tr>
   <tr>
     <td>void pcap_close(pcap_t *)</td>
