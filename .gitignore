@@ -11,6 +11,7 @@ pcap4j-test-coverage/src/
 # Gradle
 build/
 .gradle/
+bin/
 .idea
 gradle-app.setting
 .gradletasknamecache
