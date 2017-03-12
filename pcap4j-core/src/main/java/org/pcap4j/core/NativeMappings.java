@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2015  Pcap4J.org
+  _##  Copyright (C) 2011-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.jna.Callback;
 import com.sun.jna.Function;
@@ -32,6 +35,8 @@ import com.sun.jna.ptr.PointerByReference;
  * @since pcap4j 0.9.1
  */
 final class NativeMappings {
+
+  private static final Logger LOG = LoggerFactory.getLogger(NativeMappings.class);
 
   static final String PCAP_LIB_NAME
     = System.getProperty(
@@ -98,6 +103,8 @@ final class NativeMappings {
 
       }
     );
+
+    LOG.info("Pcap4J successfully loaded a native pcap library: {}", pcap_lib_version());
   }
 
   // direct mappings
