@@ -35,6 +35,7 @@ Pcap4J
     * [サンプル実行方法](#サンプル実行方法)
     * [Mavenプロジェクトでの使用方法](#mavenプロジェクトでの使用方法)
     * [ネイティブライブラリのロードについて](#ネイティブライブラリのロードについて)
+        * [WinPcapかNpcapか](#WinPcapかNpcapか)
     * [Docker](#docker)
 * [ビルド](#ビルド)
     * [Mavenコマンドでのビルド手順 (推奨)](#mavenコマンドでのビルド手順-推奨)
@@ -192,7 +193,7 @@ pom.xmlに以下のような記述を追加する。
 デフォルトでは下記の条件でネイティブライブラリを検索し、ロードする。
 
 * Windows
-    * サーチパス: 環境変数`PATH`に含まれるパス。
+    * サーチパス: 環境変数`PATH`に含まれるパス等。([MSDN](https://msdn.microsoft.com/ja-jp/library/7d83bc18.aspx)参照。)
     * ファイル名: wpcap.dllとPacket.dll
 * Linux/UNIX
     * サーチパス: OSに設定された共有ライブラリのサーチパス。例えば環境変数`LD_LIBRARY_PATH`に含まれるパス。
@@ -206,6 +207,23 @@ pom.xmlに以下のような記述を追加する。
 * jna.library.path: サーチパスを指定する。
 * org.pcap4j.core.pcapLibName: pcapライブラリ(wpcap.dllかlibpcap.soかlibpcap.dylib)へのフルパスを指定する。
 * (Windowsのみ) org.pcap4j.core.packetLibName: packetライブラリ(Packet.dll)へのフルパスを指定する。
+
+##### WinPcapかNpcapか #####
+Windowsのネイティブpcapライブラリの選択肢にはWinPcapとNpcapがある。
+
+WinPcapは2013/3/8に4.1.3(libpcap 1.0.0ベース)をリリースして以来開発が止まっているのに対して、
+Npcapは現在も開発が続いているので、より新しい機能を使いたい場合などにはNpcapを選ぶといい。
+
+WinPcapは`%SystemRoot%\System32\`にインストールされるので、何も気にしなくてもPcap4Jにロードされる。
+
+一方Npcapはデフォルトで`%SystemRoot%\System32\Npcap\`にインストールされるので、
+Pcap4Jがロードするためには以下のいずれかが必要となる。
+
+* `PATH`に`%SystemRoot%\System32\Npcap\`を追加する。
+* `jna.library.path`に`%SystemRoot%\System32\Npcap\`を指定する。
+* `org.pcap4j.core.pcapLibName`に`%SystemRoot%\System32\Npcap\wpcap.dll`を指定して、
+  `org.pcap4j.core.packetLibName`に`%SystemRoot%\System32\Npcap\Packet.dll`を指定する。
+* Npcapを`WinPcap Compatible Mode`をオンにしてインストールする。
 
 ### Docker ###
 
@@ -229,7 +247,6 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 1. WinPcap/Npcap/libpcapインストール:<br>
    WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
    ビルド時に実行されるunit testで必要なので。
-   WinPcapの代わりにNpcapを使う場合、インストール時に`WinPcap Compatible Mode`をオンにする。
 2. JDK 1.6+インストール:<br>
    JDKの1.6以上をダウンロードしてインストール。JAVA_HOMEを設定する。
 3. Mavenインストール:<br>
@@ -248,7 +265,6 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 1. WinPcap/Npcap/libpcapインストール:<br>
    WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
    ビルド時に実行されるunit testで必要なので。
-   WinPcapの代わりにNpcapを使う場合、インストール時に`WinPcap Compatible Mode`をオンにする。
 2. Eclipseインストール:<br>
    [Eclipse.org](http://www.eclipse.org/downloads/)あたりでダウンロードして解凍するだけ。
 3. M2Eインストール:<br>

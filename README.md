@@ -35,6 +35,7 @@ Contents
     * [How to run samples](#how-to-run-samples)
     * [How to use in Maven project](#how-to-use-in-maven-project)
     * [About native library loading](#about-native-library-loading)
+        * [WinPcap or Npcap](#winpcap-or-npcap)
     * [Docker](#docker)
 * [How to build](#how-to-build)
     * [Build procedure with Maven command (recommended)](#build-procedure-with-maven-command-recommended)
@@ -190,7 +191,7 @@ Add a dependency to the pom.xml as like below:
 By default, Pcap4j loads the native libraries on the following conditions:
 
 * Windows
-    * search path: The paths in the `PATH` environment variable.
+    * search path: The paths in the `PATH` environment variable, etc. (See [MSDN](https://msdn.microsoft.com/en-us/library/7d83bc18.aspx) for the details.)
     * file name: wpcap.dll and Packet.dll
 * Linux/UNIX
     * search path: The search paths of shared libraries configured on the OS.
@@ -206,6 +207,24 @@ You can use the following Java system properties to change the default behavior.
 * jna.library.path: The search path
 * org.pcap4j.core.pcapLibName: The full path of the pcap library (wpcap.dll, libpcap.so, or libpcap.dylib)
 * (Windows only) org.pcap4j.core.packetLibName: The full path of the packet library (Packet.dll)
+
+##### WinPcap or Npcap #####
+There are two native pcap libraries for Windows; WinPcap and Npcap.
+
+The development of WinPcap has stopped since version 4.1.3 (libpcap 1.0.0 base) was released on 3/8/2013,
+while Npcap is still being developed.
+So, you should pick Npcap if you want to use new features or so.
+
+Pcap4J can load WinPcap without tricks because it's installed in `%SystemRoot%\System32\`.
+
+On the other hand, because Npcap is installed in `%SystemRoot%\System32\Npcap\` by default,
+you need to do either of the following so that Pcap4J can load it:
+
+* Add `%SystemRoot%\System32\Npcap\` to `PATH`.
+* Set `jna.library.path` to `%SystemRoot%\System32\Npcap\`.
+* Set `org.pcap4j.core.pcapLibName` to `%SystemRoot%\System32\Npcap\wpcap.dll` and
+  `org.pcap4j.core.packetLibName` to `%SystemRoot%\System32\Npcap\Packet.dll`.
+* Install Npcap with `WinPcap Compatible Mode` on.
 
 ### Docker ###
 
@@ -229,7 +248,6 @@ I'm developing Pcap4j in the following environment.
 1. Install libpcap, WinPcap, or Npcap:<br>
    Install WinPcap (if Windows) or libpcap (if Linux/UNIX).
    It's needed for the unit tests which are run during a build.
-   If you use Npcap, which is an alternative to WinPcap, it needs to be installed with `WinPcap Compatible Mode` on.
 2. Install JDK 1.6+:<br>
    Download and install JDK 1.6 (or newer), and set the environment variable ***JAVA_HOME*** properly.
 3. Install Maven<br>
@@ -250,7 +268,6 @@ I'm developing Pcap4j in the following environment.
 1. Install libpcap, WinPcap, or Npcap:<br>
    Install WinPcap (if Windows) or libpcap (if Linux/UNIX).
    It's needed for the unit tests which are run during a build.
-   If you use Npcap, which is an alternative to WinPcap, it needs to be installed with `WinPcap Compatible Mode` on.
 2. Setup Eclipse 3.7+:<br>
    Install JDK for Eclipse.
    Then download an archived ***Eclipse IDE for Java Developers*** from
