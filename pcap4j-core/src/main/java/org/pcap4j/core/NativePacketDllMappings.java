@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2015  Pcap4J.org
+  _##  Copyright (C) 2015-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -9,6 +9,7 @@ package org.pcap4j.core;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.NativeLong;
@@ -30,6 +31,12 @@ final class NativePacketDllMappings {
   static final int PACKET_OID_DATA_SIZE;
 
   static {
+    if (System.getProperty("jna.library.path") == null) {
+      if (NativeMappings.NPCAP_DIR.exists()) {
+        NativeLibrary.addSearchPath("Packet", NativeMappings.NPCAP_DIR.getAbsolutePath());
+      }
+    }
+
     Native.register(
       NativePacketDllMappings.class,
       NativeLibrary.getInstance(LIB_NAME)

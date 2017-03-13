@@ -1,6 +1,9 @@
 Future (2.0.0)
 ==============
 ### New Features ###
+* Add a dll search path for Npcap (`%SystemRoot%\System32\Npcap\`).
+  No longer need to install Npcap with `WinPcap Compatible Mode` on.
+  If both WinPcap and Npcap are installed, Npcap takes precedence.
 * PcapHandle and PcapDumper implement AutoCloseable.
 * Simplify PacketFactory API.
     * newInstance(byte[], int, int, N) changes to newInstance(byte[], int, int, N...).
