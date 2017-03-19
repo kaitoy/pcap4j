@@ -38,8 +38,6 @@ Pcap4J
         * [WinPcapかNpcapか](#WinPcapかNpcapか)
     * [Docker](#docker)
 * [ビルド](#ビルド)
-    * [Mavenコマンドでのビルド手順 (推奨)](#mavenコマンドでのビルド手順-推奨)
-    * [Eclipse上でのビルド手順](#eclipse上でのビルド手順)
 * [ライセンス](#ライセンス)
 * [コンタクト](#コンタクト)
 * [おまけ](#おまけ)
@@ -237,13 +235,7 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 
 ビルド
 ------
-開発に使っている環境は以下。
 
-* [Eclipse](http://www.eclipse.org/) Java EE IDE for Web Developers Indigo Service Release 1([Pleiades](http://mergedoc.sourceforge.jp/) All in One 3.7.1.v20110924)
-* [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
-* [Apache Maven](http://maven.apache.org/) 3.0.5
-
-#### Mavenコマンドでのビルド手順 (推奨) ####
 1. WinPcap/Npcap/libpcapインストール:<br>
    WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
    ビルド時に実行されるunit testで必要なので。
@@ -260,35 +252,6 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 6. ビルド:<br>
    プロジェクトのルートディレクトリに`cd`して、`mvn install` を実行する。
    unit testを通すためにはAdministrator/root権限が必要。
-
-#### Eclipse上でのビルド手順 ####
-1. WinPcap/Npcap/libpcapインストール:<br>
-   WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
-   ビルド時に実行されるunit testで必要なので。
-2. Eclipseインストール:<br>
-   [Eclipse.org](http://www.eclipse.org/downloads/)あたりでダウンロードして解凍するだけ。
-3. M2Eインストール:<br>
-   EclipseのGUIで、[ヘルプ]＞[新規ソフトウェアのインストール] を開き、
-   ***作業対象***に http://download.eclipse.org/technology/m2e/releases を入力してEnter。
-   ***m2e - Eclipse用のMaven統合***をチェックして***次へ***。
-   ***使用条件の条項に同意します***にチェックして***完了***。
-   m2eのインストールが完了したらEclipseを再起動。
-4. Gitをインストール:<br>
-   [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
-   Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
-5. Pcap4Jのレポジトリのダウンロード:<br>
-   Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-   インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/v1)でダウンロードして展開する。
-6. プロジェクトのインポート:<br>
-   EclipseのGUIで、***ファイル ＞ インポート*** を開き、
-   ***一般 ＞ 既存プロジェクトをワークスペースへ***でPcap4Jの全プロジェクトをインポートする。
-7. ビルド:<br>
-   EclipseのGUIの***プロジェクト・エクスプローラー***で、Pcap4Jの親プロジェクトを右クリックして、
-   ***実行 ＞ Maven install***を実行する。
-   unit testを通すためにはAdministrator/root権限が必要。
-
-因みに、M2Eは旧[m2eclipse](http://m2eclipse.sonatype.org/)。
-m2eclipseでビルドしたい場合は、ステップ2をスキップして、ステップ4でMavenプロジェクトの方をインポートすればよい。
 
 ライセンス
 ----------
