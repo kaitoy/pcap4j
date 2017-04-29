@@ -18,6 +18,7 @@ RUN ./gradlew build --info 2>&1 | tee build.log
 # Generate sample script. (/usr/local/src/pcap4j/build/docker_script/capture.sh)
 RUN ./gradlew genScriptForDocker
 RUN chmod +x build/docker_script/capture.sh
+WORKDIR /usr/local/src/pcap4j/build/docker_script
 
 ENTRYPOINT ["/bin/sh", "/usr/local/src/pcap4j/build/docker_script/capture.sh"]
 CMD ["eth0", "false"]
