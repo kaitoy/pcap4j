@@ -111,7 +111,7 @@ public final class DnsDomainName implements Serializable {
           throw new IllegalRawDataException(sb.toString());
         }
 
-        foundPointer = (short) (ByteArrays.getShort(rawData, offset + cursor) & 0x3F);
+        foundPointer = (short) (ByteArrays.getShort(rawData, offset + cursor) & 0x3FFF);
         terminated = true;
         break;
       }

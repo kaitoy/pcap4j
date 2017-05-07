@@ -35,10 +35,9 @@ Contents
     * [How to run samples](#how-to-run-samples)
     * [How to use in Maven project](#how-to-use-in-maven-project)
     * [About native library loading](#about-native-library-loading)
+        * [WinPcap or Npcap](#winpcap-or-npcap)
     * [Docker](#docker)
 * [How to build](#how-to-build)
-    * [Build procedure with Maven command (recommended)](#build-procedure-with-maven-command-recommended)
-    * [Build procedure on Eclipse](#build-procedure-on-eclipse)
 * [License](#license)
 * [Contacts](#contacts)
 * [Extra](#extra)
@@ -190,7 +189,7 @@ Add a dependency to the pom.xml as like below:
 By default, Pcap4j loads the native libraries on the following conditions:
 
 * Windows
-    * search path: The paths in the `PATH` environment variable.
+    * search path: The paths in the `PATH` environment variable, etc. (See [MSDN](https://msdn.microsoft.com/en-us/library/7d83bc18.aspx) for the details.)
     * file name: wpcap.dll and Packet.dll
 * Linux/UNIX
     * search path: The search paths of shared libraries configured on the OS.
@@ -207,6 +206,24 @@ You can use the following Java system properties to change the default behavior.
 * org.pcap4j.core.pcapLibName: The full path of the pcap library (wpcap.dll, libpcap.so, or libpcap.dylib)
 * (Windows only) org.pcap4j.core.packetLibName: The full path of the packet library (Packet.dll)
 
+##### WinPcap or Npcap #####
+There are two native pcap libraries for Windows; WinPcap and Npcap.
+
+The development of WinPcap has stopped since version 4.1.3 (libpcap 1.0.0 base) was released on 3/8/2013,
+while Npcap is still being developed.
+So, you should pick Npcap if you want to use new features or so.
+
+Pcap4J can load WinPcap without tricks because it's installed in `%SystemRoot%\System32\`.
+
+On the other hand, because Npcap is installed in `%SystemRoot%\System32\Npcap\` by default,
+you need to do either of the following so that Pcap4J can load it:
+
+* Add `%SystemRoot%\System32\Npcap\` to `PATH`.
+* Set `jna.library.path` to `%SystemRoot%\System32\Npcap\`.
+* Set `org.pcap4j.core.pcapLibName` to `%SystemRoot%\System32\Npcap\wpcap.dll` and
+  `org.pcap4j.core.packetLibName` to `%SystemRoot%\System32\Npcap\Packet.dll`.
+* Install Npcap with `WinPcap Compatible Mode` on.
+
 ### Docker ###
 
 [![](https://images.microbadger.com/badges/image/kaitoy/pcap4j.svg)](https://microbadger.com/images/kaitoy/pcap4j)
@@ -219,17 +236,10 @@ This image is built everytime a commit is made on the Git repositry.
 
 How to build
 ------------
-I'm developing Pcap4j in the following environment.
 
-* [Eclipse](http://www.eclipse.org/) Java EE IDE for Web Developers Indigo Service Release 1 ([Pleiades](http://mergedoc.sourceforge.jp/) All in One 3.7.1.v20110924)
-* [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
-* [Apache Maven](http://maven.apache.org/) 3.0.5
-
-#### Build procedure with Maven command (recommended) ####
 1. Install libpcap, WinPcap, or Npcap:<br>
    Install WinPcap (if Windows) or libpcap (if Linux/UNIX).
    It's needed for the unit tests which are run during a build.
-   If you use Npcap, which is an alternative to WinPcap, it needs to be installed with `WinPcap Compatible Mode` on.
 2. Install JDK 1.6+:<br>
    Download and install JDK 1.6 (or newer), and set the environment variable ***JAVA_HOME*** properly.
 3. Install Maven<br>
@@ -245,38 +255,6 @@ I'm developing Pcap4j in the following environment.
    Open a command prompt/a terminal, `cd` to the project root directory,
    and execute `mvn install`.
    Note Administrator/root privileges are needed for the unit tests.
-
-#### Build procedure on Eclipse ####
-1. Install libpcap, WinPcap, or Npcap:<br>
-   Install WinPcap (if Windows) or libpcap (if Linux/UNIX).
-   It's needed for the unit tests which are run during a build.
-   If you use Npcap, which is an alternative to WinPcap, it needs to be installed with `WinPcap Compatible Mode` on.
-2. Setup Eclipse 3.7+:<br>
-   Install JDK for Eclipse.
-   Then download an archived ***Eclipse IDE for Java Developers*** from
-   [Eclipse.org](http://www.eclipse.org/downloads/), and extract it.
-3. Install M2E:<br>
-   Launch the Eclipse and select ***Help > Install New Software*** to open the install wizard.
-   In the wizard window, enter the URL http://download.eclipse.org/technology/m2e/releases
-   into the text field next to ***Work with:***, and press the enter key to start searching.
-   When the search is done, check the the check box which precedes ***Maven Integration for Eclipse***,
-   click the ***Next*** button, and follow the wizard instructions to complete the installation.
-4. Install Git:<br>
-   Download [Git](http://git-scm.com/downloads) and install it.
-   This step is optional.
-5. Clone the Pcap4J repository:<br>
-   If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
-   Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
-6. Import the project into Eclipse:<br>
-   In the Eclipse, select ***File > Import*** to open the import wizard.
-   Then, select ***General > Existing Projects into Workspace*** and
-   follow the wizard instructions to import all Pcap4J projects.
-7. Build:<br>
-   In the Eclipse, right-click the parent project in the ***Project Explorer*** and select ***Run as > Maven install***.
-   Note Administrator/root privileges are needed for the unit tests.
-
-For your information, M2E was formerly called [m2eclipse](http://m2eclipse.sonatype.org/).
-If you want to build Pcap4j with m2eclipse, skip the step 2 and import the maven project instead of the eclipse project in the step 4.
 
 License
 -------

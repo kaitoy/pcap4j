@@ -35,10 +35,9 @@ Pcap4J
     * [サンプル実行方法](#サンプル実行方法)
     * [Mavenプロジェクトでの使用方法](#mavenプロジェクトでの使用方法)
     * [ネイティブライブラリのロードについて](#ネイティブライブラリのロードについて)
+        * [WinPcapかNpcapか](#WinPcapかNpcapか)
     * [Docker](#docker)
 * [ビルド](#ビルド)
-    * [Mavenコマンドでのビルド手順 (推奨)](#mavenコマンドでのビルド手順-推奨)
-    * [Eclipse上でのビルド手順](#eclipse上でのビルド手順)
 * [ライセンス](#ライセンス)
 * [コンタクト](#コンタクト)
 * [おまけ](#おまけ)
@@ -192,7 +191,7 @@ pom.xmlに以下のような記述を追加する。
 デフォルトでは下記の条件でネイティブライブラリを検索し、ロードする。
 
 * Windows
-    * サーチパス: 環境変数`PATH`に含まれるパス。
+    * サーチパス: 環境変数`PATH`に含まれるパス等。([MSDN](https://msdn.microsoft.com/ja-jp/library/7d83bc18.aspx)参照。)
     * ファイル名: wpcap.dllとPacket.dll
 * Linux/UNIX
     * サーチパス: OSに設定された共有ライブラリのサーチパス。例えば環境変数`LD_LIBRARY_PATH`に含まれるパス。
@@ -207,6 +206,23 @@ pom.xmlに以下のような記述を追加する。
 * org.pcap4j.core.pcapLibName: pcapライブラリ(wpcap.dllかlibpcap.soかlibpcap.dylib)へのフルパスを指定する。
 * (Windowsのみ) org.pcap4j.core.packetLibName: packetライブラリ(Packet.dll)へのフルパスを指定する。
 
+##### WinPcapかNpcapか #####
+Windowsのネイティブpcapライブラリの選択肢にはWinPcapとNpcapがある。
+
+WinPcapは2013/3/8に4.1.3(libpcap 1.0.0ベース)をリリースして以来開発が止まっているのに対して、
+Npcapは現在も開発が続いているので、より新しい機能を使いたい場合などにはNpcapを選ぶといい。
+
+WinPcapは`%SystemRoot%\System32\`にインストールされるので、何も気にしなくてもPcap4Jにロードされる。
+
+一方Npcapはデフォルトで`%SystemRoot%\System32\Npcap\`にインストールされるので、
+Pcap4Jがロードするためには以下のいずれかが必要となる。
+
+* `PATH`に`%SystemRoot%\System32\Npcap\`を追加する。
+* `jna.library.path`に`%SystemRoot%\System32\Npcap\`を指定する。
+* `org.pcap4j.core.pcapLibName`に`%SystemRoot%\System32\Npcap\wpcap.dll`を指定して、
+  `org.pcap4j.core.packetLibName`に`%SystemRoot%\System32\Npcap\Packet.dll`を指定する。
+* Npcapを`WinPcap Compatible Mode`をオンにしてインストールする。
+
 ### Docker ###
 
 [![](https://images.microbadger.com/badges/image/kaitoy/pcap4j.svg)](https://microbadger.com/images/kaitoy/pcap4j)
@@ -219,17 +235,10 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 
 ビルド
 ------
-開発に使っている環境は以下。
 
-* [Eclipse](http://www.eclipse.org/) Java EE IDE for Web Developers Indigo Service Release 1([Pleiades](http://mergedoc.sourceforge.jp/) All in One 3.7.1.v20110924)
-* [M2E - Maven Integration for Eclipse](http://eclipse.org/m2e/download/) 1.0.100.20110804-1717
-* [Apache Maven](http://maven.apache.org/) 3.0.5
-
-#### Mavenコマンドでのビルド手順 (推奨) ####
 1. WinPcap/Npcap/libpcapインストール:<br>
    WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
    ビルド時に実行されるunit testで必要なので。
-   WinPcapの代わりにNpcapを使う場合、インストール時に`WinPcap Compatible Mode`をオンにする。
 2. JDK 1.6+インストール:<br>
    JDKの1.6以上をダウンロードしてインストール。JAVA_HOMEを設定する。
 3. Mavenインストール:<br>
@@ -243,36 +252,6 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 6. ビルド:<br>
    プロジェクトのルートディレクトリに`cd`して、`mvn install` を実行する。
    unit testを通すためにはAdministrator/root権限が必要。
-
-#### Eclipse上でのビルド手順 ####
-1. WinPcap/Npcap/libpcapインストール:<br>
-   WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
-   ビルド時に実行されるunit testで必要なので。
-   WinPcapの代わりにNpcapを使う場合、インストール時に`WinPcap Compatible Mode`をオンにする。
-2. Eclipseインストール:<br>
-   [Eclipse.org](http://www.eclipse.org/downloads/)あたりでダウンロードして解凍するだけ。
-3. M2Eインストール:<br>
-   EclipseのGUIで、[ヘルプ]＞[新規ソフトウェアのインストール] を開き、
-   ***作業対象***に http://download.eclipse.org/technology/m2e/releases を入力してEnter。
-   ***m2e - Eclipse用のMaven統合***をチェックして***次へ***。
-   ***使用条件の条項に同意します***にチェックして***完了***。
-   m2eのインストールが完了したらEclipseを再起動。
-4. Gitをインストール:<br>
-   [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
-   Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
-5. Pcap4Jのレポジトリのダウンロード:<br>
-   Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-   インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
-6. プロジェクトのインポート:<br>
-   EclipseのGUIで、***ファイル ＞ インポート*** を開き、
-   ***一般 ＞ 既存プロジェクトをワークスペースへ***でPcap4Jの全プロジェクトをインポートする。
-7. ビルド:<br>
-   EclipseのGUIの***プロジェクト・エクスプローラー***で、Pcap4Jの親プロジェクトを右クリックして、
-   ***実行 ＞ Maven install***を実行する。
-   unit testを通すためにはAdministrator/root権限が必要。
-
-因みに、M2Eは旧[m2eclipse](http://m2eclipse.sonatype.org/)。
-m2eclipseでビルドしたい場合は、ステップ2をスキップして、ステップ4でMavenプロジェクトの方をインポートすればよい。
 
 ライセンス
 ----------
