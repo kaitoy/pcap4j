@@ -8,6 +8,7 @@ build/
 .gradle/
 bin/
 .idea
+**/*.iml
 gradle-app.setting
 .gradletasknamecache
 
