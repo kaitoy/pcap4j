@@ -509,7 +509,8 @@ public final class UdpPacket extends AbstractPacket {
       );
       destPos += SHORT_SIZE_IN_BYTES;
 
-      return ByteArrays.calcChecksum(data);
+      short checksum = ByteArrays.calcChecksum(data);
+      return checksum != 0 ? checksum : (short)0xFFFF;
     }
 
     /**
