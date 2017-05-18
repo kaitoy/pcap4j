@@ -108,7 +108,7 @@
       <dependency>
         <groupId>net.java.dev.jna</groupId>
         <artifactId>jna</artifactId>
-        <version>4.2.1</version>
+        <version>4.4.0</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -147,8 +147,8 @@
           <version>3.1</version>
           <configuration>
             <encoding>UTF-8</encoding>
-            <source>1.6</source>
-            <target>1.6</target>
+            <source>1.8</source>
+            <target>1.8</target>
           </configuration>
         </plugin>
         <plugin>
