@@ -483,7 +483,7 @@ public final class DnsPacket extends AbstractPacket {
         DnsResourceRecord answer
           = DnsResourceRecord.newInstance(rawData, offset + cursor, remainingLen);
         answers.add(answer);
-        cursor += answer.length();
+	cursor += answer.length()-answer.getRData().length()+answer.getRdLengthAsInt();
       }
       for (int i = 0; i < nsCnt; i++) {
         int remainingLen = length - cursor;
@@ -502,7 +502,7 @@ public final class DnsPacket extends AbstractPacket {
         DnsResourceRecord authority
           = DnsResourceRecord.newInstance(rawData, offset + cursor, remainingLen);
         authorities.add(authority);
-        cursor += authority.length();
+        cursor += authority.length()-authority.getRData().length()+authority.getRdLengthAsInt();
       }
       for (int i = 0; i < arCnt; i++) {
         int remainingLen = length - cursor;
@@ -521,7 +521,7 @@ public final class DnsPacket extends AbstractPacket {
         DnsResourceRecord info
           = DnsResourceRecord.newInstance(rawData, offset + cursor, remainingLen);
         additionalInfo.add(info);
-        cursor += info.length();
+        cursor += info.length()-info.getRData().length()+info.getRdLengthAsInt();
       }
     }
 
