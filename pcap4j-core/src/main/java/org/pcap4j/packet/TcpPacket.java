@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2016  Pcap4J.org
+  _##  Copyright (C) 2011-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -150,19 +150,18 @@ public final class TcpPacket extends AbstractPacket {
       throw new IllegalArgumentException(sb.toString());
     }
 
-    if (header.checksum == 0) {
-      if (acceptZero) { return true; }
-      else { return false; }
+    byte[] payloadData = payload != null ? payload.getRawData() : new byte[0];
+    short calculatedChecksum
+      = header.calcChecksum(srcAddr, dstAddr, header.getRawData(), payloadData);
+    if (calculatedChecksum == 0) {
+      return true;
     }
 
-    if (payload != null) {
-      return header.calcChecksum(srcAddr, dstAddr, payload.getRawData())
-               == header.checksum;
+    if (header.checksum == 0 && acceptZero) {
+      return true;
     }
-    else {
-      return header.calcChecksum(srcAddr, dstAddr, new byte[0])
-               == header.checksum;
-    }
+
+    return false;
   }
 
   @Override
@@ -767,7 +766,13 @@ public final class TcpPacket extends AbstractPacket {
               && PacketPropertiesLoader.getInstance().tcpV6CalcChecksum()
           )
         ) {
-          this.checksum = calcChecksum(builder.srcAddr, builder.dstAddr, payload);
+          this.checksum
+            = calcChecksum(
+                builder.srcAddr,
+                builder.dstAddr,
+                buildRawData(true),
+                payload
+              );
         }
         else {
           this.checksum = (short)0;
@@ -779,7 +784,7 @@ public final class TcpPacket extends AbstractPacket {
     }
 
     private short calcChecksum(
-      InetAddress srcAddr, InetAddress dstAddr, byte[] payload
+      InetAddress srcAddr, InetAddress dstAddr, byte[] header, byte[] payload
     ) {
       byte[] data;
       int destPos;
@@ -799,15 +804,8 @@ public final class TcpPacket extends AbstractPacket {
         destPos = totalLength;
       }
 
-      // If call getRawData() here, rawData will be cached with
-      // an invalid checksum in some cases.
-      // To avoid it, use buildRawData() instead.
-      System.arraycopy(buildRawData(), 0, data, 0, length());
-      System.arraycopy(payload, 0, data, length(), payload.length);
-
-      for (int i = 0; i < CHECKSUM_SIZE; i++) {
-        data[CHECKSUM_OFFSET + i] = (byte)0;
-      }
+      System.arraycopy(header, 0, data, 0, header.length);
+      System.arraycopy(payload, 0, data, header.length, payload.length);
 
       // pseudo header
       System.arraycopy(
@@ -972,6 +970,10 @@ public final class TcpPacket extends AbstractPacket {
 
     @Override
     protected List<byte[]> getRawFields() {
+      return getRawFields(false);
+    }
+
+    private List<byte[]> getRawFields(boolean zeroInsteadOfChecksum) {
       byte flags = 0;
       if (fin) { flags = (byte)1; }
       if (syn) { flags = (byte)(flags | 2); }
@@ -995,13 +997,17 @@ public final class TcpPacket extends AbstractPacket {
         )
       );
       rawFields.add(ByteArrays.toByteArray(window));
-      rawFields.add(ByteArrays.toByteArray(checksum));
+      rawFields.add(ByteArrays.toByteArray(zeroInsteadOfChecksum ? (short) 0 : checksum));
       rawFields.add(ByteArrays.toByteArray(urgentPointer));
       for (TcpOption o: options) {
         rawFields.add(o.getRawData());
       }
       rawFields.add(padding);
       return rawFields;
+    }
+
+    private byte[] buildRawData(boolean zeroInsteadOfChecksum) {
+      return ByteArrays.concatenate(getRawFields(zeroInsteadOfChecksum));
     }
 
     private int measureLengthWithoutPadding() {
