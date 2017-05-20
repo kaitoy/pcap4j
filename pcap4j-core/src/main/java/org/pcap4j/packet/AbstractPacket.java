@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Pcap4J.org
+  _##  Copyright (C) 2011-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -499,24 +499,7 @@ public abstract class AbstractPacket implements Packet {
      * @return a raw data built
      */
     protected byte[] buildRawData() {
-      List<byte[]> rawFields = getRawFields();
-
-      int length = 0;
-      for (byte[] rawField: rawFields) {
-        length += rawField.length;
-      }
-
-      byte[] rawData = new byte[length];
-      int destPos = 0;
-      for (byte[] rawField: rawFields) {
-        System.arraycopy(
-          rawField, 0,
-          rawData, destPos, rawField.length
-        );
-        destPos += rawField.length;
-      }
-
-      return rawData;
+      return ByteArrays.concatenate(getRawFields());
     }
 
     /**

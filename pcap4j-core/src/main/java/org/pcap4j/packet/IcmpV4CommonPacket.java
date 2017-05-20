@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Pcap4J.org
+  _##  Copyright (C) 2012-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -105,17 +105,17 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
    *         false otherwise.
    */
   public boolean hasValidChecksum(boolean acceptZero) {
-    if (header.checksum == 0) {
-      if (acceptZero) { return true; }
-      else { return false; }
+    byte[] payloadData = payload != null ? payload.getRawData() : new byte[0];
+    short calculatedChecksum = header.calcChecksum(header.getRawData(), payloadData);
+    if (calculatedChecksum == 0) {
+      return true;
     }
 
-    if (payload != null) {
-      return header.calcChecksum(payload.getRawData()) == header.checksum;
+    if (header.checksum == 0 && acceptZero) {
+      return true;
     }
-    else {
-      return header.calcChecksum(new byte[0]) == header.checksum;
-    }
+
+    return false;
   }
 
   /**
@@ -270,7 +270,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
 
       if (builder.correctChecksumAtBuild) {
         if (PacketPropertiesLoader.getInstance().icmpV4CalcChecksum()) {
-          this.checksum = calcChecksum(payload);
+          this.checksum = calcChecksum(buildRawData(true), payload);
         }
         else {
           this.checksum = (short)0;
@@ -281,7 +281,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
       }
     }
 
-    private short calcChecksum(byte[] payload) {
+    private short calcChecksum(byte[] header, byte[] payload) {
       byte[] data;
       int packetLength = payload.length + length();
 
@@ -292,18 +292,12 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
         data = new byte[packetLength];
       }
 
-      // If call getRawData() here, rawData will be cached with
-      // an invalid checksum in some cases.
-      // To avoid it, use buildRawData() instead.
-      System.arraycopy(buildRawData(), 0, data, 0, length());
-
       System.arraycopy(
-        payload, 0, data, length(), payload.length
+        header, 0, data, 0, header.length
       );
-
-      for (int i = 0; i < CHECKSUM_SIZE; i++) {
-        data[CHECKSUM_OFFSET + i] = (byte)0;
-      }
+      System.arraycopy(
+        payload, 0, data, header.length, payload.length
+      );
 
       return ByteArrays.calcChecksum(data);
     }
@@ -334,11 +328,19 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
 
     @Override
     protected List<byte[]> getRawFields() {
+      return getRawFields(false);
+    }
+
+    private List<byte[]> getRawFields(boolean zeroInsteadOfChecksum) {
       List<byte[]> rawFields = new ArrayList<byte[]>();
       rawFields.add(ByteArrays.toByteArray(type.value()));
       rawFields.add(ByteArrays.toByteArray(code.value()));
-      rawFields.add(ByteArrays.toByteArray(checksum));
+      rawFields.add(ByteArrays.toByteArray(zeroInsteadOfChecksum ? (short) 0 : checksum));
       return rawFields;
+    }
+
+    private byte[] buildRawData(boolean zeroInsteadOfChecksum) {
+      return ByteArrays.concatenate(getRawFields(zeroInsteadOfChecksum));
     }
 
     @Override

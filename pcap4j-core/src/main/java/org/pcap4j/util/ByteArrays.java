@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2016  Pcap4J.org
+  _##  Copyright (C) 2011-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -14,6 +14,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.zip.Adler32;
 import java.util.zip.CRC32;
@@ -1076,6 +1077,29 @@ public final class ByteArrays {
     byte[] result = new byte[arr1.length + arr2.length];
     System.arraycopy(arr1, 0, result, 0, arr1.length);
     System.arraycopy(arr2, 0, result, arr1.length, arr2.length);
+    return result;
+  }
+
+  /**
+   * @param arrs arrays
+   * @return the concatenated array.
+   */
+  public static byte[] concatenate(List<byte[]> arrs) {
+    int length = 0;
+    for (byte[] arr: arrs) {
+      length += arr.length;
+    }
+
+    byte[] result = new byte[length];
+    int destPos = 0;
+    for (byte[] arr: arrs) {
+      System.arraycopy(
+        arr, 0,
+        result, destPos, arr.length
+      );
+      destPos += arr.length;
+    }
+
     return result;
   }
 

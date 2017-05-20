@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2016  Pcap4J.org
+  _##  Copyright (C) 2011-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -662,7 +662,7 @@ public final class IpV4Packet extends AbstractPacket implements IpPacket {
 
       if (builder.correctChecksumAtBuild) {
         if (PacketPropertiesLoader.getInstance().ipV4CalcChecksum()) {
-          headerChecksum = calcHeaderChecksum();
+          headerChecksum = calcHeaderChecksum(true);
         }
         else {
           headerChecksum = (short)0;
@@ -673,17 +673,8 @@ public final class IpV4Packet extends AbstractPacket implements IpPacket {
       }
     }
 
-    private short calcHeaderChecksum() {
-      // If call getRawData() here, rawData will be cached with
-      // an invalid checksum in some cases.
-      // To avoid it, use buildRawData() instead.
-      byte[] data = buildRawData();
-
-      for (int i = 0; i < HEADER_CHECKSUM_SIZE; i++) {
-        data[HEADER_CHECKSUM_OFFSET + i] = (byte)0;
-      }
-
-      return ByteArrays.calcChecksum(data);
+    private short calcHeaderChecksum(boolean zeroInsteadOfChecksum) {
+      return ByteArrays.calcChecksum(buildRawData(zeroInsteadOfChecksum));
     }
 
     @Override
@@ -840,18 +831,27 @@ public final class IpV4Packet extends AbstractPacket implements IpPacket {
      *
      * @param acceptZero acceptZero
      * @return true if the packet represented by this object has a valid checksum;
-     *         false otherwise.
+     *          false otherwise.
      */
     public boolean hasValidChecksum(boolean acceptZero) {
-      if (headerChecksum == 0) {
-        if (acceptZero) { return true; }
-        else { return false; }
+      short calculatedChecksum = calcHeaderChecksum(false);
+      if (calculatedChecksum == 0) {
+        return true;
       }
-      return calcHeaderChecksum() == headerChecksum;
+
+      if (headerChecksum == 0 && acceptZero) {
+        return true;
+      }
+
+      return false;
     }
 
     @Override
     protected List<byte[]> getRawFields() {
+      return getRawFields(false);
+    }
+
+    private List<byte[]> getRawFields(boolean zeroInsteadOfChecksum) {
       byte flags = 0;
       if (moreFragmentFlag) { flags = (byte)1; }
       if (dontFragmentFlag) { flags = (byte)(flags | 2); }
@@ -865,7 +865,7 @@ public final class IpV4Packet extends AbstractPacket implements IpPacket {
       rawFields.add(ByteArrays.toByteArray((short)((flags << 13) | fragmentOffset)));
       rawFields.add(ByteArrays.toByteArray(ttl));
       rawFields.add(ByteArrays.toByteArray(protocol.value()));
-      rawFields.add(ByteArrays.toByteArray(headerChecksum));
+      rawFields.add(ByteArrays.toByteArray(zeroInsteadOfChecksum ? (short) 0 : headerChecksum));
       rawFields.add(ByteArrays.toByteArray(srcAddr));
       rawFields.add(ByteArrays.toByteArray(dstAddr));
       for (IpV4Option o: options) {
@@ -873,6 +873,10 @@ public final class IpV4Packet extends AbstractPacket implements IpPacket {
       }
       rawFields.add(padding);
       return rawFields;
+    }
+
+    private byte[] buildRawData(boolean zeroInsteadOfChecksum) {
+      return ByteArrays.concatenate(getRawFields(zeroInsteadOfChecksum));
     }
 
     private int measureLengthWithoutPadding() {
