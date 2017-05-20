@@ -9,6 +9,8 @@ import java.net.UnknownHostException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.pcap4j.core.PcapHandle;
+import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.UdpPacket.UdpHeader;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpNumber;
@@ -168,6 +170,26 @@ public class UdpPacketTest extends AbstractPacketTest {
     p = b.build();
     assertTrue(p.hasValidChecksum(srcAddr, dstAddr, false));
     assertTrue(p.hasValidChecksum(srcAddr, dstAddr, true));
+  }
+
+  @Test
+  public void testHasValidChecksumFFFF() throws Exception {
+    PcapHandle pcapHandle = Pcaps.openOffline(resourceDirPath.concat("/UdpPacketTestChecksum0xFFFF.pcap"));
+    Packet packet = pcapHandle.getNextPacket();
+    assertNotNull(packet);
+
+    assertTrue(packet.contains(IpV4Packet.class));
+    IpV4Packet ipV4Packet = packet.get(IpV4Packet.class);
+    assertNotNull(ipV4Packet);
+    IpV4Packet.IpV4Header ipV4Header = ipV4Packet.getHeader();
+    assertNotNull(ipV4Header);
+
+    assertTrue(ipV4Packet.contains(UdpPacket.class));
+    UdpPacket udpPacket = ipV4Packet.get(UdpPacket.class);
+    assertNotNull(udpPacket);
+
+    assertEquals((short)0xFFFF, udpPacket.getHeader().getChecksum());
+    assertTrue(udpPacket.hasValidChecksum(ipV4Header.getSrcAddr(), ipV4Header.getDstAddr(), false));
   }
 
 }
