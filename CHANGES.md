@@ -49,6 +49,7 @@ Release 1.7.1
 * [Issues#76](https://github.com/kaitoy/pcap4j/issues/76): NullPointerException when dissecting an ICMP error packet.
 * [Issues#80](https://github.com/kaitoy/pcap4j/issues/80): Intermittent SIGSEGV in finalizer for BpfProgram.
 * [Issues#88](https://github.com/kaitoy/pcap4j/issues/88): pcap4-core and pcap4j-packetfactory-static both ship org.pcap4j.packet.factory.StaticUnknownPacketFactory
+* [Issues#94](https://github.com/kaitoy/pcap4j/issues/94): UdpPacket.hasValidChecksum is broken for checksum 0xFFFF.
 
 ### Other Changes ###
 * [PR#78](https://github.com/kaitoy/pcap4j/pull/78) [Issues#75](https://github.com/kaitoy/pcap4j/issues/75): Change PropertiesLoader to log with INFO instead of WARN when it returns the default value.
