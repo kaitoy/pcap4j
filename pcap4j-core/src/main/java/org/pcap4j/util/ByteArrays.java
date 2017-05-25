@@ -706,6 +706,34 @@ public final class ByteArrays {
   }
 
   /**
+   * @param addr a string representation of an IPv4 address. (e.g. "192.168.0.100")
+   * @return a byte array representation of the IPv4 address.
+   * @throws IllegalArgumentException if failed to parse addr.
+   */
+  public static byte[] parseInet4Address(String addr) {
+    String[] octetStrs = addr.split("\\.", 4);
+    if (octetStrs.length != INET4_ADDRESS_SIZE_IN_BYTES) {
+      throw new IllegalArgumentException("Couldn't get an Inet4Address from " + addr);
+    }
+
+    byte[] octets = new byte[4];
+    for (int i = 0; i < octets.length; i++) {
+      String octetStr = octetStrs[i];
+      try {
+        int octet = Integer.parseInt(octetStr);
+        if (octet < 0 || octet > 255) {
+          throw new IllegalArgumentException("Couldn't get an Inet4Address from " + addr);
+        }
+        octets[i] = (byte) octet;
+      } catch (NumberFormatException e) {
+        throw new IllegalArgumentException("Couldn't get an Inet4Address from " + addr);
+      }
+    }
+
+    return octets;
+  }
+
+  /**
    *
    * @param array array
    * @param offset offset

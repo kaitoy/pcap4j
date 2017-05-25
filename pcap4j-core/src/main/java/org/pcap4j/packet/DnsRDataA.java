@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -10,6 +10,7 @@ package org.pcap4j.packet;
 import static org.pcap4j.util.ByteArrays.*;
 
 import java.net.Inet4Address;
+import java.net.UnknownHostException;
 
 import org.pcap4j.packet.DnsResourceRecord.DnsRData;
 import org.pcap4j.util.ByteArrays;
@@ -36,9 +37,10 @@ public final class DnsRDataA implements DnsRData {
   /**
    *
    */
-  private static final long serialVersionUID = -3356048535448950943L;
+  private static final long serialVersionUID = 6539022022231148667L;
 
   private final Inet4Address address;
+  private final boolean addressPlainText;
 
   /**
    * A static factory method.
@@ -61,7 +63,7 @@ public final class DnsRDataA implements DnsRData {
   private DnsRDataA(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < INET4_ADDRESS_SIZE_IN_BYTES) {
       StringBuilder sb = new StringBuilder(200);
-      sb.append("The data is too short to build a DnsRDataA (")
+      sb.append("The data is too short to build a DnsRDataA (Min: ")
         .append(INET4_ADDRESS_SIZE_IN_BYTES)
         .append(" bytes). data: ")
         .append(ByteArrays.toHexString(rawData, " "))
@@ -71,7 +73,32 @@ public final class DnsRDataA implements DnsRData {
         .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
-    this.address = ByteArrays.getInet4Address(rawData, offset);
+
+    if (length == INET4_ADDRESS_SIZE_IN_BYTES) {
+      this.address = ByteArrays.getInet4Address(rawData, offset);
+      this.addressPlainText = false;
+    }
+    else {
+      String addr = new String(ByteArrays.getSubArray(rawData, offset, length));
+      try {
+        byte[] octets = ByteArrays.parseInet4Address(addr);
+        this.address = (Inet4Address) Inet4Address.getByAddress(octets);
+      } catch (IllegalArgumentException e) {
+        StringBuilder sb = new StringBuilder(200);
+        sb.append("Couldn't get an Inet4Address from ")
+          .append(addr)
+          .append(". data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
+        throw new IllegalRawDataException(sb.toString(), e);
+      } catch (UnknownHostException e) {
+        throw new AssertionError("Never get here.");
+      }
+      this.addressPlainText = true;
+    }
   }
 
   private DnsRDataA(Builder builder) {
@@ -86,6 +113,7 @@ public final class DnsRDataA implements DnsRData {
     }
 
     this.address = builder.address;
+    this.addressPlainText = builder.addressPlainText;
   }
 
   /**
@@ -93,14 +121,29 @@ public final class DnsRDataA implements DnsRData {
    */
   public Inet4Address getAddress() { return address; }
 
+  /**
+   * @return true if the ADDRESS field is a plain text; false otherwise.
+   */
+  public boolean isAddressPlainText() { return addressPlainText; }
+
   @Override
   public int length() {
-    return INET4_ADDRESS_SIZE_IN_BYTES;
+    if (addressPlainText) {
+      return address.getHostAddress().length();
+    }
+    else {
+      return INET4_ADDRESS_SIZE_IN_BYTES;
+    }
   }
 
   @Override
   public byte[] getRawData() {
-    return address.getAddress();
+    if (addressPlainText) {
+      return address.getHostAddress().getBytes();
+    }
+    else {
+      return address.getAddress();
+    }
   }
 
   /**
@@ -134,6 +177,9 @@ public final class DnsRDataA implements DnsRData {
       .append(ls)
       .append(indent).append("  ADDRESS: ")
       .append(address.getHostAddress())
+      .append(" (")
+      .append(addressPlainText ? "text" : "encoded")
+      .append(")")
       .append(ls);
 
     return sb.toString();
@@ -141,15 +187,26 @@ public final class DnsRDataA implements DnsRData {
 
   @Override
   public int hashCode() {
-    return address.hashCode();
+    int result = address.hashCode();
+    result = 31 * result + (addressPlainText ? 1 : 0);
+    return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
-    DnsRDataA other = (DnsRDataA) obj;
-    return address.equals(other.address);
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    DnsRDataA dnsRDataA = (DnsRDataA) o;
+
+    if (addressPlainText != dnsRDataA.addressPlainText) {
+      return false;
+    }
+    return address.equals(dnsRDataA.address);
   }
 
   /**
@@ -159,6 +216,7 @@ public final class DnsRDataA implements DnsRData {
   public static final class Builder {
 
     private Inet4Address address;
+    private boolean addressPlainText;
 
     /**
      *
@@ -167,6 +225,7 @@ public final class DnsRDataA implements DnsRData {
 
     private Builder(DnsRDataA obj) {
       this.address = obj.address;
+      this.addressPlainText = obj.addressPlainText;
     }
 
     /**
@@ -175,6 +234,15 @@ public final class DnsRDataA implements DnsRData {
      */
     public Builder address(Inet4Address address) {
       this.address = address;
+      return this;
+    }
+
+    /**
+     * @param addressPlainText addressPlainText
+     * @return this Builder object for method chaining.
+     */
+    public Builder addressPlainText(boolean addressPlainText) {
+      this.addressPlainText = addressPlainText;
       return this;
     }
 
