@@ -67,7 +67,7 @@ public class DnsPacketTest extends AbstractPacketTest {
     this.qdCount = 1;
     this.anCount = 5;
     this.nsCount = 6;
-    this.arCount = 7;
+    this.arCount = 8;
     this.questions = new ArrayList<DnsQuestion>();
     this.answers = new ArrayList<DnsResourceRecord>();
     this.authorities = new ArrayList<DnsResourceRecord>();
@@ -110,6 +110,7 @@ public class DnsPacketTest extends AbstractPacketTest {
           .rData(
              new DnsRDataA.Builder()
                .address((Inet4Address) InetAddress.getByName("1.2.3.4"))
+               .addressPlainText(false)
                .build()
            )
           .correctLengthAtBuild(true)
@@ -517,6 +518,26 @@ public class DnsPacketTest extends AbstractPacketTest {
           .correctLengthAtBuild(true)
           .build();
     additionalInfo.add(wksRR2);
+
+    DnsResourceRecord aRRStr
+      = new DnsResourceRecord.Builder()
+      .name(
+        new DnsDomainName.Builder()
+          .labels(hogeDomain)
+          .build()
+      )
+      .dataType(DnsResourceRecordType.A)
+      .dataClass(DnsClass.ANY)
+      .ttl(123123)
+      .rData(
+        new DnsRDataA.Builder()
+          .address((Inet4Address) InetAddress.getByName("192.168.0.100"))
+          .addressPlainText(true)
+          .build()
+      )
+      .correctLengthAtBuild(true)
+      .build();
+    additionalInfo.add(aRRStr);
 
     this.packet
       = new DnsPacket.Builder()
