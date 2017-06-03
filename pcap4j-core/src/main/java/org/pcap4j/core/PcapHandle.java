@@ -19,6 +19,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
+import org.pcap4j.core.BpfProgram.PcapDirection;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.bpf_program;
@@ -563,6 +564,36 @@ public final class PcapHandle implements AutoCloseable {
 
     this.filteringExpression = prog.getExpression();
   }
+  
+	  /**
+	  *
+	  * @param prog prog
+	  * @throws PcapNativeException if an error occurs in the pcap native library.
+	  * @throws NotOpenException if this PcapHandle is not open.
+	  * @throws NullPointerException if any of arguments are null.
+	  */
+	 public int setDirection(PcapDirection direction) throws PcapNativeException, NotOpenException {
+	   if (direction == null) {
+	     throw new NullPointerException("direction is null.");
+	   }
+	   if (!open) {
+	     throw new NotOpenException();
+	   }
+	
+	   if (!handleLock.readLock().tryLock()) {
+	     throw new NotOpenException();
+	   }
+	   try {
+	     if (!open) {
+	       throw new NotOpenException();
+	     }
+	
+	     return NativeMappings.pcap_set_datalink(handle, direction.getValue());
+	     
+	   } finally {
+	     handleLock.readLock().unlock();
+	   }
+	 }
 
   /**
    *

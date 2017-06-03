@@ -143,5 +143,31 @@ public final class BpfProgram {
     }
 
   }
+  
+  /**
+   * 
+   * @author ZAHID Mohammed
+   * version pcap4j 1.6.4
+   *
+   */
+  public static enum PcapDirection{
+	  /**
+	   * 
+	   */
+	  INOUT(0),
+	  IN(1),
+	  OUT(2);
+	  
+	  private final int value;
+	  
+	  private PcapDirection(int value){
+		  this.value=value;
+	  }
+	  
+	  public int getValue(){
+		  return this.value;
+	  }
+	  
+  }
 
 }
