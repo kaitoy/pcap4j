@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.7.1 (4-June-2017)
+===========================
+### New Features ###
 * Support DNS (RFC1035 and RFC3596)
 * [PR#84](https://github.com/kaitoy/pcap4j/pull/84): Support bpf applying. (Add BpfProgram#applyFilter().)
 * [PR#89](https://github.com/kaitoy/pcap4j/pull/89): Add PcapHandle#sendPacket(byte[] bytes, int len).
