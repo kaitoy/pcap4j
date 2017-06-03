@@ -4,6 +4,7 @@ Future
 * Support DNS (RFC1035 and RFC3596)
 * [PR#84](https://github.com/kaitoy/pcap4j/pull/84): Support bpf applying. (Add BpfProgram#applyFilter().)
 * [PR#89](https://github.com/kaitoy/pcap4j/pull/89): Add PcapHandle#sendPacket(byte[] bytes, int len).
+* [PR#102](https://github.com/kaitoy/pcap4j/pull/102): PcapHandle and PcapDumper implement Closeable.
 
 ### Bug Fixes ###
 * [Issues#76](https://github.com/kaitoy/pcap4j/issues/76): NullPointerException when dissecting an ICMP error packet.

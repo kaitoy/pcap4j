@@ -7,6 +7,7 @@
 
 package org.pcap4j.core;
 
+import java.io.Closeable;
 import java.io.EOFException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -43,7 +44,7 @@ import com.sun.jna.ptr.PointerByReference;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class PcapHandle {
+public final class PcapHandle implements Closeable {
 
   private static final Logger logger = LoggerFactory.getLogger(PcapHandle.class);
 
@@ -1382,6 +1383,7 @@ public final class PcapHandle {
   /**
    * Closes this PcapHandle.
    */
+  @Override
   public void close() {
     if (!open) {
       logger.warn("Already closed.");

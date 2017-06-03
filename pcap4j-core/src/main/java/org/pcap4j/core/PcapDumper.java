@@ -7,6 +7,7 @@
 
 package org.pcap4j.core;
 
+import java.io.Closeable;
 import java.sql.Timestamp;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
@@ -23,7 +24,7 @@ import com.sun.jna.Pointer;
  * @author Kaito Yamada
  * @since pcap4j 0.9.9
  */
-public final class PcapDumper {
+public final class PcapDumper implements Closeable {
 
   private static final Logger logger = LoggerFactory.getLogger(PcapDumper.class);
 
@@ -195,6 +196,7 @@ public final class PcapDumper {
   /**
    *
    */
+  @Override
   public void close() {
     if (!open) {
       logger.warn("Already closed.");
