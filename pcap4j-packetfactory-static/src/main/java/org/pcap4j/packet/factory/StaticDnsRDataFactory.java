@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.pcap4j.packet.DnsRDataA;
 import org.pcap4j.packet.DnsRDataAaaa;
+import org.pcap4j.packet.DnsRDataCaa;
 import org.pcap4j.packet.DnsRDataCName;
 import org.pcap4j.packet.DnsRDataHInfo;
 import org.pcap4j.packet.DnsRDataMInfo;
@@ -279,6 +280,20 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
         @Override
         public Class<DnsRDataAaaa> getTargetClass() {
           return DnsRDataAaaa.class;
+        }
+      }
+    );
+    instantiaters.put(
+      DnsResourceRecordType.CAA, new Instantiater() {
+        @Override
+        public DnsRData newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return DnsRDataCaa.newInstance(rawData, offset, length);
+        }
+        @Override
+        public Class<DnsRDataCaa> getTargetClass() {
+          return DnsRDataCaa.class;
         }
       }
     );

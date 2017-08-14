@@ -1,4 +1,4 @@
-[DNS Header (1180 bytes)]
+[DNS Header (1217 bytes)]
   ID: 0x2fc9
   QR: response
   OPCODE: 2 (Status)
@@ -11,7 +11,7 @@
   Checking Disabled: false
   RCODE: 9 (Not Authorized)
   QDCOUNT: 1
-  ANCOUNT: 5
+  ANCOUNT: 6
   NSCOUNT: 6
   ARCOUNT: 8
   Question:
@@ -64,6 +64,15 @@
     RDATA:
       MB RDATA:
         MADNAME: www.hoge.co.jp (name: www, pointer: 12)
+  Answer:
+    NAME: hoge.co.jp
+    TYPE: 257 (CAA (Certification Authority Restriction))
+    CLASS: 255 (ANY)
+    TTL: 321321
+    RDLENGTH: 15
+    RDATA:
+      CAA RDATA:
+        CAA: 0 issue ca.local
   Authority:
     NAME: hoge.co.jp
     TYPE: 3 (MD (Mail destination))
