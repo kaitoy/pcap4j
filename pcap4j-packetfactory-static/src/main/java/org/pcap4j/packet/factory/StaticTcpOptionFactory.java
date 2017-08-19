@@ -1,13 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2016  Pcap4J.org
+  _##  Copyright (C) 2013-2017  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
-
-import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IllegalTcpOption;
@@ -40,12 +38,113 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
     return INSTANCE;
   }
 
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, TcpOptionKind...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public TcpOption newInstance(byte[] rawData, int offset, int length) {
+    try {
+      return UnknownTcpOption.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalTcpOption.newInstance(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, TcpOptionKind...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public TcpOption newInstance(byte[] rawData, int offset, int length, TcpOptionKind number) {
+    try {
+      switch (Byte.toUnsignedInt(number.value())) {
+        case 0:
+          return TcpEndOfOptionList.newInstance(rawData, offset, length);
+        case 1:
+          return TcpNoOperationOption.newInstance(rawData, offset, length);
+        case 2:
+          return TcpMaximumSegmentSizeOption.newInstance(rawData, offset, length);
+        case 3:
+          return TcpWindowScaleOption.newInstance(rawData, offset, length);
+        case 4:
+          return TcpSackPermittedOption.newInstance(rawData, offset, length);
+        case 5:
+          return TcpSackOption.newInstance(rawData, offset, length);
+        case 8:
+          return TcpTimestampsOption.newInstance(rawData, offset, length);
+      }
+      return UnknownTcpOption.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalTcpOption.newInstance(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, TcpOptionKind...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number1 see {@link PacketFactory#newInstance}.
+   * @param number2 see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public TcpOption newInstance(
+    byte[] rawData, int offset, int length, TcpOptionKind number1, TcpOptionKind number2
+  ) {
+    try {
+      switch (Byte.toUnsignedInt(number1.value())) {
+        case 0:
+          return TcpEndOfOptionList.newInstance(rawData, offset, length);
+        case 1:
+          return TcpNoOperationOption.newInstance(rawData, offset, length);
+        case 2:
+          return TcpMaximumSegmentSizeOption.newInstance(rawData, offset, length);
+        case 3:
+          return TcpWindowScaleOption.newInstance(rawData, offset, length);
+        case 4:
+          return TcpSackPermittedOption.newInstance(rawData, offset, length);
+        case 5:
+          return TcpSackOption.newInstance(rawData, offset, length);
+        case 8:
+          return TcpTimestampsOption.newInstance(rawData, offset, length);
+      }
+
+      switch (Byte.toUnsignedInt(number2.value())) {
+        case 0:
+          return TcpEndOfOptionList.newInstance(rawData, offset, length);
+        case 1:
+          return TcpNoOperationOption.newInstance(rawData, offset, length);
+        case 2:
+          return TcpMaximumSegmentSizeOption.newInstance(rawData, offset, length);
+        case 3:
+          return TcpWindowScaleOption.newInstance(rawData, offset, length);
+        case 4:
+          return TcpSackPermittedOption.newInstance(rawData, offset, length);
+        case 5:
+          return TcpSackOption.newInstance(rawData, offset, length);
+        case 8:
+          return TcpTimestampsOption.newInstance(rawData, offset, length);
+      }
+      return UnknownTcpOption.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalTcpOption.newInstance(rawData, offset, length, e);
+    }
+  }
+
   @Override
   public TcpOption newInstance(byte[] rawData, int offset, int length, TcpOptionKind... numbers) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData is null.");
-    }
-
     try {
       for (TcpOptionKind num: numbers) {
         switch (Byte.toUnsignedInt(num.value())) {

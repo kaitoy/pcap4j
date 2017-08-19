@@ -1,13 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2016  Pcap4J.org
+  _##  Copyright (C) 2012-2017  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
-
-import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.BsdLoopbackPacket;
 import org.pcap4j.packet.Dot11Selector;
@@ -43,12 +41,121 @@ public final class StaticDataLinkTypePacketFactory implements PacketFactory<Pack
     return INSTANCE;
   }
 
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, DataLinkType...)} and
+   * exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public Packet newInstance(byte[] rawData, int offset, int length) {
+    return UnknownPacket.newPacket(rawData, offset, length);
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, DataLinkType...)} and
+   * exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public Packet newInstance(byte[] rawData, int offset, int length, DataLinkType number) {
+    try {
+      int val = number.value();
+      switch (val) {
+        case 0:
+          return BsdLoopbackPacket.newPacket(rawData, offset, length);
+        case 1:
+          return EthernetPacket.newPacket(rawData, offset, length);
+        case 9:
+          return PppSelector.newPacket(rawData, offset, length);
+        case 50:
+          return HdlcPppPacket.newPacket(rawData, offset, length);
+        case 105:
+          return Dot11Selector.newPacket(rawData, offset, length);
+        case 113:
+          return LinuxSllPacket.newPacket(rawData, offset, length);
+        case 127:
+          return RadiotapPacket.newPacket(rawData, offset, length);
+      }
+      if (RAW == val) {
+        return IpSelector.newPacket(rawData, offset, length);
+      }
+      return UnknownPacket.newPacket(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalPacket.newPacket(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, DataLinkType...)} and
+   * exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number1 see {@link PacketFactory#newInstance}.
+   * @param number2 see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public Packet newInstance(
+    byte[] rawData, int offset, int length, DataLinkType number1, DataLinkType number2
+  ) {
+    try {
+      int val = number1.value();
+      switch (val) {
+        case 0:
+          return BsdLoopbackPacket.newPacket(rawData, offset, length);
+        case 1:
+          return EthernetPacket.newPacket(rawData, offset, length);
+        case 9:
+          return PppSelector.newPacket(rawData, offset, length);
+        case 50:
+          return HdlcPppPacket.newPacket(rawData, offset, length);
+        case 105:
+          return Dot11Selector.newPacket(rawData, offset, length);
+        case 113:
+          return LinuxSllPacket.newPacket(rawData, offset, length);
+        case 127:
+          return RadiotapPacket.newPacket(rawData, offset, length);
+      }
+      if (RAW == val) {
+        return IpSelector.newPacket(rawData, offset, length);
+      }
+
+      val = number2.value();
+      switch (val) {
+        case 0:
+          return BsdLoopbackPacket.newPacket(rawData, offset, length);
+        case 1:
+          return EthernetPacket.newPacket(rawData, offset, length);
+        case 9:
+          return PppSelector.newPacket(rawData, offset, length);
+        case 50:
+          return HdlcPppPacket.newPacket(rawData, offset, length);
+        case 105:
+          return Dot11Selector.newPacket(rawData, offset, length);
+        case 113:
+          return LinuxSllPacket.newPacket(rawData, offset, length);
+        case 127:
+          return RadiotapPacket.newPacket(rawData, offset, length);
+      }
+      if (RAW == val) {
+        return IpSelector.newPacket(rawData, offset, length);
+      }
+      return UnknownPacket.newPacket(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalPacket.newPacket(rawData, offset, length, e);
+    }
+  }
+
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, DataLinkType... numbers) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData is null.");
-    }
-
     try {
       for (DataLinkType num: numbers) {
         int val = num.value();

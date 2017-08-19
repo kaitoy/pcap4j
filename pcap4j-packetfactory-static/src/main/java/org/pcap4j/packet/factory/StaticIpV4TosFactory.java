@@ -1,13 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2016  Pcap4J.org
+  _##  Copyright (C) 2013-2017  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
-
-import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.IpV4Packet.IpV4Tos;
 import org.pcap4j.packet.IpV4Rfc1349Tos;
@@ -29,6 +27,20 @@ public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NotApp
    */
   public static StaticIpV4TosFactory getInstance() {
     return INSTANCE;
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, NotApplicable...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public IpV4Tos newInstance(byte[] rawData, int offset, int length) {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return IpV4Rfc1349Tos.newInstance(rawData[offset]);
   }
 
   @Override

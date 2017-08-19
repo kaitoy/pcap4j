@@ -1,13 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2016  Pcap4J.org
+  _##  Copyright (C) 2013-2017  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
-
-import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.IllegalIpV6RoutingData;
 import org.pcap4j.packet.IllegalRawDataException;
@@ -35,14 +33,81 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
     return INSTANCE;
   }
 
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6RoutingType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public IpV6RoutingData newInstance(byte[] rawData, int offset, int length) {
+    try {
+      return UnknownIpV6RoutingData.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalIpV6RoutingData.newInstance(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6RoutingType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public IpV6RoutingData newInstance(
+    byte[] rawData, int offset, int length, IpV6RoutingType number
+  ) {
+    try {
+      switch (Byte.toUnsignedInt(number.value())) {
+        case 0:
+          return IpV6RoutingSourceRouteData.newInstance(rawData, offset, length);
+      }
+      return UnknownIpV6RoutingData.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalIpV6RoutingData.newInstance(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6RoutingType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number1 see {@link PacketFactory#newInstance}.
+   * @param number2 see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public IpV6RoutingData newInstance(
+    byte[] rawData, int offset, int length, IpV6RoutingType number1, IpV6RoutingType number2
+  ) {
+    try {
+      switch (Byte.toUnsignedInt(number1.value())) {
+        case 0:
+          return IpV6RoutingSourceRouteData.newInstance(rawData, offset, length);
+      }
+
+      switch (Byte.toUnsignedInt(number2.value())) {
+        case 0:
+          return IpV6RoutingSourceRouteData.newInstance(rawData, offset, length);
+      }
+      return UnknownIpV6RoutingData.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalIpV6RoutingData.newInstance(rawData, offset, length, e);
+    }
+  }
+
   @Override
   public IpV6RoutingData newInstance(
     byte[] rawData, int offset, int length, IpV6RoutingType... numbers
   ) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData is null.");
-    }
-
     try {
       for (IpV6RoutingType num: numbers) {
         switch (Byte.toUnsignedInt(num.value())) {

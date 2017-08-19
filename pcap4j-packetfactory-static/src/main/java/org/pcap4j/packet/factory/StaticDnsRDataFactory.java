@@ -1,13 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2017  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
-
-import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.DnsRDataA;
 import org.pcap4j.packet.DnsRDataAaaa;
@@ -50,14 +48,174 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
     return INSTANCE;
   }
 
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, DnsResourceRecordType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public DnsRData newInstance(byte[] rawData, int offset, int length) {
+    return UnknownDnsRData.newInstance(rawData, offset, length);
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, DnsResourceRecordType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public DnsRData newInstance(
+    byte[] rawData, int offset, int length, DnsResourceRecordType number
+  ) {
+    try {
+      switch (Short.toUnsignedInt(number.value())) {
+        case 1:
+          return DnsRDataA.newInstance(rawData, offset, length);
+        case 2:
+          return DnsRDataNs.newInstance(rawData, offset, length);
+        case 3:
+          return DnsRDataMd.newInstance(rawData, offset, length);
+        case 4:
+          return DnsRDataMf.newInstance(rawData, offset, length);
+        case 5:
+          return DnsRDataCName.newInstance(rawData, offset, length);
+        case 6:
+          return DnsRDataSoa.newInstance(rawData, offset, length);
+        case 7:
+          return DnsRDataMb.newInstance(rawData, offset, length);
+        case 8:
+          return DnsRDataMg.newInstance(rawData, offset, length);
+        case 9:
+          return DnsRDataMr.newInstance(rawData, offset, length);
+        case 10:
+          return DnsRDataNull.newInstance(rawData, offset, length);
+        case 11:
+          return DnsRDataWks.newInstance(rawData, offset, length);
+        case 12:
+          return DnsRDataPtr.newInstance(rawData, offset, length);
+        case 13:
+          return DnsRDataHInfo.newInstance(rawData, offset, length);
+        case 14:
+          return DnsRDataMInfo.newInstance(rawData, offset, length);
+        case 15:
+          return DnsRDataMx.newInstance(rawData, offset, length);
+        case 16:
+          return DnsRDataTxt.newInstance(rawData, offset, length);
+        case 28:
+          return DnsRDataAaaa.newInstance(rawData, offset, length);
+      }
+      return UnknownDnsRData.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalDnsRData.newInstance(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, DnsResourceRecordType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number1 see {@link PacketFactory#newInstance}.
+   * @param number2 see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public DnsRData newInstance(
+    byte[] rawData, int offset, int length,
+    DnsResourceRecordType number1, DnsResourceRecordType number2
+  ) {
+    try {
+      switch (Short.toUnsignedInt(number1.value())) {
+        case 1:
+          return DnsRDataA.newInstance(rawData, offset, length);
+        case 2:
+          return DnsRDataNs.newInstance(rawData, offset, length);
+        case 3:
+          return DnsRDataMd.newInstance(rawData, offset, length);
+        case 4:
+          return DnsRDataMf.newInstance(rawData, offset, length);
+        case 5:
+          return DnsRDataCName.newInstance(rawData, offset, length);
+        case 6:
+          return DnsRDataSoa.newInstance(rawData, offset, length);
+        case 7:
+          return DnsRDataMb.newInstance(rawData, offset, length);
+        case 8:
+          return DnsRDataMg.newInstance(rawData, offset, length);
+        case 9:
+          return DnsRDataMr.newInstance(rawData, offset, length);
+        case 10:
+          return DnsRDataNull.newInstance(rawData, offset, length);
+        case 11:
+          return DnsRDataWks.newInstance(rawData, offset, length);
+        case 12:
+          return DnsRDataPtr.newInstance(rawData, offset, length);
+        case 13:
+          return DnsRDataHInfo.newInstance(rawData, offset, length);
+        case 14:
+          return DnsRDataMInfo.newInstance(rawData, offset, length);
+        case 15:
+          return DnsRDataMx.newInstance(rawData, offset, length);
+        case 16:
+          return DnsRDataTxt.newInstance(rawData, offset, length);
+        case 28:
+          return DnsRDataAaaa.newInstance(rawData, offset, length);
+      }
+
+      switch (Short.toUnsignedInt(number2.value())) {
+        case 1:
+          return DnsRDataA.newInstance(rawData, offset, length);
+        case 2:
+          return DnsRDataNs.newInstance(rawData, offset, length);
+        case 3:
+          return DnsRDataMd.newInstance(rawData, offset, length);
+        case 4:
+          return DnsRDataMf.newInstance(rawData, offset, length);
+        case 5:
+          return DnsRDataCName.newInstance(rawData, offset, length);
+        case 6:
+          return DnsRDataSoa.newInstance(rawData, offset, length);
+        case 7:
+          return DnsRDataMb.newInstance(rawData, offset, length);
+        case 8:
+          return DnsRDataMg.newInstance(rawData, offset, length);
+        case 9:
+          return DnsRDataMr.newInstance(rawData, offset, length);
+        case 10:
+          return DnsRDataNull.newInstance(rawData, offset, length);
+        case 11:
+          return DnsRDataWks.newInstance(rawData, offset, length);
+        case 12:
+          return DnsRDataPtr.newInstance(rawData, offset, length);
+        case 13:
+          return DnsRDataHInfo.newInstance(rawData, offset, length);
+        case 14:
+          return DnsRDataMInfo.newInstance(rawData, offset, length);
+        case 15:
+          return DnsRDataMx.newInstance(rawData, offset, length);
+        case 16:
+          return DnsRDataTxt.newInstance(rawData, offset, length);
+        case 28:
+          return DnsRDataAaaa.newInstance(rawData, offset, length);
+      }
+      return UnknownDnsRData.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalDnsRData.newInstance(rawData, offset, length, e);
+    }
+  }
+
   @Override
   public DnsRData newInstance(
     byte[] rawData, int offset, int length, DnsResourceRecordType... numbers
   ) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData is null.");
-    }
-
     try {
       for (DnsResourceRecordType num: numbers) {
         switch (Short.toUnsignedInt(num.value())) {

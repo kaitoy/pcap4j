@@ -1,13 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2015-2016  Pcap4J.org
+  _##  Copyright (C) 2015-2017  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
-
-import java.io.ObjectStreamException;
 
 import org.pcap4j.packet.IllegalPacket;
 import org.pcap4j.packet.IllegalRawDataException;
@@ -36,12 +34,79 @@ implements PacketFactory<Packet, ProtocolFamily> {
     return INSTANCE;
   }
 
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, ProtocolFamily...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public Packet newInstance(byte[] rawData, int offset, int length) {
+    return UnknownPacket.newPacket(rawData, offset, length);
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, ProtocolFamily...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public Packet newInstance(byte[] rawData, int offset, int length, ProtocolFamily number) {
+    try {
+      if (number == ProtocolFamily.PF_INET) {
+        return IpV4Packet.newPacket(rawData, offset, length);
+      }
+      else if (number == ProtocolFamily.PF_INET6) {
+        return IpV6Packet.newPacket(rawData, offset, length);
+      }
+      return UnknownPacket.newPacket(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalPacket.newPacket(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, ProtocolFamily...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number1 see {@link PacketFactory#newInstance}.
+   * @param number2 see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public Packet newInstance(
+    byte[] rawData, int offset, int length, ProtocolFamily number1, ProtocolFamily number2
+  ) {
+    try {
+      if (number1 == ProtocolFamily.PF_INET) {
+        return IpV4Packet.newPacket(rawData, offset, length);
+      }
+      else if (number1 == ProtocolFamily.PF_INET6) {
+        return IpV6Packet.newPacket(rawData, offset, length);
+      }
+
+      if (number2 == ProtocolFamily.PF_INET) {
+        return IpV4Packet.newPacket(rawData, offset, length);
+      }
+      else if (number2 == ProtocolFamily.PF_INET6) {
+        return IpV6Packet.newPacket(rawData, offset, length);
+      }
+      return UnknownPacket.newPacket(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalPacket.newPacket(rawData, offset, length, e);
+    }
+  }
+
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, ProtocolFamily... numbers) {
-    if (rawData == null) {
-      throw new NullPointerException("rawData is null.");
-    }
-
     try {
       for (ProtocolFamily num: numbers) {
         if (num == ProtocolFamily.PF_INET) {
