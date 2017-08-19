@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -297,7 +297,7 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
         }
       }
     );
-  };
+  }
 
   /**
    *

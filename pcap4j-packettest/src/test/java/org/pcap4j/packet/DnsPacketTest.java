@@ -205,24 +205,24 @@ public class DnsPacketTest extends AbstractPacketTest {
     answers.add(mbRR);
 
     DnsResourceRecord aCaaRR
-    = new DnsResourceRecord.Builder()
-    .name(
-       new DnsDomainName.Builder()
-         .labels(hogeDomain)
-         .build()
-     )
-    .dataType(DnsResourceRecordType.CAA)
-    .dataClass(DnsClass.ANY)
-    .ttl(321321)
-    .rData(
-       new DnsRDataCaa.Builder()
-         .flag(0)
-         .tag("issue")
-         .value("ca.local")
-         .build()
-     )
-    .correctLengthAtBuild(true)
-    .build();
+      = new DnsResourceRecord.Builder()
+          .name(
+             new DnsDomainName.Builder()
+               .labels(hogeDomain)
+               .build()
+           )
+          .dataType(DnsResourceRecordType.CAA)
+          .dataClass(DnsClass.ANY)
+          .ttl(321321)
+          .rData(
+             new DnsRDataCaa.Builder()
+               .flags(0)
+               .tag("issue")
+               .value("ca.local")
+               .build()
+           )
+          .correctLengthAtBuild(true)
+          .build();
     answers.add(aCaaRR);
 
     DnsResourceRecord mdRR
