@@ -123,6 +123,34 @@ public final class DnsRDataCaa implements DnsRData {
     this.value = builder.value;
   }
 
+  /**
+   * @return true if the Issuer Critical Flag is set to 1; false otherwise.
+   */
+  public boolean isCritical() {
+    return critical;
+  }
+
+  /**
+   * @return reservedFlags (Bit 1 to 7 of the Flags field)
+   */
+  public byte getReservedFlags() {
+    return reservedFlags;
+  }
+
+  /**
+   * @return tag
+   */
+  public String getTag() {
+    return tag;
+  }
+
+  /**
+   * @return value
+   */
+  public String getValue() {
+    return value;
+  }
+
   @Override
   public int length() {
     return 1 + 1 + tag.getBytes().length + value.getBytes().length;
@@ -252,7 +280,7 @@ public final class DnsRDataCaa implements DnsRData {
     }
 
     /**
-     * @param reservedFlags reservedFlags
+     * @param reservedFlags reservedFlags. The value is between 0 and 127 (inclusive).
      * @return this Builder object for method chaining.
      */
     public Builder reservedFlags(byte reservedFlags) {
