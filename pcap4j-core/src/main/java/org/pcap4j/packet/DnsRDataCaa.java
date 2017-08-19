@@ -125,7 +125,7 @@ public final class DnsRDataCaa implements DnsRData {
 
   @Override
   public int length() {
-    return 1 + 1 + tag.length() + value.length();
+    return 1 + 1 + tag.getBytes().length + value.getBytes().length;
   }
 
   @Override
@@ -137,13 +137,15 @@ public final class DnsRDataCaa implements DnsRData {
       rawData[0] |= 0x80;
     }
 
-    rawData[1] = (byte) tag.length();
+    byte[] tagBytes = tag.getBytes();
+    rawData[1] = (byte) tagBytes.length;
     int cursor = 2;
 
-    System.arraycopy(tag.getBytes(), 0, rawData, cursor, tag.length());
-    cursor += tag.length();
+    System.arraycopy(tagBytes, 0, rawData, cursor, tagBytes.length);
+    cursor += tagBytes.length;
 
-    System.arraycopy(value.getBytes(), 0, rawData, cursor, value.length());
+    byte[] valueBytes = value.getBytes();
+    System.arraycopy(valueBytes, 0, rawData, cursor, valueBytes.length);
 
     return rawData;
   }
