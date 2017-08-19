@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* [PR#119](https://github.com/kaitoy/pcap4j/pull/119): Add DNS CAA support (RFC6844).
 
 ### Bug Fixes ###
 
