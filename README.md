@@ -85,7 +85,7 @@ Features
     * ICMPv4 (RFC792) and ICMPv6 (RFC4443, RFC4861)
     * TCP (RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21), UDP, and SCTP (only common header)
     * GTPv1 (only GTP-U and GTP-C header)
-    * DNS (RFC1035 and RFC3596)
+    * DNS (RFC1035, RFC3596, and RFC6844)
 * All built-in packet classes are serializable and thread-safe (practically immutable).
 * You can add a protocol support without modifying Pcap4J library itself.
 * Dumping and reading pcap-formatted files (e.g. a capture file of Wireshark).

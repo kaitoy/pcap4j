@@ -10,6 +10,7 @@ package org.pcap4j.packet.factory;
 import org.pcap4j.packet.DnsRDataA;
 import org.pcap4j.packet.DnsRDataAaaa;
 import org.pcap4j.packet.DnsRDataCName;
+import org.pcap4j.packet.DnsRDataCaa;
 import org.pcap4j.packet.DnsRDataHInfo;
 import org.pcap4j.packet.DnsRDataMInfo;
 import org.pcap4j.packet.DnsRDataMb;
@@ -110,6 +111,8 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
           return DnsRDataTxt.newInstance(rawData, offset, length);
         case 28:
           return DnsRDataAaaa.newInstance(rawData, offset, length);
+        case 257:
+          return DnsRDataCaa.newInstance(rawData, offset, length);
       }
       return UnknownDnsRData.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
@@ -168,6 +171,8 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
           return DnsRDataTxt.newInstance(rawData, offset, length);
         case 28:
           return DnsRDataAaaa.newInstance(rawData, offset, length);
+        case 257:
+          return DnsRDataCaa.newInstance(rawData, offset, length);
       }
 
       switch (Short.toUnsignedInt(number2.value())) {
@@ -205,6 +210,8 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
           return DnsRDataTxt.newInstance(rawData, offset, length);
         case 28:
           return DnsRDataAaaa.newInstance(rawData, offset, length);
+        case 257:
+          return DnsRDataCaa.newInstance(rawData, offset, length);
       }
       return UnknownDnsRData.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
@@ -253,6 +260,8 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
             return DnsRDataTxt.newInstance(rawData, offset, length);
           case 28:
             return DnsRDataAaaa.newInstance(rawData, offset, length);
+          case 257:
+            return DnsRDataCaa.newInstance(rawData, offset, length);
         }
       }
       return UnknownDnsRData.newInstance(rawData, offset, length);

@@ -38,6 +38,15 @@ Future (2.0.0)
     * org.pcap4j.packet.IllegalSctpChunk
     * org.pcap4j.packet.IllegalTcpOption
 
+Release 1.7.2
+=============
+### New Features ###
+* [PR#119](https://github.com/kaitoy/pcap4j/pull/119): Add DNS CAA support (RFC6844).
+
+### Bug Fixes ###
+
+### Other Changes ###
+
 Release 1.7.1 (4-June-2017)
 ===========================
 ### New Features ###

@@ -65,7 +65,7 @@ public class DnsPacketTest extends AbstractPacketTest {
     this.checkingDisabled = false;
     this.rCode = DnsRCode.NOT_AUTH;
     this.qdCount = 1;
-    this.anCount = 5;
+    this.anCount = 6;
     this.nsCount = 6;
     this.arCount = 8;
     this.questions = new ArrayList<DnsQuestion>();
@@ -203,6 +203,28 @@ public class DnsPacketTest extends AbstractPacketTest {
           .correctLengthAtBuild(true)
           .build();
     answers.add(mbRR);
+
+    DnsResourceRecord aCaaRR
+      = new DnsResourceRecord.Builder()
+          .name(
+             new DnsDomainName.Builder()
+               .labels(hogeDomain)
+               .build()
+           )
+          .dataType(DnsResourceRecordType.CAA)
+          .dataClass(DnsClass.ANY)
+          .ttl(321321)
+          .rData(
+             new DnsRDataCaa.Builder()
+               .critical(true)
+               .reservedFlags((byte) 0x12)
+               .tag("issue")
+               .value("ca.local")
+               .build()
+           )
+          .correctLengthAtBuild(true)
+          .build();
+    answers.add(aCaaRR);
 
     DnsResourceRecord mdRR
       = new DnsResourceRecord.Builder()
