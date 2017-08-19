@@ -216,7 +216,8 @@ public class DnsPacketTest extends AbstractPacketTest {
           .ttl(321321)
           .rData(
              new DnsRDataCaa.Builder()
-               .flags(0)
+               .critical(true)
+               .reservedFlags((byte) 0x12)
                .tag("issue")
                .value("ca.local")
                .build()

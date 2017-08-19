@@ -72,7 +72,10 @@
     RDLENGTH: 15
     RDATA:
       CAA RDATA:
-        CAA: 0 issue ca.local
+        Issuer Critical: true
+        Reserved Flags: 0x12
+        Tag: issue
+        Value: ca.local
   Authority:
     NAME: hoge.co.jp
     TYPE: 3 (MD (Mail destination))

@@ -26,6 +26,10 @@ import org.pcap4j.util.ByteArrays;
  *
  * where:
  * Flags: One octet containing bit flags for record. See rfc for details.
+ *
+ *    Bit 0, Issuer Critical Flag
+ *    All other bit positions are reserved for future use.
+ *
  * Tag: The property identifier, a sequence of US-ASCII characters.
  * Value: A sequence of octets representing the property value.
  * </pre>
@@ -41,7 +45,8 @@ public final class DnsRDataCaa implements DnsRData {
   /** A serial UID for serialization. */
   private static final long serialVersionUID = -1015182073420031158L;
 
-  private final int flags;
+  private final boolean critical;
+  private final byte reservedFlags;
   private final String tag;
   private final String value;
 
@@ -68,7 +73,8 @@ public final class DnsRDataCaa implements DnsRData {
       throw new IllegalRawDataException("The data is too short to build a DnsRDataCaa");
     }
 
-    this.flags = ByteArrays.getByte(rawData, offset) & 0xFF;
+    this.critical = (rawData[offset] & 0x80) != 0;
+    this.reservedFlags = (byte) (rawData[offset] & 0x7F);
 
     /* Reading single property entry consisting of a tag-value pair. */
 
@@ -92,13 +98,15 @@ public final class DnsRDataCaa implements DnsRData {
       throw new NullPointerException(sb.toString());
     }
 
-    if (builder.flags > 255 || builder.flags < 0) {
+    if ((builder.reservedFlags & 0x80) != 0) {
       StringBuilder sb = new StringBuilder();
-      sb.append("Invalid value for flags: ").append(builder.flags);
+      sb.append("(builder.reservedFlags & 0x80) must be zero. builder.reservedFlags: ")
+        .append(builder.reservedFlags);
       throw new IllegalArgumentException(sb.toString());
     }
 
-    this.flags = builder.flags;
+    this.critical = builder.critical;
+    this.reservedFlags = builder.reservedFlags;
 
     /* TODO: validate if tag follows rfc rules.
 
@@ -122,16 +130,20 @@ public final class DnsRDataCaa implements DnsRData {
 
   @Override
   public byte[] getRawData() {
-    byte rawData[] = new byte[this.length()];
+    byte rawData[] = new byte[length()];
 
-    rawData[0] = (byte) this.flags;
-    rawData[1] = (byte) this.tag.length();
+    rawData[0] = reservedFlags;
+    if (critical) {
+      rawData[0] |= 0x80;
+    }
+
+    rawData[1] = (byte) tag.length();
     int cursor = 2;
 
-    System.arraycopy(this.tag.getBytes(), 0, rawData, cursor, this.tag.length());
-    cursor += this.tag.length();
+    System.arraycopy(tag.getBytes(), 0, rawData, cursor, tag.length());
+    cursor += tag.length();
 
-    System.arraycopy(this.value.getBytes(), 0, rawData, cursor, this.value.length());
+    System.arraycopy(value.getBytes(), 0, rawData, cursor, value.length());
 
     return rawData;
   }
@@ -146,15 +158,20 @@ public final class DnsRDataCaa implements DnsRData {
     String ls = System.getProperty("line.separator");
 
     StringBuilder sb = new StringBuilder();
-    sb.append(indent).append("CAA RDATA:").append(ls);
-    sb.append(indent);
-    sb.append("  CAA: ");
-    sb.append(this.flags);
-    sb.append(" ");
-    sb.append(this.tag);
-    sb.append(" ");
-    sb.append(this.value);
-    sb.append(ls);
+    sb.append(indent).append("CAA RDATA:")
+      .append(ls)
+      .append(indent).append("  Issuer Critical: ")
+      .append(critical)
+      .append(ls)
+      .append(indent).append("  Reserved Flags: 0x")
+      .append(ByteArrays.toHexString(reservedFlags, ""))
+      .append(ls)
+      .append(indent).append("  Tag: ")
+      .append(tag)
+      .append(ls)
+      .append(indent).append("  Value: ")
+      .append(value)
+      .append(ls);
 
     return sb.toString();
   }
@@ -182,7 +199,10 @@ public final class DnsRDataCaa implements DnsRData {
 
     org.pcap4j.packet.DnsRDataCaa that = (org.pcap4j.packet.DnsRDataCaa) o;
 
-    if (flags != that.flags) {
+    if (critical != that.critical) {
+      return false;
+    }
+    if (reservedFlags != that.reservedFlags) {
       return false;
     }
     if (!tag.equals(that.tag)) {
@@ -193,7 +213,8 @@ public final class DnsRDataCaa implements DnsRData {
 
   @Override
   public int hashCode() {
-    int result = flags;
+    int result = (critical ? 1 : 0);
+    result = 31 * result + (int) reservedFlags;
     result = 31 * result + tag.hashCode();
     result = 31 * result + value.hashCode();
     return result;
@@ -205,33 +226,35 @@ public final class DnsRDataCaa implements DnsRData {
    */
   public static final class Builder {
 
-    private int flags;
+    private boolean critical;
+    private byte reservedFlags;
     private String tag;
     private String value;
 
     public Builder() {}
 
     private Builder(DnsRDataCaa obj) {
-      this.flags = obj.flags;
+      this.critical = obj.critical;
+      this.reservedFlags = obj.reservedFlags;
       this.tag = obj.tag;
       this.value = obj.value;
     }
 
     /**
-     * @param flags flags
+     * @param critical critical
      * @return this Builder object for method chaining.
      */
-    public Builder flags(int flags) {
-      this.flags = flags;
+    public Builder critical(boolean critical) {
+      this.critical = critical;
       return this;
     }
 
     /**
-     * @param flags flags
+     * @param reservedFlags reservedFlags
      * @return this Builder object for method chaining.
      */
-    public Builder flags(byte flags) {
-      this.flags = flags & 0xFF;
+    public Builder reservedFlags(byte reservedFlags) {
+      this.reservedFlags = reservedFlags;
       return this;
     }
 
