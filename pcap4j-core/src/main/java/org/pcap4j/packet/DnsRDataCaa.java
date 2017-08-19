@@ -40,7 +40,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class DnsRDataCaa implements DnsRData {
 
-  private static final int CAA_RR_MIN_LEN = 6 /* Do not accept empty tag values */;
+  private static final int CAA_RR_MIN_LEN = 2;
 
   /** A serial UID for serialization. */
   private static final long serialVersionUID = -1015182073420031158L;
@@ -70,7 +70,16 @@ public final class DnsRDataCaa implements DnsRData {
 
   private DnsRDataCaa(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < CAA_RR_MIN_LEN) {
-      throw new IllegalRawDataException("The data is too short to build a DnsRDataCaa");
+      StringBuilder sb = new StringBuilder(200);
+      sb.append("The data is too short to build a DnsRDataCaa (Min: ")
+        .append(CAA_RR_MIN_LEN)
+        .append(" bytes). data: ")
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
+      throw new IllegalRawDataException(sb.toString());
     }
 
     this.critical = (rawData[offset] & 0x80) != 0;
@@ -82,6 +91,18 @@ public final class DnsRDataCaa implements DnsRData {
     int cursor = 1;
     int tagLen = rawData[offset + cursor] & 0xFF;
     cursor++; /* tag len */
+    if (length < cursor + tagLen) {
+      StringBuilder sb = new StringBuilder(200);
+      sb.append("The data is too short to build a DnsRDataCaa (Tag Length: ")
+        .append(tagLen)
+        .append(" bytes). data: ")
+        .append(ByteArrays.toHexString(rawData, " "))
+        .append(", offset: ")
+        .append(offset)
+        .append(", length: ")
+        .append(length);
+      throw new IllegalRawDataException(sb.toString());
+    }
     this.tag = new String(rawData, offset + cursor, tagLen);
     cursor += tagLen;
 
@@ -90,10 +111,9 @@ public final class DnsRDataCaa implements DnsRData {
   }
 
   private DnsRDataCaa(Builder builder) {
-    if (builder == null || builder.tag == null || builder.value == null) {
+    if (builder.tag == null || builder.value == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.tag: ").append(builder.tag)
+      sb.append(" builder.tag: ").append(builder.tag)
         .append(" builder.value: ").append(builder.value);
       throw new NullPointerException(sb.toString());
     }
@@ -105,20 +125,15 @@ public final class DnsRDataCaa implements DnsRData {
       throw new IllegalArgumentException(sb.toString());
     }
 
+    if (builder.tag.getBytes().length > 255) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("builder.tag.getBytes().length must be less than 256. builder.tag: ")
+        .append(builder.tag);
+      throw new IllegalArgumentException(sb.toString());
+    }
+
     this.critical = builder.critical;
     this.reservedFlags = builder.reservedFlags;
-
-    /* TODO: validate if tag follows rfc rules.
-
-     Tag values MAY contain US-ASCII characters 'a' through 'z', 'A'
-     through 'Z', and the numbers 0 through 9.  Tag values SHOULD NOT
-     contain any other characters.  Matching of tag values is case
-     insensitive.
-
-     Tag values submitted for registration by IANA MUST NOT contain any
-     characters other than the (lowercase) US-ASCII characters 'a'
-     through 'z' and the numbers 0 through 9.
-     */
     this.tag = builder.tag;
     this.value = builder.value;
   }
