@@ -228,8 +228,6 @@ public final class DnsRDataCaa implements DnsRData {
 
   @Override
   public String toString(String indent, byte[] headerRawData) {
-    // TODO Auto-generated method stub.
-    // I don't know where this is called with headerRawData
     return toString(indent);
   }
 
