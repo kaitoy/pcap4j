@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
-import java.sql.Timestamp;
+import java.time.Instant;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -113,7 +113,7 @@ public abstract class AbstractPacketTest {
 
     PcapHandle handle = Pcaps.openDead(getDataLinkType(), 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
-    dumper.dump(p, new Timestamp(0));
+    dumper.dump(p, Instant.ofEpochSecond(0));
     dumper.close();
     handle.close();
 

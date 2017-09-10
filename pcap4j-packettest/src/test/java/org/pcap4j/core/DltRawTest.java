@@ -34,7 +34,7 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.sql.Timestamp;
+import java.time.Instant;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -77,7 +77,7 @@ public class DltRawTest {
                         .toString();
     PcapHandle handle = Pcaps.openDead(DataLinkType.RAW, 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
-    Timestamp ts = new Timestamp(0);
+    Instant ts = Instant.ofEpochSecond(0);
     dumper.dump(ipV4, ts);
     dumper.dump(ipV6, ts);
     dumper.close();

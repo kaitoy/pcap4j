@@ -13,7 +13,9 @@ import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.LazyValue;
 
-import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 
 /**
@@ -30,11 +32,11 @@ public final class PcapPacket extends AbstractPacket {
   private static final long serialVersionUID = -5252229699437537792L;
 
   private final byte[] rawData;
-  private final Timestamp timestamp;
+  private final Instant timestamp;
   private final int originalLength;
   private final LazyValue<Packet> packet;
 
-  PcapPacket(byte[] rawData, DataLinkType dlt, Timestamp timestamp, int originalLength) {
+  PcapPacket(byte[] rawData, DataLinkType dlt, Instant timestamp, int originalLength) {
     // Don't do null checks for performance reason.
     // All code to call this method must not pass nulls.
     //
@@ -57,7 +59,7 @@ public final class PcapPacket extends AbstractPacket {
   /**
    * @return the timestamp of when this packet was captured.
    */
-  public Timestamp getTimestamp() {
+  public Instant getTimestamp() {
     return timestamp;
   }
 
@@ -120,8 +122,10 @@ public final class PcapPacket extends AbstractPacket {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append("Captured at: ").append(timestamp).append(ls)
-      .append("Original length: ").append(originalLength).append(" bytes").append(ls)
+    sb.append("Captured at: ").append(ZonedDateTime.ofInstant(timestamp, ZoneId.systemDefault()))
+      .append(ls)
+      .append("Original length: ").append(originalLength).append(" bytes")
+      .append(ls)
       .append(packet.getValue());
 
     return sb.toString();

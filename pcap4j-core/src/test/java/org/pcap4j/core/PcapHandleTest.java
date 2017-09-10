@@ -96,19 +96,19 @@ public class PcapHandleTest {
   @Test
   public void testGetTimestamp() throws Exception {
     PcapPacket p = ph.getNextPacket();
-    assertEquals(1434220771517L, p.getTimestamp().getTime());
+    assertEquals(1434220771L, p.getTimestamp().getEpochSecond());
   }
 
   @Test
   public void testGetTimestampEx() throws Exception {
     PcapPacket p = ph.getNextPacketEx();
-    assertEquals(1434220771517L, p.getTimestamp().getTime());
+    assertEquals(1434220771L, p.getTimestamp().getEpochSecond());
   }
 
 
   @Test
   public void testGetTimestampLoop() throws Exception {
-    ph.loop(1, packet -> assertEquals(1434220771517L, packet.getTimestamp().getTime()));
+    ph.loop(1, packet -> assertEquals(1434220771L, packet.getTimestamp().getEpochSecond()));
   }
 
   @Test

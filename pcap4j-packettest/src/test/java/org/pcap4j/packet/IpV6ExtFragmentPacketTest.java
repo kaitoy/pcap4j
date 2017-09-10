@@ -24,7 +24,7 @@ import java.io.StringReader;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.sql.Timestamp;
+import java.time.Instant;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -225,7 +225,7 @@ public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
 
     PcapHandle handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
-    Timestamp ts = new Timestamp(0);
+    Instant ts = Instant.ofEpochSecond(0);
     dumper.dump(ep1, ts);
     dumper.dump(ep2, ts);
     dumper.close();

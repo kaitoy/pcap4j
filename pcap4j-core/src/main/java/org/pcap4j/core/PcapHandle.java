@@ -28,7 +28,7 @@ import java.io.EOFException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -1290,7 +1290,7 @@ public final class PcapHandle implements AutoCloseable {
     public void got_packet(
       Pointer args, Pointer header, final Pointer packet
     ) {
-      final Timestamp ts = buildTimestamp(header);
+      final Instant ts = buildTimestamp(header);
       final int len = pcap_pkthdr.getLen(header);
       final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
 
@@ -1305,19 +1305,16 @@ public final class PcapHandle implements AutoCloseable {
 
   }
 
-  private Timestamp buildTimestamp(Pointer header) {
-    Timestamp ts = new Timestamp(pcap_pkthdr.getTvSec(header).longValue() * 1000L);
+  private Instant buildTimestamp(Pointer header) {
+    long epochSecond = pcap_pkthdr.getTvSec(header).longValue();
     switch (timestampPrecision) {
       case MICRO:
-        ts.setNanos(pcap_pkthdr.getTvUsec(header).intValue() * 1000);
-        break;
+        return Instant.ofEpochSecond(epochSecond, pcap_pkthdr.getTvUsec(header).intValue() * 1000);
       case NANO:
-        ts.setNanos(pcap_pkthdr.getTvUsec(header).intValue());
-        break;
+        return Instant.ofEpochSecond(epochSecond, pcap_pkthdr.getTvUsec(header).intValue());
       default:
         throw new AssertionError("Never get here.");
     }
-    return ts;
   }
 
   /**

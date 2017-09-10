@@ -6,16 +6,6 @@
 */
 package org.pcap4j.util;
 
-import static org.junit.Assert.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -38,6 +28,19 @@ import org.pcap4j.packet.namednumber.IcmpV4Code;
 import org.pcap4j.packet.namednumber.IcmpV4Type;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 
 @SuppressWarnings("javadoc")
@@ -123,7 +126,7 @@ public class IpV4HelperTest {
 
     PcapHandle handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
-    Timestamp ts = new Timestamp(0);
+    Instant ts = Instant.ofEpochSecond(0);
     dumper.dump(orgPacket, ts);
 
     List<IpV4Packet> list = new ArrayList<IpV4Packet>();

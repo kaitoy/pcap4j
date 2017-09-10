@@ -17,7 +17,7 @@ import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
@@ -53,7 +53,7 @@ public final class PcapDumper implements AutoCloseable {
    * @throws NotOpenException if this PcapHandle is not open.
    */
   public void dump(Packet packet) throws NotOpenException {
-    dump(packet, new Timestamp(System.currentTimeMillis()));
+    dump(packet, Instant.now());
   }
 
   /**
@@ -71,7 +71,7 @@ public final class PcapDumper implements AutoCloseable {
    * @param timestamp timestamp
    * @throws NotOpenException if this PcapHandle is not open.
    */
-  public void dump(Packet packet, Timestamp timestamp) throws NotOpenException {
+  public void dump(Packet packet, Instant timestamp) throws NotOpenException {
     if (packet == null || timestamp == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("packet: ").append(packet)
@@ -91,7 +91,7 @@ public final class PcapDumper implements AutoCloseable {
    * @throws NotOpenException if this PcapHandle is not open.
    */
   public void dumpRaw(byte[] packet) throws NotOpenException {
-    dumpRaw(packet, new Timestamp(System.currentTimeMillis()));
+    dumpRaw(packet, Instant.now());
   }
 
   /**
@@ -100,7 +100,7 @@ public final class PcapDumper implements AutoCloseable {
    * @param timestamp timestamp
    * @throws NotOpenException if this PcapHandle is not open.
    */
-  public void dumpRaw(byte[] packet, Timestamp timestamp) throws NotOpenException {
+  public void dumpRaw(byte[] packet, Instant timestamp) throws NotOpenException {
     if (packet == null || timestamp == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("packet: ").append(packet)
@@ -115,13 +115,13 @@ public final class PcapDumper implements AutoCloseable {
     pcap_pkthdr header = new pcap_pkthdr();
     header.len = header.caplen = packet.length;
     header.ts = new timeval();
-    header.ts.tv_sec = new NativeLong(timestamp.getTime() / 1000L);
+    header.ts.tv_sec = new NativeLong(timestamp.getEpochSecond());
     switch (timestampPrecision) {
       case MICRO:
-        header.ts.tv_usec = new NativeLong(timestamp.getNanos() / 1000L);
+        header.ts.tv_usec = new NativeLong(timestamp.getNano() / 1000L);
         break;
       case NANO:
-        header.ts.tv_usec = new NativeLong(timestamp.getNanos());
+        header.ts.tv_usec = new NativeLong(timestamp.getNano());
         break;
       default:
         throw new AssertionError("Never get here.");

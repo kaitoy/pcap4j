@@ -56,7 +56,7 @@ Mapping between pcap API and Pcap4j API
   </tr>
   <tr>
     <td rowspan="5">void pcap_dump(u_char *, const struct pcap_pkthdr *, const u_char *)</td>
-    <td>void org.pcap4j.core.PcapDumper.dump(Packet, TimestampPrecision)</td>
+    <td>void org.pcap4j.core.PcapDumper.dump(Packet, Instant)</td>
   </tr>
   <tr>
     <td>void org.pcap4j.core.PcapDumper.dump(PcapPacket)</td>
@@ -68,7 +68,7 @@ Mapping between pcap API and Pcap4j API
     <td>void org.pcap4j.core.PcapDumper.dumpRaw(byte[])</td>
   </tr>
   <tr>
-    <td>void org.pcap4j.core.PcapDumper.dumpRaw(byte[], TimestampPrecision)</td>
+    <td>void org.pcap4j.core.PcapDumper.dumpRaw(byte[], Instant)</td>
   </tr>
   <tr>
     <td>int pcap_dump_flush(pcap_dumper_t *)</td>
