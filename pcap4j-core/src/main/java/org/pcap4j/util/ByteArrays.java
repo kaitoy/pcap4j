@@ -7,8 +7,6 @@
 
 package org.pcap4j.util;
 
-import static java.nio.ByteOrder.*;
-
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -18,6 +16,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.zip.Adler32;
 import java.util.zip.CRC32;
+
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
 /**
  * @author Kaito Yamada

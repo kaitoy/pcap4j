@@ -1,6 +1,6 @@
 package org.pcap4j.sample;
 
-import java.io.IOException;
+import com.sun.jna.Platform;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
@@ -9,9 +9,9 @@ import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.core.PcapStat;
-import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
-import com.sun.jna.Platform;
+
+import java.io.IOException;
 
 @SuppressWarnings("javadoc")
 public class Loop {
@@ -65,14 +65,7 @@ public class Loop {
       );
     }
 
-    PacketListener listener
-      = new PacketListener() {
-          @Override
-          public void gotPacket(Packet packet) {
-            System.out.println(handle.getTimestamp());
-            System.out.println(packet);
-          }
-        };
+    PacketListener listener = packet -> System.out.println(packet);
 
     try {
       handle.loop(COUNT, listener);

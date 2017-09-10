@@ -1,17 +1,5 @@
 package org.pcap4j.core;
 
-import static org.junit.Assert.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.Inet4Address;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.sql.Timestamp;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +24,22 @@ import org.pcap4j.packet.namednumber.IcmpV6Type;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.sql.Timestamp;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 @SuppressWarnings("javadoc")
 public class DltRawTest {
 
@@ -55,7 +59,7 @@ public class DltRawTest {
     File tmpDir = new File(tmpDirPath);
     if (!tmpDir.exists()) {
       if (!tmpDir.mkdirs()) {
-        throw new IOException("Failed to make a test diectory: " + tmpDirPath);
+        throw new IOException("Failed to make a test directory: " + tmpDirPath);
       }
     }
   }
@@ -108,9 +112,9 @@ public class DltRawTest {
                         .toString();
     PcapHandle ph = Pcaps.openOffline(pcapFile);
     StringBuilder sb = new StringBuilder(1000);
-    sb.append(ph.getNextPacket().toString())
+    sb.append(ph.getNextPacket().getPacket().toString())
       .append(System.getProperty("line.separator"))
-      .append(ph.getNextPacket().toString());
+      .append(ph.getNextPacket().getPacket().toString());
     ph.close();
 
     FileReader fr

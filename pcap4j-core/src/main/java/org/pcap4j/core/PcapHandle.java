@@ -7,6 +7,23 @@
 
 package org.pcap4j.core;
 
+import com.sun.jna.Platform;
+import com.sun.jna.Pointer;
+import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.PointerByReference;
+import org.pcap4j.core.BpfProgram.BpfCompileMode;
+import org.pcap4j.core.NativeMappings.PcapErrbuf;
+import org.pcap4j.core.NativeMappings.PcapLibrary;
+import org.pcap4j.core.NativeMappings.bpf_program;
+import org.pcap4j.core.NativeMappings.pcap_pkthdr;
+import org.pcap4j.core.NativeMappings.pcap_stat;
+import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
+import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.namednumber.DataLinkType;
+import org.pcap4j.util.ByteArrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.EOFException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -17,25 +34,6 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import org.pcap4j.core.BpfProgram.BpfCompileMode;
-import org.pcap4j.core.NativeMappings.PcapErrbuf;
-import org.pcap4j.core.NativeMappings.PcapLibrary;
-import org.pcap4j.core.NativeMappings.bpf_program;
-import org.pcap4j.core.NativeMappings.pcap_pkthdr;
-import org.pcap4j.core.NativeMappings.pcap_stat;
-import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
-import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.factory.PacketFactories;
-import org.pcap4j.packet.namednumber.DataLinkType;
-import org.pcap4j.util.ByteArrays;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.sun.jna.Platform;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.PointerByReference;
 
 /**
  * A wrapper class for struct pcap_t.
@@ -50,10 +48,6 @@ public final class PcapHandle implements AutoCloseable {
   private volatile DataLinkType dlt;
   private final TimestampPrecision timestampPrecision;
   private final Pointer handle;
-  private final ThreadLocal<Timestamp> timestamps
-    = new ThreadLocal<Timestamp>();
-  private final ThreadLocal<Integer> originalLengths
-    = new ThreadLocal<Integer>();
   private final ReentrantReadWriteLock handleLock = new ReentrantReadWriteLock(true);
   private static final Object compileLock = new Object();
 
@@ -279,17 +273,6 @@ public final class PcapHandle implements AutoCloseable {
   }
 
   /**
-   * @return the timestamp of the last packet captured by this handle in the current thread.
-   */
-  public Timestamp getTimestamp() { return timestamps.get(); }
-
-  /**
-   * @return the original length of the last packet
-   *         captured by this handle in the current thread.
-   */
-  public Integer getOriginalLength() { return originalLengths.get(); }
-
-  /**
    *
    * @return the dimension of the packet portion (in bytes) that is delivered to the application.
    * @throws NotOpenException if this PcapHandle is not open.
@@ -494,7 +477,7 @@ public final class PcapHandle implements AutoCloseable {
         }
         if (rc < 0) {
           throw new PcapNativeException(
-                      "Error occured in pcap_compile: " + getError(),
+                      "Error occurred in pcap_compile: " + getError(),
                       rc
                     );
         }
@@ -502,7 +485,7 @@ public final class PcapHandle implements AutoCloseable {
         rc = NativeMappings.pcap_setfilter(handle, prog);
         if (rc < 0) {
           throw new PcapNativeException(
-                      "Error occured in pcap_setfilger: " + getError(),
+                      "Error occurred in pcap_setfilter: " + getError(),
                       rc
                     );
         }
@@ -572,9 +555,7 @@ public final class PcapHandle implements AutoCloseable {
    */
   public void setBlockingMode(BlockingMode mode) throws PcapNativeException, NotOpenException {
     if (mode == null) {
-      StringBuilder sb = new StringBuilder();
-      sb.append(" mode: ").append(mode);
-      throw new NullPointerException(sb.toString());
+      throw new NullPointerException("mode must not be null");
     }
     if (!open) {
       throw new NotOpenException();
@@ -635,25 +616,10 @@ public final class PcapHandle implements AutoCloseable {
   }
 
   /**
-   * @return a Packet object created from a captured packet using the packet factory. May be null.
+   * @return a {@link PcapPacket} object that contains captured packet. May be null.
    * @throws NotOpenException if this PcapHandle is not open.
    */
-  public Packet getNextPacket() throws NotOpenException {
-    byte[] ba = getNextRawPacket();
-    if (ba == null) {
-      return null;
-    }
-
-    return PacketFactories.getFactory(Packet.class, DataLinkType.class)
-             .newInstance(ba, 0, ba.length, dlt);
-  }
-
-  /**
-   *
-   * @return a captured packet. May be null.
-   * @throws NotOpenException if this PcapHandle is not open.
-   */
-  public byte[] getNextRawPacket() throws NotOpenException {
+  public PcapPacket getNextPacket() throws NotOpenException {
     if (!open) {
       throw new NotOpenException();
     }
@@ -675,9 +641,12 @@ public final class PcapHandle implements AutoCloseable {
 
     if (packet != null) {
       Pointer headerP = header.getPointer();
-      timestamps.set(buildTimestamp(headerP));
-      originalLengths.set(pcap_pkthdr.getLen(headerP));
-      return packet.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
+      return new PcapPacket(
+               packet.getByteArray(0, pcap_pkthdr.getCaplen(headerP)),
+               dlt,
+               buildTimestamp(headerP),
+               pcap_pkthdr.getLen(headerP)
+             );
     }
     else {
       return null;
@@ -685,24 +654,8 @@ public final class PcapHandle implements AutoCloseable {
   }
 
   /**
-   * @return a Packet object created from a captured packet using the packet factory. Not null.
-   * @throws PcapNativeException if an error occurs in the pcap native library.
-   * @throws EOFException if packets are being read from a pcap file
-   *                      and there are no more packets to read from the file.
-   * @throws TimeoutException if packets are being read from a live capture
-   *                          and the timeout expired.
-   * @throws NotOpenException if this PcapHandle is not open.
-   */
-  public Packet getNextPacketEx()
-  throws PcapNativeException, EOFException, TimeoutException, NotOpenException {
-    byte[] ba = getNextRawPacketEx();
-    return PacketFactories.getFactory(Packet.class, DataLinkType.class)
-             .newInstance(ba, 0, ba.length, dlt);
-  }
-
-  /**
    *
-   * @return a captured packet. Not null.
+   * @return a {@link PcapPacket} object that contains captured packet. Not null.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    * @throws EOFException if packets are being read from a pcap file
    *                      and there are no more packets to read from the file.
@@ -710,7 +663,7 @@ public final class PcapHandle implements AutoCloseable {
    *                          and the timeout expired.
    * @throws NotOpenException if this PcapHandle is not open.
    */
-  public byte[] getNextRawPacketEx()
+  public PcapPacket getNextPacketEx()
   throws PcapNativeException, EOFException, TimeoutException, NotOpenException {
     if (!open) {
       throw new NotOpenException();
@@ -740,18 +693,21 @@ public final class PcapHandle implements AutoCloseable {
                       );
           }
 
-          timestamps.set(buildTimestamp(headerP));
-          originalLengths.set(pcap_pkthdr.getLen(headerP));
-          return dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
+          return new PcapPacket(
+                   dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP)),
+                   dlt,
+                   buildTimestamp(headerP),
+                   pcap_pkthdr.getLen(headerP)
+                 );
         case -1:
           throw new PcapNativeException(
-                  "Error occured in pcap_next_ex(): " + getError(), rc
+                  "Error occurred in pcap_next_ex(): " + getError(), rc
                 );
         case -2:
           throw new EOFException();
         default:
           throw new PcapNativeException(
-                  "Unexpected error occured: " + getError(), rc
+                  "Unexpected error occurred: " + getError(), rc
                 );
       }
     } finally {
@@ -816,68 +772,6 @@ public final class PcapHandle implements AutoCloseable {
         .append(" executor: ").append(executor);
       throw new NullPointerException(sb.toString());
     }
-    doLoop(packetCount, new GotPacketFuncExecutor(listener, dlt, executor));
-  }
-
-  /**
-   * A wrapper method for <code>int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</code>.
-   * When a packet is captured, <code>listener.gotPacket(byte[])</code> is called in
-   * the thread which called the <code>loop()</code>. And then this PcapHandle waits for
-   * the thread to return from the <code>gotPacket()</code> before it retrieves the next
-   * packet from the pcap buffer.
-   *
-   * @param packetCount the number of packets to capture. -1 is equivalent to infinity.
-   *                    0 may result in different behaviors between platforms
-   *                    and pcap library versions.
-   * @param listener listener
-   * @throws PcapNativeException if an error occurs in the pcap native library.
-   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
-   * @throws NotOpenException if this PcapHandle is not open.
-   */
-  public void loop(
-    int packetCount, RawPacketListener listener
-  ) throws PcapNativeException, InterruptedException, NotOpenException {
-    loop(
-      packetCount,
-      listener,
-      SimpleExecutor.getInstance()
-    );
-  }
-
-  /**
-   * A wrapper method for <code>int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</code>.
-   * When a packet is captured, the
-   * {@link java.util.concurrent.Executor#execute(Runnable) executor.execute()} is called
-   * with a Runnable object in the thread which called the <code>loop()</code>.
-   * Then, the Runnable object calls <code>listener.gotPacket(byte[])</code>.
-   * If <code>listener.gotPacket(byte[])</code> is expected to take a long time to
-   * process a packet, this method should be used with a proper executor instead of
-   * {@link #loop(int, RawPacketListener)} in order to prevent the pcap buffer from overflowing.
-   *
-   * @param packetCount the number of packets to capture. -1 is equivalent to infinity.
-   *                    0 may result in different behaviors between platforms
-   *                    and pcap library versions.
-   * @param listener listener
-   * @param executor executor
-   * @throws PcapNativeException if an error occurs in the pcap native library.
-   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
-   * @throws NotOpenException if this PcapHandle is not open.
-   */
-  public void loop(
-    int packetCount, RawPacketListener listener, Executor executor
-  ) throws PcapNativeException, InterruptedException, NotOpenException {
-    if (listener == null || executor == null) {
-      StringBuilder sb = new StringBuilder();
-      sb.append("listener: ").append(listener)
-        .append(" executor: ").append(executor);
-      throw new NullPointerException(sb.toString());
-    }
-    doLoop(packetCount, new GotRawPacketFuncExecutor(listener, executor));
-  }
-
-  private void doLoop(
-    int packetCount, NativeMappings.pcap_handler handler
-  ) throws PcapNativeException, InterruptedException, NotOpenException {
 
     if (!open) {
       throw new NotOpenException();
@@ -895,7 +789,7 @@ public final class PcapHandle implements AutoCloseable {
       int rc = NativeMappings.pcap_loop(
                  handle,
                  packetCount,
-                 handler,
+                 new GotPacketFuncExecutor(listener, dlt, executor),
                  null
                );
       switch (rc) {
@@ -904,14 +798,14 @@ public final class PcapHandle implements AutoCloseable {
           break;
         case -1:
           throw new PcapNativeException(
-                  "Error occured: " + getError(), rc
+                  "Error occurred: " + getError(), rc
                 );
         case -2:
           logger.info("Broken.");
           throw new InterruptedException();
         default:
           throw new PcapNativeException(
-                  "Unexpected error occured: " + getError(), rc
+                  "Unexpected error occurred: " + getError(), rc
                 );
       }
     } finally {
@@ -965,61 +859,7 @@ public final class PcapHandle implements AutoCloseable {
         .append(" executor: ").append(executor);
       throw new NullPointerException(sb.toString());
     }
-    return doDispatch(packetCount, new GotPacketFuncExecutor(listener, dlt, executor));
-  }
 
-  /**
-   *
-   * @param packetCount the maximum number of packets to process.
-   *                    If -1 is specified, all the packets in the pcap buffer or pcap file
-   *                    will be processed before returning.
-   *                    0 may result in different behaviors between platforms
-   *                    and pcap library versions.
-   * @param listener listener
-   * @return the number of captured packets.
-   * @throws PcapNativeException if an error occurs in the pcap native library.
-   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
-   * @throws NotOpenException if this PcapHandle is not open.
-   */
-  public int dispatch(
-    int packetCount, RawPacketListener listener
-  ) throws PcapNativeException, InterruptedException, NotOpenException {
-    return dispatch(
-             packetCount,
-             listener,
-             SimpleExecutor.getInstance()
-           );
-  }
-
-  /**
-   *
-   * @param packetCount the maximum number of packets to process.
-   *                    If -1 is specified, all the packets in the pcap buffer or pcap file
-   *                    will be processed before returning.
-   *                    0 may result in different behaviors between platforms
-   *                    and pcap library versions.
-   * @param listener listener
-   * @param executor executor
-   * @return the number of captured packets.
-   * @throws PcapNativeException if an error occurs in the pcap native library.
-   * @throws InterruptedException if the loop terminated due to a call to {@link #breakLoop()}.
-   * @throws NotOpenException if this PcapHandle is not open.
-   */
-  public int dispatch(
-    int packetCount, RawPacketListener listener, Executor executor
-  ) throws PcapNativeException, InterruptedException, NotOpenException {
-    if (listener == null || executor == null) {
-      StringBuilder sb = new StringBuilder();
-      sb.append("listener: ").append(listener)
-        .append(" executor: ").append(executor);
-      throw new NullPointerException(sb.toString());
-    }
-    return doDispatch(packetCount, new GotRawPacketFuncExecutor(listener, executor));
-  }
-
-  private int doDispatch(
-    int packetCount, NativeMappings.pcap_handler handler
-  ) throws PcapNativeException, InterruptedException, NotOpenException {
     if (!open) {
       throw new NotOpenException();
     }
@@ -1037,14 +877,14 @@ public final class PcapHandle implements AutoCloseable {
       rc = NativeMappings.pcap_dispatch(
              handle,
              packetCount,
-             handler,
+             new GotPacketFuncExecutor(listener, dlt, executor),
              null
            );
       if (rc < 0) {
         switch (rc) {
           case -1:
             throw new PcapNativeException(
-                    "Error occured: " + getError(),
+                    "Error occurred: " + getError(),
                     rc
                   );
           case -2:
@@ -1052,7 +892,7 @@ public final class PcapHandle implements AutoCloseable {
             throw new InterruptedException();
           default:
             throw new PcapNativeException(
-                    "Unexpected error occured: " + getError(),
+                    "Unexpected error occurred: " + getError(),
                     rc
                   );
         }
@@ -1142,14 +982,14 @@ public final class PcapHandle implements AutoCloseable {
           break;
         case -1:
           throw new PcapNativeException(
-                  "Error occured: " + getError(), rc
+                  "Error occurred: " + getError(), rc
                 );
         case -2:
           logger.info("Broken.");
           throw new InterruptedException();
         default:
           throw new PcapNativeException(
-                  "Unexpected error occured: " + getError(), rc
+                  "Unexpected error occurred: " + getError(), rc
                 );
       }
     } finally {
@@ -1239,7 +1079,7 @@ public final class PcapHandle implements AutoCloseable {
       int rc = NativeMappings.pcap_sendpacket(handle, bytes, len);
       if (rc < 0) {
         throw new PcapNativeException(
-                "Error occured in pcap_sendpacket(): " + getError(),
+                "Error occurred in pcap_sendpacket(): " + getError(),
                 rc
               );
       }
@@ -1456,55 +1296,7 @@ public final class PcapHandle implements AutoCloseable {
 
       try {
         executor.execute(
-          new Runnable() {
-            @Override
-            public void run() {
-              timestamps.set(ts);
-              originalLengths.set(len);
-              listener.gotPacket(
-                PacketFactories.getFactory(Packet.class, DataLinkType.class)
-                  .newInstance(ba, 0, ba.length, dlt)
-              );
-            }
-          }
-        );
-      } catch (Throwable e) {
-        logger.error("The executor has thrown an exception.", e);
-      }
-    }
-
-  }
-
-  private final class GotRawPacketFuncExecutor implements NativeMappings.pcap_handler {
-
-    private final RawPacketListener listener;
-    private final Executor executor;
-
-    public GotRawPacketFuncExecutor(
-      RawPacketListener listener, Executor executor
-    ) {
-      this.listener = listener;
-      this.executor = executor;
-    }
-
-    @Override
-    public void got_packet(
-      Pointer args, Pointer header, final Pointer packet
-    ) {
-      final Timestamp ts = buildTimestamp(header);
-      final int len = pcap_pkthdr.getLen(header);
-      final byte[] ba = packet.getByteArray(0, pcap_pkthdr.getCaplen(header));
-
-      try {
-        executor.execute(
-          new Runnable() {
-            @Override
-            public void run() {
-              timestamps.set(ts);
-              originalLengths.set(len);
-              listener.gotPacket(ba);
-            }
-          }
+          () -> listener.gotPacket(new PcapPacket(ba, dlt, ts, len))
         );
       } catch (Throwable e) {
         logger.error("The executor has thrown an exception.", e);

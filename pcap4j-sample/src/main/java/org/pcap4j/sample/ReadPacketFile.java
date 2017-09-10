@@ -1,13 +1,14 @@
 package org.pcap4j.sample;
 
-import java.io.EOFException;
-import java.util.concurrent.TimeoutException;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapHandle.TimestampPrecision;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.Packet;
+
+import java.io.EOFException;
+import java.util.concurrent.TimeoutException;
 
 @SuppressWarnings("javadoc")
 public class ReadPacketFile {
@@ -32,7 +33,6 @@ public class ReadPacketFile {
     for (int i = 0; i < COUNT; i++) {
       try {
         Packet packet = handle.getNextPacketEx();
-        System.out.println(handle.getTimestamp());
         System.out.println(packet);
       } catch (TimeoutException e) {
       } catch (EOFException e) {

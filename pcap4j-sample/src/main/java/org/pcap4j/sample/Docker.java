@@ -1,5 +1,6 @@
 package org.pcap4j.sample;
 
+import com.sun.jna.Platform;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapAddress;
@@ -12,7 +13,6 @@ import org.pcap4j.core.PcapStat;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.IcmpV4EchoPacket;
 import org.pcap4j.packet.Packet;
-import com.sun.jna.Platform;
 
 @SuppressWarnings("javadoc")
 public class Docker {
@@ -108,7 +108,6 @@ public class Docker {
         continue;
       }
       else {
-        System.out.println(handle.getTimestamp());
         System.out.println(packet);
         num++;
         if (num >= COUNT) {

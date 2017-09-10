@@ -7,12 +7,12 @@
 
 package org.pcap4j.packet;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.LazyValue;
 import org.pcap4j.util.LazyValue.BuildValueCommand;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Abstract immutable packet class.

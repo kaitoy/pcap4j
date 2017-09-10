@@ -55,8 +55,11 @@ Mapping between pcap API and Pcap4j API
     <td>PcapDumper org.pcap4j.core.PcapHandle.dumpOpen(String)</td>
   </tr>
   <tr>
-    <td rowspan="4">void pcap_dump(u_char *, const struct pcap_pkthdr *, const u_char *)</td>
+    <td rowspan="5">void pcap_dump(u_char *, const struct pcap_pkthdr *, const u_char *)</td>
     <td>void org.pcap4j.core.PcapDumper.dump(Packet, TimestampPrecision)</td>
+  </tr>
+  <tr>
+    <td>void org.pcap4j.core.PcapDumper.dump(PcapPacket)</td>
   </tr>
   <tr>
     <td>void org.pcap4j.core.PcapDumper.dump(Packet)</td>
@@ -80,31 +83,19 @@ Mapping between pcap API and Pcap4j API
     <td>void org.pcap4j.core.PcapDumper.close()</td>
   </tr>
   <tr>
-    <td rowspan="2">u_char *pcap_next(pcap_t *, struct pcap_pkthdr *)</td>
-    <td>Packet org.pcap4j.core.PcapHandle.getNextPacket()</td>
+    <td>u_char *pcap_next(pcap_t *, struct pcap_pkthdr *)</td>
+    <td>PcapPacket org.pcap4j.core.PcapHandle.getNextPacket()</td>
   </tr>
   <tr>
-    <td>byte[] org.pcap4j.core.PcapHandle.getNextRawPacket()</td>
+    <td>int pcap_next_ex(pcap_t *, struct pcap_pkthdr **, const u_char **)</td>
+    <td>PcapPacket org.pcap4j.core.PcapHandle.getNextPacketEx()</td>
   </tr>
   <tr>
-    <td rowspan="2">int pcap_next_ex(pcap_t *, struct pcap_pkthdr **, const u_char **)</td>
-    <td>Packet org.pcap4j.core.PcapHandle.getNextPacketEx()</td>
-  </tr>
-  <tr>
-    <td>byte[] org.pcap4j.core.PcapHandle.getNextRawPacketEx()</td>
-  </tr>
-  <tr>
-    <td rowspan="5">int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</td>
+    <td rowspan="3">int pcap_loop(pcap_t *, int, pcap_handler, u_char *)</td>
     <td>void org.pcap4j.core.PcapHandle.loop(int, PacketListener)</td>
   </tr>
   <tr>
     <td>void org.pcap4j.core.PcapHandle.loop(int, PacketListener, Executor)</td>
-  </tr>
-  <tr>
-    <td>void org.pcap4j.core.PcapHandle.loop(int, RawPacketListener)</td>
-  </tr>
-  <tr>
-    <td>void org.pcap4j.core.PcapHandle.loop(int, RawPacketListener, Executor)</td>
   </tr>
   <tr>
     <td>void org.pcap4j.core.PcapHandle.loop(int, PcapDumper)</td>
@@ -114,17 +105,11 @@ Mapping between pcap API and Pcap4j API
     <td>void org.pcap4j.core.PcapHandle.breakLoop()</td>
   </tr>
   <tr>
-    <td rowspan="4">int pcap_dispatch(pcap_t *, int, pcap_handler, u_char *)</td>
+    <td rowspan="2">int pcap_dispatch(pcap_t *, int, pcap_handler, u_char *)</td>
     <td>int org.pcap4j.core.PcapHandle.dispatch(int, PacketListener)</td>
   </tr>
   <tr>
     <td>int org.pcap4j.core.PcapHandle.dispatch(int, PacketListener, Executor)</td>
-  </tr>
-  <tr>
-    <td>int org.pcap4j.core.PcapHandle.dispatch(int, RawPacketListener)</td>
-  </tr>
-  <tr>
-    <td>int org.pcap4j.core.PcapHandle.dispatch(int, RawPacketListener, Executor)</td>
   </tr>
   <tr>
     <td>int pcap_compile(pcap_t *, struct bpf_program *, char *, int, bpf_u_int32)</td>

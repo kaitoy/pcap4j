@@ -1,9 +1,5 @@
 package org.pcap4j.sample;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
-
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
@@ -12,6 +8,10 @@ import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 @SuppressWarnings("javadoc")
 public class GetNextPacketEx {
@@ -65,7 +65,6 @@ public class GetNextPacketEx {
       while (true) {
         try {
           Packet packet = handle.getNextPacketEx();
-          System.out.println(handle.getTimestamp());
           System.out.println(packet);
           num++;
           if (num >= COUNT) {

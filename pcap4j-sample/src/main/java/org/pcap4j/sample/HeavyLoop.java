@@ -1,16 +1,16 @@
 package org.pcap4j.sample;
 
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
-import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
+
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @SuppressWarnings("javadoc")
 public class HeavyLoop {
@@ -36,19 +36,14 @@ public class HeavyLoop {
       = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
 
     PacketListener listener
-      = new PacketListener() {
-          @Override
-          public void gotPacket(Packet packet) {
-            System.out.println(handle.getTimestamp());
+      = packet -> {
+          System.out.println("start a heavy task");
+          try {
+            Thread.sleep(5000);
+          } catch (InterruptedException e) {
 
-            System.out.println("start a heavy task");
-            try {
-              Thread.sleep(5000);
-            } catch (InterruptedException e) {
-
-            }
-            System.out.println("done");
           }
+          System.out.println("done");
         };
 
     try {

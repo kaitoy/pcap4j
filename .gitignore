@@ -12,8 +12,11 @@ pcap4j-test-coverage/src/
 build/
 .gradle/
 bin/
-.idea
-**/*.iml
 gradle-app.setting
 .gradletasknamecache
+
+# IntelliJ IDEA
+**/out/
+.idea
+**/*.iml
 

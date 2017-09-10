@@ -1,7 +1,6 @@
 package org.pcap4j.sample;
 
-import java.io.IOException;
-
+import com.sun.jna.Platform;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapAddress;
@@ -15,7 +14,7 @@ import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
 
-import com.sun.jna.Platform;
+import java.io.IOException;
 
 @SuppressWarnings("javadoc")
 public class GetNextPacket {
@@ -111,7 +110,6 @@ public class GetNextPacket {
           continue;
         }
         else {
-          System.out.println(handle.getTimestamp());
           System.out.println(packet);
           num++;
           if (num >= COUNT) {

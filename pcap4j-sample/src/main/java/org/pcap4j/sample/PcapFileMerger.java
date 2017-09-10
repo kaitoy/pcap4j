@@ -4,8 +4,8 @@ import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapDumper;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
+import org.pcap4j.core.PcapPacket;
 import org.pcap4j.core.Pcaps;
-import org.pcap4j.packet.Packet;
 
 @SuppressWarnings("javadoc")
 public class PcapFileMerger {
@@ -23,9 +23,9 @@ public class PcapFileMerger {
         dumper = handle.dumpOpen(PcapFileMerger.class.getSimpleName() + ".pcap");
       }
 
-      Packet packet;
+      PcapPacket packet;
       while ((packet = handle.getNextPacket()) != null) {
-        dumper.dump(packet, handle.getTimestamp());
+        dumper.dump(packet);
       }
 
       handle.close();

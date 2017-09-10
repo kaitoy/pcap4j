@@ -1,14 +1,5 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.*;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.StringReader;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.sql.Timestamp;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,6 +16,19 @@ import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.StringReader;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.sql.Timestamp;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @SuppressWarnings("javadoc")
 public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
@@ -228,8 +232,8 @@ public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
     handle.close();
 
     PcapHandle reader = Pcaps.openOffline(dumpFile);
-    assertEquals(ep1, reader.getNextPacket());
-    assertEquals(ep2, reader.getNextPacket());
+    assertEquals(ep1, reader.getNextPacket().getPacket());
+    assertEquals(ep2, reader.getNextPacket().getPacket());
     reader.close();
 
     FileInputStream in1

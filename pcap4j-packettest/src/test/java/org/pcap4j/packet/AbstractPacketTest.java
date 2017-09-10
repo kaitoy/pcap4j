@@ -1,6 +1,15 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.pcap4j.core.PcapDumper;
+import org.pcap4j.core.PcapHandle;
+import org.pcap4j.core.Pcaps;
+import org.pcap4j.packet.namednumber.DataLinkType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,15 +20,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
 import java.sql.Timestamp;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.pcap4j.core.PcapDumper;
-import org.pcap4j.core.PcapHandle;
-import org.pcap4j.core.Pcaps;
-import org.pcap4j.packet.namednumber.DataLinkType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @SuppressWarnings("javadoc")
 public abstract class AbstractPacketTest {
@@ -114,7 +118,7 @@ public abstract class AbstractPacketTest {
     handle.close();
 
     PcapHandle reader = Pcaps.openOffline(dumpFile);
-    assertEquals(p, reader.getNextPacket());
+    assertEquals(p, reader.getNextPacket().getPacket());
     reader.close();
 
     FileInputStream in1

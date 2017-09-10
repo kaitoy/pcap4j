@@ -1,17 +1,8 @@
 package org.pcap4j.core;
 
-import static org.junit.Assert.*;
-
-import java.io.EOFException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
-
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,6 +15,20 @@ import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.LinuxSllPacketType;
 import org.pcap4j.util.ByteArrays;
+
+import java.io.EOFException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 @SuppressWarnings("javadoc")
 public class PcapHandleTest {
@@ -90,107 +95,41 @@ public class PcapHandleTest {
 
   @Test
   public void testGetTimestamp() throws Exception {
-    assertNull(ph.getTimestamp());
-    ph.getNextPacket();
-    assertEquals(1434220771517L, ph.getTimestamp().getTime());
+    PcapPacket p = ph.getNextPacket();
+    assertEquals(1434220771517L, p.getTimestamp().getTime());
   }
 
   @Test
   public void testGetTimestampEx() throws Exception {
-    assertNull(ph.getTimestamp());
-    ph.getNextPacketEx();
-    assertEquals(1434220771517L, ph.getTimestamp().getTime());
+    PcapPacket p = ph.getNextPacketEx();
+    assertEquals(1434220771517L, p.getTimestamp().getTime());
   }
 
-  @Test
-  public void testGetTimestampRaw() throws Exception {
-    assertNull(ph.getTimestamp());
-    ph.getNextRawPacket();
-    assertEquals(1434220771517L, ph.getTimestamp().getTime());
-  }
 
   @Test
   public void testGetTimestampLoop() throws Exception {
-    assertNull(ph.getTimestamp());
-    ph.loop(1, new PacketListener() {
-      @Override
-      public void gotPacket(Packet packet) {
-        assertEquals(1434220771517L, ph.getTimestamp().getTime());
-      }
-    });
-  }
-
-  @Test
-  public void testGetTimestampLoopRaw() throws Exception {
-    assertNull(ph.getTimestamp());
-    ph.loop(1, new RawPacketListener() {
-      @Override
-      public void gotPacket(byte[] packet) {
-        assertEquals(1434220771517L, ph.getTimestamp().getTime());
-      }
-    });
-  }
-
-  @Test
-  public void testGetTimestampRawEx() throws Exception {
-    assertNull(ph.getTimestamp());
-    ph.getNextRawPacketEx();
-    assertEquals(1434220771517L, ph.getTimestamp().getTime());
+    ph.loop(1, packet -> assertEquals(1434220771517L, packet.getTimestamp().getTime()));
   }
 
   @Test
   public void testGetOriginalLength() throws Exception {
-    assertNull(ph.getOriginalLength());
-    Packet packet = ph.getNextPacket();
-    assertEquals(new Integer(74), ph.getOriginalLength());
-    assertEquals(packet.length(), ph.getOriginalLength().intValue());
+    PcapPacket packet = ph.getNextPacket();
+    assertEquals(74, packet.getOriginalLength());
+    assertEquals(packet.length(), packet.getOriginalLength());
   }
 
   @Test
   public void testGetOriginalLengthEx() throws Exception {
-    assertNull(ph.getOriginalLength());
-    Packet packet = ph.getNextPacketEx();
-    assertEquals(new Integer(74), ph.getOriginalLength());
-    assertEquals(packet.length(), ph.getOriginalLength().intValue());
-  }
-
-  @Test
-  public void testGetOriginalLengthRaw() throws Exception {
-    assertNull(ph.getOriginalLength());
-    byte[] packet = ph.getNextRawPacket();
-    assertEquals(new Integer(74), ph.getOriginalLength());
-    assertEquals(packet.length, ph.getOriginalLength().intValue());
-  }
-
-  @Test
-  public void testGetOriginalLengthRawEx() throws Exception {
-    assertNull(ph.getOriginalLength());
-    byte[] packet = ph.getNextRawPacketEx();
-    assertEquals(new Integer(74), ph.getOriginalLength());
-    assertEquals(packet.length, ph.getOriginalLength().intValue());
+    PcapPacket packet = ph.getNextPacketEx();
+    assertEquals(74, packet.getOriginalLength());
+    assertEquals(packet.length(), packet.getOriginalLength());
   }
 
   @Test
   public void testGetOriginalLengthLoop() throws Exception {
-    assertNull(ph.getOriginalLength());
-    ph.loop(1, new PacketListener() {
-      @Override
-      public void gotPacket(Packet packet) {
-        assertEquals(new Integer(74), ph.getOriginalLength());
-        assertEquals(packet.length(), ph.getOriginalLength().intValue());
-      }
-    });
-  }
-
-  @Test
-  public void testGetOriginalLengthLoopRaw() throws Exception {
-    assertNull(ph.getOriginalLength());
-    ph.loop(1, new RawPacketListener() {
-      @Override
-      public void gotPacket(byte[] packet) {
-        assertEquals(new Integer(74), ph.getOriginalLength());
-        assertEquals(packet.length, ph.getOriginalLength().intValue());
-      }
+    ph.loop(1, packet -> {
+      assertEquals(74, packet.getOriginalLength());
+      assertEquals(packet.length(), packet.getOriginalLength());
     });
   }
 
@@ -207,12 +146,7 @@ public class PcapHandleTest {
       Process process = pb.start();
 
       final List<Packet> packets = new ArrayList<Packet>();
-      handle.loop(3, new PacketListener() {
-        @Override
-        public void gotPacket(Packet packet) {
-          packets.add(packet);
-        }
-      });
+      handle.loop(3, packet -> packets.add(packet));
       handle.close();
       process.destroy();
 
@@ -251,12 +185,7 @@ public class PcapHandleTest {
       Process process = pb.start();
 
       final List<Packet> packets = new ArrayList<Packet>();
-      handle.loop(3, new PacketListener() {
-        @Override
-        public void gotPacket(Packet packet) {
-          packets.add(packet);
-        }
-      });
+      handle.loop(3, packet -> packets.add(packet));
       handle.close();
       process.destroy();
 
@@ -349,41 +278,27 @@ public class PcapHandleTest {
       final byte[] result = new byte[sendingRawPacket.length];
       final FutureTask<byte[]> future
         = new FutureTask<byte[]>(
-            new Runnable() {
-
-              @Override
-              public void run() {}
-
-            },
+            () -> {},
             result
           );
       pool.execute(
-        new Runnable() {
-
-          @Override
-          public void run() {
-            try {
-              handle.loop(
-                -1,
-                new RawPacketListener() {
-
-                  @Override
-                  public void gotPacket(byte[] p) {
-                    if (p[0] == 1 && p[1] == 2 && p[2] == 3 && p[3] == 4 && p[4] == 5) {
-                      assertEquals(result.length, p.length);
-                      System.arraycopy(p, 0, result, 0, result.length);
-                      future.run();
-                    }
-                  }
-
+        () -> {
+          try {
+            handle.loop(
+              -1,
+              packet -> {
+                byte[] p = packet.getRawData();
+                if (p[0] == 1 && p[1] == 2 && p[2] == 3 && p[3] == 4 && p[4] == 5) {
+                  assertEquals(result.length, p.length);
+                  System.arraycopy(p, 0, result, 0, result.length);
+                  future.run();
                 }
-              );
-            } catch (PcapNativeException e) {
-            } catch (InterruptedException e) {
-            } catch (NotOpenException e) {
-            }
+              }
+            );
+          } catch (PcapNativeException e) {
+          } catch (InterruptedException e) {
+          } catch (NotOpenException e) {
           }
-
         }
       );
 
@@ -413,41 +328,27 @@ public class PcapHandleTest {
       final byte[] result = new byte[50];
       final FutureTask<byte[]> future
         = new FutureTask<byte[]>(
-            new Runnable() {
-
-              @Override
-              public void run() {}
-
-            },
+            () -> {},
             result
           );
       pool.execute(
-        new Runnable() {
-
-          @Override
-          public void run() {
-            try {
-              handle.loop(
-                -1,
-                new RawPacketListener() {
-
-                  @Override
-                  public void gotPacket(byte[] p) {
-                    if (p[0] == 1 && p[1] == 2 && p[2] == 3 && p[3] == 4 && p[4] == 5) {
-                      assertEquals(result.length, p.length);
-                      System.arraycopy(p, 0, result, 0, result.length);
-                      future.run();
-                    }
-                  }
-
+        () -> {
+          try {
+            handle.loop(
+              -1,
+              packet -> {
+                byte[] p = packet.getRawData();
+                if (p[0] == 1 && p[1] == 2 && p[2] == 3 && p[3] == 4 && p[4] == 5) {
+                  Assert.assertEquals(result.length, p.length);
+                  System.arraycopy(p, 0, result, 0, result.length);
+                  future.run();
                 }
-              );
-            } catch (PcapNativeException e) {
-            } catch (InterruptedException e) {
-            } catch (NotOpenException e) {
-            }
+              }
+            );
+          } catch (PcapNativeException e) {
+          } catch (InterruptedException e) {
+          } catch (NotOpenException e) {
           }
-
         }
       );
 

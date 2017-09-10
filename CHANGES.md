@@ -18,6 +18,18 @@ Future (2.0.0)
     * org.pcap4j.packet.IllegalRadiotapData
     * org.pcap4j.packet.IllegalSctpChunk
     * org.pcap4j.packet.IllegalTcpOption
+* Improve APIs to get a packet, its timestamp, and its original length.
+    * Add PcapPacket class, which implements Packet and holds the raw data, the timestamp, and the original length of a captured packet.
+    * Remove getTimestamp() and getOriginalLength() from PcapHandle.
+    * getNextPacket() and getNextPacketEx() of PcapHandle returns PcapPacket instead of Packet.
+    * PacketListener#gotPacket() receives PcapPacket instead of Packet.
+    * Add PcapDumper#dump(PcapPacket).
+    * remove raw packet APIs:
+        * PcapHandle#getNextRawPacket
+        * PcapHandle#getNextRawPacketEx
+        * PcapHandle#loop with RawPacketListener
+        * PcapHandle#dispatch with RawPacketListener
+        * RawPacketListener
 
 ### Bug Fixes ###
 

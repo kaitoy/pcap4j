@@ -1,10 +1,5 @@
 package org.pcap4j.sample;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
@@ -22,6 +17,12 @@ import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @SuppressWarnings("javadoc")
 public class SendArpRequest {
@@ -86,17 +87,14 @@ public class SendArpRequest {
       );
 
       PacketListener listener
-        = new PacketListener() {
-            @Override
-            public void gotPacket(Packet packet) {
-              if (packet.contains(ArpPacket.class)) {
-                ArpPacket arp = packet.get(ArpPacket.class);
-                if (arp.getHeader().getOperation().equals(ArpOperation.REPLY)) {
-                  SendArpRequest.resolvedAddr = arp.getHeader().getSrcHardwareAddr();
-                }
+        = packet -> {
+            if (packet.contains(ArpPacket.class)) {
+              ArpPacket arp = packet.get(ArpPacket.class);
+              if (arp.getHeader().getOperation().equals(ArpOperation.REPLY)) {
+                SendArpRequest.resolvedAddr = arp.getHeader().getSrcHardwareAddr();
               }
-              System.out.println(packet);
             }
+            System.out.println(packet);
           };
 
       Task t = new Task(handle, listener);

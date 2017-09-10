@@ -1,10 +1,5 @@
 package org.pcap4j.core;
 
-import static org.junit.Assert.*;
-import java.io.File;
-import java.net.InetAddress;
-import java.sql.Timestamp;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,6 +18,16 @@ import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.net.InetAddress;
+import java.sql.Timestamp;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("javadoc")
 public class PcapsTest {
@@ -97,9 +102,9 @@ public class PcapsTest {
             + "PcapsTest.testOpenOfflineWithTimestampPrecision.pcap",
           TimestampPrecision.NANO
         );
-    phNano.getNextRawPacket();
-    assertEquals(1434220771517L, phNano.getTimestamp().getTime());
-    assertEquals(517995677, phNano.getTimestamp().getNanos());
+    PcapPacket packet = phNano.getNextPacket();
+    assertEquals(1434220771517L, packet.getTimestamp().getTime());
+    assertEquals(517995677, packet.getTimestamp().getNanos());
     phNano.close();
 
     PcapHandle phMicro
@@ -108,11 +113,11 @@ public class PcapsTest {
             + "PcapsTest.testOpenOfflineWithTimestampPrecision.pcap",
           TimestampPrecision.MICRO
         );
-    phMicro.getNextRawPacket();
-    System.out.println(phMicro.getTimestamp().getTime());
-    System.out.println(phMicro.getTimestamp().getNanos());
-    assertEquals(1434220771517L, phMicro.getTimestamp().getTime());
-    assertEquals(517995000, phMicro.getTimestamp().getNanos());
+    packet = phMicro.getNextPacket();
+    System.out.println(packet.getTimestamp().getTime());
+    System.out.println(packet.getTimestamp().getNanos());
+    assertEquals(1434220771517L, packet.getTimestamp().getTime());
+    assertEquals(517995000, packet.getTimestamp().getNanos());
     phMicro.close();
   }
 
@@ -173,9 +178,9 @@ public class PcapsTest {
     phdMicro.close();
     PcapHandle phNano1
       = Pcaps.openOffline(tmpFile1,TimestampPrecision.NANO);
-    phNano1.getNextRawPacket();
-    assertEquals(1234567890123L, phNano1.getTimestamp().getTime());
-    assertEquals(123456000, phNano1.getTimestamp().getNanos());
+    PcapPacket ppacket = phNano1.getNextPacket();
+    assertEquals(1234567890123L, ppacket.getTimestamp().getTime());
+    assertEquals(123456000, ppacket.getTimestamp().getNanos());
     phNano1.close();
 
     PcapHandle phdNano = Pcaps.openDead(
@@ -191,9 +196,9 @@ public class PcapsTest {
     phdNano.close();
     PcapHandle phNano2
       = Pcaps.openOffline(tmpFile2,TimestampPrecision.NANO);
-    phNano2.getNextRawPacket();
-    assertEquals(1234567890123L, phNano2.getTimestamp().getTime());
-    assertEquals(123456789, phNano2.getTimestamp().getNanos());
+    ppacket = phNano2.getNextPacket();
+    assertEquals(1234567890123L, ppacket.getTimestamp().getTime());
+    assertEquals(123456789, ppacket.getTimestamp().getNanos());
     phNano2.close();
   }
 

@@ -1,15 +1,14 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2016 Pcap4J.org
+  _##  Copyright (C) 2012-2017 Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.core;
 
-import java.sql.Timestamp;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
+import com.sun.jna.NativeLong;
+import com.sun.jna.Pointer;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.core.NativeMappings.timeval;
 import org.pcap4j.core.PcapHandle.TimestampPrecision;
@@ -18,8 +17,8 @@ import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.jna.NativeLong;
-import com.sun.jna.Pointer;
+import java.sql.Timestamp;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author Kaito Yamada
@@ -55,6 +54,15 @@ public final class PcapDumper implements AutoCloseable {
    */
   public void dump(Packet packet) throws NotOpenException {
     dump(packet, new Timestamp(System.currentTimeMillis()));
+  }
+
+  /**
+   *
+   * @param packet packet
+   * @throws NotOpenException if this PcapHandle is not open.
+   */
+  public void dump(PcapPacket packet) throws NotOpenException {
+    dump(packet, packet.getTimestamp());
   }
 
   /**
