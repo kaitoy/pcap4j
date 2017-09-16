@@ -18,15 +18,19 @@ import org.pcap4j.util.ByteArrays;
 
 import java.io.EOFException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -358,6 +362,29 @@ public class PcapHandleTest {
       handle.breakLoop();
       handle.close();
       assertArrayEquals(ByteArrays.getSubArray(sendingRawPacket, 0, result.length), result);
+    }
+  }
+
+  @Test
+  public void testStream() throws Exception {
+    try (
+      PcapHandle handle
+           = Pcaps.openOffline("src/test/resources/org/pcap4j/core/udp_tcp_icmp.pcap");
+      Stream<PcapPacket> stream = handle.stream()
+    ) {
+      Iterator<PcapPacket> iter = stream
+        .limit(4)
+        .iterator();
+
+      assertTrue(iter.hasNext());
+      assertEquals(66, iter.next().getOriginalLength());
+      assertTrue(iter.hasNext());
+      assertEquals(98, iter.next().getOriginalLength());
+      assertTrue(iter.hasNext());
+      assertEquals(60, iter.next().getOriginalLength());
+      assertTrue(iter.hasNext());
+      assertNull(iter.next());
+      assertFalse(iter.hasNext());
     }
   }
 

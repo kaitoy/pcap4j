@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Stream;
 
 /**
  * A wrapper class for struct pcap_t.
@@ -1024,6 +1025,63 @@ public final class PcapHandle implements AutoCloseable {
     } finally {
       handleLock.readLock().unlock();
     }
+  }
+
+  /**
+   * Returns a {@link Stream} instance representing a stream of captured packets.
+   * When this handle become unable to capture packets anymore (e.g. reaches EOF of the pcap file),
+   * the stream starts to supply nulls.
+   * This method locks this handle.
+   * Call {@link Stream#close()} to unlock.
+   *
+   * @return a stream of captured packets.
+   * @throws NotOpenException if this PcapHandle is not open.
+   */
+  public Stream<PcapPacket> stream() throws NotOpenException {
+    if (!open) {
+      throw new NotOpenException();
+    }
+
+    if (!handleLock.readLock().tryLock()) {
+      throw new NotOpenException();
+    }
+    if (!open) {
+      throw new NotOpenException();
+    }
+
+    Stream<PcapPacket> stream = Stream.generate(() -> {
+      PointerByReference headerPP = new PointerByReference();
+      PointerByReference dataPP = new PointerByReference();
+      while (true) {
+        int rc = NativeMappings.pcap_next_ex(handle, headerPP, dataPP);
+        switch (rc) {
+          case 0:
+            continue; // timeout
+          case 1:
+            Pointer headerP = headerPP.getValue();
+            Pointer dataP = dataPP.getValue();
+            if (headerP == null || dataP == null) {
+              return null; // native error
+            }
+
+            return new PcapPacket(
+              dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP)),
+              dlt,
+              buildTimestamp(headerP),
+              pcap_pkthdr.getLen(headerP)
+            );
+          case -1:
+            return null; // native error
+          case -2:
+            return null; // EOF
+          default:
+            return null;
+        }
+      }
+    });
+
+    stream.onClose(() -> handleLock.readLock().unlock());
+    return stream;
   }
 
   /**

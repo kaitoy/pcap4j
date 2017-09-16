@@ -31,6 +31,7 @@ Future (2.0.0)
         * PcapHandle#dispatch with RawPacketListener
         * RawPacketListener
 * Use java.time.Instant for timestamps instead of java.sql.Timestamp.
+* Add PcapHandle#stream().
 
 ### Bug Fixes ###
 
