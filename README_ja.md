@@ -250,7 +250,7 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
    Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
    インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/v1)でダウンロードして展開する。
 6. ビルド:<br>
-   プロジェクトのルートディレクトリに`cd`して、`mvn install` を実行する。
+   プロジェクトのルートディレクトリに`cd`して、`./mvnw install` を実行する。
    unit testを通すためにはAdministrator/root権限が必要。
 
 ライセンス

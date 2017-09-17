@@ -253,7 +253,7 @@ How to build
    Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/v1) and extract it.
 6. Build:<br>
    Open a command prompt/a terminal, `cd` to the project root directory,
-   and execute `mvn install`.
+   and execute `./mvnw install`.
    Note Administrator/root privileges are needed for the unit tests.
 
 License
