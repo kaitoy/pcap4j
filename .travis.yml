@@ -12,7 +12,7 @@ branches:
 matrix:
   include:
     - jdk: oraclejdk8
-    - jdk: oraclejdk7
+    - jdk: openjdk7
       env: COVERALLS=yes
     - jdk: openjdk6
   fast_finish: true
