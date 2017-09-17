@@ -38,9 +38,9 @@ script:
   - |
     if [ "${COVERALLS}" = "yes"  ]
     then
-      sudo ./mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -DserviceJobId=$TRAVIS_JOB_ID -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage package coveralls:report
+      sudo /home/travis/kaitoy/pcap4j/mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -DserviceJobId=$TRAVIS_JOB_ID -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage package coveralls:report
     else
-      sudo ./mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B install
+      sudo /home/travis/kaitoy/pcap4j/mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B install
     fi
 
 notifications:
