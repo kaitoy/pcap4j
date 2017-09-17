@@ -3,6 +3,8 @@ sudo: required
 language: java
 
 addons:
+  hosts:
+    - pcap4j-test
   hostname: pcap4j-test
 
 branches:
@@ -14,7 +16,11 @@ matrix:
     - jdk: oraclejdk8
     - jdk: openjdk7
       env: COVERALLS=yes
-    - jdk: openjdk6
+    - addons:
+        apt:
+          packages:
+            - openjdk-6-jdk
+      jdk: openjdk6
   fast_finish: true
 
 cache:
