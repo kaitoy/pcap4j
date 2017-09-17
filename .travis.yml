@@ -1,3 +1,4 @@
+group: deprecated-2017Q3
 sudo: required
 
 language: java
