@@ -1058,7 +1058,12 @@ public final class ByteArrays {
       throw new IllegalArgumentException("arr is empty.");
     }
     if (len == 0) {
-      throw new IllegalArgumentException("length is zero.");
+      StringBuilder sb = new StringBuilder(100);
+      sb.append("length is zero. offset: ")
+        .append(offset)
+        .append(", arr: ")
+        .append(toHexString(arr, ""));
+      throw new IllegalArgumentException(sb.toString());
     }
     if (offset < 0 || len < 0 || offset + len > arr.length) {
       StringBuilder sb = new StringBuilder(100);
@@ -1067,7 +1072,9 @@ public final class ByteArrays {
         .append(", offset: ")
         .append(offset)
         .append(", len: ")
-        .append(len);
+        .append(len)
+        .append(", arr: ")
+        .append(toHexString(arr, ""));
       throw new ArrayIndexOutOfBoundsException(sb.toString());
     }
   }
