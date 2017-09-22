@@ -441,7 +441,7 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
   /**
    * The interface representing an IPv6 option.
    * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * classes which imprement this interface must implement the following method:
+   * classes which implement this interface must implement the following method:
    * {@code public static IpV6Option newInstance(byte[] rawData, int offset, int length)
    * throws IllegalRawDataException}
    *

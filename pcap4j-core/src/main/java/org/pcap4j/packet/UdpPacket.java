@@ -136,7 +136,7 @@ public final class UdpPacket extends AbstractPacket {
 
   /**
    *
-   * checksum varification is necessary for IPv6(i.e. acceptZero must be false)
+   * checksum verification is necessary for IPv6(i.e. acceptZero must be false)
    *
    * @param srcAddr srcAddr
    * @param dstAddr dstAddr
@@ -281,7 +281,7 @@ public final class UdpPacket extends AbstractPacket {
      *
      * used for checksum calculation
      * If the lower-layer packet is a IPv6 packet and
-     * the extention headers including a routing header,
+     * the extension headers including a routing header,
      * this parameter is that of the final destination.
      * (i.e. the last element of the Routing header)
      *

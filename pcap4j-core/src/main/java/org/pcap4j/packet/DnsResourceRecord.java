@@ -299,7 +299,7 @@ public final class DnsResourceRecord implements Serializable {
 
   /**
    * @param indent indent
-   * @return String represantation of this object.
+   * @return String representation of this object.
    */
   public String toString(String indent) {
     return convertToString(indent, null);
@@ -308,7 +308,7 @@ public final class DnsResourceRecord implements Serializable {
   /**
    * @param indent indent
    * @param headerRawData the raw data of the DNS header including this resource record.
-   * @return String represantation of this object.
+   * @return String representation of this object.
    */
   public String toString(String indent, byte[] headerRawData) {
     if (headerRawData == null) {
@@ -488,7 +488,7 @@ public final class DnsResourceRecord implements Serializable {
   /**
    * The interface representing an RDATA.
    * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * classes which imprement this interface must implement the following method:
+   * classes which implement this interface must implement the following method:
    * {@code public static IpV4Option newInstance(byte[] rawData, int offset, int length)
    * throws IllegalRawDataException}
    *

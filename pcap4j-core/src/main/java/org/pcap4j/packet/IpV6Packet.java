@@ -612,7 +612,7 @@ public final class IpV6Packet extends AbstractPacket implements IpPacket {
   /**
    * The interface representing an IPv6 traffic class.
    * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * classes which imprement this interface must implement the following method:
+   * classes which implement this interface must implement the following method:
    * {@code public static IpV6TrafficClass newInstance(byte value)}
    *
    * @author Kaito Yamada
@@ -631,7 +631,7 @@ public final class IpV6Packet extends AbstractPacket implements IpPacket {
   /**
    * The interface representing an IPv6 flow label.
    * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * classes which imprement this interface must implement the following method:
+   * classes which implement this interface must implement the following method:
    * {@code public static IpV6FlowLabel newInstance(int value)}
    *
    * @author Kaito Yamada
