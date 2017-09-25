@@ -1,4 +1,4 @@
-[DNS Header (1217 bytes)]
+[DNS Header (1228 bytes)]
   ID: 0x2fc9
   QR: response
   OPCODE: 2 (Status)
@@ -13,7 +13,7 @@
   QDCOUNT: 1
   ANCOUNT: 6
   NSCOUNT: 6
-  ARCOUNT: 8
+  ARCOUNT: 9
   Question:
     QNAME: hoge.co.jp
     QTYPE: 1 (A (Host address))
@@ -219,3 +219,9 @@
     RDATA:
       A RDATA:
         ADDRESS: 192.168.0.100 (text)
+  Additional:
+    NAME: <ROOT>
+    TYPE: 41 (OPT)
+    CLASS: 255 (ANY)
+    TTL: 123123
+    RDLENGTH: 0

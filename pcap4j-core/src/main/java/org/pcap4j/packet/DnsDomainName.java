@@ -1,3 +1,10 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016-2017  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
@@ -40,6 +47,19 @@ public final class DnsDomainName implements Serializable {
   private static final long serialVersionUID = -9123494137779222577L;
 
   private static final Logger LOG = LoggerFactory.getLogger(DnsDomainName.class);
+
+  /**
+   * The root domain (zero)
+   */
+  public static final DnsDomainName ROOT_DOMAIN;
+
+  static {
+    try {
+      ROOT_DOMAIN = new DnsDomainName(new byte[] { 0 }, 0, 1);
+    } catch (IllegalRawDataException e) {
+      throw new AssertionError("Never get here.");
+    }
+  }
 
   private final List<String> labels;
   private final String name;
@@ -227,7 +247,7 @@ public final class DnsDomainName implements Serializable {
   /**
    * @param headerRawData the raw data of the DNS header including this domain name.
    * @return decompressed name.
-   * @throws IllegalRawDataException if an eror occurred during decompression
+   * @throws IllegalRawDataException if an error occurred during decompression
    *                                 or circular reference is detected.
    */
   public String decompress(byte[] headerRawData) throws IllegalRawDataException {
@@ -315,6 +335,10 @@ public final class DnsDomainName implements Serializable {
 
   @Override
   public String toString() {
+    if (labels.size() == 0 && pointer == null) {
+      return "<ROOT>";
+    }
+
     if (pointer == null) {
       return name;
     }
@@ -337,6 +361,10 @@ public final class DnsDomainName implements Serializable {
    * @return string representation of this object.
    */
   public String toString(byte[] headerRawData) {
+    if (labels.size() == 0 && pointer == null) {
+      return "<ROOT>";
+    }
+
     if (pointer == null) {
       return name;
     }

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -132,14 +132,19 @@ public final class DnsResourceRecord implements Serializable {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.rData = PacketFactories
-                   .getFactory(DnsRData.class, DnsResourceRecordType.class)
-                      .newInstance(
-                         rawData,
-                         offset + cursor,
-                         rdLen,
-                         dataType
-                       );
+    if (rdLen != 0) {
+      this.rData = PacketFactories
+                     .getFactory(DnsRData.class, DnsResourceRecordType.class)
+                     .newInstance(
+                       rawData,
+                       offset + cursor,
+                       rdLen,
+                       dataType
+                     );
+    }
+    else {
+      this.rData = null;
+    }
   }
 
   private DnsResourceRecord(Builder builder) {
@@ -148,14 +153,12 @@ public final class DnsResourceRecord implements Serializable {
       || builder.name == null
       || builder.dataType == null
       || builder.dataClass == null
-      || builder.rData == null
     ) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder").append(builder)
         .append(" builder.name: ").append(builder.name)
         .append(" builder.dataType: ").append(builder.dataType)
-        .append(" builder.dataClass: ").append(builder.dataClass)
-        .append(" builder.rData: ").append(builder.rData);
+        .append(" builder.dataClass: ").append(builder.dataClass);
       throw new NullPointerException(sb.toString());
     }
 
@@ -166,7 +169,7 @@ public final class DnsResourceRecord implements Serializable {
     this.rData = builder.rData;
 
     if (builder.correctLengthAtBuild) {
-      int rdLen = rData.length();
+      int rdLen = rData == null ? 0 : rData.length();
       if ((rdLen & 0xFFFF0000) != 0) {
         throw new IllegalArgumentException(
                 "(rData.length() & 0xFFFF0000) must be zero. rData: " + rData
@@ -229,7 +232,7 @@ public final class DnsResourceRecord implements Serializable {
   }
 
   /**
-   * @return rData
+   * @return rData. May be null.
    */
   public DnsRData getRData() {
     return rData;
@@ -275,12 +278,14 @@ public final class DnsResourceRecord implements Serializable {
       ByteArrays.toByteArray(rdLength), 0,
       data, cursor, SHORT_SIZE_IN_BYTES
     );
-    cursor += SHORT_SIZE_IN_BYTES;
-    byte[] rawRData = rData.getRawData();
-    System.arraycopy(
-      rawRData, 0,
-      data, cursor, rawRData.length
-    );
+    if (rData != null) {
+      cursor += SHORT_SIZE_IN_BYTES;
+      byte[] rawRData = rData.getRawData();
+      System.arraycopy(
+        rawRData, 0,
+        data, cursor, rawRData.length
+      );
+    }
 
     return data;
   }
@@ -289,7 +294,8 @@ public final class DnsResourceRecord implements Serializable {
    * @return length
    */
   public int length() {
-    return name.length() + SHORT_SIZE_IN_BYTES * 3 + INT_SIZE_IN_BYTES + rData.length();
+    int rDataLen = rData == null ? 0 : rData.length();
+    return name.length() + SHORT_SIZE_IN_BYTES * 3 + INT_SIZE_IN_BYTES + rDataLen;
   }
 
   @Override
@@ -330,60 +336,56 @@ public final class DnsResourceRecord implements Serializable {
       .append(indent).append("TTL: ")
       .append(getTtlAsLong()).append(ls)
       .append(indent).append("RDLENGTH: ")
-      .append(getRdLengthAsInt()).append(ls)
-      .append(indent).append("RDATA:").append(ls)
-      .append(
-         headerRawData != null ? rData.toString(indent + "  ", headerRawData)
-                               : rData.toString(indent + "  ")
-       );
+      .append(getRdLengthAsInt()).append(ls);
+      if (rData != null) {
+        sb.append(indent).append("RDATA:").append(ls)
+          .append(
+            headerRawData != null ? rData.toString(indent + "  ", headerRawData)
+                                  : rData.toString(indent + "  ")
+          );
+      }
 
     return sb.toString();
   }
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + dataClass.hashCode();
-    result = prime * result + dataType.hashCode();
-    result = prime * result + name.hashCode();
-    result = prime * result + rdLength;
-    result = prime * result + ttl;
-    result = prime * result + rData.hashCode();
+    int result = name.hashCode();
+    result = 31 * result + dataType.hashCode();
+    result = 31 * result + dataClass.hashCode();
+    result = 31 * result + ttl;
+    result = 31 * result + (int) rdLength;
+    result = 31 * result + (rData != null ? rData.hashCode() : 0);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
     }
-    if (obj == null) {
+    if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+
+    DnsResourceRecord that = (DnsResourceRecord) o;
+
+    if (ttl != that.ttl) {
       return false;
     }
-    DnsResourceRecord other = (DnsResourceRecord) obj;
-    if (!dataClass.equals(other.dataClass)) {
+    if (rdLength != that.rdLength) {
       return false;
     }
-    if (!dataType.equals(other.dataType)) {
+    if (!name.equals(that.name)) {
       return false;
     }
-    if (!name.equals(other.name)) {
+    if (!dataType.equals(that.dataType)) {
       return false;
     }
-    if (rdLength != other.rdLength) {
+    if (!dataClass.equals(that.dataClass)) {
       return false;
     }
-    if (ttl != other.ttl) {
-      return false;
-    }
-    if (!rData.equals(other.rData)) {
-      return false;
-    }
-    return true;
+    return rData != null ? rData.equals(that.rData) : that.rData == null;
   }
 
   /**
