@@ -178,7 +178,7 @@ public final class DnsQuestion implements Serializable {
 
   /**
    * @param indent indent
-   * @return String represantation of this object.
+   * @return String representation of this object.
    */
   public String toString(String indent) {
     return convertToString(indent, null);
@@ -187,7 +187,7 @@ public final class DnsQuestion implements Serializable {
   /**
    * @param indent indent
    * @param headerRawData the raw data of the DNS header including this question.
-   * @return String represantation of this object.
+   * @return String representation of this object.
    */
   public String toString(String indent, byte[] headerRawData) {
     if (headerRawData == null) {

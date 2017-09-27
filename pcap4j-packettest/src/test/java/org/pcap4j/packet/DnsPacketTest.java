@@ -67,7 +67,7 @@ public class DnsPacketTest extends AbstractPacketTest {
     this.qdCount = 1;
     this.anCount = 6;
     this.nsCount = 6;
-    this.arCount = 8;
+    this.arCount = 9;
     this.questions = new ArrayList<DnsQuestion>();
     this.answers = new ArrayList<DnsResourceRecord>();
     this.authorities = new ArrayList<DnsResourceRecord>();
@@ -543,23 +543,33 @@ public class DnsPacketTest extends AbstractPacketTest {
 
     DnsResourceRecord aRRStr
       = new DnsResourceRecord.Builder()
-      .name(
-        new DnsDomainName.Builder()
-          .labels(hogeDomain)
-          .build()
-      )
-      .dataType(DnsResourceRecordType.A)
-      .dataClass(DnsClass.ANY)
-      .ttl(123123)
-      .rData(
-        new DnsRDataA.Builder()
-          .address((Inet4Address) InetAddress.getByName("192.168.0.100"))
-          .addressPlainText(true)
-          .build()
-      )
-      .correctLengthAtBuild(true)
-      .build();
+          .name(
+            new DnsDomainName.Builder()
+              .labels(hogeDomain)
+              .build()
+          )
+          .dataType(DnsResourceRecordType.A)
+          .dataClass(DnsClass.ANY)
+          .ttl(123123)
+          .rData(
+            new DnsRDataA.Builder()
+              .address((Inet4Address) InetAddress.getByName("192.168.0.100"))
+              .addressPlainText(true)
+              .build()
+          )
+          .correctLengthAtBuild(true)
+          .build();
     additionalInfo.add(aRRStr);
+
+    DnsResourceRecord optRR
+      = new DnsResourceRecord.Builder()
+          .name(DnsDomainName.ROOT_DOMAIN)
+          .dataType(DnsResourceRecordType.OPT)
+          .dataClass(DnsClass.ANY)
+          .ttl(123123)
+          .correctLengthAtBuild(true)
+          .build();
+    additionalInfo.add(optRR);
 
     this.packet
       = new DnsPacket.Builder()

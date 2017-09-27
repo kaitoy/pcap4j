@@ -553,7 +553,7 @@ public final class RadiotapPacket extends AbstractPacket {
   /**
    * The interface representing a Radiotap data field.
    * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * classes which imprement this interface must implement the following method:
+   * classes which implement this interface must implement the following method:
    * {@code public static RadiotapDataField newInstance(byte[] rawData, int offset, int length)
    * throws IllegalRawDataException}
    *

@@ -321,7 +321,7 @@ public final class Dot11HtControl implements Serializable {
 
   /**
    * @param indent indent
-   * @return String represantation of this object.
+   * @return String representation of this object.
    */
   public String toString(String indent) {
     StringBuilder sb = new StringBuilder();

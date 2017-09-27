@@ -59,6 +59,7 @@ Release 1.7.2
 * Add Packets class, a utility class for operating on packets.
 
 ### Bug Fixes ###
+* [Issues#123](https://github.com/kaitoy/pcap4j/issues/123): IllegalArgumentException occurs during dissecting a DNS packet including a resource record the RDLENGTH of which is zero.
 
 ### Other Changes ###
 
