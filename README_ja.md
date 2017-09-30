@@ -47,9 +47,9 @@ Pcap4J
 
 Maven Central Repositoryからダウンロードできる。
 
-* Pcap4J 1.7.1
-    * ソースなし: [pcap4j-distribution-1.7.1-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.7.1/pcap4j-distribution-1.7.1-bin.zip)
-    * ソース入り: [pcap4j-distribution-1.7.1-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.7.1/pcap4j-distribution-1.7.1-src.zip)
+* Pcap4J 1.7.2
+    * ソースなし: [pcap4j-distribution-1.7.2-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.7.2/pcap4j-distribution-1.7.2-bin.zip)
+    * ソース入り: [pcap4j-distribution-1.7.2-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.7.2/pcap4j-distribution-1.7.2-src.zip)
 * スナップショットビルド
     * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
 
@@ -131,7 +131,7 @@ Pcap4Jは管理者権限で実行する必要がある。
 ケーパビリティを付与するには次のコマンドを実行する: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### ドキュメント ####
-最新のJavaDocは[こちら](http://www.javadoc.io/doc/org.pcap4j/pcap4j/1.7.1)。
+最新のJavaDocは[こちら](http://www.javadoc.io/doc/org.pcap4j/pcap4j/1.7.2)。
 各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22)からダウンロードできる。
 
 Pcap4Jのモジュール構成については[こちら](https://github.com/kaitoy/pcap4j/blob/v1/www/pcap4j_modules.md)。
@@ -174,12 +174,12 @@ pom.xmlに以下のような記述を追加する。
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-core</artifactId>
-      <version>1.7.1</version>
+      <version>1.7.2</version>
     </dependency>
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-packetfactory-static</artifactId>
-      <version>1.7.1</version>
+      <version>1.7.2</version>
     </dependency>
        ...
   </dependencies>
