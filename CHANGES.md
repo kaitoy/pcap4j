@@ -32,6 +32,7 @@ Future (2.0.0)
         * RawPacketListener
 * Use java.time.Instant for timestamps instead of java.sql.Timestamp.
 * Add PcapHandle#stream().
+* [PR#125](https://github.com/kaitoy/pcap4j/pull/125): ByteArrays#validateBounds() throws LengthZeroException instead of IllegalArgumentException when the given `len` is zero.
 
 ### Bug Fixes ###
 
