@@ -7,6 +7,8 @@
 
 package org.pcap4j.util;
 
+import org.pcap4j.core.LengthZeroException;
+
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -1046,7 +1048,8 @@ public final class ByteArrays {
    * @param offset offset
    * @param len len
    * @throws NullPointerException if the {@code arr} is null.
-   * @throws IllegalArgumentException if {@code arr} is empty or {@code len} is zero.
+   * @throws IllegalArgumentException if {@code arr} is empty.
+   * @throws LengthZeroException if {@code len} is zero.
    * @throws ArrayIndexOutOfBoundsException if {@code offset} or {@code len} is negative,
    *         or ({@code offset} + {@code len}) is greater than or equal to {@code arr.length}.
    */
@@ -1063,7 +1066,7 @@ public final class ByteArrays {
         .append(offset)
         .append(", arr: ")
         .append(toHexString(arr, ""));
-      throw new IllegalArgumentException(sb.toString());
+      throw new LengthZeroException(sb.toString());
     }
     if (offset < 0 || len < 0 || offset + len > arr.length) {
       StringBuilder sb = new StringBuilder(100);
