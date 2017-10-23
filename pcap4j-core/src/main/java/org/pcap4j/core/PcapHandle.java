@@ -160,6 +160,17 @@ public final class PcapHandle implements Closeable {
       else {
         this.timestampPrecision = TimestampPrecision.MICRO;
       }
+      if (builder.isImmediateModeSet) {
+        try {
+          int rc = PcapLibrary.INSTANCE.pcap_set_immediate_mode(handle, builder.immediateMode ? 1 : 0);
+          if (rc != 0) {
+            throw new PcapNativeException(getError(), rc);
+          }
+        } catch (UnsatisfiedLinkError e) {
+          logger.error("Failed to instantiate PcapHandle object.", e);
+          throw new PcapNativeException("Immediate mode is not supported on this platform.");
+        }
+      }
 
       int activateRc = NativeMappings.pcap_activate(handle);
       if (activateRc < 0) {
@@ -1551,6 +1562,8 @@ public final class PcapHandle implements Closeable {
     private boolean isBufferSizeSet = false;
     private TimestampPrecision timestampPrecision = null;
     private PcapDirection direction = null;
+    private boolean immediateMode;
+    private boolean isImmediateModeSet = false;
 
     /**
      *
@@ -1660,6 +1673,25 @@ public final class PcapHandle implements Closeable {
      */
     public Builder direction(PcapDirection direction) {
       this.direction = direction;
+      return this;
+    }
+    
+    /**
+     * Set immediate mode, which allows programs to process packets as soon as
+     * they arrive.
+     * 
+     * @param immediateMode Whether immediate mode should be set on a PcapHandle
+     *                      when it is built. If true, immediate mode will be set,
+     *                      otherwise it will not be set.
+     *                      Some platforms and library versions don't support setting
+     *                      immediate mode. Calling this method in such cases may cause
+     *                      PcapNativeException at {@link #build()}. If this method isn't
+     *                      called, immediate mode will not be set {@link #build()}.
+     * @return this Builder object for method chaining.
+     */
+    public Builder immediateMode(boolean immediateMode) {
+      this.immediateMode = immediateMode;
+      this.isImmediateModeSet = true;
       return this;
     }
 
