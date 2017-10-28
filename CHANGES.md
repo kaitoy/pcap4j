@@ -53,8 +53,17 @@ Future (2.0.0)
     * org.pcap4j.packet.IllegalSctpChunk
     * org.pcap4j.packet.IllegalTcpOption
 
-Release 1.7.2
+Release 1.7.3
 =============
+### New Features ###
+* [PR#127](https://github.com/kaitoy/pcap4j/pull/127): Add support for setting immediate mode.
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.7.2 (30-Sep-2017)
+===========================
 ### New Features ###
 * [PR#119](https://github.com/kaitoy/pcap4j/pull/119): Add DNS CAA support (RFC6844).
 * Add Packets class, a utility class for operating on packets.

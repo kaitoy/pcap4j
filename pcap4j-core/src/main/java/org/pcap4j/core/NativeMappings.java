@@ -103,6 +103,7 @@ final class NativeMappings {
       "pcap_open_dead_with_tstamp_precision"
     );
     funcMap.put("pcap_set_tstamp_precision", "pcap_set_tstamp_precision");
+    funcMap.put("pcap_set_immediate_mode", "pcap_set_immediate_mode");
 
     NATIVE_LOAD_LIBRARY_OPTIONS.put(
       Library.OPTION_FUNCTION_MAPPER,
@@ -322,6 +323,9 @@ final class NativeMappings {
 
     // int pcap_set_tstamp_precision(pcap_t *p, int tstamp_precision)
     int pcap_set_tstamp_precision(Pointer p, int tstamp_precision);
+    
+    // int pcap_set_immediate_mode(pcap_t *p, int immediate_mode)
+    int pcap_set_immediate_mode(Pointer p, int immediate_mode);
 
   }
 

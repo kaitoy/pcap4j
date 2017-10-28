@@ -388,4 +388,27 @@ public class PcapHandleTest {
     }
   }
 
+  @Test
+  public void testImmediateMode() throws Exception {
+    if (System.getenv("TRAVIS") != null) {
+      // run only on Travis CI
+      PcapHandle handle
+        = new PcapHandle.Builder("any")
+        .immediateMode(true)
+        .promiscuousMode(PromiscuousMode.PROMISCUOUS)
+        .snaplen(65536)
+        .timeoutMillis(Integer.MAX_VALUE)
+        .build();
+
+      ProcessBuilder pb = new ProcessBuilder("/bin/ping", "www.google.com");
+      Process process = pb.start();
+
+      handle.loop(3, packet -> {
+        // Do nothing.
+      });
+      handle.close();
+      process.destroy();
+    }
+  }
+
 }
