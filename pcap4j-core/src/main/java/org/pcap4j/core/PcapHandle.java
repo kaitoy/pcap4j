@@ -506,7 +506,7 @@ public final class PcapHandle implements Closeable {
         }
         if (rc < 0) {
           throw new PcapNativeException(
-                      "Error occured in pcap_compile: " + getError(),
+                      "Error occurred in pcap_compile: " + getError(),
                       rc
                     );
         }
@@ -514,7 +514,7 @@ public final class PcapHandle implements Closeable {
         rc = NativeMappings.pcap_setfilter(handle, prog);
         if (rc < 0) {
           throw new PcapNativeException(
-                      "Error occured in pcap_setfilger: " + getError(),
+                      "Error occurred in pcap_setfilter: " + getError(),
                       rc
                     );
         }
@@ -757,13 +757,13 @@ public final class PcapHandle implements Closeable {
           return dataP.getByteArray(0, pcap_pkthdr.getCaplen(headerP));
         case -1:
           throw new PcapNativeException(
-                  "Error occured in pcap_next_ex(): " + getError(), rc
+                  "Error occurred in pcap_next_ex(): " + getError(), rc
                 );
         case -2:
           throw new EOFException();
         default:
           throw new PcapNativeException(
-                  "Unexpected error occured: " + getError(), rc
+                  "Unexpected error occurred: " + getError(), rc
                 );
       }
     } finally {
@@ -916,14 +916,14 @@ public final class PcapHandle implements Closeable {
           break;
         case -1:
           throw new PcapNativeException(
-                  "Error occured: " + getError(), rc
+                  "Error occurred: " + getError(), rc
                 );
         case -2:
           logger.info("Broken.");
           throw new InterruptedException();
         default:
           throw new PcapNativeException(
-                  "Unexpected error occured: " + getError(), rc
+                  "Unexpected error occurred: " + getError(), rc
                 );
       }
     } finally {
@@ -1056,7 +1056,7 @@ public final class PcapHandle implements Closeable {
         switch (rc) {
           case -1:
             throw new PcapNativeException(
-                    "Error occured: " + getError(),
+                    "Error occurred: " + getError(),
                     rc
                   );
           case -2:
@@ -1064,7 +1064,7 @@ public final class PcapHandle implements Closeable {
             throw new InterruptedException();
           default:
             throw new PcapNativeException(
-                    "Unexpected error occured: " + getError(),
+                    "Unexpected error occurred: " + getError(),
                     rc
                   );
         }
@@ -1154,14 +1154,14 @@ public final class PcapHandle implements Closeable {
           break;
         case -1:
           throw new PcapNativeException(
-                  "Error occured: " + getError(), rc
+                  "Error occurred: " + getError(), rc
                 );
         case -2:
           logger.info("Broken.");
           throw new InterruptedException();
         default:
           throw new PcapNativeException(
-                  "Unexpected error occured: " + getError(), rc
+                  "Unexpected error occurred: " + getError(), rc
                 );
       }
     } finally {
@@ -1251,7 +1251,7 @@ public final class PcapHandle implements Closeable {
       int rc = NativeMappings.pcap_sendpacket(handle, bytes, len);
       if (rc < 0) {
         throw new PcapNativeException(
-                "Error occured in pcap_sendpacket(): " + getError(),
+                "Error occurred in pcap_sendpacket(): " + getError(),
                 rc
               );
       }
