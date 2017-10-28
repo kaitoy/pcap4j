@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* [PR#127](https://github.com/kaitoy/pcap4j/pull/127): Add support for setting immediate mode.
 
 ### Bug Fixes ###
 
