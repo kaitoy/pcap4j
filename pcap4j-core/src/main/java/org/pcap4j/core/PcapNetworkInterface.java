@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2016  Pcap4J.org
+  _##  Copyright (C) 2011-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -41,12 +41,16 @@ public final class PcapNetworkInterface {
     = LoggerFactory.getLogger(PcapNetworkInterface.class);
 
   private static final int PCAP_IF_LOOPBACK = 0x00000001;
+  private static final int PCAP_IF_UP = 0x00000002;
+  private static final int PCAP_IF_RUNNING = 0x00000004;
 
   private final String name;
   private final String description;
   private final List<PcapAddress> addresses = new ArrayList<PcapAddress>();
   private final List<LinkLayerAddress> linkLayerAddresses = new ArrayList<LinkLayerAddress>();
   private final boolean loopBack;
+  private final boolean up;
+  private final boolean running;
   private final boolean local;
 
   private PcapNetworkInterface(pcap_if pif, boolean local) {
@@ -128,13 +132,10 @@ public final class PcapNetworkInterface {
       }
     }
 
-    if (pif.flags == PCAP_IF_LOOPBACK) {
-      this.loopBack = true;
-    }
-    else {
-      this.loopBack = false;
-    }
-
+    System.out.println(pif.flags);
+    this.loopBack = (pif.flags & PCAP_IF_LOOPBACK) != 0;
+    this.up = (pif.flags & PCAP_IF_UP) != 0;
+    this.running = (pif.flags & PCAP_IF_RUNNING) != 0;
     this.local = local;
   }
 
@@ -175,12 +176,34 @@ public final class PcapNetworkInterface {
   }
 
   /**
+   * Returns if this network interface is loopback.
+   * This method may always return false on some environments.
    *
    * @return true if the network interface represented by this object
-   *         is a loop back interface; false otherwise.
+   *          is a loop back interface; false otherwise.
    */
   public boolean isLoopBack() {
     return loopBack;
+  }
+
+  /**
+   * Returns if this network interface is up.
+   * This method may always return false on some environments.
+   *
+   * @return true if the network interface represented by this object is up; false otherwise.
+   */
+  public boolean isUp() {
+    return up;
+  }
+
+  /**
+   * Returns if this network interface is running.
+   * This method may always return false on some environments.
+   *
+   * @return true if the network interface represented by this object is running; false otherwise.
+   */
+  public boolean isRunning() {
+    return running;
   }
 
   /**
@@ -338,6 +361,10 @@ public final class PcapNetworkInterface {
 
     sb.append("] loopBack: [").append(loopBack)
       .append("]");
+    sb.append("] up: [").append(up)
+      .append("]");
+    sb.append("] running: [").append(running)
+      .append("]");
     sb.append("] local: [").append(local)
       .append("]");
 
@@ -353,6 +380,8 @@ public final class PcapNetworkInterface {
     result = prime * result + linkLayerAddresses.hashCode();
     result = prime * result + (local ? 1231 : 1237);
     result = prime * result + (loopBack ? 1231 : 1237);
+    result = prime * result + (up ? 1231 : 1237);
+    result = prime * result + (running ? 1231 : 1237);
     result = prime * result + name.hashCode();
     return result;
   }
@@ -387,6 +416,12 @@ public final class PcapNetworkInterface {
       return false;
     }
     if (loopBack != other.loopBack) {
+      return false;
+    }
+    if (up != other.up) {
+      return false;
+    }
+    if (running != other.running) {
       return false;
     }
     if (!name.equals(other.name)) {
