@@ -660,7 +660,7 @@ public final class TcpPacket extends AbstractPacket {
         StringBuilder sb = new StringBuilder(100);
         sb.append("The data offset must be equal or more than ")
           .append(OPTIONS_OFFSET / 4)
-          .append("but it is: ")
+          .append(", but it is: ")
           .append(getDataOffsetAsInt());
         throw new IllegalRawDataException(sb.toString());
       }
