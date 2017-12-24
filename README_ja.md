@@ -12,19 +12,18 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=master&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/master)
 [![codecov](https://codecov.io/gh/kaitoy/pcap4j/branch/master/graph/badge.svg)](https://codecov.io/gh/kaitoy/pcap4j)
 
-Pcap4J
-======
+Pcap4J 2.x and newer
+====================
 
 パケットをキャプチャ・作成・送信するためのJavaライブラリ。
 ネイティブのパケットキャプチャライブラリである[libpcap](http://www.tcpdump.org/)、
-[WinPcap](http://www.winpcap.org/)、または[Npcap](https://github.com/nmap/npcap)を[JNA](https://github.com/twall/jna)を
+[Npcap](https://github.com/nmap/npcap)、または[WinPcap](http://www.winpcap.org/)を[JNA](https://github.com/twall/jna)を
 使ってラッピングして、JavaらしいAPIに仕上げたもの。
 
 目次
 ----
 
 * [ダウンロード](#ダウンロード)
-* [開発経緯](#開発経緯)
 * [機能](#機能)
 * [使い方](#使い方)
     * [システム要件](#システム要件)
@@ -33,39 +32,23 @@ Pcap4J
         * [その他](#その他)
     * [ドキュメント](#ドキュメント)
     * [サンプル実行方法](#サンプル実行方法)
-    * [Mavenプロジェクトでの使用方法](#mavenプロジェクトでの使用方法)
+    * [プロジェクトへPcap4Jを追加する方法](#プロジェクトへpcap4jを追加する方法)
     * [ネイティブライブラリのロードについて](#ネイティブライブラリのロードについて)
         * [WinPcapかNpcapか](#WinPcapかNpcapか)
     * [Docker](#docker)
 * [ビルド](#ビルド)
 * [ライセンス](#ライセンス)
 * [コンタクト](#コンタクト)
-* [おまけ](#おまけ)
 
 ダウンロード
 ------------
 
 Maven Central Repositoryからダウンロードできる。
 
-* Pcap4J 1.7.2
-    * ソースなし: [pcap4j-distribution-1.7.2-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.7.2/pcap4j-distribution-1.7.2-bin.zip)
-    * ソース入り: [pcap4j-distribution-1.7.2-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.7.2/pcap4j-distribution-1.7.2-src.zip)
+* Pcap4J 2.0.0-alpha
+    * [pcap4j-2.0.0-alpha-distribution.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/2.0.0-alpha/pcap4j-2.0.0-alpha-distribution.zip)
 * スナップショットビルド
     * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j/
-
-開発経緯
---------
-
-SNMPネットワークシミュレータをJavaで作っていて、ICMPをいじるためにパケットキャプチャをしたくなったが、
-Raw Socketやデータリンクアクセスを使って自力でやるのは大変そうなので [pcap](http://ja.wikipedia.org/wiki/Pcap)を使うことに。
-
-pcapの実装は、UNIX系にはlibpcap、WindowsにはWinPcapがあるが、いずれもネイティブライブラリ。
-これらのJavaラッパは[jpcap](http://jpcap.sourceforge.net/)や[jNetPcap](http://jnetpcap.com/)が既にあるが、
-これらはパケットキャプチャに特化していて、パケット作成・送信がしにくいような気がした。
-
-[Jpcap](http://netresearch.ics.uci.edu/kfujii/Jpcap/doc/)はパケット作成・送信もやりやすいけど、
-ICMPのキャプチャ周りにバグがあって使えなかった。結構前から開発が止まっているようだし。
-ということで自作した。
 
 機能
 ----
@@ -96,9 +79,9 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
 #### システム要件 ####
 
 ##### ライブラリ等の依存 #####
-1.1.0以前のはJ2SE 5.0以降で動く。1.2.0以降のはJ2SE 6.0以降で動く。
-UNIX系ならlibpcap 1.0.0以降、WindowsならWinPcap (多分)3.0以降かNpcapがインストールされている必要がある。
-jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。
+JRE 8以降で動く。
+UNIX系ならlibpcap 1.0.0以降、WindowsならNpcapかWinPcap (多分)3.0以降がインストールされている必要がある。
+jna 4以降、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。
 
 動作確認に使っているバージョンは以下。
 
@@ -113,6 +96,7 @@ jna、slf4j-api(と適当なロガー実装モジュール)もクラスパスに
 x86かx64プロセッサ上の以下のOSで動作することを確認した。
 
 * Windows: XP, Vista, 7, [10](http://tbd.kaitoy.xyz/2016/01/12/pcap4j-with-four-native-libraries-on-windows10/), 2003 R2, 2008, 2008 R2, and 2012
+* OS X
 * Linux
     * RHEL: 5 and 6
     * CentOS: 5
@@ -121,9 +105,7 @@ x86かx64プロセッサ上の以下のOSで動作することを確認した。
     * Solaris: 10
     * FreeBSD: 10
 
-また、tomuteさんからMac OS Xで動いたとの[報告](http://tomute.hateblo.jp/entry/2013/01/27/003209)が。ありがとうございます。
-
-他のアーキテクチャ/OSでも、JNAとlibpcapがサポートしていれば動く、と願う(FreeBSDはだめそう)。
+他のアーキテクチャ/OSでも、JNAとlibpcapがサポートしていれば動く、と願う。
 
 ##### その他 #####
 Pcap4Jは管理者権限で実行する必要がある。
@@ -131,7 +113,7 @@ Pcap4Jは管理者権限で実行する必要がある。
 ケーパビリティを付与するには次のコマンドを実行する: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### ドキュメント ####
-最新のJavaDocは[こちら](http://www.javadoc.io/doc/org.pcap4j/pcap4j/1.7.2)。
+最新のJavaDocは[こちら](http://www.javadoc.io/doc/org.pcap4j/pcap4j/2.0.0-alpha)。
 各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22)からダウンロードできる。
 
 Pcap4Jのモジュール構成については[こちら](https://github.com/kaitoy/pcap4j/blob/master/www/pcap4j_modules.md)。
@@ -161,37 +143,51 @@ Eclipse上でpcap4j-sampleにあるサンプルを実行する場合、
 その実行構成のクラスパスタブのユーザー・エントリーの最初に、
 pcap4j-packetfactory-staticプロジェクトかpcap4j-packetfactory-propertiesbasedプロジェクトを追加する必要がある。
 
-#### Mavenプロジェクトでの使用方法 ####
-pom.xmlに以下のような記述を追加する。
+#### プロジェクトへPcap4Jを追加する方法 ####
 
-```xml
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  ...
-  <dependencies>
-    <dependency>
-      <groupId>org.pcap4j</groupId>
-      <artifactId>pcap4j-core</artifactId>
-      <version>1.7.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pcap4j</groupId>
-      <artifactId>pcap4j-packetfactory-static</artifactId>
-      <version>1.7.2</version>
-    </dependency>
-       ...
-  </dependencies>
-  ...
-</project>
-```
+* Gradle
+
+    build.gradleに以下のような記述を追加する。
+
+    ```
+    dependencies {
+      compile 'org.pcap4j:pcap4j-core:2.0.0-alpha'
+      compile 'org.pcap4j:pcap4j-packetfactory-static:2.0.0-alpha'
+    }
+    ```
+
+* Maven
+
+    pom.xmlに以下のような記述を追加する。
+
+    ```xml
+    <project xmlns="http://maven.apache.org/POM/4.0.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                          http://maven.apache.org/xsd/maven-4.0.0.xsd">
+      ...
+      <dependencies>
+        <dependency>
+          <groupId>org.pcap4j</groupId>
+          <artifactId>pcap4j-core</artifactId>
+          <version>2.0.0-alpha</version>
+        </dependency>
+        <dependency>
+          <groupId>org.pcap4j</groupId>
+          <artifactId>pcap4j-packetfactory-static</artifactId>
+          <version>2.0.0-alpha</version>
+        </dependency>
+           ...
+      </dependencies>
+      ...
+    </project>
+    ```
 
 #### ネイティブライブラリのロードについて ####
 デフォルトでは下記の条件でネイティブライブラリを検索し、ロードする。
 
 * Windows
-    * サーチパス: 環境変数`PATH`に含まれるパス等。([MSDN](https://msdn.microsoft.com/ja-jp/library/7d83bc18.aspx)参照。)
+    * サーチパス: 環境変数`PATH`に含まれるパス等([MSDN](https://msdn.microsoft.com/ja-jp/library/7d83bc18.aspx)参照。)と`%SystemRoot%\System32\Npcap`。
     * ファイル名: wpcap.dllとPacket.dll
 * Linux/UNIX
     * サーチパス: OSに設定された共有ライブラリのサーチパス。例えば環境変数`LD_LIBRARY_PATH`に含まれるパス。
@@ -212,16 +208,8 @@ Windowsのネイティブpcapライブラリの選択肢にはWinPcapとNpcapが
 WinPcapは2013/3/8に4.1.3(libpcap 1.0.0ベース)をリリースして以来開発が止まっているのに対して、
 Npcapは現在も開発が続いているので、より新しい機能を使いたい場合などにはNpcapを選ぶといい。
 
-WinPcapは`%SystemRoot%\System32\`にインストールされるので、何も気にしなくてもPcap4Jにロードされる。
-
-一方Npcapはデフォルトで`%SystemRoot%\System32\Npcap\`にインストールされるので、
-Pcap4Jがロードするためには以下のいずれかが必要となる。
-
-* `PATH`に`%SystemRoot%\System32\Npcap\`を追加する。
-* `jna.library.path`に`%SystemRoot%\System32\Npcap\`を指定する。
-* `org.pcap4j.core.pcapLibName`に`%SystemRoot%\System32\Npcap\wpcap.dll`を指定して、
-  `org.pcap4j.core.packetLibName`に`%SystemRoot%\System32\Npcap\Packet.dll`を指定する。
-* Npcapを`WinPcap Compatible Mode`をオンにしてインストールする。
+デフォルトでは、WinPcapは`%SystemRoot%\System32\`にインストールされ、Npcapは`%SystemRoot%\System32\Npcap\`にインストールされる。
+両方インストールしている環境で、明示的にNpcapを使用したい場合、`org.pcap4j.core.pcapLibName`に`%SystemRoot%\System32\Npcap\wpcap.dll`を指定して、`org.pcap4j.core.packetLibName`に`%SystemRoot%\System32\Npcap\Packet.dll`を指定する。
 
 ### Docker ###
 
@@ -237,20 +225,18 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 ------
 
 1. WinPcap/Npcap/libpcapインストール:<br>
-   WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
+   WindowsであればNpcapかWinPcap、Linux/Unixであればlibpcapをインストールする。
    ビルド時に実行されるunit testで必要なので。
-2. JDK 1.6+インストール:<br>
-   JDKの1.6以上をダウンロードしてインストール。JAVA_HOMEを設定する。
-3. Mavenインストール:<br>
-   Mavenの3.0.5以上をインストールして、そのbinディレクトリにPATHを通す。
-4. Gitをインストール:<br>
+2. JDK 8+インストール:<br>
+   JDKの8以上をダウンロードしてインストール。JAVA_HOMEを設定する。
+3. Gitをインストール:<br>
    [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
    Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
-5. Pcap4Jのレポジトリのダウンロード:<br>
+4. Pcap4Jのレポジトリのダウンロード:<br>
    Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
    インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
-6. ビルド:<br>
-   プロジェクトのルートディレクトリに`cd`して、`mvn install` を実行する。
+5. ビルド:<br>
+   プロジェクトのルートディレクトリに`cd`して、`gradlew build` を実行する。
    unit testを通すためにはAdministrator/root権限が必要。
 
 ライセンス
@@ -258,7 +244,7 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 
 Pcap4J is distributed under the MIT license.
 
-    Copyright (c) 2011-2015 Pcap4J.org
+    Copyright (c) 2011-2017 Pcap4J.org
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -287,8 +273,3 @@ Pcap4J is distributed under the MIT license.
 ----------
 
 Kaito Yamada (kaitoy@pcap4j.org)
-
-おまけ
-------
-
-Pcap4J を使ったSNMPネットワークシミュレータ、SNeO。Githubに公開しました: https://github.com/kaitoy/sneo
