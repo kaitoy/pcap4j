@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -18,7 +18,7 @@ allprojects {
   apply plugin: 'java'
 
   group = 'org.pcap4j'
-  version = '2.0.0-SNAPSHOT'
+  version = '2.0.0-alpha-SNAPSHOT'
 
   javadoc {
     def currentYear = Calendar.getInstance().get Calendar.YEAR
