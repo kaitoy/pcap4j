@@ -72,6 +72,7 @@ Maven Central Repositoryからダウンロードできる。
 * 各ビルトインパケットクラスはシリアライズに対応。スレッドセーフ(実質的に不変)。
 * ライブラリをいじらずに、対応プロトコルをユーザが追加できる。
 * pcapのダンプファイル(Wiresharkのcapture fileなど)の読み込み、書き込み。
+* [Semantic Versioning 2.0.0](https://semver.org/lang/ja/)準拠。
 
 使い方
 ------

@@ -72,6 +72,7 @@ Features
 * All built-in packet classes are serializable and thread-safe (practically immutable).
 * You can add a protocol support without modifying Pcap4J library itself.
 * Dumping and reading pcap-formatted files (e.g. a capture file of Wireshark).
+* [Semantic Versioning 2.0.0](https://semver.org/)
 
 How to use
 ----------
