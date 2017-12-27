@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.7.3 (28-Dec-2017)
+===========================
+### New Features ###
 * [PR#127](https://github.com/kaitoy/pcap4j/pull/127): Add support for setting immediate mode.
 * Add `isUp()` and `isRunning()` to PcapNetworkInterface.
 
