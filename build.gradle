@@ -18,7 +18,7 @@ allprojects {
   apply plugin: 'java'
 
   group = 'org.pcap4j'
-  version = '2.0.0-alpha-SNAPSHOT'
+  version = '2.0.0-alpha'
 
   javadoc {
     def currentYear = Calendar.getInstance().get Calendar.YEAR
