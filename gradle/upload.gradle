@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -62,7 +62,7 @@ allprojects {
     publish = true
     pkg {
       repo = 'maven'
-      name = 'pcap4j'
+      name = 'org.pcap4j:pcap4j'
       licenses = ['MIT']
       vcsUrl = 'https://github.com/kaitoy/pcap4j.git'
       version {
