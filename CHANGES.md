@@ -1,5 +1,5 @@
-Future (2.0.0)
-==============
+Release 2.0.0-alpha (28-Dec-2017)
+=================================
 ### New Features ###
 * Add a dll search path for Npcap (`%SystemRoot%\System32\Npcap\`).
   No longer need to install Npcap with `WinPcap Compatible Mode` on.
