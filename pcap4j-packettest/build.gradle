@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -17,7 +17,9 @@ dependencies {
   testCompile "junit:junit:${junitVer}"
 }
 
-jar.enabled = false
+// jar is needed to sync to the Central, although it's empty.
+// jar.enabled = false
+
 test.enabled = false
 
 task jarTests(type: Jar, dependsOn: testClasses) {
@@ -29,9 +31,4 @@ testClasses.finalizedBy jarTests
 artifacts {
   archives jarTests
   testJar jarTests
-}
-
-// remove the output of jar task from archives
-configurations.archives.artifacts.with { artifacts ->
-  artifacts.remove artifacts.find { !it.classifier }
 }
