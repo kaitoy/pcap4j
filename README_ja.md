@@ -46,7 +46,7 @@ Pcap4J 2.x and newer
 Maven Central Repositoryからダウンロードできる。
 
 * Pcap4J 2.0.0-alpha
-    * [pcap4j-2.0.0-alpha-distribution.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/2.0.0-alpha/pcap4j-2.0.0-alpha-distribution.zip)
+    * [pcap4j-2.0.0-alpha-distribution.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/2.0.0-alpha/pcap4j-2.0.0-alpha-distribution.zip)
 * スナップショットビルド
     * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j/
 
