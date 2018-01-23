@@ -17,7 +17,7 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.6
  */
-public final class UdpPort extends NamedNumber<Short, UdpPort> {
+public final class UdpPort extends Port {
 
   /**
    *
@@ -4848,27 +4848,6 @@ public final class UdpPort extends NamedNumber<Short, UdpPort> {
    */
   public static UdpPort register(UdpPort port) {
     return registry.put(port.value(), port);
-  }
-
-  /**
-   * @return the value of this object as an int.
-   */
-  public int valueAsInt() {
-    return 0xFFFF & value();
-  }
-
-  /**
-   *
-   * @return a string representation of this value.
-   */
-  @Override
-  public String valueAsString() {
-    return String.valueOf(valueAsInt());
-  }
-
-  @Override
-  public int compareTo(UdpPort o) {
-    return value().compareTo(o.value());
   }
 
 }

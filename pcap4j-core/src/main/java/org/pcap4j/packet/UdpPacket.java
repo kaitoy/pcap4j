@@ -24,7 +24,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class UdpPacket extends AbstractPacket {
+public final class UdpPacket extends AbstractPacket implements TransportPacket {
 
   /**
    *
@@ -310,7 +310,7 @@ public final class UdpPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class UdpHeader extends AbstractHeader {
+  public static final class UdpHeader extends AbstractHeader implements TransportHeader{
 
     /*
      *  0                              16                            31

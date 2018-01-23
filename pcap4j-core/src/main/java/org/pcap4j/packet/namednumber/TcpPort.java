@@ -17,7 +17,7 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.12
  */
-public final class TcpPort extends NamedNumber<Short, TcpPort> {
+public final class TcpPort extends Port {
 
   /**
    *
@@ -4835,26 +4835,4 @@ public final class TcpPort extends NamedNumber<Short, TcpPort> {
   public static TcpPort register(TcpPort port) {
     return registry.put(port.value(), port);
   }
-
-  /**
-   * @return the value of this object as an int.
-   */
-  public int valueAsInt() {
-    return 0xFFFF & value();
-  }
-
-  /**
-   *
-   * @return a string representation of this value.
-   */
-  @Override
-  public String valueAsString() {
-    return String.valueOf(valueAsInt());
-  }
-
-  @Override
-  public int compareTo(TcpPort o) {
-    return value().compareTo(o.value());
-  }
-
 }

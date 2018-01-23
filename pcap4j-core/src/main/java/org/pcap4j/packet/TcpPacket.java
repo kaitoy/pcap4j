@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * @author Kaito Yamada
  * @since pcap4j 0.9.12
  */
-public final class TcpPacket extends AbstractPacket {
+public final class TcpPacket extends AbstractPacket implements TransportPacket {
 
   // http://tools.ietf.org/html/rfc793
 
@@ -473,7 +473,7 @@ public final class TcpPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.12
    */
-  public static final class TcpHeader extends AbstractHeader {
+  public static final class TcpHeader extends AbstractHeader implements TransportHeader {
 
     /*
      *  0                              16                            31
