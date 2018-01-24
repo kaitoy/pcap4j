@@ -50,10 +50,23 @@ public final class PcapPacket extends AbstractPacket {
     this.timestamp = timestamp;
     this.originalLength = originalLength;
     this.packet
-      = new LazyValue<Packet>(
+      = new LazyValue<>(
           () -> PacketFactories.getFactory(Packet.class, DataLinkType.class)
             .newInstance(rawData, 0, rawData.length, dlt)
         );
+  }
+
+  private PcapPacket(PcapPacket.Builder builder) {
+    if (builder == null
+            || builder.payloadBuilder == null) {
+      throw new NullPointerException("builder: " + builder);
+    }
+
+    this.timestamp = builder.timestamp;
+    this.originalLength = builder.originalLength;
+    this.packet = new LazyValue<>(
+            () -> builder.payloadBuilder.build());
+    this.rawData = packet.getValue().getRawData();
   }
 
   /**
@@ -114,7 +127,7 @@ public final class PcapPacket extends AbstractPacket {
    */
   @Override
   public Builder getBuilder() {
-    return packet.getValue().getBuilder();
+    return new Builder(this);
   }
 
   @Override
@@ -172,4 +185,59 @@ public final class PcapPacket extends AbstractPacket {
     return result;
   }
 
+  /**
+   * @author Ferran Altimiras
+   */
+  public static final class Builder extends AbstractBuilder {
+
+    private Instant timestamp;
+    private int originalLength;
+    private Packet.Builder payloadBuilder;
+    /**
+     *
+     */
+    public Builder() {}
+
+    private Builder(PcapPacket packet) {
+      this.timestamp = packet.timestamp;
+      this.originalLength = packet.originalLength;
+      this.payloadBuilder = packet.getPayload() != null ? packet.getPayload().getBuilder() : null;
+    }
+
+    /**
+     *
+     * @param timestamp timestamp
+     * @return this Builder object for method chaining.
+     */
+    public PcapPacket.Builder timestamp(Instant timestamp) {
+      this.timestamp = timestamp;
+      return this;
+    }
+
+    /**
+     *
+     * @param originalLength originalLenght
+     * @return this Builder object for method chaining.
+     */
+    public PcapPacket.Builder originalLength(int originalLength) {
+      this.originalLength = originalLength;
+      return this;
+    }
+
+    @Override
+    public PcapPacket.Builder payloadBuilder(Packet.Builder payloadBuilder) {
+      this.payloadBuilder = payloadBuilder;
+      return this;
+    }
+
+    @Override
+    public Packet.Builder getPayloadBuilder() {
+      return payloadBuilder;
+    }
+
+    @Override
+    public PcapPacket build() {
+      return new PcapPacket(this);
+    }
+  }
 }
