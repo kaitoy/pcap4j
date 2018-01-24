@@ -182,8 +182,8 @@ public class IcmpV4ErrReplyer {
               return;
             }
 
-            EthernetPacket.Builder eb1
-              = (EthernetPacket.Builder)packet.getBuilder();
+
+            EthernetPacket.Builder eb1 = packet.getBuilder().get(EthernetPacket.Builder.class);
             ArpPacket.Builder ab = eb1.get(ArpPacket.Builder.class);
 
             ab.srcHardwareAddr(MAC_ADDR)
