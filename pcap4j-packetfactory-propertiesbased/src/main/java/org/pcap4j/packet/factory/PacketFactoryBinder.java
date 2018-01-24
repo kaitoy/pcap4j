@@ -1,16 +1,18 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2016  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
 
+import java.io.ObjectStreamException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.NamedNumber;
 
@@ -24,6 +26,8 @@ final class PacketFactoryBinder {
 
   private final Map<CacheKey, PacketFactory<?, ?>> cache
     = new ConcurrentHashMap<CacheKey, PacketFactory<?, ?>>();
+
+  private PacketFactoryBinder() {}
 
   public static PacketFactoryBinder getInstance() { return INSTANCE; }
 

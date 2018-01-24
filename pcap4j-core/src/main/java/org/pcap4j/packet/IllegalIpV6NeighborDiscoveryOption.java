@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,25 +8,26 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
+
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 import org.pcap4j.util.ByteArrays;
-
 
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.15
  */
 public final class IllegalIpV6NeighborDiscoveryOption
-implements IpV6NeighborDiscoveryOption {
+implements IpV6NeighborDiscoveryOption, IllegalRawDataHolder {
 
   /**
    *
    */
-  private static final long serialVersionUID = 2715909582897939970L;
+  private static final long serialVersionUID = -6156417526745835637L;
 
   private final IpV6NeighborDiscoveryOptionType type;
   private final byte[] rawData;
+  private final IllegalRawDataException cause;
 
   /**
    * A static factory method.
@@ -36,39 +37,26 @@ implements IpV6NeighborDiscoveryOption {
    * @param rawData rawData
    * @param offset offset
    * @param length length
+   * @param cause cause
    * @return a new IllegalIpV6NeighborDiscoveryOption object.
    */
   public static IllegalIpV6NeighborDiscoveryOption newInstance(
-    byte[] rawData, int offset, int length
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
   ) {
+    if (cause == null) {
+      throw new NullPointerException("cause is null.");
+    }
     ByteArrays.validateBounds(rawData, offset, length);
-    return new IllegalIpV6NeighborDiscoveryOption(rawData, offset, length);
+    return new IllegalIpV6NeighborDiscoveryOption(rawData, offset, length, cause);
   }
 
-  private IllegalIpV6NeighborDiscoveryOption(byte[] rawData, int offset, int length) {
+  private IllegalIpV6NeighborDiscoveryOption(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
     this.type = IpV6NeighborDiscoveryOptionType.getInstance(rawData[offset]);
     this.rawData = new byte[length];
     System.arraycopy(rawData, offset, this.rawData, 0, length);
-  }
-
-  private IllegalIpV6NeighborDiscoveryOption(Builder builder) {
-    if (
-        builder == null
-     || builder.type == null
-     || builder.rawData == null
-   ) {
-     StringBuilder sb = new StringBuilder();
-     sb.append("builder: ").append(builder)
-       .append(" builder.type: ").append(builder.type)
-       .append(" builder.rawData: ").append(builder.rawData);
-     throw new NullPointerException(sb.toString());
-   }
-
-   this.type = builder.type;
-   this.rawData = new byte[builder.rawData.length];
-   System.arraycopy(
-     builder.rawData, 0, this.rawData, 0, builder.rawData.length
-   );
+    this.cause = cause;
   }
 
   @Override
@@ -84,12 +72,9 @@ implements IpV6NeighborDiscoveryOption {
     return copy;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() {
-    return new Builder(this);
+  @Override
+  public IllegalRawDataException getCause() {
+    return cause;
   }
 
   @Override
@@ -99,76 +84,40 @@ implements IpV6NeighborDiscoveryOption {
       .append(type)
       .append("] [Illegal Raw Data: 0x")
       .append(ByteArrays.toHexString(rawData, ""))
+      .append("] [cause: ")
+      .append(cause)
       .append("]");
     return sb.toString();
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
-
-    IllegalIpV6NeighborDiscoveryOption other = (IllegalIpV6NeighborDiscoveryOption)obj;
-    return
-         type.equals(other.type)
-      && Arrays.equals(other.rawData, rawData);
-  }
-
-  @Override
   public int hashCode() {
-    int result = 17;
-    result = 31 * result + type.hashCode();
-    result = 31 * result + Arrays.hashCode(rawData);
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + cause.hashCode();
+    result = prime * result + Arrays.hashCode(rawData);
     return result;
   }
 
-  /**
-   * @author Kaito Yamada
-   * @since pcap4j 0.9.15
-   */
-  public static final class Builder {
-
-    private IpV6NeighborDiscoveryOptionType type;
-    private byte[] rawData;
-
-    /**
-     *
-     */
-    public Builder() {}
-
-    private Builder(IllegalIpV6NeighborDiscoveryOption option) {
-      this.type = option.type;
-      this.rawData = option.rawData;
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-    /**
-     *
-     * @param type type
-     * @return this Builder object for method chaining.
-     */
-    public Builder type(IpV6NeighborDiscoveryOptionType type) {
-      this.type = type;
-      return this;
+    if (obj == null) {
+      return false;
     }
-
-    /**
-     *
-     * @param rawData rawData
-     * @return this Builder object for method chaining.
-     */
-    public Builder rawData(byte[] rawData) {
-      this.rawData = rawData;
-      return this;
+    if (getClass() != obj.getClass()) {
+      return false;
     }
-
-    /**
-     *
-     * @return a new IllegalIpV6NeighborDiscoveryOption object.
-     */
-    public IllegalIpV6NeighborDiscoveryOption build() {
-      return new IllegalIpV6NeighborDiscoveryOption(this);
+    IllegalIpV6NeighborDiscoveryOption other = (IllegalIpV6NeighborDiscoveryOption) obj;
+    if (!cause.equals(other.cause)) {
+      return false;
     }
-
+    if (!Arrays.equals(rawData, other.rawData)) {
+      return false;
+    }
+    return true;
   }
 
 }

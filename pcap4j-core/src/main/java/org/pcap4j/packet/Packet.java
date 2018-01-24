@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 /**
  * The interface representing a packet which consists of a header and a payload.
@@ -53,6 +54,11 @@ public interface Packet extends Iterable<Packet>, Serializable {
    */
   public byte[] getRawData();
 
+  @Override
+  public default Iterator<Packet> iterator() {
+    return new PacketIterator(this);
+  }
+
   /**
    * Traverses this packet and its payload to find an object of
    * the specified packet class and returns the object.
@@ -63,7 +69,14 @@ public interface Packet extends Iterable<Packet>, Serializable {
    * @param clazz the packet class of the object to get
    * @return a packet object if found; otherwise null
    */
-  public <T extends Packet> T get(Class<T> clazz);
+  public default <T extends Packet> T get(Class<T> clazz) {
+    for (Packet p: this) {
+      if (clazz.isInstance(p)) {
+        return clazz.cast(p);
+      }
+    }
+    return null;
+  }
 
   /**
    * Returns the outer packet object of
@@ -73,7 +86,14 @@ public interface Packet extends Iterable<Packet>, Serializable {
    *              whose outer packet object is what you want to get
    * @return a packet object if found; otherwise null
    */
-  public Packet getOuterOf(Class<? extends Packet> clazz);
+  public default Packet getOuterOf(Class<? extends Packet> clazz) {
+    for (Packet p: this) {
+      if (clazz.isInstance(p.getPayload())) {
+        return p;
+      }
+    }
+    return null;
+  }
 
   /**
    * Returns true if this packet is or its payload includes an object of
@@ -84,7 +104,9 @@ public interface Packet extends Iterable<Packet>, Serializable {
    * @return true if this packet is or its payload includes an object of
    *         specified packet class; false otherwise
    */
-  public <T extends Packet> boolean contains(Class<T> clazz);
+  public default <T extends Packet> boolean contains(Class<T> clazz) {
+    return get(clazz) != null;
+  }
 
   /**
    * Returns a new Builder object populated with this object's fields' values.
@@ -101,6 +123,11 @@ public interface Packet extends Iterable<Packet>, Serializable {
    */
   public interface Builder extends Iterable<Builder> {
 
+    @Override
+    public default Iterator<Builder> iterator() {
+      return new BuilderIterator(this);
+    }
+
     /**
      * Traverses this builder and its payload builder to find an object of
      * the specified builder class and returns the object.
@@ -111,7 +138,14 @@ public interface Packet extends Iterable<Packet>, Serializable {
      * @param clazz the builder class of the object to get
      * @return a builder object if found; otherwise null
      */
-    public <T extends Builder> T get(Class<T> clazz);
+    public default <T extends Builder> T get(Class<T> clazz) {
+      for (Builder b: this) {
+        if (clazz.isInstance(b)) {
+          return clazz.cast(b);
+        }
+      }
+      return null;
+    }
 
     /**
      * Returns the outer builder object of
@@ -121,7 +155,14 @@ public interface Packet extends Iterable<Packet>, Serializable {
      *              whose outer builder object is what you want to get
      * @return a builder object if found; otherwise null
      */
-    public Builder getOuterOf(Class<? extends Builder> clazz);
+    public default Builder getOuterOf(Class<? extends Builder> clazz) {
+      for (Builder b: this) {
+        if (clazz.isInstance(b.getPayloadBuilder())) {
+          return b;
+        }
+      }
+      return null;
+    }
 
     /**
      * Set the payload builder.

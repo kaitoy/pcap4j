@@ -1,0 +1,145 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016-2017  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
+allprojects {
+  apply plugin: 'maven'
+  apply plugin: 'com.jfrog.bintray'
+
+  // sources jars
+  if (project.name != 'pcap4j') {
+    task jarSources(type: Jar) {
+      classifier = 'sources'
+      if (project.name == 'pcap4j-packettest') {
+        from sourceSets.test.allSource
+      }
+      else {
+        from sourceSets.main.allSource
+      }
+    }
+    artifacts {
+      archives jarSources
+    }
+  }
+
+  // javadoc jars
+  if (
+       project.name != 'pcap4j'
+    && project.name != 'pcap4j-packettest'
+  ) {
+    javadoc.enabled = true
+    task jarJavadoc(type: Jar, dependsOn: javadoc) {
+      classifier = 'javadoc'
+      from javadoc.destinationDir
+    }
+    artifacts {
+      archives jarJavadoc
+    }
+  }
+
+  // snapshots to Sonatype
+  uploadArchives {
+    repositories.mavenDeployer {
+      configuration = configurations.archives
+      repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+        authentication(
+          userName: project.findProperty('sonatype_user'),
+          password: project.findProperty('sonatype_password'),
+        )
+      }
+    }
+  }
+
+  // releases to JCenter
+  bintray {
+    user = findProperty 'bintray_user'
+    key = findProperty 'bintray_apikey'
+    configurations = ['archives']
+    dryRun = false
+    publish = true
+    pkg {
+      repo = 'maven'
+      name = 'org.pcap4j:pcap4j'
+      licenses = ['MIT']
+      vcsUrl = 'https://github.com/kaitoy/pcap4j.git'
+      version {
+        name = project.version
+        vcsTag = project.version
+        // released = new Date()
+        gpg {
+          sign = true
+          passphrase = project.findProperty('bintray_gpg_password')
+        }
+        mavenCentralSync {
+          sync = true
+          user = project.findProperty('sonatype_user')
+          password = project.findProperty('sonatype_password')
+          close = '1'
+        }
+      }
+    }
+  }
+  
+  project.install.repositories.mavenInstaller.pom.project {
+    url 'https://github.com/kaitoy/pcap4j'
+    inceptionYear '2011'
+    licenses {
+      license {
+        name 'MIT License'
+        url 'https://github.com/kaitoy/pcap4j/blob/master/LICENSE'
+        distribution 'repo'
+      }
+    }
+    scm {
+      connection 'scm:git:git@github.com:kaitoy/pcap4j.git'
+      developerConnection 'scm:git:git@github.com:kaitoy/pcap4j.git'
+      url 'https://github.com/kaitoy/pcap4j.git'
+      tag 'HEAD'
+    }
+    developers {
+      developer {
+        id 'kaitoy'
+        name 'Kaito Yamada'
+        email 'kaitoy@pcap4j.org'
+      }
+    }
+  }
+}
+
+artifacts {
+  archives jarJavadoc, dist
+}
+
+rootProject.install.repositories.mavenInstaller.pom.project {
+  name 'Pcap4J'
+  packaging 'pom'
+  description 'A Java library for capturing, crafting and sending packets.'
+}
+project(':pcap4j-core').install.repositories.mavenInstaller.pom.project {
+  name 'Pcap4J Core'
+  packaging 'jar'
+  description 'The core module of Pcap4J.'
+}
+project(':pcap4j-packetfactory-propertiesbased').install.repositories.mavenInstaller.pom.project {
+  name 'Pcap4J Properties-Based Packet Factory'
+  packaging 'jar'
+  description 'Properties-Based Packet Factory.'
+}
+project(':pcap4j-packetfactory-static').install.repositories.mavenInstaller.pom.project {
+  name 'Pcap4J Static Packet Factory'
+  packaging 'jar'
+  description 'Static Packet Factory.'
+}
+project(':pcap4j-packettest').install.repositories.mavenInstaller.pom.project {
+  name 'Pcap4J Packet Tests'
+  packaging 'jar'
+  description 'Tests of Pcap4J packet classes.'
+}
+project(':pcap4j-sample').install.repositories.mavenInstaller.pom.project {
+  name 'Pcap4J Samples'
+  packaging 'jar'
+  description 'Samples of Pcap4J.'
+}

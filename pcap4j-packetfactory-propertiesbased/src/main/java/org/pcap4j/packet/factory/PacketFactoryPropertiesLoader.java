@@ -7,6 +7,8 @@
 
 package org.pcap4j.packet.factory;
 
+import java.io.ObjectStreamException;
+
 import org.pcap4j.packet.DnsResourceRecord.DnsRData;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;

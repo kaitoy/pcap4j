@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -18,38 +18,35 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NotApplicable> {
 
-  private static final StaticIpV4TosFactory INSTANCE
-    = new StaticIpV4TosFactory();
+  private static final StaticIpV4TosFactory INSTANCE = new StaticIpV4TosFactory();
+
+  private StaticIpV4TosFactory() {}
 
   /**
-   *
    * @return the singleton instance of StaticIpV4TosFactory.
    */
   public static StaticIpV4TosFactory getInstance() {
     return INSTANCE;
   }
 
-  @Override
-  @Deprecated
-  public IpV4Tos newInstance(byte[] rawData, int offset, int length, NotApplicable number) {
-    return newInstance(rawData, offset, length);
-  }
-
-  @Override
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, NotApplicable...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
   public IpV4Tos newInstance(byte[] rawData, int offset, int length) {
     ByteArrays.validateBounds(rawData, offset, length);
     return IpV4Rfc1349Tos.newInstance(rawData[offset]);
   }
 
   @Override
-  @Deprecated
-  public Class<? extends IpV4Tos> getTargetClass(NotApplicable number) {
-    return getTargetClass();
-  }
-
-  @Override
-  public Class<? extends IpV4Tos> getTargetClass() {
-    return IpV4Rfc1349Tos.class;
+  public IpV4Tos newInstance(byte[] rawData, int offset, int length, NotApplicable... numbers) {
+    ByteArrays.validateBounds(rawData, offset, length);
+    return IpV4Rfc1349Tos.newInstance(rawData[offset]);
   }
 
 }

@@ -1,14 +1,12 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2017  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.pcap4j.packet.IllegalIpV6Option;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV6ExtOptionsPacket.IpV6Option;
@@ -21,105 +19,113 @@ import org.pcap4j.packet.namednumber.IpV6OptionType;
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */
-public final class StaticIpV6OptionFactory
-implements PacketFactory<IpV6Option, IpV6OptionType> {
+public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, IpV6OptionType> {
 
-  private static final StaticIpV6OptionFactory INSTANCE
-    = new StaticIpV6OptionFactory();
-  private final Map<IpV6OptionType, Instantiater> instantiaters
-    = new HashMap<IpV6OptionType, Instantiater>();
+  private static final StaticIpV6OptionFactory INSTANCE = new StaticIpV6OptionFactory();
 
-  private StaticIpV6OptionFactory() {
-    instantiaters.put(
-      IpV6OptionType.PAD1, new Instantiater() {
-        @Override
-        public IpV6Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
-          return IpV6Pad1Option.newInstance(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV6Pad1Option> getTargetClass() {
-          return IpV6Pad1Option.class;
-        }
-      }
-    );
-    instantiaters.put(
-      IpV6OptionType.PADN, new Instantiater() {
-        @Override
-        public IpV6Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
-          return IpV6PadNOption.newInstance(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV6PadNOption> getTargetClass() {
-          return IpV6PadNOption.class;
-        }
-      }
-    );
-  };
+  private StaticIpV6OptionFactory() {}
 
   /**
-   *
    * @return the singleton instance of StaticIpV6OptionFactory.
    */
   public static StaticIpV6OptionFactory getInstance() {
     return INSTANCE;
   }
 
-  @Override
-  public IpV6Option newInstance(
-    byte[] rawData, int offset, int length, IpV6OptionType number
-  ) {
-    if (rawData == null || number == null) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" number: ")
-        .append(number);
-      throw new NullPointerException(sb.toString());
-    }
-
-    try {
-      Instantiater instantiater = instantiaters.get(number);
-      if (instantiater != null) {
-        return instantiater.newInstance(rawData, offset, length);
-      }
-    } catch (IllegalRawDataException e) {
-      return IllegalIpV6Option.newInstance(rawData, offset, length);
-    }
-
-    return newInstance(rawData, offset, length);
-  }
-
-  @Override
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6OptionType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
   public IpV6Option newInstance(byte[] rawData, int offset, int length) {
     try {
       return UnknownIpV6Option.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalIpV6Option.newInstance(rawData, offset, length);
+      return IllegalIpV6Option.newInstance(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6OptionType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public IpV6Option newInstance(
+    byte[] rawData, int offset, int length, IpV6OptionType number
+  ) {
+    try {
+      switch (Byte.toUnsignedInt(number.value())) {
+        case 0:
+          return IpV6Pad1Option.newInstance(rawData, offset, length);
+        case 1:
+          return IpV6PadNOption.newInstance(rawData, offset, length);
+      }
+      return UnknownIpV6Option.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalIpV6Option.newInstance(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6OptionType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number1 see {@link PacketFactory#newInstance}.
+   * @param number2 see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public IpV6Option newInstance(
+    byte[] rawData, int offset, int length, IpV6OptionType number1, IpV6OptionType number2
+  ) {
+    try {
+      switch (Byte.toUnsignedInt(number1.value())) {
+        case 0:
+          return IpV6Pad1Option.newInstance(rawData, offset, length);
+        case 1:
+          return IpV6PadNOption.newInstance(rawData, offset, length);
+      }
+
+      switch (Byte.toUnsignedInt(number2.value())) {
+        case 0:
+          return IpV6Pad1Option.newInstance(rawData, offset, length);
+        case 1:
+          return IpV6PadNOption.newInstance(rawData, offset, length);
+      }
+      return UnknownIpV6Option.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalIpV6Option.newInstance(rawData, offset, length, e);
     }
   }
 
   @Override
-  public Class<? extends IpV6Option> getTargetClass(IpV6OptionType number) {
-    if (number == null) {
-      throw new NullPointerException("number must not be null.");
+  public IpV6Option newInstance(
+    byte[] rawData, int offset, int length, IpV6OptionType... numbers
+  ) {
+    try {
+      for (IpV6OptionType num: numbers) {
+        switch (Byte.toUnsignedInt(num.value())) {
+          case 0:
+            return IpV6Pad1Option.newInstance(rawData, offset, length);
+          case 1:
+            return IpV6PadNOption.newInstance(rawData, offset, length);
+        }
+      }
+      return UnknownIpV6Option.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalIpV6Option.newInstance(rawData, offset, length, e);
     }
-    Instantiater instantiater = instantiaters.get(number);
-    return instantiater != null ? instantiater.getTargetClass() : getTargetClass();
-  }
-
-  @Override
-  public Class<? extends IpV6Option> getTargetClass() {
-    return UnknownIpV6Option.class;
-  }
-
-  private static interface Instantiater {
-
-    public IpV6Option newInstance(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException;
-
-    public Class<? extends IpV6Option> getTargetClass();
-
   }
 
 }

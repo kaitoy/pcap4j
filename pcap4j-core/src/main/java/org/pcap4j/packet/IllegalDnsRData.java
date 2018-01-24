@@ -16,14 +16,15 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.7.1
  */
-public final class IllegalDnsRData implements DnsRData {
+public final class IllegalDnsRData implements DnsRData, IllegalRawDataHolder {
 
   /**
    *
    */
-  private static final long serialVersionUID = -4966155227455233333L;
+  private static final long serialVersionUID = 7160504910755325172L;
 
   private final byte[] rawData;
+  private final IllegalRawDataException cause;
 
   /**
    * A static factory method.
@@ -33,29 +34,22 @@ public final class IllegalDnsRData implements DnsRData {
    * @param rawData rawData
    * @param offset offset
    * @param length length
+   * @param cause cause
    * @return a new IllegalDnsRData object.
    */
-  public static IllegalDnsRData newInstance(byte[] rawData, int offset, int length) {
-    ByteArrays.validateBounds(rawData, offset, length);
-    return new IllegalDnsRData(rawData, offset, length);
-  }
-
-  private IllegalDnsRData(byte[] rawData, int offset, int length) {
-    this.rawData = ByteArrays.getSubArray(rawData, offset, length);
-  }
-
-  private IllegalDnsRData(Builder builder) {
-    if (
-         builder == null
-      || builder.rawData == null
-    ) {
-      StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.rawData: ").append(builder.rawData);
-      throw new NullPointerException(sb.toString());
+  public static IllegalDnsRData newInstance(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    if (cause == null) {
+      throw new NullPointerException("cause is null.");
     }
+    ByteArrays.validateBounds(rawData, offset, length);
+    return new IllegalDnsRData(rawData, offset, length, cause);
+  }
 
-    this.rawData = ByteArrays.clone(builder.rawData);
+  private IllegalDnsRData(byte[] rawData, int offset, int length, IllegalRawDataException cause) {
+    this.rawData = ByteArrays.getSubArray(rawData, offset, length);
+    this.cause = cause;
   }
 
   @Override
@@ -68,10 +62,10 @@ public final class IllegalDnsRData implements DnsRData {
     return ByteArrays.clone(rawData);
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  @Override
+  public IllegalRawDataException getCause() {
+    return cause;
+  }
 
   @Override
   public String toString(String indent) {
@@ -94,6 +88,9 @@ public final class IllegalDnsRData implements DnsRData {
       .append(ls)
       .append(indent).append("  data: ")
       .append(ByteArrays.toHexString(rawData, ""))
+      .append(ls)
+      .append(indent).append("  cause: ")
+      .append(cause)
       .append(ls);
 
     return sb.toString();
@@ -101,50 +98,32 @@ public final class IllegalDnsRData implements DnsRData {
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(rawData);
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + cause.hashCode();
+    result = prime * result + Arrays.hashCode(rawData);
+    return result;
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     IllegalDnsRData other = (IllegalDnsRData) obj;
-    return Arrays.equals(rawData, other.rawData);
-  }
-
-  /**
-   * @author Kaito Yamada
-   * @since pcap4j 1.7.1
-   */
-  public static final class Builder {
-
-    private byte[] rawData;
-
-    /**
-     *
-     */
-    public Builder() {}
-
-    private Builder(IllegalDnsRData obj) {
-      this.rawData = obj.rawData;
+    if (!cause.equals(other.cause)) {
+      return false;
     }
-
-    /**
-     * @param rawData rawData
-     * @return this Builder object for method chaining.
-     */
-    public Builder rawData(byte[] rawData) {
-      this.rawData = rawData;
-      return this;
+    if (!Arrays.equals(rawData, other.rawData)) {
+      return false;
     }
-
-    /**
-     * @return a new IllegalDnsRData object.
-     */
-    public IllegalDnsRData build() {
-      return new IllegalDnsRData(this);
-    }
-
+    return true;
   }
 
 }

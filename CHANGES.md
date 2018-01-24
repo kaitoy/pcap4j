@@ -1,10 +1,57 @@
-Future
-======
+Release 2.0.0-alpha (28-Dec-2017)
+=================================
 ### New Features ###
+* Add a dll search path for Npcap (`%SystemRoot%\System32\Npcap\`).
+  No longer need to install Npcap with `WinPcap Compatible Mode` on.
+  If both WinPcap and Npcap are installed, Npcap takes precedence.
+* PcapHandle and PcapDumper implement AutoCloseable.
+* Simplify PacketFactory API.
+    * newInstance(byte[], int, int, N) changes to newInstance(byte[], int, int, N...).
+    * newInstance(byte[], int, int), getTargetClass(N), and getTargetClass() are removed.
+* The following classes implement the new interface IllegalRawDataHolder to hold IllegalRawDataException.
+    * org.pcap4j.packet.IllegalIpV4InternetTimestampOptionData
+    * org.pcap4j.packet.IllegalIpV4Option
+    * org.pcap4j.packet.IllegalIpV6NeighborDiscoveryOption
+    * org.pcap4j.packet.IllegalIpV6Option
+    * org.pcap4j.packet.IllegalIpV6RoutingData
+    * org.pcap4j.packet.IllegalPacket (actually implements IllegalRawDataPacket extending IllegalRawDataHolder and Packet)
+    * org.pcap4j.packet.IllegalRadiotapData
+    * org.pcap4j.packet.IllegalSctpChunk
+    * org.pcap4j.packet.IllegalTcpOption
+* Improve APIs to get a packet, its timestamp, and its original length.
+    * Add PcapPacket class, which implements Packet and holds the raw data, the timestamp, and the original length of a captured packet.
+    * Remove getTimestamp() and getOriginalLength() from PcapHandle.
+    * getNextPacket() and getNextPacketEx() of PcapHandle returns PcapPacket instead of Packet.
+    * PacketListener#gotPacket() receives PcapPacket instead of Packet.
+    * Add PcapDumper#dump(PcapPacket).
+    * remove raw packet APIs:
+        * PcapHandle#getNextRawPacket
+        * PcapHandle#getNextRawPacketEx
+        * PcapHandle#loop with RawPacketListener
+        * PcapHandle#dispatch with RawPacketListener
+        * RawPacketListener
+* Use java.time.Instant for timestamps instead of java.sql.Timestamp.
+* Add PcapHandle#stream().
+* [PR#125](https://github.com/kaitoy/pcap4j/pull/125): ByteArrays#validateBounds() throws LengthZeroException instead of IllegalArgumentException when the given `len` is zero.
 
 ### Bug Fixes ###
 
 ### Other Changes ###
+* The default implementations of Packet's iterator(), get(), getOuterOf(), and contains() are moved from AbstractPacket to Packet itself.
+* The default implementations of Packet.Builder's iterator(), get(), and getOuterOf() are moved from AbstractBuilder to Packet.Builder itself.
+* NotApplicable.UNKNOWN_IPV6_NEXT_EXTENTION changes to UnknownIpV6Extension instance.
+* Remove the finalizer from BpfProgram for more stability ([Issues#80](https://github.com/kaitoy/pcap4j/issues/80)). BpfProgram#free(), which was called in the finalizer, now needs to be called explicitly.
+* Change serialization formats:
+    * org.pcap4j.packet.IllegalDnsRData
+    * org.pcap4j.packet.IllegalIpV4InternetTimestampOptionData
+    * org.pcap4j.packet.IllegalIpV4Option
+    * org.pcap4j.packet.IllegalIpV6NeighborDiscoveryOption
+    * org.pcap4j.packet.IllegalIpV6Option
+    * org.pcap4j.packet.IllegalIpV6RoutingData
+    * org.pcap4j.packet.IllegalPacket
+    * org.pcap4j.packet.IllegalRadiotapData
+    * org.pcap4j.packet.IllegalSctpChunk
+    * org.pcap4j.packet.IllegalTcpOption
 
 Release 1.7.3 (28-Dec-2017)
 ===========================

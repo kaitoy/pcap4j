@@ -20,15 +20,16 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 1.6.6
  */
-public final class IllegalSctpChunk implements SctpChunk {
+public final class IllegalSctpChunk implements SctpChunk, IllegalRawDataHolder {
 
   /**
    *
    */
-  private static final long serialVersionUID = 7163848436153227901L;
+  private static final long serialVersionUID = 379650793871792784L;
 
   private final SctpChunkType type;
   private final byte[] rawData;
+  private final IllegalRawDataException cause;
 
   /**
    * A static factory method.
@@ -38,37 +39,24 @@ public final class IllegalSctpChunk implements SctpChunk {
    * @param rawData rawData
    * @param offset offset
    * @param length length
+   * @param cause cause
    * @return a new UnknownSctpChunk object.
    */
-  public static IllegalSctpChunk newInstance(byte[] rawData, int offset, int length) {
+  public static IllegalSctpChunk newInstance(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    if (cause == null) {
+      throw new NullPointerException("cause is null.");
+    }
     ByteArrays.validateBounds(rawData, offset, length);
-    return new IllegalSctpChunk(rawData, offset, length);
+    return new IllegalSctpChunk(rawData, offset, length, cause);
   }
 
-  private IllegalSctpChunk(byte[] rawData, int offset, int length) {
+  private IllegalSctpChunk(byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     this.type = SctpChunkType.getInstance(rawData[offset]);
     this.rawData = new byte[length];
     System.arraycopy(rawData, offset, this.rawData, 0, length);
-  }
-
-  private IllegalSctpChunk(Builder builder) {
-    if (
-         builder == null
-      || builder.type == null
-      || builder.rawData == null
-    ) {
-      StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.type: ").append(builder.type)
-        .append(" builder.rawData: ").append(builder.rawData);
-      throw new NullPointerException(sb.toString());
-    }
-
-    this.type = builder.type;
-    this.rawData = new byte[builder.rawData.length];
-    System.arraycopy(
-      builder.rawData, 0, this.rawData, 0, builder.rawData.length
-    );
+    this.cause = cause;
   }
 
   @Override
@@ -84,12 +72,9 @@ public final class IllegalSctpChunk implements SctpChunk {
     return copy;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() {
-    return new Builder(this);
+  @Override
+  public IllegalRawDataException getCause() {
+    return cause;
   }
 
   @Override
@@ -100,6 +85,8 @@ public final class IllegalSctpChunk implements SctpChunk {
       .append(type);
     sb.append(", Illegal Raw Data: 0x")
       .append(ByteArrays.toHexString(rawData, ""));
+    sb.append(", Cause: ")
+      .append(cause);
     sb.append("]");
 
     return sb.toString();
@@ -109,71 +96,30 @@ public final class IllegalSctpChunk implements SctpChunk {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + cause.hashCode();
     result = prime * result + Arrays.hashCode(rawData);
-    result = prime * result + type.hashCode();
     return result;
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     IllegalSctpChunk other = (IllegalSctpChunk) obj;
-    if (!Arrays.equals(rawData, other.rawData))
+    if (!cause.equals(other.cause)) {
       return false;
-    if (!type.equals(other.type))
+    }
+    if (!Arrays.equals(rawData, other.rawData)) {
       return false;
+    }
     return true;
-  }
-
-  /**
-   * @author Kaito Yamada
-   * @since pcap4j 1.6.6
-   */
-  public static final class Builder {
-
-    private SctpChunkType type;
-    private byte[] rawData;
-
-    /**
-     *
-     */
-    public Builder() {}
-
-    private Builder(IllegalSctpChunk obj) {
-      this.type = obj.type;
-      this.rawData = obj.rawData;
-    }
-
-    /**
-     * @param type type
-     * @return this Builder object for method chaining.
-     */
-    public Builder type(SctpChunkType type) {
-      this.type = type;
-      return this;
-    }
-
-    /**
-     * @param rawData rawData
-     * @return this Builder object for method chaining.
-     */
-    public Builder rawData(byte[] rawData) {
-      this.rawData = rawData;
-      return this;
-    }
-
-    /**
-     * @return a new IllegalSctpChunk object.
-     */
-    public IllegalSctpChunk build() {
-      return new IllegalSctpChunk(this);
-    }
-
   }
 
 }

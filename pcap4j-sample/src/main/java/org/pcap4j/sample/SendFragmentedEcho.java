@@ -1,11 +1,5 @@
 package org.pcap4j.sample;
 
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
@@ -30,6 +24,13 @@ import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.util.IpV4Helper;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
+
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @SuppressWarnings("javadoc")
 public class SendFragmentedEcho {
@@ -99,13 +100,7 @@ public class SendFragmentedEcho {
         BpfCompileMode.OPTIMIZE
       );
 
-      PacketListener listener
-        = new PacketListener() {
-            @Override
-            public void gotPacket(Packet packet) {
-              System.out.println(packet);
-            }
-          };
+      PacketListener listener = packet -> System.out.println(packet);
 
       Task t = new Task(handle, listener);
       pool.execute(t);

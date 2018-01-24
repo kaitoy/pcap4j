@@ -1,30 +1,29 @@
 [Japanese](/README_ja.md)
 
-<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/v1/www/images/logos/pcap4j-logo-color.png" width="70%" style="margin: 0px auto; display: block;" />
+<img alt="Pcap4J" title="Pcap4J" src="https://github.com/kaitoy/pcap4j/raw/master/www/images/logos/pcap4j-logo-color.png" width="70%" style="margin: 0px auto; display: block;" />
 
-[Logos](https://github.com/kaitoy/pcap4j/blob/v1/www/logos.md)
+[Logos](https://github.com/kaitoy/pcap4j/blob/master/www/logos.md)
 
 [![Slack](http://pcap4j-slackin.herokuapp.com/badge.svg)](https://pcap4j-slackin.herokuapp.com/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.pcap4j/pcap4j-distribution)
 
-[![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg?branch=v1)](https://travis-ci.org/kaitoy/pcap4j)
-[![CircleCI](https://circleci.com/gh/kaitoy/pcap4j/tree/v1.svg?style=svg)](https://circleci.com/gh/kaitoy/pcap4j/tree/v1)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=v1&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/v1)
-[![Coverage Status](https://coveralls.io/repos/kaitoy/pcap4j/badge.svg)](https://coveralls.io/r/kaitoy/pcap4j)
+[![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg?branch=master)](https://travis-ci.org/kaitoy/pcap4j)
+[![CircleCI](https://circleci.com/gh/kaitoy/pcap4j/tree/master.svg?style=svg)](https://circleci.com/gh/kaitoy/pcap4j/tree/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=master&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/master)
+[![codecov](https://codecov.io/gh/kaitoy/pcap4j/branch/master/graph/badge.svg)](https://codecov.io/gh/kaitoy/pcap4j)
 
-Pcap4J
-======
+Pcap4J 2.x and newer
+====================
 
 Pcap4J is a Java library for capturing, crafting and sending packets.
 Pcap4J wraps a native packet capture library ([libpcap](http://www.tcpdump.org/),
-[WinPcap](http://www.winpcap.org/), or [Npcap](https://github.com/nmap/npcap)) via [JNA](https://github.com/twall/jna)
+[Npcap](https://github.com/nmap/npcap), or [WinPcap](http://www.winpcap.org/)) via [JNA](https://github.com/twall/jna)
 and provides you Java-Oriented APIs.
 
 Contents
 --------
 
 * [Download](#download)
-* [Why Pcap4J was born](#why-pcap4j-was-born)
 * [Features](#features)
 * [How to use](#how-to-use)
     * [System requirements](#system-requirements)
@@ -33,39 +32,23 @@ Contents
         * [Others](#others)
     * [Documents](#documents)
     * [How to run samples](#how-to-run-samples)
-    * [How to use in Maven project](#how-to-use-in-maven-project)
+    * [How to add Pcap4J to your project](#how-to-add-pcap4j-to-your-project)
     * [About native library loading](#about-native-library-loading)
         * [WinPcap or Npcap](#winpcap-or-npcap)
     * [Docker](#docker)
 * [How to build](#how-to-build)
 * [License](#license)
 * [Contacts](#contacts)
-* [Extra](#extra)
 
 Download
 --------
 
 Pcap4J is available on the Maven Central Repository.
 
-* Pcap4J 1.7.3
-    * without source: [pcap4j-distribution-1.7.3-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.7.3/pcap4j-distribution-1.7.3-bin.zip)
-    * with    source: [pcap4j-distribution-1.7.3-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.7.3/pcap4j-distribution-1.7.3-src.zip)
+* Pcap4J 2.0.0-alpha
+    * [pcap4j-2.0.0-alpha-distribution.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/2.0.0-alpha/pcap4j-2.0.0-alpha-distribution.zip)
 * Snapshot builds
-    * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
-
-Why Pcap4J was born
--------------------
-I have been developing an SNMP network simulator (SNeO, available at the link below) by Java,
-which needed to capture packets and I found the [pcap](http://en.wikipedia.org/wiki/Pcap) was useful for it.
-Although there are some implementations of the pcap such as libpcap (for UNIX) and WinPcap (for Windows),
-because they are both native libraries, a Java wrapper library was necessary in order to use them for SNeO.
-I researched it and found three Java wrapper libraries for pcap: [jpcap](http://jpcap.sourceforge.net/),
-[jNetPcap](http://jnetpcap.com/), and [Jpcap](http://netresearch.ics.uci.edu/kfujii/Jpcap/doc/).
-But both jpcap and jNetPcap were unsuitable for SNeO because they seemed to be designed for mainly capturing packets
-and not to be useful for making and sending packets so much. On the other hand, Jpcap looked useful for
-making and sending packets. But it had a defect in capturing ICMP packets and
-its development seemed to be stopped long ago.
-That's why I started developing Pcap4j.
+    * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j/
 
 Features
 --------
@@ -89,6 +72,7 @@ Features
 * All built-in packet classes are serializable and thread-safe (practically immutable).
 * You can add a protocol support without modifying Pcap4J library itself.
 * Dumping and reading pcap-formatted files (e.g. a capture file of Wireshark).
+* [Semantic Versioning 2.0.0](https://semver.org/)
 
 How to use
 ----------
@@ -96,13 +80,13 @@ How to use
 #### System requirements ####
 
 ##### Dependencies #####
-Pcap4j 1.1.0 or older needs J2SE 5.0+. Pcap4j 1.2.0 or newer needs J2SE 6.0+.
-And also a pcap native library (libpcap 1.0.0+, WinPcap 3.0+, or Npcap), jna, slf4j-api, and an implementation of logger for slf4j are required.
+Pcap4j needs JRE 8+.
+And also a pcap native library (libpcap 1.0.0+, Npcap or WinPcap 3.0+), JNA 4+, slf4j-api, and an implementation of logger for slf4j are required.
 I'm using the following libraries for the test.
 
 * libpcap 1.1.1
 * WinPcap 4.1.2
-* jna 4.1.0
+* JNA 4.1.0
 * slf4j-api 1.7.12
 * logback-core 1.0.0
 * logback-classic 1.0.0
@@ -111,6 +95,7 @@ I'm using the following libraries for the test.
 I tested Pcap4j on the following OSes with x86 or x64 processors.
 
 * Windows: XP, Vista, 7, [10](http://tbd.kaitoy.xyz/2016/01/12/pcap4j-with-four-native-libraries-on-windows10/), 2003 R2, 2008, 2008 R2, and 2012
+* OS X
 * Linux
     * RHEL: 5 and 6
     * CentOS: 5
@@ -119,9 +104,7 @@ I tested Pcap4j on the following OSes with x86 or x64 processors.
     * Solaris: 10
     * FreeBSD: 10
 
-And tomute tested Pcap4j on Mac OS X. The report is [here](http://tomute.hateblo.jp/entry/2013/01/27/003209). Thank you, tomute!
-
-I hope Pcap4j can run on the other OSes supported by both JNA and libpcap.
+Hopefully Pcap4j can run on the other OSes supported by both JNA and libpcap.
 
 ##### Others #####
 Pcap4J needs administrator/root privileges.
@@ -129,67 +112,81 @@ Or, if on Linux, you can run Pcap4J with a non-root user by granting capabilitie
 to your java command by the following command: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### Documents ####
-The latest JavaDoc is [here](http://www.javadoc.io/doc/org.pcap4j/pcap4j/1.7.3).
+The latest JavaDoc is [here](http://www.javadoc.io/doc/org.pcap4j/pcap4j/2.0.0-alpha).
 Each version's JavaDoc is on the [Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22).
 
-Refer to [here](https://github.com/kaitoy/pcap4j/blob/v1/www/pcap4j_modules.md) for information about Pcap4J modules.
+Refer to [here](https://github.com/kaitoy/pcap4j/blob/master/www/pcap4j_modules.md) for information about Pcap4J modules.
 
 Because Pcap4J is a wrapper of a pcap native library, the following documents help you to understand how to use Pcap4J.
 
 * [Programming with pcap](http://www.tcpdump.org/pcap.html)
 * [WinPcap Manuals](http://www.winpcap.org/docs/default.htm)
-* [Mapping between pcap API and Pcap4J API](https://github.com/kaitoy/pcap4j/blob/v1/www/api_mappings.md)
+* [Mapping between pcap API and Pcap4J API](https://github.com/kaitoy/pcap4j/blob/master/www/api_mappings.md)
 
-You can learn how to write Pcap4J programs from [samples](https://github.com/kaitoy/pcap4j/tree/v1/pcap4j-sample/src/main/java/org/pcap4j/sample).
+You can learn how to write Pcap4J programs from [samples](https://github.com/kaitoy/pcap4j/tree/master/pcap4j-sample/src/main/java/org/pcap4j/sample).
 
 Learn more about Pcap4j from the following documents:
 
-* [Learn about packet class](https://github.com/kaitoy/pcap4j/blob/v1/www/Packet.md)
-* [Learn about Packet Factory](https://github.com/kaitoy/pcap4j/blob/v1/www/PacketFactory.md)
-* [How to add protocol support](https://github.com/kaitoy/pcap4j/blob/v1/www/HowToAddProtocolSupport.md)
+* [Learn about packet class](https://github.com/kaitoy/pcap4j/blob/master/www/Packet.md)
+* [Learn about Packet Factory](https://github.com/kaitoy/pcap4j/blob/master/www/PacketFactory.md)
+* [How to add protocol support](https://github.com/kaitoy/pcap4j/blob/master/www/HowToAddProtocolSupport.md)
 * [kaitoy's blog](http://tbd.kaitoy.xyz/tags/pcap4j/)
 
 #### How to run samples ####
 See the following examples:
 
-* [org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/blob/v1/www/Packet.md)
-* [org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/blob/v1/www/sample_SendArpRequest.md)
+* [org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/blob/master/www/Packet.md)
+* [org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/blob/master/www/sample_SendArpRequest.md)
 
 If you want to run a sample in pcap4j-sample on Eclipse,
 add pcap4j-packetfactory-static or pcap4j-packetfactory-propertiesbased project
 to the top of User Entries in Classpath tab of the Run Configuration for the sample.
 
-#### How to use in Maven project ####
-Add a dependency to the pom.xml as like below:
+#### How to add Pcap4J to your project ####
 
-```xml
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  ...
-  <dependencies>
-    <dependency>
-      <groupId>org.pcap4j</groupId>
-      <artifactId>pcap4j-core</artifactId>
-      <version>1.7.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pcap4j</groupId>
-      <artifactId>pcap4j-packetfactory-static</artifactId>
-      <version>1.7.3</version>
-    </dependency>
-       ...
-  </dependencies>
-  ...
-</project>
-```
+* Gradle
+
+    Add a dependency to the build.gradle as like below:
+
+    ```
+    dependencies {
+      compile 'org.pcap4j:pcap4j-core:2.0.0-alpha'
+      compile 'org.pcap4j:pcap4j-packetfactory-static:2.0.0-alpha'
+    }
+    ```
+
+* Maven
+
+    Add a dependency to the pom.xml as like below:
+
+    ```xml
+    <project xmlns="http://maven.apache.org/POM/4.0.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                          http://maven.apache.org/xsd/maven-4.0.0.xsd">
+      ...
+      <dependencies>
+        <dependency>
+          <groupId>org.pcap4j</groupId>
+          <artifactId>pcap4j-core</artifactId>
+          <version>2.0.0-alpha</version>
+        </dependency>
+        <dependency>
+          <groupId>org.pcap4j</groupId>
+          <artifactId>pcap4j-packetfactory-static</artifactId>
+          <version>2.0.0-alpha</version>
+        </dependency>
+           ...
+      </dependencies>
+      ...
+    </project>
+    ```
 
 #### About native library loading ####
 By default, Pcap4j loads the native libraries on the following conditions:
 
 * Windows
-    * search path: The paths in the `PATH` environment variable, etc. (See [MSDN](https://msdn.microsoft.com/en-us/library/7d83bc18.aspx) for the details.)
+    * search path: The paths in the `PATH` environment variable, etc. (See [MSDN](https://msdn.microsoft.com/en-us/library/7d83bc18.aspx) for the details.), and `%SystemRoot%\System32\Npcap`.
     * file name: wpcap.dll and Packet.dll
 * Linux/UNIX
     * search path: The search paths of shared libraries configured on the OS.
@@ -213,16 +210,9 @@ The development of WinPcap has stopped since version 4.1.3 (libpcap 1.0.0 base) 
 while Npcap is still being developed.
 So, you should pick Npcap if you want to use new features or so.
 
-Pcap4J can load WinPcap without tricks because it's installed in `%SystemRoot%\System32\`.
+By default, WinPcap is installed in `%SystemRoot%\System32\`, and Npcap is installed in `%SystemRoot%\System32\Npcap\`.
 
-On the other hand, because Npcap is installed in `%SystemRoot%\System32\Npcap\` by default,
-you need to do either of the following so that Pcap4J can load it:
-
-* Add `%SystemRoot%\System32\Npcap\` to `PATH`.
-* Set `jna.library.path` to `%SystemRoot%\System32\Npcap\`.
-* Set `org.pcap4j.core.pcapLibName` to `%SystemRoot%\System32\Npcap\wpcap.dll` and
-  `org.pcap4j.core.packetLibName` to `%SystemRoot%\System32\Npcap\Packet.dll`.
-* Install Npcap with `WinPcap Compatible Mode` on.
+If you have both WinPcap and Npcap installed and want to use Npcap, you can explicitly specify it by setting `org.pcap4j.core.pcapLibName` to `%SystemRoot%\System32\Npcap\wpcap.dll` and `org.pcap4j.core.packetLibName` to `%SystemRoot%\System32\Npcap\Packet.dll`.
 
 ### Docker ###
 
@@ -238,22 +228,19 @@ How to build
 ------------
 
 1. Install libpcap, WinPcap, or Npcap:<br>
-   Install WinPcap (if Windows) or libpcap (if Linux/UNIX).
+   Install Npcap or WinPcap (if Windows), or libpcap (if Linux/UNIX).
    It's needed for the unit tests which are run during a build.
-2. Install JDK 1.6+:<br>
-   Download and install JDK 1.6 (or newer), and set the environment variable ***JAVA_HOME*** properly.
-3. Install Maven<br>
-   Download and install Maven 3.0.5 (or newer).
-   Then, add the path of the Maven bin directory to the environment variable ***PATH***.
-4. Install Git:<br>
+2. Install JDK 8+:<br>
+   Download and install JDK 8+, and set the environment variable ***JAVA_HOME*** properly.
+3. Install Git:<br>
    Download [Git](http://git-scm.com/downloads) and install it.
    This step is optional.
-5. Clone the Pcap4J repository:<br>
+4. Clone the Pcap4J repository:<br>
    If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
-   Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/v1) and extract it.
-6. Build:<br>
+   Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
+5. Build:<br>
    Open a command prompt/a terminal, `cd` to the project root directory,
-   and execute `./mvnw install`.
+   and execute `gradlew build`.
    Note Administrator/root privileges are needed for the unit tests.
 
 License
@@ -261,7 +248,7 @@ License
 
 Pcap4J is distributed under the MIT license.
 
-    Copyright (c) 2011-2015 Pcap4J.org
+    Copyright (c) 2011-2017 Pcap4J.org
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -280,8 +267,3 @@ Contacts
 --------
 
 Kaito Yamada (kaitoy@pcap4j.org)
-
-Extra
------
-
-An SNMP Network Simulator using Pcap4J; SNeO is also hosted on Github: https://github.com/kaitoy/sneo

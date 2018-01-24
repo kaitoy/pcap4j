@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Pcap4J.org
+  _##  Copyright (C) 2012-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
+
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.util.ByteArrays;
@@ -17,15 +18,16 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
-public final class IllegalIpV4Option implements IpV4Option {
+public final class IllegalIpV4Option implements IpV4Option, IllegalRawDataHolder {
 
   /**
    *
    */
-  private static final long serialVersionUID = -5887663161675479542L;
+  private static final long serialVersionUID = -4509427228608202960L;
 
   private final IpV4OptionType type;
   private final byte[] rawData;
+  private final IllegalRawDataException cause;
 
   /**
    * A static factory method.
@@ -35,37 +37,24 @@ public final class IllegalIpV4Option implements IpV4Option {
    * @param rawData rawData
    * @param offset offset
    * @param length length
+   * @param cause cause
    * @return a new IllegalIpV4Option object.
    */
-  public static IllegalIpV4Option newInstance(byte[] rawData, int offset, int length) {
+  public static IllegalIpV4Option newInstance(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
+    if (cause == null) {
+      throw new NullPointerException("cause is null.");
+    }
     ByteArrays.validateBounds(rawData, offset, length);
-    return new IllegalIpV4Option(rawData, offset, length);
+    return new IllegalIpV4Option(rawData, offset, length, cause);
   }
 
-  private IllegalIpV4Option(byte[] rawData, int offset, int length) {
+  private IllegalIpV4Option(byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     this.type = IpV4OptionType.getInstance(rawData[offset]);
     this.rawData = new byte[length];
     System.arraycopy(rawData, offset, this.rawData, 0, length);
-  }
-
-  private IllegalIpV4Option(Builder builder) {
-    if (
-        builder == null
-     || builder.type == null
-     || builder.rawData == null
-   ) {
-     StringBuilder sb = new StringBuilder();
-     sb.append("builder: ").append(builder)
-       .append(" builder.type: ").append(builder.type)
-       .append(" builder.rawData: ").append(builder.rawData);
-     throw new NullPointerException(sb.toString());
-   }
-
-   this.type = builder.type;
-   this.rawData = new byte[builder.rawData.length];
-   System.arraycopy(
-     builder.rawData, 0, this.rawData, 0, builder.rawData.length
-   );
+    this.cause = cause;
   }
 
   @Override
@@ -81,12 +70,9 @@ public final class IllegalIpV4Option implements IpV4Option {
     return copy;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() {
-    return new Builder(this);
+  @Override
+  public IllegalRawDataException getCause() {
+    return cause;
   }
 
   @Override
@@ -96,76 +82,40 @@ public final class IllegalIpV4Option implements IpV4Option {
       .append(type)
       .append("] [Illegal Raw Data: 0x")
       .append(ByteArrays.toHexString(rawData, ""))
+      .append("] [cause: ")
+      .append(cause)
       .append("]");
     return sb.toString();
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
-
-    IllegalIpV4Option other = (IllegalIpV4Option)obj;
-    return
-         type.equals(other.type)
-      && Arrays.equals(other.rawData, rawData);
-  }
-
-  @Override
   public int hashCode() {
-    int result = 17;
-    result = 31 * result + type.hashCode();
-    result = 31 * result + Arrays.hashCode(rawData);
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + cause.hashCode();
+    result = prime * result + Arrays.hashCode(rawData);
     return result;
   }
 
-  /**
-   * @author Kaito Yamada
-   * @since pcap4j 0.9.11
-   */
-  public static final class Builder {
-
-    private IpV4OptionType type;
-    private byte[] rawData;
-
-    /**
-     *
-     */
-    public Builder() {}
-
-    private Builder(IllegalIpV4Option option) {
-      this.type = option.type;
-      this.rawData = option.rawData;
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-    /**
-     *
-     * @param type type
-     * @return this Builder object for method chaining.
-     */
-    public Builder type(IpV4OptionType type) {
-      this.type = type;
-      return this;
+    if (obj == null) {
+      return false;
     }
-
-    /**
-     *
-     * @param rawData rawData
-     * @return this Builder object for method chaining.
-     */
-    public Builder rawData(byte[] rawData) {
-      this.rawData = rawData;
-      return this;
+    if (getClass() != obj.getClass()) {
+      return false;
     }
-
-    /**
-     *
-     * @return a new IllegalIpV4Option object.
-     */
-    public IllegalIpV4Option build() {
-      return new IllegalIpV4Option(this);
+    IllegalIpV4Option other = (IllegalIpV4Option) obj;
+    if (!cause.equals(other.cause)) {
+      return false;
     }
-
+    if (!Arrays.equals(rawData, other.rawData)) {
+      return false;
+    }
+    return true;
   }
 
 }

@@ -7,8 +7,10 @@
 
 package org.pcap4j.core;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.ByteOrder;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +45,16 @@ final class NativeMappings {
         NativeMappings.class.getPackage().getName() + ".pcapLibName",
         Platform.isWindows() ? "wpcap" : "pcap"
       );
+  static final File NPCAP_DIR
+    = Paths.get(System.getenv("SystemRoot"), "System32", "Npcap").toFile();
+
+  static {
+    if (Platform.isWindows() && System.getProperty("jna.library.path") == null) {
+      if (NPCAP_DIR.exists()) {
+        NativeLibrary.addSearchPath("wpcap", NPCAP_DIR.getAbsolutePath());
+      }
+    }
+  }
 
   static final Function PCAP_DUMP
     = Function.getFunction(

@@ -1,13 +1,5 @@
 package org.pcap4j.sample;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
@@ -35,6 +27,15 @@ import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.util.IcmpV4Helper;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @SuppressWarnings("javadoc")
 public class IcmpV4ErrReplyer {
@@ -140,68 +141,66 @@ public class IcmpV4ErrReplyer {
       .paddingAtBuild(true);
 
     final PacketListener listener
-      = new PacketListener() {
-          public void gotPacket(Packet packet) {
-            if (packet.contains(IcmpV4EchoPacket.class)) {
-              if (type.equals(IcmpV4Type.DESTINATION_UNREACHABLE)) {
-                ((IcmpV4DestinationUnreachablePacket.Builder)icmpV4errb).payload(
-                  IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
-                );
-              }
-              else if (type.equals(IcmpV4Type.TIME_EXCEEDED)) {
-                ((IcmpV4TimeExceededPacket.Builder)icmpV4errb).payload(
-                  IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
-                );
-              }
-              else if (type.equals(IcmpV4Type.PARAMETER_PROBLEM)) {
-                ((IcmpV4ParameterProblemPacket.Builder)icmpV4errb).payload(
-                  IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
-                );
-              }
-
-              ipv4b.srcAddr(packet.get(IpV4Packet.class).getHeader().getDstAddr());
-              ipv4b.dstAddr(packet.get(IpV4Packet.class).getHeader().getSrcAddr());
-              eb.srcAddr(packet.get(EthernetPacket.class).getHeader().getDstAddr());
-              eb.dstAddr(packet.get(EthernetPacket.class).getHeader().getSrcAddr());
-
-              try {
-                handle4send.sendPacket(eb.build());
-              } catch (PcapNativeException e) {
-                e.printStackTrace();
-              } catch (NotOpenException e) {
-                e.printStackTrace();
-              }
+      = packet -> {
+          if (packet.contains(IcmpV4EchoPacket.class)) {
+            if (type.equals(IcmpV4Type.DESTINATION_UNREACHABLE)) {
+              ((IcmpV4DestinationUnreachablePacket.Builder)icmpV4errb).payload(
+                IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
+              );
             }
-            else if (packet.contains(ArpPacket.class)) {
-              ArpPacket ap = packet.get(ArpPacket.class);
+            else if (type.equals(IcmpV4Type.TIME_EXCEEDED)) {
+              ((IcmpV4TimeExceededPacket.Builder)icmpV4errb).payload(
+                IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
+              );
+            }
+            else if (type.equals(IcmpV4Type.PARAMETER_PROBLEM)) {
+              ((IcmpV4ParameterProblemPacket.Builder)icmpV4errb).payload(
+                IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
+              );
+            }
 
-              if (
-                !ap.getHeader().getOperation().equals(ArpOperation.REQUEST)
-              ) { return; }
-              if (!ap.getHeader().getDstProtocolAddr().equals(address)) {
-                return;
-              }
+            ipv4b.srcAddr(packet.get(IpV4Packet.class).getHeader().getDstAddr());
+            ipv4b.dstAddr(packet.get(IpV4Packet.class).getHeader().getSrcAddr());
+            eb.srcAddr(packet.get(EthernetPacket.class).getHeader().getDstAddr());
+            eb.dstAddr(packet.get(EthernetPacket.class).getHeader().getSrcAddr());
 
-              EthernetPacket.Builder eb
-                = (EthernetPacket.Builder)packet.getBuilder();
-              ArpPacket.Builder ab = eb.get(ArpPacket.Builder.class);
+            try {
+              handle4send.sendPacket(eb.build());
+            } catch (PcapNativeException e) {
+              e.printStackTrace();
+            } catch (NotOpenException e) {
+              e.printStackTrace();
+            }
+          }
+          else if (packet.contains(ArpPacket.class)) {
+            ArpPacket ap = packet.get(ArpPacket.class);
 
-              ab.srcHardwareAddr(MAC_ADDR)
-                .dstHardwareAddr(ap.getHeader().getSrcHardwareAddr())
-                .srcProtocolAddr(ap.getHeader().getDstProtocolAddr())
-                .dstProtocolAddr(ap.getHeader().getSrcProtocolAddr())
-                .operation(ArpOperation.REPLY);
+            if (
+              !ap.getHeader().getOperation().equals(ArpOperation.REQUEST)
+            ) { return; }
+            if (!ap.getHeader().getDstProtocolAddr().equals(address)) {
+              return;
+            }
 
-              eb.dstAddr(ap.getHeader().getSrcHardwareAddr())
-                .srcAddr(MAC_ADDR);
+            EthernetPacket.Builder eb1
+              = (EthernetPacket.Builder)packet.getBuilder();
+            ArpPacket.Builder ab = eb1.get(ArpPacket.Builder.class);
 
-              try {
-                handle4send.sendPacket(eb.build());
-              } catch (PcapNativeException e) {
-                e.printStackTrace();
-              } catch (NotOpenException e) {
-                e.printStackTrace();
-              }
+            ab.srcHardwareAddr(MAC_ADDR)
+              .dstHardwareAddr(ap.getHeader().getSrcHardwareAddr())
+              .srcProtocolAddr(ap.getHeader().getDstProtocolAddr())
+              .dstProtocolAddr(ap.getHeader().getSrcProtocolAddr())
+              .operation(ArpOperation.REPLY);
+
+            eb1.dstAddr(ap.getHeader().getSrcHardwareAddr())
+              .srcAddr(MAC_ADDR);
+
+            try {
+              handle4send.sendPacket(eb1.build());
+            } catch (PcapNativeException e) {
+              e.printStackTrace();
+            } catch (NotOpenException e) {
+              e.printStackTrace();
             }
           }
         };
@@ -209,6 +208,7 @@ public class IcmpV4ErrReplyer {
     ExecutorService executor = Executors.newSingleThreadExecutor();
     executor.execute(
       new Runnable() {
+        @Override
         public void run() {
           while (true) {
             try {

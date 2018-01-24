@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2017  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -18,183 +18,188 @@ import org.pcap4j.packet.IcmpV6RedirectPacket;
 import org.pcap4j.packet.IcmpV6RouterAdvertisementPacket;
 import org.pcap4j.packet.IcmpV6RouterSolicitationPacket;
 import org.pcap4j.packet.IcmpV6TimeExceededPacket;
+import org.pcap4j.packet.IllegalPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.IcmpV6Type;
 
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.15
  */
-public final class StaticIcmpV6TypePacketFactory
-extends AbstractStaticPacketFactory<IcmpV6Type> {
+public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet, IcmpV6Type> {
 
   private static final StaticIcmpV6TypePacketFactory INSTANCE
     = new StaticIcmpV6TypePacketFactory();
 
-  private StaticIcmpV6TypePacketFactory() {
-    instantiaters.put(
-      IcmpV6Type.DESTINATION_UNREACHABLE, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IcmpV6DestinationUnreachablePacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IcmpV6DestinationUnreachablePacket> getTargetClass() {
-          return IcmpV6DestinationUnreachablePacket.class;
-        }
-      }
-    );
-    instantiaters.put(
-      IcmpV6Type.PACKET_TOO_BIG, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IcmpV6PacketTooBigPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IcmpV6PacketTooBigPacket> getTargetClass() {
-          return IcmpV6PacketTooBigPacket.class;
-        }
-      }
-    );
-    instantiaters.put(
-      IcmpV6Type.TIME_EXCEEDED, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IcmpV6TimeExceededPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IcmpV6TimeExceededPacket> getTargetClass() {
-          return IcmpV6TimeExceededPacket.class;
-        }
-      }
-    );
-    instantiaters.put(
-      IcmpV6Type.PARAMETER_PROBLEM, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IcmpV6ParameterProblemPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IcmpV6ParameterProblemPacket> getTargetClass() {
-          return IcmpV6ParameterProblemPacket.class;
-        }
-      }
-    );
-    instantiaters.put(
-      IcmpV6Type.ECHO_REQUEST, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IcmpV6EchoRequestPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IcmpV6EchoRequestPacket> getTargetClass() {
-          return IcmpV6EchoRequestPacket.class;
-        }
-      }
-    );
-    instantiaters.put(
-      IcmpV6Type.ECHO_REPLY, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IcmpV6EchoReplyPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IcmpV6EchoReplyPacket> getTargetClass() {
-          return IcmpV6EchoReplyPacket.class;
-        }
-      }
-    );
-    instantiaters.put(
-      IcmpV6Type.ROUTER_SOLICITATION, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IcmpV6RouterSolicitationPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IcmpV6RouterSolicitationPacket> getTargetClass() {
-          return IcmpV6RouterSolicitationPacket.class;
-        }
-      }
-    );
-    instantiaters.put(
-      IcmpV6Type.ROUTER_ADVERTISEMENT, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IcmpV6RouterAdvertisementPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IcmpV6RouterAdvertisementPacket> getTargetClass() {
-          return IcmpV6RouterAdvertisementPacket.class;
-        }
-      }
-    );
-    instantiaters.put(
-      IcmpV6Type.NEIGHBOR_SOLICITATION, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IcmpV6NeighborSolicitationPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IcmpV6NeighborSolicitationPacket> getTargetClass() {
-          return IcmpV6NeighborSolicitationPacket.class;
-        }
-      }
-    );
-    instantiaters.put(
-      IcmpV6Type.NEIGHBOR_ADVERTISEMENT, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IcmpV6NeighborAdvertisementPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IcmpV6NeighborAdvertisementPacket> getTargetClass() {
-          return IcmpV6NeighborAdvertisementPacket.class;
-        }
-      }
-    );
-    instantiaters.put(
-      IcmpV6Type.REDIRECT, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IcmpV6RedirectPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IcmpV6RedirectPacket> getTargetClass() {
-          return IcmpV6RedirectPacket.class;
-        }
-      }
-    );
-  };
+  private StaticIcmpV6TypePacketFactory() {}
 
   /**
-   *
    * @return the singleton instance of StaticIcmpV6TypePacketFactory.
    */
   public static StaticIcmpV6TypePacketFactory getInstance() {
     return INSTANCE;
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, IcmpV6Type...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public Packet newInstance(byte[] rawData, int offset, int length) {
+    return UnknownPacket.newPacket(rawData, offset, length);
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, IcmpV6Type...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public Packet newInstance(byte[] rawData, int offset, int length, IcmpV6Type number) {
+    try {
+      switch (Byte.toUnsignedInt(number.value())) {
+        case 1:
+          return IcmpV6DestinationUnreachablePacket.newPacket(rawData, offset, length);
+        case 2:
+          return IcmpV6PacketTooBigPacket.newPacket(rawData, offset, length);
+        case 3:
+          return IcmpV6TimeExceededPacket.newPacket(rawData, offset, length);
+        case 4:
+          return IcmpV6ParameterProblemPacket.newPacket(rawData, offset, length);
+        case 128:
+          return IcmpV6EchoRequestPacket.newPacket(rawData, offset, length);
+        case 129:
+          return IcmpV6EchoReplyPacket.newPacket(rawData, offset, length);
+        case 133:
+          return IcmpV6RouterSolicitationPacket.newPacket(rawData, offset, length);
+        case 134:
+          return IcmpV6RouterAdvertisementPacket.newPacket(rawData, offset, length);
+        case 135:
+          return IcmpV6NeighborSolicitationPacket.newPacket(rawData, offset, length);
+        case 136:
+          return IcmpV6NeighborAdvertisementPacket.newPacket(rawData, offset, length);
+        case 137:
+          return IcmpV6RedirectPacket.newPacket(rawData, offset, length);
+      }
+      return UnknownPacket.newPacket(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalPacket.newPacket(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, IcmpV6Type...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number1 see {@link PacketFactory#newInstance}.
+   * @param number2 see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public Packet newInstance(
+    byte[] rawData, int offset, int length, IcmpV6Type number1, IcmpV6Type number2
+  ) {
+    try {
+      switch (Byte.toUnsignedInt(number1.value())) {
+        case 1:
+          return IcmpV6DestinationUnreachablePacket.newPacket(rawData, offset, length);
+        case 2:
+          return IcmpV6PacketTooBigPacket.newPacket(rawData, offset, length);
+        case 3:
+          return IcmpV6TimeExceededPacket.newPacket(rawData, offset, length);
+        case 4:
+          return IcmpV6ParameterProblemPacket.newPacket(rawData, offset, length);
+        case 128:
+          return IcmpV6EchoRequestPacket.newPacket(rawData, offset, length);
+        case 129:
+          return IcmpV6EchoReplyPacket.newPacket(rawData, offset, length);
+        case 133:
+          return IcmpV6RouterSolicitationPacket.newPacket(rawData, offset, length);
+        case 134:
+          return IcmpV6RouterAdvertisementPacket.newPacket(rawData, offset, length);
+        case 135:
+          return IcmpV6NeighborSolicitationPacket.newPacket(rawData, offset, length);
+        case 136:
+          return IcmpV6NeighborAdvertisementPacket.newPacket(rawData, offset, length);
+        case 137:
+          return IcmpV6RedirectPacket.newPacket(rawData, offset, length);
+      }
+
+      switch (Byte.toUnsignedInt(number2.value())) {
+        case 1:
+          return IcmpV6DestinationUnreachablePacket.newPacket(rawData, offset, length);
+        case 2:
+          return IcmpV6PacketTooBigPacket.newPacket(rawData, offset, length);
+        case 3:
+          return IcmpV6TimeExceededPacket.newPacket(rawData, offset, length);
+        case 4:
+          return IcmpV6ParameterProblemPacket.newPacket(rawData, offset, length);
+        case 128:
+          return IcmpV6EchoRequestPacket.newPacket(rawData, offset, length);
+        case 129:
+          return IcmpV6EchoReplyPacket.newPacket(rawData, offset, length);
+        case 133:
+          return IcmpV6RouterSolicitationPacket.newPacket(rawData, offset, length);
+        case 134:
+          return IcmpV6RouterAdvertisementPacket.newPacket(rawData, offset, length);
+        case 135:
+          return IcmpV6NeighborSolicitationPacket.newPacket(rawData, offset, length);
+        case 136:
+          return IcmpV6NeighborAdvertisementPacket.newPacket(rawData, offset, length);
+        case 137:
+          return IcmpV6RedirectPacket.newPacket(rawData, offset, length);
+      }
+      return UnknownPacket.newPacket(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalPacket.newPacket(rawData, offset, length, e);
+    }
+  }
+
+  @Override
+  public Packet newInstance(byte[] rawData, int offset, int length, IcmpV6Type... numbers) {
+    try {
+      for (IcmpV6Type num: numbers) {
+        switch (Byte.toUnsignedInt(num.value())) {
+          case 1:
+            return IcmpV6DestinationUnreachablePacket.newPacket(rawData, offset, length);
+          case 2:
+            return IcmpV6PacketTooBigPacket.newPacket(rawData, offset, length);
+          case 3:
+            return IcmpV6TimeExceededPacket.newPacket(rawData, offset, length);
+          case 4:
+            return IcmpV6ParameterProblemPacket.newPacket(rawData, offset, length);
+          case 128:
+            return IcmpV6EchoRequestPacket.newPacket(rawData, offset, length);
+          case 129:
+            return IcmpV6EchoReplyPacket.newPacket(rawData, offset, length);
+          case 133:
+            return IcmpV6RouterSolicitationPacket.newPacket(rawData, offset, length);
+          case 134:
+            return IcmpV6RouterAdvertisementPacket.newPacket(rawData, offset, length);
+          case 135:
+            return IcmpV6NeighborSolicitationPacket.newPacket(rawData, offset, length);
+          case 136:
+            return IcmpV6NeighborAdvertisementPacket.newPacket(rawData, offset, length);
+          case 137:
+            return IcmpV6RedirectPacket.newPacket(rawData, offset, length);
+        }
+      }
+      return UnknownPacket.newPacket(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalPacket.newPacket(rawData, offset, length, e);
+    }
   }
 
 }

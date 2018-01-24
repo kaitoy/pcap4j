@@ -1,0 +1,34 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016-2017  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
+archivesBaseName = 'pcap4j-packettest'
+description = 'Tests of Pcap4J packet classes.'
+
+configurations {
+  testJar
+}
+
+dependencies {
+  testCompile project(':pcap4j-core')
+  testCompile "junit:junit:${junitVer}"
+}
+
+// jar is needed to sync to the Central, although it's empty.
+// jar.enabled = false
+
+test.enabled = false
+
+task jarTests(type: Jar, dependsOn: testClasses) {
+  classifier = 'tests'
+  from sourceSets.test.output
+}
+testClasses.finalizedBy jarTests
+
+artifacts {
+  archives jarTests
+  testJar jarTests
+}

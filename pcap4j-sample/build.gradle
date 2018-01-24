@@ -1,0 +1,13 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
+archivesBaseName = 'pcap4j-sample'
+description = 'Samples of Pcap4J.'
+
+dependencies {
+  compile project(':pcap4j-core')
+}

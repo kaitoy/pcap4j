@@ -17,7 +17,7 @@ import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
-import org.pcap4j.packet.namednumber.NotApplicable;
+import org.pcap4j.packet.namednumber.UnknownIpV6Extension;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -52,20 +52,15 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
   ) {
     PacketFactory<Packet, IpNumber> factory
       = PacketFactories.getFactory(Packet.class, IpNumber.class);
-    Class<? extends Packet> nextPacketClass = factory.getTargetClass(number);
-    Packet nextPacket;
-    if (nextPacketClass.equals(factory.getTargetClass())) {
-      nextPacket =
-        PacketFactories.getFactory(Packet.class, NotApplicable.class)
-          .newInstance(rawData, payloadOffset, payloadLength, NotApplicable.UNKNOWN_IP_V6_EXTENSION);
-      if (nextPacket instanceof IllegalPacket) {
-        nextPacket = factory.newInstance(rawData, payloadOffset, payloadLength);
-      }
+    Packet nextPacket
+      = factory
+          .newInstance(
+             rawData, payloadOffset, payloadLength,
+             number, UnknownIpV6Extension.getInstance()
+           );
+    if (nextPacket instanceof IllegalRawDataPacket) {
+      nextPacket = factory.newInstance(rawData, payloadOffset, payloadLength);
     }
-    else {
-      nextPacket = factory.newInstance(rawData, payloadOffset, payloadLength, number);
-    }
-
     this.payload = nextPacket;
   }
 

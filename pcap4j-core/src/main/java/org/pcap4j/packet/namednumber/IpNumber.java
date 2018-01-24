@@ -17,7 +17,7 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class IpNumber extends NamedNumber<Byte, IpNumber> {
+public class IpNumber extends NamedNumber<Byte, IpNumber> {
 
   /**
    *

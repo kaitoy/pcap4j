@@ -7,20 +7,11 @@ version: '{build}-{branch}'
 
 # branches to build
 branches:
-  # whitelist
-  only:
-    - v1
-
-  # blacklist
   except:
     - gh-pages
 
 # Do not build on tags
 skip_tags: true
-
-# Skipping commits with particular message or from user
-skip_commits:
-  message: /\[maven-release-plugin\]/
 
 #---------------------------------#
 #    environment configuration    #
@@ -30,7 +21,13 @@ skip_commits:
 os: Windows Server 2012 R2
 
 # fetch repository as zip archive
-shallow_clone: false
+shallow_clone: true
+
+cache:
+  - C:\Users\appveyor\.gradle\wrapper
+  - C:\Users\appveyor\.gradle\native
+  - C:\Users\appveyor\.gradle\daemon
+#  - C:\Users\appveyor\.gradle\caches
 
 # environment variables
 environment:
@@ -38,6 +35,7 @@ environment:
     secure: DDwS0DjK9j/d79DuAlJy3A==
   SONATYPE_NEXUS_PASSWORD:
     secure: mr5kcUXHVYPmF+7bXPi2Ow==
+  JAVA_HOME: C:\Program Files (x86)\Java\jdk1.8.0
 
 # scripts that run after cloning repository
 install:
@@ -49,19 +47,6 @@ install:
   # randomly fails somehow.
   - cmd: choco install -y nmap
 
-  # Install Maven
-  # - cmd: choco install -y maven -version 3.2.5
-  # Get the Maven bin directory path
-  # - ps: $env:MAVEN_BIN_PATH = [Environment]::GetEnvironmentVariable('M2', 'User')
-  # - cmd: echo %MAVEN_BIN_PATH%
-
-  # Use pre-installed Maven instead
-
-  # Set JAVA_HOME
-  - ps: $env:PATH -match '[;|^][^;]*\\jdk[^;]*[;|\\Z]'
-  - ps: $env:JAVA_HOME = $matches[0] -replace ';|\\bin', ''
-  - cmd: echo %JAVA_HOME%
-
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
@@ -70,26 +55,31 @@ install:
 platform: Any CPU
 
 # scripts to run before build
-before_build:
-  - cmd: if not exist %userprofile%\.m2 (mkdir %userprofile%\.m2)
-  - cmd: copy /y mvn\settings.xml %userprofile%\.m2
-  - ps: if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) {$env:MAVEN_PHASE = 'deploy'} else {$env:MAVEN_PHASE = 'install'}
+#before_build:
+#  - ps: if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) {$env:MAVEN_PHASE = 'deploy'} else {$env:MAVEN_PHASE = 'install'}
 
 build_script:
-  # Run mvn command with jna.nosys=true not to use an older jna pre-installed in AppVeyor VMs.
-  - cmd: call mvn -Djna.nosys=true -Djna.library.path=C:\Windows\System32\Npcap -P distribution-assembly %MAVEN_PHASE%
+  # jna.nosys=true is not to use an older jna pre-installed in AppVeyor VMs.
+  - cmd: gradlew.bat assemble --info --no-daemon -Djna.nosys=true -Djna.library.path=C:\Windows\System32\Npcap
 
 #---------------------------------#
 #       tests configuration       #
 #---------------------------------#
 
-test: off
+test_script:
+  - cmd: gradlew.bat test --info --no-daemon -Djna.nosys=true -Djna.library.path=C:\Windows\System32\Npcap
 
 #---------------------------------#
 #     deployment configuration    #
 #---------------------------------#
 
-deploy: off
+deploy_script:
+  - ps: >-
+      if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) {
+        ./gradlew.bat uploadArchives --info --no-daemon -Psonatype_user=%SONATYPE_NEXUS_USERNAME% -Psonatype_password=%SONATYPE_NEXUS_PASSWORD%
+      } else {
+        echo "skipping deploy."
+      }
 
 #---------------------------------#
 #         notifications           #

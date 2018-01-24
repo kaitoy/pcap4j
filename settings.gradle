@@ -1,0 +1,15 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
+rootProject.name = 'pcap4j'
+include(
+  'pcap4j-core',
+  'pcap4j-packettest',
+  'pcap4j-packetfactory-static',
+  'pcap4j-packetfactory-propertiesbased',
+  'pcap4j-sample',
+)

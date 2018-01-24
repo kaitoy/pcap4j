@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Pcap4J.org
+  _##  Copyright (C) 2012-2016  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
+
 import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;
 import org.pcap4j.util.ByteArrays;
 
@@ -15,14 +16,16 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
-public final class IllegalIpV4InternetTimestampOptionData implements IpV4InternetTimestampOptionData {
+public final class IllegalIpV4InternetTimestampOptionData
+implements IpV4InternetTimestampOptionData, IllegalRawDataHolder {
 
   /**
    *
    */
-  private static final long serialVersionUID = 2799097946096468081L;
+  private static final long serialVersionUID = 7638064341058938978L;
 
   private final byte[] rawData;
+  private final IllegalRawDataException cause;
 
   /**
    * A static factory method.
@@ -32,18 +35,25 @@ public final class IllegalIpV4InternetTimestampOptionData implements IpV4Interne
    * @param rawData rawData
    * @param offset offset
    * @param length length
+   * @param cause cause
    * @return a new IllegalIpV4InternetTimestampOptionData object.
    */
   public static IllegalIpV4InternetTimestampOptionData newInstance(
-    byte[] rawData, int offset, int length
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
   ) {
+    if (cause == null) {
+      throw new NullPointerException("cause is null.");
+    }
     ByteArrays.validateBounds(rawData, offset, length);
-    return new IllegalIpV4InternetTimestampOptionData(rawData, offset, length);
+    return new IllegalIpV4InternetTimestampOptionData(rawData, offset, length, cause);
   }
 
-  private IllegalIpV4InternetTimestampOptionData(byte[] rawData, int offset, int length) {
+  private IllegalIpV4InternetTimestampOptionData(
+    byte[] rawData, int offset, int length, IllegalRawDataException cause
+  ) {
     this.rawData = new byte[length];
     System.arraycopy(rawData, offset, this.rawData, 0, length);
+    this.cause = cause;
   }
 
   @Override
@@ -57,27 +67,49 @@ public final class IllegalIpV4InternetTimestampOptionData implements IpV4Interne
   }
 
   @Override
+  public IllegalRawDataException getCause() {
+    return cause;
+  }
+
+  @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[illegal data: ")
       .append(ByteArrays.toHexString(rawData, ""))
+      .append("] [cause: ")
+      .append(cause)
       .append("]");
     return sb.toString();
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
-
-    IllegalIpV4InternetTimestampOptionData other
-      = (IllegalIpV4InternetTimestampOptionData)obj;
-    return Arrays.equals(other.rawData, rawData);
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + cause.hashCode();
+    result = prime * result + Arrays.hashCode(rawData);
+    return result;
   }
 
   @Override
-  public int hashCode() {
-    return Arrays.hashCode(rawData);
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    IllegalIpV4InternetTimestampOptionData other = (IllegalIpV4InternetTimestampOptionData) obj;
+    if (!cause.equals(other.cause)) {
+      return false;
+    }
+    if (!Arrays.equals(rawData, other.rawData)) {
+      return false;
+    }
+    return true;
   }
 
 }

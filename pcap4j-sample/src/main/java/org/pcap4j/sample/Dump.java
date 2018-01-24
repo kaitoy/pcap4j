@@ -1,6 +1,5 @@
 package org.pcap4j.sample;
 
-import java.io.IOException;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapDumper;
@@ -9,8 +8,10 @@ import org.pcap4j.core.PcapHandle.TimestampPrecision;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
-import org.pcap4j.packet.Packet;
+import org.pcap4j.core.PcapPacket;
 import org.pcap4j.util.NifSelector;
+
+import java.io.IOException;
 
 @SuppressWarnings("javadoc")
 public class Dump {
@@ -83,12 +84,12 @@ public class Dump {
     int num = 0;
     PcapDumper dumper = handle.dumpOpen(PCAP_FILE);
     while (true) {
-      Packet packet = handle.getNextPacket();
+      PcapPacket packet = handle.getNextPacket();
       if (packet == null) {
         continue;
       }
       else {
-        dumper.dump(packet, handle.getTimestamp());
+        dumper.dump(packet);
         num++;
         if (num >= COUNT) {
           break;

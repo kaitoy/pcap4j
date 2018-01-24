@@ -1,9 +1,11 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -141,6 +143,7 @@ public class IcmpV6TimeExceededPacketTest extends AbstractPacketTest {
     assertTrue(p.getPayload().contains(UnknownPacket.class));
     assertEquals(p.getPayload().get(UnknownPacket.class).length(), 3);
     assertFalse(p.getPayload().contains(IllegalPacket.class));
+    assertFalse(p.getPayload().contains(IllegalRawDataPacket.class));
   }
 
   @Test

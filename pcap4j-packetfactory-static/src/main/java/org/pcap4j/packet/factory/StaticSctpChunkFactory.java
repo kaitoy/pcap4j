@@ -1,14 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2017  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IllegalSctpChunk;
@@ -23,25 +20,8 @@ import org.pcap4j.packet.namednumber.SctpChunkType;
 public final class StaticSctpChunkFactory implements PacketFactory<SctpChunk, SctpChunkType> {
 
   private static final StaticSctpChunkFactory INSTANCE = new StaticSctpChunkFactory();
-  private final Map<SctpChunkType, Instantiater> instantiaters
-    = new HashMap<SctpChunkType, Instantiater>();
 
-  private StaticSctpChunkFactory() {
-//    instantiaters.put(
-//      SctpChunkType.DATA, new Instantiater() {
-//        @Override
-//        public SctpChunk newInstance(
-//          byte[] rawData, int offset, int length
-//        ) throws IllegalRawDataException {
-//          return SctpChunkPayloadData.newInstance(rawData, offset, length);
-//        }
-//        @Override
-//        public Class<SctpChunkPayloadData> getTargetClass() {
-//          return SctpChunkPayloadData.class;
-//        }
-//      }
-//    );
-  };
+  private StaticSctpChunkFactory() {}
 
   /**
    *
@@ -51,60 +31,88 @@ public final class StaticSctpChunkFactory implements PacketFactory<SctpChunk, Sc
     return INSTANCE;
   }
 
-  @Override
-  public SctpChunk newInstance(byte[] rawData, int offset, int length, SctpChunkType number) {
-    if (rawData == null || number == null) {
-      StringBuilder sb = new StringBuilder(40);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" number: ")
-        .append(number);
-      throw new NullPointerException(sb.toString());
-    }
-
-    try {
-      Instantiater instantiater = instantiaters.get(number);
-      if (instantiater != null) {
-        return instantiater.newInstance(rawData, offset, length);
-      }
-    } catch (IllegalRawDataException e) {
-      return IllegalSctpChunk.newInstance(rawData, offset, length);
-    }
-
-    return newInstance(rawData, offset, length);
-  }
-
-  @Override
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, SctpChunkType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
   public SctpChunk newInstance(byte[] rawData, int offset, int length) {
     try {
       return UnknownSctpChunk.newInstance(rawData, offset, length);
     } catch (IllegalRawDataException e) {
-      return IllegalSctpChunk.newInstance(rawData, offset, length);
+      return IllegalSctpChunk.newInstance(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, SctpChunkType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public SctpChunk newInstance(byte[] rawData, int offset, int length, SctpChunkType number) {
+    try {
+//      switch (Byte.toUnsignedInt(number.value())) {
+//        case 0:
+//          return SctpChunkPayloadData.newInstance(rawData, offset, length);
+//      }
+      return UnknownSctpChunk.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalSctpChunk.newInstance(rawData, offset, length, e);
+    }
+  }
+
+  /**
+   * This method is a variant of {@link #newInstance(byte[], int, int, SctpChunkType...)}
+   * and exists only for performance reason.
+   *
+   * @param rawData see {@link PacketFactory#newInstance}.
+   * @param offset see {@link PacketFactory#newInstance}.
+   * @param length see {@link PacketFactory#newInstance}.
+   * @param number1 see {@link PacketFactory#newInstance}.
+   * @param number2 see {@link PacketFactory#newInstance}.
+   * @return see {@link PacketFactory#newInstance}.
+   */
+  public SctpChunk newInstance(
+    byte[] rawData, int offset, int length, SctpChunkType number1, SctpChunkType number2
+  ) {
+    try {
+//      switch (Byte.toUnsignedInt(number1.value())) {
+//        case 0:
+//          return SctpChunkPayloadData.newInstance(rawData, offset, length);
+//      }
+//
+//      switch (Byte.toUnsignedInt(number2.value())) {
+//        case 0:
+//          return SctpChunkPayloadData.newInstance(rawData, offset, length);
+//      }
+      return UnknownSctpChunk.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalSctpChunk.newInstance(rawData, offset, length, e);
     }
   }
 
   @Override
-  public Class<? extends SctpChunk> getTargetClass(SctpChunkType number) {
-    if (number == null) {
-      throw new NullPointerException("number must not be null.");
+  public SctpChunk newInstance(byte[] rawData, int offset, int length, SctpChunkType... numbers) {
+    try {
+//      for (SctpChunkType num: numbers) {
+//        switch (Byte.toUnsignedInt(num.value())) {
+//          case 0:
+//            return SctpChunkPayloadData.newInstance(rawData, offset, length);
+//        }
+//      }
+      return UnknownSctpChunk.newInstance(rawData, offset, length);
+    } catch (IllegalRawDataException e) {
+      return IllegalSctpChunk.newInstance(rawData, offset, length, e);
     }
-    Instantiater instantiater = instantiaters.get(number);
-    return instantiater != null ? instantiater.getTargetClass() : getTargetClass();
-  }
-
-  @Override
-  public Class<? extends SctpChunk> getTargetClass() {
-    return UnknownSctpChunk.class;
-  }
-
-  private static interface Instantiater {
-
-    public SctpChunk newInstance(
-      byte [] rawData, int offset, int length
-    ) throws IllegalRawDataException;
-
-    public Class<? extends SctpChunk> getTargetClass();
-
   }
 
 }

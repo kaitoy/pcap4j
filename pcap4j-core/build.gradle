@@ -1,0 +1,32 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2016  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
+archivesBaseName = 'pcap4j-core'
+description = 'The core module of Pcap4J.'
+
+dependencies {
+  compile "org.slf4j:slf4j-api:${slf4jVer}"
+  compile "net.java.dev.jna:jna:${jnaVer}"
+  testCompile "junit:junit:${junitVer}"
+  testCompile "org.powermock:powermock-module-junit4:${powermockVer}"
+  testCompile "org.powermock:powermock-module-junit4-rule:${powermockVer}"
+  testCompile "org.powermock:powermock-classloading-xstream:${powermockVer}"
+  testCompile "org.powermock:powermock-api-mockito:${powermockVer}"
+  testRuntime "ch.qos.logback:logback-core:${logbackVer}"
+  testRuntime "ch.qos.logback:logback-classic:${logbackVer}"
+}
+
+compileJava << {
+  delete "${destinationDir}/org/pcap4j/packet/factory/PacketFactoryBinder.class"
+}
+
+test {
+  systemProperties System.getProperties().findAll({
+    it.key.startsWith 'org.pcap4j.' or it.key == 'jna.library.path' or it.key == 'jna.nosys'
+  })
+  systemProperty 'org.pcap4j.core.PcapDumperTest.tmpDir', temporaryDir
+}

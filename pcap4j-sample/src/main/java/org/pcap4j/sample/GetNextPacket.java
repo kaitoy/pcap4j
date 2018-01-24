@@ -1,6 +1,6 @@
 package org.pcap4j.sample;
 
-import java.io.IOException;
+import com.sun.jna.Platform;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapAddress;
@@ -13,7 +13,8 @@ import org.pcap4j.core.PcapStat;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.NifSelector;
-import com.sun.jna.Platform;
+
+import java.io.IOException;
 
 @SuppressWarnings("javadoc")
 public class GetNextPacket {
@@ -95,38 +96,36 @@ public class GetNextPacket {
     if (TIMESTAMP_PRECISION_NANO) {
       phb.timestampPrecision(TimestampPrecision.NANO);
     }
-    PcapHandle handle = phb.build();
 
-    handle.setFilter(
-      filter,
-      BpfCompileMode.OPTIMIZE
-    );
+    try (PcapHandle handle = phb.build()) {
+      handle.setFilter(
+        filter,
+        BpfCompileMode.OPTIMIZE
+      );
 
-    int num = 0;
-    while (true) {
-      Packet packet = handle.getNextPacket();
-      if (packet == null) {
-        continue;
-      }
-      else {
-        System.out.println(handle.getTimestamp());
-        System.out.println(packet);
-        num++;
-        if (num >= COUNT) {
-          break;
+      int num = 0;
+      while (true) {
+        Packet packet = handle.getNextPacket();
+        if (packet == null) {
+          continue;
+        }
+        else {
+          System.out.println(packet);
+          num++;
+          if (num >= COUNT) {
+            break;
+          }
         }
       }
-    }
 
-    PcapStat ps = handle.getStats();
-    System.out.println("ps_recv: " + ps.getNumPacketsReceived());
-    System.out.println("ps_drop: " + ps.getNumPacketsDropped());
-    System.out.println("ps_ifdrop: " + ps.getNumPacketsDroppedByIf());
-    if (Platform.isWindows()) {
-      System.out.println("bs_capt: " + ps.getNumPacketsCaptured());
+      PcapStat ps = handle.getStats();
+      System.out.println("ps_recv: " + ps.getNumPacketsReceived());
+      System.out.println("ps_drop: " + ps.getNumPacketsDropped());
+      System.out.println("ps_ifdrop: " + ps.getNumPacketsDroppedByIf());
+      if (Platform.isWindows()) {
+        System.out.println("bs_capt: " + ps.getNumPacketsCaptured());
+      }
     }
-
-    handle.close();
   }
 
 }

@@ -1,15 +1,14 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2015 Pcap4J.org
+  _##  Copyright (C) 2012-2017 Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.core;
 
-import java.io.Closeable;
-import java.sql.Timestamp;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import com.sun.jna.NativeLong;
+import com.sun.jna.Pointer;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.core.NativeMappings.timeval;
 import org.pcap4j.core.PcapHandle.TimestampPrecision;
@@ -17,14 +16,15 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.sun.jna.NativeLong;
-import com.sun.jna.Pointer;
+
+import java.time.Instant;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.9
  */
-public final class PcapDumper implements Closeable {
+public final class PcapDumper implements AutoCloseable {
 
   private static final Logger logger = LoggerFactory.getLogger(PcapDumper.class);
 
@@ -53,7 +53,16 @@ public final class PcapDumper implements Closeable {
    * @throws NotOpenException if this PcapHandle is not open.
    */
   public void dump(Packet packet) throws NotOpenException {
-    dump(packet, new Timestamp(System.currentTimeMillis()));
+    dump(packet, Instant.now());
+  }
+
+  /**
+   *
+   * @param packet packet
+   * @throws NotOpenException if this PcapHandle is not open.
+   */
+  public void dump(PcapPacket packet) throws NotOpenException {
+    dump(packet, packet.getTimestamp());
   }
 
   /**
@@ -62,7 +71,7 @@ public final class PcapDumper implements Closeable {
    * @param timestamp timestamp
    * @throws NotOpenException if this PcapHandle is not open.
    */
-  public void dump(Packet packet, Timestamp timestamp) throws NotOpenException {
+  public void dump(Packet packet, Instant timestamp) throws NotOpenException {
     if (packet == null || timestamp == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("packet: ").append(packet)
@@ -82,7 +91,7 @@ public final class PcapDumper implements Closeable {
    * @throws NotOpenException if this PcapHandle is not open.
    */
   public void dumpRaw(byte[] packet) throws NotOpenException {
-    dumpRaw(packet, new Timestamp(System.currentTimeMillis()));
+    dumpRaw(packet, Instant.now());
   }
 
   /**
@@ -91,7 +100,7 @@ public final class PcapDumper implements Closeable {
    * @param timestamp timestamp
    * @throws NotOpenException if this PcapHandle is not open.
    */
-  public void dumpRaw(byte[] packet, Timestamp timestamp) throws NotOpenException {
+  public void dumpRaw(byte[] packet, Instant timestamp) throws NotOpenException {
     if (packet == null || timestamp == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("packet: ").append(packet)
@@ -106,13 +115,13 @@ public final class PcapDumper implements Closeable {
     pcap_pkthdr header = new pcap_pkthdr();
     header.len = header.caplen = packet.length;
     header.ts = new timeval();
-    header.ts.tv_sec = new NativeLong(timestamp.getTime() / 1000L);
+    header.ts.tv_sec = new NativeLong(timestamp.getEpochSecond());
     switch (timestampPrecision) {
       case MICRO:
-        header.ts.tv_usec = new NativeLong(timestamp.getNanos() / 1000L);
+        header.ts.tv_usec = new NativeLong(timestamp.getNano() / 1000L);
         break;
       case NANO:
-        header.ts.tv_usec = new NativeLong(timestamp.getNanos());
+        header.ts.tv_usec = new NativeLong(timestamp.getNano());
         break;
       default:
         throw new AssertionError("Never get here.");
@@ -194,7 +203,7 @@ public final class PcapDumper implements Closeable {
   }
 
   /**
-   *
+   * Closes this PcapDumper.
    */
   @Override
   public void close() {

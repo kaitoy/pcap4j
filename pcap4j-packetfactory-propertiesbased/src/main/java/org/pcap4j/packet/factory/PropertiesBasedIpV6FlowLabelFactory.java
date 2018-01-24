@@ -8,8 +8,11 @@
 package org.pcap4j.packet.factory;
 
 import static org.pcap4j.util.ByteArrays.*;
+
+import java.io.ObjectStreamException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
@@ -33,34 +36,12 @@ implements PacketFactory<IpV6FlowLabel, NotApplicable> {
   public static PropertiesBasedIpV6FlowLabelFactory getInstance() { return INSTANCE; }
 
   @Override
-  @Deprecated
-  public IpV6FlowLabel newInstance(byte[] rawData, int offset, int length, NotApplicable number) {
-    return newInstance(rawData, offset, length);
-  }
-
-  @Override
-  public IpV6FlowLabel newInstance(byte[] rawData, int offset, int length) {
-    return newInstance(rawData, offset, length, getTargetClass());
-  }
-
-  /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
-   *
-   * @param rawData rawData
-   * @param offset offset
-   * @param length length
-   * @param clazz clazz
-   * @return a new IpV6FlowLabel object.
-   * @throws IllegalStateException if an access to the newInstance method of the clazz fails.
-   * @throws IllegalArgumentException if an exception is thrown by newInstance method of the clazz.
-   * @throws NullPointerException if any of arguments are null.
-   */
   public IpV6FlowLabel newInstance(
-    byte[] rawData, int offset, int length, Class<? extends IpV6FlowLabel> clazz
+    byte[] rawData, int offset, int length, NotApplicable... number
   ) {
     ByteArrays.validateBounds(rawData, offset, length);
+    Class<? extends IpV6FlowLabel> clazz
+      = PacketFactoryPropertiesLoader.getInstance().getIpV6FlowLabelClass();
     if (clazz == null) {
       throw new NullPointerException("clazz is null.");
     }
@@ -82,17 +63,6 @@ implements PacketFactory<IpV6FlowLabel, NotApplicable> {
     } catch (InvocationTargetException e) {
       throw new IllegalArgumentException(e);
     }
-  }
-
-  @Override
-  @Deprecated
-  public Class<? extends IpV6FlowLabel> getTargetClass(NotApplicable number) {
-    return getTargetClass();
-  }
-
-  @Override
-  public Class<? extends IpV6FlowLabel> getTargetClass() {
-    return PacketFactoryPropertiesLoader.getInstance().getIpV6FlowLabelClass();
   }
 
 }

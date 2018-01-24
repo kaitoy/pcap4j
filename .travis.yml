@@ -2,30 +2,21 @@ sudo: required
 
 language: java
 
-addons:
-  hosts:
-    - pcap4j-test
-  hostname: pcap4j-test
-
 branches:
-  only:
-    - v1
+  except:
+    - gh-pages
 
 matrix:
   include:
     - jdk: oraclejdk8
-    - jdk: openjdk7
-      env: COVERALLS=yes
-    - addons:
-        apt:
-          packages:
-            - openjdk-6-jdk
-      jdk: openjdk6
   fast_finish: true
 
 cache:
   directories:
-    - $HOME/.m2
+    - $HOME/.gradle/wrapper
+    - $HOME/.gradle/native
+    - $HOME/.gradle/daemon
+#    - $HOME/.gradle/caches
 
 install:
   - git clone -b libpcap-1.7.4 git://github.com/the-tcpdump-group/libpcap.git libpcap
@@ -35,13 +26,11 @@ install:
   - cd ..
 
 script:
-  - |
-    if [ "${COVERALLS}" = "yes"  ]
-    then
-      sudo $TRAVIS_BUILD_DIR/mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -DserviceJobId=$TRAVIS_JOB_ID -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage package coveralls:report
-    else
-      sudo $TRAVIS_BUILD_DIR/mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B install
-    fi
+  # sudo is needed for some unit tests.
+  - sudo ./gradlew build jacocoTestReport --info --no-daemon -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email:
