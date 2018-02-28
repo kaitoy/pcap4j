@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2017  Pcap4J.org
+  _##  Copyright (C) 2011-2018  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -132,7 +132,6 @@ public final class PcapNetworkInterface {
       }
     }
 
-    System.out.println(pif.flags);
     this.loopBack = (pif.flags & PCAP_IF_LOOPBACK) != 0;
     this.up = (pif.flags & PCAP_IF_UP) != 0;
     this.running = (pif.flags & PCAP_IF_RUNNING) != 0;
