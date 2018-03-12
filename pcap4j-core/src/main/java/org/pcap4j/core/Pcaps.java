@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2015  Pcap4J.org
+  _##  Copyright (C) 2011-2018  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -39,6 +39,8 @@ public final class Pcaps {
   private Pcaps() { throw new AssertionError(); }
 
   /**
+   * Gets all devices.
+   * This method is not thread-safe.
    *
    * @return a list of PcapNetworkInterfaces.
    * @throws PcapNativeException if an error occurs in the pcap native library.
@@ -81,6 +83,8 @@ public final class Pcaps {
   }
 
   /**
+   * Gets a device by IP address.
+   * This method is not thread-safe.
    *
    * @param addr addr
    * @return a PcapNetworkInterface.
@@ -108,6 +112,8 @@ public final class Pcaps {
   }
 
   /**
+   * Gets a device by name.
+   * This method is not thread-safe.
    *
    * @param name name
    * @return a PcapNetworkInterface.
