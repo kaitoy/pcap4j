@@ -74,7 +74,10 @@ public final class UnknownTcpOption implements TcpOption {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.data = ByteArrays.getSubArray(rawData, 2 + offset, this.length - 2);
+    if (this.length > 2)
+      this.data = ByteArrays.getSubArray(rawData, 2 + offset, this.length - 2);
+    else
+      this.data = new byte[]{};
   }
 
   private UnknownTcpOption(Builder builder) {
