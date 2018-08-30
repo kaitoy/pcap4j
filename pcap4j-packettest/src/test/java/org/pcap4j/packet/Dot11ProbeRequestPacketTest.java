@@ -44,6 +44,7 @@ import org.pcap4j.packet.namednumber.Dot11FrameType;
 import org.pcap4j.packet.namednumber.Dot11InformationElementId;
 import org.pcap4j.packet.namednumber.Dot11ServiceIntervalGranularity;
 import org.pcap4j.packet.namednumber.Dot11VenueInfo;
+import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -490,6 +491,61 @@ public class Dot11ProbeRequestPacketTest extends AbstractPacketTest {
         = Dot11ProbeRequestPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
+  }
+
+  @Test
+  public void testNewPacketUnOrdered(){
+    try {
+      //raw data bytes string for unordered probe request
+      String rawDataString = "40000000ffffffffffff984be157aaf7ffffffffffff30b100034f454e010802040b0c1216182403010b2d1a" +
+              "600100ff0000000100000000000000000000000000000000000032043048606cf2825146";
+      Integer fcsFromRawString = 1179747058;
+      byte[] rawData = ByteArrays.parseByteArray(rawDataString,"");
+      Dot11ProbeRequestPacket p
+        = Dot11ProbeRequestPacket.newPacket(rawData, 0, rawData.length);
+       assertEquals(p.getFcs(), fcsFromRawString);
+    }catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
+  }
+
+  @Test
+  public void testNewPacketOrdered(){
+    try {
+      //raw data bytes string for ordered probe request
+      String rawDataString = "40000000ffffffffffffe4b318621f4cffffffffffff00140000010882840b168c92182432053048606cff" +
+              "2d1ae70917ffff0000000000000000000000000000000000000000008554ed06";
+      Integer fcsFromRawString = 116216965;
+      byte[] rawData = ByteArrays.parseByteArray(rawDataString,"");
+      Dot11ProbeRequestPacket p
+        = Dot11ProbeRequestPacket.newPacket(rawData, 0, rawData.length);
+
+      assertEquals(p.getFcs(), fcsFromRawString);
+    }catch (IllegalRawDataException e) {
+      throw new AssertionError(e);
+    }
+  }
+
+  @Test
+  public void testNewPacketInformationElementOrder(){
+    try {
+      //raw data bytes string for unordered probe request
+      String rawDataString = "40000000ffffffffffff984be157aaf7ffffffffffff30b100034f454e010802040b0c1216182403010b2d1a" +
+              "600100ff0000000100000000000000000000000000000000000032043048606cf2825146";
+
+      byte[] rawData = ByteArrays.parseByteArray(rawDataString,"");
+      Dot11ProbeRequestPacket p
+        = Dot11ProbeRequestPacket.newPacket(rawData, 0, rawData.length);
+      List<Dot11InformationElement> informationElementOrderedList =  p.getHeader().getInformationElementOrderedList();
+
+      assertEquals(informationElementOrderedList.get(0).getElementId().name(),"SSID");
+      assertEquals(informationElementOrderedList.get(1).getElementId().name(),"Supported rates");
+      assertEquals(informationElementOrderedList.get(2).getElementId().name(),"DSSS Parameter Set");
+      assertEquals(informationElementOrderedList.get(3).getElementId().name(),"HT Capabilities");
+      assertEquals(informationElementOrderedList.get(4).getElementId().name(),"Extended Supported Rates");
+    }catch (IllegalRawDataException e) {
       throw new AssertionError(e);
     }
   }

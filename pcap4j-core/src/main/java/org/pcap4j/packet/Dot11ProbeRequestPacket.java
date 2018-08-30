@@ -11,6 +11,7 @@ import static org.pcap4j.packet.namednumber.Dot11InformationElementId.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.pcap4j.util.ByteArrays;
@@ -474,20 +475,23 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
      */
     private static final long serialVersionUID = -2203820242563461514L;
 
-    private final Dot11SsidElement ssid;
-    private final Dot11SupportedRatesElement supportedRates;
-    private final Dot11RequestElement request;
-    private final Dot11ExtendedSupportedRatesElement extendedSupportedRates;
-    private final Dot11DsssParameterSetElement dsssParameterSet;
-    private final Dot11SupportedOperatingClassesElement supportedOperatingClasses;
-    private final Dot11HTCapabilitiesElement htCapabilities;
-    private final Dot112040BssCoexistenceElement twentyFortyBssCoexistence;
-    private final Dot11ExtendedCapabilitiesElement extendedCapabilities;
-    private final Dot11SsidListElement ssidList;
-    private final Dot11ChannelUsageElement channelUsage;
-    private final Dot11InterworkingElement interworking;
-    private final Dot11MeshIdElement meshId;
-    private final List<Dot11VendorSpecificElement> vendorSpecificElements;
+    private Dot11SsidElement ssid = null;
+    private Dot11SupportedRatesElement supportedRates = null;
+    private Dot11RequestElement request = null;
+    private Dot11ExtendedSupportedRatesElement extendedSupportedRates = null;
+    private Dot11DsssParameterSetElement dsssParameterSet = null;
+    private Dot11SupportedOperatingClassesElement supportedOperatingClasses = null;
+    private Dot11HTCapabilitiesElement htCapabilities = null;
+    private Dot112040BssCoexistenceElement twentyFortyBssCoexistence = null;
+    private Dot11ExtendedCapabilitiesElement extendedCapabilities = null;
+    private Dot11SsidListElement ssidList = null;
+    private Dot11ChannelUsageElement channelUsage = null;
+    private Dot11InterworkingElement interworking = null;
+    private Dot11MeshIdElement meshId = null;
+    private List<Dot11VendorSpecificElement> vendorSpecificElements = new ArrayList<Dot11VendorSpecificElement>();
+
+    private List<Dot11InformationElement> infoElementOrderedList = new LinkedList<Dot11InformationElement>();
+    private static final short INFORMATION_ELEMENT_MAX_COUNT = 15;
 
     private Dot11ProbeRequestHeader(
       byte[] rawData, int offset, int length
@@ -497,137 +501,97 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
       offset += mgmtHeaderLen;
       length -= mgmtHeaderLen;
 
-      if (length > 0 && rawData[offset] == SSID.value().byteValue()) {
-        this.ssid = Dot11SsidElement.newInstance(rawData, offset, length);
-        int elemLen = ssid.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.ssid = null;
-      }
-      if (length > 0 && rawData[offset] == SUPPORTED_RATES.value().byteValue()) {
-        this.supportedRates = Dot11SupportedRatesElement.newInstance(rawData, offset, length);
-        int elemLen = supportedRates.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.supportedRates = null;
-      }
-      if (length > 0 && rawData[offset] == REQUEST.value().byteValue()) {
-        this.request = Dot11RequestElement.newInstance(rawData, offset, length);
-        int elemLen = request.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.request = null;
-      }
-      if (length > 0 && rawData[offset] == EXTENDED_SUPPORTED_RATES.value().byteValue()) {
-        this.extendedSupportedRates
-          = Dot11ExtendedSupportedRatesElement.newInstance(rawData, offset, length);
-        int elemLen = extendedSupportedRates.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.extendedSupportedRates = null;
-      }
-      if (length > 0 && rawData[offset] == DSSS_PARAMETER_SET.value().byteValue()) {
-        this.dsssParameterSet
-          = Dot11DsssParameterSetElement.newInstance(rawData, offset, length);
-        int elemLen = dsssParameterSet.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.dsssParameterSet = null;
-      }
-      if (length > 0 && rawData[offset] == SUPPORTED_OPERATING_CLASSES.value().byteValue()) {
-        this.supportedOperatingClasses
-          = Dot11SupportedOperatingClassesElement.newInstance(rawData, offset, length);
-        int elemLen = supportedOperatingClasses.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.supportedOperatingClasses = null;
-      }
-      if (length > 0 && rawData[offset] == HT_CAPABILITIES.value().byteValue()) {
-        this.htCapabilities = Dot11HTCapabilitiesElement.newInstance(rawData, offset, length);
-        int elemLen = htCapabilities.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.htCapabilities = null;
-      }
-      if (length > 0 && rawData[offset] == IE_20_40_BSS_COEXISTENCE.value().byteValue()) {
-        this.twentyFortyBssCoexistence
-          = Dot112040BssCoexistenceElement.newInstance(rawData, offset, length);
-        int elemLen = twentyFortyBssCoexistence.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.twentyFortyBssCoexistence = null;
-      }
-      if (length > 0 && rawData[offset] == EXTENDED_CAPABILITIES.value().byteValue()) {
-        this.extendedCapabilities
-          = Dot11ExtendedCapabilitiesElement.newInstance(rawData, offset, length);
-        int elemLen = extendedCapabilities.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.extendedCapabilities = null;
-      }
-      if (length > 0 && rawData[offset] == SSID_LIST.value().byteValue()) {
-        this.ssidList = Dot11SsidListElement.newInstance(rawData, offset, length);
-        int elemLen = ssidList.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.ssidList = null;
-      }
-      if (length > 0 && rawData[offset] == CHANNEL_USAGE.value().byteValue()) {
-        this.channelUsage = Dot11ChannelUsageElement.newInstance(rawData, offset, length);
-        int elemLen = channelUsage.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.channelUsage = null;
-      }
-      if (length > 0 && rawData[offset] == INTERWORKING.value().byteValue()) {
-        this.interworking = Dot11InterworkingElement.newInstance(rawData, offset, length);
-        int elemLen = interworking.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.interworking = null;
-      }
-      if (length > 0 && rawData[offset] == MESH_ID.value().byteValue()) {
-        this.meshId = Dot11MeshIdElement.newInstance(rawData, offset, length);
-        int elemLen = meshId.length();
-        offset += elemLen;
-        length -= elemLen;
-      }
-      else {
-        this.meshId = null;
-      }
-
-      this.vendorSpecificElements = new ArrayList<Dot11VendorSpecificElement>();
-      while (length > 0 && rawData[offset] == VENDOR_SPECIFIC.value().byteValue()) {
-        Dot11VendorSpecificElement elem
-          = Dot11VendorSpecificElement.newInstance(rawData, offset, length);
-        vendorSpecificElements.add(elem);
-        int elemLen = elem.length();
-        offset += elemLen;
-        length -= elemLen;
+      short iterCount = 0;
+      while (length > 4 && iterCount < INFORMATION_ELEMENT_MAX_COUNT) {
+        iterCount++;
+        if (length > 0 && rawData[offset] == SSID.value().byteValue()) {
+          this.ssid = Dot11SsidElement.newInstance(rawData, offset, length);
+          int elemLen = ssid.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.ssid);
+        }else if (length > 0 && rawData[offset] == SUPPORTED_RATES.value().byteValue()) {
+          this.supportedRates = Dot11SupportedRatesElement.newInstance(rawData, offset, length);
+          int elemLen = supportedRates.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.supportedRates);
+        }else if (length > 0 && rawData[offset] == REQUEST.value().byteValue()) {
+          this.request = Dot11RequestElement.newInstance(rawData, offset, length);
+          int elemLen = request.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.request);
+        }else if (length > 0 && rawData[offset] == EXTENDED_SUPPORTED_RATES.value().byteValue()) {
+          this.extendedSupportedRates = Dot11ExtendedSupportedRatesElement.newInstance(rawData, offset, length);
+          int elemLen = extendedSupportedRates.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.extendedSupportedRates);
+        }else if (length > 0 && rawData[offset] == DSSS_PARAMETER_SET.value().byteValue()) {
+          this.dsssParameterSet = Dot11DsssParameterSetElement.newInstance(rawData, offset, length);
+          int elemLen = dsssParameterSet.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.dsssParameterSet);
+        }else if (length > 0 && rawData[offset] == SUPPORTED_OPERATING_CLASSES.value().byteValue()) {
+          this.supportedOperatingClasses = Dot11SupportedOperatingClassesElement.newInstance(rawData, offset, length);
+          int elemLen = supportedOperatingClasses.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.supportedOperatingClasses);
+        }else if (length > 0 && rawData[offset] == HT_CAPABILITIES.value().byteValue()) {
+          this.htCapabilities = Dot11HTCapabilitiesElement.newInstance(rawData, offset, length);
+          int elemLen = htCapabilities.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.htCapabilities);
+        }else if (length > 0 && rawData[offset] == IE_20_40_BSS_COEXISTENCE.value().byteValue()) {
+          this.twentyFortyBssCoexistence = Dot112040BssCoexistenceElement.newInstance(rawData, offset, length);
+          int elemLen = twentyFortyBssCoexistence.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.twentyFortyBssCoexistence);
+        }else if (length > 0 && rawData[offset] == EXTENDED_CAPABILITIES.value().byteValue()) {
+          this.extendedCapabilities = Dot11ExtendedCapabilitiesElement.newInstance(rawData, offset, length);
+          int elemLen = extendedCapabilities.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.extendedCapabilities);
+        }else if (length > 0 && rawData[offset] == SSID_LIST.value().byteValue()) {
+          this.ssidList = Dot11SsidListElement.newInstance(rawData, offset, length);
+          int elemLen = ssidList.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.ssidList);
+        }else if (length > 0 && rawData[offset] == CHANNEL_USAGE.value().byteValue()) {
+          this.channelUsage = Dot11ChannelUsageElement.newInstance(rawData, offset, length);
+          int elemLen = channelUsage.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.channelUsage);
+        }else if (length > 0 && rawData[offset] == INTERWORKING.value().byteValue()) {
+          this.interworking = Dot11InterworkingElement.newInstance(rawData, offset, length);
+          int elemLen = interworking.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.interworking);
+        }else if (length > 0 && rawData[offset] == MESH_ID.value().byteValue()) {
+          this.meshId = Dot11MeshIdElement.newInstance(rawData, offset, length);
+          int elemLen = meshId.length();
+          offset += elemLen;
+          length -= elemLen;
+          infoElementOrderedList.add(this.meshId);
+        }else {
+          while (length > 0 && rawData[offset] == VENDOR_SPECIFIC.value().byteValue()) {
+            Dot11VendorSpecificElement elem = Dot11VendorSpecificElement.newInstance(rawData, offset, length);
+            vendorSpecificElements.add(elem);
+            int elemLen = elem.length();
+            offset += elemLen;
+            length -= elemLen;
+            infoElementOrderedList.add(elem);
+          }
+        }
       }
     }
 
@@ -751,6 +715,13 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
      */
     public List<Dot11VendorSpecificElement> getVendorSpecificElements() {
       return new ArrayList<Dot11VendorSpecificElement>(vendorSpecificElements);
+    }
+
+    /**
+     * @return infoElementOrderedList
+     */
+    public List<Dot11InformationElement> getInformationElementOrderedList() {
+      return infoElementOrderedList;
     }
 
     @Override
