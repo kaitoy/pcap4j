@@ -10,6 +10,10 @@ package org.pcap4j.packet.factory;
 import org.pcap4j.packet.IcmpV6DestinationUnreachablePacket;
 import org.pcap4j.packet.IcmpV6EchoReplyPacket;
 import org.pcap4j.packet.IcmpV6EchoRequestPacket;
+import org.pcap4j.packet.IcmpV6HomeAgentAddressDiscoveryReplyPacket;
+import org.pcap4j.packet.IcmpV6HomeAgentAddressDiscoveryRequestPacket;
+import org.pcap4j.packet.IcmpV6MobilePrefixAdvertisementPacket;
+import org.pcap4j.packet.IcmpV6MobilePrefixSolicitationPacket;
 import org.pcap4j.packet.IcmpV6NeighborAdvertisementPacket;
 import org.pcap4j.packet.IcmpV6NeighborSolicitationPacket;
 import org.pcap4j.packet.IcmpV6PacketTooBigPacket;
@@ -184,6 +188,62 @@ extends AbstractStaticPacketFactory<IcmpV6Type> {
         @Override
         public Class<IcmpV6RedirectPacket> getTargetClass() {
           return IcmpV6RedirectPacket.class;
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.HOME_AGENT_ADDRESS_DISCOVERY_REQUEST, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV6HomeAgentAddressDiscoveryRequestPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<IcmpV6HomeAgentAddressDiscoveryRequestPacket> getTargetClass() {
+          return IcmpV6HomeAgentAddressDiscoveryRequestPacket.class;
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.HOME_AGENT_ADDRESS_DISCOVERY_REPLY, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV6HomeAgentAddressDiscoveryReplyPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<IcmpV6HomeAgentAddressDiscoveryReplyPacket> getTargetClass() {
+          return IcmpV6HomeAgentAddressDiscoveryReplyPacket.class;
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.MOBILE_PREFIX_SOLICITATION, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV6MobilePrefixSolicitationPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<IcmpV6MobilePrefixSolicitationPacket> getTargetClass() {
+          return IcmpV6MobilePrefixSolicitationPacket.class;
+        }
+      }
+    );
+    instantiaters.put(
+      IcmpV6Type.MOBILE_PREFIX_ADVERTISEMENT, new PacketInstantiater() {
+        @Override
+        public Packet newInstance(
+          byte[] rawData, int offset, int length
+        ) throws IllegalRawDataException {
+          return IcmpV6MobilePrefixAdvertisementPacket.newPacket(rawData, offset, length);
+        }
+        @Override
+        public Class<IcmpV6MobilePrefixAdvertisementPacket> getTargetClass() {
+          return IcmpV6MobilePrefixAdvertisementPacket.class;
         }
       }
     );
