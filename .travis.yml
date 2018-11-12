@@ -35,6 +35,9 @@ install:
   - cd ..
 
 script:
+  - jdk_switcher use openjdk7
+  - $TRAVIS_BUILD_DIR/mvnw --version
+  - jdk_switcher use openjdk6
   - |
     if [ "${COVERALLS}" = "yes"  ]
     then
