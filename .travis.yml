@@ -40,7 +40,7 @@ script:
   - |
     if [ "${JDK6}" = "yes"  ]
     then
-      export JAVA_HOME=$HOME/openjdk6
+      export /usr/lib/jvm/java-6-openjdk-amd64/
     fi
     if [ "${COVERALLS}" = "yes"  ]
     then
