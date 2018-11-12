@@ -313,7 +313,7 @@ public final class PcapNetworkInterface {
 
     long hFile = -1;
     if (lpAdapter != null) {
-      if (Pointer.SIZE == 4) {
+      if (Native.POINTER_SIZE == 4) {
         hFile = lpAdapter.getInt(0);
       }
       else {
