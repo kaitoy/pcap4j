@@ -53,6 +53,15 @@ Release 2.0.0-alpha (28-Dec-2017)
     * org.pcap4j.packet.IllegalSctpChunk
     * org.pcap4j.packet.IllegalTcpOption
 
+Release 1.7.4 (12-Nov-2018)
+======
+### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+* [Issues#191](https://github.com/kaitoy/pcap4j/issues/191): Change to use Native.POINTER_SIZE instead of Pointer.SIZE that is deprecated in JNA 5.
+
 Release 1.7.3 (28-Dec-2017)
 ===========================
 ### New Features ###
