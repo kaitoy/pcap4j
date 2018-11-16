@@ -292,7 +292,7 @@ final class NativeMappings {
   interface PcapLibrary extends Library {
 
     static final PcapLibrary INSTANCE
-      = (PcapLibrary)Native.loadLibrary(
+      = (PcapLibrary)Native.load(
           PCAP_LIB_NAME,
           PcapLibrary.class,
           NATIVE_LOAD_LIBRARY_OPTIONS
