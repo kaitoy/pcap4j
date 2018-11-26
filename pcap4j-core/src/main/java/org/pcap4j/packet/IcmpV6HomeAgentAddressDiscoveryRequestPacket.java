@@ -13,12 +13,16 @@ import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 /**
+<<<<<<< HEAD
  * Icmpv6 home agent address discovery reply packet.
  *
  * @see <a href="https://tools.ietf.org/html/rfc3775">RFC 3775</a>
  * @see <a href="https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml#icmpv6-parameters-codes-21">ICMPv6 Parameters</a>
  * @author Leo Ma
  * @since pcap4j 1.7.5
+=======
+ *
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
  */
 public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket {
 
@@ -28,6 +32,10 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket
     private static final long serialVersionUID = -4921942983336579680L;
 
     private final IcmpV6HomeAgentAddressDiscoveryRequestHeader header;
+<<<<<<< HEAD
+=======
+    private final Packet payload;
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 
     /**
      * A static factory method.
@@ -49,10 +57,25 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket
     private IcmpV6HomeAgentAddressDiscoveryRequestPacket(
             byte[] rawData, int offset, int length) throws IllegalRawDataException {
         this.header = new IcmpV6HomeAgentAddressDiscoveryRequestHeader(rawData, offset, length);
+<<<<<<< HEAD
+=======
+
+        int payloadLength = length - header.length();
+        if (payloadLength > 0) {
+            this.payload = PacketFactories.getFactory(Packet.class, NotApplicable.class)
+                    .newInstance(rawData, offset + header.length(), payloadLength, NotApplicable.UNKNOWN);
+        } else {
+            this.payload = null;
+        }
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
     }
 
     private IcmpV6HomeAgentAddressDiscoveryRequestPacket(Builder builder) {
         this.header = new IcmpV6HomeAgentAddressDiscoveryRequestHeader(builder);
+<<<<<<< HEAD
+=======
+        this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
     }
 
     @Override
@@ -61,6 +84,14 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket
     }
 
     @Override
+<<<<<<< HEAD
+=======
+    public Packet getPayload() {
+        return payload;
+    }
+
+    @Override
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
     public Builder getBuilder() {
         return new Builder(this);
     }
@@ -69,6 +100,10 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket
 
         private short identifier;
         private short reserved;
+<<<<<<< HEAD
+=======
+        private Packet.Builder payloadBuilder;
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 
         /**
          *
@@ -80,6 +115,10 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket
         private Builder(IcmpV6HomeAgentAddressDiscoveryRequestPacket packet) {
             this.identifier = packet.header.identifier;
             this.reserved = packet.header.reserved;
+<<<<<<< HEAD
+=======
+            this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
         }
 
         /**
@@ -101,6 +140,20 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket
         }
 
         @Override
+<<<<<<< HEAD
+=======
+        public Builder payloadBuilder(Packet.Builder payloadBuilder) {
+            this.payloadBuilder = payloadBuilder;
+            return this;
+        }
+
+        @Override
+        public Packet.Builder getPayloadBuilder() {
+            return payloadBuilder;
+        }
+
+        @Override
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
         public IcmpV6HomeAgentAddressDiscoveryRequestPacket build() {
             return new IcmpV6HomeAgentAddressDiscoveryRequestPacket(this);
         }

@@ -1,12 +1,18 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.INET6_ADDRESS_SIZE_IN_BYTES;
+<<<<<<< HEAD
 import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+=======
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 import java.net.Inet6Address;
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Iterator;
+=======
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 import java.util.List;
 
 import org.pcap4j.packet.AbstractPacket;
@@ -16,6 +22,7 @@ import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
+<<<<<<< HEAD
 /**
  * Icmpv6 home agent address discovery reply packet.
  *
@@ -24,6 +31,8 @@ import org.pcap4j.util.ByteArrays;
  * @author Leo Ma
  * @since pcap4j 1.7.5
  */
+=======
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
 
     /**
@@ -32,6 +41,10 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
     private static final long serialVersionUID = 8080366373921919970L;
 
     private final IcmpV6HomeAgentAddressDiscoveryReplyHeader header;
+<<<<<<< HEAD
+=======
+    private final Packet payload;
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 
     /**
      * A static factory method.
@@ -53,10 +66,25 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
     private IcmpV6HomeAgentAddressDiscoveryReplyPacket(
             byte[] rawData, int offset, int length) throws IllegalRawDataException {
         this.header = new IcmpV6HomeAgentAddressDiscoveryReplyHeader(rawData, offset, length);
+<<<<<<< HEAD
+=======
+
+        int payloadLength = length - header.length();
+        if (payloadLength > 0) {
+            this.payload = PacketFactories.getFactory(Packet.class, NotApplicable.class)
+                    .newInstance(rawData, offset + header.length(), payloadLength, NotApplicable.UNKNOWN);
+        } else {
+            this.payload = null;
+        }
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
     }
 
     private IcmpV6HomeAgentAddressDiscoveryReplyPacket(Builder builder) {
         this.header = new IcmpV6HomeAgentAddressDiscoveryReplyHeader(builder);
+<<<<<<< HEAD
+=======
+        this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
     }
 
     @Override
@@ -65,6 +93,14 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
     }
 
     @Override
+<<<<<<< HEAD
+=======
+    public Packet getPayload() {
+        return payload;
+    }
+
+    @Override
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
     public Builder getBuilder() {
         return new Builder(this);
     }
@@ -73,7 +109,12 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
 
         private short identifier;
         private short reserved;
+<<<<<<< HEAD
         private List<Inet6Address> homeAgentAddresses;
+=======
+        private Inet6Address homeAgentAddresses;
+        private Packet.Builder payloadBuilder;
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 
         /**
          *
@@ -86,6 +127,10 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
             this.identifier = packet.header.identifier;
             this.reserved = packet.header.reserved;
             this.homeAgentAddresses = packet.header.homeAgentAddresses;
+<<<<<<< HEAD
+=======
+            this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
         }
 
         /**
@@ -110,12 +155,31 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
          * @param homeAgentAddresses homeAgentAddresses
          * @return this Builder object for method chaining.
          */
+<<<<<<< HEAD
         public Builder homeAgentAddresses(List<Inet6Address> homeAgentAddresses) {
             this.homeAgentAddresses = new ArrayList<Inet6Address>(homeAgentAddresses);
+=======
+        public Builder homeAgentAddresses(Inet6Address homeAgentAddresses) {
+            this.homeAgentAddresses = homeAgentAddresses;
             return this;
         }
 
         @Override
+        public Builder payloadBuilder(Packet.Builder payloadBuilder) {
+            this.payloadBuilder = payloadBuilder;
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
+            return this;
+        }
+
+        @Override
+<<<<<<< HEAD
+=======
+        public Packet.Builder getPayloadBuilder() {
+            return payloadBuilder;
+        }
+
+        @Override
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
         public IcmpV6HomeAgentAddressDiscoveryReplyPacket build() {
             return new IcmpV6HomeAgentAddressDiscoveryReplyPacket(this);
         }
@@ -147,11 +211,16 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
         private static final int RESERVED_SIZE = SHORT_SIZE_IN_BYTES;
         private static final int HOME_AGENT_ADDRESSES_OFFSET = RESERVED_OFFSET + RESERVED_SIZE;
         private static final int HOME_AGENT_ADDRESSES_SIZE = INET6_ADDRESS_SIZE_IN_BYTES;
+<<<<<<< HEAD
         private static final int ICMPV6_HOME_AGENT_ADDRESS_DISCOVERY_REPLY_HEADER_MIN_SIZE = HOME_AGENT_ADDRESSES_OFFSET
+=======
+        private static final int ICMPV6_HOME_AGENT_ADDRESS_DISCOVERY_REPLY_HEADER_SIZE = HOME_AGENT_ADDRESSES_OFFSET
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
                 + HOME_AGENT_ADDRESSES_SIZE;
 
         private final short identifier;
         private final short reserved;
+<<<<<<< HEAD
         private final List<Inet6Address> homeAgentAddresses;
 
         private IcmpV6HomeAgentAddressDiscoveryReplyHeader(byte[] rawData, int offset, int length)
@@ -160,6 +229,16 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
                 StringBuilder sb = new StringBuilder();
                 sb.append("The data is too short to build an ICMPv6 Home Agent Address Discovery Reply Header(")
                         .append(ICMPV6_HOME_AGENT_ADDRESS_DISCOVERY_REPLY_HEADER_MIN_SIZE)
+=======
+        private final Inet6Address homeAgentAddresses;
+
+        private IcmpV6HomeAgentAddressDiscoveryReplyHeader(byte[] rawData, int offset, int length)
+                throws IllegalRawDataException {
+            if (length < ICMPV6_HOME_AGENT_ADDRESS_DISCOVERY_REPLY_HEADER_SIZE) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("The data is too short to build an ICMPv6 Home Agent Address Discovery Reply Header(")
+                        .append(ICMPV6_HOME_AGENT_ADDRESS_DISCOVERY_REPLY_HEADER_SIZE)
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
                         .append(" bytes). data: ")
                         .append(ByteArrays.toHexString(rawData, " "))
                         .append(", offset: ")
@@ -170,10 +249,15 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
             }
             this.identifier = ByteArrays.getShort(rawData, IDENTIFIER_OFFSET + offset);
             this.reserved = ByteArrays.getShort(rawData, RESERVED_OFFSET + offset);
+<<<<<<< HEAD
             this.homeAgentAddresses = new ArrayList<Inet6Address>();
             for (int i = HOME_AGENT_ADDRESSES_OFFSET; i < length; i += INET6_ADDRESS_SIZE_IN_BYTES) {
                 homeAgentAddresses.add(ByteArrays.getInet6Address(rawData, i + offset));
             }
+=======
+            this.homeAgentAddresses = ByteArrays.getInet6Address(rawData, HOME_AGENT_ADDRESSES_OFFSET + offset);
+
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
         }
 
         private IcmpV6HomeAgentAddressDiscoveryReplyHeader(Builder builder) {
@@ -190,7 +274,11 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
             return reserved;
         }
 
+<<<<<<< HEAD
         public List<Inet6Address> getHomeAgentAddresses() {
+=======
+        public Inet6Address getHomeAgentAddresses() {
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
             return homeAgentAddresses;
         }
 
@@ -199,18 +287,26 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
             List<byte[]> rawFields = new ArrayList<byte[]>();
             rawFields.add(ByteArrays.toByteArray(identifier));
             rawFields.add(ByteArrays.toByteArray(reserved));
+<<<<<<< HEAD
             Iterator<Inet6Address> iter = homeAgentAddresses.iterator();
             List<byte[]> homeAgentAddressesByteList = new ArrayList<byte[]>();
             for (int i = HOME_AGENT_ADDRESSES_OFFSET; i < length(); i += INET6_ADDRESS_SIZE_IN_BYTES) {
                 homeAgentAddressesByteList.add(ByteArrays.toByteArray(iter.next()));
             }
             rawFields.add(ByteArrays.concatenate(homeAgentAddressesByteList));
+=======
+            rawFields.add(ByteArrays.toByteArray(homeAgentAddresses));
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
             return rawFields;
         }
 
         @Override
         public int length() {
+<<<<<<< HEAD
             return homeAgentAddresses.size() * INET6_ADDRESS_SIZE_IN_BYTES + HOME_AGENT_ADDRESSES_OFFSET;
+=======
+            return ICMPV6_HOME_AGENT_ADDRESS_DISCOVERY_REPLY_HEADER_SIZE;
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
         }
 
         @Override
@@ -228,12 +324,18 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
             sb.append("  Reserved: ")
                     .append(reserved)
                     .append(ls);
+<<<<<<< HEAD
             sb.append("  HomeAgentAddresses: ");
             for (Inet6Address addr : homeAgentAddresses) {
                 sb.append(" ")
                         .append(addr);
             }
             sb.append(ls);
+=======
+            sb.append("  HomeAgentAddresses: ")
+                    .append(homeAgentAddresses)
+                    .append(ls);
+>>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
             return sb.toString();
         }
 
