@@ -8,13 +8,10 @@ import java.util.List;
 import org.pcap4j.packet.AbstractPacket;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IllegalRawDataException;
-import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
-import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
-<<<<<<< HEAD
 /**
  * Icmpv6 home agent address discovery reply packet.
  *
@@ -23,8 +20,6 @@ import org.pcap4j.util.ByteArrays;
  * @author Leo Ma
  * @since pcap4j 1.7.5
  */
-=======
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
 
     /**
@@ -33,10 +28,6 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
     private static final long serialVersionUID = 7088081805293115326L;
 
     private final IcmpV6MobilePrefixAdvertisementHeader header;
-<<<<<<< HEAD
-=======
-    private final Packet payload;
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 
     /**
      * A static factory method.
@@ -58,25 +49,10 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
     private IcmpV6MobilePrefixAdvertisementPacket(byte[] rawData, int offset, int length)
             throws IllegalRawDataException {
         this.header = new IcmpV6MobilePrefixAdvertisementHeader(rawData, offset, length);
-<<<<<<< HEAD
-=======
-
-        int payloadLength = length - header.length();
-        if (payloadLength > 0) {
-            this.payload = PacketFactories.getFactory(Packet.class, NotApplicable.class)
-                    .newInstance(rawData, offset + header.length(), payloadLength, NotApplicable.UNKNOWN);
-        } else {
-            this.payload = null;
-        }
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
     }
 
     private IcmpV6MobilePrefixAdvertisementPacket(Builder builder) {
         this.header = new IcmpV6MobilePrefixAdvertisementHeader(builder);
-<<<<<<< HEAD
-=======
-        this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
     }
 
     @Override
@@ -96,10 +72,6 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
         private boolean otherStatefulConfigurationFlag;
         private short reserved;
         private List<IpV6NeighborDiscoveryOption> options;
-<<<<<<< HEAD
-=======
-        private Packet.Builder payloadBuilder;
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 
         /**
          *
@@ -114,10 +86,6 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
             this.otherStatefulConfigurationFlag = packet.header.otherStatefulConfigurationFlag; // O field
             this.reserved = packet.header.reserved;
             this.options = packet.header.options;
-<<<<<<< HEAD
-=======
-            this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
         }
 
         /**
@@ -166,20 +134,6 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
         }
 
         @Override
-<<<<<<< HEAD
-=======
-        public Builder payloadBuilder(Packet.Builder payloadBuilder) {
-            this.payloadBuilder = payloadBuilder;
-            return this;
-        }
-
-        @Override
-        public Packet.Builder getPayloadBuilder() {
-            return payloadBuilder;
-        }
-
-        @Override
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
         public IcmpV6MobilePrefixAdvertisementPacket build() {
             return new IcmpV6MobilePrefixAdvertisementPacket(this);
         }
@@ -282,11 +236,7 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
         }
 
         public List<IpV6NeighborDiscoveryOption> getOptions() {
-<<<<<<< HEAD
             return new ArrayList<IpV6NeighborDiscoveryOption>(options);
-=======
-            return options;
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
         }
 
         @Override

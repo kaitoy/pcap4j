@@ -4,12 +4,8 @@ import static org.junit.Assert.*;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
-
-=======
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,35 +35,18 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacketTest {
     private final IcmpV6HomeAgentAddressDiscoveryReplyPacket packet;
     private final short identifier;
     private final short reserved;
-<<<<<<< HEAD
     private final List<Inet6Address> homeAgentAddresses = new ArrayList<Inet6Address>();
-=======
-    private final Inet6Address homeAgentAddresses;
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 
     public IcmpV6HomeAgentAddressDiscoveryReplyPacketTest() throws UnknownHostException {
         this.identifier = (short) 1234;
         this.reserved = (short) 12345;
-<<<<<<< HEAD
         this.homeAgentAddresses.add((Inet6Address) InetAddress.getByName("2001:db8::aaaa:bbbb:0:0"));
         this.homeAgentAddresses.add((Inet6Address) InetAddress.getByName("2001:db8::aaaa:bbbb:0:1"));
-=======
-        this.homeAgentAddresses = (Inet6Address) InetAddress.getByName("2001:db8::aaaa:bbbb:0:0");
-
-        UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
-        unknownb.rawData(new byte[] { (byte) 0, (byte) 1, (byte) 2, (byte) 3, (byte) 0, (byte) 1, (byte) 2, (byte) 3,
-                (byte) 0, (byte) 1, (byte) 2, (byte) 3 });
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
 
         IcmpV6HomeAgentAddressDiscoveryReplyPacket.Builder b = new IcmpV6HomeAgentAddressDiscoveryReplyPacket.Builder();
         b.identifier(identifier)
                 .reserved(reserved)
-<<<<<<< HEAD
                 .homeAgentAddresses(homeAgentAddresses);
-=======
-                .homeAgentAddresses(homeAgentAddresses)
-                .payloadBuilder(unknownb);
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
         this.packet = b.build();
     }
 

@@ -39,20 +39,9 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacketTest {
         this.identifier = (short) 1234;
         this.reserved = (short) 12345;
 
-<<<<<<< HEAD
         IcmpV6HomeAgentAddressDiscoveryRequestPacket.Builder b = new IcmpV6HomeAgentAddressDiscoveryRequestPacket.Builder();
         b.identifier(identifier)
                 .reserved(reserved);
-=======
-        UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
-        unknownb.rawData(new byte[] { (byte) 0, (byte) 1, (byte) 2, (byte) 3, (byte) 0, (byte) 1, (byte) 2, (byte) 3,
-                (byte) 0, (byte) 1, (byte) 2, (byte) 3 });
-
-        IcmpV6HomeAgentAddressDiscoveryRequestPacket.Builder b = new IcmpV6HomeAgentAddressDiscoveryRequestPacket.Builder();
-        b.identifier(identifier)
-                .reserved(reserved)
-                .payloadBuilder(unknownb);
->>>>>>> a0e84f44c4204d798f995a1427f680bd1744ae4d
         this.packet = b.build();
     }
 
