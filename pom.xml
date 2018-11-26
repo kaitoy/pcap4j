@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pcap4j</groupId>
   <artifactId>pcap4j</artifactId>
-  <version>1.7.4-SNAPSHOT</version>
+  <version>1.7.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Pcap4J</name>
   <description>A Java library for capturing, crafting and sending packets.</description>
@@ -108,12 +108,12 @@
       <dependency>
         <groupId>net.java.dev.jna</groupId>
         <artifactId>jna</artifactId>
-        <version>4.2.1</version>
+        <version>5.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.7.12</version>
+        <version>1.7.25</version>
       </dependency>
       <dependency>
         <groupId>org.powermock</groupId>
