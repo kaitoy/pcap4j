@@ -11,6 +11,8 @@
 [![CircleCI](https://circleci.com/gh/kaitoy/pcap4j/tree/master.svg?style=svg)](https://circleci.com/gh/kaitoy/pcap4j/tree/master)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=master&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/master)
 [![codecov](https://codecov.io/gh/kaitoy/pcap4j/branch/master/graph/badge.svg)](https://codecov.io/gh/kaitoy/pcap4j)
+[![Code Quality: Java](https://img.shields.io/lgtm/grade/java/g/kaitoy/pcap4j.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kaitoy/pcap4j/context:java)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/kaitoy/pcap4j.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kaitoy/pcap4j/alerts)
 
 Pcap4J 2.x and newer
 ====================
