@@ -224,7 +224,7 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
         }
 
         private IcmpV6MobilePrefixAdvertisementHeader(Builder builder) {
-            if ((builder.reserved & 0xC0000000) != 0) {
+            if ((builder.reserved & 0xC000) != 0) {
                 throw new IllegalArgumentException(
                         "Invalid reserved: " + builder.reserved);
             }
