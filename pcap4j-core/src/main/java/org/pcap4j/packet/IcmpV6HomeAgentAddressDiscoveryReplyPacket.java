@@ -256,12 +256,11 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
             sb.append("  Reserved: ")
                     .append(reserved)
                     .append(ls);
-            sb.append("  HomeAgentAddresses: ");
             for (Inet6Address addr : homeAgentAddresses) {
-                sb.append(" ")
+                sb.append("  HomeAgentAddress: ")
                         .append(addr);
+                sb.append(ls);
             }
-            sb.append(ls);
             return sb.toString();
         }
 
