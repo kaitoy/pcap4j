@@ -250,16 +250,16 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
           }
 
         /**
-         * @return managedAddressConfigurationFlag
+         * @return true if the Managed Address Configuration flag is set to 1; false otherwise.
          */
-        public boolean isManagedAddressConfigurationFlag() {
+        public boolean getManagedAddressConfigurationFlag() {
             return managedAddressConfigurationFlag;
         }
 
         /**
-         * @return otherStatefulConfigurationFlag
+         * @return true if the Other Stateful Configuration flag is set to 1; false otherwise.
          */
-        public boolean isOtherStatefulConfigurationFlag() {
+        public boolean getOtherStatefulConfigurationFlag() {
             return otherStatefulConfigurationFlag;
         }
 

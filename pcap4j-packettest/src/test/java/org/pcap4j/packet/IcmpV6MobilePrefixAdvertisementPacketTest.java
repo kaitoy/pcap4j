@@ -137,8 +137,8 @@ public class IcmpV6MobilePrefixAdvertisementPacketTest {
     public void testGetHeader() {
         IcmpV6MobilePrefixAdvertisementPacket.IcmpV6MobilePrefixAdvertisementHeader h = packet.getHeader();
         assertEquals(identifier, h.getIdentifier());
-        assertEquals(managedAddressConfigurationFlag, h.isManagedAddressConfigurationFlag());
-        assertEquals(otherStatefulConfigurationFlag, h.isOtherStatefulConfigurationFlag());
+        assertEquals(managedAddressConfigurationFlag, h.getManagedAddressConfigurationFlag());
+        assertEquals(otherStatefulConfigurationFlag, h.getOtherStatefulConfigurationFlag());
         assertEquals(reserved, h.getReserved());
         Iterator<IpV6NeighborDiscoveryOption> iter = h.getOptions().iterator();
         for (IpV6NeighborDiscoveryOption expected : options) {
