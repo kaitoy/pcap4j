@@ -5,14 +5,8 @@ import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 import java.net.Inet6Address;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.pcap4j.packet.AbstractPacket;
-import org.pcap4j.packet.IllegalRawDataException;
-import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.factory.PacketFactories;
-import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -244,6 +238,7 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
                 return true;
             }
             if (obj == null) {
+
                 return false;
             }
             if (!this.getClass().isInstance(obj)) {
