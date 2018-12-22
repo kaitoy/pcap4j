@@ -17,7 +17,7 @@ import org.pcap4j.util.ByteArrays;
 /**
  * Icmpv6 home agent address discovery request packet.
  *
- * @see <a href="https://tools.ietf.org/html/rfc3775">RFC 3775</a>
+ * @see <a href="https://tools.ietf.org/html/rfc6275">RFC 6275</a>
  * @see <a href="https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml#icmpv6-parameters-codes-21">ICMPv6 Parameters</a>
  * @author Leo Ma
  * @since pcap4j 1.7.5
@@ -122,7 +122,7 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      * </pre>
      *
-     * @see <a href="https://tools.ietf.org/html/rfc3775">RFC 3775</a>
+     * @see <a href="https://tools.ietf.org/html/rfc6275">RFC 6275</a>
      * @see <a href="https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml#icmpv6-parameters-codes-21">ICMPv6 Parameters</a>
      * @author Leo Ma
      * @since pcap4j 1.7.5
