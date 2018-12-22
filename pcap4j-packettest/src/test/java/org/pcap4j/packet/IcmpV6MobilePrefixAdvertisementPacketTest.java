@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("javadoc")
-public class IcmpV6MobilePrefixAdvertisementPacketTest {
+public class IcmpV6MobilePrefixAdvertisementPacketTest extends AbstractPacketTest {
 
     private static final Logger logger = LoggerFactory.getLogger(IcmpV6MobilePrefixAdvertisementPacketTest.class);
 
@@ -149,29 +149,44 @@ public class IcmpV6MobilePrefixAdvertisementPacketTest {
         IcmpV6MobilePrefixAdvertisementPacket.Builder b = packet.getBuilder();
         IcmpV6MobilePrefixAdvertisementPacket p;
 
-        b.reserved((byte) 0);
+        b.identifier((short) 0);
+        b.reserved((short) 0);
         p = b.build();
-        assertEquals((byte) 0, p.getHeader().getReserved());
+        assertEquals((short ) 0, (short) p.getHeader().getIdentifierAsInt());
+        assertEquals((short) 0, p.getHeader().getReserved());
 
-        b.reserved((byte) 63);
+        b.identifier((short) 10000);
+        b.reserved((short) 20);
         p = b.build();
-        assertEquals((byte) 63, p.getHeader().getReserved());
+        assertEquals((short) 10000, (short) p.getHeader().getIdentifierAsInt());
+        assertEquals((short) 20, p.getHeader().getReserved());
 
-        b.reserved((byte) 64);
+        b.identifier((short) 32767);
+        b.reserved((short) 16383);
+        p = b.build();
+        assertEquals((short) 32767, (short) p.getHeader().getIdentifierAsInt());
+        assertEquals((short) 16383, p.getHeader().getReserved());
+
+        b.identifier((short) -1);
+        p = b.build();
+        assertEquals((short) -1, (short) p.getHeader().getIdentifierAsInt());
+
+        b.identifier((short) -32768);
+        p = b.build();
+        assertEquals((short) -32768, (short) p.getHeader().getIdentifierAsInt());
+
+        b.reserved((short) 16384);
         try {
             p = b.build();
+            fail("reserved must not accept 16384.");
         } catch (IllegalArgumentException e) {}
 
-        b.reserved((byte) -1);
+        b.reserved((short) -1);
         try {
             p = b.build();
+            fail("reserved must not accept -1.");
         } catch (IllegalArgumentException e) {}
 
-    }
-
-    @Test
-    public void testGetWholePacket() {
-        System.out.println(getWholePacket().toString());
     }
 
 }

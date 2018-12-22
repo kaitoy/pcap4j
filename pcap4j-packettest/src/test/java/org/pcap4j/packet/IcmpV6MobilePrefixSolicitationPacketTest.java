@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.pcap4j.packet.IcmpV6HomeAgentAddressDiscoveryReplyPacket.Builder;
 import org.pcap4j.packet.IcmpV6MobilePrefixSolicitationPacket.IcmpV6MobilePrefixSolicitationHeader;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IcmpV6Code;
@@ -18,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("javadoc")
-public class IcmpV6MobilePrefixSolicitationPacketTest {
+public class IcmpV6MobilePrefixSolicitationPacketTest extends AbstractPacketTest {
 
     private static final Logger logger = LoggerFactory
             .getLogger(IcmpV6HomeAgentAddressDiscoveryRequestPacketTest.class);
@@ -92,6 +93,7 @@ public class IcmpV6MobilePrefixSolicitationPacketTest {
         IcmpV6MobilePrefixSolicitationPacket p;
         try {
             p = IcmpV6MobilePrefixSolicitationPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
+            assertEquals(packet, p);
         } catch (IllegalRawDataException e) {
             throw new AssertionError(e);
         }
@@ -103,10 +105,29 @@ public class IcmpV6MobilePrefixSolicitationPacketTest {
         IcmpV6MobilePrefixSolicitationHeader h = packet.getHeader();
         assertEquals(identifier, h.getIdentifier());
         assertEquals(reserved, h.getReserved());
+
+        IcmpV6MobilePrefixSolicitationPacket.Builder b = packet.getBuilder();
+        IcmpV6MobilePrefixSolicitationPacket p;
+
+        b.identifier((short)0);
+        p = b.build();
+        assertEquals((short)0, (short)p.getHeader().getIdentifierAsInt());
+
+        b.identifier((short)10000);
+        p = b.build();
+        assertEquals((short)10000, (short)p.getHeader().getIdentifierAsInt());
+
+        b.identifier((short)32767);
+        p = b.build();
+        assertEquals((short)32767, (short)p.getHeader().getIdentifierAsInt());
+
+        b.identifier((short)-1);
+        p = b.build();
+        assertEquals((short)-1, (short)p.getHeader().getIdentifierAsInt());
+
+        b.identifier((short)-32768);
+        p = b.build();
+        assertEquals((short)-32768, (short)p.getHeader().getIdentifierAsInt());
     }
 
-    @Test
-    public void testGetWholePacket() {
-        System.out.println(getWholePacket().toString());
-    }
 }

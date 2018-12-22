@@ -1,0 +1,8 @@
+[ICMPv6 Mobile Prefix Advertisement Header (52 bytes)]
+  Identifier: 1234
+  ManagedAddressConfigurationFlag: true
+  OtherStatefulConfigurationFlag: false
+  Reserved: 10
+  Option: [Type: 1 (Source Link-layer Address)] [Length: 1 (8 bytes)] [linkLayerAddress: ff 00 00 01 02 03]
+  Option: [Type: 5 (MTU)] [Length: 1 (8 bytes)] [Reserved: -34] [MTU: 9999999]
+  Option: [Type: 3 (Prefix Information)] [Length: 4 (32 bytes)] [Prefix Length: 96] [on-link flag: true] [address-configuration flag: false] [Reserved1: 22] [Valid Lifetime: 2222222] [Preferred Lifetime: 777777777] [Reserved2: 1212121212] [Prefix: /2001:db8:0:0:aaaa:bbbb:0:0]
