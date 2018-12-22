@@ -114,7 +114,7 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
          * @return this Builder object for method chaining.
          */
         public Builder homeAgentAddresses(List<Inet6Address> homeAgentAddresses) {
-            this.homeAgentAddresses = new ArrayList<Inet6Address>(homeAgentAddresses);
+            this.homeAgentAddresses = homeAgentAddresses;
             return this;
         }
 
@@ -191,7 +191,7 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
         private IcmpV6HomeAgentAddressDiscoveryReplyHeader(Builder builder) {
             this.identifier = builder.identifier;
             this.reserved = builder.reserved;
-            this.homeAgentAddresses = builder.homeAgentAddresses;
+            this.homeAgentAddresses = new ArrayList<Inet6Address>(builder.homeAgentAddresses);
         }
 
         /**
