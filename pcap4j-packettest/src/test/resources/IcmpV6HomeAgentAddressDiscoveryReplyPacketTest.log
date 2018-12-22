@@ -1,0 +1,5 @@
+[ICMPv6 Home Agent Address Discovery Reply Header (36 bytes)]
+  Identifier: 1234
+  Reserved: 12345
+  HomeAgentAddress: /2001:db8:0:0:aaaa:bbbb:0:0
+  HomeAgentAddress: /2001:db8:0:0:aaaa:bbbb:0:1

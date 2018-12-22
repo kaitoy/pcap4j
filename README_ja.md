@@ -84,7 +84,7 @@ ICMPのキャプチャ周りにバグがあって使えなかった。結構前�
     * IEEE802.1Q
     * ARP
     * IPv4 (RFC791、RFC1349)、IPv6 (RFC2460)
-    * ICMPv4 (RFC792)、ICMPv6 (RFC4443, RFC4861)
+    * ICMPv4 (RFC792)、ICMPv6 (RFC4443、RFC4861、RFC6275)
     * TCP (RFC793、RFC2018、draft-ietf-tcpm-1323bis-21)、UDP、SCTP (共通ヘッダのみ)
     * GTPv1 (GTP-UとGTP-Cのヘッダのみ)
     * DNS (RFC1035、RFC3596、RFC6844)
