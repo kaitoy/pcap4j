@@ -35,7 +35,7 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket
      * A static factory method.
      * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
      * which may throw exceptions undocumented here.
-     * 
+     *
      * @param rawData rawData
      * @param offset offset
      * @param length length
@@ -67,6 +67,9 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket
         return new Builder(this);
     }
 
+    /**
+     *
+     */
     public static final class Builder extends AbstractBuilder {
 
         private short identifier;
@@ -109,14 +112,22 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket
 
     }
 
+    /**
+     * Icmpv6 home agent address discovery request header.
+     *
+     * <pre style="white-space: pre;">
+     *  0                            15                              31
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |          Identifier           |            Reserved           |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * </pre>
+     *
+     * @see <a href="https://tools.ietf.org/html/rfc3775">RFC 3775</a>
+     * @see <a href="https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml#icmpv6-parameters-codes-21">ICMPv6 Parameters</a>
+     * @author Leo Ma
+     * @since pcap4j 1.7.5
+     */
     public static final class IcmpV6HomeAgentAddressDiscoveryRequestHeader extends AbstractHeader {
-
-        /*
-         *  0                            15                              31
-         * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-         * |          Identifier           |            Reserved           |
-         * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-         */
 
         /**
          *
@@ -156,14 +167,23 @@ public class IcmpV6HomeAgentAddressDiscoveryRequestPacket extends AbstractPacket
             this.reserved = builder.reserved;
         }
 
+        /**
+         * @return identifier
+         */
         public short getIdentifier() {
             return identifier;
         }
 
+        /**
+         * @return identifier
+         */
         public int getIdentifierAsInt() {
             return identifier & 0xFFFF;
           }
 
+        /**
+         * @return reserved
+         */
         public short getReserved() {
             return reserved;
         }

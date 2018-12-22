@@ -37,7 +37,7 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
      * A static factory method.
      * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
      * which may throw exceptions undocumented here.
-     * 
+     *
      * @param rawData rawData
      * @param offset offset
      * @param length length
@@ -69,6 +69,9 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
         return new Builder(this);
     }
 
+    /**
+     *
+     */
     public static final class Builder extends AbstractBuilder {
 
         private short identifier;
@@ -122,23 +125,32 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
 
     }
 
+    /**
+     * Icmpv6 home agent address discovery reply header.
+     *
+     * <pre style="white-space: pre;">
+     * 0                   1                   2                   3
+     * 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |           Identifier          |             Reserved          |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |                                                               |
+     * +                                                               +
+     * |                                                               |
+     * +                      Home Agent Addresses                     +
+     * |                                                               |
+     * +                                                               +
+     * |                                                               |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * </pre>
+     *
+     * @see <a href="https://tools.ietf.org/html/rfc3775">RFC 3775</a>
+     * @see <a href="https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml#icmpv6-parameters-codes-21">ICMPv6 Parameters</a>
+     * @author Leo Ma
+     * @since pcap4j 1.7.5
+     */
     public static final class IcmpV6HomeAgentAddressDiscoveryReplyHeader extends AbstractHeader {
 
-        /*
-         * 0                   1                   2                   3
-         * 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-         * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-         * |           Identifier          |             Reserved          |
-         * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-         * |                                                               |
-         * +                                                               +
-         * |                                                               |
-         * +                      Home Agent Addresses                     +
-         * |                                                               |
-         * +                                                               +
-         * |                                                               |
-         * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-         */
         private static final long serialVersionUID = 7184228144196703852L;
 
         private static final int IDENTIFIER_OFFSET = 0;
@@ -182,18 +194,28 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
             this.homeAgentAddresses = builder.homeAgentAddresses;
         }
 
+        /**
+         * @return identifier
+         */
         public short getIdentifier() {
             return identifier;
         }
 
-        public int getIdentifierAsInt() {
-            return identifier & 0xFFFF;
-          }
+        /**
+         * @return identifier
+         */
+        public int getIdentifierAsInt() { return identifier & 0xFFFF; }
 
+        /**
+         * @return reserved
+         */
         public short getReserved() {
             return reserved;
         }
 
+        /**
+         * @return homeAgentAddresses
+         */
         public List<Inet6Address> getHomeAgentAddresses() {
             return new ArrayList<Inet6Address>(homeAgentAddresses);
         }
@@ -203,7 +225,7 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
             List<byte[]> rawFields = new ArrayList<byte[]>();
             rawFields.add(ByteArrays.toByteArray(identifier));
             rawFields.add(ByteArrays.toByteArray(reserved));
-            
+
             for (Inet6Address addr : homeAgentAddresses) {
                 rawFields.add(ByteArrays.toByteArray(addr));
             }

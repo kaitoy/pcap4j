@@ -38,7 +38,7 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
      * A static factory method.
      * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
      * which may throw exceptions undocumented here.
-     * 
+     *
      * @param rawData rawData
      * @param offset offset
      * @param length length
@@ -70,6 +70,9 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
         return new Builder(this);
     }
 
+    /**
+     *
+     */
     public static final class Builder extends AbstractBuilder {
 
         private short identifier;
@@ -145,17 +148,25 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
 
     }
 
+    /**
+     * Icmpv6 mobile prefix advertisement header.
+     *
+     * <pre style="white-space: pre;">
+     *  0                   1                   2                   3
+     * 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |          Identifier           |M|O|        Reserved           |
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     * |           Options ...
+     * +-+-+-+-+-+-+-+-+-+-+-+-+-
+     * </pre>
+     *
+     * @see <a href="https://tools.ietf.org/html/rfc3775">RFC 3775</a>
+     * @see <a href="https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml#icmpv6-parameters-codes-24">ICMPv6 Parameters</a>
+     * @author Leo Ma
+     * @since pcap4j 1.7.5
+     */
     public static final class IcmpV6MobilePrefixAdvertisementHeader extends AbstractHeader {
-
-        /*
-         *  0                   1                   2                   3
-         * 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-         * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-         * |          Identifier           |M|O|        Reserved           |
-         * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-         * |           Options ...
-         * +-+-+-+-+-+-+-+-+-+-+-+-+-
-         */
 
         /**
          *
@@ -224,26 +235,44 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
             this.options = new ArrayList<IpV6NeighborDiscoveryOption>(builder.options);
         }
 
+        /**
+         * @return identifier
+         */
         public short getIdentifier() {
             return identifier;
         }
 
+        /**
+         * @return identifier
+         */
         public int getIdentifierAsInt() {
             return identifier & 0xFFFF;
           }
 
+        /**
+         * @return managedAddressConfigurationFlag
+         */
         public boolean isManagedAddressConfigurationFlag() {
             return managedAddressConfigurationFlag;
         }
 
+        /**
+         * @return otherStatefulConfigurationFlag
+         */
         public boolean isOtherStatefulConfigurationFlag() {
             return otherStatefulConfigurationFlag;
         }
 
+        /**
+         * @return reserved
+         */
         public short getReserved() {
             return reserved;
         }
 
+        /**
+         * @return options
+         */
         public List<IpV6NeighborDiscoveryOption> getOptions() {
             return new ArrayList<IpV6NeighborDiscoveryOption>(options);
         }

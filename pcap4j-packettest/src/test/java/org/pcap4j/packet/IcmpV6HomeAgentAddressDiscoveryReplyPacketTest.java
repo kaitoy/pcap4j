@@ -19,6 +19,7 @@ import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("javadoc")
 public class IcmpV6HomeAgentAddressDiscoveryReplyPacketTest {
 
     private static final Logger logger = LoggerFactory.getLogger(IcmpV6HomeAgentAddressDiscoveryReplyPacketTest.class);
