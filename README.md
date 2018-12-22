@@ -84,7 +84,7 @@ Features
     * IEEE802.1Q
     * ARP
     * IPv4 (RFC791 and RFC1349) and IPv6 (RFC2460)
-    * ICMPv4 (RFC792) and ICMPv6 (RFC4443, RFC4861)
+    * ICMPv4 (RFC792) and ICMPv6 (RFC4443, RFC4861, and RFC6275)
     * TCP (RFC793, RFC2018, and draft-ietf-tcpm-1323bis-21), UDP, and SCTP (only common header)
     * GTPv1 (only GTP-U and GTP-C header)
     * DNS (RFC1035, RFC3596, and RFC6844)

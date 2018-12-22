@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* [PR#196](https://github.com/kaitoy/pcap4j/pull/196): add protocol implementations for 4 icmpv6 types (RFC6275).
 
 ### Bug Fixes ###
 
