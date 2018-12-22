@@ -247,7 +247,7 @@ extends AbstractStaticPacketFactory<IcmpV6Type> {
         }
       }
     );
-  };
+  }
 
   /**
    *
