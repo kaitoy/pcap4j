@@ -1,3 +1,10 @@
+/*_##########################################################################
+  _##
+  _##  Copyright (C) 2018  Pcap4J.org
+  _##
+  _##########################################################################
+*/
+
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
