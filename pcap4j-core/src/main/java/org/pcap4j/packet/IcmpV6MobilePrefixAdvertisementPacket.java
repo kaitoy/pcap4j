@@ -232,7 +232,11 @@ public class IcmpV6MobilePrefixAdvertisementPacket extends AbstractPacket {
             this.managedAddressConfigurationFlag = builder.managedAddressConfigurationFlag;
             this.otherStatefulConfigurationFlag = builder.otherStatefulConfigurationFlag;
             this.reserved = builder.reserved;
-            this.options = new ArrayList<IpV6NeighborDiscoveryOption>(builder.options);
+            if (builder.options != null) {
+                this.options = new ArrayList<IpV6NeighborDiscoveryOption>(builder.options);
+            } else {
+                this.options = new ArrayList<IpV6NeighborDiscoveryOption>(0);
+            }
         }
 
         /**

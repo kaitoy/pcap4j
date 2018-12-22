@@ -191,7 +191,11 @@ public class IcmpV6HomeAgentAddressDiscoveryReplyPacket extends AbstractPacket {
         private IcmpV6HomeAgentAddressDiscoveryReplyHeader(Builder builder) {
             this.identifier = builder.identifier;
             this.reserved = builder.reserved;
-            this.homeAgentAddresses = new ArrayList<Inet6Address>(builder.homeAgentAddresses);
+            if (builder.homeAgentAddresses != null) {
+                this.homeAgentAddresses = new ArrayList<Inet6Address>(builder.homeAgentAddresses);
+            } else {
+                this.homeAgentAddresses = new ArrayList<Inet6Address>(0);
+            }
         }
 
         /**
