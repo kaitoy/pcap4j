@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2015  Pcap4J.org
+  _##  Copyright (C) 2013-2018  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -280,6 +280,11 @@ public final class IcmpV6Code extends NamedNumber<Byte, IcmpV6Code> {
     map = new HashMap<Byte, IcmpV6Code>();
     map.put(NO_CODE.value(), NO_CODE);
     registry.put(IcmpV6Type.MOBILE_PREFIX_SOLICITATION.value(), map);
+
+    // Type 146 - Mobile Prefix Advertisement
+    map = new HashMap<Byte, IcmpV6Code>();
+    map.put(NO_CODE.value(), NO_CODE);
+    registry.put(IcmpV6Type.MOBILE_PREFIX_ADVERTISEMENT.value(), map);
   }
 
   /**

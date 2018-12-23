@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2017  Pcap4J.org
+  _##  Copyright (C) 2013-2018  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -10,6 +10,10 @@ package org.pcap4j.packet.factory;
 import org.pcap4j.packet.IcmpV6DestinationUnreachablePacket;
 import org.pcap4j.packet.IcmpV6EchoReplyPacket;
 import org.pcap4j.packet.IcmpV6EchoRequestPacket;
+import org.pcap4j.packet.IcmpV6HomeAgentAddressDiscoveryReplyPacket;
+import org.pcap4j.packet.IcmpV6HomeAgentAddressDiscoveryRequestPacket;
+import org.pcap4j.packet.IcmpV6MobilePrefixAdvertisementPacket;
+import org.pcap4j.packet.IcmpV6MobilePrefixSolicitationPacket;
 import org.pcap4j.packet.IcmpV6NeighborAdvertisementPacket;
 import org.pcap4j.packet.IcmpV6NeighborSolicitationPacket;
 import org.pcap4j.packet.IcmpV6PacketTooBigPacket;
@@ -87,6 +91,14 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
           return IcmpV6NeighborAdvertisementPacket.newPacket(rawData, offset, length);
         case 137:
           return IcmpV6RedirectPacket.newPacket(rawData, offset, length);
+        case 144:
+          return IcmpV6HomeAgentAddressDiscoveryRequestPacket.newPacket(rawData, offset, length);
+        case 145:
+          return IcmpV6HomeAgentAddressDiscoveryReplyPacket.newPacket(rawData, offset, length);
+        case 146:
+          return IcmpV6MobilePrefixSolicitationPacket.newPacket(rawData, offset, length);
+        case 147:
+          return IcmpV6MobilePrefixAdvertisementPacket.newPacket(rawData, offset, length);
       }
       return UnknownPacket.newPacket(rawData, offset, length);
     } catch (IllegalRawDataException e) {
@@ -131,6 +143,14 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
           return IcmpV6NeighborAdvertisementPacket.newPacket(rawData, offset, length);
         case 137:
           return IcmpV6RedirectPacket.newPacket(rawData, offset, length);
+        case 144:
+          return IcmpV6HomeAgentAddressDiscoveryRequestPacket.newPacket(rawData, offset, length);
+        case 145:
+          return IcmpV6HomeAgentAddressDiscoveryReplyPacket.newPacket(rawData, offset, length);
+        case 146:
+          return IcmpV6MobilePrefixSolicitationPacket.newPacket(rawData, offset, length);
+        case 147:
+          return IcmpV6MobilePrefixAdvertisementPacket.newPacket(rawData, offset, length);
       }
 
       switch (Byte.toUnsignedInt(number2.value())) {
@@ -156,6 +176,14 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
           return IcmpV6NeighborAdvertisementPacket.newPacket(rawData, offset, length);
         case 137:
           return IcmpV6RedirectPacket.newPacket(rawData, offset, length);
+        case 144:
+          return IcmpV6HomeAgentAddressDiscoveryRequestPacket.newPacket(rawData, offset, length);
+        case 145:
+          return IcmpV6HomeAgentAddressDiscoveryReplyPacket.newPacket(rawData, offset, length);
+        case 146:
+          return IcmpV6MobilePrefixSolicitationPacket.newPacket(rawData, offset, length);
+        case 147:
+          return IcmpV6MobilePrefixAdvertisementPacket.newPacket(rawData, offset, length);
       }
       return UnknownPacket.newPacket(rawData, offset, length);
     } catch (IllegalRawDataException e) {
@@ -190,6 +218,14 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
             return IcmpV6NeighborAdvertisementPacket.newPacket(rawData, offset, length);
           case 137:
             return IcmpV6RedirectPacket.newPacket(rawData, offset, length);
+          case 144:
+            return IcmpV6HomeAgentAddressDiscoveryRequestPacket.newPacket(rawData, offset, length);
+          case 145:
+            return IcmpV6HomeAgentAddressDiscoveryReplyPacket.newPacket(rawData, offset, length);
+          case 146:
+            return IcmpV6MobilePrefixSolicitationPacket.newPacket(rawData, offset, length);
+          case 147:
+            return IcmpV6MobilePrefixAdvertisementPacket.newPacket(rawData, offset, length);
         }
       }
       return UnknownPacket.newPacket(rawData, offset, length);
