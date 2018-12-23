@@ -25,9 +25,7 @@ import java.io.Serializable;
  */
 public final class Dot11ChannelEntry implements Serializable {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1866907693281185049L;
 
   private final byte operatingClass;
@@ -42,30 +40,22 @@ public final class Dot11ChannelEntry implements Serializable {
     this.channel = channel;
   }
 
-  /**
-   * @return operatingClass
-   */
+  /** @return operatingClass */
   public byte getOperatingClass() {
     return operatingClass;
   }
 
-  /**
-   * @return operatingClass
-   */
+  /** @return operatingClass */
   public int getOperatingClassAsInt() {
     return operatingClass & 0xFF;
   }
 
-  /**
-   * @return channel
-   */
+  /** @return channel */
   public byte getChannel() {
     return channel;
   }
 
-  /**
-   * @return channel
-   */
+  /** @return channel */
   public int getChannelAsInt() {
     return channel & 0xFF;
   }
@@ -81,17 +71,12 @@ public final class Dot11ChannelEntry implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     Dot11ChannelEntry other = (Dot11ChannelEntry) obj;
-    if (channel != other.channel)
-      return false;
-    if (operatingClass != other.operatingClass)
-      return false;
+    if (channel != other.channel) return false;
+    if (operatingClass != other.operatingClass) return false;
     return true;
   }
 
@@ -100,12 +85,11 @@ public final class Dot11ChannelEntry implements Serializable {
     StringBuilder sb = new StringBuilder();
 
     sb.append("[Operating Class: ")
-      .append(getOperatingClassAsInt())
-      .append(", Channel: ")
-      .append(getChannelAsInt())
-      .append("]");
+        .append(getOperatingClassAsInt())
+        .append(", Channel: ")
+        .append(getChannelAsInt())
+        .append("]");
 
     return sb.toString();
   }
-
 }

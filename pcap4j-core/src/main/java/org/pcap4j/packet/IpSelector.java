@@ -20,15 +20,12 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IpSelector extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -36,31 +33,30 @@ public final class IpSelector extends AbstractPacket {
    * @return a new Packet object representing an IP (v4 or v6) packet.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Packet newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Packet newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
 
     int ipVersion = (rawData[offset] >> 4) & 0x0f;
-    PacketFactory<Packet, EtherType> factory
-      = PacketFactories.getFactory(Packet.class, EtherType.class);
+    PacketFactory<Packet, EtherType> factory =
+        PacketFactories.getFactory(Packet.class, EtherType.class);
     if (ipVersion == IpVersion.IPV4.value().intValue()) {
       return factory.newInstance(rawData, offset, length, EtherType.IPV4);
     }
     if (ipVersion == IpVersion.IPV6.value().intValue()) {
       return factory.newInstance(rawData, offset, length, EtherType.IPV6);
-    }
-    else {
+    } else {
       return PacketFactories.getFactory(Packet.class, NotApplicable.class)
-               .newInstance(rawData, offset, length, NotApplicable.UNKNOWN);
+          .newInstance(rawData, offset, length, NotApplicable.UNKNOWN);
     }
   }
 
-  private IpSelector() { throw new AssertionError(); }
+  private IpSelector() {
+    throw new AssertionError();
+  }
 
   @Override
   public Builder getBuilder() {
     throw new UnsupportedOperationException();
   }
-
 }

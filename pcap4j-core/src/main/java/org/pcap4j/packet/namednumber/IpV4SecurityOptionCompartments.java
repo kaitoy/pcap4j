@@ -19,28 +19,23 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.11
  */
 public final class IpV4SecurityOptionCompartments
-extends NamedNumber<Short, IpV4SecurityOptionCompartments> {
+    extends NamedNumber<Short, IpV4SecurityOptionCompartments> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -420949071267484565L;
 
-  /**
-   * not compartmented: 0x0000
-   */
-  public static final IpV4SecurityOptionCompartments NOT_COMPARTMENTED
-    = new IpV4SecurityOptionCompartments((short)0x0000, "not compartmented");
+  /** not compartmented: 0x0000 */
+  public static final IpV4SecurityOptionCompartments NOT_COMPARTMENTED =
+      new IpV4SecurityOptionCompartments((short) 0x0000, "not compartmented");
 
-  private static final Map<Short, IpV4SecurityOptionCompartments> registry
-    = new HashMap<Short, IpV4SecurityOptionCompartments>();
+  private static final Map<Short, IpV4SecurityOptionCompartments> registry =
+      new HashMap<Short, IpV4SecurityOptionCompartments>();
 
   static {
     registry.put(NOT_COMPARTMENTED.value(), NOT_COMPARTMENTED);
   }
 
   /**
-   *
    * @param value value
    * @param name name
    */
@@ -49,27 +44,22 @@ extends NamedNumber<Short, IpV4SecurityOptionCompartments> {
   }
 
   /**
-   *
    * @param value value
    * @return a IpV4SecurityOptionCompartments object.
    */
   public static IpV4SecurityOptionCompartments getInstance(Short value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new IpV4SecurityOptionCompartments(value, "unknown");
     }
   }
 
   /**
-   *
    * @param number number
    * @return a IpV4SecurityOptionCompartments object.
    */
-  public static IpV4SecurityOptionCompartments register(
-    IpV4SecurityOptionCompartments number
-  ) {
+  public static IpV4SecurityOptionCompartments register(IpV4SecurityOptionCompartments number) {
     return registry.put(number.value(), number);
   }
 
@@ -82,5 +72,4 @@ extends NamedNumber<Short, IpV4SecurityOptionCompartments> {
   public int compareTo(IpV4SecurityOptionCompartments o) {
     return value().compareTo(o.value());
   }
-
 }

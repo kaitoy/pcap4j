@@ -19,17 +19,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Ssh2KexInitPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -2424080361918022468L;
 
   private final Ssh2KexInitHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -37,49 +34,57 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
    * @return a new Ssh2KexInitPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Ssh2KexInitPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Ssh2KexInitPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Ssh2KexInitPacket(rawData, offset, length);
   }
 
-  private Ssh2KexInitPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Ssh2KexInitPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     this.header = new Ssh2KexInitHeader(rawData, offset, length);
   }
 
   private Ssh2KexInitPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.cookie == null
-      || builder.kexAlgorithms == null
-      || builder.serverHostKeyAlgorithms == null
-      || builder.encryptionAlgorithmsClientToServer == null
-      || builder.encryptionAlgorithmsServerToClient == null
-      || builder.macAlgorithmsClientToServer == null
-      || builder.macAlgorithmsServerToClient == null
-      || builder.compressionAlgorithmsClientToServer == null
-      || builder.compressionAlgorithmsServerToClient == null
-      || builder.languagesClientToServer == null
-      || builder.languagesServerToClient == null
-      || builder.firstKexPacketFollows == null
-    ) {
+    if (builder == null
+        || builder.cookie == null
+        || builder.kexAlgorithms == null
+        || builder.serverHostKeyAlgorithms == null
+        || builder.encryptionAlgorithmsClientToServer == null
+        || builder.encryptionAlgorithmsServerToClient == null
+        || builder.macAlgorithmsClientToServer == null
+        || builder.macAlgorithmsServerToClient == null
+        || builder.compressionAlgorithmsClientToServer == null
+        || builder.compressionAlgorithmsServerToClient == null
+        || builder.languagesClientToServer == null
+        || builder.languagesServerToClient == null
+        || builder.firstKexPacketFollows == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.cookie: ").append(builder.cookie)
-        .append(" builder.kexAlgorithms: ").append(builder.kexAlgorithms)
-        .append(" builder.serverHostKeyAlgorithms: ").append(builder.serverHostKeyAlgorithms)
-        .append(" builder.encryptionAlgorithmsClientToServer: ").append(builder.encryptionAlgorithmsClientToServer)
-        .append(" builder.encryptionAlgorithmsServerToClient: ").append(builder.encryptionAlgorithmsServerToClient)
-        .append(" builder.macAlgorithmsClientToServer: ").append(builder.macAlgorithmsClientToServer)
-        .append(" builder.macAlgorithmsServerToClient: ").append(builder.macAlgorithmsServerToClient)
-        .append(" builder.compressionAlgorithmsClientToServer: ").append(builder.compressionAlgorithmsClientToServer)
-        .append(" builder.compressionAlgorithmsServerToClient: ").append(builder.compressionAlgorithmsServerToClient)
-        .append(" builder.languagesClientToServer: ").append(builder.languagesClientToServer)
-        .append(" builder.languagesServerToClient: ").append(builder.languagesServerToClient)
-        .append(" builder.firstKexPacketFollows: ").append(builder.firstKexPacketFollows);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.cookie: ")
+          .append(builder.cookie)
+          .append(" builder.kexAlgorithms: ")
+          .append(builder.kexAlgorithms)
+          .append(" builder.serverHostKeyAlgorithms: ")
+          .append(builder.serverHostKeyAlgorithms)
+          .append(" builder.encryptionAlgorithmsClientToServer: ")
+          .append(builder.encryptionAlgorithmsClientToServer)
+          .append(" builder.encryptionAlgorithmsServerToClient: ")
+          .append(builder.encryptionAlgorithmsServerToClient)
+          .append(" builder.macAlgorithmsClientToServer: ")
+          .append(builder.macAlgorithmsClientToServer)
+          .append(" builder.macAlgorithmsServerToClient: ")
+          .append(builder.macAlgorithmsServerToClient)
+          .append(" builder.compressionAlgorithmsClientToServer: ")
+          .append(builder.compressionAlgorithmsClientToServer)
+          .append(" builder.compressionAlgorithmsServerToClient: ")
+          .append(builder.compressionAlgorithmsServerToClient)
+          .append(" builder.languagesClientToServer: ")
+          .append(builder.languagesClientToServer)
+          .append(" builder.languagesServerToClient: ")
+          .append(builder.languagesServerToClient)
+          .append(" builder.firstKexPacketFollows: ")
+          .append(builder.firstKexPacketFollows);
       throw new NullPointerException(sb.toString());
     }
 
@@ -97,7 +102,6 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
   }
 
   /**
-   *
    * @author Kaito Yamada
    * @since pcap4j 1.0.1
    */
@@ -117,9 +121,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     private Ssh2Boolean firstKexPacketFollows;
     private int reserved;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(Ssh2KexInitPacket packet) {
@@ -139,7 +141,6 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param cookie cookie
      * @return this Builder object for method chaining.
      */
@@ -149,7 +150,6 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param kexAlgorithms kexAlgorithms
      * @return this Builder object for method chaining.
      */
@@ -159,7 +159,6 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param serverHostKeyAlgorithms serverHostKeyAlgorithms
      * @return this Builder object for method chaining.
      */
@@ -169,27 +168,26 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param encryptionAlgorithmsClientToServer encryptionAlgorithmsClientToServer
      * @return this Builder object for method chaining.
      */
-    public Builder encryptionAlgorithmsClientToServer(Ssh2NameList encryptionAlgorithmsClientToServer) {
+    public Builder encryptionAlgorithmsClientToServer(
+        Ssh2NameList encryptionAlgorithmsClientToServer) {
       this.encryptionAlgorithmsClientToServer = encryptionAlgorithmsClientToServer;
       return this;
     }
 
     /**
-     *
      * @param encryptionAlgorithmsServerToClient encryptionAlgorithmsServerToClient
      * @return this Builder object for method chaining.
      */
-    public Builder encryptionAlgorithmsServerToClient(Ssh2NameList encryptionAlgorithmsServerToClient) {
+    public Builder encryptionAlgorithmsServerToClient(
+        Ssh2NameList encryptionAlgorithmsServerToClient) {
       this.encryptionAlgorithmsServerToClient = encryptionAlgorithmsServerToClient;
       return this;
     }
 
     /**
-     *
      * @param macAlgorithmsClientToServer macAlgorithmsClientToServer
      * @return this Builder object for method chaining.
      */
@@ -199,7 +197,6 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param macAlgorithmsServerToClient macAlgorithmsServerToClient
      * @return this Builder object for method chaining.
      */
@@ -209,31 +206,26 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param compressionAlgorithmsClientToServer compressionAlgorithmsClientToServer
      * @return this Builder object for method chaining.
      */
     public Builder compressionAlgorithmsClientToServer(
-      Ssh2NameList compressionAlgorithmsClientToServer
-    ) {
+        Ssh2NameList compressionAlgorithmsClientToServer) {
       this.compressionAlgorithmsClientToServer = compressionAlgorithmsClientToServer;
       return this;
     }
 
     /**
-     *
      * @param compressionAlgorithmsServerToClient compressionAlgorithmsServerToClient
      * @return this Builder object for method chaining.
      */
     public Builder compressionAlgorithmsServerToClient(
-      Ssh2NameList compressionAlgorithmsServerToClient
-    ) {
+        Ssh2NameList compressionAlgorithmsServerToClient) {
       this.compressionAlgorithmsServerToClient = compressionAlgorithmsServerToClient;
       return this;
     }
 
     /**
-     *
      * @param languagesClientToServer languagesClientToServer
      * @return this Builder object for method chaining.
      */
@@ -243,7 +235,6 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param languagesServerToClient languagesServerToClient
      * @return this Builder object for method chaining.
      */
@@ -253,7 +244,6 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param firstKexPacketFollows firstKexPacketFollows
      * @return this Builder object for method chaining.
      */
@@ -263,7 +253,6 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param reserved reserved
      * @return this Builder object for method chaining.
      */
@@ -276,11 +265,9 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     public Ssh2KexInitPacket build() {
       return new Ssh2KexInitPacket(this);
     }
-
   }
 
   /**
-   *
    * @author Kaito Yamada
    * @version pcap4j 1.0.1
    */
@@ -305,9 +292,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
      * uint32       0 (reserved for future extension)
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -2780304573850816908L;
 
     private final Ssh2MessageNumber messageNumber = Ssh2MessageNumber.SSH_MSG_KEXINIT;
@@ -325,30 +310,27 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     private final Ssh2Boolean firstKexPacketFollows;
     private final int reserved;
 
-    private Ssh2KexInitHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private Ssh2KexInitHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < 62) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 KEX init header. data: ")
-          .append(new String(rawData))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(new String(rawData))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
-      if (
-        !Ssh2MessageNumber.getInstance(rawData[offset])
-          .equals(Ssh2MessageNumber.SSH_MSG_KEXINIT)
-      ) {
+      if (!Ssh2MessageNumber.getInstance(rawData[offset])
+          .equals(Ssh2MessageNumber.SSH_MSG_KEXINIT)) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is not an SSH2 KEX init message. data: ")
-          .append(new String(rawData))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(new String(rawData))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -363,10 +345,12 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
       this.serverHostKeyAlgorithms = new Ssh2NameList(rawData, currentOffset, remainingLength);
       currentOffset += serverHostKeyAlgorithms.length();
       remainingLength -= serverHostKeyAlgorithms.length();
-      this.encryptionAlgorithmsClientToServer = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      this.encryptionAlgorithmsClientToServer =
+          new Ssh2NameList(rawData, currentOffset, remainingLength);
       currentOffset += encryptionAlgorithmsClientToServer.length();
       remainingLength -= encryptionAlgorithmsClientToServer.length();
-      this.encryptionAlgorithmsServerToClient = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      this.encryptionAlgorithmsServerToClient =
+          new Ssh2NameList(rawData, currentOffset, remainingLength);
       currentOffset += encryptionAlgorithmsClientToServer.length();
       remainingLength -= encryptionAlgorithmsClientToServer.length();
       this.macAlgorithmsClientToServer = new Ssh2NameList(rawData, currentOffset, remainingLength);
@@ -375,10 +359,12 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
       this.macAlgorithmsServerToClient = new Ssh2NameList(rawData, currentOffset, remainingLength);
       currentOffset += macAlgorithmsServerToClient.length();
       remainingLength -= macAlgorithmsServerToClient.length();
-      this.compressionAlgorithmsClientToServer = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      this.compressionAlgorithmsClientToServer =
+          new Ssh2NameList(rawData, currentOffset, remainingLength);
       currentOffset += compressionAlgorithmsClientToServer.length();
       remainingLength -= compressionAlgorithmsClientToServer.length();
-      this.compressionAlgorithmsServerToClient = new Ssh2NameList(rawData, currentOffset, remainingLength);
+      this.compressionAlgorithmsServerToClient =
+          new Ssh2NameList(rawData, currentOffset, remainingLength);
       currentOffset += compressionAlgorithmsServerToClient.length();
       remainingLength -= compressionAlgorithmsServerToClient.length();
       this.languagesClientToServer = new Ssh2NameList(rawData, currentOffset, remainingLength);
@@ -391,11 +377,11 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
       if (remainingLength < 5) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 KEX init header. data: ")
-          .append(new String(rawData))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(new String(rawData))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -409,7 +395,7 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
       if (cookie.length != 16) {
         StringBuilder sb = new StringBuilder(100);
         sb.append("cookie length must be 16. builder.cookie: ")
-          .append(ByteArrays.toHexString(builder.cookie, " "));
+            .append(ByteArrays.toHexString(builder.cookie, " "));
         throw new IllegalArgumentException(sb.toString());
       }
       this.kexAlgorithms = builder.kexAlgorithms;
@@ -426,114 +412,72 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
       this.reserved = builder.reserved;
     }
 
-    /**
-     *
-     * @return messageNumber
-     */
+    /** @return messageNumber */
     public Ssh2MessageNumber getMessageNumber() {
       return messageNumber;
     }
 
-    /**
-     *
-     * @return cookie
-     */
+    /** @return cookie */
     public byte[] getCookie() {
       return ByteArrays.clone(cookie);
     }
 
-    /**
-     *
-     * @return kexAlgorithms
-     */
+    /** @return kexAlgorithms */
     public Ssh2NameList getKexAlgorithms() {
       return kexAlgorithms;
     }
 
-    /**
-     *
-     * @return serverHostKeyAlgorithms
-     */
+    /** @return serverHostKeyAlgorithms */
     public Ssh2NameList getServerHostKeyAlgorithms() {
       return serverHostKeyAlgorithms;
     }
 
-    /**
-     *
-     * @return encryptionAlgorithmsClientToServer
-     */
+    /** @return encryptionAlgorithmsClientToServer */
     public Ssh2NameList getEncryptionAlgorithmsClientToServer() {
       return encryptionAlgorithmsClientToServer;
     }
 
-    /**
-     *
-     * @return encryptionAlgorithmsServerToClient
-     */
+    /** @return encryptionAlgorithmsServerToClient */
     public Ssh2NameList getEncryptionAlgorithmsServerToClient() {
       return encryptionAlgorithmsServerToClient;
     }
 
-    /**
-     *
-     * @return macAlgorithmsClientToServer
-     */
+    /** @return macAlgorithmsClientToServer */
     public Ssh2NameList getMacAlgorithmsClientToServer() {
       return macAlgorithmsClientToServer;
     }
 
-    /**
-     *
-     * @return macAlgorithmsServerToClient
-     */
+    /** @return macAlgorithmsServerToClient */
     public Ssh2NameList getMacAlgorithmsServerToClient() {
       return macAlgorithmsServerToClient;
     }
 
-    /**
-     *
-     * @return compressionAlgorithmsClientToServer
-     */
+    /** @return compressionAlgorithmsClientToServer */
     public Ssh2NameList getCompressionAlgorithmsClientToServer() {
       return compressionAlgorithmsClientToServer;
     }
 
-    /**
-     *
-     * @return compressionAlgorithmsServerToClient
-     */
+    /** @return compressionAlgorithmsServerToClient */
     public Ssh2NameList getCompressionAlgorithmsServerToClient() {
       return compressionAlgorithmsServerToClient;
     }
 
-    /**
-     *
-     * @return languagesClientToServer
-     */
+    /** @return languagesClientToServer */
     public Ssh2NameList getLanguagesClientToServer() {
       return languagesClientToServer;
     }
 
-    /**
-     *
-     * @return languagesServerToClient
-     */
+    /** @return languagesServerToClient */
     public Ssh2NameList getLanguagesServerToClient() {
       return languagesServerToClient;
     }
 
-    /**
-     *
-     * @return firstKexPacketFollows
-     */
+    /** @return firstKexPacketFollows */
     public Ssh2Boolean getFirstKexPacketFollows() {
       return firstKexPacketFollows;
     }
 
-    /**
-     *
-     * @return reserved
-     */
+    /** @return reserved */
     public int getReserved() {
       return reserved;
     }
@@ -559,83 +503,69 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
     }
 
     @Override
-    protected int calcLength() { return getRawData().length; }
+    protected int calcLength() {
+      return getRawData().length;
+    }
 
     @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[SSH2 KEX init Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Message Number: ")
-        .append(messageNumber)
-        .append(ls);
-      sb.append("  cookie: ")
-        .append(ByteArrays.toHexString(cookie, " "))
-        .append(ls);
-      sb.append("  kex_algorithms: ")
-        .append(kexAlgorithms)
-        .append(ls);
-      sb.append("  server_host_key_algorithms: ")
-        .append(serverHostKeyAlgorithms)
-        .append(ls);
+      sb.append("[SSH2 KEX init Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Message Number: ").append(messageNumber).append(ls);
+      sb.append("  cookie: ").append(ByteArrays.toHexString(cookie, " ")).append(ls);
+      sb.append("  kex_algorithms: ").append(kexAlgorithms).append(ls);
+      sb.append("  server_host_key_algorithms: ").append(serverHostKeyAlgorithms).append(ls);
       sb.append("  encryption_algorithms_client_to_server: ")
-        .append(encryptionAlgorithmsClientToServer)
-        .append(ls);
+          .append(encryptionAlgorithmsClientToServer)
+          .append(ls);
       sb.append("  encryption_algorithms_server_to_client: ")
-        .append(encryptionAlgorithmsServerToClient)
-        .append(ls);
+          .append(encryptionAlgorithmsServerToClient)
+          .append(ls);
       sb.append("  mac_algorithms_client_to_server: ")
-        .append(macAlgorithmsClientToServer)
-        .append(ls);
+          .append(macAlgorithmsClientToServer)
+          .append(ls);
       sb.append("  mac_algorithms_server_to_client: ")
-        .append(macAlgorithmsServerToClient)
-        .append(ls);
+          .append(macAlgorithmsServerToClient)
+          .append(ls);
       sb.append("  compression_algorithms_client_to_server: ")
-        .append(compressionAlgorithmsClientToServer)
-        .append(ls);
+          .append(compressionAlgorithmsClientToServer)
+          .append(ls);
       sb.append("  compression_algorithms_server_to_client: ")
-        .append(compressionAlgorithmsServerToClient)
-        .append(ls);
-      sb.append("  languages_client_to_server: ")
-        .append(languagesClientToServer)
-        .append(ls);
-      sb.append("  languages_server_to_client: ")
-        .append(languagesServerToClient)
-        .append(ls);
-      sb.append("  first_kex_packet_follows: ")
-        .append(firstKexPacketFollows)
-        .append(ls);
-      sb.append("  reserved: ")
-        .append(ByteArrays.toHexString(reserved, " "))
-        .append(ls);
+          .append(compressionAlgorithmsServerToClient)
+          .append(ls);
+      sb.append("  languages_client_to_server: ").append(languagesClientToServer).append(ls);
+      sb.append("  languages_server_to_client: ").append(languagesServerToClient).append(ls);
+      sb.append("  first_kex_packet_follows: ").append(firstKexPacketFollows).append(ls);
+      sb.append("  reserved: ").append(ByteArrays.toHexString(reserved, " ")).append(ls);
 
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      Ssh2KexInitHeader other = (Ssh2KexInitHeader)obj;
-      return
-           Arrays.equals(cookie, other.cookie)
-        && kexAlgorithms.equals(other.kexAlgorithms)
-        && serverHostKeyAlgorithms.equals(other.serverHostKeyAlgorithms)
-        && encryptionAlgorithmsClientToServer.equals(other.encryptionAlgorithmsClientToServer)
-        && encryptionAlgorithmsServerToClient.equals(other.encryptionAlgorithmsServerToClient)
-        && macAlgorithmsClientToServer.equals(other.macAlgorithmsClientToServer)
-        && macAlgorithmsServerToClient.equals(other.macAlgorithmsServerToClient)
-        && compressionAlgorithmsClientToServer.equals(other.compressionAlgorithmsClientToServer)
-        && compressionAlgorithmsServerToClient.equals(other.compressionAlgorithmsServerToClient)
-        && languagesClientToServer.equals(other.languagesClientToServer)
-        && languagesServerToClient.equals(other.languagesServerToClient)
-        && firstKexPacketFollows.equals(other.firstKexPacketFollows)
-        && reserved == other.reserved;
+      Ssh2KexInitHeader other = (Ssh2KexInitHeader) obj;
+      return Arrays.equals(cookie, other.cookie)
+          && kexAlgorithms.equals(other.kexAlgorithms)
+          && serverHostKeyAlgorithms.equals(other.serverHostKeyAlgorithms)
+          && encryptionAlgorithmsClientToServer.equals(other.encryptionAlgorithmsClientToServer)
+          && encryptionAlgorithmsServerToClient.equals(other.encryptionAlgorithmsServerToClient)
+          && macAlgorithmsClientToServer.equals(other.macAlgorithmsClientToServer)
+          && macAlgorithmsServerToClient.equals(other.macAlgorithmsServerToClient)
+          && compressionAlgorithmsClientToServer.equals(other.compressionAlgorithmsClientToServer)
+          && compressionAlgorithmsServerToClient.equals(other.compressionAlgorithmsServerToClient)
+          && languagesClientToServer.equals(other.languagesClientToServer)
+          && languagesServerToClient.equals(other.languagesServerToClient)
+          && firstKexPacketFollows.equals(other.firstKexPacketFollows)
+          && reserved == other.reserved;
     }
 
     @Override
@@ -656,7 +586,5 @@ public final class Ssh2KexInitPacket extends AbstractPacket {
       result = 31 * result + reserved;
       return result;
     }
-
   }
-
 }

@@ -21,9 +21,8 @@ import org.pcap4j.util.ByteArrays;
  * Element ID: 72
  * </pre>
  *
- * The 20/40 BSS Coexistence element is used by STAs to exchange information that affects
- * 20/40 BSS coexistence.
- * The structure of the 20/40 BSS Coexistence Information field is as follows:
+ * The 20/40 BSS Coexistence element is used by STAs to exchange information that affects 20/40 BSS
+ * coexistence. The structure of the 20/40 BSS Coexistence Information field is as follows:
  *
  * <pre style="white-space: pre;">
  *       B0            B1            B2            B3            B4          B5,6,7
@@ -35,26 +34,22 @@ import org.pcap4j.util.ByteArrays;
  * </pre>
  *
  * The Information Request field is used to indicate that a transmitting STA is requesting the
- * recipient to transmit a 20/40 BSS Coexistence Management frame with the transmitting STA as
- * the recipient.
- * The Forty MHz Intolerant field is set to 1 to prohibit an AP that receives this information or
- * reports of this information from operating a 20/40 MHz BSS. When equal to 0, it does not
- * prohibit a receiving AP from operating a 20/40 MHz BSS. This field is used for inter-BSS
+ * recipient to transmit a 20/40 BSS Coexistence Management frame with the transmitting STA as the
+ * recipient. The Forty MHz Intolerant field is set to 1 to prohibit an AP that receives this
+ * information or reports of this information from operating a 20/40 MHz BSS. When equal to 0, it
+ * does not prohibit a receiving AP from operating a 20/40 MHz BSS. This field is used for inter-BSS
  * communication. The definition of this field is the same as the definition of the Forty MHz
- * Intolerant field in the HT Capabilities element.
- * The 20 MHz BSS Width Request field is set to 1 to prohibit a receiving AP from operating its
- * BSS as a 20/40 MHz BSS. Otherwise, it is set to 0. This field is used for intra-BSS
- * communication.
- * The OBSS Scanning Exemption Request field is set to 1 to indicate that the transmitting non-AP
- * STA is requesting the BSS to allow the STA to be exempt from OBSS scanning. Otherwise, it is
- * set to 0. The OBSS Scanning Exemption Request field is reserved when transmitted by an AP.
- * The OBSS Scanning Exemption Request field is reserved when a 20/40 BSS Coexistence element is
- * included in a group addressed frame.
- * The OBSS Scanning Exemption Grant field is set to 1 by an AP to indicate that the receiving STA
- * is exempted from performing OBSS Scanning. Otherwise, it is set to 0. The OBSS Scanning
- * Exemption Grant field is reserved when transmitted by a non-AP STA. The OBSS Scanning Exemption
- * Grant field is reserved when a 20/40 BSS Coexistence element is included in a group addressed
- * frame.
+ * Intolerant field in the HT Capabilities element. The 20 MHz BSS Width Request field is set to 1
+ * to prohibit a receiving AP from operating its BSS as a 20/40 MHz BSS. Otherwise, it is set to 0.
+ * This field is used for intra-BSS communication. The OBSS Scanning Exemption Request field is set
+ * to 1 to indicate that the transmitting non-AP STA is requesting the BSS to allow the STA to be
+ * exempt from OBSS scanning. Otherwise, it is set to 0. The OBSS Scanning Exemption Request field
+ * is reserved when transmitted by an AP. The OBSS Scanning Exemption Request field is reserved when
+ * a 20/40 BSS Coexistence element is included in a group addressed frame. The OBSS Scanning
+ * Exemption Grant field is set to 1 by an AP to indicate that the receiving STA is exempted from
+ * performing OBSS Scanning. Otherwise, it is set to 0. The OBSS Scanning Exemption Grant field is
+ * reserved when transmitted by a non-AP STA. The OBSS Scanning Exemption Grant field is reserved
+ * when a 20/40 BSS Coexistence element is included in a group addressed frame.
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
@@ -62,9 +57,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot112040BssCoexistenceElement extends Dot11InformationElement {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 8883468584264617141L;
 
   private final boolean informationRequested;
@@ -77,9 +70,8 @@ public final class Dot112040BssCoexistenceElement extends Dot11InformationElemen
   private final boolean bit7;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -87,9 +79,8 @@ public final class Dot112040BssCoexistenceElement extends Dot11InformationElemen
    * @return a new Dot112040BssCoexistenceElement object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot112040BssCoexistenceElement newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot112040BssCoexistenceElement newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot112040BssCoexistenceElement(rawData, offset, length);
   }
@@ -100,15 +91,13 @@ public final class Dot112040BssCoexistenceElement extends Dot11InformationElemen
    * @param length length
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  private Dot112040BssCoexistenceElement(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot112040BssCoexistenceElement(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     super(rawData, offset, length, Dot11InformationElementId.IE_20_40_BSS_COEXISTENCE);
 
     if (getLengthAsInt() != 1) {
       throw new IllegalRawDataException(
-              "The length must be 1 but is actually: " + getLengthAsInt()
-            );
+          "The length must be 1 but is actually: " + getLengthAsInt());
     }
 
     this.informationRequested = (rawData[offset + 2] & 0x01) != 0;
@@ -121,9 +110,7 @@ public final class Dot112040BssCoexistenceElement extends Dot11InformationElemen
     this.bit7 = (rawData[offset + 2] & 0x80) != 0;
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   private Dot112040BssCoexistenceElement(Builder builder) {
     super(builder);
     this.informationRequested = builder.informationRequested;
@@ -136,58 +123,42 @@ public final class Dot112040BssCoexistenceElement extends Dot11InformationElemen
     this.bit7 = builder.bit7;
   }
 
-  /**
-   * @return true if the Information Request field is set to 1; otherwise false.
-   */
+  /** @return true if the Information Request field is set to 1; otherwise false. */
   public boolean isInformationRequested() {
     return informationRequested;
   }
 
-  /**
-   * @return true if the Forty MHz Intolerant field is set to 1; otherwise false.
-   */
+  /** @return true if the Forty MHz Intolerant field is set to 1; otherwise false. */
   public boolean is40MhzIntolerant() {
     return fortyMhzIntolerant;
   }
 
-  /**
-   * @return true if the 20 MHz BSS Width Request field is set to 1; otherwise false.
-   */
+  /** @return true if the 20 MHz BSS Width Request field is set to 1; otherwise false. */
   public boolean is20MhzBssWidthRequested() {
     return twentyMhzBssWidthRequested;
   }
 
-  /**
-   * @return true if the OBSS Scanning Exemption Request field is set to 1; otherwise false.
-   */
+  /** @return true if the OBSS Scanning Exemption Request field is set to 1; otherwise false. */
   public boolean isObssScanningExemptionRequested() {
     return obssScanningExemptionRequested;
   }
 
-  /**
-   * @return true if the OBSS Scanning Exemption Grant field is set to 1; otherwise false.
-   */
+  /** @return true if the OBSS Scanning Exemption Grant field is set to 1; otherwise false. */
   public boolean isObssScanningExemptionGranted() {
     return obssScanningExemptionGranted;
   }
 
-  /**
-   * @return true if the bit 5 of the Information field is set to 1; otherwise false.
-   */
+  /** @return true if the bit 5 of the Information field is set to 1; otherwise false. */
   public boolean getBit5() {
     return bit5;
   }
 
-  /**
-   * @return true if the bit 6 of the Information field is set to 1; otherwise false.
-   */
+  /** @return true if the bit 6 of the Information field is set to 1; otherwise false. */
   public boolean getBit6() {
     return bit6;
   }
 
-  /**
-   * @return true if bit 7 of the Information field is set to 1; otherwise false.
-   */
+  /** @return true if bit 7 of the Information field is set to 1; otherwise false. */
   public boolean getBit7() {
     return bit7;
   }
@@ -229,11 +200,10 @@ public final class Dot112040BssCoexistenceElement extends Dot11InformationElemen
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public int hashCode() {
@@ -252,25 +222,16 @@ public final class Dot112040BssCoexistenceElement extends Dot11InformationElemen
 
   @Override
   public boolean equals(Object obj) {
-    if (!super.equals(obj))
-      return false;
+    if (!super.equals(obj)) return false;
     Dot112040BssCoexistenceElement other = (Dot112040BssCoexistenceElement) obj;
-    if (fortyMhzIntolerant != other.fortyMhzIntolerant)
-      return false;
-    if (informationRequested != other.informationRequested)
-      return false;
-    if (obssScanningExemptionGranted != other.obssScanningExemptionGranted)
-      return false;
-    if (obssScanningExemptionRequested != other.obssScanningExemptionRequested)
-      return false;
-    if (twentyMhzBssWidthRequested != other.twentyMhzBssWidthRequested)
-      return false;
-    if (bit5 != other.bit5)
-      return false;
-    if (bit6 != other.bit6)
-      return false;
-    if (bit7 != other.bit7)
-      return false;
+    if (fortyMhzIntolerant != other.fortyMhzIntolerant) return false;
+    if (informationRequested != other.informationRequested) return false;
+    if (obssScanningExemptionGranted != other.obssScanningExemptionGranted) return false;
+    if (obssScanningExemptionRequested != other.obssScanningExemptionRequested) return false;
+    if (twentyMhzBssWidthRequested != other.twentyMhzBssWidthRequested) return false;
+    if (bit5 != other.bit5) return false;
+    if (bit6 != other.bit6) return false;
+    if (bit7 != other.bit7) return false;
     return true;
   }
 
@@ -287,39 +248,26 @@ public final class Dot112040BssCoexistenceElement extends Dot11InformationElemen
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("20/40 BSS Coexistence:")
-      .append(ls);
-    sb.append(indent).append("  Element ID: ")
-      .append(getElementId())
-      .append(ls);
-    sb.append(indent).append("  Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes")
-      .append(ls);
-    sb.append(indent).append("  Information Requested: ")
-      .append(informationRequested)
-      .append(ls);
-    sb.append(indent).append("  40 MHz Intolerant: ")
-      .append(fortyMhzIntolerant)
-      .append(ls);
-    sb.append(indent).append("  20 MHz BSS Width Requested: ")
-      .append(twentyMhzBssWidthRequested)
-      .append(ls);
-    sb.append(indent).append("  OBSS Scanning Exemption Requested: ")
-      .append(obssScanningExemptionRequested)
-      .append(ls);
-    sb.append(indent).append("  OBSS Scanning Exemption Granted: ")
-      .append(obssScanningExemptionGranted)
-      .append(ls);
-    sb.append(indent).append("  Bit 5: ")
-      .append(bit5)
-      .append(ls);
-    sb.append(indent).append("  Bit 6: ")
-      .append(bit6)
-      .append(ls);
-    sb.append(indent).append("  Bit 7: ")
-      .append(bit7)
-      .append(ls);
+    sb.append(indent).append("20/40 BSS Coexistence:").append(ls);
+    sb.append(indent).append("  Element ID: ").append(getElementId()).append(ls);
+    sb.append(indent).append("  Length: ").append(getLengthAsInt()).append(" bytes").append(ls);
+    sb.append(indent).append("  Information Requested: ").append(informationRequested).append(ls);
+    sb.append(indent).append("  40 MHz Intolerant: ").append(fortyMhzIntolerant).append(ls);
+    sb.append(indent)
+        .append("  20 MHz BSS Width Requested: ")
+        .append(twentyMhzBssWidthRequested)
+        .append(ls);
+    sb.append(indent)
+        .append("  OBSS Scanning Exemption Requested: ")
+        .append(obssScanningExemptionRequested)
+        .append(ls);
+    sb.append(indent)
+        .append("  OBSS Scanning Exemption Granted: ")
+        .append(obssScanningExemptionGranted)
+        .append(ls);
+    sb.append(indent).append("  Bit 5: ").append(bit5).append(ls);
+    sb.append(indent).append("  Bit 6: ").append(bit6).append(ls);
+    sb.append(indent).append("  Bit 7: ").append(bit7).append(ls);
 
     return sb.toString();
   }
@@ -339,20 +287,14 @@ public final class Dot112040BssCoexistenceElement extends Dot11InformationElemen
     private boolean bit6;
     private boolean bit7;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {
       elementId(
-        Dot11InformationElementId.getInstance(
-          Dot11InformationElementId.IE_20_40_BSS_COEXISTENCE.value()
-        )
-      );
+          Dot11InformationElementId.getInstance(
+              Dot11InformationElementId.IE_20_40_BSS_COEXISTENCE.value()));
     }
 
-    /**
-     * @param elem a Dot112040BssCoexistenceElement object.
-     */
+    /** @param elem a Dot112040BssCoexistenceElement object. */
     private Builder(Dot112040BssCoexistenceElement elem) {
       super(elem);
       this.informationRequested = elem.informationRequested;
@@ -456,7 +398,5 @@ public final class Dot112040BssCoexistenceElement extends Dot11InformationElemen
       }
       return new Dot112040BssCoexistenceElement(this);
     }
-
   }
-
 }

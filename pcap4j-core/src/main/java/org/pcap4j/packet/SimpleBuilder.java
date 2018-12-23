@@ -17,21 +17,15 @@ public final class SimpleBuilder extends AbstractBuilder {
 
   private Packet packet;
 
-  /**
-   *
-   */
+  /** */
   public SimpleBuilder() {}
 
-  /**
-   *
-   * @param packet packet
-   */
+  /** @param packet packet */
   public SimpleBuilder(Packet packet) {
     this.packet = packet;
   }
 
   /**
-   *
    * @param packet packet
    * @return SimpleBuilder
    */
@@ -44,5 +38,4 @@ public final class SimpleBuilder extends AbstractBuilder {
   public Packet build() {
     return packet;
   }
-
 }

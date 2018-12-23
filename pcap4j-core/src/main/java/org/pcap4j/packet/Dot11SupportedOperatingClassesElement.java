@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.namednumber.Dot11InformationElementId;
 import org.pcap4j.util.ByteArrays;
 
@@ -24,11 +23,10 @@ import org.pcap4j.util.ByteArrays;
  * </pre>
  *
  * The Supported Operating Classes element is used by a STA to advertise the operating classes that
- * it is capable of operating with in this country.
- * The value of the Length field of the Supported Operating Classes element is between 2 and 253.
- * The Current Operating Class octet indicates the operating class in use for transmission and
- * reception. The Operating Classes field lists in ascending order all operating classes that the
- * STA is capable of operating with in this country.
+ * it is capable of operating with in this country. The value of the Length field of the Supported
+ * Operating Classes element is between 2 and 253. The Current Operating Class octet indicates the
+ * operating class in use for transmission and reception. The Operating Classes field lists in
+ * ascending order all operating classes that the STA is capable of operating with in this country.
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
@@ -36,18 +34,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot11SupportedOperatingClassesElement extends Dot11InformationElement {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2089786652681023988L;
 
   private final byte currentOperatingClass;
   private final byte[] operatingClasses;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -56,8 +51,7 @@ public final class Dot11SupportedOperatingClassesElement extends Dot11Informatio
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static Dot11SupportedOperatingClassesElement newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+      byte[] rawData, int offset, int length) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot11SupportedOperatingClassesElement(rawData, offset, length);
   }
@@ -68,57 +62,51 @@ public final class Dot11SupportedOperatingClassesElement extends Dot11Informatio
    * @param length length
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  private Dot11SupportedOperatingClassesElement(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot11SupportedOperatingClassesElement(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     super(rawData, offset, length, Dot11InformationElementId.SUPPORTED_OPERATING_CLASSES);
 
     int infoLen = getLengthAsInt();
     if (infoLen < 1) {
       throw new IllegalRawDataException(
-              "The length must be more than 0 but is actually: " + infoLen
-            );
+          "The length must be more than 0 but is actually: " + infoLen);
     }
 
     this.currentOperatingClass = rawData[offset + 2];
     if (infoLen == 1) {
       this.operatingClasses = new byte[0];
-    }
-    else {
+    } else {
       this.operatingClasses = ByteArrays.getSubArray(rawData, offset + 3, infoLen - 1);
     }
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   private Dot11SupportedOperatingClassesElement(Builder builder) {
     super(builder);
 
     if (builder.operatingClasses.length > 254) {
       throw new IllegalArgumentException(
-              "Too long operatingClasses: " + ByteArrays.toHexString(builder.operatingClasses, " ")
-            );
+          "Too long operatingClasses: " + ByteArrays.toHexString(builder.operatingClasses, " "));
     }
 
     this.currentOperatingClass = builder.currentOperatingClass;
     this.operatingClasses = ByteArrays.clone(builder.operatingClasses);
   }
 
-  /**
-   * @return currentOperatingClass
-   */
-  public byte getCurrentOperatingClass() { return currentOperatingClass; }
+  /** @return currentOperatingClass */
+  public byte getCurrentOperatingClass() {
+    return currentOperatingClass;
+  }
 
-  /**
-   * @return currentOperatingClass
-   */
-  public int getCurrentOperatingClassAsInt() { return currentOperatingClass & 0xFF; }
+  /** @return currentOperatingClass */
+  public int getCurrentOperatingClassAsInt() {
+    return currentOperatingClass & 0xFF;
+  }
 
-  /**
-   * @return operatingClasses
-   */
-  public byte[] getOperatingClasses() { return ByteArrays.clone(operatingClasses); }
+  /** @return operatingClasses */
+  public byte[] getOperatingClasses() {
+    return ByteArrays.clone(operatingClasses);
+  }
 
   @Override
   public int length() {
@@ -135,10 +123,10 @@ public final class Dot11SupportedOperatingClassesElement extends Dot11Informatio
     return rawData;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public int hashCode() {
@@ -151,13 +139,10 @@ public final class Dot11SupportedOperatingClassesElement extends Dot11Informatio
 
   @Override
   public boolean equals(Object obj) {
-    if (!super.equals(obj))
-      return false;
+    if (!super.equals(obj)) return false;
     Dot11SupportedOperatingClassesElement other = (Dot11SupportedOperatingClassesElement) obj;
-    if (currentOperatingClass != other.currentOperatingClass)
-      return false;
-    if (!Arrays.equals(operatingClasses, other.operatingClasses))
-      return false;
+    if (currentOperatingClass != other.currentOperatingClass) return false;
+    if (!Arrays.equals(operatingClasses, other.operatingClasses)) return false;
     return true;
   }
 
@@ -174,22 +159,15 @@ public final class Dot11SupportedOperatingClassesElement extends Dot11Informatio
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Supported Operating Classes:")
-      .append(ls);
-    sb.append(indent).append("  Element ID: ")
-      .append(getElementId())
-      .append(ls);
-    sb.append(indent).append("  Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes")
-      .append(ls);
-    sb.append(indent).append("  Current Operating Class: ")
-      .append(getCurrentOperatingClassAsInt())
-      .append(ls);
-    for (byte cls: operatingClasses) {
-      sb.append(indent).append("  Operating Class: ")
-        .append(cls & 0xFF)
+    sb.append(indent).append("Supported Operating Classes:").append(ls);
+    sb.append(indent).append("  Element ID: ").append(getElementId()).append(ls);
+    sb.append(indent).append("  Length: ").append(getLengthAsInt()).append(" bytes").append(ls);
+    sb.append(indent)
+        .append("  Current Operating Class: ")
+        .append(getCurrentOperatingClassAsInt())
         .append(ls);
+    for (byte cls : operatingClasses) {
+      sb.append(indent).append("  Operating Class: ").append(cls & 0xFF).append(ls);
     }
 
     return sb.toString();
@@ -199,26 +177,19 @@ public final class Dot11SupportedOperatingClassesElement extends Dot11Informatio
    * @author Kaito Yamada
    * @since pcap4j 1.7.0
    */
-  public static final class
-  Builder extends Dot11InformationElement.Builder {
+  public static final class Builder extends Dot11InformationElement.Builder {
 
     private byte currentOperatingClass;
     private byte[] operatingClasses;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {
       elementId(
-        Dot11InformationElementId.getInstance(
-          Dot11InformationElementId.SUPPORTED_OPERATING_CLASSES.value()
-        )
-      );
+          Dot11InformationElementId.getInstance(
+              Dot11InformationElementId.SUPPORTED_OPERATING_CLASSES.value()));
     }
 
-    /**
-     * @param elem a Dot11SupportedOperatingClassesElement object.
-     */
+    /** @param elem a Dot11SupportedOperatingClassesElement object. */
     private Builder(Dot11SupportedOperatingClassesElement elem) {
       super(elem);
       this.currentOperatingClass = elem.currentOperatingClass;
@@ -267,7 +238,5 @@ public final class Dot11SupportedOperatingClassesElement extends Dot11Informatio
       }
       return new Dot11SupportedOperatingClassesElement(this);
     }
-
   }
-
 }

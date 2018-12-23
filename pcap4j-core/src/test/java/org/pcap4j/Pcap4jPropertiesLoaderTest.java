@@ -2,9 +2,9 @@ package org.pcap4j;
 
 import static org.junit.Assert.*;
 
+import com.sun.jna.Platform;
 import java.util.Arrays;
 import java.util.Collection;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,8 +16,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.powermock.reflect.Whitebox;
 
-import com.sun.jna.Platform;
-
 @SuppressWarnings("javadoc")
 @RunWith(Parameterized.class)
 @PrepareForTest(Platform.class)
@@ -27,8 +25,7 @@ public class Pcap4jPropertiesLoaderTest {
 
   private final int osType;
 
-  @Rule
-  public PowerMockRule powerMockRule = new PowerMockRule();
+  @Rule public PowerMockRule powerMockRule = new PowerMockRule();
 
   public Pcap4jPropertiesLoaderTest(int osType) {
     this.osType = osType;
@@ -37,14 +34,13 @@ public class Pcap4jPropertiesLoaderTest {
   @Parameterized.Parameters
   public static Collection<Object[]> osType() {
     return Arrays.asList(
-      new Object[][]{
-        {Platform.WINDOWS},
-        {Platform.MAC},
-        {Platform.LINUX},
-        {Platform.FREEBSD},
-        {Platform.OPENBSD}
-      }
-    );
+        new Object[][] {
+          {Platform.WINDOWS},
+          {Platform.MAC},
+          {Platform.LINUX},
+          {Platform.FREEBSD},
+          {Platform.OPENBSD}
+        });
   }
 
   @Before
@@ -55,39 +51,39 @@ public class Pcap4jPropertiesLoaderTest {
     this.propertiesLoader = Pcap4jPropertiesLoader.getInstance();
 
     Whitebox.setInternalState(
-      propertiesLoader, "loader",
-      new PropertiesLoader("org/pcap4j/pcap4j-test.properties", false, false)
-    );
+        propertiesLoader,
+        "loader",
+        new PropertiesLoader("org/pcap4j/pcap4j-test.properties", false, false));
   }
 
   @Test
   public void testHasDefaultAfInet() {
     assertNotNull(propertiesLoader.getAfInet());
-    assertEquals(2, (int)propertiesLoader.getAfInet());
+    assertEquals(2, (int) propertiesLoader.getAfInet());
   }
 
   @Test
   public void testHasDefaultAfInet6() {
     assertNotNull(propertiesLoader.getAfInet6());
-    assertEquals(getExpectedDefaultAfInet6(), (int)propertiesLoader.getAfInet6());
+    assertEquals(getExpectedDefaultAfInet6(), (int) propertiesLoader.getAfInet6());
   }
 
   @Test
   public void testHasDefaultAfPacket() {
     assertNotNull(propertiesLoader.getAfPacket());
-    assertEquals(17, (int)propertiesLoader.getAfPacket());
+    assertEquals(17, (int) propertiesLoader.getAfPacket());
   }
 
   @Test
   public void testHasDefaultAfLink() {
     assertNotNull(propertiesLoader.getAfLink());
-    assertEquals(18, (int)propertiesLoader.getAfLink());
+    assertEquals(18, (int) propertiesLoader.getAfLink());
   }
 
   @Test
   public void testHasDefaultDltRaw() {
     assertNotNull(propertiesLoader.getDltRaw());
-    assertEquals(getExpectedDefaultDltRaw(), (int)propertiesLoader.getDltRaw());
+    assertEquals(getExpectedDefaultDltRaw(), (int) propertiesLoader.getDltRaw());
   }
 
   private int getExpectedDefaultAfInet6() {
@@ -113,5 +109,4 @@ public class Pcap4jPropertiesLoaderTest {
         return 12;
     }
   }
-
 }

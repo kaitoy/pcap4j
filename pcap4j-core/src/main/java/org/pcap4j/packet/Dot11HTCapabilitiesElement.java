@@ -9,7 +9,6 @@ package org.pcap4j.packet;
 
 import java.nio.ByteOrder;
 import java.util.Arrays;
-
 import org.pcap4j.packet.namednumber.Dot11InformationElementId;
 import org.pcap4j.util.ByteArrays;
 
@@ -110,10 +109,10 @@ import org.pcap4j.util.ByteArrays;
  * +---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+
  * </pre>
  *
- * The HT Capabilities element contains a number of fields that are used to advertise optional
- * HT capabilities of an HT STA. The HT Capabilities element is present in Beacon, Association
- * Request, Association Response, Reassociation Request, Reassociation Response, Probe Request,
- * Probe Response, Mesh Peering Open, and Mesh Peering Close frames.
+ * The HT Capabilities element contains a number of fields that are used to advertise optional HT
+ * capabilities of an HT STA. The HT Capabilities element is present in Beacon, Association Request,
+ * Association Response, Reassociation Request, Reassociation Response, Probe Request, Probe
+ * Response, Mesh Peering Open, and Mesh Peering Close frames.
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
@@ -121,9 +120,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -5174208022820530840L;
 
   private final boolean ldpcCodingSupported;
@@ -233,9 +230,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
   private final boolean bit7OfAselCapability;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -243,9 +239,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    * @return a new Dot11HTCapabilitiesElement object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot11HTCapabilitiesElement newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot11HTCapabilitiesElement newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot11HTCapabilitiesElement(rawData, offset, length);
   }
@@ -256,15 +251,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    * @param length length
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  private Dot11HTCapabilitiesElement(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot11HTCapabilitiesElement(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     super(rawData, offset, length, Dot11InformationElementId.HT_CAPABILITIES);
 
     if (getLengthAsInt() != 26) {
       throw new IllegalRawDataException(
-              "The length must be 26 but is actually: " + getLengthAsInt()
-            );
+          "The length must be 26 but is actually: " + getLengthAsInt());
     }
 
     byte data = rawData[offset + 2];
@@ -390,21 +383,22 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     this.explicitCsiTxBeamformingSupported = (intData & 0x01) != 0;
     this.explicitNoncompressedSteeringSupported = (intData & 0x02) != 0;
     this.explicitCompressedSteeringSupported = (intData & 0x04) != 0;
-    this.explicitTxBeamformingCsiFeedbackCapability
-      = BeamformingFeedbackCapability.getInstance((intData >> 3) & 0x03);
-    this.explicitNoncompressedBeamformingFeedbackCapability
-      = BeamformingFeedbackCapability.getInstance((intData >> 5) & 0x03);
-    this.explicitCompressedBeamformingFeedbackCapability
-      = BeamformingFeedbackCapability.getInstance((intData >> 7) & 0x03);
+    this.explicitTxBeamformingCsiFeedbackCapability =
+        BeamformingFeedbackCapability.getInstance((intData >> 3) & 0x03);
+    this.explicitNoncompressedBeamformingFeedbackCapability =
+        BeamformingFeedbackCapability.getInstance((intData >> 5) & 0x03);
+    this.explicitCompressedBeamformingFeedbackCapability =
+        BeamformingFeedbackCapability.getInstance((intData >> 7) & 0x03);
     this.minGrouping = Grouping.getInstance((intData >> 9) & 0x03);
-    this.csiNumBeamformerAntennasSupported
-      = NumBeamformerAntennas.getInstance((intData >> 11) & 0x03);
-    this.noncompressedSteeringNumBeamformerAntennasSupported
-      = NumBeamformerAntennas.getInstance((intData >> 13) & 0x03);
-    this.compressedSteeringNumBeamformerAntennasSupported
-      = NumBeamformerAntennas.getInstance((intData >> 15) & 0x03);
+    this.csiNumBeamformerAntennasSupported =
+        NumBeamformerAntennas.getInstance((intData >> 11) & 0x03);
+    this.noncompressedSteeringNumBeamformerAntennasSupported =
+        NumBeamformerAntennas.getInstance((intData >> 13) & 0x03);
+    this.compressedSteeringNumBeamformerAntennasSupported =
+        NumBeamformerAntennas.getInstance((intData >> 15) & 0x03);
     this.csiMaxNumRowsBeamformerSupported = CsiNumRows.getInstance((intData >> 17) & 0x03);
-    this.channelEstimationCapability = ChannelEstimationCapability.getInstance((intData >> 19) & 0x03);
+    this.channelEstimationCapability =
+        ChannelEstimationCapability.getInstance((intData >> 19) & 0x03);
     this.bit29OfTransmitBeamformingCapabilities = (intData & 0x200000) != 0;
     this.bit30OfTransmitBeamformingCapabilities = (intData & 0x400000) != 0;
     this.bit31OfTransmitBeamformingCapabilities = (intData & 0x800000) != 0;
@@ -418,87 +412,82 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     this.bit7OfAselCapability = (intData & 0x80000000) != 0;
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   private Dot11HTCapabilitiesElement(Builder builder) {
     super(builder);
-    if (
-         builder == null
-      || builder.smPowerSaveMode == null
-      || builder.rxStbcSupport == null
-      || builder.maxAMsduLength == null
-      || builder.maxAMpduLength == null
-      || builder.minMpduStartSpacing == null
-      || builder.supportedRxMcsIndexes == null
-      || builder.txMaxNumSpatialStreamsSupported == null
-      || builder.pcoTransitionTime == null
-      || builder.mcsFeedbackCapability == null
-      || builder.calibration == null
-      || builder.explicitTxBeamformingCsiFeedbackCapability == null
-      || builder.explicitNoncompressedBeamformingFeedbackCapability == null
-      || builder.explicitCompressedBeamformingFeedbackCapability == null
-      || builder.minGrouping == null
-      || builder.csiNumBeamformerAntennasSupported == null
-      || builder.noncompressedSteeringNumBeamformerAntennasSupported == null
-      || builder.compressedSteeringNumBeamformerAntennasSupported == null
-      || builder.csiMaxNumRowsBeamformerSupported == null
-      || builder.channelEstimationCapability == null
-    ) {
+    if (builder == null
+        || builder.smPowerSaveMode == null
+        || builder.rxStbcSupport == null
+        || builder.maxAMsduLength == null
+        || builder.maxAMpduLength == null
+        || builder.minMpduStartSpacing == null
+        || builder.supportedRxMcsIndexes == null
+        || builder.txMaxNumSpatialStreamsSupported == null
+        || builder.pcoTransitionTime == null
+        || builder.mcsFeedbackCapability == null
+        || builder.calibration == null
+        || builder.explicitTxBeamformingCsiFeedbackCapability == null
+        || builder.explicitNoncompressedBeamformingFeedbackCapability == null
+        || builder.explicitCompressedBeamformingFeedbackCapability == null
+        || builder.minGrouping == null
+        || builder.csiNumBeamformerAntennasSupported == null
+        || builder.noncompressedSteeringNumBeamformerAntennasSupported == null
+        || builder.compressedSteeringNumBeamformerAntennasSupported == null
+        || builder.csiMaxNumRowsBeamformerSupported == null
+        || builder.channelEstimationCapability == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.smPowerSaveMode: ")
-        .append(builder.smPowerSaveMode)
-        .append(" builder.rxStbcSupport: ")
-        .append(builder.rxStbcSupport)
-        .append(" builder.maxAMsduLength: ")
-        .append(builder.maxAMsduLength)
-        .append(" builder.maxAMpduLength: ")
-        .append(builder.maxAMpduLength)
-        .append(" builder.minMpduStartSpacing: ")
-        .append(builder.minMpduStartSpacing)
-        .append(" builder.supportedRxMcsIndexes: ")
-        .append(builder.supportedRxMcsIndexes)
-        .append(" builder.txMaxNumSpatialStreamsSupported: ")
-        .append(builder.txMaxNumSpatialStreamsSupported)
-        .append(" builder.pcoTransitionTime: ")
-        .append(builder.pcoTransitionTime)
-        .append(" builder.mcsFeedbackCapability: ")
-        .append(builder.mcsFeedbackCapability)
-        .append(" builder.calibration: ")
-        .append(builder.calibration)
-        .append(" builder.explicitTxBeamformingCsiFeedbackCapability: ")
-        .append(builder.explicitTxBeamformingCsiFeedbackCapability)
-        .append(" builder.explicitNoncompressedBeamformingFeedbackCapability: ")
-        .append(builder.explicitNoncompressedBeamformingFeedbackCapability)
-        .append(" builder.explicitCompressedBeamformingFeedbackCapability: ")
-        .append(builder.explicitCompressedBeamformingFeedbackCapability)
-        .append(" builder.minGrouping: ")
-        .append(builder.minGrouping)
-        .append(" builder.csiNumBeamformerAntennasSupported: ")
-        .append(builder.csiNumBeamformerAntennasSupported)
-        .append(" builder.noncompressedSteeringNumBeamformerAntennasSupported: ")
-        .append(builder.noncompressedSteeringNumBeamformerAntennasSupported)
-        .append(" builder.compressedSteeringNumBeamformerAntennasSupported: ")
-        .append(builder.compressedSteeringNumBeamformerAntennasSupported)
-        .append(" builder.csiMaxNumRowsBeamformerSupported: ")
-        .append(builder.csiMaxNumRowsBeamformerSupported)
-        .append(" builder.channelEstimationCapability: ")
-        .append(builder.channelEstimationCapability);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.smPowerSaveMode: ")
+          .append(builder.smPowerSaveMode)
+          .append(" builder.rxStbcSupport: ")
+          .append(builder.rxStbcSupport)
+          .append(" builder.maxAMsduLength: ")
+          .append(builder.maxAMsduLength)
+          .append(" builder.maxAMpduLength: ")
+          .append(builder.maxAMpduLength)
+          .append(" builder.minMpduStartSpacing: ")
+          .append(builder.minMpduStartSpacing)
+          .append(" builder.supportedRxMcsIndexes: ")
+          .append(builder.supportedRxMcsIndexes)
+          .append(" builder.txMaxNumSpatialStreamsSupported: ")
+          .append(builder.txMaxNumSpatialStreamsSupported)
+          .append(" builder.pcoTransitionTime: ")
+          .append(builder.pcoTransitionTime)
+          .append(" builder.mcsFeedbackCapability: ")
+          .append(builder.mcsFeedbackCapability)
+          .append(" builder.calibration: ")
+          .append(builder.calibration)
+          .append(" builder.explicitTxBeamformingCsiFeedbackCapability: ")
+          .append(builder.explicitTxBeamformingCsiFeedbackCapability)
+          .append(" builder.explicitNoncompressedBeamformingFeedbackCapability: ")
+          .append(builder.explicitNoncompressedBeamformingFeedbackCapability)
+          .append(" builder.explicitCompressedBeamformingFeedbackCapability: ")
+          .append(builder.explicitCompressedBeamformingFeedbackCapability)
+          .append(" builder.minGrouping: ")
+          .append(builder.minGrouping)
+          .append(" builder.csiNumBeamformerAntennasSupported: ")
+          .append(builder.csiNumBeamformerAntennasSupported)
+          .append(" builder.noncompressedSteeringNumBeamformerAntennasSupported: ")
+          .append(builder.noncompressedSteeringNumBeamformerAntennasSupported)
+          .append(" builder.compressedSteeringNumBeamformerAntennasSupported: ")
+          .append(builder.compressedSteeringNumBeamformerAntennasSupported)
+          .append(" builder.csiMaxNumRowsBeamformerSupported: ")
+          .append(builder.csiMaxNumRowsBeamformerSupported)
+          .append(" builder.channelEstimationCapability: ")
+          .append(builder.channelEstimationCapability);
       throw new NullPointerException(sb.toString());
     }
     if (builder.supportedRxMcsIndexes.length != 77) {
       throw new IllegalArgumentException(
-              "supportedRxMcsIndexes.length must be 77. builder.supportedRxMcsIndexes.length: "
-                + builder.supportedRxMcsIndexes.length
-            );
+          "supportedRxMcsIndexes.length must be 77. builder.supportedRxMcsIndexes.length: "
+              + builder.supportedRxMcsIndexes.length);
     }
     if ((builder.rxHighestSupportedDataRate & 0xFC00) != 0) {
       throw new IllegalArgumentException(
-              "(rxHighestSupportedDataRate & 0xFC00) must be zero."
-                + " builder.rxHighestSupportedDataRate: "
-                + builder.rxHighestSupportedDataRate
-            );
+          "(rxHighestSupportedDataRate & 0xFC00) must be zero."
+              + " builder.rxHighestSupportedDataRate: "
+              + builder.rxHighestSupportedDataRate);
     }
 
     this.ldpcCodingSupported = builder.ldpcCodingSupported;
@@ -586,18 +575,18 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     this.explicitCsiTxBeamformingSupported = builder.explicitCsiTxBeamformingSupported;
     this.explicitNoncompressedSteeringSupported = builder.explicitNoncompressedSteeringSupported;
     this.explicitCompressedSteeringSupported = builder.explicitCompressedSteeringSupported;
-    this.explicitTxBeamformingCsiFeedbackCapability
-      = builder.explicitTxBeamformingCsiFeedbackCapability;
-    this.explicitNoncompressedBeamformingFeedbackCapability
-      = builder.explicitNoncompressedBeamformingFeedbackCapability;
-    this.explicitCompressedBeamformingFeedbackCapability
-      = builder.explicitCompressedBeamformingFeedbackCapability;
+    this.explicitTxBeamformingCsiFeedbackCapability =
+        builder.explicitTxBeamformingCsiFeedbackCapability;
+    this.explicitNoncompressedBeamformingFeedbackCapability =
+        builder.explicitNoncompressedBeamformingFeedbackCapability;
+    this.explicitCompressedBeamformingFeedbackCapability =
+        builder.explicitCompressedBeamformingFeedbackCapability;
     this.minGrouping = builder.minGrouping;
     this.csiNumBeamformerAntennasSupported = builder.csiNumBeamformerAntennasSupported;
-    this.noncompressedSteeringNumBeamformerAntennasSupported
-      = builder.noncompressedSteeringNumBeamformerAntennasSupported;
-    this.compressedSteeringNumBeamformerAntennasSupported
-      = builder.compressedSteeringNumBeamformerAntennasSupported;
+    this.noncompressedSteeringNumBeamformerAntennasSupported =
+        builder.noncompressedSteeringNumBeamformerAntennasSupported;
+    this.compressedSteeringNumBeamformerAntennasSupported =
+        builder.compressedSteeringNumBeamformerAntennasSupported;
     this.csiMaxNumRowsBeamformerSupported = builder.csiMaxNumRowsBeamformerSupported;
     this.channelEstimationCapability = builder.channelEstimationCapability;
     this.bit29OfTransmitBeamformingCapabilities = builder.bit29OfTransmitBeamformingCapabilities;
@@ -605,8 +594,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     this.bit31OfTransmitBeamformingCapabilities = builder.bit31OfTransmitBeamformingCapabilities;
     this.antennaSelectionSupported = builder.antennaSelectionSupported;
     this.explicitCsiFeedbackBasedTxAselSupported = builder.explicitCsiFeedbackBasedTxAselSupported;
-    this.antennaIndicesFeedbackBasedTxAselSupported
-      = builder.antennaIndicesFeedbackBasedTxAselSupported;
+    this.antennaIndicesFeedbackBasedTxAselSupported =
+        builder.antennaIndicesFeedbackBasedTxAselSupported;
     this.explicitCsiFeedbackSupported = builder.explicitCsiFeedbackSupported;
     this.antennaIndicesFeedbackSupported = builder.antennaIndicesFeedbackSupported;
     this.rxAselSupported = builder.rxAselSupported;
@@ -614,143 +603,104 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     this.bit7OfAselCapability = builder.bit7OfAselCapability;
   }
 
-  /**
-   * @return true if the LDPC Coding Capability field is set to 1; false otherwise.
-   */
+  /** @return true if the LDPC Coding Capability field is set to 1; false otherwise. */
   public boolean isLdpcCodingSupported() {
     return ldpcCodingSupported;
   }
 
-  /**
-   * @return true if the Supported Channel Width Set field is set to 1; false otherwise.
-   */
+  /** @return true if the Supported Channel Width Set field is set to 1; false otherwise. */
   public boolean isBoth20and40MhzSupported() {
     return both20and40MhzSupported;
   }
 
-  /**
-   * @return smPowerSaveMode
-   */
+  /** @return smPowerSaveMode */
   public SmPowerSaveMode getSmPowerSaveMode() {
     return smPowerSaveMode;
   }
 
-  /**
-   * @return true if the HT-Greenfield field is set to 1; false otherwise.
-   */
+  /** @return true if the HT-Greenfield field is set to 1; false otherwise. */
   public boolean isHtGreenfieldSupported() {
     return htGreenfieldSupported;
   }
 
-  /**
-   * @return true if the Short GI for 20 MHz field is set to 1; false otherwise.
-   */
+  /** @return true if the Short GI for 20 MHz field is set to 1; false otherwise. */
   public boolean isShortGiFor20MhzSupported() {
     return shortGiFor20MhzSupported;
   }
 
-  /**
-   * @return true if the Short GI for 40 MHz field is set to 1; false otherwise.
-   */
+  /** @return true if the Short GI for 40 MHz field is set to 1; false otherwise. */
   public boolean isShortGiFor40MhzSupported() {
     return shortGiFor40MhzSupported;
   }
 
-  /**
-   * @return true if the Tx STBC field is set to 1; false otherwise.
-   */
+  /** @return true if the Tx STBC field is set to 1; false otherwise. */
   public boolean isTxStbcSupported() {
     return txStbcSupported;
   }
 
-  /**
-   * @return rxStbcSupport
-   */
+  /** @return rxStbcSupport */
   public StbcSupport getRxStbcSupport() {
     return rxStbcSupport;
   }
 
-  /**
-   * @return true if the HT-Delayed Block Ack field is set to 1; false otherwise.
-   */
+  /** @return true if the HT-Delayed Block Ack field is set to 1; false otherwise. */
   public boolean isHtDelayedBlockAckSupported() {
     return htDelayedBlockAckSupported;
   }
 
-  /**
-   * @return maxAMsduLength
-   */
+  /** @return maxAMsduLength */
   public AMsduLength getMaxAMsduLength() {
     return maxAMsduLength;
   }
 
-  /**
-   * @return true if the DSSS/CCK Mode in 40 MHz field is set to 1; false otherwise.
-   */
+  /** @return true if the DSSS/CCK Mode in 40 MHz field is set to 1; false otherwise. */
   public boolean isDsssCckModeIn40MhzSupported() {
     return dsssCckModeIn40MhzSupported;
   }
 
-  /**
-   * @return true if the bit 13 of the HT Capabilities Info field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 13 of the HT Capabilities Info field is set to 1; false otherwise. */
   public boolean getBit13OfHtCapabilitiesInfo() {
     return bit13OfHtCapabilitiesInfo;
   }
 
-  /**
-   * @return true if the Forty MHz Intolerant field is set to 1; false otherwise.
-   */
+  /** @return true if the Forty MHz Intolerant field is set to 1; false otherwise. */
   public boolean isFortyMhzIntolerant() {
     return fortyMhzIntolerant;
   }
 
-  /**
-   * @return true if the L-SIG TXOP Protection Support field is set to 1; false otherwise.
-   */
+  /** @return true if the L-SIG TXOP Protection Support field is set to 1; false otherwise. */
   public boolean islSigTxopProtectionSupported() {
     return lSigTxopProtectionSupported;
   }
 
-  /**
-   * @return maxAMpduLength
-   */
+  /** @return maxAMpduLength */
   public AMpduLength getMaxAMpduLength() {
     return maxAMpduLength;
   }
 
-  /**
-   * @return minMpduStartSpacing
-   */
+  /** @return minMpduStartSpacing */
   public MpduStartSpacing getMinMpduStartSpacing() {
     return minMpduStartSpacing;
   }
 
-  /**
-   * @return true if the bit 5 of the A-MPDU Parameters field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 5 of the A-MPDU Parameters field is set to 1; false otherwise. */
   public boolean getBit5OfAMpduParameters() {
     return bit5OfAMpduParameters;
   }
 
-  /**
-   * @return true if the bit 6 of the A-MPDU Parameters field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 6 of the A-MPDU Parameters field is set to 1; false otherwise. */
   public boolean getBit6OfAMpduParameters() {
     return bit6OfAMpduParameters;
   }
 
-  /**
-   * @return true if the bit 7 of the A-MPDU Parameters field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 7 of the A-MPDU Parameters field is set to 1; false otherwise. */
   public boolean getBit7OfAMpduParameters() {
     return bit7OfAMpduParameters;
   }
 
   /**
-   * @return supportedRxMcsIndexes.
-   *         supportedRxMcsIndexes[x] is set to true if the bit x of the Rx MCS Bitmask
-   *         is set to 1; otherwise supportedRxMcsIndexes[x] is set to false.
+   * @return supportedRxMcsIndexes. supportedRxMcsIndexes[x] is set to true if the bit x of the Rx
+   *     MCS Bitmask is set to 1; otherwise supportedRxMcsIndexes[x] is set to false.
    */
   public boolean[] getSupportedRxMcsIndexes() {
     boolean[] clone = new boolean[77];
@@ -758,317 +708,227 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     return clone;
   }
 
-  /**
-   * @return true if the bit 77 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 77 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit77OfSupportedMcsSet() {
     return bit77OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 78 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 78 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit78OfSupportedMcsSet() {
     return bit78OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 79 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 79 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit79OfSupportedMcsSet() {
     return bit79OfSupportedMcsSet;
   }
 
-  /**
-   * @return rxHighestSupportedDataRate
-   */
+  /** @return rxHighestSupportedDataRate */
   public short getRxHighestSupportedDataRate() {
     return rxHighestSupportedDataRate;
   }
 
-  /**
-   * @return rxHighestSupportedDataRate
-   */
+  /** @return rxHighestSupportedDataRate */
   public int getRxHighestSupportedDataRateAsInt() {
     return rxHighestSupportedDataRate;
   }
 
-  /**
-   * @return true if the bit 90 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 90 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit90OfSupportedMcsSet() {
     return bit90OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 91 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 91 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit91OfSupportedMcsSet() {
     return bit91OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 92 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 92 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit92OfSupportedMcsSet() {
     return bit92OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 93 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 93 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit93OfSupportedMcsSet() {
     return bit93OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 94 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 94 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit94OfSupportedMcsSet() {
     return bit94OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 95 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 95 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit95OfSupportedMcsSet() {
     return bit95OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the Tx MCS Set Defined field is set to 1; false otherwise.
-   */
+  /** @return true if the Tx MCS Set Defined field is set to 1; false otherwise. */
   public boolean isTxMcsSetDefined() {
     return txMcsSetDefined;
   }
 
-  /**
-   * @return true if the Tx Rx MCS Set Not Equal field is set to 1; false otherwise.
-   */
+  /** @return true if the Tx Rx MCS Set Not Equal field is set to 1; false otherwise. */
   public boolean isTxRxMcsSetNotEqual() {
     return txRxMcsSetNotEqual;
   }
 
-  /**
-   * @return txMaxNumSpatialStreamsSupported
-   */
+  /** @return txMaxNumSpatialStreamsSupported */
   public NumSpatialStreams getTxMaxNumSpatialStreamsSupported() {
     return txMaxNumSpatialStreamsSupported;
   }
 
-  /**
-   * @return true if the Tx Unequal Modulation Supported field is set to 1; false otherwise.
-   */
+  /** @return true if the Tx Unequal Modulation Supported field is set to 1; false otherwise. */
   public boolean isTxUnequalModulationSupported() {
     return txUnequalModulationSupported;
   }
 
-  /**
-   * @return true if the bit 101 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 101 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit101OfSupportedMcsSet() {
     return bit101OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 102 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 102 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit102OfSupportedMcsSet() {
     return bit102OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 103 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 103 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit103OfSupportedMcsSet() {
     return bit103OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 104 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 104 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit104OfSupportedMcsSet() {
     return bit104OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 105 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 105 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit105OfSupportedMcsSet() {
     return bit105OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 106 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 106 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit106OfSupportedMcsSet() {
     return bit106OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 107 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 107 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit107OfSupportedMcsSet() {
     return bit107OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 108 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 108 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit108OfSupportedMcsSet() {
     return bit108OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 109 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 109 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit109OfSupportedMcsSet() {
     return bit109OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 110 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 110 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit110OfSupportedMcsSet() {
     return bit110OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 111 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 111 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit111OfSupportedMcsSet() {
     return bit111OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 112 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 112 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit112OfSupportedMcsSet() {
     return bit112OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 113 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 113 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit113OfSupportedMcsSet() {
     return bit113OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 114 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 114 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit114OfSupportedMcsSet() {
     return bit114OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 115 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 115 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit115OfSupportedMcsSet() {
     return bit115OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 116 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 116 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit116OfSupportedMcsSet() {
     return bit116OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 117 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 117 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit117OfSupportedMcsSet() {
     return bit117OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 118 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 118 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit118OfSupportedMcsSet() {
     return bit118OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 119 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 119 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit119OfSupportedMcsSet() {
     return bit119OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 120 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 120 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit120OfSupportedMcsSet() {
     return bit120OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 121 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 121 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit121OfSupportedMcsSet() {
     return bit121OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 122 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 122 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit122OfSupportedMcsSet() {
     return bit122OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 123 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 123 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit123OfSupportedMcsSet() {
     return bit123OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 124 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 124 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit124OfSupportedMcsSet() {
     return bit124OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 125 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 125 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit125OfSupportedMcsSet() {
     return bit125OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 126 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 126 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit126OfSupportedMcsSet() {
     return bit126OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the bit 127 of the Supported MCS Set field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 127 of the Supported MCS Set field is set to 1; false otherwise. */
   public boolean getBit127OfSupportedMcsSet() {
     return bit127OfSupportedMcsSet;
   }
 
-  /**
-   * @return true if the PCO field is set to 1; false otherwise.
-   */
+  /** @return true if the PCO field is set to 1; false otherwise. */
   public boolean isPcoSupported() {
     return pcoSupported;
   }
 
-  /**
-   * @return pcoTransitionTime
-   */
+  /** @return pcoTransitionTime */
   public PcoTransitionTime getPcoTransitionTime() {
     return pcoTransitionTime;
   }
 
-  /**
-   * @return true if the  field is set to 1; false otherwise.
-   */
+  /** @return true if the field is set to 1; false otherwise. */
   public boolean getBit3OfHtExtendedCapabilities() {
     return bit3OfHtExtendedCapabilities;
   }
@@ -1101,23 +961,17 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     return bit7OfHtExtendedCapabilities;
   }
 
-  /**
-   * @return mcsFeedbackCapability
-   */
+  /** @return mcsFeedbackCapability */
   public McsFeedbackCapability getMcsFeedbackCapability() {
     return mcsFeedbackCapability;
   }
 
-  /**
-   * @return true if the +HTC Support field is set to 1; false otherwise.
-   */
+  /** @return true if the +HTC Support field is set to 1; false otherwise. */
   public boolean isHtControlFieldSupported() {
     return htControlFieldSupported;
   }
 
-  /**
-   * @return true if the RD Responder field is set to 1; false otherwise.
-   */
+  /** @return true if the RD Responder field is set to 1; false otherwise. */
   public boolean isRdResponderSupported() {
     return rdResponderSupported;
   }
@@ -1151,37 +1005,29 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
   }
 
   /**
-   * @return true if the Implicit Transmit Beamforming Receiving Capable field is set to 1;
-   *         false otherwise.
+   * @return true if the Implicit Transmit Beamforming Receiving Capable field is set to 1; false
+   *     otherwise.
    */
   public boolean isImplicitTxBeamformingReceivingSupported() {
     return implicitTxBeamformingReceivingSupported;
   }
 
-  /**
-   * @return true if the Receive Staggered Sounding Capable field is set to 1; false otherwise.
-   */
+  /** @return true if the Receive Staggered Sounding Capable field is set to 1; false otherwise. */
   public boolean isRxStaggeredSoundingSupported() {
     return rxStaggeredSoundingSupported;
   }
 
-  /**
-   * @return true if the Transmit Staggered Sounding Capable field is set to 1; false otherwise.
-   */
+  /** @return true if the Transmit Staggered Sounding Capable field is set to 1; false otherwise. */
   public boolean isTxStaggeredSoundingSupported() {
     return txStaggeredSoundingSupported;
   }
 
-  /**
-   * @return true if the Receive NDP Capable field is set to 1; false otherwise.
-   */
+  /** @return true if the Receive NDP Capable field is set to 1; false otherwise. */
   public boolean isRxNdpSupported() {
     return rxNdpSupported;
   }
 
-  /**
-   * @return true if the Transmit NDP Capable field is set to 1; false otherwise.
-   */
+  /** @return true if the Transmit NDP Capable field is set to 1; false otherwise. */
   public boolean isTxNdpSupported() {
     return txNdpSupported;
   }
@@ -1193,16 +1039,14 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     return implicitTxBeamformingSupported;
   }
 
-  /**
-   * @return calibration
-   */
+  /** @return calibration */
   public Calibration getCalibration() {
     return calibration;
   }
 
   /**
-   * @return true if the Explicit CSI Transmit Beamforming Capable field is set to 1;
-   *         false otherwise.
+   * @return true if the Explicit CSI Transmit Beamforming Capable field is set to 1; false
+   *     otherwise.
    */
   public boolean isExplicitCsiTxBeamformingSupported() {
     return explicitCsiTxBeamformingSupported;
@@ -1222,103 +1066,83 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     return explicitCompressedSteeringSupported;
   }
 
-  /**
-   * @return explicitTxBeamformingCsiFeedbackCapability
-   */
+  /** @return explicitTxBeamformingCsiFeedbackCapability */
   public BeamformingFeedbackCapability getExplicitTxBeamformingCsiFeedbackCapability() {
     return explicitTxBeamformingCsiFeedbackCapability;
   }
 
-  /**
-   * @return explicitNoncompressedBeamformingFeedbackCapability
-   */
+  /** @return explicitNoncompressedBeamformingFeedbackCapability */
   public BeamformingFeedbackCapability getExplicitNoncompressedBeamformingFeedbackCapability() {
     return explicitNoncompressedBeamformingFeedbackCapability;
   }
 
-  /**
-   * @return explicitCompressedBeamformingFeedbackCapability
-   */
+  /** @return explicitCompressedBeamformingFeedbackCapability */
   public BeamformingFeedbackCapability getExplicitCompressedBeamformingFeedbackCapability() {
     return explicitCompressedBeamformingFeedbackCapability;
   }
 
-  /**
-   * @return minGrouping
-   */
+  /** @return minGrouping */
   public Grouping getMinGrouping() {
     return minGrouping;
   }
 
-  /**
-   * @return csiNumBeamformerAntennasSupported
-   */
+  /** @return csiNumBeamformerAntennasSupported */
   public NumBeamformerAntennas getCsiNumBeamformerAntennasSupported() {
     return csiNumBeamformerAntennasSupported;
   }
 
-  /**
-   * @return noncompressedSteeringNumBeamformerAntennasSupported
-   */
+  /** @return noncompressedSteeringNumBeamformerAntennasSupported */
   public NumBeamformerAntennas getNoncompressedSteeringNumBeamformerAntennasSupported() {
     return noncompressedSteeringNumBeamformerAntennasSupported;
   }
 
-  /**
-   * @return compressedSteeringNumBeamformerAntennasSupported
-   */
+  /** @return compressedSteeringNumBeamformerAntennasSupported */
   public NumBeamformerAntennas getCompressedSteeringNumBeamformerAntennasSupported() {
     return compressedSteeringNumBeamformerAntennasSupported;
   }
 
-  /**
-   * @return csiMaxNumRowsBeamformerSupported
-   */
+  /** @return csiMaxNumRowsBeamformerSupported */
   public CsiNumRows getCsiMaxNumRowsBeamformerSupported() {
     return csiMaxNumRowsBeamformerSupported;
   }
 
-  /**
-   * @return channelEstimationCapability
-   */
+  /** @return channelEstimationCapability */
   public ChannelEstimationCapability getChannelEstimationCapability() {
     return channelEstimationCapability;
   }
 
   /**
-   * @return true if the bit 29 of the Transmit Beamforming Capabilities field is set to 1;
-   *         false otherwise.
+   * @return true if the bit 29 of the Transmit Beamforming Capabilities field is set to 1; false
+   *     otherwise.
    */
   public boolean getBit29OfTransmitBeamformingCapabilities() {
     return bit29OfTransmitBeamformingCapabilities;
   }
 
   /**
-   * @return true if the bit 30 of the Transmit Beamforming Capabilities field is set to 1;
-   *         false otherwise.
+   * @return true if the bit 30 of the Transmit Beamforming Capabilities field is set to 1; false
+   *     otherwise.
    */
   public boolean getBit30OfTransmitBeamformingCapabilities() {
     return bit30OfTransmitBeamformingCapabilities;
   }
 
   /**
-   * @return true if the bit 31 of the Transmit Beamforming Capabilities field is set to 1;
-   *         false otherwise.
+   * @return true if the bit 31 of the Transmit Beamforming Capabilities field is set to 1; false
+   *     otherwise.
    */
   public boolean getBit31OfTransmitBeamformingCapabilities() {
     return bit31OfTransmitBeamformingCapabilities;
   }
 
-  /**
-   * @return true if the Antenna Selection Capable field is set to 1; false otherwise.
-   */
+  /** @return true if the Antenna Selection Capable field is set to 1; false otherwise. */
   public boolean isAntennaSelectionSupported() {
     return antennaSelectionSupported;
   }
 
   /**
-   * @return true if the Explicit CSI Feedback Based Transmit ASEL Capable field is set to 1;
-   *         false otherwise.
+   * @return true if the Explicit CSI Feedback Based Transmit ASEL Capable field is set to 1; false
+   *     otherwise.
    */
   public boolean isExplicitCsiFeedbackBasedTxAselSupported() {
     return explicitCsiFeedbackBasedTxAselSupported;
@@ -1326,43 +1150,33 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
 
   /**
    * @return true if the Antenna Indices Feedback Based Transmit ASEL Capable field is set to 1;
-   *         false otherwise.
+   *     false otherwise.
    */
   public boolean isAntennaIndicesFeedbackBasedTxAselSupported() {
     return antennaIndicesFeedbackBasedTxAselSupported;
   }
 
-  /**
-   * @return true if the Explicit CSI Feedback Capable field is set to 1; false otherwise.
-   */
+  /** @return true if the Explicit CSI Feedback Capable field is set to 1; false otherwise. */
   public boolean isExplicitCsiFeedbackSupported() {
     return explicitCsiFeedbackSupported;
   }
 
-  /**
-   * @return true if the Antenna Indices Feedback Capable field is set to 1; false otherwise.
-   */
+  /** @return true if the Antenna Indices Feedback Capable field is set to 1; false otherwise. */
   public boolean isAntennaIndicesFeedbackSupported() {
     return antennaIndicesFeedbackSupported;
   }
 
-  /**
-   * @return true if the Receive ASEL Capable field is set to 1; false otherwise.
-   */
+  /** @return true if the Receive ASEL Capable field is set to 1; false otherwise. */
   public boolean isRxAselSupported() {
     return rxAselSupported;
   }
 
-  /**
-   * @return true if the Transmit Sounding PPDUs Capable field is set to 1; false otherwise.
-   */
+  /** @return true if the Transmit Sounding PPDUs Capable field is set to 1; false otherwise. */
   public boolean isTxSoundingPpdusSupported() {
     return txSoundingPpdusSupported;
   }
 
-  /**
-   * @return true if the bit 70 of the ASEL Capability field is set to 1; false otherwise.
-   */
+  /** @return true if the bit 70 of the ASEL Capability field is set to 1; false otherwise. */
   public boolean getBit7OfAselCapability() {
     return bit7OfAselCapability;
   }
@@ -1473,9 +1287,11 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     }
 
     System.arraycopy(
-      ByteArrays.toByteArray(rxHighestSupportedDataRate, ByteOrder.LITTLE_ENDIAN), 0,
-      rawData, 15, 2
-    );
+        ByteArrays.toByteArray(rxHighestSupportedDataRate, ByteOrder.LITTLE_ENDIAN),
+        0,
+        rawData,
+        15,
+        2);
 
     idx = 16;
     if (bit90OfSupportedMcsSet) {
@@ -1659,16 +1475,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       rawData[idx] |= 0x20;
     }
 
-    int lastData
-      =   (explicitTxBeamformingCsiFeedbackCapability.value << 3)
-        | (explicitNoncompressedBeamformingFeedbackCapability.value << 5)
-        | (explicitCompressedBeamformingFeedbackCapability.value << 7)
-        | (minGrouping.value << 9)
-        | (csiNumBeamformerAntennasSupported.value << 11)
-        | (noncompressedSteeringNumBeamformerAntennasSupported.value << 13)
-        | (compressedSteeringNumBeamformerAntennasSupported.value << 15)
-        | (csiMaxNumRowsBeamformerSupported.value << 17)
-        | (channelEstimationCapability.value << 19);
+    int lastData =
+        (explicitTxBeamformingCsiFeedbackCapability.value << 3)
+            | (explicitNoncompressedBeamformingFeedbackCapability.value << 5)
+            | (explicitCompressedBeamformingFeedbackCapability.value << 7)
+            | (minGrouping.value << 9)
+            | (csiNumBeamformerAntennasSupported.value << 11)
+            | (noncompressedSteeringNumBeamformerAntennasSupported.value << 13)
+            | (compressedSteeringNumBeamformerAntennasSupported.value << 15)
+            | (csiMaxNumRowsBeamformerSupported.value << 17)
+            | (channelEstimationCapability.value << 19);
     if (explicitCsiTxBeamformingSupported) {
       lastData |= 0x01;
     }
@@ -1716,11 +1532,10 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public int hashCode() {
@@ -1846,9 +1661,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       return false;
     }
     Dot11HTCapabilitiesElement other = (Dot11HTCapabilitiesElement) obj;
-    if (
-      antennaIndicesFeedbackBasedTxAselSupported != other.antennaIndicesFeedbackBasedTxAselSupported
-    ) {
+    if (antennaIndicesFeedbackBasedTxAselSupported
+        != other.antennaIndicesFeedbackBasedTxAselSupported) {
       return false;
     }
     if (antennaIndicesFeedbackSupported != other.antennaIndicesFeedbackSupported) {
@@ -2026,8 +1840,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       return false;
     }
     if (compressedSteeringNumBeamformerAntennasSupported
-      != other.compressedSteeringNumBeamformerAntennasSupported
-    ) {
+        != other.compressedSteeringNumBeamformerAntennasSupported) {
       return false;
     }
     if (csiMaxNumRowsBeamformerSupported != other.csiMaxNumRowsBeamformerSupported) {
@@ -2040,8 +1853,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       return false;
     }
     if (explicitCompressedBeamformingFeedbackCapability
-      != other.explicitCompressedBeamformingFeedbackCapability
-    ) {
+        != other.explicitCompressedBeamformingFeedbackCapability) {
       return false;
     }
     if (explicitCompressedSteeringSupported != other.explicitCompressedSteeringSupported) {
@@ -2057,16 +1869,14 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       return false;
     }
     if (explicitNoncompressedBeamformingFeedbackCapability
-      != other.explicitNoncompressedBeamformingFeedbackCapability
-    ) {
+        != other.explicitNoncompressedBeamformingFeedbackCapability) {
       return false;
     }
     if (explicitNoncompressedSteeringSupported != other.explicitNoncompressedSteeringSupported) {
       return false;
     }
     if (explicitTxBeamformingCsiFeedbackCapability
-      != other.explicitTxBeamformingCsiFeedbackCapability
-    ) {
+        != other.explicitTxBeamformingCsiFeedbackCapability) {
       return false;
     }
     if (fortyMhzIntolerant != other.fortyMhzIntolerant) {
@@ -2109,8 +1919,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       return false;
     }
     if (noncompressedSteeringNumBeamformerAntennasSupported
-      != other.noncompressedSteeringNumBeamformerAntennasSupported
-    ) {
+        != other.noncompressedSteeringNumBeamformerAntennasSupported) {
       return false;
     }
     if (pcoSupported != other.pcoSupported) {
@@ -2189,356 +1998,460 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("HT Capabilities:")
-      .append(ls);
-    sb.append(indent).append("  Element ID: ")
-      .append(getElementId())
-      .append(ls);
-    sb.append(indent).append("  Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes")
-      .append(ls);
-    sb.append(indent).append("  HT Capabilities Info:")
-      .append(ls)
-      .append(indent).append("    LDPC Coding is Supported: ")
-      .append(ldpcCodingSupported)
-      .append(ls)
-      .append(indent).append("    Supported Channel Width Set: ")
-      .append(both20and40MhzSupported ? "20 MHz and 40 MHz" : "20 MHz")
-      .append(ls)
-      .append(indent).append("    SM Power Save: ")
-      .append(smPowerSaveMode)
-      .append(ls)
-      .append(indent).append("    HT-Greenfield is Supported: ")
-      .append(htGreenfieldSupported)
-      .append(ls)
-      .append(indent).append("    Short GI for 20 MHz is Supported: ")
-      .append(shortGiFor20MhzSupported)
-      .append(ls)
-      .append(indent).append("    Short GI for 40 MHz is Supported: ")
-      .append(shortGiFor40MhzSupported)
-      .append(ls)
-      .append(indent).append("    Tx STBC is Supported: ")
-      .append(txStbcSupported)
-      .append(ls)
-      .append(indent).append("    Rx STBC Support: ")
-      .append(rxStbcSupport)
-      .append(ls)
-      .append(indent).append("    HT-Delayed Block Ack is Supported: ")
-      .append(htDelayedBlockAckSupported)
-      .append(ls)
-      .append(indent).append("    Max A-MSDU Length: ")
-      .append(maxAMsduLength)
-      .append(" octets")
-      .append(ls)
-      .append(indent).append("    DSSS/CCK Mode in 40 MHz is Supported: ")
-      .append(dsssCckModeIn40MhzSupported)
-      .append(ls)
-      .append(indent).append("    Bit 13: ")
-      .append(bit13OfHtCapabilitiesInfo)
-      .append(ls)
-      .append(indent).append("    40 MHz is Intolerant: ")
-      .append(fortyMhzIntolerant)
-      .append(ls)
-      .append(indent).append("    L-SIG TXOP Protection is Supported: ")
-      .append(lSigTxopProtectionSupported)
-      .append(ls);
-    sb.append(indent).append("  A-MPDU Parameters:")
-      .append(ls)
-      .append(indent).append("    Max A-MPDU Length: ")
-      .append(maxAMpduLength)
-      .append(" octets")
-      .append(ls)
-      .append(indent).append("    Min MPDU Start Spacing: ")
-      .append(minMpduStartSpacing)
-      .append(ls)
-      .append(indent).append("    Bit 5: ")
-      .append(bit5OfAMpduParameters)
-      .append(ls)
-      .append(indent).append("    Bit 6: ")
-      .append(bit6OfAMpduParameters)
-      .append(ls)
-      .append(indent).append("    Bit 7: ")
-      .append(bit7OfAMpduParameters)
-      .append(ls);
-    sb.append(indent).append("  Supported MCS Set:")
-      .append(ls)
-      .append(indent).append("    Supported Rx MCS Indexes: ");
+    sb.append(indent).append("HT Capabilities:").append(ls);
+    sb.append(indent).append("  Element ID: ").append(getElementId()).append(ls);
+    sb.append(indent).append("  Length: ").append(getLengthAsInt()).append(" bytes").append(ls);
+    sb.append(indent)
+        .append("  HT Capabilities Info:")
+        .append(ls)
+        .append(indent)
+        .append("    LDPC Coding is Supported: ")
+        .append(ldpcCodingSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Supported Channel Width Set: ")
+        .append(both20and40MhzSupported ? "20 MHz and 40 MHz" : "20 MHz")
+        .append(ls)
+        .append(indent)
+        .append("    SM Power Save: ")
+        .append(smPowerSaveMode)
+        .append(ls)
+        .append(indent)
+        .append("    HT-Greenfield is Supported: ")
+        .append(htGreenfieldSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Short GI for 20 MHz is Supported: ")
+        .append(shortGiFor20MhzSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Short GI for 40 MHz is Supported: ")
+        .append(shortGiFor40MhzSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Tx STBC is Supported: ")
+        .append(txStbcSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Rx STBC Support: ")
+        .append(rxStbcSupport)
+        .append(ls)
+        .append(indent)
+        .append("    HT-Delayed Block Ack is Supported: ")
+        .append(htDelayedBlockAckSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Max A-MSDU Length: ")
+        .append(maxAMsduLength)
+        .append(" octets")
+        .append(ls)
+        .append(indent)
+        .append("    DSSS/CCK Mode in 40 MHz is Supported: ")
+        .append(dsssCckModeIn40MhzSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 13: ")
+        .append(bit13OfHtCapabilitiesInfo)
+        .append(ls)
+        .append(indent)
+        .append("    40 MHz is Intolerant: ")
+        .append(fortyMhzIntolerant)
+        .append(ls)
+        .append(indent)
+        .append("    L-SIG TXOP Protection is Supported: ")
+        .append(lSigTxopProtectionSupported)
+        .append(ls);
+    sb.append(indent)
+        .append("  A-MPDU Parameters:")
+        .append(ls)
+        .append(indent)
+        .append("    Max A-MPDU Length: ")
+        .append(maxAMpduLength)
+        .append(" octets")
+        .append(ls)
+        .append(indent)
+        .append("    Min MPDU Start Spacing: ")
+        .append(minMpduStartSpacing)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 5: ")
+        .append(bit5OfAMpduParameters)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 6: ")
+        .append(bit6OfAMpduParameters)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 7: ")
+        .append(bit7OfAMpduParameters)
+        .append(ls);
+    sb.append(indent)
+        .append("  Supported MCS Set:")
+        .append(ls)
+        .append(indent)
+        .append("    Supported Rx MCS Indexes: ");
     boolean firstMcsIdx = true;
     for (int i = 0; i < supportedRxMcsIndexes.length; i++) {
       if (supportedRxMcsIndexes[i]) {
         if (!firstMcsIdx) {
           sb.append(", ");
-        }
-        else {
+        } else {
           firstMcsIdx = false;
         }
         sb.append(i);
       }
     }
     sb.append(ls)
-      .append(indent).append("    Bit 77: ")
-      .append(bit77OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 78: ")
-      .append(bit78OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 79: ")
-      .append(bit79OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Rx Highest Supported Data Rate: ")
-      .append(rxHighestSupportedDataRate)
-      .append(" Mb/s")
-      .append(ls)
-      .append(indent).append("    Bit 90: ")
-      .append(bit90OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 91: ")
-      .append(bit91OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 92: ")
-      .append(bit92OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 93: ")
-      .append(bit93OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 94: ")
-      .append(bit94OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 95: ")
-      .append(bit95OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Tx MCS Set is Defined: ")
-      .append(txMcsSetDefined)
-      .append(ls)
-      .append(indent).append("    Tx Rx MCS Set Not Equal: ")
-      .append(txRxMcsSetNotEqual)
-      .append(ls)
-      .append(indent).append("    Tx Max Number Spatial Streams Supported: ")
-      .append(txMaxNumSpatialStreamsSupported)
-      .append(ls)
-      .append(indent).append("    Tx Unequal Modulation is Supported: ")
-      .append(txUnequalModulationSupported)
-      .append(ls)
-      .append(indent).append("    Bit 101: ")
-      .append(bit101OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 102: ")
-      .append(bit102OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 103: ")
-      .append(bit103OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 104: ")
-      .append(bit104OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 105: ")
-      .append(bit105OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 106: ")
-      .append(bit106OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 107: ")
-      .append(bit107OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 108: ")
-      .append(bit108OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 109: ")
-      .append(bit109OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 110: ")
-      .append(bit110OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 111: ")
-      .append(bit111OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 112: ")
-      .append(bit112OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 113: ")
-      .append(bit113OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 114: ")
-      .append(bit114OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 115: ")
-      .append(bit115OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 116: ")
-      .append(bit116OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 117: ")
-      .append(bit117OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 118: ")
-      .append(bit118OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 119: ")
-      .append(bit119OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 120: ")
-      .append(bit120OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 121: ")
-      .append(bit121OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 122: ")
-      .append(bit122OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 123: ")
-      .append(bit123OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 124: ")
-      .append(bit124OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 125: ")
-      .append(bit125OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 126: ")
-      .append(bit126OfSupportedMcsSet)
-      .append(ls)
-      .append(indent).append("    Bit 127: ")
-      .append(bit127OfSupportedMcsSet)
-      .append(ls);
-    sb.append(indent).append("  HT Extended Capabilities:")
-      .append(ls)
-      .append(indent).append("    PCO is Supported: ")
-      .append(pcoSupported)
-      .append(ls)
-      .append(indent).append("    PCO Transition Time: ")
-      .append(pcoTransitionTime)
-      .append(ls)
-      .append(indent).append("    Bit 3: ")
-      .append(bit3OfHtExtendedCapabilities)
-      .append(ls)
-      .append(indent).append("    Bit 4: ")
-      .append(bit4OfHtExtendedCapabilities)
-      .append(ls)
-      .append(indent).append("    Bit 5: ")
-      .append(bit5OfHtExtendedCapabilities)
-      .append(ls)
-      .append(indent).append("    Bit 6: ")
-      .append(bit6OfHtExtendedCapabilities)
-      .append(ls)
-      .append(indent).append("    Bit 7: ")
-      .append(bit7OfHtExtendedCapabilities)
-      .append(ls)
-      .append(indent).append("    MCS Feedback: ")
-      .append(mcsFeedbackCapability)
-      .append(ls)
-      .append(indent).append("    HT Control Field is Support: ")
-      .append(htControlFieldSupported)
-      .append(ls)
-      .append(indent).append("    RD Responder is Supported: ")
-      .append(rdResponderSupported)
-      .append(ls)
-      .append(indent).append("    Bit 12: ")
-      .append(bit12OfHtExtendedCapabilities)
-      .append(ls)
-      .append(indent).append("    Bit 13: ")
-      .append(bit13OfHtExtendedCapabilities)
-      .append(ls)
-      .append(indent).append("    Bit 14: ")
-      .append(bit14OfHtExtendedCapabilities)
-      .append(ls)
-      .append(indent).append("    Bit 15: ")
-      .append(bit15OfHtExtendedCapabilities)
-      .append(ls);
-    sb.append(indent).append("  Transmit Beamforming Capabilities:")
-      .append(ls)
-      .append(indent).append("    Implicit Tx Beamforming Receiving is Supported: ")
-      .append(implicitTxBeamformingReceivingSupported)
-      .append(ls)
-      .append(indent).append("    Rx Staggered Sounding is Supported: ")
-      .append(rxStaggeredSoundingSupported)
-      .append(ls)
-      .append(indent).append("    Tx Staggered Sounding is Supported: ")
-      .append(txStaggeredSoundingSupported)
-      .append(ls)
-      .append(indent).append("    Rx NDP is Supported: ")
-      .append(rxNdpSupported)
-      .append(ls)
-      .append(indent).append("    Tx NDP is Supported: ")
-      .append(txNdpSupported)
-      .append(ls)
-      .append(indent).append("    Implicit Tx Beamforming is Supported: ")
-      .append(implicitTxBeamformingSupported)
-      .append(ls)
-      .append(indent).append("    Calibration: ")
-      .append(calibration)
-      .append(ls)
-      .append(indent).append("    Explicit CSI Tx Beamforming is Supported: ")
-      .append(explicitCsiTxBeamformingSupported)
-      .append(ls)
-      .append(indent).append("    Explicit Noncompressed Steering is Supported: ")
-      .append(explicitNoncompressedSteeringSupported)
-      .append(ls)
-      .append(indent).append("    Explicit Compressed Steering is Supported: ")
-      .append(explicitCompressedSteeringSupported)
-      .append(ls)
-      .append(indent).append("    Explicit Tx Beamforming CSI Feedback: ")
-      .append(explicitTxBeamformingCsiFeedbackCapability)
-      .append(ls)
-      .append(indent).append("    Explicit Noncompressed Beamforming Feedback: ")
-      .append(explicitNoncompressedBeamformingFeedbackCapability)
-      .append(ls)
-      .append(indent).append("    Explicit Compressed Beamforming Feedback: ")
-      .append(explicitCompressedBeamformingFeedbackCapability)
-      .append(ls)
-      .append(indent).append("    Min Grouping: ")
-      .append(minGrouping)
-      .append(ls)
-      .append(indent).append("    CSI Number of Beamformer Antennas Supported: ")
-      .append(csiNumBeamformerAntennasSupported)
-      .append(ls)
-      .append(indent).append("    Noncompressed Steering Number of Beamformer Antennas Supported: ")
-      .append(noncompressedSteeringNumBeamformerAntennasSupported)
-      .append(ls)
-      .append(indent).append("    Compressed Steering Number of Beamformer Antennas Supported: ")
-      .append(compressedSteeringNumBeamformerAntennasSupported)
-      .append(ls)
-      .append(indent).append("    CSI Max Number of Rows Beamformer Supported: ")
-      .append(csiMaxNumRowsBeamformerSupported)
-      .append(ls)
-      .append(indent).append("    Channel Estimation: ")
-      .append(channelEstimationCapability)
-      .append(ls)
-      .append(indent).append("    Bit 29: ")
-      .append(bit29OfTransmitBeamformingCapabilities)
-      .append(ls)
-      .append(indent).append("    Bit 30: ")
-      .append(bit30OfTransmitBeamformingCapabilities)
-      .append(ls)
-      .append(indent).append("    Bit 31: ")
-      .append(bit31OfTransmitBeamformingCapabilities)
-      .append(ls);
-    sb.append(indent).append("  ASEL Capabilities:")
-      .append(ls)
-      .append(indent).append("    Antenna Selection is Supported: ")
-      .append(antennaSelectionSupported)
-      .append(ls)
-      .append(indent).append("    Explicit CSI Feedback Based Tx ASEL is Supported: ")
-      .append(explicitCsiFeedbackBasedTxAselSupported)
-      .append(ls)
-      .append(indent).append("    Antenna Indices Feedback Based Tx ASEL is Supported: ")
-      .append(antennaIndicesFeedbackBasedTxAselSupported)
-      .append(ls)
-      .append(indent).append("    Explicit CSI Feedback is Supported: ")
-      .append(explicitCsiFeedbackSupported)
-      .append(ls)
-      .append(indent).append("    Antenna Indices Feedback is Supported: ")
-      .append(antennaIndicesFeedbackSupported)
-      .append(ls)
-      .append(indent).append("    Rx ASEL is Supported: ")
-      .append(rxAselSupported)
-      .append(ls)
-      .append(indent).append("    Tx Sounding PPDUs is Supported: ")
-      .append(txSoundingPpdusSupported)
-      .append(ls)
-      .append(indent).append("    Bit 7: ")
-      .append(bit7OfAselCapability)
-      .append(ls);
+        .append(indent)
+        .append("    Bit 77: ")
+        .append(bit77OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 78: ")
+        .append(bit78OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 79: ")
+        .append(bit79OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Rx Highest Supported Data Rate: ")
+        .append(rxHighestSupportedDataRate)
+        .append(" Mb/s")
+        .append(ls)
+        .append(indent)
+        .append("    Bit 90: ")
+        .append(bit90OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 91: ")
+        .append(bit91OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 92: ")
+        .append(bit92OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 93: ")
+        .append(bit93OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 94: ")
+        .append(bit94OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 95: ")
+        .append(bit95OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Tx MCS Set is Defined: ")
+        .append(txMcsSetDefined)
+        .append(ls)
+        .append(indent)
+        .append("    Tx Rx MCS Set Not Equal: ")
+        .append(txRxMcsSetNotEqual)
+        .append(ls)
+        .append(indent)
+        .append("    Tx Max Number Spatial Streams Supported: ")
+        .append(txMaxNumSpatialStreamsSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Tx Unequal Modulation is Supported: ")
+        .append(txUnequalModulationSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 101: ")
+        .append(bit101OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 102: ")
+        .append(bit102OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 103: ")
+        .append(bit103OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 104: ")
+        .append(bit104OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 105: ")
+        .append(bit105OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 106: ")
+        .append(bit106OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 107: ")
+        .append(bit107OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 108: ")
+        .append(bit108OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 109: ")
+        .append(bit109OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 110: ")
+        .append(bit110OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 111: ")
+        .append(bit111OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 112: ")
+        .append(bit112OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 113: ")
+        .append(bit113OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 114: ")
+        .append(bit114OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 115: ")
+        .append(bit115OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 116: ")
+        .append(bit116OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 117: ")
+        .append(bit117OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 118: ")
+        .append(bit118OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 119: ")
+        .append(bit119OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 120: ")
+        .append(bit120OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 121: ")
+        .append(bit121OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 122: ")
+        .append(bit122OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 123: ")
+        .append(bit123OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 124: ")
+        .append(bit124OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 125: ")
+        .append(bit125OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 126: ")
+        .append(bit126OfSupportedMcsSet)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 127: ")
+        .append(bit127OfSupportedMcsSet)
+        .append(ls);
+    sb.append(indent)
+        .append("  HT Extended Capabilities:")
+        .append(ls)
+        .append(indent)
+        .append("    PCO is Supported: ")
+        .append(pcoSupported)
+        .append(ls)
+        .append(indent)
+        .append("    PCO Transition Time: ")
+        .append(pcoTransitionTime)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 3: ")
+        .append(bit3OfHtExtendedCapabilities)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 4: ")
+        .append(bit4OfHtExtendedCapabilities)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 5: ")
+        .append(bit5OfHtExtendedCapabilities)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 6: ")
+        .append(bit6OfHtExtendedCapabilities)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 7: ")
+        .append(bit7OfHtExtendedCapabilities)
+        .append(ls)
+        .append(indent)
+        .append("    MCS Feedback: ")
+        .append(mcsFeedbackCapability)
+        .append(ls)
+        .append(indent)
+        .append("    HT Control Field is Support: ")
+        .append(htControlFieldSupported)
+        .append(ls)
+        .append(indent)
+        .append("    RD Responder is Supported: ")
+        .append(rdResponderSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 12: ")
+        .append(bit12OfHtExtendedCapabilities)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 13: ")
+        .append(bit13OfHtExtendedCapabilities)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 14: ")
+        .append(bit14OfHtExtendedCapabilities)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 15: ")
+        .append(bit15OfHtExtendedCapabilities)
+        .append(ls);
+    sb.append(indent)
+        .append("  Transmit Beamforming Capabilities:")
+        .append(ls)
+        .append(indent)
+        .append("    Implicit Tx Beamforming Receiving is Supported: ")
+        .append(implicitTxBeamformingReceivingSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Rx Staggered Sounding is Supported: ")
+        .append(rxStaggeredSoundingSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Tx Staggered Sounding is Supported: ")
+        .append(txStaggeredSoundingSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Rx NDP is Supported: ")
+        .append(rxNdpSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Tx NDP is Supported: ")
+        .append(txNdpSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Implicit Tx Beamforming is Supported: ")
+        .append(implicitTxBeamformingSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Calibration: ")
+        .append(calibration)
+        .append(ls)
+        .append(indent)
+        .append("    Explicit CSI Tx Beamforming is Supported: ")
+        .append(explicitCsiTxBeamformingSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Explicit Noncompressed Steering is Supported: ")
+        .append(explicitNoncompressedSteeringSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Explicit Compressed Steering is Supported: ")
+        .append(explicitCompressedSteeringSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Explicit Tx Beamforming CSI Feedback: ")
+        .append(explicitTxBeamformingCsiFeedbackCapability)
+        .append(ls)
+        .append(indent)
+        .append("    Explicit Noncompressed Beamforming Feedback: ")
+        .append(explicitNoncompressedBeamformingFeedbackCapability)
+        .append(ls)
+        .append(indent)
+        .append("    Explicit Compressed Beamforming Feedback: ")
+        .append(explicitCompressedBeamformingFeedbackCapability)
+        .append(ls)
+        .append(indent)
+        .append("    Min Grouping: ")
+        .append(minGrouping)
+        .append(ls)
+        .append(indent)
+        .append("    CSI Number of Beamformer Antennas Supported: ")
+        .append(csiNumBeamformerAntennasSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Noncompressed Steering Number of Beamformer Antennas Supported: ")
+        .append(noncompressedSteeringNumBeamformerAntennasSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Compressed Steering Number of Beamformer Antennas Supported: ")
+        .append(compressedSteeringNumBeamformerAntennasSupported)
+        .append(ls)
+        .append(indent)
+        .append("    CSI Max Number of Rows Beamformer Supported: ")
+        .append(csiMaxNumRowsBeamformerSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Channel Estimation: ")
+        .append(channelEstimationCapability)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 29: ")
+        .append(bit29OfTransmitBeamformingCapabilities)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 30: ")
+        .append(bit30OfTransmitBeamformingCapabilities)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 31: ")
+        .append(bit31OfTransmitBeamformingCapabilities)
+        .append(ls);
+    sb.append(indent)
+        .append("  ASEL Capabilities:")
+        .append(ls)
+        .append(indent)
+        .append("    Antenna Selection is Supported: ")
+        .append(antennaSelectionSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Explicit CSI Feedback Based Tx ASEL is Supported: ")
+        .append(explicitCsiFeedbackBasedTxAselSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Antenna Indices Feedback Based Tx ASEL is Supported: ")
+        .append(antennaIndicesFeedbackBasedTxAselSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Explicit CSI Feedback is Supported: ")
+        .append(explicitCsiFeedbackSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Antenna Indices Feedback is Supported: ")
+        .append(antennaIndicesFeedbackSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Rx ASEL is Supported: ")
+        .append(rxAselSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Tx Sounding PPDUs is Supported: ")
+        .append(txSoundingPpdusSupported)
+        .append(ls)
+        .append(indent)
+        .append("    Bit 7: ")
+        .append(bit7OfAselCapability)
+        .append(ls);
 
     return sb.toString();
   }
@@ -2552,24 +2465,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum SmPowerSaveMode {
 
-    /**
-     * Static: 0
-     */
+    /** Static: 0 */
     STATIC(0),
 
-    /**
-     * Dynamic: 1
-     */
+    /** Dynamic: 1 */
     DYNAMIC(1),
 
-    /**
-     * reserved: 2
-     */
+    /** reserved: 2 */
     RESERVED(2),
 
-    /**
-     * disabled: 3
-     */
+    /** disabled: 3 */
     DISABLED(3);
 
     private final int value;
@@ -2578,9 +2483,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.value = value;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
@@ -2588,10 +2491,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(20);
-      sb.append(value)
-        .append(" (")
-        .append(name())
-        .append(")");
+      sb.append(value).append(" (").append(name()).append(")");
       return sb.toString();
     }
 
@@ -2600,14 +2500,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the SmPowerSaveMode object the value of which is the given value.
      */
     public static SmPowerSaveMode getInstance(int value) {
-      for (SmPowerSaveMode mode: values()) {
+      for (SmPowerSaveMode mode : values()) {
         if (mode.value == value) {
           return mode;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -2619,24 +2518,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum StbcSupport {
 
-    /**
-     * No support: 0
-     */
+    /** No support: 0 */
     NO_SUPPORT(0, "No support"),
 
-    /**
-     * One spatial stream is supported: 1
-     */
+    /** One spatial stream is supported: 1 */
     ONE_SPATIAL_STREAM(1, "One spatial stream is supported"),
 
-    /**
-     * One and two spatial streams are supported: 2
-     */
+    /** One and two spatial streams are supported: 2 */
     ONE_AND_TWO_SPATIAL_STREAMS(2, "One and two spatial streams are supported"),
 
-    /**
-     * One, two and three spatial streams are supported: 3
-     */
+    /** One, two and three spatial streams are supported: 3 */
     ONE_TWO_AND_THREE_SPATIAL_STREAMS(3, "One, two and three spatial streams are supported");
 
     private final int value;
@@ -2647,16 +2538,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -2664,10 +2551,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(60);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -2676,14 +2560,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the StbcSupport object the value of which is the given value.
      */
     public static StbcSupport getInstance(int value) {
-      for (StbcSupport val: values()) {
+      for (StbcSupport val : values()) {
         if (val.value == value) {
           return val;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -2695,14 +2578,10 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum AMsduLength {
 
-    /**
-     * 3839 octets: 0
-     */
+    /** 3839 octets: 0 */
     MAX_3839(0, "3839 octets"),
 
-    /**
-     * 7935 octets: 1
-     */
+    /** 7935 octets: 1 */
     MAX_7935(1, "7935 octets");
 
     private final int value;
@@ -2713,16 +2592,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -2730,10 +2605,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -2742,14 +2614,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the AMsduLength object the value of which is the given value.
      */
     public static AMsduLength getInstance(int value) {
-      for (AMsduLength val: values()) {
+      for (AMsduLength val : values()) {
         if (val.value == value) {
           return val;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -2761,24 +2632,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum AMpduLength {
 
-    /**
-     * 8191 octets: 0
-     */
+    /** 8191 octets: 0 */
     MAX_8191(0, "8191 octets"),
 
-    /**
-     * 16383 octets: 1
-     */
+    /** 16383 octets: 1 */
     MAX_16383(1, "16383 octets"),
 
-    /**
-     * 32767 octets: 2
-     */
+    /** 32767 octets: 2 */
     MAX_32767(2, "32767 octets"),
 
-    /**
-     * 65535 octets: 3
-     */
+    /** 65535 octets: 3 */
     MAX_65535(3, "65535 octets");
 
     private final int value;
@@ -2789,16 +2652,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -2806,10 +2665,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -2818,14 +2674,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the AMpduLength object the value of which is the given value.
      */
     public static AMpduLength getInstance(int value) {
-      for (AMpduLength val: values()) {
+      for (AMpduLength val : values()) {
         if (val.value == value) {
           return val;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -2837,44 +2692,28 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum MpduStartSpacing {
 
-    /**
-     * No restriction: 0
-     */
+    /** No restriction: 0 */
     NO_RESTRICTION(0, "No restriction"),
 
-    /**
-     * 1/4 us: 1
-     */
+    /** 1/4 us: 1 */
     ONE_FOURTH_US(1, "1/4 us"),
 
-    /**
-     * 1/2 us: 2
-     */
+    /** 1/2 us: 2 */
     HALF_US(2, "1/2 us"),
 
-    /**
-     * 1 us: 3
-     */
+    /** 1 us: 3 */
     ONE_US(3, "1 us"),
 
-    /**
-     * 2 us: 4
-     */
+    /** 2 us: 4 */
     TWO_US(4, "2 us"),
 
-    /**
-     * 4 us: 5
-     */
+    /** 4 us: 5 */
     FOUR_US(5, "4 us"),
 
-    /**
-     * 8 us: 6
-     */
+    /** 8 us: 6 */
     EIGHT_US(6, "8 us"),
 
-    /**
-     * 16 us: 7
-     */
+    /** 16 us: 7 */
     SIXTEEN_US(7, "16 us");
 
     private final int value;
@@ -2885,16 +2724,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -2902,10 +2737,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -2914,14 +2746,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the MpduStartSpacing object the value of which is the given value.
      */
     public static MpduStartSpacing getInstance(int value) {
-      for (MpduStartSpacing cp: values()) {
+      for (MpduStartSpacing cp : values()) {
         if (cp.value == value) {
           return cp;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -2933,24 +2764,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum NumSpatialStreams {
 
-    /**
-     * 1 spatial stream: 0
-     */
+    /** 1 spatial stream: 0 */
     ONE(0, "1 spatial stream"),
 
-    /**
-     * 2 spatial stream: 1
-     */
+    /** 2 spatial stream: 1 */
     TWO(1, "2 spatial stream"),
 
-    /**
-     * 3 spatial stream: 2
-     */
+    /** 3 spatial stream: 2 */
     THREE(2, "3 spatial stream"),
 
-    /**
-     * 4 spatial stream: 3
-     */
+    /** 4 spatial stream: 3 */
     FOUR(3, "4 spatial stream");
 
     private final int value;
@@ -2961,16 +2784,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -2978,10 +2797,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -2990,14 +2806,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the NumSpatialStreams object the value of which is the given value.
      */
     public static NumSpatialStreams getInstance(int value) {
-      for (NumSpatialStreams cp: values()) {
+      for (NumSpatialStreams cp : values()) {
         if (cp.value == value) {
           return cp;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -3009,24 +2824,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum PcoTransitionTime {
 
-    /**
-     * No transition: 0
-     */
+    /** No transition: 0 */
     NO_TRANSITION(0, "No transition"),
 
-    /**
-     * 400 us: 1
-     */
+    /** 400 us: 1 */
     PTT_400_US(1, "400 us"),
 
-    /**
-     * 1.5 ms: 2
-     */
+    /** 1.5 ms: 2 */
     PTT_1_5_MS(2, "1.5 ms"),
 
-    /**
-     * 5 ms: 3
-     */
+    /** 5 ms: 3 */
     PTT_5_MS(3, "5 ms");
 
     private final int value;
@@ -3037,16 +2844,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -3054,10 +2857,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -3066,14 +2866,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the PcoTransitionTime object the value of which is the given value.
      */
     public static PcoTransitionTime getInstance(int value) {
-      for (PcoTransitionTime cp: values()) {
+      for (PcoTransitionTime cp : values()) {
         if (cp.value == value) {
           return cp;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -3085,24 +2884,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum McsFeedbackCapability {
 
-    /**
-     * No Feedback: 0
-     */
+    /** No Feedback: 0 */
     NO_FEEDBACK(0, "No Feedback"),
 
-    /**
-     * reserved: 1
-     */
+    /** reserved: 1 */
     RESERVED(1, "reserved"),
 
-    /**
-     * Only unsolicited: 2
-     */
+    /** Only unsolicited: 2 */
     ONLY_UNSOLICITED(2, "Only unsolicited"),
 
-    /**
-     * Unsolicited and solicited: 3
-     */
+    /** Unsolicited and solicited: 3 */
     UNSOLICITED_AND_SOLICITED(3, "Unsolicited and solicited");
 
     private final int value;
@@ -3113,16 +2904,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -3130,10 +2917,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -3142,14 +2926,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the McsFeedbackCapability object the value of which is the given value.
      */
     public static McsFeedbackCapability getInstance(int value) {
-      for (McsFeedbackCapability cp: values()) {
+      for (McsFeedbackCapability cp : values()) {
         if (cp.value == value) {
           return cp;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -3161,24 +2944,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum Calibration {
 
-    /**
-     * Not supported: 0
-     */
+    /** Not supported: 0 */
     NOT_SUPPORTED(0, "Not supported"),
 
-    /**
-     * Respond: 1
-     */
+    /** Respond: 1 */
     RESPOND(1, "Respond"),
 
-    /**
-     * reserved: 2
-     */
+    /** reserved: 2 */
     RESERVED(2, "reserved"),
 
-    /**
-     * Initiate and respond: 3
-     */
+    /** Initiate and respond: 3 */
     INITIATE_AND_RESPOND(3, "Initiate and respond");
 
     private final int value;
@@ -3189,16 +2964,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -3206,10 +2977,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -3218,21 +2986,19 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the Calibration object the value of which is the given value.
      */
     public static Calibration getInstance(int value) {
-      for (Calibration cp: values()) {
+      for (Calibration cp : values()) {
         if (cp.value == value) {
           return cp;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
-   * Explicit Transmit Beamforming CSI Feedback field,
-   * Explicit Noncompressed Beamforming Feedback Capable field, and
-   * Explicit Compressed Beamforming Feedback Capable field
-   * of IEEE802.11 HT Capabilities element.
+   * Explicit Transmit Beamforming CSI Feedback field, Explicit Noncompressed Beamforming Feedback
+   * Capable field, and Explicit Compressed Beamforming Feedback Capable field of IEEE802.11 HT
+   * Capabilities element.
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
    * @author Kaito Yamada
@@ -3240,24 +3006,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum BeamformingFeedbackCapability {
 
-    /**
-     * Not supported: 0
-     */
+    /** Not supported: 0 */
     NOT_SUPPORTED(0, "Not supported"),
 
-    /**
-     * Delayed: 1
-     */
+    /** Delayed: 1 */
     DELAYED(1, "Delayed"),
 
-    /**
-     * Immediate: 2
-     */
+    /** Immediate: 2 */
     IMMEDIATE(2, "Immediate"),
 
-    /**
-     * Delayed and immediate: 3
-     */
+    /** Delayed and immediate: 3 */
     DELAYED_AND_IMMEDIATE(3, "Delayed and immediate");
 
     private final int value;
@@ -3268,16 +3026,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -3285,10 +3039,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -3297,14 +3048,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the BeamformingFeedbackCapability object the value of which is the given value.
      */
     public static BeamformingFeedbackCapability getInstance(int value) {
-      for (BeamformingFeedbackCapability cp: values()) {
+      for (BeamformingFeedbackCapability cp : values()) {
         if (cp.value == value) {
           return cp;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -3316,24 +3066,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum Grouping {
 
-    /**
-     * No grouping: 0
-     */
+    /** No grouping: 0 */
     NO_GROUPING(0, "No grouping"),
 
-    /**
-     * Groups of 1, 2: 1
-     */
+    /** Groups of 1, 2: 1 */
     GROUPS_OF_1_2(1, "Groups of 1, 2"),
 
-    /**
-     * Groups of 1, 4: 2
-     */
+    /** Groups of 1, 4: 2 */
     GROUPS_OF_1_4(2, "Groups of 1, 4"),
 
-    /**
-     * Groups of 1, 2, 4: 3
-     */
+    /** Groups of 1, 2, 4: 3 */
     GROUPS_OF_1_2_4(3, "Groups of 1, 2, 4");
 
     private final int value;
@@ -3344,16 +3086,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -3361,10 +3099,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -3373,20 +3108,18 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the Grouping object the value of which is the given value.
      */
     public static Grouping getInstance(int value) {
-      for (Grouping cp: values()) {
+      for (Grouping cp : values()) {
         if (cp.value == value) {
           return cp;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
-   * CSI Number of Beamformer Antennas Supported field,
-   * Noncompressed Steering Number of Beamformer Antennas Supported field, and
-   * Compressed Steering Number of Beamformer Antennas Supported field
+   * CSI Number of Beamformer Antennas Supported field, Noncompressed Steering Number of Beamformer
+   * Antennas Supported field, and Compressed Steering Number of Beamformer Antennas Supported field
    * of IEEE802.11 HT Capabilities element.
    *
    * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
@@ -3395,24 +3128,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum NumBeamformerAntennas {
 
-    /**
-     * Single Tx antenna sounding: 0
-     */
+    /** Single Tx antenna sounding: 0 */
     SINGLE(0, "Single Tx antenna sounding"),
 
-    /**
-     * 2 Tx antenna sounding: 1
-     */
+    /** 2 Tx antenna sounding: 1 */
     TWO(1, "2 Tx antenna sounding"),
 
-    /**
-     * 3 Tx antenna sounding: 2
-     */
+    /** 3 Tx antenna sounding: 2 */
     THREE(2, "3 Tx antenna sounding"),
 
-    /**
-     * 4 Tx antenna sounding: 3
-     */
+    /** 4 Tx antenna sounding: 3 */
     FOUR(3, "4 Tx antenna sounding");
 
     private final int value;
@@ -3423,16 +3148,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -3440,10 +3161,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -3452,14 +3170,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the NumBeamformerAntennas object the value of which is the given value.
      */
     public static NumBeamformerAntennas getInstance(int value) {
-      for (NumBeamformerAntennas cp: values()) {
+      for (NumBeamformerAntennas cp : values()) {
         if (cp.value == value) {
           return cp;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -3471,24 +3188,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum CsiNumRows {
 
-    /**
-     * Single row of CSI: 0
-     */
+    /** Single row of CSI: 0 */
     SINGLE(0, "Single row of CSI"),
 
-    /**
-     * 2 rows of CSI: 1
-     */
+    /** 2 rows of CSI: 1 */
     TWO(1, "2 rows of CSI"),
 
-    /**
-     * 3 rows of CSI: 2
-     */
+    /** 3 rows of CSI: 2 */
     THREE(2, "3 rows of CSI"),
 
-    /**
-     * 4 rows of CSI: 3
-     */
+    /** 4 rows of CSI: 3 */
     FOUR(3, "4 rows of CSI");
 
     private final int value;
@@ -3499,16 +3208,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -3516,10 +3221,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -3528,14 +3230,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the CsiNumRows object the value of which is the given value.
      */
     public static CsiNumRows getInstance(int value) {
-      for (CsiNumRows cp: values()) {
+      for (CsiNumRows cp : values()) {
         if (cp.value == value) {
           return cp;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -3547,24 +3248,16 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
    */
   public static enum ChannelEstimationCapability {
 
-    /**
-     * 1 space-time stream: 0
-     */
+    /** 1 space-time stream: 0 */
     ONE_SPACE_TIME_STREAM(0, "1 space-time stream"),
 
-    /**
-     * 2 space-time streams: 1
-     */
+    /** 2 space-time streams: 1 */
     TWO_SPACE_TIME_STREAMS(1, "2 space-time streams"),
 
-    /**
-     * 3 space-time streams: 2
-     */
+    /** 3 space-time streams: 2 */
     THREE_SPACE_TIME_STREAMS(2, "3 space-time streams"),
 
-    /**
-     * 4 space-time streams: 3
-     */
+    /** 4 space-time streams: 3 */
     FOUR_SPACE_TIME_STREAMS(3, "4 space-time streams");
 
     private final int value;
@@ -3575,16 +3268,12 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -3592,10 +3281,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -3604,14 +3290,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return the ChannelEstimationCapability object the value of which is the given value.
      */
     public static ChannelEstimationCapability getInstance(int value) {
-      for (ChannelEstimationCapability cp: values()) {
+      for (ChannelEstimationCapability cp : values()) {
         if (cp.value == value) {
           return cp;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -3726,20 +3411,13 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     private boolean txSoundingPpdusSupported;
     private boolean bit7OfAselCapability;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {
       elementId(
-        Dot11InformationElementId.getInstance(
-          Dot11InformationElementId.HT_CAPABILITIES.value()
-        )
-      );
+          Dot11InformationElementId.getInstance(Dot11InformationElementId.HT_CAPABILITIES.value()));
     }
 
-    /**
-     * @param elem a Dot11HTCapabilitiesElement object.
-     */
+    /** @param elem a Dot11HTCapabilitiesElement object. */
     private Builder(Dot11HTCapabilitiesElement obj) {
       super(obj);
       this.ldpcCodingSupported = obj.ldpcCodingSupported;
@@ -3827,18 +3505,18 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.explicitCsiTxBeamformingSupported = obj.explicitCsiTxBeamformingSupported;
       this.explicitNoncompressedSteeringSupported = obj.explicitNoncompressedSteeringSupported;
       this.explicitCompressedSteeringSupported = obj.explicitCompressedSteeringSupported;
-      this.explicitTxBeamformingCsiFeedbackCapability
-        = obj.explicitTxBeamformingCsiFeedbackCapability;
-      this.explicitNoncompressedBeamformingFeedbackCapability
-        = obj.explicitNoncompressedBeamformingFeedbackCapability;
-      this.explicitCompressedBeamformingFeedbackCapability
-        = obj.explicitCompressedBeamformingFeedbackCapability;
+      this.explicitTxBeamformingCsiFeedbackCapability =
+          obj.explicitTxBeamformingCsiFeedbackCapability;
+      this.explicitNoncompressedBeamformingFeedbackCapability =
+          obj.explicitNoncompressedBeamformingFeedbackCapability;
+      this.explicitCompressedBeamformingFeedbackCapability =
+          obj.explicitCompressedBeamformingFeedbackCapability;
       this.minGrouping = obj.minGrouping;
       this.csiNumBeamformerAntennasSupported = obj.csiNumBeamformerAntennasSupported;
-      this.noncompressedSteeringNumBeamformerAntennasSupported
-        = obj.noncompressedSteeringNumBeamformerAntennasSupported;
-      this.compressedSteeringNumBeamformerAntennasSupported
-        = obj.compressedSteeringNumBeamformerAntennasSupported;
+      this.noncompressedSteeringNumBeamformerAntennasSupported =
+          obj.noncompressedSteeringNumBeamformerAntennasSupported;
+      this.compressedSteeringNumBeamformerAntennasSupported =
+          obj.compressedSteeringNumBeamformerAntennasSupported;
       this.csiMaxNumRowsBeamformerSupported = obj.csiMaxNumRowsBeamformerSupported;
       this.channelEstimationCapability = obj.channelEstimationCapability;
       this.bit29OfTransmitBeamformingCapabilities = obj.bit29OfTransmitBeamformingCapabilities;
@@ -3846,8 +3524,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       this.bit31OfTransmitBeamformingCapabilities = obj.bit31OfTransmitBeamformingCapabilities;
       this.antennaSelectionSupported = obj.antennaSelectionSupported;
       this.explicitCsiFeedbackBasedTxAselSupported = obj.explicitCsiFeedbackBasedTxAselSupported;
-      this.antennaIndicesFeedbackBasedTxAselSupported
-        = obj.antennaIndicesFeedbackBasedTxAselSupported;
+      this.antennaIndicesFeedbackBasedTxAselSupported =
+          obj.antennaIndicesFeedbackBasedTxAselSupported;
       this.explicitCsiFeedbackSupported = obj.explicitCsiFeedbackSupported;
       this.antennaIndicesFeedbackSupported = obj.antennaIndicesFeedbackSupported;
       this.rxAselSupported = obj.rxAselSupported;
@@ -4063,8 +3741,8 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
     }
 
     /**
-     * @param rxHighestSupportedDataRate rxHighestSupportedDataRate.
-     *        The value is between 0 and 1023 (inclusive).
+     * @param rxHighestSupportedDataRate rxHighestSupportedDataRate. The value is between 0 and 1023
+     *     (inclusive).
      * @return this Builder object for method chaining.
      */
     public Builder rxHighestSupportedDataRate(short rxHighestSupportedDataRate) {
@@ -4149,8 +3827,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder txMaxNumSpatialStreamsSupported(
-      NumSpatialStreams txMaxNumSpatialStreamsSupported
-    ) {
+        NumSpatialStreams txMaxNumSpatialStreamsSupported) {
       this.txMaxNumSpatialStreamsSupported = txMaxNumSpatialStreamsSupported;
       return this;
     }
@@ -4538,8 +4215,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder implicitTxBeamformingReceivingSupported(
-      boolean implicitTxBeamformingReceivingSupported
-    ) {
+        boolean implicitTxBeamformingReceivingSupported) {
       this.implicitTxBeamformingReceivingSupported = implicitTxBeamformingReceivingSupported;
       return this;
     }
@@ -4612,8 +4288,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder explicitNoncompressedSteeringSupported(
-      boolean explicitNoncompressedSteeringSupported
-    ) {
+        boolean explicitNoncompressedSteeringSupported) {
       this.explicitNoncompressedSteeringSupported = explicitNoncompressedSteeringSupported;
       return this;
     }
@@ -4623,8 +4298,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder explicitCompressedSteeringSupported(
-      boolean explicitCompressedSteeringSupported
-    ) {
+        boolean explicitCompressedSteeringSupported) {
       this.explicitCompressedSteeringSupported = explicitCompressedSteeringSupported;
       return this;
     }
@@ -4634,33 +4308,32 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder explicitTxBeamformingCsiFeedbackCapability(
-      BeamformingFeedbackCapability explicitTxBeamformingCsiFeedbackCapability
-    ) {
+        BeamformingFeedbackCapability explicitTxBeamformingCsiFeedbackCapability) {
       this.explicitTxBeamformingCsiFeedbackCapability = explicitTxBeamformingCsiFeedbackCapability;
       return this;
     }
 
     /**
-     * @param explicitNoncompressedBeamformingFeedbackCapability explicitNoncompressedBeamformingFeedbackCapability
+     * @param explicitNoncompressedBeamformingFeedbackCapability
+     *     explicitNoncompressedBeamformingFeedbackCapability
      * @return this Builder object for method chaining.
      */
     public Builder explicitNoncompressedBeamformingFeedbackCapability(
-      BeamformingFeedbackCapability explicitNoncompressedBeamformingFeedbackCapability
-    ) {
-      this.explicitNoncompressedBeamformingFeedbackCapability
-       = explicitNoncompressedBeamformingFeedbackCapability;
+        BeamformingFeedbackCapability explicitNoncompressedBeamformingFeedbackCapability) {
+      this.explicitNoncompressedBeamformingFeedbackCapability =
+          explicitNoncompressedBeamformingFeedbackCapability;
       return this;
     }
 
     /**
-     * @param explicitCompressedBeamformingFeedbackCapability explicitCompressedBeamformingFeedbackCapability
+     * @param explicitCompressedBeamformingFeedbackCapability
+     *     explicitCompressedBeamformingFeedbackCapability
      * @return this Builder object for method chaining.
      */
     public Builder explicitCompressedBeamformingFeedbackCapability(
-      BeamformingFeedbackCapability explicitCompressedBeamformingFeedbackCapability
-    ) {
-      this.explicitCompressedBeamformingFeedbackCapability
-       = explicitCompressedBeamformingFeedbackCapability;
+        BeamformingFeedbackCapability explicitCompressedBeamformingFeedbackCapability) {
+      this.explicitCompressedBeamformingFeedbackCapability =
+          explicitCompressedBeamformingFeedbackCapability;
       return this;
     }
 
@@ -4678,33 +4351,32 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder csiNumBeamformerAntennasSupported(
-      NumBeamformerAntennas csiNumBeamformerAntennasSupported
-    ) {
+        NumBeamformerAntennas csiNumBeamformerAntennasSupported) {
       this.csiNumBeamformerAntennasSupported = csiNumBeamformerAntennasSupported;
       return this;
     }
 
     /**
-     * @param noncompressedSteeringNumBeamformerAntennasSupported noncompressedSteeringNumBeamformerAntennasSupported
+     * @param noncompressedSteeringNumBeamformerAntennasSupported
+     *     noncompressedSteeringNumBeamformerAntennasSupported
      * @return this Builder object for method chaining.
      */
     public Builder noncompressedSteeringNumBeamformerAntennasSupported(
-      NumBeamformerAntennas noncompressedSteeringNumBeamformerAntennasSupported
-    ) {
-      this.noncompressedSteeringNumBeamformerAntennasSupported
-       = noncompressedSteeringNumBeamformerAntennasSupported;
+        NumBeamformerAntennas noncompressedSteeringNumBeamformerAntennasSupported) {
+      this.noncompressedSteeringNumBeamformerAntennasSupported =
+          noncompressedSteeringNumBeamformerAntennasSupported;
       return this;
     }
 
     /**
-     * @param compressedSteeringNumBeamformerAntennasSupported compressedSteeringNumBeamformerAntennasSupported
+     * @param compressedSteeringNumBeamformerAntennasSupported
+     *     compressedSteeringNumBeamformerAntennasSupported
      * @return this Builder object for method chaining.
      */
     public Builder compressedSteeringNumBeamformerAntennasSupported(
-      NumBeamformerAntennas compressedSteeringNumBeamformerAntennasSupported
-    ) {
-      this.compressedSteeringNumBeamformerAntennasSupported
-       = compressedSteeringNumBeamformerAntennasSupported;
+        NumBeamformerAntennas compressedSteeringNumBeamformerAntennasSupported) {
+      this.compressedSteeringNumBeamformerAntennasSupported =
+          compressedSteeringNumBeamformerAntennasSupported;
       return this;
     }
 
@@ -4722,8 +4394,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder channelEstimationCapability(
-      ChannelEstimationCapability channelEstimationCapability
-    ) {
+        ChannelEstimationCapability channelEstimationCapability) {
       this.channelEstimationCapability = channelEstimationCapability;
       return this;
     }
@@ -4733,8 +4404,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit29OfTransmitBeamformingCapabilities(
-      boolean bit29OfTransmitBeamformingCapabilities
-    ) {
+        boolean bit29OfTransmitBeamformingCapabilities) {
       this.bit29OfTransmitBeamformingCapabilities = bit29OfTransmitBeamformingCapabilities;
       return this;
     }
@@ -4744,8 +4414,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit30OfTransmitBeamformingCapabilities(
-      boolean bit30OfTransmitBeamformingCapabilities
-    ) {
+        boolean bit30OfTransmitBeamformingCapabilities) {
       this.bit30OfTransmitBeamformingCapabilities = bit30OfTransmitBeamformingCapabilities;
       return this;
     }
@@ -4755,8 +4424,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder bit31OfTransmitBeamformingCapabilities(
-      boolean bit31OfTransmitBeamformingCapabilities
-    ) {
+        boolean bit31OfTransmitBeamformingCapabilities) {
       this.bit31OfTransmitBeamformingCapabilities = bit31OfTransmitBeamformingCapabilities;
       return this;
     }
@@ -4775,8 +4443,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder explicitCsiFeedbackBasedTxAselSupported(
-      boolean explicitCsiFeedbackBasedTxAselSupported
-    ) {
+        boolean explicitCsiFeedbackBasedTxAselSupported) {
       this.explicitCsiFeedbackBasedTxAselSupported = explicitCsiFeedbackBasedTxAselSupported;
       return this;
     }
@@ -4786,8 +4453,7 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
      * @return this Builder object for method chaining.
      */
     public Builder antennaIndicesFeedbackBasedTxAselSupported(
-      boolean antennaIndicesFeedbackBasedTxAselSupported
-    ) {
+        boolean antennaIndicesFeedbackBasedTxAselSupported) {
       this.antennaIndicesFeedbackBasedTxAselSupported = antennaIndicesFeedbackBasedTxAselSupported;
       return this;
     }
@@ -4856,7 +4522,5 @@ public final class Dot11HTCapabilitiesElement extends Dot11InformationElement {
       }
       return new Dot11HTCapabilitiesElement(this);
     }
-
   }
-
 }

@@ -15,15 +15,12 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class FragmentedPacket extends SimplePacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 8065880017691703511L;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -49,7 +46,9 @@ public final class FragmentedPacket extends SimplePacket {
   }
 
   @Override
-  protected String modifier() { return "Fragmented "; }
+  protected String modifier() {
+    return "Fragmented ";
+  }
 
   /**
    * @author Kaito Yamada
@@ -57,9 +56,7 @@ public final class FragmentedPacket extends SimplePacket {
    */
   public static final class Builder extends org.pcap4j.packet.SimplePacket.Builder {
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(FragmentedPacket packet) {
@@ -67,7 +64,6 @@ public final class FragmentedPacket extends SimplePacket {
     }
 
     /**
-     *
      * @param rawData rawData
      * @return this Builder object for method chaining.
      */
@@ -80,7 +76,5 @@ public final class FragmentedPacket extends SimplePacket {
     public FragmentedPacket build() {
       return new FragmentedPacket(this);
     }
-
   }
-
 }

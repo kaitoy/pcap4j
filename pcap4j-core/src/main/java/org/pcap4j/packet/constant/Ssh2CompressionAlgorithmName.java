@@ -16,16 +16,13 @@ package org.pcap4j.packet.constant;
  */
 public final class Ssh2CompressionAlgorithmName {
 
-  private Ssh2CompressionAlgorithmName() { throw new AssertionError(); }
+  private Ssh2CompressionAlgorithmName() {
+    throw new AssertionError();
+  }
 
-  /**
-   *
-   */
+  /** */
   public static final String NONE = "none";
 
-  /**
-   *
-   */
+  /** */
   public static final String ZLIB = "zlib";
-
 }

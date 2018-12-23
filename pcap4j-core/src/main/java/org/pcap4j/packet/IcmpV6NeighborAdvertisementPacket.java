@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +23,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2928161747361401145L;
 
   private final IcmpV6NeighborAdvertisementHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -40,29 +38,26 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
    * @return a new IcmpV6NeighborAdvertisementPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IcmpV6NeighborAdvertisementPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IcmpV6NeighborAdvertisementPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new IcmpV6NeighborAdvertisementPacket(rawData, offset, length);
   }
 
-  private IcmpV6NeighborAdvertisementPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private IcmpV6NeighborAdvertisementPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     this.header = new IcmpV6NeighborAdvertisementHeader(rawData, offset, length);
   }
 
   private IcmpV6NeighborAdvertisementPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.targetAddress == null
-      || builder.options == null
-    ) {
+    if (builder == null || builder.targetAddress == null || builder.options == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.targetAddress: ").append(builder.targetAddress)
-        .append(" builder.options: ").append(builder.options);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.targetAddress: ")
+          .append(builder.targetAddress)
+          .append(" builder.options: ")
+          .append(builder.options);
       throw new NullPointerException(sb.toString());
     }
 
@@ -92,9 +87,7 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
     private Inet6Address targetAddress;
     private List<IpV6NeighborDiscoveryOption> options;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IcmpV6NeighborAdvertisementPacket packet) {
@@ -107,7 +100,6 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param routerFlag routerFlag
      * @return this Builder object for method chaining.
      */
@@ -117,7 +109,6 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param solicitedFlag solicitedFlag
      * @return this Builder object for method chaining.
      */
@@ -127,7 +118,6 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param overrideFlag overrideFlag
      * @return this Builder object for method chaining.
      */
@@ -137,7 +127,6 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param reserved reserved
      * @return this Builder object for method chaining.
      */
@@ -147,7 +136,6 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param targetAddress targetAddress
      * @return this Builder object for method chaining.
      */
@@ -157,7 +145,6 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param options options
      * @return this Builder object for method chaining.
      */
@@ -170,15 +157,13 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
     public IcmpV6NeighborAdvertisementPacket build() {
       return new IcmpV6NeighborAdvertisementPacket(this);
     }
-
   }
 
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.15
    */
-  public static
-  final class IcmpV6NeighborAdvertisementHeader extends AbstractHeader {
+  public static final class IcmpV6NeighborAdvertisementHeader extends AbstractHeader {
 
     /*
      *  0                   1                   2                   3
@@ -199,21 +184,14 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = 2755611686067943647L;
 
-    private static final int R_S_O_RESERVED_OFFSET
-      = 0;
-    private static final int R_S_O_RESERVED_SIZE
-      = INT_SIZE_IN_BYTES;
-    private static final int TARGET_ADDRESS_OFFSET
-      = R_S_O_RESERVED_OFFSET + R_S_O_RESERVED_SIZE;
-    private static final int TARGET_ADDRESS_SIZE
-      = INET6_ADDRESS_SIZE_IN_BYTES;
-    private static final int OPTIONS_OFFSET
-      = TARGET_ADDRESS_OFFSET + TARGET_ADDRESS_SIZE;
+    private static final int R_S_O_RESERVED_OFFSET = 0;
+    private static final int R_S_O_RESERVED_SIZE = INT_SIZE_IN_BYTES;
+    private static final int TARGET_ADDRESS_OFFSET = R_S_O_RESERVED_OFFSET + R_S_O_RESERVED_SIZE;
+    private static final int TARGET_ADDRESS_SIZE = INET6_ADDRESS_SIZE_IN_BYTES;
+    private static final int OPTIONS_OFFSET = TARGET_ADDRESS_OFFSET + TARGET_ADDRESS_SIZE;
 
     private final boolean routerFlag; // R field
     private final boolean solicitedFlag; // S field
@@ -222,19 +200,19 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
     private final Inet6Address targetAddress;
     private final List<IpV6NeighborDiscoveryOption> options;
 
-    private IcmpV6NeighborAdvertisementHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private IcmpV6NeighborAdvertisementHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < OPTIONS_OFFSET) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The raw data must be more than ")
-          .append(OPTIONS_OFFSET - 1).append("bytes")
-          .append(" to build this header. raw data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(OPTIONS_OFFSET - 1)
+            .append("bytes")
+            .append(" to build this header. raw data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -247,21 +225,18 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
       this.options = new ArrayList<IpV6NeighborDiscoveryOption>();
       int currentOffsetInHeader = OPTIONS_OFFSET;
       while (currentOffsetInHeader < length) {
-        IpV6NeighborDiscoveryOptionType type
-          = IpV6NeighborDiscoveryOptionType.getInstance(rawData[currentOffsetInHeader + offset]);
+        IpV6NeighborDiscoveryOptionType type =
+            IpV6NeighborDiscoveryOptionType.getInstance(rawData[currentOffsetInHeader + offset]);
         IpV6NeighborDiscoveryOption newOne;
         try {
-          newOne
-            = PacketFactories
-                .getFactory(
-                   IpV6NeighborDiscoveryOption.class,
-                   IpV6NeighborDiscoveryOptionType.class
-                 ).newInstance(
-                     rawData,
-                     currentOffsetInHeader + offset,
-                     length - currentOffsetInHeader,
-                     type
-                   );
+          newOne =
+              PacketFactories.getFactory(
+                      IpV6NeighborDiscoveryOption.class, IpV6NeighborDiscoveryOptionType.class)
+                  .newInstance(
+                      rawData,
+                      currentOffsetInHeader + offset,
+                      length - currentOffsetInHeader,
+                      type);
         } catch (Exception e) {
           break;
         }
@@ -273,9 +248,7 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
 
     private IcmpV6NeighborAdvertisementHeader(Builder builder) {
       if ((builder.reserved & 0xE0000000) != 0) {
-        throw new IllegalArgumentException(
-                "Invalid reserved: " + builder.reserved
-              );
+        throw new IllegalArgumentException("Invalid reserved: " + builder.reserved);
       }
 
       this.routerFlag = builder.routerFlag;
@@ -286,50 +259,32 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
       this.options = new ArrayList<IpV6NeighborDiscoveryOption>(builder.options);
     }
 
-    /**
-     *
-     * @return routerFlag
-     */
+    /** @return routerFlag */
     public boolean getRouterFlag() {
       return routerFlag;
     }
 
-    /**
-     *
-     * @return solicitedFlag
-     */
+    /** @return solicitedFlag */
     public boolean getSolicitedFlag() {
       return solicitedFlag;
     }
 
-    /**
-     *
-     * @return overrideFlag
-     */
+    /** @return overrideFlag */
     public boolean getOverrideFlag() {
       return overrideFlag;
     }
 
-    /**
-     *
-     * @return reserved
-     */
+    /** @return reserved */
     public int getReserved() {
       return reserved;
     }
 
-    /**
-     *
-     * @return targetAddress
-     */
+    /** @return targetAddress */
     public Inet6Address getTargetAddress() {
       return targetAddress;
     }
 
-    /**
-     *
-     * @return options
-     */
+    /** @return options */
     public List<IpV6NeighborDiscoveryOption> getOptions() {
       return new ArrayList<IpV6NeighborDiscoveryOption>(options);
     }
@@ -349,7 +304,7 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
       }
       rawFields.add(ByteArrays.toByteArray(tmp));
       rawFields.add(ByteArrays.toByteArray(targetAddress));
-      for (IpV6NeighborDiscoveryOption o: options) {
+      for (IpV6NeighborDiscoveryOption o : options) {
         rawFields.add(o.getRawData());
       }
       return rawFields;
@@ -358,7 +313,7 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
     @Override
     protected int calcLength() {
       int len = 0;
-      for (IpV6NeighborDiscoveryOption o: options) {
+      for (IpV6NeighborDiscoveryOption o : options) {
         len += o.length();
       }
       return len + OPTIONS_OFFSET;
@@ -370,28 +325,16 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
       String ls = System.getProperty("line.separator");
 
       sb.append("[ICMPv6 Neighbor Advertisement Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Router flag: ")
-        .append(routerFlag)
-        .append(ls);
-      sb.append("  Solicited flag: ")
-        .append(solicitedFlag)
-        .append(ls);
-      sb.append("  Override flag: ")
-        .append(overrideFlag)
-        .append(ls);
-      sb.append("  Reserved: ")
-        .append(reserved)
-        .append(ls);
-      sb.append("  Target Address: ")
-        .append(targetAddress)
-        .append(ls);
-      for (IpV6NeighborDiscoveryOption opt: options) {
-        sb.append("  Option: ")
-          .append(opt)
+          .append(length())
+          .append(" bytes)]")
           .append(ls);
+      sb.append("  Router flag: ").append(routerFlag).append(ls);
+      sb.append("  Solicited flag: ").append(solicitedFlag).append(ls);
+      sb.append("  Override flag: ").append(overrideFlag).append(ls);
+      sb.append("  Reserved: ").append(reserved).append(ls);
+      sb.append("  Target Address: ").append(targetAddress).append(ls);
+      for (IpV6NeighborDiscoveryOption opt : options) {
+        sb.append("  Option: ").append(opt).append(ls);
       }
 
       return sb.toString();
@@ -399,17 +342,20 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      IcmpV6NeighborAdvertisementHeader other = (IcmpV6NeighborAdvertisementHeader)obj;
-      return
-           targetAddress.equals(other.targetAddress)
-        && routerFlag == other.routerFlag
-        && solicitedFlag == other.solicitedFlag
-        && overrideFlag == other.overrideFlag
-        && reserved == other.reserved
-        && options.equals(other.options);
+      IcmpV6NeighborAdvertisementHeader other = (IcmpV6NeighborAdvertisementHeader) obj;
+      return targetAddress.equals(other.targetAddress)
+          && routerFlag == other.routerFlag
+          && solicitedFlag == other.solicitedFlag
+          && overrideFlag == other.overrideFlag
+          && reserved == other.reserved
+          && options.equals(other.options);
     }
 
     @Override
@@ -423,7 +369,5 @@ public final class IcmpV6NeighborAdvertisementPacket extends AbstractPacket {
       result = 31 * result + options.hashCode();
       return result;
     }
-
   }
-
 }

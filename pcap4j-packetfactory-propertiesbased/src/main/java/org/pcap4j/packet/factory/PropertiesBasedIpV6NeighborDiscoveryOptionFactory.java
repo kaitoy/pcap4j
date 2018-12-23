@@ -18,27 +18,22 @@ import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
  * @author Kaito Yamada
  * @since pcap4j 0.9.15
  */
-public final class
-PropertiesBasedIpV6NeighborDiscoveryOptionFactory
-implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptionType> {
+public final class PropertiesBasedIpV6NeighborDiscoveryOptionFactory
+    implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptionType> {
 
-  private static final PropertiesBasedIpV6NeighborDiscoveryOptionFactory INSTANCE
-    = new PropertiesBasedIpV6NeighborDiscoveryOptionFactory();
+  private static final PropertiesBasedIpV6NeighborDiscoveryOptionFactory INSTANCE =
+      new PropertiesBasedIpV6NeighborDiscoveryOptionFactory();
 
   private PropertiesBasedIpV6NeighborDiscoveryOptionFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of PropertiesBasedIpV6NeighborDiscoveryOptionFactory.
-   */
+  /** @return the singleton instance of PropertiesBasedIpV6NeighborDiscoveryOptionFactory. */
   public static PropertiesBasedIpV6NeighborDiscoveryOptionFactory getInstance() {
     return INSTANCE;
   }
 
   @Override
   public IpV6NeighborDiscoveryOption newInstance(
-    byte[] rawData, int offset, int length, IpV6NeighborDiscoveryOptionType type
-  ) {
+      byte[] rawData, int offset, int length, IpV6NeighborDiscoveryOptionType type) {
     return newInstance(rawData, offset, length, getTargetClass(type));
   }
 
@@ -48,32 +43,30 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
   }
 
   /**
-   *
    * @param rawData rawData
    * @param offset offset
    * @param length length
    * @param dataClass dataClass
    * @return a new IpV6NeighborDiscoveryOption object.
    * @throws IllegalStateException if an access to the newInstance method of the dataClass fails.
-   * @throws IllegalArgumentException if an exception other than {@link IllegalRawDataException}
-   *                                  is thrown by newInstance method of the dataClass.
+   * @throws IllegalArgumentException if an exception other than {@link IllegalRawDataException} is
+   *     thrown by newInstance method of the dataClass.
    * @throws NullPointerException if any of arguments are null.
    */
   public IpV6NeighborDiscoveryOption newInstance(
-    byte[] rawData, int offset, int length, Class<? extends IpV6NeighborDiscoveryOption> dataClass
-  ) {
+      byte[] rawData,
+      int offset,
+      int length,
+      Class<? extends IpV6NeighborDiscoveryOption> dataClass) {
     if (rawData == null || dataClass == null) {
       StringBuilder sb = new StringBuilder(50);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" dataClass: ")
-        .append(dataClass);
+      sb.append("rawData: ").append(rawData).append(" dataClass: ").append(dataClass);
       throw new NullPointerException(sb.toString());
     }
 
     try {
       Method newInstance = dataClass.getMethod("newInstance", byte[].class, int.class, int.class);
-      return (IpV6NeighborDiscoveryOption)newInstance.invoke(null, rawData, offset, length);
+      return (IpV6NeighborDiscoveryOption) newInstance.invoke(null, rawData, offset, length);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -91,19 +84,16 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
   }
 
   @Override
-  public Class<? extends IpV6NeighborDiscoveryOption>
-  getTargetClass(IpV6NeighborDiscoveryOptionType type) {
+  public Class<? extends IpV6NeighborDiscoveryOption> getTargetClass(
+      IpV6NeighborDiscoveryOptionType type) {
     if (type == null) {
       throw new NullPointerException("type: " + type);
     }
-    return PacketFactoryPropertiesLoader.getInstance()
-             .getIpV6NeighborDiscoveryOptionClass(type);
+    return PacketFactoryPropertiesLoader.getInstance().getIpV6NeighborDiscoveryOptionClass(type);
   }
 
   @Override
   public Class<? extends IpV6NeighborDiscoveryOption> getTargetClass() {
-    return PacketFactoryPropertiesLoader.getInstance()
-             .getUnknownIpV6NeighborDiscoveryOptionClass();
+    return PacketFactoryPropertiesLoader.getInstance().getUnknownIpV6NeighborDiscoveryOptionClass();
   }
-
 }

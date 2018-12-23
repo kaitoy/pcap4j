@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,60 +24,45 @@ import org.pcap4j.util.ByteArrays;
  */
 abstract class AbstractPppPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 9184646119975504414L;
 
   private final Packet payload;
   private final byte[] pad;
 
-  protected AbstractPppPacket(
-    byte[] rawData, int offset, int length, AbstractPppHeader header
-  ) throws IllegalRawDataException {
+  protected AbstractPppPacket(byte[] rawData, int offset, int length, AbstractPppHeader header)
+      throws IllegalRawDataException {
     int payloadAndPadLength = length - header.length();
     if (payloadAndPadLength > 0) {
       int payloadOffset = offset + header.length();
-      this.payload
-        = PacketFactories.getFactory(Packet.class, PppDllProtocol.class)
-            .newInstance(rawData, payloadOffset, payloadAndPadLength, header.getProtocol());
+      this.payload =
+          PacketFactories.getFactory(Packet.class, PppDllProtocol.class)
+              .newInstance(rawData, payloadOffset, payloadAndPadLength, header.getProtocol());
 
       int padLength = payloadAndPadLength - payload.length();
       if (padLength > 0) {
-        this.pad
-          = ByteArrays.getSubArray(
-              rawData, payloadOffset + payload.length(), padLength
-            );
-      }
-      else {
+        this.pad = ByteArrays.getSubArray(rawData, payloadOffset + payload.length(), padLength);
+      } else {
         this.pad = new byte[0];
       }
-    }
-    else {
+    } else {
       this.payload = null;
       this.pad = new byte[0];
     }
   }
 
   protected AbstractPppPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.protocol == null
-    ) {
+    if (builder == null || builder.protocol == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.protocol: ").append(builder.protocol);
+      sb.append("builder: ").append(builder).append(" builder.protocol: ").append(builder.protocol);
       throw new NullPointerException(sb.toString());
     }
 
     this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     if (builder.pad != null && builder.pad.length != 0) {
       this.pad = new byte[builder.pad.length];
-      System.arraycopy(
-        builder.pad, 0, this.pad, 0, builder.pad.length
-      );
-    }
-    else {
+      System.arraycopy(builder.pad, 0, this.pad, 0, builder.pad.length);
+    } else {
       this.pad = new byte[0];
     }
   }
@@ -89,10 +75,7 @@ abstract class AbstractPppPacket extends AbstractPacket {
     return payload;
   }
 
-  /**
-   *
-   * @return pad
-   */
+  /** @return pad */
   public byte[] getPad() {
     byte[] copy = new byte[pad.length];
     System.arraycopy(pad, 0, copy, 0, pad.length);
@@ -110,9 +93,7 @@ abstract class AbstractPppPacket extends AbstractPacket {
   protected byte[] buildRawData() {
     byte[] rawData = super.buildRawData();
     if (pad.length != 0) {
-      System.arraycopy(
-        pad, 0, rawData, rawData.length - pad.length, pad.length
-      );
+      System.arraycopy(pad, 0, rawData, rawData.length - pad.length, pad.length);
     }
     return rawData;
   }
@@ -128,12 +109,12 @@ abstract class AbstractPppPacket extends AbstractPacket {
     if (pad.length != 0) {
       String ls = System.getProperty("line.separator");
       sb.append("[PPP Pad (")
-        .append(pad.length)
-        .append(" bytes)]")
-        .append(ls)
-        .append("  Hex stream: ")
-        .append(ByteArrays.toHexString(pad, " "))
-        .append(ls);
+          .append(pad.length)
+          .append(" bytes)]")
+          .append(ls)
+          .append("  Hex stream: ")
+          .append(ByteArrays.toHexString(pad, " "))
+          .append(ls);
     }
 
     return sb.toString();
@@ -142,10 +123,9 @@ abstract class AbstractPppPacket extends AbstractPacket {
   @Override
   public boolean equals(Object obj) {
     if (super.equals(obj)) {
-      AbstractPppPacket other = (AbstractPppPacket)obj;
+      AbstractPppPacket other = (AbstractPppPacket) obj;
       return Arrays.equals(pad, other.pad);
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -159,15 +139,13 @@ abstract class AbstractPppPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 1.4.0
    */
-  static abstract class Builder extends AbstractBuilder {
+  abstract static class Builder extends AbstractBuilder {
 
     private PppDllProtocol protocol;
     private Packet.Builder payloadBuilder;
     private byte[] pad;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     protected Builder(AbstractPppPacket packet) {
@@ -177,7 +155,6 @@ abstract class AbstractPppPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param protocol protocol
      * @return this Builder object for method chaining.
      */
@@ -198,7 +175,6 @@ abstract class AbstractPppPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param pad pad
      * @return this Builder object for method chaining.
      */
@@ -206,14 +182,13 @@ abstract class AbstractPppPacket extends AbstractPacket {
       this.pad = pad;
       return this;
     }
-
   }
 
   /**
    * @author Kaito Yamada
    * @since pcap4j 1.4.0
    */
-  static abstract class AbstractPppHeader extends AbstractHeader {
+  abstract static class AbstractPppHeader extends AbstractHeader {
 
     /*
      * +----------+-------------+---------+
@@ -222,9 +197,7 @@ abstract class AbstractPppPacket extends AbstractPacket {
      * +----------+-------------+---------+
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -9126636226651383452L;
 
     private static final int PROTOCOL_OFFSET = 0;
@@ -233,16 +206,15 @@ abstract class AbstractPppPacket extends AbstractPacket {
 
     private final PppDllProtocol protocol;
 
-    protected AbstractPppHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    protected AbstractPppHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < PPP_HEADER_SIZE) {
         this.protocol = null; // Subclass has to throw an IllegalRawDataException.
-      }
-      else {
+      } else {
         try {
-          this.protocol
-            = PppDllProtocol.getInstance(ByteArrays.getShort(rawData, PROTOCOL_OFFSET + offset));
-        }
-        catch (IllegalArgumentException e) {
+          this.protocol =
+              PppDllProtocol.getInstance(ByteArrays.getShort(rawData, PROTOCOL_OFFSET + offset));
+        } catch (IllegalArgumentException e) {
           throw new IllegalRawDataException(e);
         }
       }
@@ -252,10 +224,7 @@ abstract class AbstractPppPacket extends AbstractPacket {
       this.protocol = builder.protocol;
     }
 
-    /**
-     *
-     * @return protocol
-     */
+    /** @return protocol */
     public PppDllProtocol getProtocol() {
       return protocol;
     }
@@ -277,23 +246,22 @@ abstract class AbstractPppPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[PPP Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Protocol: ")
-        .append(protocol)
-        .append(ls);
+      sb.append("[PPP Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Protocol: ").append(protocol).append(ls);
 
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      AbstractPppHeader other = (AbstractPppHeader)obj;
+      AbstractPppHeader other = (AbstractPppHeader) obj;
       return protocol.equals(other.protocol);
     }
 
@@ -303,7 +271,5 @@ abstract class AbstractPppPacket extends AbstractPacket {
       result = 31 * result + protocol.hashCode();
       return result;
     }
-
   }
-
 }

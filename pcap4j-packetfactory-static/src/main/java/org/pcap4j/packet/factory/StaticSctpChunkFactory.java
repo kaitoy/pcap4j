@@ -9,7 +9,6 @@ package org.pcap4j.packet.factory;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IllegalSctpChunk;
 import org.pcap4j.packet.SctpPacket.SctpChunk;
@@ -23,30 +22,27 @@ import org.pcap4j.packet.namednumber.SctpChunkType;
 public final class StaticSctpChunkFactory implements PacketFactory<SctpChunk, SctpChunkType> {
 
   private static final StaticSctpChunkFactory INSTANCE = new StaticSctpChunkFactory();
-  private final Map<SctpChunkType, Instantiater> instantiaters
-    = new HashMap<SctpChunkType, Instantiater>();
+  private final Map<SctpChunkType, Instantiater> instantiaters =
+      new HashMap<SctpChunkType, Instantiater>();
 
   private StaticSctpChunkFactory() {
-//    instantiaters.put(
-//      SctpChunkType.DATA, new Instantiater() {
-//        @Override
-//        public SctpChunk newInstance(
-//          byte[] rawData, int offset, int length
-//        ) throws IllegalRawDataException {
-//          return SctpChunkPayloadData.newInstance(rawData, offset, length);
-//        }
-//        @Override
-//        public Class<SctpChunkPayloadData> getTargetClass() {
-//          return SctpChunkPayloadData.class;
-//        }
-//      }
-//    );
+    //    instantiaters.put(
+    //      SctpChunkType.DATA, new Instantiater() {
+    //        @Override
+    //        public SctpChunk newInstance(
+    //          byte[] rawData, int offset, int length
+    //        ) throws IllegalRawDataException {
+    //          return SctpChunkPayloadData.newInstance(rawData, offset, length);
+    //        }
+    //        @Override
+    //        public Class<SctpChunkPayloadData> getTargetClass() {
+    //          return SctpChunkPayloadData.class;
+    //        }
+    //      }
+    //    );
   };
 
-  /**
-   *
-   * @return the singleton instance of StaticSctpChunkFactory.
-   */
+  /** @return the singleton instance of StaticSctpChunkFactory. */
   public static StaticSctpChunkFactory getInstance() {
     return INSTANCE;
   }
@@ -55,10 +51,7 @@ public final class StaticSctpChunkFactory implements PacketFactory<SctpChunk, Sc
   public SctpChunk newInstance(byte[] rawData, int offset, int length, SctpChunkType number) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" number: ")
-        .append(number);
+      sb.append("rawData: ").append(rawData).append(" number: ").append(number);
       throw new NullPointerException(sb.toString());
     }
 
@@ -99,12 +92,9 @@ public final class StaticSctpChunkFactory implements PacketFactory<SctpChunk, Sc
 
   private static interface Instantiater {
 
-    public SctpChunk newInstance(
-      byte [] rawData, int offset, int length
-    ) throws IllegalRawDataException;
+    public SctpChunk newInstance(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException;
 
     public Class<? extends SctpChunk> getTargetClass();
-
   }
-
 }

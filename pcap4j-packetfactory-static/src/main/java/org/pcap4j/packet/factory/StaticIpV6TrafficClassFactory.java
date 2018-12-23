@@ -17,22 +17,19 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6TrafficClassFactory
-implements PacketFactory<IpV6TrafficClass, NotApplicable> {
+    implements PacketFactory<IpV6TrafficClass, NotApplicable> {
 
-  private static final StaticIpV6TrafficClassFactory INSTANCE
-    = new StaticIpV6TrafficClassFactory();
+  private static final StaticIpV6TrafficClassFactory INSTANCE = new StaticIpV6TrafficClassFactory();
 
-  /**
-   *
-   * @return the singleton instance of StaticIpV6TrafficClassFactory.
-   */
+  /** @return the singleton instance of StaticIpV6TrafficClassFactory. */
   public static StaticIpV6TrafficClassFactory getInstance() {
     return INSTANCE;
   }
 
   @Override
   @Deprecated
-  public IpV6TrafficClass newInstance(byte[] rawData, int offset, int length, NotApplicable number) {
+  public IpV6TrafficClass newInstance(
+      byte[] rawData, int offset, int length, NotApplicable number) {
     return newInstance(rawData, offset, length);
   }
 
@@ -52,5 +49,4 @@ implements PacketFactory<IpV6TrafficClass, NotApplicable> {
   public Class<? extends IpV6TrafficClass> getTargetClass() {
     return IpV6SimpleTrafficClass.class;
   }
-
 }

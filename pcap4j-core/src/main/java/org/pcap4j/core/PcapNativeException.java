@@ -17,52 +17,41 @@ public final class PcapNativeException extends Exception {
 
   private Integer returnCode = null;
 
-  /**
-   *
-   */
+  /** */
   public PcapNativeException() {
     super();
   }
 
-  /**
-   *
-   * @param message message
-   */
-  public PcapNativeException(String message){
+  /** @param message message */
+  public PcapNativeException(String message) {
     super(message);
   }
 
   /**
-   *
    * @param message message
    * @param returnCode returnCode
    */
-  public PcapNativeException(String message, Integer returnCode){
+  public PcapNativeException(String message, Integer returnCode) {
     super(message);
     this.returnCode = returnCode;
   }
 
   /**
-   *
    * @param message message
    * @param cause cause
    */
-  public PcapNativeException(String message, Throwable cause){
-      super(message, cause);
+  public PcapNativeException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  /** @param cause cause */
+  public PcapNativeException(Throwable cause) {
+    super(cause);
   }
 
   /**
-   *
-   * @param cause cause
-   */
-  public PcapNativeException(Throwable cause){
-      super(cause);
-  }
-
-  /**
-   *
-   * @return the return code if the native function which caused
-   *         this exception returned it; otherwise null.
+   * @return the return code if the native function which caused this exception returned it;
+   *     otherwise null.
    */
   public Integer getReturnCode() {
     return returnCode;
@@ -71,5 +60,4 @@ public final class PcapNativeException extends Exception {
   void setReturnCode(Integer returnCode) {
     this.returnCode = returnCode;
   }
-
 }

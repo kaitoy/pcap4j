@@ -19,17 +19,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Ssh2VersionExchangePacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 936170241296151065L;
 
   private final Ssh2VersionExchangeHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -37,31 +34,31 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
    * @return a new Ssh2VersionExchangePacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Ssh2VersionExchangePacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Ssh2VersionExchangePacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Ssh2VersionExchangePacket(rawData, offset, length);
   }
 
-  private Ssh2VersionExchangePacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Ssh2VersionExchangePacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     this.header = new Ssh2VersionExchangeHeader(rawData, offset, length);
   }
 
   private Ssh2VersionExchangePacket(Builder builder) {
-    if (
-         builder == null
-      || builder.protoVersion == null
-      || builder.softwareVersion == null
-      || builder.comments == null
-    ) {
+    if (builder == null
+        || builder.protoVersion == null
+        || builder.softwareVersion == null
+        || builder.comments == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.protoVersion: ").append(builder.protoVersion)
-        .append(" builder.softwareVersion: ").append(builder.softwareVersion)
-        .append(" builder.comments: ").append(builder.comments);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.protoVersion: ")
+          .append(builder.protoVersion)
+          .append(" builder.softwareVersion: ")
+          .append(builder.softwareVersion)
+          .append(" builder.comments: ")
+          .append(builder.comments);
       throw new NullPointerException(sb.toString());
     }
 
@@ -79,7 +76,6 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
   }
 
   /**
-   *
    * @author Kaito Yamada
    * @since pcap4j 1.0.1
    */
@@ -90,9 +86,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
     private String softwareVersion;
     private String comments;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(Ssh2VersionExchangePacket packet) {
@@ -103,7 +97,6 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param messages messages
      * @return this Builder object for method chaining.
      */
@@ -113,7 +106,6 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param protoVersion protoVersion
      * @return this Builder object for method chaining.
      */
@@ -123,7 +115,6 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param softwareVersion softwareVersion
      * @return this Builder object for method chaining.
      */
@@ -133,7 +124,6 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param comments comments
      * @return this Builder object for method chaining.
      */
@@ -146,11 +136,9 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
     public Ssh2VersionExchangePacket build() {
       return new Ssh2VersionExchangePacket(this);
     }
-
   }
 
   /**
-   *
    * @author Kaito Yamada
    * @version pcap4j 1.0.1
    */
@@ -182,9 +170,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
      * characters and the minus sign (-).
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -997040469918475251L;
 
     private final List<String> messages;
@@ -192,17 +178,16 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
     private final String softwareVersion;
     private final String comments;
 
-    private Ssh2VersionExchangeHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private Ssh2VersionExchangeHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < 9) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 version exchange header. data: ")
-          .append(new String(rawData))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(new String(rawData))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -225,14 +210,12 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
 
       if (versionIdx == -1) {
         StringBuilder sb = new StringBuilder(120);
-        sb.append("The data doesn't include the version string. data: ")
-          .append(data);
+        sb.append("The data doesn't include the version string. data: ").append(data);
         throw new IllegalRawDataException(sb.toString());
       }
       if (lines.length < versionIdx + 2) {
         StringBuilder sb = new StringBuilder(120);
-        sb.append("The version string must be terminated by CR LF. data: ")
-          .append(data);
+        sb.append("The version string must be terminated by CR LF. data: ").append(data);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -240,8 +223,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
       int hyphenIdx = data.indexOf("-");
       if (hyphenIdx == -1) {
         StringBuilder sb = new StringBuilder(120);
-        sb.append("The data must start with SSH-protoversion-softwareversion. data: ")
-          .append(data);
+        sb.append("The data must start with SSH-protoversion-softwareversion. data: ").append(data);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -252,8 +234,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
       if (spIdx != -1) {
         this.softwareVersion = data.substring(0, spIdx);
         this.comments = data.substring(spIdx + 1, data.length());
-      }
-      else {
+      } else {
         this.softwareVersion = data.substring(0, data.length());
         this.comments = "";
       }
@@ -261,11 +242,11 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
       if (length() > 255) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too long for an SSH version exchange header. data: ")
-          .append(new String(rawData))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(new String(rawData))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
     }
@@ -273,8 +254,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
     private Ssh2VersionExchangeHeader(Builder builder) {
       if (builder.messages != null) {
         this.messages = new ArrayList<String>(builder.messages);
-      }
-      else {
+      } else {
         this.messages = new ArrayList<String>();
       }
       this.protoVersion = builder.protoVersion;
@@ -284,7 +264,7 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
       if (length() > 255) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too long for an SSH version exchange header. data: ")
-          .append("builder.messages: [");
+            .append("builder.messages: [");
         Iterator<String> iter = messages.iterator();
         while (iter.hasNext()) {
           String message = iter.next();
@@ -294,62 +274,45 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
           }
         }
         sb.append("]")
-          .append(" builder.protoVersion: ").append(builder.protoVersion)
-          .append(" builder.softwareVersion: ").append(builder.softwareVersion)
-          .append(" builder.comments: ").append(builder.comments);
+            .append(" builder.protoVersion: ")
+            .append(builder.protoVersion)
+            .append(" builder.softwareVersion: ")
+            .append(builder.softwareVersion)
+            .append(" builder.comments: ")
+            .append(builder.comments);
         throw new IllegalArgumentException(sb.toString());
       }
     }
 
-    /**
-     *
-     * @return a shallow copy of messages
-     */
+    /** @return a shallow copy of messages */
     public ArrayList<String> getMessages() {
       return new ArrayList<String>(messages);
     }
 
-    /**
-     *
-     * @return protoVersion
-     */
+    /** @return protoVersion */
     public String getProtoVersion() {
       return protoVersion;
     }
 
-    /**
-     *
-     * @return softwareVersion
-     */
+    /** @return softwareVersion */
     public String getSoftwareVersion() {
       return softwareVersion;
     }
 
-    /**
-     *
-     * @return comments
-     */
+    /** @return comments */
     public String getComments() {
       return comments;
     }
 
-    /**
-     *
-     * @return the entire message.
-     */
+    /** @return the entire message. */
     public String getEntireMessage() {
       StringBuilder sb = new StringBuilder(50);
-      for (String message: messages) {
-        sb.append(message)
-          .append("\r\n");
+      for (String message : messages) {
+        sb.append(message).append("\r\n");
       }
-      sb.append("SSH-")
-        .append(protoVersion)
-        .append("-")
-        .append(softwareVersion);
+      sb.append("SSH-").append(protoVersion).append("-").append(softwareVersion);
       if (comments.length() != 0) {
-        sb.append(" ")
-          .append(comments);
+        sb.append(" ").append(comments);
       }
       sb.append("\r\n");
 
@@ -364,21 +327,18 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
     }
 
     @Override
-    protected int calcLength() { return getEntireMessage().length(); }
+    protected int calcLength() {
+      return getEntireMessage().length();
+    }
 
     @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[SSH2 Version Exchange Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      for (String line: getEntireMessage().split("\r\n")) {
-        sb.append("  ")
-          .append(line)
-          .append(ls);
+      sb.append("[SSH2 Version Exchange Header (").append(length()).append(" bytes)]").append(ls);
+      for (String line : getEntireMessage().split("\r\n")) {
+        sb.append("  ").append(line).append(ls);
       }
 
       return sb.toString();
@@ -386,15 +346,18 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      Ssh2VersionExchangeHeader other = (Ssh2VersionExchangeHeader)obj;
-      return
-           protoVersion.equals(other.protoVersion)
-        && softwareVersion.equals(other.softwareVersion)
-        && comments.equals(other.comments)
-        && messages.equals(other.messages);
+      Ssh2VersionExchangeHeader other = (Ssh2VersionExchangeHeader) obj;
+      return protoVersion.equals(other.protoVersion)
+          && softwareVersion.equals(other.softwareVersion)
+          && comments.equals(other.comments)
+          && messages.equals(other.messages);
     }
 
     @Override
@@ -406,7 +369,5 @@ public final class Ssh2VersionExchangePacket extends AbstractPacket {
       result = 31 * result + comments.hashCode();
       return result;
     }
-
   }
-
 }

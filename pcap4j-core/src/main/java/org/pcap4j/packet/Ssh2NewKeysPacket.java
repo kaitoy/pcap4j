@@ -19,9 +19,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Ssh2NewKeysPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -4355029035065046101L;
 
   private static final Ssh2NewKeysPacket INSTANCE = new Ssh2NewKeysPacket();
@@ -30,15 +28,14 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
 
   private Ssh2NewKeysPacket() {}
 
-  /**
-   * @return the singleton instance of Ssh2NewKeysPacket.
-   */
-  public static Ssh2NewKeysPacket getInstance() { return INSTANCE; }
+  /** @return the singleton instance of Ssh2NewKeysPacket. */
+  public static Ssh2NewKeysPacket getInstance() {
+    return INSTANCE;
+  }
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -46,9 +43,8 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
    * @return the singleton instance of Ssh2NewKeysPacket.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Ssh2NewKeysPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Ssh2NewKeysPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     Ssh2NewKeysHeader.checkRawData(rawData, offset, length);
     return INSTANCE;
@@ -81,7 +77,6 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
   }
 
   /**
-   *
    * @author Kaito Yamada
    * @version pcap4j 1.0.1
    */
@@ -93,9 +88,7 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
      * byte      SSH_MSG_NEWKEYS
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -6964593795610286838L;
 
     private static final Ssh2NewKeysHeader INSTANCE = new Ssh2NewKeysHeader();
@@ -104,41 +97,37 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
 
     private Ssh2NewKeysHeader() {}
 
-    private static void checkRawData(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private static void checkRawData(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < 1) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is too short to build an SSH2 New Keys header. data: ")
-          .append(new String(rawData))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(new String(rawData))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      if (
-        !Ssh2MessageNumber.getInstance(rawData[offset])
-          .equals(Ssh2MessageNumber.SSH_MSG_KEXINIT)
-      ) {
+      if (!Ssh2MessageNumber.getInstance(rawData[offset])
+          .equals(Ssh2MessageNumber.SSH_MSG_KEXINIT)) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is not an SSH2 New Keys message. data: ")
-          .append(new String(rawData))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(new String(rawData))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
     }
 
-    private static Ssh2NewKeysHeader getInstance() { return INSTANCE; }
+    private static Ssh2NewKeysHeader getInstance() {
+      return INSTANCE;
+    }
 
-    /**
-     *
-     * @return messageNumber
-     */
+    /** @return messageNumber */
     public Ssh2MessageNumber getMessageNumber() {
       return messageNumber;
     }
@@ -151,20 +140,17 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
     }
 
     @Override
-    public int length() { return 1; }
+    public int length() {
+      return 1;
+    }
 
     @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[SSH2 New Keys Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Message Number: ")
-        .append(messageNumber)
-        .append(ls);
+      sb.append("[SSH2 New Keys Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Message Number: ").append(messageNumber).append(ls);
 
       return sb.toString();
     }
@@ -184,7 +170,5 @@ public final class Ssh2NewKeysPacket extends AbstractPacket {
     private Object readResolve() throws ObjectStreamException {
       return INSTANCE;
     }
-
   }
-
 }

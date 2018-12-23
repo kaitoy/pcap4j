@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.namednumber.Dot11InformationElementId;
 import org.pcap4j.packet.namednumber.Dot11ServiceIntervalGranularity;
 import org.pcap4j.util.ByteArrays;
@@ -33,9 +32,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElement {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 5039470467536222487L;
 
   private final Boolean twentyFortyBssCoexistenceManagementSupported;
@@ -96,9 +93,8 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
   private final int actualLength;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -106,9 +102,8 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
    * @return a new Dot11ExtendedCapabilitiesElement object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot11ExtendedCapabilitiesElement newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot11ExtendedCapabilitiesElement newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot11ExtendedCapabilitiesElement(rawData, offset, length);
   }
@@ -119,9 +114,8 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
    * @param length length
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  private Dot11ExtendedCapabilitiesElement(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot11ExtendedCapabilitiesElement(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     super(rawData, offset, length, Dot11InformationElementId.EXTENDED_CAPABILITIES);
 
     this.actualLength = getLengthAsInt();
@@ -135,8 +129,7 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
       this.bit5 = (rawData[offset + 2] & 0x20) != 0;
       this.scheduledPsmpSupported = (rawData[offset + 2] & 0x40) != 0;
       this.eventActivated = (rawData[offset + 2] & 0x80) != 0;
-    }
-    else {
+    } else {
       this.twentyFortyBssCoexistenceManagementSupported = null;
       this.bit1 = null;
       this.extendedChannelSwitchingSupported = null;
@@ -156,8 +149,7 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
       this.collocatedInterferenceReportingActivated = (rawData[offset + 3] & 0x20) != 0;
       this.rmCivicMeasurementActivated = (rawData[offset + 3] & 0x40) != 0;
       this.rmLciMeasurementActivated = (rawData[offset + 3] & 0x80) != 0;
-    }
-    else {
+    } else {
       this.diagnosticsActivated = null;
       this.multicastDiagnosticsActivated = null;
       this.locationTrackingActivated = null;
@@ -177,8 +169,7 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
       this.acStationCountActivated = (rawData[offset + 4] & 0x20) != 0;
       this.multiBssIdActivated = (rawData[offset + 4] & 0x40) != 0;
       this.timingMeasurementActivated = (rawData[offset + 4] & 0x80) != 0;
-    }
-    else {
+    } else {
       this.tfsActivated = null;
       this.wnmSleepModeActivated = null;
       this.timBroadcastActivated = null;
@@ -198,8 +189,7 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
       this.tdlsPeerPsmSupported = (rawData[offset + 5] & 0x20) != 0;
       this.tdlsChannelSwitchingActivated = (rawData[offset + 5] & 0x40) != 0;
       this.interworkingServiceActivated = (rawData[offset + 5] & 0x80) != 0;
-    }
-    else {
+    } else {
       this.channelUsageActivated = null;
       this.ssidListActivated = null;
       this.dmsActivated = null;
@@ -219,8 +209,7 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
       this.tdlsSupported = (rawData[offset + 6] & 0x20) != 0;
       this.tdlsProhibited = (rawData[offset + 6] & 0x40) != 0;
       this.tdlsChannelSwitchingProhibited = (rawData[offset + 6] & 0x80) != 0;
-    }
-    else {
+    } else {
       this.qosMapActivated = null;
       this.ebrActivated = null;
       this.sspnInterfaceActivated = null;
@@ -233,14 +222,13 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
 
     if (actualLength > 5) {
       this.rejectingUnadmittedTraffic = (rawData[offset + 7] & 0x01) != 0;
-      this.serviceIntervalGranularity
-        = Dot11ServiceIntervalGranularity.getInstance((byte) ((rawData[offset + 7] & 0x0E) >> 1));
+      this.serviceIntervalGranularity =
+          Dot11ServiceIntervalGranularity.getInstance((byte) ((rawData[offset + 7] & 0x0E) >> 1));
       this.rmIdentifierMeasurementActivated = (rawData[offset + 7] & 0x10) != 0;
       this.uapsdCoexistenceActivated = (rawData[offset + 7] & 0x20) != 0;
       this.wnmNotificationActivated = (rawData[offset + 7] & 0x40) != 0;
       this.bit47 = (rawData[offset + 7] & 0x80) != 0;
-    }
-    else {
+    } else {
       this.rejectingUnadmittedTraffic = null;
       this.serviceIntervalGranularity = null;
       this.rmIdentifierMeasurementActivated = null;
@@ -258,8 +246,7 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
       this.bit53 = (rawData[offset + 8] & 0x20) != 0;
       this.bit54 = (rawData[offset + 8] & 0x40) != 0;
       this.bit55 = (rawData[offset + 8] & 0x80) != 0;
-    }
-    else {
+    } else {
       this.utf8Ssid = null;
       this.bit49 = null;
       this.bit50 = null;
@@ -272,33 +259,28 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
 
     if (actualLength > 7) {
       this.trailingData = ByteArrays.getSubArray(rawData, offset + 9, actualLength - 7);
-    }
-    else {
+    } else {
       this.trailingData = null;
     }
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   private Dot11ExtendedCapabilitiesElement(Builder builder) {
     super(builder);
 
     if (builder.trailingData.length > 248) {
       throw new IllegalArgumentException(
-              "Too long trailingData: " + ByteArrays.toHexString(builder.trailingData, " ")
-            );
+          "Too long trailingData: " + ByteArrays.toHexString(builder.trailingData, " "));
     }
 
     if (builder.getCorrectLengthAtBuild()) {
       this.actualLength = getLengthAsInt();
-    }
-    else {
+    } else {
       this.actualLength = calcActualLength(builder);
     }
 
-    this.twentyFortyBssCoexistenceManagementSupported
-      = builder.twentyFortyBssCoexistenceManagementSupported;
+    this.twentyFortyBssCoexistenceManagementSupported =
+        builder.twentyFortyBssCoexistenceManagementSupported;
     this.bit1 = builder.bit1;
     this.extendedChannelSwitchingSupported = builder.extendedChannelSwitchingSupported;
     this.bit3 = builder.bit3;
@@ -311,8 +293,8 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
     this.locationTrackingActivated = builder.locationTrackingActivated;
     this.fmsActivated = builder.fmsActivated;
     this.proxyArpServiceActivated = builder.proxyArpServiceActivated;
-    this.collocatedInterferenceReportingActivated
-      = builder.collocatedInterferenceReportingActivated;
+    this.collocatedInterferenceReportingActivated =
+        builder.collocatedInterferenceReportingActivated;
     this.rmCivicMeasurementActivated = builder.rmCivicMeasurementActivated;
     this.rmLciMeasurementActivated = builder.rmLciMeasurementActivated;
     this.tfsActivated = builder.tfsActivated;
@@ -355,8 +337,7 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
     this.bit55 = builder.bit55;
     if (builder.trailingData != null) {
       this.trailingData = ByteArrays.clone(builder.trailingData);
-    }
-    else {
+    } else {
       this.trailingData = null;
     }
   }
@@ -364,475 +345,343 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
   private static int calcActualLength(Builder builder) {
     if (builder.trailingData != null) {
       return 7 + builder.trailingData.length;
-    }
-    else if (
-         builder.utf8Ssid != null
-      || builder.bit49 != null
-      || builder.bit50 != null
-      || builder.bit51 != null
-      || builder.bit52 != null
-      || builder.bit53 != null
-      || builder.bit54 != null
-      || builder.bit55 != null
-    ) {
+    } else if (builder.utf8Ssid != null
+        || builder.bit49 != null
+        || builder.bit50 != null
+        || builder.bit51 != null
+        || builder.bit52 != null
+        || builder.bit53 != null
+        || builder.bit54 != null
+        || builder.bit55 != null) {
       return 7;
-    }
-    else if (
-         builder.rejectingUnadmittedTraffic != null
-      || builder.serviceIntervalGranularity != null
-      || builder.rmIdentifierMeasurementActivated != null
-      || builder.uapsdCoexistenceActivated != null
-      || builder.wnmNotificationActivated != null
-      || builder.bit47 != null
-    ) {
+    } else if (builder.rejectingUnadmittedTraffic != null
+        || builder.serviceIntervalGranularity != null
+        || builder.rmIdentifierMeasurementActivated != null
+        || builder.uapsdCoexistenceActivated != null
+        || builder.wnmNotificationActivated != null
+        || builder.bit47 != null) {
       return 6;
-    }
-    else if (
-         builder.qosMapActivated != null
-      || builder.ebrActivated != null
-      || builder.sspnInterfaceActivated != null
-      || builder.bit35 != null
-      || builder.msgcfActivated != null
-      || builder.tdlsSupported != null
-      || builder.tdlsProhibited != null
-      || builder.tdlsChannelSwitchingProhibited != null
-    ) {
+    } else if (builder.qosMapActivated != null
+        || builder.ebrActivated != null
+        || builder.sspnInterfaceActivated != null
+        || builder.bit35 != null
+        || builder.msgcfActivated != null
+        || builder.tdlsSupported != null
+        || builder.tdlsProhibited != null
+        || builder.tdlsChannelSwitchingProhibited != null) {
       return 5;
-    }
-    else if (
-         builder.channelUsageActivated != null
-      || builder.ssidListActivated != null
-      || builder.dmsActivated != null
-      || builder.utcTsfOffsetActivated != null
-      || builder.tdlsPeerUapsdBufferStaSupported != null
-      || builder.tdlsPeerPsmSupported != null
-      || builder.tdlsChannelSwitchingActivated != null
-      || builder.interworkingServiceActivated != null
-    ) {
+    } else if (builder.channelUsageActivated != null
+        || builder.ssidListActivated != null
+        || builder.dmsActivated != null
+        || builder.utcTsfOffsetActivated != null
+        || builder.tdlsPeerUapsdBufferStaSupported != null
+        || builder.tdlsPeerPsmSupported != null
+        || builder.tdlsChannelSwitchingActivated != null
+        || builder.interworkingServiceActivated != null) {
       return 4;
-    }
-    else if (
-         builder.tfsActivated != null
-      || builder.wnmSleepModeActivated != null
-      || builder.timBroadcastActivated != null
-      || builder.bssTransitionActivated != null
-      || builder.qosTrafficCapabilityActivated != null
-      || builder.acStationCountActivated != null
-      || builder.multiBssIdActivated != null
-      || builder.timingMeasurementActivated != null
-    ) {
+    } else if (builder.tfsActivated != null
+        || builder.wnmSleepModeActivated != null
+        || builder.timBroadcastActivated != null
+        || builder.bssTransitionActivated != null
+        || builder.qosTrafficCapabilityActivated != null
+        || builder.acStationCountActivated != null
+        || builder.multiBssIdActivated != null
+        || builder.timingMeasurementActivated != null) {
       return 3;
-    }
-    else if (
-         builder.diagnosticsActivated != null
-      || builder.multicastDiagnosticsActivated != null
-      || builder.locationTrackingActivated != null
-      || builder.fmsActivated != null
-      || builder.proxyArpServiceActivated != null
-      || builder.collocatedInterferenceReportingActivated != null
-      || builder.rmCivicMeasurementActivated != null
-      || builder.rmLciMeasurementActivated != null
-    ) {
+    } else if (builder.diagnosticsActivated != null
+        || builder.multicastDiagnosticsActivated != null
+        || builder.locationTrackingActivated != null
+        || builder.fmsActivated != null
+        || builder.proxyArpServiceActivated != null
+        || builder.collocatedInterferenceReportingActivated != null
+        || builder.rmCivicMeasurementActivated != null
+        || builder.rmLciMeasurementActivated != null) {
       return 2;
-    }
-    else if (
-         builder.twentyFortyBssCoexistenceManagementSupported != null
-      || builder.bit1 != null
-      || builder.extendedChannelSwitchingSupported != null
-      || builder.bit3 != null
-      || builder.psmpOperationSupported != null
-      || builder.bit5 != null
-      || builder.scheduledPsmpSupported != null
-      || builder.eventActivated != null
-    ) {
+    } else if (builder.twentyFortyBssCoexistenceManagementSupported != null
+        || builder.bit1 != null
+        || builder.extendedChannelSwitchingSupported != null
+        || builder.bit3 != null
+        || builder.psmpOperationSupported != null
+        || builder.bit5 != null
+        || builder.scheduledPsmpSupported != null
+        || builder.eventActivated != null) {
       return 1;
-    }
-    else {
+    } else {
       return 0;
     }
   }
 
-  /**
-   * @return twentyFortyBssCoexistenceManagementSupported. May be null.
-   */
+  /** @return twentyFortyBssCoexistenceManagementSupported. May be null. */
   public Boolean is2040BssCoexistenceManagementSupported() {
     return twentyFortyBssCoexistenceManagementSupported;
   }
 
-  /**
-   * @return bit1. May be null.
-   */
+  /** @return bit1. May be null. */
   public Boolean getBit1() {
     return bit1;
   }
 
-  /**
-   * @return extendedChannelSwitchingSupported. May be null.
-   */
+  /** @return extendedChannelSwitchingSupported. May be null. */
   public Boolean isExtendedChannelSwitchingSupported() {
     return extendedChannelSwitchingSupported;
   }
 
-  /**
-   * @return bit3. May be null.
-   */
+  /** @return bit3. May be null. */
   public Boolean getBit3() {
     return bit3;
   }
 
-  /**
-   * @return psmpOperationSupported. May be null.
-   */
+  /** @return psmpOperationSupported. May be null. */
   public Boolean isPsmpOperationSupported() {
     return psmpOperationSupported;
   }
 
-  /**
-   * @return bit5. May be null.
-   */
+  /** @return bit5. May be null. */
   public Boolean getBit5() {
     return bit5;
   }
 
-  /**
-   * @return scheduledPsmpSupported. May be null.
-   */
+  /** @return scheduledPsmpSupported. May be null. */
   public Boolean isScheduledPsmpSupported() {
     return scheduledPsmpSupported;
   }
 
-  /**
-   * @return eventActivated. May be null.
-   */
+  /** @return eventActivated. May be null. */
   public Boolean isEventActivated() {
     return eventActivated;
   }
 
-  /**
-   * @return diagnosticsActivated. May be null.
-   */
+  /** @return diagnosticsActivated. May be null. */
   public Boolean isDiagnosticsActivated() {
     return diagnosticsActivated;
   }
 
-  /**
-   * @return multicastDiagnosticsActivated. May be null.
-   */
+  /** @return multicastDiagnosticsActivated. May be null. */
   public Boolean isMulticastDiagnosticsActivated() {
     return multicastDiagnosticsActivated;
   }
 
-  /**
-   * @return locationTrackingActivated. May be null.
-   */
+  /** @return locationTrackingActivated. May be null. */
   public Boolean isLocationTrackingActivated() {
     return locationTrackingActivated;
   }
 
-  /**
-   * @return fmsActivated. May be null.
-   */
+  /** @return fmsActivated. May be null. */
   public Boolean isFmsActivated() {
     return fmsActivated;
   }
 
-  /**
-   * @return proxyArpServiceActivated. May be null.
-   */
+  /** @return proxyArpServiceActivated. May be null. */
   public Boolean isProxyArpServiceActivated() {
     return proxyArpServiceActivated;
   }
 
-  /**
-   * @return collocatedInterferenceReportingActivated. May be null.
-   */
+  /** @return collocatedInterferenceReportingActivated. May be null. */
   public Boolean isCollocatedInterferenceReportingActivated() {
     return collocatedInterferenceReportingActivated;
   }
 
-  /**
-   * @return rmCivicMeasurementActivated. May be null.
-   */
+  /** @return rmCivicMeasurementActivated. May be null. */
   public Boolean isRmCivicMeasurementActivated() {
     return rmCivicMeasurementActivated;
   }
 
-  /**
-   * @return rmLciMeasurementActivated. May be null.
-   */
+  /** @return rmLciMeasurementActivated. May be null. */
   public Boolean isRmLciMeasurementActivated() {
     return rmLciMeasurementActivated;
   }
 
-  /**
-   * @return tfsActivated. May be null.
-   */
+  /** @return tfsActivated. May be null. */
   public Boolean isTfsActivated() {
     return tfsActivated;
   }
 
-  /**
-   * @return wnmSleepModeActivated. May be null.
-   */
+  /** @return wnmSleepModeActivated. May be null. */
   public Boolean isWnmSleepModeActivated() {
     return wnmSleepModeActivated;
   }
 
-  /**
-   * @return timBroadcastActivated. May be null.
-   */
+  /** @return timBroadcastActivated. May be null. */
   public Boolean isTimBroadcastActivated() {
     return timBroadcastActivated;
   }
 
-  /**
-   * @return bssTransitionActivated. May be null.
-   */
+  /** @return bssTransitionActivated. May be null. */
   public Boolean isBssTransitionActivated() {
     return bssTransitionActivated;
   }
 
-  /**
-   * @return qosTrafficCapabilityActivated. May be null.
-   */
+  /** @return qosTrafficCapabilityActivated. May be null. */
   public Boolean isQosTrafficCapabilityActivated() {
     return qosTrafficCapabilityActivated;
   }
 
-  /**
-   * @return acStationCountActivated. May be null.
-   */
+  /** @return acStationCountActivated. May be null. */
   public Boolean isAcStationCountActivated() {
     return acStationCountActivated;
   }
 
-  /**
-   * @return multiBssIdActivated. May be null.
-   */
+  /** @return multiBssIdActivated. May be null. */
   public Boolean isMultiBssIdActivated() {
     return multiBssIdActivated;
   }
 
-  /**
-   * @return timingMeasurementActivated. May be null.
-   */
+  /** @return timingMeasurementActivated. May be null. */
   public Boolean isTimingMeasurementActivated() {
     return timingMeasurementActivated;
   }
 
-  /**
-   * @return channelUsageActivated. May be null.
-   */
+  /** @return channelUsageActivated. May be null. */
   public Boolean isChannelUsageActivated() {
     return channelUsageActivated;
   }
 
-  /**
-   * @return ssidListActivated. May be null.
-   */
+  /** @return ssidListActivated. May be null. */
   public Boolean isSsidListActivated() {
     return ssidListActivated;
   }
 
-  /**
-   * @return dmsActivated. May be null.
-   */
+  /** @return dmsActivated. May be null. */
   public Boolean isDmsActivated() {
     return dmsActivated;
   }
 
-  /**
-   * @return utcTsfOffsetActivated. May be null.
-   */
+  /** @return utcTsfOffsetActivated. May be null. */
   public Boolean isUtcTsfOffsetActivated() {
     return utcTsfOffsetActivated;
   }
 
-  /**
-   * @return tdlsPeerUapsdBufferStaSupported. May be null.
-   */
+  /** @return tdlsPeerUapsdBufferStaSupported. May be null. */
   public Boolean isTdlsPeerUapsdBufferStaSupported() {
     return tdlsPeerUapsdBufferStaSupported;
   }
 
-  /**
-   * @return tdlsPeerPsmSupported. May be null.
-   */
+  /** @return tdlsPeerPsmSupported. May be null. */
   public Boolean isTdlsPeerPsmSupported() {
     return tdlsPeerPsmSupported;
   }
 
-  /**
-   * @return tdlsChannelSwitchingActivated. May be null.
-   */
+  /** @return tdlsChannelSwitchingActivated. May be null. */
   public Boolean isTdlsChannelSwitchingActivated() {
     return tdlsChannelSwitchingActivated;
   }
 
-  /**
-   * @return interworkingServiceActivated. May be null.
-   */
+  /** @return interworkingServiceActivated. May be null. */
   public Boolean isInterworkingServiceActivated() {
     return interworkingServiceActivated;
   }
 
-  /**
-   * @return qosMapActivated. May be null.
-   */
+  /** @return qosMapActivated. May be null. */
   public Boolean isQosMapActivated() {
     return qosMapActivated;
   }
 
-  /**
-   * @return ebrActivated. May be null.
-   */
+  /** @return ebrActivated. May be null. */
   public Boolean isEbrActivated() {
     return ebrActivated;
   }
 
-  /**
-   * @return sspnInterfaceActivated. May be null.
-   */
+  /** @return sspnInterfaceActivated. May be null. */
   public Boolean isSspnInterfaceActivated() {
     return sspnInterfaceActivated;
   }
 
-  /**
-   * @return bit35. May be null.
-   */
+  /** @return bit35. May be null. */
   public Boolean getBit35() {
     return bit35;
   }
 
-  /**
-   * @return msgcfActivated. May be null.
-   */
+  /** @return msgcfActivated. May be null. */
   public Boolean isMsgcfActivated() {
     return msgcfActivated;
   }
 
-  /**
-   * @return tdlsSupported. May be null.
-   */
+  /** @return tdlsSupported. May be null. */
   public Boolean isTdlsSupported() {
     return tdlsSupported;
   }
 
-  /**
-   * @return tdlsProhibited. May be null.
-   */
+  /** @return tdlsProhibited. May be null. */
   public Boolean isTdlsProhibited() {
     return tdlsProhibited;
   }
 
-  /**
-   * @return tdlsChannelSwitchingProhibited. May be null.
-   */
+  /** @return tdlsChannelSwitchingProhibited. May be null. */
   public Boolean isTdlsChannelSwitchingProhibited() {
     return tdlsChannelSwitchingProhibited;
   }
 
-  /**
-   * @return rejectingUnadmittedTraffic. May be null.
-   */
+  /** @return rejectingUnadmittedTraffic. May be null. */
   public Boolean isRejectingUnadmittedTraffic() {
     return rejectingUnadmittedTraffic;
   }
 
-  /**
-   * @return serviceIntervalGranularity. May be null.
-   */
+  /** @return serviceIntervalGranularity. May be null. */
   public Dot11ServiceIntervalGranularity getServiceIntervalGranularity() {
     return serviceIntervalGranularity;
   }
 
-  /**
-   * @return rmIdentifierMeasurementActivated. May be null.
-   */
+  /** @return rmIdentifierMeasurementActivated. May be null. */
   public Boolean isRmIdentifierMeasurementActivated() {
     return rmIdentifierMeasurementActivated;
   }
 
-  /**
-   * @return uapsdCoexistenceActivated. May be null.
-   */
+  /** @return uapsdCoexistenceActivated. May be null. */
   public Boolean isUapsdCoexistenceActivated() {
     return uapsdCoexistenceActivated;
   }
 
-  /**
-   * @return wnmNotificationActivated. May be null.
-   */
+  /** @return wnmNotificationActivated. May be null. */
   public Boolean isWnmNotificationActivated() {
     return wnmNotificationActivated;
   }
 
-  /**
-   * @return bit47. May be null.
-   */
+  /** @return bit47. May be null. */
   public Boolean getBit47() {
     return bit47;
   }
 
-  /**
-   * @return utf8Ssid. May be null.
-   */
+  /** @return utf8Ssid. May be null. */
   public Boolean isutf8Ssid() {
     return utf8Ssid;
   }
 
-  /**
-   * @return bit49. May be null.
-   */
+  /** @return bit49. May be null. */
   public Boolean getBit49() {
     return bit49;
   }
 
-  /**
-   * @return bit50. May be null.
-   */
+  /** @return bit50. May be null. */
   public Boolean getBit50() {
     return bit50;
   }
 
-  /**
-   * @return bit51. May be null.
-   */
+  /** @return bit51. May be null. */
   public Boolean getBit51() {
     return bit51;
   }
 
-  /**
-   * @return bit52. May be null.
-   */
+  /** @return bit52. May be null. */
   public Boolean getBit52() {
     return bit52;
   }
 
-  /**
-   * @return bit53. May be null.
-   */
+  /** @return bit53. May be null. */
   public Boolean getBit53() {
     return bit53;
   }
 
-  /**
-   * @return bit54. May be null.
-   */
+  /** @return bit54. May be null. */
   public Boolean getBit54() {
     return bit54;
   }
 
-  /**
-   * @return bit55. May be null.
-   */
+  /** @return bit55. May be null. */
   public Boolean getBit55() {
     return bit55;
   }
 
-  /**
-   * @return trailingData. May be null.
-   */
+  /** @return trailingData. May be null. */
   public byte[] getTrailingData() {
     return trailingData != null ? ByteArrays.clone(trailingData) : null;
   }
@@ -1027,19 +876,19 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
     result = prime * result + ((utf8Ssid == null) ? 0 : utf8Ssid.hashCode());
-    result = prime * result
-        + ((acStationCountActivated == null) ? 0 : acStationCountActivated.hashCode());
+    result =
+        prime * result
+            + ((acStationCountActivated == null) ? 0 : acStationCountActivated.hashCode());
     result = prime * result + ((bit1 == null) ? 0 : bit1.hashCode());
     result = prime * result + ((bit3 == null) ? 0 : bit3.hashCode());
     result = prime * result + ((bit35 == null) ? 0 : bit35.hashCode());
@@ -1052,412 +901,295 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
     result = prime * result + ((bit53 == null) ? 0 : bit53.hashCode());
     result = prime * result + ((bit54 == null) ? 0 : bit54.hashCode());
     result = prime * result + ((bit55 == null) ? 0 : bit55.hashCode());
-    result = prime * result
-        + ((bssTransitionActivated == null) ? 0 : bssTransitionActivated.hashCode());
-    result = prime * result
-        + ((channelUsageActivated == null) ? 0 : channelUsageActivated.hashCode());
-    result = prime * result + ((collocatedInterferenceReportingActivated == null) ? 0
-        : collocatedInterferenceReportingActivated.hashCode());
-    result = prime * result
-        + ((diagnosticsActivated == null) ? 0 : diagnosticsActivated.hashCode());
+    result =
+        prime * result + ((bssTransitionActivated == null) ? 0 : bssTransitionActivated.hashCode());
+    result =
+        prime * result + ((channelUsageActivated == null) ? 0 : channelUsageActivated.hashCode());
+    result =
+        prime * result
+            + ((collocatedInterferenceReportingActivated == null)
+                ? 0
+                : collocatedInterferenceReportingActivated.hashCode());
+    result =
+        prime * result + ((diagnosticsActivated == null) ? 0 : diagnosticsActivated.hashCode());
     result = prime * result + ((dmsActivated == null) ? 0 : dmsActivated.hashCode());
     result = prime * result + ((ebrActivated == null) ? 0 : ebrActivated.hashCode());
     result = prime * result + ((eventActivated == null) ? 0 : eventActivated.hashCode());
-    result = prime * result + ((extendedChannelSwitchingSupported == null) ? 0
-        : extendedChannelSwitchingSupported.hashCode());
+    result =
+        prime * result
+            + ((extendedChannelSwitchingSupported == null)
+                ? 0
+                : extendedChannelSwitchingSupported.hashCode());
     result = prime * result + ((fmsActivated == null) ? 0 : fmsActivated.hashCode());
-    result = prime * result
-        + ((interworkingServiceActivated == null) ? 0 : interworkingServiceActivated.hashCode());
-    result = prime * result
-        + ((locationTrackingActivated == null) ? 0 : locationTrackingActivated.hashCode());
+    result =
+        prime * result
+            + ((interworkingServiceActivated == null)
+                ? 0
+                : interworkingServiceActivated.hashCode());
+    result =
+        prime * result
+            + ((locationTrackingActivated == null) ? 0 : locationTrackingActivated.hashCode());
     result = prime * result + ((msgcfActivated == null) ? 0 : msgcfActivated.hashCode());
     result = prime * result + ((multiBssIdActivated == null) ? 0 : multiBssIdActivated.hashCode());
-    result = prime * result
-        + ((multicastDiagnosticsActivated == null) ? 0 : multicastDiagnosticsActivated.hashCode());
-    result = prime * result
-        + ((proxyArpServiceActivated == null) ? 0 : proxyArpServiceActivated.hashCode());
-    result = prime * result
-        + ((psmpOperationSupported == null) ? 0 : psmpOperationSupported.hashCode());
+    result =
+        prime * result
+            + ((multicastDiagnosticsActivated == null)
+                ? 0
+                : multicastDiagnosticsActivated.hashCode());
+    result =
+        prime * result
+            + ((proxyArpServiceActivated == null) ? 0 : proxyArpServiceActivated.hashCode());
+    result =
+        prime * result + ((psmpOperationSupported == null) ? 0 : psmpOperationSupported.hashCode());
     result = prime * result + ((qosMapActivated == null) ? 0 : qosMapActivated.hashCode());
-    result = prime * result
-        + ((qosTrafficCapabilityActivated == null) ? 0 : qosTrafficCapabilityActivated.hashCode());
-    result = prime * result
-        + ((rejectingUnadmittedTraffic == null) ? 0 : rejectingUnadmittedTraffic.hashCode());
-    result = prime * result
-        + ((rmCivicMeasurementActivated == null) ? 0 : rmCivicMeasurementActivated.hashCode());
-    result = prime * result + ((rmIdentifierMeasurementActivated == null) ? 0
-        : rmIdentifierMeasurementActivated.hashCode());
-    result = prime * result
-        + ((rmLciMeasurementActivated == null) ? 0 : rmLciMeasurementActivated.hashCode());
-    result = prime * result
-        + ((scheduledPsmpSupported == null) ? 0 : scheduledPsmpSupported.hashCode());
-    result = prime * result
-        + ((serviceIntervalGranularity == null) ? 0 : serviceIntervalGranularity.hashCode());
+    result =
+        prime * result
+            + ((qosTrafficCapabilityActivated == null)
+                ? 0
+                : qosTrafficCapabilityActivated.hashCode());
+    result =
+        prime * result
+            + ((rejectingUnadmittedTraffic == null) ? 0 : rejectingUnadmittedTraffic.hashCode());
+    result =
+        prime * result
+            + ((rmCivicMeasurementActivated == null) ? 0 : rmCivicMeasurementActivated.hashCode());
+    result =
+        prime * result
+            + ((rmIdentifierMeasurementActivated == null)
+                ? 0
+                : rmIdentifierMeasurementActivated.hashCode());
+    result =
+        prime * result
+            + ((rmLciMeasurementActivated == null) ? 0 : rmLciMeasurementActivated.hashCode());
+    result =
+        prime * result + ((scheduledPsmpSupported == null) ? 0 : scheduledPsmpSupported.hashCode());
+    result =
+        prime * result
+            + ((serviceIntervalGranularity == null) ? 0 : serviceIntervalGranularity.hashCode());
     result = prime * result + ((ssidListActivated == null) ? 0 : ssidListActivated.hashCode());
-    result = prime * result
-        + ((sspnInterfaceActivated == null) ? 0 : sspnInterfaceActivated.hashCode());
-    result = prime * result
-        + ((tdlsChannelSwitchingActivated == null) ? 0 : tdlsChannelSwitchingActivated.hashCode());
-    result = prime * result + ((tdlsChannelSwitchingProhibited == null) ? 0
-        : tdlsChannelSwitchingProhibited.hashCode());
-    result = prime * result
-        + ((tdlsPeerPsmSupported == null) ? 0 : tdlsPeerPsmSupported.hashCode());
-    result = prime * result + ((tdlsPeerUapsdBufferStaSupported == null) ? 0
-        : tdlsPeerUapsdBufferStaSupported.hashCode());
+    result =
+        prime * result + ((sspnInterfaceActivated == null) ? 0 : sspnInterfaceActivated.hashCode());
+    result =
+        prime * result
+            + ((tdlsChannelSwitchingActivated == null)
+                ? 0
+                : tdlsChannelSwitchingActivated.hashCode());
+    result =
+        prime * result
+            + ((tdlsChannelSwitchingProhibited == null)
+                ? 0
+                : tdlsChannelSwitchingProhibited.hashCode());
+    result =
+        prime * result + ((tdlsPeerPsmSupported == null) ? 0 : tdlsPeerPsmSupported.hashCode());
+    result =
+        prime * result
+            + ((tdlsPeerUapsdBufferStaSupported == null)
+                ? 0
+                : tdlsPeerUapsdBufferStaSupported.hashCode());
     result = prime * result + ((tdlsProhibited == null) ? 0 : tdlsProhibited.hashCode());
     result = prime * result + ((tdlsSupported == null) ? 0 : tdlsSupported.hashCode());
     result = prime * result + ((tfsActivated == null) ? 0 : tfsActivated.hashCode());
-    result = prime * result
-        + ((timBroadcastActivated == null) ? 0 : timBroadcastActivated.hashCode());
-    result = prime * result
-        + ((timingMeasurementActivated == null) ? 0 : timingMeasurementActivated.hashCode());
+    result =
+        prime * result + ((timBroadcastActivated == null) ? 0 : timBroadcastActivated.hashCode());
+    result =
+        prime * result
+            + ((timingMeasurementActivated == null) ? 0 : timingMeasurementActivated.hashCode());
     result = prime * result + Arrays.hashCode(trailingData);
-    result = prime * result + ((twentyFortyBssCoexistenceManagementSupported == null) ? 0
-        : twentyFortyBssCoexistenceManagementSupported.hashCode());
-    result = prime * result
-        + ((uapsdCoexistenceActivated == null) ? 0 : uapsdCoexistenceActivated.hashCode());
-    result = prime * result
-        + ((utcTsfOffsetActivated == null) ? 0 : utcTsfOffsetActivated.hashCode());
-    result = prime * result
-        + ((wnmNotificationActivated == null) ? 0 : wnmNotificationActivated.hashCode());
-    result = prime * result
-        + ((wnmSleepModeActivated == null) ? 0 : wnmSleepModeActivated.hashCode());
+    result =
+        prime * result
+            + ((twentyFortyBssCoexistenceManagementSupported == null)
+                ? 0
+                : twentyFortyBssCoexistenceManagementSupported.hashCode());
+    result =
+        prime * result
+            + ((uapsdCoexistenceActivated == null) ? 0 : uapsdCoexistenceActivated.hashCode());
+    result =
+        prime * result + ((utcTsfOffsetActivated == null) ? 0 : utcTsfOffsetActivated.hashCode());
+    result =
+        prime * result
+            + ((wnmNotificationActivated == null) ? 0 : wnmNotificationActivated.hashCode());
+    result =
+        prime * result + ((wnmSleepModeActivated == null) ? 0 : wnmSleepModeActivated.hashCode());
     return result;
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (!super.equals(obj))
-      return false;
+    if (!super.equals(obj)) return false;
     Dot11ExtendedCapabilitiesElement other = (Dot11ExtendedCapabilitiesElement) obj;
     if (utf8Ssid == null) {
-      if (other.utf8Ssid != null)
-        return false;
-    }
-    else if (!utf8Ssid.equals(other.utf8Ssid))
-      return false;
+      if (other.utf8Ssid != null) return false;
+    } else if (!utf8Ssid.equals(other.utf8Ssid)) return false;
     if (acStationCountActivated == null) {
-      if (other.acStationCountActivated != null)
-        return false;
-    }
-    else if (!acStationCountActivated.equals(other.acStationCountActivated))
-      return false;
+      if (other.acStationCountActivated != null) return false;
+    } else if (!acStationCountActivated.equals(other.acStationCountActivated)) return false;
     if (bit1 == null) {
-      if (other.bit1 != null)
-        return false;
-    }
-    else if (!bit1.equals(other.bit1))
-      return false;
+      if (other.bit1 != null) return false;
+    } else if (!bit1.equals(other.bit1)) return false;
     if (bit3 == null) {
-      if (other.bit3 != null)
-        return false;
-    }
-    else if (!bit3.equals(other.bit3))
-      return false;
+      if (other.bit3 != null) return false;
+    } else if (!bit3.equals(other.bit3)) return false;
     if (bit35 == null) {
-      if (other.bit35 != null)
-        return false;
-    }
-    else if (!bit35.equals(other.bit35))
-      return false;
+      if (other.bit35 != null) return false;
+    } else if (!bit35.equals(other.bit35)) return false;
     if (bit47 == null) {
-      if (other.bit47 != null)
-        return false;
-    }
-    else if (!bit47.equals(other.bit47))
-      return false;
+      if (other.bit47 != null) return false;
+    } else if (!bit47.equals(other.bit47)) return false;
     if (bit49 == null) {
-      if (other.bit49 != null)
-        return false;
-    }
-    else if (!bit49.equals(other.bit49))
-      return false;
+      if (other.bit49 != null) return false;
+    } else if (!bit49.equals(other.bit49)) return false;
     if (bit5 == null) {
-      if (other.bit5 != null)
-        return false;
-    }
-    else if (!bit5.equals(other.bit5))
-      return false;
+      if (other.bit5 != null) return false;
+    } else if (!bit5.equals(other.bit5)) return false;
     if (bit50 == null) {
-      if (other.bit50 != null)
-        return false;
-    }
-    else if (!bit50.equals(other.bit50))
-      return false;
+      if (other.bit50 != null) return false;
+    } else if (!bit50.equals(other.bit50)) return false;
     if (bit51 == null) {
-      if (other.bit51 != null)
-        return false;
-    }
-    else if (!bit51.equals(other.bit51))
-      return false;
+      if (other.bit51 != null) return false;
+    } else if (!bit51.equals(other.bit51)) return false;
     if (bit52 == null) {
-      if (other.bit52 != null)
-        return false;
-    }
-    else if (!bit52.equals(other.bit52))
-      return false;
+      if (other.bit52 != null) return false;
+    } else if (!bit52.equals(other.bit52)) return false;
     if (bit53 == null) {
-      if (other.bit53 != null)
-        return false;
-    }
-    else if (!bit53.equals(other.bit53))
-      return false;
+      if (other.bit53 != null) return false;
+    } else if (!bit53.equals(other.bit53)) return false;
     if (bit54 == null) {
-      if (other.bit54 != null)
-        return false;
-    }
-    else if (!bit54.equals(other.bit54))
-      return false;
+      if (other.bit54 != null) return false;
+    } else if (!bit54.equals(other.bit54)) return false;
     if (bit55 == null) {
-      if (other.bit55 != null)
-        return false;
-    }
-    else if (!bit55.equals(other.bit55))
-      return false;
+      if (other.bit55 != null) return false;
+    } else if (!bit55.equals(other.bit55)) return false;
     if (bssTransitionActivated == null) {
-      if (other.bssTransitionActivated != null)
-        return false;
-    }
-    else if (!bssTransitionActivated.equals(other.bssTransitionActivated))
-      return false;
+      if (other.bssTransitionActivated != null) return false;
+    } else if (!bssTransitionActivated.equals(other.bssTransitionActivated)) return false;
     if (channelUsageActivated == null) {
-      if (other.channelUsageActivated != null)
-        return false;
-    }
-    else if (!channelUsageActivated.equals(other.channelUsageActivated))
-      return false;
+      if (other.channelUsageActivated != null) return false;
+    } else if (!channelUsageActivated.equals(other.channelUsageActivated)) return false;
     if (collocatedInterferenceReportingActivated == null) {
-      if (other.collocatedInterferenceReportingActivated != null)
-        return false;
-    }
-    else if (!collocatedInterferenceReportingActivated
-        .equals(other.collocatedInterferenceReportingActivated))
-      return false;
+      if (other.collocatedInterferenceReportingActivated != null) return false;
+    } else if (!collocatedInterferenceReportingActivated.equals(
+        other.collocatedInterferenceReportingActivated)) return false;
     if (diagnosticsActivated == null) {
-      if (other.diagnosticsActivated != null)
-        return false;
-    }
-    else if (!diagnosticsActivated.equals(other.diagnosticsActivated))
-      return false;
+      if (other.diagnosticsActivated != null) return false;
+    } else if (!diagnosticsActivated.equals(other.diagnosticsActivated)) return false;
     if (dmsActivated == null) {
-      if (other.dmsActivated != null)
-        return false;
-    }
-    else if (!dmsActivated.equals(other.dmsActivated))
-      return false;
+      if (other.dmsActivated != null) return false;
+    } else if (!dmsActivated.equals(other.dmsActivated)) return false;
     if (ebrActivated == null) {
-      if (other.ebrActivated != null)
-        return false;
-    }
-    else if (!ebrActivated.equals(other.ebrActivated))
-      return false;
+      if (other.ebrActivated != null) return false;
+    } else if (!ebrActivated.equals(other.ebrActivated)) return false;
     if (eventActivated == null) {
-      if (other.eventActivated != null)
-        return false;
-    }
-    else if (!eventActivated.equals(other.eventActivated))
-      return false;
+      if (other.eventActivated != null) return false;
+    } else if (!eventActivated.equals(other.eventActivated)) return false;
     if (extendedChannelSwitchingSupported == null) {
-      if (other.extendedChannelSwitchingSupported != null)
-        return false;
-    }
-    else if (!extendedChannelSwitchingSupported.equals(other.extendedChannelSwitchingSupported))
+      if (other.extendedChannelSwitchingSupported != null) return false;
+    } else if (!extendedChannelSwitchingSupported.equals(other.extendedChannelSwitchingSupported))
       return false;
     if (fmsActivated == null) {
-      if (other.fmsActivated != null)
-        return false;
-    }
-    else if (!fmsActivated.equals(other.fmsActivated))
-      return false;
+      if (other.fmsActivated != null) return false;
+    } else if (!fmsActivated.equals(other.fmsActivated)) return false;
     if (interworkingServiceActivated == null) {
-      if (other.interworkingServiceActivated != null)
-        return false;
-    }
-    else if (!interworkingServiceActivated.equals(other.interworkingServiceActivated))
+      if (other.interworkingServiceActivated != null) return false;
+    } else if (!interworkingServiceActivated.equals(other.interworkingServiceActivated))
       return false;
     if (locationTrackingActivated == null) {
-      if (other.locationTrackingActivated != null)
-        return false;
-    }
-    else if (!locationTrackingActivated.equals(other.locationTrackingActivated))
-      return false;
+      if (other.locationTrackingActivated != null) return false;
+    } else if (!locationTrackingActivated.equals(other.locationTrackingActivated)) return false;
     if (msgcfActivated == null) {
-      if (other.msgcfActivated != null)
-        return false;
-    }
-    else if (!msgcfActivated.equals(other.msgcfActivated))
-      return false;
+      if (other.msgcfActivated != null) return false;
+    } else if (!msgcfActivated.equals(other.msgcfActivated)) return false;
     if (multiBssIdActivated == null) {
-      if (other.multiBssIdActivated != null)
-        return false;
-    }
-    else if (!multiBssIdActivated.equals(other.multiBssIdActivated))
-      return false;
+      if (other.multiBssIdActivated != null) return false;
+    } else if (!multiBssIdActivated.equals(other.multiBssIdActivated)) return false;
     if (multicastDiagnosticsActivated == null) {
-      if (other.multicastDiagnosticsActivated != null)
-        return false;
-    }
-    else if (!multicastDiagnosticsActivated.equals(other.multicastDiagnosticsActivated))
+      if (other.multicastDiagnosticsActivated != null) return false;
+    } else if (!multicastDiagnosticsActivated.equals(other.multicastDiagnosticsActivated))
       return false;
     if (proxyArpServiceActivated == null) {
-      if (other.proxyArpServiceActivated != null)
-        return false;
-    }
-    else if (!proxyArpServiceActivated.equals(other.proxyArpServiceActivated))
-      return false;
+      if (other.proxyArpServiceActivated != null) return false;
+    } else if (!proxyArpServiceActivated.equals(other.proxyArpServiceActivated)) return false;
     if (psmpOperationSupported == null) {
-      if (other.psmpOperationSupported != null)
-        return false;
-    }
-    else if (!psmpOperationSupported.equals(other.psmpOperationSupported))
-      return false;
+      if (other.psmpOperationSupported != null) return false;
+    } else if (!psmpOperationSupported.equals(other.psmpOperationSupported)) return false;
     if (qosMapActivated == null) {
-      if (other.qosMapActivated != null)
-        return false;
-    }
-    else if (!qosMapActivated.equals(other.qosMapActivated))
-      return false;
+      if (other.qosMapActivated != null) return false;
+    } else if (!qosMapActivated.equals(other.qosMapActivated)) return false;
     if (qosTrafficCapabilityActivated == null) {
-      if (other.qosTrafficCapabilityActivated != null)
-        return false;
-    }
-    else if (!qosTrafficCapabilityActivated.equals(other.qosTrafficCapabilityActivated))
+      if (other.qosTrafficCapabilityActivated != null) return false;
+    } else if (!qosTrafficCapabilityActivated.equals(other.qosTrafficCapabilityActivated))
       return false;
     if (rejectingUnadmittedTraffic == null) {
-      if (other.rejectingUnadmittedTraffic != null)
-        return false;
-    }
-    else if (!rejectingUnadmittedTraffic.equals(other.rejectingUnadmittedTraffic))
-      return false;
+      if (other.rejectingUnadmittedTraffic != null) return false;
+    } else if (!rejectingUnadmittedTraffic.equals(other.rejectingUnadmittedTraffic)) return false;
     if (rmCivicMeasurementActivated == null) {
-      if (other.rmCivicMeasurementActivated != null)
-        return false;
-    }
-    else if (!rmCivicMeasurementActivated.equals(other.rmCivicMeasurementActivated))
-      return false;
+      if (other.rmCivicMeasurementActivated != null) return false;
+    } else if (!rmCivicMeasurementActivated.equals(other.rmCivicMeasurementActivated)) return false;
     if (rmIdentifierMeasurementActivated == null) {
-      if (other.rmIdentifierMeasurementActivated != null)
-        return false;
-    }
-    else if (!rmIdentifierMeasurementActivated.equals(other.rmIdentifierMeasurementActivated))
+      if (other.rmIdentifierMeasurementActivated != null) return false;
+    } else if (!rmIdentifierMeasurementActivated.equals(other.rmIdentifierMeasurementActivated))
       return false;
     if (rmLciMeasurementActivated == null) {
-      if (other.rmLciMeasurementActivated != null)
-        return false;
-    }
-    else if (!rmLciMeasurementActivated.equals(other.rmLciMeasurementActivated))
-      return false;
+      if (other.rmLciMeasurementActivated != null) return false;
+    } else if (!rmLciMeasurementActivated.equals(other.rmLciMeasurementActivated)) return false;
     if (scheduledPsmpSupported == null) {
-      if (other.scheduledPsmpSupported != null)
-        return false;
-    }
-    else if (!scheduledPsmpSupported.equals(other.scheduledPsmpSupported))
-      return false;
+      if (other.scheduledPsmpSupported != null) return false;
+    } else if (!scheduledPsmpSupported.equals(other.scheduledPsmpSupported)) return false;
     if (serviceIntervalGranularity == null) {
-      if (other.serviceIntervalGranularity != null)
-        return false;
-    }
-    else if (!serviceIntervalGranularity.equals(other.serviceIntervalGranularity))
-      return false;
+      if (other.serviceIntervalGranularity != null) return false;
+    } else if (!serviceIntervalGranularity.equals(other.serviceIntervalGranularity)) return false;
     if (ssidListActivated == null) {
-      if (other.ssidListActivated != null)
-        return false;
-    }
-    else if (!ssidListActivated.equals(other.ssidListActivated))
-      return false;
+      if (other.ssidListActivated != null) return false;
+    } else if (!ssidListActivated.equals(other.ssidListActivated)) return false;
     if (sspnInterfaceActivated == null) {
-      if (other.sspnInterfaceActivated != null)
-        return false;
-    }
-    else if (!sspnInterfaceActivated.equals(other.sspnInterfaceActivated))
-      return false;
+      if (other.sspnInterfaceActivated != null) return false;
+    } else if (!sspnInterfaceActivated.equals(other.sspnInterfaceActivated)) return false;
     if (tdlsChannelSwitchingActivated == null) {
-      if (other.tdlsChannelSwitchingActivated != null)
-        return false;
-    }
-    else if (!tdlsChannelSwitchingActivated.equals(other.tdlsChannelSwitchingActivated))
+      if (other.tdlsChannelSwitchingActivated != null) return false;
+    } else if (!tdlsChannelSwitchingActivated.equals(other.tdlsChannelSwitchingActivated))
       return false;
     if (tdlsChannelSwitchingProhibited == null) {
-      if (other.tdlsChannelSwitchingProhibited != null)
-        return false;
-    }
-    else if (!tdlsChannelSwitchingProhibited.equals(other.tdlsChannelSwitchingProhibited))
+      if (other.tdlsChannelSwitchingProhibited != null) return false;
+    } else if (!tdlsChannelSwitchingProhibited.equals(other.tdlsChannelSwitchingProhibited))
       return false;
     if (tdlsPeerPsmSupported == null) {
-      if (other.tdlsPeerPsmSupported != null)
-        return false;
-    }
-    else if (!tdlsPeerPsmSupported.equals(other.tdlsPeerPsmSupported))
-      return false;
+      if (other.tdlsPeerPsmSupported != null) return false;
+    } else if (!tdlsPeerPsmSupported.equals(other.tdlsPeerPsmSupported)) return false;
     if (tdlsPeerUapsdBufferStaSupported == null) {
-      if (other.tdlsPeerUapsdBufferStaSupported != null)
-        return false;
-    }
-    else if (!tdlsPeerUapsdBufferStaSupported.equals(other.tdlsPeerUapsdBufferStaSupported))
+      if (other.tdlsPeerUapsdBufferStaSupported != null) return false;
+    } else if (!tdlsPeerUapsdBufferStaSupported.equals(other.tdlsPeerUapsdBufferStaSupported))
       return false;
     if (tdlsProhibited == null) {
-      if (other.tdlsProhibited != null)
-        return false;
-    }
-    else if (!tdlsProhibited.equals(other.tdlsProhibited))
-      return false;
+      if (other.tdlsProhibited != null) return false;
+    } else if (!tdlsProhibited.equals(other.tdlsProhibited)) return false;
     if (tdlsSupported == null) {
-      if (other.tdlsSupported != null)
-        return false;
-    }
-    else if (!tdlsSupported.equals(other.tdlsSupported))
-      return false;
+      if (other.tdlsSupported != null) return false;
+    } else if (!tdlsSupported.equals(other.tdlsSupported)) return false;
     if (tfsActivated == null) {
-      if (other.tfsActivated != null)
-        return false;
-    }
-    else if (!tfsActivated.equals(other.tfsActivated))
-      return false;
+      if (other.tfsActivated != null) return false;
+    } else if (!tfsActivated.equals(other.tfsActivated)) return false;
     if (timBroadcastActivated == null) {
-      if (other.timBroadcastActivated != null)
-        return false;
-    }
-    else if (!timBroadcastActivated.equals(other.timBroadcastActivated))
-      return false;
+      if (other.timBroadcastActivated != null) return false;
+    } else if (!timBroadcastActivated.equals(other.timBroadcastActivated)) return false;
     if (timingMeasurementActivated == null) {
-      if (other.timingMeasurementActivated != null)
-        return false;
-    }
-    else if (!timingMeasurementActivated.equals(other.timingMeasurementActivated))
-      return false;
-    if (!Arrays.equals(trailingData, other.trailingData))
-      return false;
+      if (other.timingMeasurementActivated != null) return false;
+    } else if (!timingMeasurementActivated.equals(other.timingMeasurementActivated)) return false;
+    if (!Arrays.equals(trailingData, other.trailingData)) return false;
     if (twentyFortyBssCoexistenceManagementSupported == null) {
-      if (other.twentyFortyBssCoexistenceManagementSupported != null)
-        return false;
-    }
-    else if (!twentyFortyBssCoexistenceManagementSupported
-        .equals(other.twentyFortyBssCoexistenceManagementSupported))
-      return false;
+      if (other.twentyFortyBssCoexistenceManagementSupported != null) return false;
+    } else if (!twentyFortyBssCoexistenceManagementSupported.equals(
+        other.twentyFortyBssCoexistenceManagementSupported)) return false;
     if (uapsdCoexistenceActivated == null) {
-      if (other.uapsdCoexistenceActivated != null)
-        return false;
-    }
-    else if (!uapsdCoexistenceActivated.equals(other.uapsdCoexistenceActivated))
-      return false;
+      if (other.uapsdCoexistenceActivated != null) return false;
+    } else if (!uapsdCoexistenceActivated.equals(other.uapsdCoexistenceActivated)) return false;
     if (utcTsfOffsetActivated == null) {
-      if (other.utcTsfOffsetActivated != null)
-        return false;
-    }
-    else if (!utcTsfOffsetActivated.equals(other.utcTsfOffsetActivated))
-      return false;
+      if (other.utcTsfOffsetActivated != null) return false;
+    } else if (!utcTsfOffsetActivated.equals(other.utcTsfOffsetActivated)) return false;
     if (wnmNotificationActivated == null) {
-      if (other.wnmNotificationActivated != null)
-        return false;
-    }
-    else if (!wnmNotificationActivated.equals(other.wnmNotificationActivated))
-      return false;
+      if (other.wnmNotificationActivated != null) return false;
+    } else if (!wnmNotificationActivated.equals(other.wnmNotificationActivated)) return false;
     if (wnmSleepModeActivated == null) {
-      if (other.wnmSleepModeActivated != null)
-        return false;
-    }
-    else if (!wnmSleepModeActivated.equals(other.wnmSleepModeActivated))
-      return false;
+      if (other.wnmSleepModeActivated != null) return false;
+    } else if (!wnmSleepModeActivated.equals(other.wnmSleepModeActivated)) return false;
     return true;
   }
 
@@ -1474,195 +1206,169 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Extended Capabilities:")
-      .append(ls);
-    sb.append(indent).append("  Element ID: ")
-      .append(getElementId())
-      .append(ls);
-    sb.append(indent).append("  Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes")
-      .append(ls);
+    sb.append(indent).append("Extended Capabilities:").append(ls);
+    sb.append(indent).append("  Element ID: ").append(getElementId()).append(ls);
+    sb.append(indent).append("  Length: ").append(getLengthAsInt()).append(" bytes").append(ls);
     if (actualLength > 0) {
-      sb.append(indent).append("  20/40 BSS Coexistence Management Supported: ")
-        .append(twentyFortyBssCoexistenceManagementSupported)
-        .append(ls);
-      sb.append(indent).append("  Bit1: ")
-        .append(bit1)
-        .append(ls);
-      sb.append(indent).append("  Extended Channel Switching Supported: ")
-        .append(extendedChannelSwitchingSupported)
-        .append(ls);
-      sb.append(indent).append("  Bit3: ")
-        .append(bit3)
-        .append(ls);
-      sb.append(indent).append("  PSMP Operation Supported: ")
-        .append(psmpOperationSupported)
-        .append(ls);
-      sb.append(indent).append("  Bit5: ")
-        .append(bit5)
-        .append(ls);
-      sb.append(indent).append("  Scheduled PSMP Supported: ")
-        .append(scheduledPsmpSupported)
-        .append(ls);
-      sb.append(indent).append("  Event Activated: ")
-        .append(eventActivated)
-        .append(ls);
+      sb.append(indent)
+          .append("  20/40 BSS Coexistence Management Supported: ")
+          .append(twentyFortyBssCoexistenceManagementSupported)
+          .append(ls);
+      sb.append(indent).append("  Bit1: ").append(bit1).append(ls);
+      sb.append(indent)
+          .append("  Extended Channel Switching Supported: ")
+          .append(extendedChannelSwitchingSupported)
+          .append(ls);
+      sb.append(indent).append("  Bit3: ").append(bit3).append(ls);
+      sb.append(indent)
+          .append("  PSMP Operation Supported: ")
+          .append(psmpOperationSupported)
+          .append(ls);
+      sb.append(indent).append("  Bit5: ").append(bit5).append(ls);
+      sb.append(indent)
+          .append("  Scheduled PSMP Supported: ")
+          .append(scheduledPsmpSupported)
+          .append(ls);
+      sb.append(indent).append("  Event Activated: ").append(eventActivated).append(ls);
     }
     if (actualLength > 1) {
-      sb.append(indent).append("  Diagnostics Activated: ")
-        .append(diagnosticsActivated)
-        .append(ls);
-      sb.append(indent).append("  Multicast Diagnostics Activated: ")
-        .append(multicastDiagnosticsActivated)
-        .append(ls);
-      sb.append(indent).append("  Location Tracking Activated: ")
-        .append(locationTrackingActivated)
-        .append(ls);
-      sb.append(indent).append("  FMS Activated: ")
-        .append(fmsActivated)
-        .append(ls);
-      sb.append(indent).append("  Proxy ARP Service Activated: ")
-        .append(proxyArpServiceActivated)
-        .append(ls);
-      sb.append(indent).append("  Collocated Interference Reporting Activated: ")
-        .append(collocatedInterferenceReportingActivated)
-        .append(ls);
-      sb.append(indent).append("  RM Civic Measurement Activated: ")
-        .append(rmCivicMeasurementActivated)
-        .append(ls);
-      sb.append(indent).append("  RM LCI Measurement Activated: ")
-        .append(rmLciMeasurementActivated)
-      .append(ls);
+      sb.append(indent).append("  Diagnostics Activated: ").append(diagnosticsActivated).append(ls);
+      sb.append(indent)
+          .append("  Multicast Diagnostics Activated: ")
+          .append(multicastDiagnosticsActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  Location Tracking Activated: ")
+          .append(locationTrackingActivated)
+          .append(ls);
+      sb.append(indent).append("  FMS Activated: ").append(fmsActivated).append(ls);
+      sb.append(indent)
+          .append("  Proxy ARP Service Activated: ")
+          .append(proxyArpServiceActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  Collocated Interference Reporting Activated: ")
+          .append(collocatedInterferenceReportingActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  RM Civic Measurement Activated: ")
+          .append(rmCivicMeasurementActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  RM LCI Measurement Activated: ")
+          .append(rmLciMeasurementActivated)
+          .append(ls);
     }
     if (actualLength > 2) {
-      sb.append(indent).append("  TFS Activated: ")
-        .append(tfsActivated)
-        .append(ls);
-      sb.append(indent).append("  WNM Sleep Mode Activated: ")
-        .append(wnmSleepModeActivated)
-        .append(ls);
-      sb.append(indent).append("  TIM Broadcast Activated: ")
-        .append(timBroadcastActivated)
-        .append(ls);
-      sb.append(indent).append("  BSS Transition Activated: ")
-        .append(bssTransitionActivated)
-        .append(ls);
-      sb.append(indent).append("  QoS Traffic Capability Activated: ")
-        .append(qosTrafficCapabilityActivated)
-        .append(ls);
-      sb.append(indent).append("  AC Station Count Activated: ")
-        .append(acStationCountActivated)
-        .append(ls);
-      sb.append(indent).append("  Multi BSS ID Activated: ")
-        .append(multiBssIdActivated)
-        .append(ls);
-      sb.append(indent).append("  Timing Measurement Activated: ")
-        .append(timingMeasurementActivated)
-        .append(ls);
+      sb.append(indent).append("  TFS Activated: ").append(tfsActivated).append(ls);
+      sb.append(indent)
+          .append("  WNM Sleep Mode Activated: ")
+          .append(wnmSleepModeActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  TIM Broadcast Activated: ")
+          .append(timBroadcastActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  BSS Transition Activated: ")
+          .append(bssTransitionActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  QoS Traffic Capability Activated: ")
+          .append(qosTrafficCapabilityActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  AC Station Count Activated: ")
+          .append(acStationCountActivated)
+          .append(ls);
+      sb.append(indent).append("  Multi BSS ID Activated: ").append(multiBssIdActivated).append(ls);
+      sb.append(indent)
+          .append("  Timing Measurement Activated: ")
+          .append(timingMeasurementActivated)
+          .append(ls);
     }
     if (actualLength > 3) {
-      sb.append(indent).append("  Channel Usage Activated: ")
-        .append(channelUsageActivated)
-        .append(ls);
-      sb.append(indent).append("  SSID List Activated: ")
-        .append(ssidListActivated)
-        .append(ls);
-      sb.append(indent).append("  DMS Activated: ")
-        .append(dmsActivated)
-        .append(ls);
-      sb.append(indent).append("  UTC TSF Offset Activated: ")
-        .append(utcTsfOffsetActivated)
-        .append(ls);
-      sb.append(indent).append("  TDLS Peer U-APSD Buffer STA Supported: ")
-        .append(tdlsPeerUapsdBufferStaSupported)
-        .append(ls);
-      sb.append(indent).append("  TDLS Peer PSM Supported: ")
-        .append(tdlsPeerPsmSupported)
-        .append(ls);
-      sb.append(indent).append("  TDLS Channel Switching Activated: ")
-        .append(tdlsChannelSwitchingActivated)
-        .append(ls);
-      sb.append(indent).append("  Interworking Service Activated: ")
-        .append(interworkingServiceActivated)
-        .append(ls);
+      sb.append(indent)
+          .append("  Channel Usage Activated: ")
+          .append(channelUsageActivated)
+          .append(ls);
+      sb.append(indent).append("  SSID List Activated: ").append(ssidListActivated).append(ls);
+      sb.append(indent).append("  DMS Activated: ").append(dmsActivated).append(ls);
+      sb.append(indent)
+          .append("  UTC TSF Offset Activated: ")
+          .append(utcTsfOffsetActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  TDLS Peer U-APSD Buffer STA Supported: ")
+          .append(tdlsPeerUapsdBufferStaSupported)
+          .append(ls);
+      sb.append(indent)
+          .append("  TDLS Peer PSM Supported: ")
+          .append(tdlsPeerPsmSupported)
+          .append(ls);
+      sb.append(indent)
+          .append("  TDLS Channel Switching Activated: ")
+          .append(tdlsChannelSwitchingActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  Interworking Service Activated: ")
+          .append(interworkingServiceActivated)
+          .append(ls);
     }
     if (actualLength > 4) {
-      sb.append(indent).append("  QoS Map Activated: ")
-        .append(qosMapActivated)
-        .append(ls);
-      sb.append(indent).append("  EBR Activated: ")
-        .append(ebrActivated)
-        .append(ls);
-      sb.append(indent).append("  SSPN Interface Activated: ")
-        .append(sspnInterfaceActivated)
-        .append(ls);
-      sb.append(indent).append("  Bit35: ")
-        .append(bit35)
-        .append(ls);
-      sb.append(indent).append("  MSGCF Activated: ")
-        .append(msgcfActivated)
-        .append(ls);
-      sb.append(indent).append("  TDLS Supported: ")
-        .append(tdlsSupported)
-        .append(ls);
-      sb.append(indent).append("  TDLS Prohibited: ")
-        .append(tdlsProhibited)
-        .append(ls);
-      sb.append(indent).append("  TDLS Channel Switching Prohibited: ")
-        .append(tdlsChannelSwitchingProhibited)
-        .append(ls);
+      sb.append(indent).append("  QoS Map Activated: ").append(qosMapActivated).append(ls);
+      sb.append(indent).append("  EBR Activated: ").append(ebrActivated).append(ls);
+      sb.append(indent)
+          .append("  SSPN Interface Activated: ")
+          .append(sspnInterfaceActivated)
+          .append(ls);
+      sb.append(indent).append("  Bit35: ").append(bit35).append(ls);
+      sb.append(indent).append("  MSGCF Activated: ").append(msgcfActivated).append(ls);
+      sb.append(indent).append("  TDLS Supported: ").append(tdlsSupported).append(ls);
+      sb.append(indent).append("  TDLS Prohibited: ").append(tdlsProhibited).append(ls);
+      sb.append(indent)
+          .append("  TDLS Channel Switching Prohibited: ")
+          .append(tdlsChannelSwitchingProhibited)
+          .append(ls);
     }
     if (actualLength > 5) {
-      sb.append(indent).append("  Rejecting Unadmitted Traffic: ")
-        .append(rejectingUnadmittedTraffic)
-        .append(ls);
-      sb.append(indent).append("  Service Interval Granularity: ")
-        .append(serviceIntervalGranularity)
-        .append(ls);
-      sb.append(indent).append("  RM Identifier Measurement Activated: ")
-        .append(rmIdentifierMeasurementActivated)
-        .append(ls);
-      sb.append(indent).append("  U-APSD Coexistence Activated: ")
-        .append(uapsdCoexistenceActivated)
-        .append(ls);
-      sb.append(indent).append("  WNM-Notification Activated: ")
-        .append(wnmNotificationActivated)
-        .append(ls);
-      sb.append(indent).append("  Bit47: ")
-        .append(bit47)
-        .append(ls);
+      sb.append(indent)
+          .append("  Rejecting Unadmitted Traffic: ")
+          .append(rejectingUnadmittedTraffic)
+          .append(ls);
+      sb.append(indent)
+          .append("  Service Interval Granularity: ")
+          .append(serviceIntervalGranularity)
+          .append(ls);
+      sb.append(indent)
+          .append("  RM Identifier Measurement Activated: ")
+          .append(rmIdentifierMeasurementActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  U-APSD Coexistence Activated: ")
+          .append(uapsdCoexistenceActivated)
+          .append(ls);
+      sb.append(indent)
+          .append("  WNM-Notification Activated: ")
+          .append(wnmNotificationActivated)
+          .append(ls);
+      sb.append(indent).append("  Bit47: ").append(bit47).append(ls);
     }
     if (actualLength > 6) {
-      sb.append(indent).append("  UTF-8 SSID: ")
-        .append(utf8Ssid)
-        .append(ls);
-      sb.append(indent).append("  Bit49: ")
-        .append(bit49)
-        .append(ls);
-      sb.append(indent).append("  Bit50: ")
-        .append(bit50)
-        .append(ls);
-      sb.append(indent).append("  Bit51: ")
-        .append(bit51)
-        .append(ls);
-      sb.append(indent).append("  Bit52: ")
-        .append(bit52)
-        .append(ls);
-      sb.append(indent).append("  Bit53: ")
-        .append(bit53)
-        .append(ls);
-      sb.append(indent).append("  Bit54: ")
-        .append(bit54)
-        .append(ls);
-      sb.append(indent).append("  Bit55: ")
-        .append(bit55)
-        .append(ls);
+      sb.append(indent).append("  UTF-8 SSID: ").append(utf8Ssid).append(ls);
+      sb.append(indent).append("  Bit49: ").append(bit49).append(ls);
+      sb.append(indent).append("  Bit50: ").append(bit50).append(ls);
+      sb.append(indent).append("  Bit51: ").append(bit51).append(ls);
+      sb.append(indent).append("  Bit52: ").append(bit52).append(ls);
+      sb.append(indent).append("  Bit53: ").append(bit53).append(ls);
+      sb.append(indent).append("  Bit54: ").append(bit54).append(ls);
+      sb.append(indent).append("  Bit55: ").append(bit55).append(ls);
     }
     if (actualLength > 7) {
-      sb.append(indent).append("  Trailing Data: 0x")
-        .append(ByteArrays.toHexString(trailingData, ""))
-        .append(ls);
+      sb.append(indent)
+          .append("  Trailing Data: 0x")
+          .append(ByteArrays.toHexString(trailingData, ""))
+          .append(ls);
     }
 
     return sb.toString();
@@ -1730,24 +1436,18 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
     private Boolean bit55;
     private byte[] trailingData;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {
       elementId(
-        Dot11InformationElementId.getInstance(
-          Dot11InformationElementId.EXTENDED_CAPABILITIES.value()
-        )
-      );
+          Dot11InformationElementId.getInstance(
+              Dot11InformationElementId.EXTENDED_CAPABILITIES.value()));
     }
 
-    /**
-     * @param elem a Dot11ExtendedCapabilitiesElement object.
-     */
+    /** @param elem a Dot11ExtendedCapabilitiesElement object. */
     private Builder(Dot11ExtendedCapabilitiesElement elem) {
       super(elem);
-      this.twentyFortyBssCoexistenceManagementSupported
-        = elem.twentyFortyBssCoexistenceManagementSupported;
+      this.twentyFortyBssCoexistenceManagementSupported =
+          elem.twentyFortyBssCoexistenceManagementSupported;
       this.bit1 = elem.bit1;
       this.extendedChannelSwitchingSupported = elem.extendedChannelSwitchingSupported;
       this.bit3 = elem.bit3;
@@ -1760,8 +1460,7 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
       this.locationTrackingActivated = elem.locationTrackingActivated;
       this.fmsActivated = elem.fmsActivated;
       this.proxyArpServiceActivated = elem.proxyArpServiceActivated;
-      this.collocatedInterferenceReportingActivated
-        = elem.collocatedInterferenceReportingActivated;
+      this.collocatedInterferenceReportingActivated = elem.collocatedInterferenceReportingActivated;
       this.rmCivicMeasurementActivated = elem.rmCivicMeasurementActivated;
       this.rmLciMeasurementActivated = elem.rmLciMeasurementActivated;
       this.tfsActivated = elem.tfsActivated;
@@ -1807,14 +1506,13 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
 
     /**
      * @param twentyFortyBssCoexistenceManagementSupported
-     *          twentyFortyBssCoexistenceManagementSupported
+     *     twentyFortyBssCoexistenceManagementSupported
      * @return this Builder object for method chaining.
      */
     public Builder twentyFortyBssCoexistenceManagementSupported(
-      Boolean twentyFortyBssCoexistenceManagementSupported
-    ) {
-      this.twentyFortyBssCoexistenceManagementSupported
-        = twentyFortyBssCoexistenceManagementSupported;
+        Boolean twentyFortyBssCoexistenceManagementSupported) {
+      this.twentyFortyBssCoexistenceManagementSupported =
+          twentyFortyBssCoexistenceManagementSupported;
       return this;
     }
 
@@ -1931,8 +1629,7 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
      * @return this Builder object for method chaining.
      */
     public Builder collocatedInterferenceReportingActivated(
-      Boolean collocatedInterferenceReportingActivated
-    ) {
+        Boolean collocatedInterferenceReportingActivated) {
       this.collocatedInterferenceReportingActivated = collocatedInterferenceReportingActivated;
       return this;
     }
@@ -2185,8 +1882,7 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
      * @return this Builder object for method chaining.
      */
     public Builder serviceIntervalGranularity(
-      Dot11ServiceIntervalGranularity serviceIntervalGranularity
-    ) {
+        Dot11ServiceIntervalGranularity serviceIntervalGranularity) {
       this.serviceIntervalGranularity = serviceIntervalGranularity;
       return this;
     }
@@ -2327,7 +2023,5 @@ public final class Dot11ExtendedCapabilitiesElement extends Dot11InformationElem
       }
       return new Dot11ExtendedCapabilitiesElement(this);
     }
-
   }
-
 }

@@ -14,10 +14,9 @@ public class ReadPacketFile {
 
   private static final int COUNT = 5;
 
-  private static final String PCAP_FILE_KEY
-    = ReadPacketFile.class.getName() + ".pcapFile";
-  private static final String PCAP_FILE
-    = System.getProperty(PCAP_FILE_KEY, "src/main/resources/echoAndEchoReply.pcap");
+  private static final String PCAP_FILE_KEY = ReadPacketFile.class.getName() + ".pcapFile";
+  private static final String PCAP_FILE =
+      System.getProperty(PCAP_FILE_KEY, "src/main/resources/echoAndEchoReply.pcap");
 
   private ReadPacketFile() {}
 
@@ -43,5 +42,4 @@ public class ReadPacketFile {
 
     handle.close();
   }
-
 }

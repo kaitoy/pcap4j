@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
@@ -18,17 +17,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IllegalRadiotapData implements RadiotapData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 6405498375843386046L;
 
   private final byte[] rawData;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -45,13 +41,9 @@ public final class IllegalRadiotapData implements RadiotapData {
   }
 
   private IllegalRadiotapData(Builder builder) {
-    if (
-         builder == null
-      || builder.rawData == null
-    ) {
+    if (builder == null || builder.rawData == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.rawData: ").append(builder.rawData);
+      sb.append("builder: ").append(builder).append(" builder.rawData: ").append(builder.rawData);
       throw new NullPointerException(sb.toString());
     }
 
@@ -68,10 +60,10 @@ public final class IllegalRadiotapData implements RadiotapData {
     return ByteArrays.clone(rawData);
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -83,11 +75,13 @@ public final class IllegalRadiotapData implements RadiotapData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Illegal Data: ")
-      .append(ls)
-      .append(indent).append("  data: ")
-      .append(ByteArrays.toHexString(rawData, ""))
-      .append(ls);
+    sb.append(indent)
+        .append("Illegal Data: ")
+        .append(ls)
+        .append(indent)
+        .append("  data: ")
+        .append(ByteArrays.toHexString(rawData, ""))
+        .append(ls);
 
     return sb.toString();
   }
@@ -99,8 +93,12 @@ public final class IllegalRadiotapData implements RadiotapData {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     IllegalRadiotapData other = (IllegalRadiotapData) obj;
     return Arrays.equals(rawData, other.rawData);
   }
@@ -113,9 +111,7 @@ public final class IllegalRadiotapData implements RadiotapData {
 
     private byte[] rawData;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IllegalRadiotapData obj) {
@@ -131,13 +127,9 @@ public final class IllegalRadiotapData implements RadiotapData {
       return this;
     }
 
-    /**
-     * @return a new UnknownRadiotapDataField object.
-     */
+    /** @return a new UnknownRadiotapDataField object. */
     public IllegalRadiotapData build() {
       return new IllegalRadiotapData(this);
     }
-
   }
-
 }

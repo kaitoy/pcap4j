@@ -9,7 +9,6 @@ package org.pcap4j.packet.factory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import org.pcap4j.packet.IllegalRadiotapData;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
@@ -19,27 +18,22 @@ import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class
-PropertiesBasedRadiotapDataFactory
-implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
+public final class PropertiesBasedRadiotapDataFactory
+    implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
 
-  private static final PropertiesBasedRadiotapDataFactory INSTANCE
-    = new PropertiesBasedRadiotapDataFactory();
+  private static final PropertiesBasedRadiotapDataFactory INSTANCE =
+      new PropertiesBasedRadiotapDataFactory();
 
   private PropertiesBasedRadiotapDataFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of PropertiesBasedRadiotapDataFactory.
-   */
+  /** @return the singleton instance of PropertiesBasedRadiotapDataFactory. */
   public static PropertiesBasedRadiotapDataFactory getInstance() {
     return INSTANCE;
   }
 
   @Override
   public RadiotapData newInstance(
-    byte[] rawData, int offset, int length, RadiotapPresentBitNumber num
-  ) {
+      byte[] rawData, int offset, int length, RadiotapPresentBitNumber num) {
     return newInstance(rawData, offset, length, getTargetClass(num));
   }
 
@@ -49,32 +43,27 @@ implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
   }
 
   /**
-   *
    * @param rawData rawData
    * @param offset offset
    * @param length length
    * @param dataClass dataClass
    * @return a new RadiotapDataField object.
    * @throws IllegalStateException if an access to the newInstance method of the dataClass fails.
-   * @throws IllegalArgumentException if an exception other than {@link IllegalRawDataException}
-   *                                  is thrown by newInstance method of the dataClass.
+   * @throws IllegalArgumentException if an exception other than {@link IllegalRawDataException} is
+   *     thrown by newInstance method of the dataClass.
    * @throws NullPointerException if any of arguments are null.
    */
   public RadiotapData newInstance(
-    byte[] rawData, int offset, int length, Class<? extends RadiotapData> dataClass
-  ) {
+      byte[] rawData, int offset, int length, Class<? extends RadiotapData> dataClass) {
     if (rawData == null || dataClass == null) {
       StringBuilder sb = new StringBuilder(50);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" dataClass: ")
-        .append(dataClass);
+      sb.append("rawData: ").append(rawData).append(" dataClass: ").append(dataClass);
       throw new NullPointerException(sb.toString());
     }
 
     try {
       Method newInstance = dataClass.getMethod("newInstance", byte[].class, int.class, int.class);
-      return (RadiotapData)newInstance.invoke(null, rawData, offset, length);
+      return (RadiotapData) newInstance.invoke(null, rawData, offset, length);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -103,5 +92,4 @@ implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
   public Class<? extends RadiotapData> getTargetClass() {
     return PacketFactoryPropertiesLoader.getInstance().getUnknownRadiotapDataFieldClass();
   }
-
 }

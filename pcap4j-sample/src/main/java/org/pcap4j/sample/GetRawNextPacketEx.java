@@ -15,20 +15,15 @@ import org.pcap4j.util.NifSelector;
 @SuppressWarnings("javadoc")
 public class GetRawNextPacketEx {
 
-  private static final String COUNT_KEY
-    = GetRawNextPacketEx.class.getName() + ".count";
-  private static final int COUNT
-    = Integer.getInteger(COUNT_KEY, 5);
+  private static final String COUNT_KEY = GetRawNextPacketEx.class.getName() + ".count";
+  private static final int COUNT = Integer.getInteger(COUNT_KEY, 5);
 
-  private static final String READ_TIMEOUT_KEY
-    = GetRawNextPacketEx.class.getName() + ".readTimeout";
-  private static final int READ_TIMEOUT
-    = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
+  private static final String READ_TIMEOUT_KEY =
+      GetRawNextPacketEx.class.getName() + ".readTimeout";
+  private static final int READ_TIMEOUT = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
 
-  private static final String SNAPLEN_KEY
-    = GetRawNextPacketEx.class.getName() + ".snaplen";
-  private static final int SNAPLEN
-    = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
+  private static final String SNAPLEN_KEY = GetRawNextPacketEx.class.getName() + ".snaplen";
+  private static final int SNAPLEN = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
 
   private GetRawNextPacketEx() {}
 
@@ -54,13 +49,9 @@ public class GetRawNextPacketEx {
 
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
-    PcapHandle handle
-      = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+    PcapHandle handle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
 
-    handle.setFilter(
-      filter,
-      BpfCompileMode.OPTIMIZE
-    );
+    handle.setFilter(filter, BpfCompileMode.OPTIMIZE);
 
     int num = 0;
     while (true) {
@@ -80,5 +71,4 @@ public class GetRawNextPacketEx {
 
     handle.close();
   }
-
 }

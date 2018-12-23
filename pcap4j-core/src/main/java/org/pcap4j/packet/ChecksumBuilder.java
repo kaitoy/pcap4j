@@ -15,18 +15,11 @@ package org.pcap4j.packet;
 public interface ChecksumBuilder<T> {
 
   /**
-   *
    * @param correctChecksumAtBuild correctChecksumAtBuild
    * @return ChecksumBuilder
    */
-  public ChecksumBuilder<T> correctChecksumAtBuild(
-    boolean correctChecksumAtBuild
-  );
+  public ChecksumBuilder<T> correctChecksumAtBuild(boolean correctChecksumAtBuild);
 
-  /**
-   *
-   * @return a new object.
-   */
+  /** @return a new object. */
   public T build();
-
 }

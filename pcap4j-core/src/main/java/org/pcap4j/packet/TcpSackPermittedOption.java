@@ -26,29 +26,24 @@ public final class TcpSackPermittedOption implements TcpOption {
    *   +---------+---------+
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -5364948716212977767L;
 
-  private static final TcpSackPermittedOption INSTANCE
-    = new TcpSackPermittedOption();
+  private static final TcpSackPermittedOption INSTANCE = new TcpSackPermittedOption();
 
   private static final TcpOptionKind kind = TcpOptionKind.SACK_PERMITTED;
   private static final byte length = 2;
 
   private TcpSackPermittedOption() {}
 
-  /**
-   *
-   * @return the singleton instance of TcpSackPermittedOption.
-   */
-  public static TcpSackPermittedOption getInstance() { return INSTANCE; }
+  /** @return the singleton instance of TcpSackPermittedOption. */
+  public static TcpSackPermittedOption getInstance() {
+    return INSTANCE;
+  }
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -56,37 +51,35 @@ public final class TcpSackPermittedOption implements TcpOption {
    * @return the singleton instance of TcpSackPermittedOption.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static TcpSackPermittedOption newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static TcpSackPermittedOption newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
 
     if (length < 2) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 1. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (rawData[offset] != kind.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The kind must be: ")
-        .append(kind.valueAsString())
-        .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(kind.valueAsString())
+          .append(" rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (rawData[1 + offset] != 2) {
       throw new IllegalRawDataException(
-                  "The value of length field must be 2 but: " + rawData[1 + offset]
-                );
+          "The value of length field must be 2 but: " + rawData[1 + offset]);
     }
     return INSTANCE;
   }
@@ -96,20 +89,20 @@ public final class TcpSackPermittedOption implements TcpOption {
     return kind;
   }
 
-  /**
-   *
-   * @return length
-   */
-  public byte getLength() { return length; }
+  /** @return length */
+  public byte getLength() {
+    return length;
+  }
 
-  /**
-   *
-   * @return length
-   */
-  public int getLengthAsInt() { return 0xFF & length; }
+  /** @return length */
+  public int getLengthAsInt() {
+    return 0xFF & length;
+  }
 
   @Override
-  public int length() { return 2; }
+  public int length() {
+    return 2;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -122,11 +115,8 @@ public final class TcpSackPermittedOption implements TcpOption {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Kind: ")
-      .append(kind);
-    sb.append("] [Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes]");
+    sb.append("[Kind: ").append(kind);
+    sb.append("] [Length: ").append(getLengthAsInt()).append(" bytes]");
     return sb.toString();
   }
 
@@ -135,5 +125,4 @@ public final class TcpSackPermittedOption implements TcpOption {
   private Object readResolve() throws ObjectStreamException {
     return INSTANCE;
   }
-
 }

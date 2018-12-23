@@ -10,13 +10,11 @@ package org.pcap4j.packet;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
 import org.pcap4j.util.ByteArrays;
 
 /**
- * The present field of Radiotap header.
- * Vendor namespaces are not supported yet.
+ * The present field of Radiotap header. Vendor namespaces are not supported yet.
  *
  * @see <a href="http://www.radiotap.org/">Radiotap</a>
  * @author Kaito Yamada
@@ -24,9 +22,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class RadiotapPresentBitmask implements Serializable {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -4525947413002802922L;
 
   private final String namespace;
@@ -36,9 +32,8 @@ public final class RadiotapPresentBitmask implements Serializable {
   private final boolean anotherBitmapFollows;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -48,15 +43,13 @@ public final class RadiotapPresentBitmask implements Serializable {
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static RadiotapPresentBitmask newInstance(
-    byte[] rawData, int offset, int length, int bitNumOffset
-  ) throws IllegalRawDataException {
+      byte[] rawData, int offset, int length, int bitNumOffset) throws IllegalRawDataException {
     return newInstance(rawData, offset, length, bitNumOffset, "");
   }
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -67,25 +60,25 @@ public final class RadiotapPresentBitmask implements Serializable {
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static RadiotapPresentBitmask newInstance(
-    byte[] rawData, int offset, int length, int bitNumOffset, String namespace
-  ) throws IllegalRawDataException {
+      byte[] rawData, int offset, int length, int bitNumOffset, String namespace)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new RadiotapPresentBitmask(rawData, offset, length, bitNumOffset, namespace);
   }
 
   private RadiotapPresentBitmask(
-    byte[] rawData, int offset, int length, int bitNumOffset, String namespace
-  ) throws IllegalRawDataException {
+      byte[] rawData, int offset, int length, int bitNumOffset, String namespace)
+      throws IllegalRawDataException {
     if (ByteArrays.INT_SIZE_IN_BYTES > length) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapPresentBitmask (")
-        .append(ByteArrays.INT_SIZE_IN_BYTES)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.INT_SIZE_IN_BYTES)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -124,22 +117,19 @@ public final class RadiotapPresentBitmask implements Serializable {
   }
 
   private RadiotapPresentBitmask(Builder builder) {
-    if (
-         builder == null
-      || builder.namespace == null
-      || builder.bitNumbers == null
-    ) {
+    if (builder == null || builder.namespace == null || builder.bitNumbers == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.namespace: ").append(builder.namespace)
-        .append(" builder.bitNumbers: ").append(builder.bitNumbers);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.namespace: ")
+          .append(builder.namespace)
+          .append(" builder.bitNumbers: ")
+          .append(builder.bitNumbers);
       throw new NullPointerException(sb.toString());
     }
     if (builder.bitNumbers.size() > 29) {
       throw new IllegalArgumentException(
-                  "bitNumbers.size() must be less than 30 but is: "
-                    + builder.bitNumbers.size()
-                );
+          "bitNumbers.size() must be less than 30 but is: " + builder.bitNumbers.size());
     }
 
     this.namespace = builder.namespace;
@@ -149,64 +139,47 @@ public final class RadiotapPresentBitmask implements Serializable {
     this.anotherBitmapFollows = builder.anotherBitmapFollows;
   }
 
-  /**
-   * @return namespace
-   */
+  /** @return namespace */
   public String getNamespace() {
     return namespace;
   }
 
-  /**
-   * @return bitNumbers
-   */
+  /** @return bitNumbers */
   public ArrayList<RadiotapPresentBitNumber> getBitNumbers() {
     return new ArrayList<RadiotapPresentBitNumber>(bitNumbers);
   }
 
-  /**
-   * @return radiotapNamespaceNext
-   */
+  /** @return radiotapNamespaceNext */
   public boolean isRadiotapNamespaceNext() {
     return radiotapNamespaceNext;
   }
 
-  /**
-   * @return vendorNamespaceNext
-   */
+  /** @return vendorNamespaceNext */
   public boolean isVendorNamespaceNext() {
     return vendorNamespaceNext;
   }
 
-  /**
-   * @return anotherBitmapFollows
-   */
+  /** @return anotherBitmapFollows */
   public boolean isAnotherBitmapFollows() {
     return anotherBitmapFollows;
   }
 
-  /**
-   * @return the bitmask
-   */
+  /** @return the bitmask */
   public byte[] getBitmask() {
     return getRawData();
   }
 
-  /**
-   * @return length of this data
-   */
+  /** @return length of this data */
   public int length() {
     return ByteArrays.INT_SIZE_IN_BYTES;
   }
 
-  /**
-   * @return the raw data
-   */
+  /** @return the raw data */
   public byte[] getRawData() {
     byte[] data = new byte[length()];
-    for (RadiotapPresentBitNumber num: bitNumbers) {
+    for (RadiotapPresentBitNumber num : bitNumbers) {
       int bit = num.value() % 32;
-      data[bit / ByteArrays.BYTE_SIZE_IN_BITS]
-        |= 1 << bit % ByteArrays.BYTE_SIZE_IN_BITS;
+      data[bit / ByteArrays.BYTE_SIZE_IN_BITS] |= 1 << bit % ByteArrays.BYTE_SIZE_IN_BITS;
     }
     if (radiotapNamespaceNext) {
       data[3] |= 0x20;
@@ -220,10 +193,10 @@ public final class RadiotapPresentBitmask implements Serializable {
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -238,25 +211,29 @@ public final class RadiotapPresentBitmask implements Serializable {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Present Bitmask (")
-      .append(ByteArrays.toHexString(getRawData(), " "))
-      .append("):")
-      .append(ls)
-      .append(indent).append("  Present Fields: ")
-      .append(ls);
-    for (RadiotapPresentBitNumber num: bitNumbers) {
-      sb.append(indent).append("    ").append(num)
+    sb.append(indent)
+        .append("Present Bitmask (")
+        .append(ByteArrays.toHexString(getRawData(), " "))
+        .append("):")
+        .append(ls)
+        .append(indent)
+        .append("  Present Fields: ")
         .append(ls);
+    for (RadiotapPresentBitNumber num : bitNumbers) {
+      sb.append(indent).append("    ").append(num).append(ls);
     }
-    sb.append(indent).append("  Radiotap NS Next: ")
-      .append(radiotapNamespaceNext)
-      .append(ls)
-      .append(indent).append("  Vendor NS Next: ")
-      .append(vendorNamespaceNext)
-      .append(ls)
-      .append(indent).append("  Another Bitmap Follows: ")
-      .append(anotherBitmapFollows)
-      .append(ls);
+    sb.append(indent)
+        .append("  Radiotap NS Next: ")
+        .append(radiotapNamespaceNext)
+        .append(ls)
+        .append(indent)
+        .append("  Vendor NS Next: ")
+        .append(vendorNamespaceNext)
+        .append(ls)
+        .append(indent)
+        .append("  Another Bitmap Follows: ")
+        .append(anotherBitmapFollows)
+        .append(ls);
 
     return sb.toString();
   }
@@ -275,18 +252,20 @@ public final class RadiotapPresentBitmask implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    RadiotapPresentBitmask other = (RadiotapPresentBitmask)obj;
-    return
-         bitNumbers.equals(other.bitNumbers)
-      && namespace.equals(other.namespace)
-      && radiotapNamespaceNext == other.radiotapNamespaceNext
-      && vendorNamespaceNext == other.vendorNamespaceNext
-      && anotherBitmapFollows == other.anotherBitmapFollows;
+    RadiotapPresentBitmask other = (RadiotapPresentBitmask) obj;
+    return bitNumbers.equals(other.bitNumbers)
+        && namespace.equals(other.namespace)
+        && radiotapNamespaceNext == other.radiotapNamespaceNext
+        && vendorNamespaceNext == other.vendorNamespaceNext
+        && anotherBitmapFollows == other.anotherBitmapFollows;
   }
-
 
   /**
    * @author Kaito Yamada
@@ -300,9 +279,7 @@ public final class RadiotapPresentBitmask implements Serializable {
     private boolean vendorNamespaceNext;
     private boolean anotherBitmapFollows;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(RadiotapPresentBitmask rp) {
@@ -358,13 +335,9 @@ public final class RadiotapPresentBitmask implements Serializable {
       return this;
     }
 
-    /**
-     * @return a new RadiotapPresentBitmask object.
-     */
+    /** @return a new RadiotapPresentBitmask object. */
     public RadiotapPresentBitmask build() {
       return new RadiotapPresentBitmask(this);
     }
-
   }
-
 }

@@ -16,46 +16,36 @@ import org.pcap4j.packet.namednumber.Oui;
  */
 public final class MacAddress extends LinkLayerAddress {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -8222662646993989547L;
 
-  /**
-   *
-   */
-  public static final MacAddress ETHER_BROADCAST_ADDRESS
-    = MacAddress.getByAddress(
-        new byte[]{
-          (byte)255, (byte)255, (byte)255, (byte)255, (byte)255, (byte)255
-        }
-      );
+  /** */
+  public static final MacAddress ETHER_BROADCAST_ADDRESS =
+      MacAddress.getByAddress(
+          new byte[] {(byte) 255, (byte) 255, (byte) 255, (byte) 255, (byte) 255, (byte) 255});
 
-  /**
-   *
-   */
+  /** */
   public static final int SIZE_IN_BYTES = 6;
 
-  private MacAddress(byte[] address) { super(address); }
+  private MacAddress(byte[] address) {
+    super(address);
+  }
 
   /**
-   *
    * @param address address
    * @return a new MacAddress object.
    */
   public static MacAddress getByAddress(byte[] address) {
     if (address.length != SIZE_IN_BYTES) {
       throw new IllegalArgumentException(
-              ByteArrays.toHexString(address, ":")
-                + " is invalid for address. The length must be "
-                + SIZE_IN_BYTES
-            );
+          ByteArrays.toHexString(address, ":")
+              + " is invalid for address. The length must be "
+              + SIZE_IN_BYTES);
     }
     return new MacAddress(ByteArrays.clone(address));
   }
 
   /**
-   *
    * @param name name
    * @return a new MacAddress object.
    */
@@ -66,7 +56,6 @@ public final class MacAddress extends LinkLayerAddress {
   }
 
   /**
-   *
    * @param name name
    * @param separator separator
    * @return a new MacAddress object.
@@ -75,30 +64,24 @@ public final class MacAddress extends LinkLayerAddress {
     return getByAddress(ByteArrays.parseByteArray(name, separator));
   }
 
-  /**
-   *
-   * @return OUI
-   */
+  /** @return OUI */
   public Oui getOui() {
     return Oui.getInstance(ByteArrays.getInt(getAddress(), 0) >>> 8);
   }
 
   /**
-   *
-   * @return true if the MAC address represented by this object is
-   *         a unicast address; otherwise false.
+   * @return true if the MAC address represented by this object is a unicast address; otherwise
+   *     false.
    */
   public boolean isUnicast() {
     return (getAddress()[0] & 1) == 0;
   }
 
   /**
-   *
-   * @return true if the MAC address represented by this object is
-   *         a globally unique address; otherwise false.
+   * @return true if the MAC address represented by this object is a globally unique address;
+   *     otherwise false.
    */
   public boolean isGloballyUnique() {
     return (getAddress()[0] & 2) == 0;
   }
-
 }

@@ -16,17 +16,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IllegalPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -8028013257441150031L;
 
   private final byte[] rawData;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -44,21 +41,18 @@ public final class IllegalPacket extends AbstractPacket {
   }
 
   private IllegalPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.rawData == null
-    ) {
+    if (builder == null || builder.rawData == null) {
       throw new NullPointerException();
     }
 
     this.rawData = new byte[builder.rawData.length];
-    System.arraycopy(
-      builder.rawData, 0, this.rawData, 0, builder.rawData.length
-    );
+    System.arraycopy(builder.rawData, 0, this.rawData, 0, builder.rawData.length);
   }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -67,9 +61,7 @@ public final class IllegalPacket extends AbstractPacket {
     return copy;
   }
 
-  /**
-   *
-   */
+  /** */
   @Override
   public Builder getBuilder() {
     return new Builder(this);
@@ -80,22 +72,21 @@ public final class IllegalPacket extends AbstractPacket {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append("[Illegal Packet (")
-      .append(length())
-      .append(" bytes)]")
-      .append(ls);
-    sb.append("  Hex stream: ")
-      .append(ByteArrays.toHexString(rawData, " "))
-      .append(ls);
+    sb.append("[Illegal Packet (").append(length()).append(" bytes)]").append(ls);
+    sb.append("  Hex stream: ").append(ByteArrays.toHexString(rawData, " ")).append(ls);
 
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
-    IllegalPacket other = (IllegalPacket)obj;
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
+    IllegalPacket other = (IllegalPacket) obj;
     return Arrays.equals(rawData, other.rawData);
   }
 
@@ -112,9 +103,7 @@ public final class IllegalPacket extends AbstractPacket {
 
     private byte[] rawData = new byte[0];
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IllegalPacket packet) {
@@ -122,7 +111,6 @@ public final class IllegalPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param rawData rawData
      * @return this Builder object for method chaining.
      */
@@ -135,7 +123,5 @@ public final class IllegalPacket extends AbstractPacket {
     public IllegalPacket build() {
       return new IllegalPacket(this);
     }
-
   }
-
 }

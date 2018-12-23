@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.util.ByteArrays;
@@ -16,20 +17,16 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
-public final class IcmpV4DestinationUnreachablePacket
-extends IcmpV4InvokingPacketPacket {
+public final class IcmpV4DestinationUnreachablePacket extends IcmpV4InvokingPacketPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2435425895590241470L;
 
   private final IcmpV4DestinationUnreachableHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -37,21 +34,18 @@ extends IcmpV4InvokingPacketPacket {
    * @return a new IcmpV4DestinationUnreachablePacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IcmpV4DestinationUnreachablePacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IcmpV4DestinationUnreachablePacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
 
-    IcmpV4DestinationUnreachableHeader header
-      = new IcmpV4DestinationUnreachableHeader(rawData, offset, length);
+    IcmpV4DestinationUnreachableHeader header =
+        new IcmpV4DestinationUnreachableHeader(rawData, offset, length);
 
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
       return new IcmpV4DestinationUnreachablePacket(
-               header, rawData, offset + header.length(), payloadLength
-             );
-    }
-    else {
+          header, rawData, offset + header.length(), payloadLength);
+    } else {
       return new IcmpV4DestinationUnreachablePacket(header);
     }
   }
@@ -61,8 +55,10 @@ extends IcmpV4InvokingPacketPacket {
   }
 
   private IcmpV4DestinationUnreachablePacket(
-    IcmpV4DestinationUnreachableHeader header, byte[] rawData, int payloadOffset, int payloadLength
-  ) {
+      IcmpV4DestinationUnreachableHeader header,
+      byte[] rawData,
+      int payloadOffset,
+      int payloadLength) {
     super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }
@@ -86,14 +82,11 @@ extends IcmpV4InvokingPacketPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  public static
-  final class Builder extends org.pcap4j.packet.IcmpV4InvokingPacketPacket.Builder {
+  public static final class Builder extends org.pcap4j.packet.IcmpV4InvokingPacketPacket.Builder {
 
     private int unused;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IcmpV4DestinationUnreachablePacket packet) {
@@ -102,7 +95,6 @@ extends IcmpV4InvokingPacketPacket {
     }
 
     /**
-     *
      * @param unused unused
      * @return this Builder object for method chaining.
      */
@@ -121,7 +113,6 @@ extends IcmpV4InvokingPacketPacket {
     public IcmpV4DestinationUnreachablePacket build() {
       return new IcmpV4DestinationUnreachablePacket(this);
     }
-
   }
 
   /**
@@ -138,33 +129,28 @@ extends IcmpV4InvokingPacketPacket {
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = 5245447443272345197L;
 
-    private static final int UNUSED_OFFSET
-      = 0;
-    private static final int UNUSED_SIZE
-      = INT_SIZE_IN_BYTES;
-    private static final int ICMPV4_DESTINATION_UNREACHABLE_HEADER_SIZE
-      = UNUSED_OFFSET + UNUSED_SIZE;
+    private static final int UNUSED_OFFSET = 0;
+    private static final int UNUSED_SIZE = INT_SIZE_IN_BYTES;
+    private static final int ICMPV4_DESTINATION_UNREACHABLE_HEADER_SIZE =
+        UNUSED_OFFSET + UNUSED_SIZE;
 
     private final int unused;
 
-    private IcmpV4DestinationUnreachableHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private IcmpV4DestinationUnreachableHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < ICMPV4_DESTINATION_UNREACHABLE_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 Destination Unreachable Header(")
-          .append(ICMPV4_DESTINATION_UNREACHABLE_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(ICMPV4_DESTINATION_UNREACHABLE_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -175,11 +161,10 @@ extends IcmpV4InvokingPacketPacket {
       this.unused = builder.unused;
     }
 
-    /**
-     *
-     * @return unused
-     */
-    public int getUnused() { return unused; }
+    /** @return unused */
+    public int getUnused() {
+      return unused;
+    }
 
     @Override
     protected List<byte[]> getRawFields() {
@@ -199,21 +184,23 @@ extends IcmpV4InvokingPacketPacket {
       String ls = System.getProperty("line.separator");
 
       sb.append("[ICMPv4 Destination Unreachable Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Unused: ")
-        .append(unused)
-        .append(ls);
+          .append(length())
+          .append(" bytes)]")
+          .append(ls);
+      sb.append("  Unused: ").append(unused).append(ls);
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      IcmpV4DestinationUnreachableHeader other = (IcmpV4DestinationUnreachableHeader)obj;
+      IcmpV4DestinationUnreachableHeader other = (IcmpV4DestinationUnreachableHeader) obj;
       return unused == other.unused;
     }
 
@@ -223,7 +210,5 @@ extends IcmpV4InvokingPacketPacket {
       result = 31 * result + unused;
       return result;
     }
-
   }
-
 }

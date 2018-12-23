@@ -19,85 +19,49 @@ import java.util.Map;
  */
 public final class Dot11VenueGroup extends NamedNumber<Byte, Dot11VenueGroup> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 1522500014088468419L;
 
-  /**
-   * Unspecified: 0
-   */
-  public static final Dot11VenueGroup UNSPECIFIED
-    = new Dot11VenueGroup((byte) 0, "Unspecified");
+  /** Unspecified: 0 */
+  public static final Dot11VenueGroup UNSPECIFIED = new Dot11VenueGroup((byte) 0, "Unspecified");
 
-  /**
-   * Assembly: 1
-   */
-  public static final Dot11VenueGroup ASSEMBLY
-    = new Dot11VenueGroup((byte) 1, "Assembly");
+  /** Assembly: 1 */
+  public static final Dot11VenueGroup ASSEMBLY = new Dot11VenueGroup((byte) 1, "Assembly");
 
-  /**
-   * Business: 2
-   */
-  public static final Dot11VenueGroup BUSINESS
-    = new Dot11VenueGroup((byte) 2, "Business");
+  /** Business: 2 */
+  public static final Dot11VenueGroup BUSINESS = new Dot11VenueGroup((byte) 2, "Business");
 
-  /**
-   * Educational: 3
-   */
-  public static final Dot11VenueGroup EDUCATIONAL
-    = new Dot11VenueGroup((byte) 3, "Educational");
+  /** Educational: 3 */
+  public static final Dot11VenueGroup EDUCATIONAL = new Dot11VenueGroup((byte) 3, "Educational");
 
-  /**
-   * Factory and Industrial: 4
-   */
-  public static final Dot11VenueGroup FACTORY_AND_INDUSTRIAL
-    = new Dot11VenueGroup((byte) 4, "Factory and Industrial");
+  /** Factory and Industrial: 4 */
+  public static final Dot11VenueGroup FACTORY_AND_INDUSTRIAL =
+      new Dot11VenueGroup((byte) 4, "Factory and Industrial");
 
-  /**
-   * Institutional: 5
-   */
-  public static final Dot11VenueGroup INSTITUTIONAL
-    = new Dot11VenueGroup((byte) 5, "Institutional");
+  /** Institutional: 5 */
+  public static final Dot11VenueGroup INSTITUTIONAL =
+      new Dot11VenueGroup((byte) 5, "Institutional");
 
-  /**
-   * Mercantile: 6
-   */
-  public static final Dot11VenueGroup MERCANTILE
-    = new Dot11VenueGroup((byte) 6, "Mercantile");
+  /** Mercantile: 6 */
+  public static final Dot11VenueGroup MERCANTILE = new Dot11VenueGroup((byte) 6, "Mercantile");
 
-  /**
-   * Residential: 7
-   */
-  public static final Dot11VenueGroup RESIDENTIAL
-    = new Dot11VenueGroup((byte) 7, "Residential");
+  /** Residential: 7 */
+  public static final Dot11VenueGroup RESIDENTIAL = new Dot11VenueGroup((byte) 7, "Residential");
 
-  /**
-   * Storage: 8
-   */
-  public static final Dot11VenueGroup STORAGE
-    = new Dot11VenueGroup((byte) 8, "Storage");
+  /** Storage: 8 */
+  public static final Dot11VenueGroup STORAGE = new Dot11VenueGroup((byte) 8, "Storage");
 
-  /**
-   * Utility and Miscellaneous: 9
-   */
-  public static final Dot11VenueGroup UTILITY_AND_MISCELLANEOUS
-    = new Dot11VenueGroup((byte) 9, "Utility and Miscellaneous");
+  /** Utility and Miscellaneous: 9 */
+  public static final Dot11VenueGroup UTILITY_AND_MISCELLANEOUS =
+      new Dot11VenueGroup((byte) 9, "Utility and Miscellaneous");
 
-  /**
-   * Vehicular: 10
-   */
-  public static final Dot11VenueGroup VEHICULAR
-    = new Dot11VenueGroup((byte) 10, "Vehicular");
+  /** Vehicular: 10 */
+  public static final Dot11VenueGroup VEHICULAR = new Dot11VenueGroup((byte) 10, "Vehicular");
 
-  /**
-   * Outdoor: 11
-   */
-  public static final Dot11VenueGroup OUTDOOR
-    = new Dot11VenueGroup((byte) 11, "Outdoor");
+  /** Outdoor: 11 */
+  public static final Dot11VenueGroup OUTDOOR = new Dot11VenueGroup((byte) 11, "Outdoor");
 
-  private static final Map<Byte, Dot11VenueGroup> registry
-    = new HashMap<Byte, Dot11VenueGroup>();
+  private static final Map<Byte, Dot11VenueGroup> registry = new HashMap<Byte, Dot11VenueGroup>();
 
   static {
     registry.put(UNSPECIFIED.value(), UNSPECIFIED);
@@ -129,8 +93,7 @@ public final class Dot11VenueGroup extends NamedNumber<Byte, Dot11VenueGroup> {
   public static Dot11VenueGroup getInstance(Byte value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new Dot11VenueGroup(value, "unknown");
     }
   }
@@ -148,12 +111,9 @@ public final class Dot11VenueGroup extends NamedNumber<Byte, Dot11VenueGroup> {
     return value().compareTo(o.value());
   }
 
-  /**
-   *
-   */
+  /** */
   @Override
   public String valueAsString() {
     return String.valueOf(value() & 0xFF);
   }
-
 }

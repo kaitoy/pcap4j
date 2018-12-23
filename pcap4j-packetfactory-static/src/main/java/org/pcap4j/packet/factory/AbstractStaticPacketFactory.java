@@ -21,22 +21,16 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @param <N> number
  */
 public abstract class AbstractStaticPacketFactory<N extends NamedNumber<?, ?>>
-implements PacketFactory<Packet, N> {
+    implements PacketFactory<Packet, N> {
 
-  /**
-   *
-   */
-  protected final Map<N, PacketInstantiater> instantiaters
-    = new HashMap<N, PacketInstantiater>();
+  /** */
+  protected final Map<N, PacketInstantiater> instantiaters = new HashMap<N, PacketInstantiater>();
 
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, N number) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" number: ")
-        .append(number);
+      sb.append("rawData: ").append(rawData).append(" number: ").append(number);
       throw new NullPointerException(sb.toString());
     }
 
@@ -70,5 +64,4 @@ implements PacketFactory<Packet, N> {
   public Class<? extends Packet> getTargetClass() {
     return UnknownPacket.class;
   }
-
 }

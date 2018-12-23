@@ -40,9 +40,9 @@ Pcap4J
         * [WinPcapかNpcapか](#WinPcapかNpcapか)
     * [Docker](#docker)
 * [ビルド](#ビルド)
+* [コードに貢献](#コードに貢献)
 * [ライセンス](#ライセンス)
 * [コンタクト](#コンタクト)
-* [おまけ](#おまけ)
 
 ダウンロード
 ------------
@@ -255,12 +255,24 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
    プロジェクトのルートディレクトリに`cd`して、`./mvnw install` を実行する。
    unit testを通すためにはAdministrator/root権限が必要。
 
+コードに貢献
+------------
+
+1. このリポジトリをフォークする。
+2. v1ブランチからブランチを作る。
+3. コードを書く。
+
+    * プロトコルサポートを追加するときは[このPR](https://github.com/kaitoy/pcap4j/pull/70)を参照。
+    * このプロジェクトは[Google Java Style Guide](https://google.github.io/styleguide/javaguide.html)に従う。「`mvnw com.coveo:fmt-maven-plugin:format`」を実行するとフォーマットできる。
+
+4. そのブランチからPRを送る。
+
 ライセンス
 ----------
 
 Pcap4J is distributed under the MIT license.
 
-    Copyright (c) 2011-2015 Pcap4J.org
+    Copyright (c) 2011-2018 Pcap4J.org
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -289,8 +301,3 @@ Pcap4J is distributed under the MIT license.
 ----------
 
 Kaito Yamada (kaitoy@pcap4j.org)
-
-おまけ
-------
-
-Pcap4J を使ったSNMPネットワークシミュレータ、SNeO。Githubに公開しました: https://github.com/kaitoy/sneo

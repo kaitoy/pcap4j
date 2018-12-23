@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +23,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IcmpV6RedirectPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3400190218684481961L;
 
   private final IcmpV6RedirectHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -40,31 +38,31 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
    * @return a new IcmpV6RedirectPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IcmpV6RedirectPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IcmpV6RedirectPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new IcmpV6RedirectPacket(rawData, offset, length);
   }
 
-  private IcmpV6RedirectPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private IcmpV6RedirectPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     this.header = new IcmpV6RedirectHeader(rawData, offset, length);
   }
 
   private IcmpV6RedirectPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.targetAddress == null
-      || builder.destinationAddress == null
-      || builder.options == null
-    ) {
+    if (builder == null
+        || builder.targetAddress == null
+        || builder.destinationAddress == null
+        || builder.options == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.targetAddress: ").append(builder.targetAddress)
-        .append(" builder.destinationAddress: ").append(builder.destinationAddress)
-        .append(" builder.options: ").append(builder.options);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.targetAddress: ")
+          .append(builder.targetAddress)
+          .append(" builder.destinationAddress: ")
+          .append(builder.destinationAddress)
+          .append(" builder.options: ")
+          .append(builder.options);
       throw new NullPointerException(sb.toString());
     }
 
@@ -92,9 +90,7 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
     private Inet6Address destinationAddress;
     private List<IpV6NeighborDiscoveryOption> options;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IcmpV6RedirectPacket packet) {
@@ -105,7 +101,6 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param reserved reserved
      * @return this Builder object for method chaining.
      */
@@ -115,7 +110,6 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param targetAddress targetAddress
      * @return this Builder object for method chaining.
      */
@@ -125,7 +119,6 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param destinationAddress destinationAddress
      * @return this Builder object for method chaining.
      */
@@ -135,7 +128,6 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param options options
      * @return this Builder object for method chaining.
      */
@@ -148,15 +140,13 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
     public IcmpV6RedirectPacket build() {
       return new IcmpV6RedirectPacket(this);
     }
-
   }
 
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.15
    */
-  public static
-  final class IcmpV6RedirectHeader extends AbstractHeader {
+  public static final class IcmpV6RedirectHeader extends AbstractHeader {
 
     /*
      *  0                   1                   2                   3
@@ -185,71 +175,59 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -649348640271386853L;
 
-    private static final int RESERVED_OFFSET
-      = 0;
-    private static final int RESERVED_SIZE
-      = INT_SIZE_IN_BYTES;
-    private static final int TARGET_ADDRESS_OFFSET
-      = RESERVED_OFFSET + RESERVED_SIZE;
-    private static final int TARGET_ADDRESS_SIZE
-      = INET6_ADDRESS_SIZE_IN_BYTES;
-    private static final int DESTINATION_ADDRESS_OFFSET
-      = TARGET_ADDRESS_OFFSET + TARGET_ADDRESS_SIZE;
-    private static final int DESTINATION_ADDRESS_SIZE
-      = INET6_ADDRESS_SIZE_IN_BYTES;
-    private static final int OPTIONS_OFFSET
-      = DESTINATION_ADDRESS_OFFSET + DESTINATION_ADDRESS_SIZE;
+    private static final int RESERVED_OFFSET = 0;
+    private static final int RESERVED_SIZE = INT_SIZE_IN_BYTES;
+    private static final int TARGET_ADDRESS_OFFSET = RESERVED_OFFSET + RESERVED_SIZE;
+    private static final int TARGET_ADDRESS_SIZE = INET6_ADDRESS_SIZE_IN_BYTES;
+    private static final int DESTINATION_ADDRESS_OFFSET =
+        TARGET_ADDRESS_OFFSET + TARGET_ADDRESS_SIZE;
+    private static final int DESTINATION_ADDRESS_SIZE = INET6_ADDRESS_SIZE_IN_BYTES;
+    private static final int OPTIONS_OFFSET = DESTINATION_ADDRESS_OFFSET + DESTINATION_ADDRESS_SIZE;
 
     private final int reserved;
     private final Inet6Address targetAddress;
     private final Inet6Address destinationAddress;
     private final List<IpV6NeighborDiscoveryOption> options;
 
-    private IcmpV6RedirectHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private IcmpV6RedirectHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < OPTIONS_OFFSET) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The raw data must be more than ")
-          .append(OPTIONS_OFFSET - 1).append("bytes")
-          .append(" to build this header. raw data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(OPTIONS_OFFSET - 1)
+            .append("bytes")
+            .append(" to build this header. raw data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
       this.reserved = ByteArrays.getInt(rawData, RESERVED_OFFSET + offset);
-      this.targetAddress
-        = ByteArrays.getInet6Address(rawData, TARGET_ADDRESS_OFFSET + offset);
-      this.destinationAddress
-        = ByteArrays.getInet6Address(rawData, DESTINATION_ADDRESS_OFFSET + offset);
+      this.targetAddress = ByteArrays.getInet6Address(rawData, TARGET_ADDRESS_OFFSET + offset);
+      this.destinationAddress =
+          ByteArrays.getInet6Address(rawData, DESTINATION_ADDRESS_OFFSET + offset);
       this.options = new ArrayList<IpV6NeighborDiscoveryOption>();
 
       int currentOffsetInHeader = OPTIONS_OFFSET;
       while (currentOffsetInHeader < length) {
-        IpV6NeighborDiscoveryOptionType type
-          = IpV6NeighborDiscoveryOptionType.getInstance(rawData[currentOffsetInHeader + offset]);
+        IpV6NeighborDiscoveryOptionType type =
+            IpV6NeighborDiscoveryOptionType.getInstance(rawData[currentOffsetInHeader + offset]);
         IpV6NeighborDiscoveryOption newOne;
         try {
-          newOne
-            = PacketFactories
-                .getFactory(
-                   IpV6NeighborDiscoveryOption.class,
-                   IpV6NeighborDiscoveryOptionType.class
-                 ).newInstance(
-                     rawData,
-                     currentOffsetInHeader + offset,
-                     length - currentOffsetInHeader,
-                     type
-                   );
+          newOne =
+              PacketFactories.getFactory(
+                      IpV6NeighborDiscoveryOption.class, IpV6NeighborDiscoveryOptionType.class)
+                  .newInstance(
+                      rawData,
+                      currentOffsetInHeader + offset,
+                      length - currentOffsetInHeader,
+                      type);
         } catch (Exception e) {
           break;
         }
@@ -266,34 +244,22 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
       this.options = new ArrayList<IpV6NeighborDiscoveryOption>(builder.options);
     }
 
-    /**
-     *
-     * @return reserved
-     */
+    /** @return reserved */
     public int getReserved() {
       return reserved;
     }
 
-    /**
-     *
-     * @return targetAddress
-     */
+    /** @return targetAddress */
     public Inet6Address getTargetAddress() {
       return targetAddress;
     }
 
-    /**
-     *
-     * @return destinationAddress
-     */
+    /** @return destinationAddress */
     public Inet6Address getDestinationAddress() {
       return destinationAddress;
     }
 
-    /**
-     *
-     * @return options
-     */
+    /** @return options */
     public List<IpV6NeighborDiscoveryOption> getOptions() {
       return new ArrayList<IpV6NeighborDiscoveryOption>(options);
     }
@@ -304,7 +270,7 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
       rawFields.add(ByteArrays.toByteArray(reserved));
       rawFields.add(ByteArrays.toByteArray(targetAddress));
       rawFields.add(ByteArrays.toByteArray(destinationAddress));
-      for (IpV6NeighborDiscoveryOption o: options) {
+      for (IpV6NeighborDiscoveryOption o : options) {
         rawFields.add(o.getRawData());
       }
       return rawFields;
@@ -313,7 +279,7 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
     @Override
     protected int calcLength() {
       int len = 0;
-      for (IpV6NeighborDiscoveryOption o: options) {
+      for (IpV6NeighborDiscoveryOption o : options) {
         len += o.length();
       }
       return len + OPTIONS_OFFSET;
@@ -324,23 +290,12 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[ICMPv6 Redirect Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Reserved: ")
-        .append(reserved)
-        .append(ls);
-      sb.append("  Target Address: ")
-        .append(targetAddress)
-        .append(ls);
-      sb.append("  Destination Address: ")
-        .append(destinationAddress)
-        .append(ls);
-      for (IpV6NeighborDiscoveryOption opt: options) {
-        sb.append("  Option: ")
-          .append(opt)
-          .append(ls);
+      sb.append("[ICMPv6 Redirect Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Reserved: ").append(reserved).append(ls);
+      sb.append("  Target Address: ").append(targetAddress).append(ls);
+      sb.append("  Destination Address: ").append(destinationAddress).append(ls);
+      for (IpV6NeighborDiscoveryOption opt : options) {
+        sb.append("  Option: ").append(opt).append(ls);
       }
 
       return sb.toString();
@@ -348,15 +303,18 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      IcmpV6RedirectHeader other = (IcmpV6RedirectHeader)obj;
-      return
-           targetAddress.equals(other.targetAddress)
-        && destinationAddress.equals(other.destinationAddress)
-        && reserved == other.reserved
-        && options.equals(other.options);
+      IcmpV6RedirectHeader other = (IcmpV6RedirectHeader) obj;
+      return targetAddress.equals(other.targetAddress)
+          && destinationAddress.equals(other.destinationAddress)
+          && reserved == other.reserved
+          && options.equals(other.options);
     }
 
     @Override
@@ -368,7 +326,5 @@ public final class IcmpV6RedirectPacket extends AbstractPacket {
       result = 31 * result + options.hashCode();
       return result;
     }
-
   }
-
 }

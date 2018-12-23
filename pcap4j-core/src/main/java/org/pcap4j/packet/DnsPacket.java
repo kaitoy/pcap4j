@@ -12,7 +12,6 @@ import static org.pcap4j.util.ByteArrays.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.pcap4j.packet.namednumber.DnsOpCode;
 import org.pcap4j.packet.namednumber.DnsRCode;
 import org.pcap4j.util.ByteArrays;
@@ -21,23 +20,22 @@ import org.pcap4j.util.ByteArrays;
  * DNS packet.
  *
  * @see <a href="https://tools.ietf.org/html/rfc1035">RFC 1035</a>
- * @see <a href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-12">DNS Header Flags</a>
+ * @see <a
+ *     href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-12">DNS
+ *     Header Flags</a>
  * @author Kaito Yamada
  * @since pcap4j 1.7.1
  */
 public final class DnsPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2804715680374557063L;
 
   private final DnsHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -45,9 +43,8 @@ public final class DnsPacket extends AbstractPacket {
    * @return a new DnsPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsPacket(rawData, offset, length);
   }
@@ -57,15 +54,14 @@ public final class DnsPacket extends AbstractPacket {
   }
 
   private DnsPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.opCode == null
-      || builder.rCode == null
-    ) {
+    if (builder == null || builder.opCode == null || builder.rCode == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.opCode: ").append(builder.opCode)
-        .append(" builder.rCode: ").append(builder.rCode);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.opCode: ")
+          .append(builder.opCode)
+          .append(" builder.rCode: ")
+          .append(builder.rCode);
       throw new NullPointerException(sb.toString());
     }
 
@@ -108,9 +104,7 @@ public final class DnsPacket extends AbstractPacket {
     private List<DnsResourceRecord> authorities;
     private List<DnsResourceRecord> additionalInfo;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(DnsPacket packet) {
@@ -310,7 +304,6 @@ public final class DnsPacket extends AbstractPacket {
     public DnsPacket build() {
       return new DnsPacket(this);
     }
-
   }
 
   /**
@@ -354,37 +347,22 @@ public final class DnsPacket extends AbstractPacket {
    */
   public static final class DnsHeader extends AbstractHeader {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -2779530760536525672L;
 
-    private static final int ID_OFFSET
-      = 0;
-    private static final int ID_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int FLAGS_OFFSET
-      = ID_OFFSET + ID_SIZE;
-    private static final int FLAGS_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int QDCOUNT_OFFSET
-      = FLAGS_OFFSET + FLAGS_SIZE;
-    private static final int QDCOUNT_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int ANCOUNT_OFFSET
-      = QDCOUNT_OFFSET + QDCOUNT_SIZE;
-    private static final int ANCOUNT_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int NSCOUNT_OFFSET
-      = ANCOUNT_OFFSET + ANCOUNT_SIZE;
-    private static final int NSCOUNT_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int ARCOUNT_OFFSET
-      = NSCOUNT_OFFSET + NSCOUNT_SIZE;
-    private static final int ARCOUNT_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int DNS_MIN_HEADER_SIZE
-      = ARCOUNT_OFFSET + ARCOUNT_SIZE;
+    private static final int ID_OFFSET = 0;
+    private static final int ID_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int FLAGS_OFFSET = ID_OFFSET + ID_SIZE;
+    private static final int FLAGS_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int QDCOUNT_OFFSET = FLAGS_OFFSET + FLAGS_SIZE;
+    private static final int QDCOUNT_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int ANCOUNT_OFFSET = QDCOUNT_OFFSET + QDCOUNT_SIZE;
+    private static final int ANCOUNT_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int NSCOUNT_OFFSET = ANCOUNT_OFFSET + ANCOUNT_SIZE;
+    private static final int NSCOUNT_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int ARCOUNT_OFFSET = NSCOUNT_OFFSET + NSCOUNT_SIZE;
+    private static final int ARCOUNT_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int DNS_MIN_HEADER_SIZE = ARCOUNT_OFFSET + ARCOUNT_SIZE;
 
     private final short id;
     private final boolean response;
@@ -410,13 +388,13 @@ public final class DnsPacket extends AbstractPacket {
       if (length < DNS_MIN_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(200);
         sb.append("The data is too short to build a DnsHeader (")
-          .append(DNS_MIN_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(DNS_MIN_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -452,17 +430,16 @@ public final class DnsPacket extends AbstractPacket {
         if (remainingLen == 0) {
           StringBuilder sb = new StringBuilder(200);
           sb.append("The data is too short to build a question in DnsHeader. data: ")
-            .append(ByteArrays.toHexString(rawData, " "))
-            .append(", offset: ")
-            .append(offset)
-            .append(", length: ")
-            .append(length)
-            .append(", cursor: ")
-            .append(cursor);
+              .append(ByteArrays.toHexString(rawData, " "))
+              .append(", offset: ")
+              .append(offset)
+              .append(", length: ")
+              .append(length)
+              .append(", cursor: ")
+              .append(cursor);
           throw new IllegalRawDataException(sb.toString());
         }
-        DnsQuestion question
-          = DnsQuestion.newInstance(rawData, offset + cursor, remainingLen);
+        DnsQuestion question = DnsQuestion.newInstance(rawData, offset + cursor, remainingLen);
         questions.add(question);
         cursor += question.length();
       }
@@ -471,17 +448,17 @@ public final class DnsPacket extends AbstractPacket {
         if (remainingLen == 0) {
           StringBuilder sb = new StringBuilder(200);
           sb.append("The data is too short to build an answer in DnsHeader. data: ")
-            .append(ByteArrays.toHexString(rawData, " "))
-            .append(", offset: ")
-            .append(offset)
-            .append(", length: ")
-            .append(length)
-            .append(", cursor: ")
-            .append(cursor);
+              .append(ByteArrays.toHexString(rawData, " "))
+              .append(", offset: ")
+              .append(offset)
+              .append(", length: ")
+              .append(length)
+              .append(", cursor: ")
+              .append(cursor);
           throw new IllegalRawDataException(sb.toString());
         }
-        DnsResourceRecord answer
-          = DnsResourceRecord.newInstance(rawData, offset + cursor, remainingLen);
+        DnsResourceRecord answer =
+            DnsResourceRecord.newInstance(rawData, offset + cursor, remainingLen);
         answers.add(answer);
         cursor += answer.length();
       }
@@ -490,17 +467,17 @@ public final class DnsPacket extends AbstractPacket {
         if (remainingLen == 0) {
           StringBuilder sb = new StringBuilder(200);
           sb.append("The data is too short to build an authority in DnsHeader. data: ")
-            .append(ByteArrays.toHexString(rawData, " "))
-            .append(", offset: ")
-            .append(offset)
-            .append(", length: ")
-            .append(length)
-            .append(", cursor: ")
-            .append(cursor);
+              .append(ByteArrays.toHexString(rawData, " "))
+              .append(", offset: ")
+              .append(offset)
+              .append(", length: ")
+              .append(length)
+              .append(", cursor: ")
+              .append(cursor);
           throw new IllegalRawDataException(sb.toString());
         }
-        DnsResourceRecord authority
-          = DnsResourceRecord.newInstance(rawData, offset + cursor, remainingLen);
+        DnsResourceRecord authority =
+            DnsResourceRecord.newInstance(rawData, offset + cursor, remainingLen);
         authorities.add(authority);
         cursor += authority.length();
       }
@@ -509,17 +486,17 @@ public final class DnsPacket extends AbstractPacket {
         if (remainingLen == 0) {
           StringBuilder sb = new StringBuilder(200);
           sb.append("The data is too short to build additional info in DnsHeader. data: ")
-            .append(ByteArrays.toHexString(rawData, " "))
-            .append(", offset: ")
-            .append(offset)
-            .append(", length: ")
-            .append(length)
-            .append(", cursor: ")
-            .append(cursor);
+              .append(ByteArrays.toHexString(rawData, " "))
+              .append(", offset: ")
+              .append(offset)
+              .append(", length: ")
+              .append(length)
+              .append(", cursor: ")
+              .append(cursor);
           throw new IllegalRawDataException(sb.toString());
         }
-        DnsResourceRecord info
-          = DnsResourceRecord.newInstance(rawData, offset + cursor, remainingLen);
+        DnsResourceRecord info =
+            DnsResourceRecord.newInstance(rawData, offset + cursor, remainingLen);
         additionalInfo.add(info);
         cursor += info.length();
       }
@@ -544,210 +521,157 @@ public final class DnsPacket extends AbstractPacket {
       if (builder.questions != null) {
         if (builder.questions.size() > 65535) {
           throw new IllegalArgumentException(
-                  "The number of questions must be less than 65536. builder.questions.size(): "
-                    + builder.questions.size()
-                );
+              "The number of questions must be less than 65536. builder.questions.size(): "
+                  + builder.questions.size());
         }
         this.questions = new ArrayList<DnsQuestion>(builder.questions);
-      }
-      else {
+      } else {
         this.questions = Collections.emptyList();
       }
       if (builder.answers != null) {
         if (builder.answers.size() > 65535) {
           throw new IllegalArgumentException(
-                  "The number of answers must be less than 65536. builder.answers.size(): "
-                    + builder.answers.size()
-                );
+              "The number of answers must be less than 65536. builder.answers.size(): "
+                  + builder.answers.size());
         }
         this.answers = new ArrayList<DnsResourceRecord>(builder.answers);
-      }
-      else {
+      } else {
         this.answers = Collections.emptyList();
       }
       if (builder.authorities != null) {
         if (builder.authorities.size() > 65535) {
           throw new IllegalArgumentException(
-                  "The number of authorities must be less than 65536. builder.authorities.size(): "
-                    + builder.authorities.size()
-                );
+              "The number of authorities must be less than 65536. builder.authorities.size(): "
+                  + builder.authorities.size());
         }
         this.authorities = new ArrayList<DnsResourceRecord>(builder.authorities);
-      }
-      else {
+      } else {
         this.authorities = Collections.emptyList();
       }
       if (builder.additionalInfo != null) {
         if (builder.additionalInfo.size() > 65535) {
           throw new IllegalArgumentException(
-                  "The number of additionalInfo elements must be less than 65536."
-                    + " builder.additionalInfo.size(): " + builder.additionalInfo.size()
-                );
+              "The number of additionalInfo elements must be less than 65536."
+                  + " builder.additionalInfo.size(): "
+                  + builder.additionalInfo.size());
         }
         this.additionalInfo = new ArrayList<DnsResourceRecord>(builder.additionalInfo);
-      }
-      else {
+      } else {
         this.additionalInfo = Collections.emptyList();
       }
     }
 
-    /**
-     * @return id
-     */
+    /** @return id */
     public short getId() {
       return id;
     }
 
-    /**
-     * @return true if the QR bit is set to 1; false otherwise.
-     */
+    /** @return true if the QR bit is set to 1; false otherwise. */
     public boolean isResponse() {
       return response;
     }
 
-    /**
-     * @return opCode
-     */
+    /** @return opCode */
     public DnsOpCode getOpCode() {
       return opCode;
     }
 
-    /**
-     * @return true if the AA bit is set to 1; false otherwise.
-     */
+    /** @return true if the AA bit is set to 1; false otherwise. */
     public boolean isAuthoritativeAnswer() {
       return authoritativeAnswer;
     }
 
-    /**
-     * @return true if the TC bit is set to 1; false otherwise.
-     */
+    /** @return true if the TC bit is set to 1; false otherwise. */
     public boolean isTruncated() {
       return truncated;
     }
 
-    /**
-     * @return true if the RD bit is set to 1; false otherwise.
-     */
+    /** @return true if the RD bit is set to 1; false otherwise. */
     public boolean isRecursionDesired() {
       return recursionDesired;
     }
 
-    /**
-     * @return true if the RA bit is set to 1; false otherwise.
-     */
+    /** @return true if the RA bit is set to 1; false otherwise. */
     public boolean isRecursionAvailable() {
       return recursionAvailable;
     }
 
-    /**
-     * @return true if the Z bit is set to 1; false otherwise.
-     */
+    /** @return true if the Z bit is set to 1; false otherwise. */
     public boolean getReservedBit() {
       return reserved;
     }
 
-    /**
-     * @return true if the AD bit is set to 1; false otherwise.
-     */
+    /** @return true if the AD bit is set to 1; false otherwise. */
     public boolean isAuthenticData() {
       return authenticData;
     }
 
-    /**
-     * @return true if the CD bit is set to 1; false otherwise.
-     */
+    /** @return true if the CD bit is set to 1; false otherwise. */
     public boolean isCheckingDisabled() {
       return checkingDisabled;
     }
 
-    /**
-     * @return rCode
-     */
+    /** @return rCode */
     public DnsRCode getrCode() {
       return rCode;
     }
 
-    /**
-     * @return qdCount
-     */
+    /** @return qdCount */
     public short getQdCount() {
       return qdCount;
     }
 
-    /**
-     * @return qdCount
-     */
+    /** @return qdCount */
     public int getQdCountAsInt() {
       return qdCount & 0xFFFF;
     }
 
-    /**
-     * @return anCount
-     */
+    /** @return anCount */
     public short getAnCount() {
       return anCount;
     }
 
-    /**
-     * @return anCount
-     */
+    /** @return anCount */
     public int getAnCountAsInt() {
       return anCount & 0xFFFF;
     }
 
-    /**
-     * @return nsCount
-     */
+    /** @return nsCount */
     public short getNsCount() {
       return nsCount;
     }
 
-    /**
-     * @return nsCount
-     */
+    /** @return nsCount */
     public int getNsCountAsInt() {
       return nsCount & 0xFFFF;
     }
 
-    /**
-     * @return arCount
-     */
+    /** @return arCount */
     public short getArCount() {
       return arCount;
     }
 
-    /**
-     * @return arCount
-     */
+    /** @return arCount */
     public int getArCountAsInt() {
       return arCount & 0xFFFF;
     }
 
-    /**
-     * @return questions
-     */
+    /** @return questions */
     public List<DnsQuestion> getQuestions() {
       return new ArrayList<DnsQuestion>(questions);
     }
 
-    /**
-     * @return answers
-     */
+    /** @return answers */
     public List<DnsResourceRecord> getAnswers() {
       return new ArrayList<DnsResourceRecord>(answers);
     }
 
-    /**
-     * @return authorities
-     */
+    /** @return authorities */
     public List<DnsResourceRecord> getAuthorities() {
       return new ArrayList<DnsResourceRecord>(authorities);
     }
 
-    /**
-     * @return additionalInfo
-     */
+    /** @return additionalInfo */
     public List<DnsResourceRecord> getAdditionalInfo() {
       return new ArrayList<DnsResourceRecord>(additionalInfo);
     }
@@ -792,16 +716,16 @@ public final class DnsPacket extends AbstractPacket {
       rawFields.add(ByteArrays.toByteArray(nsCount));
       rawFields.add(ByteArrays.toByteArray(arCount));
 
-      for (DnsQuestion question: questions) {
+      for (DnsQuestion question : questions) {
         rawFields.add(question.getRawData());
       }
-      for (DnsResourceRecord answer: answers) {
+      for (DnsResourceRecord answer : answers) {
         rawFields.add(answer.getRawData());
       }
-      for (DnsResourceRecord authority: authorities) {
+      for (DnsResourceRecord authority : authorities) {
         rawFields.add(authority.getRawData());
       }
-      for (DnsResourceRecord info: additionalInfo) {
+      for (DnsResourceRecord info : additionalInfo) {
         rawFields.add(info.getRawData());
       }
 
@@ -811,16 +735,16 @@ public final class DnsPacket extends AbstractPacket {
     @Override
     public int length() {
       int len = DNS_MIN_HEADER_SIZE;
-      for (DnsQuestion question: questions) {
+      for (DnsQuestion question : questions) {
         len += question.length();
       }
-      for (DnsResourceRecord answer: answers) {
+      for (DnsResourceRecord answer : answers) {
         len += answer.length();
       }
-      for (DnsResourceRecord authority: authorities) {
+      for (DnsResourceRecord authority : authorities) {
         len += authority.length();
       }
-      for (DnsResourceRecord info: additionalInfo) {
+      for (DnsResourceRecord info : additionalInfo) {
         len += info.length();
       }
       return len;
@@ -831,76 +755,35 @@ public final class DnsPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[DNS Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  ID: ")
-        .append("0x" + ByteArrays.toHexString(id, ""))
-        .append(ls);
-      sb.append("  QR: ")
-        .append(response ? "response" : "query")
-        .append(ls);
-      sb.append("  OPCODE: ")
-        .append(opCode)
-        .append(ls);
-      sb.append("  Authoritative Answer: ")
-        .append(authoritativeAnswer)
-        .append(ls);
-      sb.append("  Truncated: ")
-        .append(truncated)
-        .append(ls);
-      sb.append("  Recursion Desired: ")
-        .append(recursionDesired)
-        .append(ls);
-      sb.append("  Recursion Available: ")
-        .append(recursionAvailable)
-        .append(ls);
-      sb.append("  Reserved Bit: ")
-        .append(reserved ? 1 : 0)
-        .append(ls);
-      sb.append("  Authentic Data: ")
-        .append(authenticData)
-        .append(ls);
-      sb.append("  Checking Disabled: ")
-        .append(checkingDisabled)
-        .append(ls);
-      sb.append("  RCODE: ")
-        .append(rCode)
-        .append(ls);
-      sb.append("  QDCOUNT: ")
-        .append(qdCount)
-        .append(ls);
-      sb.append("  ANCOUNT: ")
-        .append(anCount)
-        .append(ls);
-      sb.append("  NSCOUNT: ")
-        .append(nsCount)
-        .append(ls);
-      sb.append("  ARCOUNT: ")
-        .append(arCount)
-        .append(ls);
+      sb.append("[DNS Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  ID: ").append("0x" + ByteArrays.toHexString(id, "")).append(ls);
+      sb.append("  QR: ").append(response ? "response" : "query").append(ls);
+      sb.append("  OPCODE: ").append(opCode).append(ls);
+      sb.append("  Authoritative Answer: ").append(authoritativeAnswer).append(ls);
+      sb.append("  Truncated: ").append(truncated).append(ls);
+      sb.append("  Recursion Desired: ").append(recursionDesired).append(ls);
+      sb.append("  Recursion Available: ").append(recursionAvailable).append(ls);
+      sb.append("  Reserved Bit: ").append(reserved ? 1 : 0).append(ls);
+      sb.append("  Authentic Data: ").append(authenticData).append(ls);
+      sb.append("  Checking Disabled: ").append(checkingDisabled).append(ls);
+      sb.append("  RCODE: ").append(rCode).append(ls);
+      sb.append("  QDCOUNT: ").append(qdCount).append(ls);
+      sb.append("  ANCOUNT: ").append(anCount).append(ls);
+      sb.append("  NSCOUNT: ").append(nsCount).append(ls);
+      sb.append("  ARCOUNT: ").append(arCount).append(ls);
 
       byte[] headerRawData = getRawData();
-      for (DnsQuestion question: questions) {
-        sb.append("  Question:")
-          .append(ls)
-          .append(question.toString("    ", headerRawData));
+      for (DnsQuestion question : questions) {
+        sb.append("  Question:").append(ls).append(question.toString("    ", headerRawData));
       }
-      for (DnsResourceRecord answer: answers) {
-        sb.append("  Answer:")
-          .append(ls)
-          .append(answer.toString("    ", headerRawData));
+      for (DnsResourceRecord answer : answers) {
+        sb.append("  Answer:").append(ls).append(answer.toString("    ", headerRawData));
       }
-      for (DnsResourceRecord authority: authorities) {
-        sb.append("  Authority:")
-          .append(ls)
-          .append(authority.toString("    ", headerRawData));
+      for (DnsResourceRecord authority : authorities) {
+        sb.append("  Authority:").append(ls).append(authority.toString("    ", headerRawData));
       }
-      for (DnsResourceRecord info: additionalInfo) {
-        sb.append("  Additional:")
-          .append(ls)
-          .append(info.toString("    ", headerRawData));
+      for (DnsResourceRecord info : additionalInfo) {
+        sb.append("  Additional:").append(ls).append(info.toString("    ", headerRawData));
       }
 
       return sb.toString();
@@ -1003,7 +886,5 @@ public final class DnsPacket extends AbstractPacket {
       result = prime * result + (truncated ? 1231 : 1237);
       return result;
     }
-
   }
-
 }

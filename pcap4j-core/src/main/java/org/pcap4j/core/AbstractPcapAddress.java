@@ -35,12 +35,10 @@ abstract class AbstractPcapAddress implements PcapAddress {
       if (pcapAddr.addr.getSaFamily() != saFamily) {
         warn(pcapAddr.addr.getSaFamily(), saFamily, devName, "addr");
         this.address = null;
-      }
-      else {
+      } else {
         this.address = ntoInetAddress(pcapAddr.addr);
       }
-    }
-    else {
+    } else {
       this.address = null;
     }
 
@@ -48,12 +46,10 @@ abstract class AbstractPcapAddress implements PcapAddress {
       if (pcapAddr.netmask.getSaFamily() != saFamily) {
         warn(pcapAddr.netmask.getSaFamily(), saFamily, devName, "netmask");
         this.netmask = null;
-      }
-      else {
+      } else {
         this.netmask = ntoInetAddress(pcapAddr.netmask);
       }
-    }
-    else {
+    } else {
       this.netmask = null;
     }
 
@@ -61,12 +57,10 @@ abstract class AbstractPcapAddress implements PcapAddress {
       if (pcapAddr.broadaddr.getSaFamily() != saFamily) {
         warn(pcapAddr.broadaddr.getSaFamily(), saFamily, devName, "broadaddr");
         this.broadcastAddr = null;
-      }
-      else {
+      } else {
         this.broadcastAddr = ntoInetAddress(pcapAddr.broadaddr);
       }
-    }
-    else {
+    } else {
       this.broadcastAddr = null;
     }
 
@@ -74,28 +68,23 @@ abstract class AbstractPcapAddress implements PcapAddress {
       if (pcapAddr.dstaddr.getSaFamily() != saFamily) {
         warn(pcapAddr.dstaddr.getSaFamily(), saFamily, devName, "dstaddr");
         this.dstAddr = null;
-      }
-      else {
+      } else {
         this.dstAddr = ntoInetAddress(pcapAddr.dstaddr);
       }
-    }
-    else {
+    } else {
       this.dstAddr = null;
     }
   }
 
-  private void warn(
-    short actualSaFamily, short expectedSaFamily, String devName, String field
-  ) {
+  private void warn(short actualSaFamily, short expectedSaFamily, String devName, String field) {
     if (logger.isWarnEnabled()) {
       logger.warn(
-        "Couldn't analyze an address. "
-          + "devName: {}, field: {}, actual saFamily: {}, expected saFamily: {}",
-        devName,
-        field,
-        actualSaFamily,
-        expectedSaFamily
-      );
+          "Couldn't analyze an address. "
+              + "devName: {}, field: {}, actual saFamily: {}, expected saFamily: {}",
+          devName,
+          field,
+          actualSaFamily,
+          expectedSaFamily);
     }
   }
 
@@ -125,11 +114,15 @@ abstract class AbstractPcapAddress implements PcapAddress {
   public String toString() {
     StringBuilder sb = new StringBuilder(190);
 
-    sb.append("address: [").append(address)
-      .append("] netmask: [").append(netmask)
-      .append("] broadcastAddr: [").append(broadcastAddr)
-      .append("] dstAddr [").append(dstAddr)
-      .append("]");
+    sb.append("address: [")
+        .append(address)
+        .append("] netmask: [")
+        .append(netmask)
+        .append("] broadcastAddr: [")
+        .append(broadcastAddr)
+        .append("] dstAddr [")
+        .append(dstAddr)
+        .append("]");
 
     return sb.toString();
   }
@@ -140,31 +133,19 @@ abstract class AbstractPcapAddress implements PcapAddress {
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
 
-    AbstractPcapAddress other = (AbstractPcapAddress)obj;
+    AbstractPcapAddress other = (AbstractPcapAddress) obj;
     if (address == null) {
-      if (other.address != null)
-        return false;
-    }
-    else if (!address.equals(other.address))
-      return false;
+      if (other.address != null) return false;
+    } else if (!address.equals(other.address)) return false;
     if (broadcastAddr == null) {
-      if (other.broadcastAddr != null)
-        return false;
-    }
-    else if (!broadcastAddr.equals(other.broadcastAddr))
-      return false;
+      if (other.broadcastAddr != null) return false;
+    } else if (!broadcastAddr.equals(other.broadcastAddr)) return false;
     if (dstAddr == null) {
-      if (other.dstAddr != null)
-        return false;
-    }
-    else if (!dstAddr.equals(other.dstAddr))
-      return false;
+      if (other.dstAddr != null) return false;
+    } else if (!dstAddr.equals(other.dstAddr)) return false;
     if (netmask == null) {
-      if (other.netmask != null)
-        return false;
-    }
-    else if (!netmask.equals(other.netmask))
-      return false;
+      if (other.netmask != null) return false;
+    } else if (!netmask.equals(other.netmask)) return false;
 
     return true;
   }
@@ -179,5 +160,4 @@ abstract class AbstractPcapAddress implements PcapAddress {
     result = prime * result + ((netmask == null) ? 0 : netmask.hashCode());
     return result;
   }
-
 }

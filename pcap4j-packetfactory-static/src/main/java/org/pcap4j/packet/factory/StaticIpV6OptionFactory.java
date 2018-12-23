@@ -21,59 +21,53 @@ import org.pcap4j.packet.namednumber.IpV6OptionType;
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */
-public final class StaticIpV6OptionFactory
-implements PacketFactory<IpV6Option, IpV6OptionType> {
+public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, IpV6OptionType> {
 
-  private static final StaticIpV6OptionFactory INSTANCE
-    = new StaticIpV6OptionFactory();
-  private final Map<IpV6OptionType, Instantiater> instantiaters
-    = new HashMap<IpV6OptionType, Instantiater>();
+  private static final StaticIpV6OptionFactory INSTANCE = new StaticIpV6OptionFactory();
+  private final Map<IpV6OptionType, Instantiater> instantiaters =
+      new HashMap<IpV6OptionType, Instantiater>();
 
   private StaticIpV6OptionFactory() {
     instantiaters.put(
-      IpV6OptionType.PAD1, new Instantiater() {
-        @Override
-        public IpV6Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
-          return IpV6Pad1Option.newInstance(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV6Pad1Option> getTargetClass() {
-          return IpV6Pad1Option.class;
-        }
-      }
-    );
+        IpV6OptionType.PAD1,
+        new Instantiater() {
+          @Override
+          public IpV6Option newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return IpV6Pad1Option.newInstance(rawData, offset, length);
+          }
+
+          @Override
+          public Class<IpV6Pad1Option> getTargetClass() {
+            return IpV6Pad1Option.class;
+          }
+        });
     instantiaters.put(
-      IpV6OptionType.PADN, new Instantiater() {
-        @Override
-        public IpV6Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException {
-          return IpV6PadNOption.newInstance(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV6PadNOption> getTargetClass() {
-          return IpV6PadNOption.class;
-        }
-      }
-    );
+        IpV6OptionType.PADN,
+        new Instantiater() {
+          @Override
+          public IpV6Option newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return IpV6PadNOption.newInstance(rawData, offset, length);
+          }
+
+          @Override
+          public Class<IpV6PadNOption> getTargetClass() {
+            return IpV6PadNOption.class;
+          }
+        });
   };
 
-  /**
-   *
-   * @return the singleton instance of StaticIpV6OptionFactory.
-   */
+  /** @return the singleton instance of StaticIpV6OptionFactory. */
   public static StaticIpV6OptionFactory getInstance() {
     return INSTANCE;
   }
 
   @Override
-  public IpV6Option newInstance(
-    byte[] rawData, int offset, int length, IpV6OptionType number
-  ) {
+  public IpV6Option newInstance(byte[] rawData, int offset, int length, IpV6OptionType number) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" number: ")
-        .append(number);
+      sb.append("rawData: ").append(rawData).append(" number: ").append(number);
       throw new NullPointerException(sb.toString());
     }
 
@@ -114,12 +108,9 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
 
   private static interface Instantiater {
 
-    public IpV6Option newInstance(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException;
+    public IpV6Option newInstance(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException;
 
     public Class<? extends IpV6Option> getTargetClass();
-
   }
-
 }

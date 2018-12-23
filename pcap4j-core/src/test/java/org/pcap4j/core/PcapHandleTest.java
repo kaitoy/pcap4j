@@ -9,7 +9,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -33,18 +32,14 @@ public class PcapHandleTest {
   private PcapHandle ph;
 
   @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-  }
+  public static void setUpBeforeClass() throws Exception {}
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Before
   public void setUp() throws Exception {
-    ph = Pcaps.openOffline(
-           "src/test/resources/org/pcap4j/core/PcapHandleTest.pcap"
-         );
+    ph = Pcaps.openOffline("src/test/resources/org/pcap4j/core/PcapHandleTest.pcap");
   }
 
   @After
@@ -69,8 +64,7 @@ public class PcapHandleTest {
       } catch (PcapNativeException e) {
         assertEquals("Statistics aren't available from a pcap_open_dead pcap_t", e.getMessage());
       }
-    }
-    else {
+    } else {
       ph = nifs.get(0).openLive(55555, PromiscuousMode.PROMISCUOUS, 100);
       PcapStat ps = ph.getStats();
       assertNotNull(ps);
@@ -114,23 +108,27 @@ public class PcapHandleTest {
   @Test
   public void testGetTimestampLoop() throws Exception {
     assertNull(ph.getTimestamp());
-    ph.loop(1, new PacketListener() {
-      @Override
-      public void gotPacket(Packet packet) {
-        assertEquals(1434220771517L, ph.getTimestamp().getTime());
-      }
-    });
+    ph.loop(
+        1,
+        new PacketListener() {
+          @Override
+          public void gotPacket(Packet packet) {
+            assertEquals(1434220771517L, ph.getTimestamp().getTime());
+          }
+        });
   }
 
   @Test
   public void testGetTimestampLoopRaw() throws Exception {
     assertNull(ph.getTimestamp());
-    ph.loop(1, new RawPacketListener() {
-      @Override
-      public void gotPacket(byte[] packet) {
-        assertEquals(1434220771517L, ph.getTimestamp().getTime());
-      }
-    });
+    ph.loop(
+        1,
+        new RawPacketListener() {
+          @Override
+          public void gotPacket(byte[] packet) {
+            assertEquals(1434220771517L, ph.getTimestamp().getTime());
+          }
+        });
   }
 
   @Test
@@ -175,25 +173,29 @@ public class PcapHandleTest {
   @Test
   public void testGetOriginalLengthLoop() throws Exception {
     assertNull(ph.getOriginalLength());
-    ph.loop(1, new PacketListener() {
-      @Override
-      public void gotPacket(Packet packet) {
-        assertEquals(new Integer(74), ph.getOriginalLength());
-        assertEquals(packet.length(), ph.getOriginalLength().intValue());
-      }
-    });
+    ph.loop(
+        1,
+        new PacketListener() {
+          @Override
+          public void gotPacket(Packet packet) {
+            assertEquals(new Integer(74), ph.getOriginalLength());
+            assertEquals(packet.length(), ph.getOriginalLength().intValue());
+          }
+        });
   }
 
   @Test
   public void testGetOriginalLengthLoopRaw() throws Exception {
     assertNull(ph.getOriginalLength());
-    ph.loop(1, new RawPacketListener() {
-      @Override
-      public void gotPacket(byte[] packet) {
-        assertEquals(new Integer(74), ph.getOriginalLength());
-        assertEquals(packet.length, ph.getOriginalLength().intValue());
-      }
-    });
+    ph.loop(
+        1,
+        new RawPacketListener() {
+          @Override
+          public void gotPacket(byte[] packet) {
+            assertEquals(new Integer(74), ph.getOriginalLength());
+            assertEquals(packet.length, ph.getOriginalLength().intValue());
+          }
+        });
   }
 
   @Test
@@ -209,12 +211,14 @@ public class PcapHandleTest {
       Process process = pb.start();
 
       final List<Packet> packets = new ArrayList<Packet>();
-      handle.loop(3, new PacketListener() {
-        @Override
-        public void gotPacket(Packet packet) {
-          packets.add(packet);
-        }
-      });
+      handle.loop(
+          3,
+          new PacketListener() {
+            @Override
+            public void gotPacket(Packet packet) {
+              packets.add(packet);
+            }
+          });
       handle.close();
       process.destroy();
 
@@ -222,8 +226,7 @@ public class PcapHandleTest {
       assertTrue(packets.get(0).contains(IcmpV4EchoPacket.class));
       assertTrue(packets.get(1).contains(IcmpV4EchoPacket.class));
       assertTrue(packets.get(2).contains(IcmpV4EchoPacket.class));
-    }
-    else {
+    } else {
       try {
         ph.setDirection(PcapDirection.OUT);
         fail();
@@ -237,25 +240,27 @@ public class PcapHandleTest {
   public void testDirection() throws Exception {
     if (System.getenv("TRAVIS") != null) {
       // run only on Travis CI
-      PcapHandle handle
-        = new PcapHandle.Builder("any")
-            .direction(PcapDirection.IN)
-            .promiscuousMode(PromiscuousMode.PROMISCUOUS)
-            .snaplen(65536)
-            .timeoutMillis(10)
-            .build();
+      PcapHandle handle =
+          new PcapHandle.Builder("any")
+              .direction(PcapDirection.IN)
+              .promiscuousMode(PromiscuousMode.PROMISCUOUS)
+              .snaplen(65536)
+              .timeoutMillis(10)
+              .build();
       handle.setFilter("icmp", BpfCompileMode.OPTIMIZE);
 
       ProcessBuilder pb = new ProcessBuilder("/bin/ping", "www.google.com");
       Process process = pb.start();
 
       final List<Packet> packets = new ArrayList<Packet>();
-      handle.loop(3, new PacketListener() {
-        @Override
-        public void gotPacket(Packet packet) {
-          packets.add(packet);
-        }
-      });
+      handle.loop(
+          3,
+          new PacketListener() {
+            @Override
+            public void gotPacket(Packet packet) {
+              packets.add(packet);
+            }
+          });
       handle.close();
       process.destroy();
 
@@ -270,10 +275,7 @@ public class PcapHandleTest {
   public void testSetFilterIcmp() throws Exception {
     PcapHandle handle = null;
     try {
-      handle
-        = Pcaps.openOffline(
-            "src/test/resources/org/pcap4j/core/udp_tcp_icmp.pcap"
-          );
+      handle = Pcaps.openOffline("src/test/resources/org/pcap4j/core/udp_tcp_icmp.pcap");
       handle.setFilter("icmp", BpfCompileMode.OPTIMIZE);
       int count = 0;
       try {
@@ -282,7 +284,8 @@ public class PcapHandleTest {
           assertNotNull(p.get(IcmpV4CommonPacket.class));
           count++;
         }
-      } catch (EOFException e) {}
+      } catch (EOFException e) {
+      }
       assertEquals(1, count);
     } finally {
       if (handle != null) {
@@ -296,13 +299,8 @@ public class PcapHandleTest {
     PcapHandle handle = null;
     BpfProgram prog = null;
     try {
-      handle
-        = Pcaps.openOffline(
-            "src/test/resources/org/pcap4j/core/udp_tcp_icmp.pcap"
-          );
-      prog = handle.compileFilter(
-        "udp", BpfCompileMode.OPTIMIZE, PcapHandle.PCAP_NETMASK_UNKNOWN
-      );
+      handle = Pcaps.openOffline("src/test/resources/org/pcap4j/core/udp_tcp_icmp.pcap");
+      prog = handle.compileFilter("udp", BpfCompileMode.OPTIMIZE, PcapHandle.PCAP_NETMASK_UNKNOWN);
       handle.setFilter(prog);
       int count = 0;
       try {
@@ -311,7 +309,8 @@ public class PcapHandleTest {
           assertNotNull(p.get(UdpPacket.class));
           count++;
         }
-      } catch (EOFException e) {}
+      } catch (EOFException e) {
+      }
       assertEquals(1, count);
     } finally {
       if (handle != null) {
@@ -339,45 +338,39 @@ public class PcapHandleTest {
 
       ExecutorService pool = Executors.newSingleThreadExecutor();
       final byte[] result = new byte[sendingRawPacket.length];
-      final FutureTask<byte[]> future
-        = new FutureTask<byte[]>(
-            new Runnable() {
+      final FutureTask<byte[]> future =
+          new FutureTask<byte[]>(
+              new Runnable() {
 
-              @Override
-              public void run() {}
-
-            },
-            result
-          );
+                @Override
+                public void run() {}
+              },
+              result);
       pool.execute(
-        new Runnable() {
+          new Runnable() {
 
-          @Override
-          public void run() {
-            try {
-              handle.loop(
-                -1,
-                new RawPacketListener() {
+            @Override
+            public void run() {
+              try {
+                handle.loop(
+                    -1,
+                    new RawPacketListener() {
 
-                  @Override
-                  public void gotPacket(byte[] p) {
-                    if (p[0] == 1 && p[1] == 2 && p[2] == 3 && p[3] == 4 && p[4] == 5) {
-                      assertEquals(result.length, p.length);
-                      System.arraycopy(p, 0, result, 0, result.length);
-                      future.run();
-                    }
-                  }
-
-                }
-              );
-            } catch (PcapNativeException e) {
-            } catch (InterruptedException e) {
-            } catch (NotOpenException e) {
+                      @Override
+                      public void gotPacket(byte[] p) {
+                        if (p[0] == 1 && p[1] == 2 && p[2] == 3 && p[3] == 4 && p[4] == 5) {
+                          assertEquals(result.length, p.length);
+                          System.arraycopy(p, 0, result, 0, result.length);
+                          future.run();
+                        }
+                      }
+                    });
+              } catch (PcapNativeException e) {
+              } catch (InterruptedException e) {
+              } catch (NotOpenException e) {
+              }
             }
-          }
-
-        }
-      );
+          });
 
       Thread.sleep(1000);
       handle.sendPacket(sendingPacket);
@@ -403,45 +396,39 @@ public class PcapHandleTest {
 
       ExecutorService pool = Executors.newSingleThreadExecutor();
       final byte[] result = new byte[50];
-      final FutureTask<byte[]> future
-        = new FutureTask<byte[]>(
-            new Runnable() {
+      final FutureTask<byte[]> future =
+          new FutureTask<byte[]>(
+              new Runnable() {
 
-              @Override
-              public void run() {}
-
-            },
-            result
-          );
+                @Override
+                public void run() {}
+              },
+              result);
       pool.execute(
-        new Runnable() {
+          new Runnable() {
 
-          @Override
-          public void run() {
-            try {
-              handle.loop(
-                -1,
-                new RawPacketListener() {
+            @Override
+            public void run() {
+              try {
+                handle.loop(
+                    -1,
+                    new RawPacketListener() {
 
-                  @Override
-                  public void gotPacket(byte[] p) {
-                    if (p[0] == 1 && p[1] == 2 && p[2] == 3 && p[3] == 4 && p[4] == 5) {
-                      assertEquals(result.length, p.length);
-                      System.arraycopy(p, 0, result, 0, result.length);
-                      future.run();
-                    }
-                  }
-
-                }
-              );
-            } catch (PcapNativeException e) {
-            } catch (InterruptedException e) {
-            } catch (NotOpenException e) {
+                      @Override
+                      public void gotPacket(byte[] p) {
+                        if (p[0] == 1 && p[1] == 2 && p[2] == 3 && p[3] == 4 && p[4] == 5) {
+                          assertEquals(result.length, p.length);
+                          System.arraycopy(p, 0, result, 0, result.length);
+                          future.run();
+                        }
+                      }
+                    });
+              } catch (PcapNativeException e) {
+              } catch (InterruptedException e) {
+              } catch (NotOpenException e) {
+              }
             }
-          }
-
-        }
-      );
+          });
 
       Thread.sleep(1000);
       handle.sendPacket(sendingRawPacket, result.length);
@@ -456,26 +443,27 @@ public class PcapHandleTest {
   public void testImmediateMode() throws Exception {
     if (System.getenv("TRAVIS") != null) {
       // run only on Travis CI
-      PcapHandle handle
-        = new PcapHandle.Builder("any")
-        .immediateMode(true)
-        .promiscuousMode(PromiscuousMode.PROMISCUOUS)
-        .snaplen(65536)
-        .timeoutMillis(Integer.MAX_VALUE)
-        .build();
+      PcapHandle handle =
+          new PcapHandle.Builder("any")
+              .immediateMode(true)
+              .promiscuousMode(PromiscuousMode.PROMISCUOUS)
+              .snaplen(65536)
+              .timeoutMillis(Integer.MAX_VALUE)
+              .build();
 
       ProcessBuilder pb = new ProcessBuilder("/bin/ping", "www.google.com");
       Process process = pb.start();
 
-      handle.loop(3, new PacketListener() {
-        @Override
-        public void gotPacket(Packet packet) {
-          // Do nothing.
-        }
-      });
+      handle.loop(
+          3,
+          new PacketListener() {
+            @Override
+            public void gotPacket(Packet packet) {
+              // Do nothing.
+            }
+          });
       handle.close();
       process.destroy();
     }
   }
-
 }

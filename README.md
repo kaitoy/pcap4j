@@ -40,9 +40,9 @@ Contents
         * [WinPcap or Npcap](#winpcap-or-npcap)
     * [Docker](#docker)
 * [How to build](#how-to-build)
+* [Contributing Code](#contributing-code)
 * [License](#license)
 * [Contacts](#contacts)
-* [Extra](#extra)
 
 Download
 --------
@@ -258,12 +258,24 @@ How to build
    and execute `./mvnw install`.
    Note Administrator/root privileges are needed for the unit tests.
 
+Contributing Code
+-----------------
+
+1. Fork this repository.
+2. Create a branch from v1 branch.
+3. Write code.
+
+    * Please refer to [This PR](https://github.com/kaitoy/pcap4j/pull/70) as an example when adding protocol support.
+    * This project follows [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html). Execute the following command to format your code: `mvnw com.coveo:fmt-maven-plugin:format`
+
+4. Send a PR from the branch.
+
 License
 -------
 
 Pcap4J is distributed under the MIT license.
 
-    Copyright (c) 2011-2015 Pcap4J.org
+    Copyright (c) 2011-2018 Pcap4J.org
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -282,8 +294,3 @@ Contacts
 --------
 
 Kaito Yamada (kaitoy@pcap4j.org)
-
-Extra
------
-
-An SNMP Network Simulator using Pcap4J; SNeO is also hosted on Github: https://github.com/kaitoy/sneo

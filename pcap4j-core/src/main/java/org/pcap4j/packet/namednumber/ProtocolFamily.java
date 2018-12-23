@@ -20,37 +20,26 @@ import org.pcap4j.core.Inets;
  */
 public final class ProtocolFamily extends NamedNumber<Integer, ProtocolFamily> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2803732603678906217L;
 
-  /**
-   * PF_UNSPEC (unspecified): 0
-   */
-  public static final ProtocolFamily PF_UNSPEC
-    = new ProtocolFamily(0, "PF_UNSPEC");
+  /** PF_UNSPEC (unspecified): 0 */
+  public static final ProtocolFamily PF_UNSPEC = new ProtocolFamily(0, "PF_UNSPEC");
 
-  /**
-   * PF_INET (IPv4). This value is set to 0xFFFF &amp; {@link Inets#AF_INET}.
-   */
-  public static final ProtocolFamily PF_INET
-    = new ProtocolFamily(0xFFFF & Inets.AF_INET, "PF_INET");
+  /** PF_INET (IPv4). This value is set to 0xFFFF &amp; {@link Inets#AF_INET}. */
+  public static final ProtocolFamily PF_INET =
+      new ProtocolFamily(0xFFFF & Inets.AF_INET, "PF_INET");
 
-  /**
-   * PF_LINK (Link layer interface). This value is set to 0xFFFF &amp; {@link Inets#AF_LINK}.
-   */
-  public static final ProtocolFamily PF_LINK
-    = new ProtocolFamily(0xFFFF & Inets.AF_LINK, "PF_LINK");
+  /** PF_LINK (Link layer interface). This value is set to 0xFFFF &amp; {@link Inets#AF_LINK}. */
+  public static final ProtocolFamily PF_LINK =
+      new ProtocolFamily(0xFFFF & Inets.AF_LINK, "PF_LINK");
 
-  /**
-   * PF_INET6 (IPv6). This value is set to 0xFFFF &amp; {@link Inets#AF_INET6}.
-   */
-  public static final ProtocolFamily PF_INET6
-    = new ProtocolFamily(0xFFFF & Inets.AF_INET6, "PF_INET6");
+  /** PF_INET6 (IPv6). This value is set to 0xFFFF &amp; {@link Inets#AF_INET6}. */
+  public static final ProtocolFamily PF_INET6 =
+      new ProtocolFamily(0xFFFF & Inets.AF_INET6, "PF_INET6");
 
-  private static final Map<Integer, ProtocolFamily> registry
-    = new HashMap<Integer, ProtocolFamily>(10);
+  private static final Map<Integer, ProtocolFamily> registry =
+      new HashMap<Integer, ProtocolFamily>(10);
 
   static {
     registry.put(PF_UNSPEC.value(), PF_UNSPEC);
@@ -60,7 +49,6 @@ public final class ProtocolFamily extends NamedNumber<Integer, ProtocolFamily> {
   }
 
   /**
-   *
    * @param value value
    * @param name name
    */
@@ -69,21 +57,18 @@ public final class ProtocolFamily extends NamedNumber<Integer, ProtocolFamily> {
   }
 
   /**
-   *
    * @param value value
    * @return a ProtocolFamily object.
    */
   public static ProtocolFamily getInstance(Integer value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new ProtocolFamily(value, "unknown");
     }
   }
 
   /**
-   *
    * @param type type
    * @return a ProtocolFamily object.
    */
@@ -91,9 +76,7 @@ public final class ProtocolFamily extends NamedNumber<Integer, ProtocolFamily> {
     return registry.put(type.value(), type);
   }
 
-  /**
-   *
-   */
+  /** */
   @Override
   public String valueAsString() {
     return String.valueOf(value() & 0xFFFF);
@@ -103,5 +86,4 @@ public final class ProtocolFamily extends NamedNumber<Integer, ProtocolFamily> {
   public int compareTo(ProtocolFamily o) {
     return value().compareTo(o.value());
   }
-
 }

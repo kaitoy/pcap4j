@@ -31,17 +31,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class DnsRDataCName implements DnsRData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3515906031137985263L;
 
   private final DnsDomainName cName;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -49,9 +46,8 @@ public final class DnsRDataCName implements DnsRData {
    * @return a new DnsRDataCname object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsRDataCName newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsRDataCName newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsRDataCName(rawData, offset, length);
   }
@@ -61,23 +57,19 @@ public final class DnsRDataCName implements DnsRData {
   }
 
   private DnsRDataCName(Builder builder) {
-    if (
-         builder == null
-      || builder.cName == null
-    ) {
+    if (builder == null || builder.cName == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.cName: ").append(builder.cName);
+      sb.append("builder: ").append(builder).append(" builder.cName: ").append(builder.cName);
       throw new NullPointerException(sb.toString());
     }
 
     this.cName = builder.cName;
   }
 
-  /**
-   * @return cName
-   */
-  public DnsDomainName getCName() { return cName; }
+  /** @return cName */
+  public DnsDomainName getCName() {
+    return cName;
+  }
 
   @Override
   public int length() {
@@ -89,10 +81,10 @@ public final class DnsRDataCName implements DnsRData {
     return cName.getRawData();
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -116,11 +108,13 @@ public final class DnsRDataCName implements DnsRData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("CNAME RDATA:")
-      .append(ls)
-      .append(indent).append("  CNAME: ")
-      .append(cName.toString(headerRawData))
-      .append(ls);
+    sb.append(indent)
+        .append("CNAME RDATA:")
+        .append(ls)
+        .append(indent)
+        .append("  CNAME: ")
+        .append(cName.toString(headerRawData))
+        .append(ls);
 
     return sb.toString();
   }
@@ -132,8 +126,12 @@ public final class DnsRDataCName implements DnsRData {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     DnsRDataCName other = (DnsRDataCName) obj;
     return cName.equals(other.cName);
   }
@@ -146,9 +144,7 @@ public final class DnsRDataCName implements DnsRData {
 
     private DnsDomainName cName;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(DnsRDataCName obj) {
@@ -164,13 +160,9 @@ public final class DnsRDataCName implements DnsRData {
       return this;
     }
 
-    /**
-     * @return a new DnsRDataCname object.
-     */
+    /** @return a new DnsRDataCname object. */
     public DnsRDataCName build() {
       return new DnsRDataCName(this);
     }
-
   }
-
 }

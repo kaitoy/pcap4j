@@ -30,17 +30,14 @@ public final class BpfProgram {
     return program;
   }
 
-  /**
-   *
-   * @return expression
-   */
+  /** @return expression */
   public String getExpression() {
     return expression;
   }
 
   /**
-   * Apply the filter on a given packet.
-   * Return true if the packet given passes the filter that is built from this program.
+   * Apply the filter on a given packet. Return true if the packet given passes the filter that is
+   * built from this program.
    *
    * @param packet the packet to apply the filter on
    * @return true if this program is not freed and the packet passes the filter; false otherwise.
@@ -50,8 +47,8 @@ public final class BpfProgram {
   }
 
   /**
-   * Apply the filter on a given packet.
-   * Return true if the packet given passes the filter that is built from this program.
+   * Apply the filter on a given packet. Return true if the packet given passes the filter that is
+   * built from this program.
    *
    * @param packet the packet to apply the filter on
    * @return true if this program is not freed and the packet passes the filter; false otherwise.
@@ -61,9 +58,8 @@ public final class BpfProgram {
   }
 
   /**
-   * Apply the filter on a given packet.
-   * Return true if the packet given passes the filter that is built from this program.
-   *
+   * Apply the filter on a given packet. Return true if the packet given passes the filter that is
+   * built from this program.
    *
    * @param packet a byte array including the packet to apply the filter on
    * @param orgPacketLen the length of the original packet
@@ -84,18 +80,12 @@ public final class BpfProgram {
     }
   }
 
-  /**
-   *
-   * @return true if the bpf_program represented by this object is freed;
-   *         false otherwise.
-   */
+  /** @return true if the bpf_program represented by this object is freed; false otherwise. */
   public boolean isFreed() {
     return freed;
   }
 
-  /**
-   *
-   */
+  /** */
   public void free() {
     if (freed) {
       return;
@@ -116,20 +106,15 @@ public final class BpfProgram {
   }
 
   /**
-   *
    * @author Kaito Yamada
    * @version pcap4j 0.9.16
    */
   public static enum BpfCompileMode {
 
-    /**
-     *
-     */
+    /** */
     OPTIMIZE(1),
 
-    /**
-     *
-     */
+    /** */
     NONOPTIMIZE(0);
 
     private final int value;
@@ -138,14 +123,9 @@ public final class BpfProgram {
       this.value = value;
     }
 
-    /**
-     *
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
-
   }
-
 }

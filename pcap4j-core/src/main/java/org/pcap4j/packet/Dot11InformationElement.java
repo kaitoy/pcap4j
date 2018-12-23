@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.io.Serializable;
-
 import org.pcap4j.packet.namednumber.Dot11InformationElementId;
 import org.pcap4j.util.ByteArrays;
 
@@ -28,9 +27,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public abstract class Dot11InformationElement implements Serializable {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3620485938137514351L;
 
   private final Dot11InformationElementId elementId;
@@ -44,61 +41,58 @@ public abstract class Dot11InformationElement implements Serializable {
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
   protected Dot11InformationElement(
-    byte[] rawData, int offset, int length, Dot11InformationElementId id
-  ) throws IllegalRawDataException {
+      byte[] rawData, int offset, int length, Dot11InformationElementId id)
+      throws IllegalRawDataException {
     if (length < 2) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data length must be more than 1. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (rawData[offset] != id.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The element ID must be ")
-        .append(id.valueAsString())
-        .append(" but is actually ")
-        .append(rawData[offset])
-        .append(". rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(id.valueAsString())
+          .append(" but is actually ")
+          .append(rawData[offset])
+          .append(". rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.elementId = id;
     this.length = rawData[1 + offset];
     int lenAsInt = getLengthAsInt();
-    if (lenAsInt > length - 2)  {
+    if (lenAsInt > length - 2) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("rawData is too short. length field: ")
-        .append(lenAsInt)
-        .append(", rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(lenAsInt)
+          .append(", rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   protected Dot11InformationElement(Builder builder) {
-    if (
-         builder == null
-      || builder.elementId == null
-    ) {
+    if (builder == null || builder.elementId == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.elementId: ").append(builder.elementId);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.elementId: ")
+          .append(builder.elementId);
       throw new NullPointerException(sb.toString());
     }
 
@@ -106,29 +100,25 @@ public abstract class Dot11InformationElement implements Serializable {
     this.length = builder.length;
   }
 
-  /**
-   * @return the element ID
-   */
-  public Dot11InformationElementId getElementId() { return elementId; }
+  /** @return the element ID */
+  public Dot11InformationElementId getElementId() {
+    return elementId;
+  }
 
-  /**
-   * @return the value of the length field.
-   */
-  public byte getLength() { return length; }
+  /** @return the value of the length field. */
+  public byte getLength() {
+    return length;
+  }
 
-  /**
-   * @return the value of the length field.
-   */
-  public int getLengthAsInt() { return 0xFF & length; }
+  /** @return the value of the length field. */
+  public int getLengthAsInt() {
+    return 0xFF & length;
+  }
 
-  /**
-   * @return the length
-   */
+  /** @return the length */
   public abstract int length();
 
-  /**
-   * @return the raw data.
-   */
+  /** @return the raw data. */
   public abstract byte[] getRawData();
 
   @Override
@@ -142,17 +132,12 @@ public abstract class Dot11InformationElement implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     Dot11InformationElement other = (Dot11InformationElement) obj;
-    if (!elementId.equals(other.elementId))
-      return false;
-    if (length != other.length)
-      return false;
+    if (!elementId.equals(other.elementId)) return false;
+    if (length != other.length) return false;
     return true;
   }
 
@@ -160,21 +145,16 @@ public abstract class Dot11InformationElement implements Serializable {
    * @author Kaito Yamada
    * @since pcap4j 1.7.0
    */
-  public static abstract class
-  Builder implements LengthBuilder<Dot11InformationElement> {
+  public abstract static class Builder implements LengthBuilder<Dot11InformationElement> {
 
     private Dot11InformationElementId elementId;
     private byte length;
     private boolean correctLengthAtBuild;
 
-    /**
-     *
-     */
+    /** */
     protected Builder() {}
 
-    /**
-     * @param elem a Dot11InformationElement object.
-     */
+    /** @param elem a Dot11InformationElement object. */
     protected Builder(Dot11InformationElement elem) {
       this.elementId = elem.elementId;
       this.length = elem.length;
@@ -204,13 +184,9 @@ public abstract class Dot11InformationElement implements Serializable {
       return this;
     }
 
-    /**
-     * @return correctLengthAtBuild
-     */
+    /** @return correctLengthAtBuild */
     protected boolean getCorrectLengthAtBuild() {
       return correctLengthAtBuild;
     }
-
   }
-
 }

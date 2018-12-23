@@ -15,28 +15,15 @@ import java.net.InetAddress;
  */
 public interface PcapAddress {
 
-  /**
-   *
-   * @return address or null
-   */
+  /** @return address or null */
   public InetAddress getAddress();
 
-  /**
-   *
-   * @return netmask or null
-   */
+  /** @return netmask or null */
   public InetAddress getNetmask();
 
-  /**
-   *
-   * @return broadcast address or null
-   */
+  /** @return broadcast address or null */
   public InetAddress getBroadcastAddress();
 
-  /**
-   *
-   * @return destination address or null
-   */
+  /** @return destination address or null */
   public InetAddress getDestinationAddress();
-
 }

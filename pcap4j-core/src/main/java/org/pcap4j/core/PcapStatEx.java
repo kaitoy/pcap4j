@@ -62,151 +62,108 @@ public final class PcapStatEx {
     this.txNumWindowErrors = new BigInteger(stat.tx_window_errors.toString());
   }
 
-  /**
-   * @return the number of packets received.
-   */
+  /** @return the number of packets received. */
   public BigInteger getRxNumPackets() {
     return rxNumPackets;
   }
 
-  /**
-   * @return the number of packets transmitted.
-   */
+  /** @return the number of packets transmitted. */
   public BigInteger getTxNumPackets() {
     return txNumPackets;
   }
 
-  /**
-   * @return the number of bytes received.
-   */
+  /** @return the number of bytes received. */
   public BigInteger getRxNumBytes() {
     return rxNumBytes;
   }
 
-  /**
-   * @return the number of bytes transmitted.
-   */
+  /** @return the number of bytes transmitted. */
   public BigInteger getTxNumBytes() {
     return txNumBytes;
   }
 
-  /**
-   * @return the number of packets received with error.
-   */
+  /** @return the number of packets received with error. */
   public BigInteger getRxNumPacketsError() {
     return rxNumPacketsError;
   }
 
-  /**
-   * @return the number of packets transmitted with error.
-   */
+  /** @return the number of packets transmitted with error. */
   public BigInteger getTxNumPacketsError() {
     return txNumPacketsError;
   }
 
-  /**
-   * @return the number of packets the receiver dropped.
-   */
+  /** @return the number of packets the receiver dropped. */
   public BigInteger getRxNumPacketsDropped() {
     return rxNumPacketsDropped;
   }
 
-  /**
-   * @return the number of packets the transmitter dropped.
-   */
+  /** @return the number of packets the transmitter dropped. */
   public BigInteger getTxNumPacketsDropped() {
     return txNumPacketsDropped;
   }
 
-  /**
-   * @return the number of multicast packets received.
-   */
+  /** @return the number of multicast packets received. */
   public BigInteger getRxNumMulticastPackets() {
     return rxNumMulticastPackets;
   }
 
-  /**
-   * @return the number of collisions.
-   */
+  /** @return the number of collisions. */
   public BigInteger getNumCollisions() {
     return numCollisions;
   }
 
-  /**
-   * @return the number of length errors in the receiver.
-   */
+  /** @return the number of length errors in the receiver. */
   public BigInteger getRxNumLenghErrors() {
     return rxNumLenghErrors;
   }
 
-  /**
-   * @return the number of buffer overflow errors in the transmitter.
-   */
+  /** @return the number of buffer overflow errors in the transmitter. */
   public BigInteger getTxNumOverflowErrors() {
     return txNumOverflowErrors;
   }
 
-  /**
-   * @return the number of CRC errors in the receiver.
-   */
+  /** @return the number of CRC errors in the receiver. */
   public BigInteger getRxNumCrcErrors() {
     return rxNumCrcErrors;
   }
 
-  /**
-   * @return the number of frame alignment errors in the receiver.
-   */
+  /** @return the number of frame alignment errors in the receiver. */
   public BigInteger getRxNumFrameErrors() {
     return rxNumFrameErrors;
   }
 
-  /**
-   * @return the number of fifo overrun errors in the receiver.
-   */
+  /** @return the number of fifo overrun errors in the receiver. */
   public BigInteger getRxNumFifoErrors() {
     return rxNumFifoErrors;
   }
 
-  /**
-   * @return the number of packets the receiver missed.
-   */
+  /** @return the number of packets the receiver missed. */
   public BigInteger getRxNumMissedErrors() {
     return rxNumMissedErrors;
   }
 
-  /**
-   * @return the number of aborted errors in the transmitter.
-   */
+  /** @return the number of aborted errors in the transmitter. */
   public BigInteger getTxNumAbortedErrors() {
     return txNumAbortedErrors;
   }
 
-  /**
-   * @return the number of times carrier sense signal lost during transmission.
-   */
+  /** @return the number of times carrier sense signal lost during transmission. */
   public BigInteger getTxNumCarrierErrors() {
     return txNumCarrierErrors;
   }
 
-  /**
-   * @return the number of fifo underrun errors in the transmitter.
-   */
+  /** @return the number of fifo underrun errors in the transmitter. */
   public BigInteger getTxNumFifoErrors() {
     return txNumFifoErrors;
   }
 
-  /**
-   * @return the number of heartbeat errors in the transmitter.
-   */
+  /** @return the number of heartbeat errors in the transmitter. */
   public BigInteger getTxNumHeartbeatErrors() {
     return txNumHeartbeatErrors;
   }
 
-  /**
-   * @return the number of window errors in the transmitter.
-   */
+  /** @return the number of window errors in the transmitter. */
   public BigInteger getTxNumWindowErrors() {
     return txNumWindowErrors;
   }
-
 }

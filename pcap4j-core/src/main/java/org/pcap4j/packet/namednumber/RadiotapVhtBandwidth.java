@@ -19,169 +19,89 @@ import java.util.Map;
  */
 public final class RadiotapVhtBandwidth extends NamedNumber<Byte, RadiotapVhtBandwidth> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3400539041474374620L;
 
-  /**
-   * 20: 0
-   */
-  public static final RadiotapVhtBandwidth BW_20
-    = new RadiotapVhtBandwidth((byte) 0, "20");
+  /** 20: 0 */
+  public static final RadiotapVhtBandwidth BW_20 = new RadiotapVhtBandwidth((byte) 0, "20");
 
-  /**
-   * 40: 1
-   */
-  public static final RadiotapVhtBandwidth BW_40
-    = new RadiotapVhtBandwidth((byte) 1, "40");
+  /** 40: 1 */
+  public static final RadiotapVhtBandwidth BW_40 = new RadiotapVhtBandwidth((byte) 1, "40");
 
-  /**
-   * 20L: 2
-   */
-  public static final RadiotapVhtBandwidth BW_20L
-    = new RadiotapVhtBandwidth((byte) 2, "20L");
+  /** 20L: 2 */
+  public static final RadiotapVhtBandwidth BW_20L = new RadiotapVhtBandwidth((byte) 2, "20L");
 
-  /**
-   * 20U: 3
-   */
-  public static final RadiotapVhtBandwidth BW_20U
-    = new RadiotapVhtBandwidth((byte) 3, "20U");
+  /** 20U: 3 */
+  public static final RadiotapVhtBandwidth BW_20U = new RadiotapVhtBandwidth((byte) 3, "20U");
 
-  /**
-   * 80: 4
-   */
-  public static final RadiotapVhtBandwidth BW_80
-    = new RadiotapVhtBandwidth((byte) 4, "80");
+  /** 80: 4 */
+  public static final RadiotapVhtBandwidth BW_80 = new RadiotapVhtBandwidth((byte) 4, "80");
 
-  /**
-   * 40L: 5
-   */
-  public static final RadiotapVhtBandwidth BW_40L
-    = new RadiotapVhtBandwidth((byte) 5, "40L");
+  /** 40L: 5 */
+  public static final RadiotapVhtBandwidth BW_40L = new RadiotapVhtBandwidth((byte) 5, "40L");
 
-  /**
-   * 40U: 6
-   */
-  public static final RadiotapVhtBandwidth BW_40U
-    = new RadiotapVhtBandwidth((byte) 6, "40U");
+  /** 40U: 6 */
+  public static final RadiotapVhtBandwidth BW_40U = new RadiotapVhtBandwidth((byte) 6, "40U");
 
-  /**
-   * 20LL: 7
-   */
-  public static final RadiotapVhtBandwidth BW_20LL
-    = new RadiotapVhtBandwidth((byte) 7, "20LL");
+  /** 20LL: 7 */
+  public static final RadiotapVhtBandwidth BW_20LL = new RadiotapVhtBandwidth((byte) 7, "20LL");
 
-  /**
-   * 20LU: 8
-   */
-  public static final RadiotapVhtBandwidth BW_20LU
-    = new RadiotapVhtBandwidth((byte) 8, "20LU");
+  /** 20LU: 8 */
+  public static final RadiotapVhtBandwidth BW_20LU = new RadiotapVhtBandwidth((byte) 8, "20LU");
 
-  /**
-   * 20UL: 9
-   */
-  public static final RadiotapVhtBandwidth BW_20UL
-    = new RadiotapVhtBandwidth((byte) 9, "20UL");
+  /** 20UL: 9 */
+  public static final RadiotapVhtBandwidth BW_20UL = new RadiotapVhtBandwidth((byte) 9, "20UL");
 
-  /**
-   * 20UU: 10
-   */
-  public static final RadiotapVhtBandwidth BW_20UU
-    = new RadiotapVhtBandwidth((byte) 10, "20UU");
+  /** 20UU: 10 */
+  public static final RadiotapVhtBandwidth BW_20UU = new RadiotapVhtBandwidth((byte) 10, "20UU");
 
-  /**
-   * 160: 11
-   */
-  public static final RadiotapVhtBandwidth BW_160
-    = new RadiotapVhtBandwidth((byte) 11, "160");
+  /** 160: 11 */
+  public static final RadiotapVhtBandwidth BW_160 = new RadiotapVhtBandwidth((byte) 11, "160");
 
-  /**
-   * 80L: 12
-   */
-  public static final RadiotapVhtBandwidth BW_80L
-    = new RadiotapVhtBandwidth((byte) 12, "80L");
+  /** 80L: 12 */
+  public static final RadiotapVhtBandwidth BW_80L = new RadiotapVhtBandwidth((byte) 12, "80L");
 
-  /**
-   * 80U: 13
-   */
-  public static final RadiotapVhtBandwidth BW_80U
-    = new RadiotapVhtBandwidth((byte) 13, "80U");
+  /** 80U: 13 */
+  public static final RadiotapVhtBandwidth BW_80U = new RadiotapVhtBandwidth((byte) 13, "80U");
 
-  /**
-   * 40LL: 14
-   */
-  public static final RadiotapVhtBandwidth BW_40LL
-    = new RadiotapVhtBandwidth((byte) 14, "40LL");
+  /** 40LL: 14 */
+  public static final RadiotapVhtBandwidth BW_40LL = new RadiotapVhtBandwidth((byte) 14, "40LL");
 
-  /**
-   * 40LU: 15
-   */
-  public static final RadiotapVhtBandwidth BW_40LU
-    = new RadiotapVhtBandwidth((byte) 15, "40LU");
+  /** 40LU: 15 */
+  public static final RadiotapVhtBandwidth BW_40LU = new RadiotapVhtBandwidth((byte) 15, "40LU");
 
-  /**
-   * 40UL: 16
-   */
-  public static final RadiotapVhtBandwidth BW_40UL
-    = new RadiotapVhtBandwidth((byte) 16, "40UL");
+  /** 40UL: 16 */
+  public static final RadiotapVhtBandwidth BW_40UL = new RadiotapVhtBandwidth((byte) 16, "40UL");
 
-  /**
-   * 40UU: 17
-   */
-  public static final RadiotapVhtBandwidth BW_40UU
-    = new RadiotapVhtBandwidth((byte) 17, "40UU");
+  /** 40UU: 17 */
+  public static final RadiotapVhtBandwidth BW_40UU = new RadiotapVhtBandwidth((byte) 17, "40UU");
 
-  /**
-   * 20LLL: 18
-   */
-  public static final RadiotapVhtBandwidth BW_20LLL
-    = new RadiotapVhtBandwidth((byte) 18, "20LLL");
+  /** 20LLL: 18 */
+  public static final RadiotapVhtBandwidth BW_20LLL = new RadiotapVhtBandwidth((byte) 18, "20LLL");
 
-  /**
-   * 20LLU: 19
-   */
-  public static final RadiotapVhtBandwidth BW_20LLU
-    = new RadiotapVhtBandwidth((byte) 19, "20LLU");
+  /** 20LLU: 19 */
+  public static final RadiotapVhtBandwidth BW_20LLU = new RadiotapVhtBandwidth((byte) 19, "20LLU");
 
-  /**
-   * 20LUL: 20
-   */
-  public static final RadiotapVhtBandwidth BW_20LUL
-    = new RadiotapVhtBandwidth((byte) 20, "20LUL");
+  /** 20LUL: 20 */
+  public static final RadiotapVhtBandwidth BW_20LUL = new RadiotapVhtBandwidth((byte) 20, "20LUL");
 
-  /**
-   * 20LUU: 21
-   */
-  public static final RadiotapVhtBandwidth BW_20LUU
-    = new RadiotapVhtBandwidth((byte) 21, "20LUU");
+  /** 20LUU: 21 */
+  public static final RadiotapVhtBandwidth BW_20LUU = new RadiotapVhtBandwidth((byte) 21, "20LUU");
 
-  /**
-   * 20ULL: 22
-   */
-  public static final RadiotapVhtBandwidth BW_20ULL
-    = new RadiotapVhtBandwidth((byte) 22, "20ULL");
+  /** 20ULL: 22 */
+  public static final RadiotapVhtBandwidth BW_20ULL = new RadiotapVhtBandwidth((byte) 22, "20ULL");
 
-  /**
-   * 20ULU: 23
-   */
-  public static final RadiotapVhtBandwidth BW_20ULU
-    = new RadiotapVhtBandwidth((byte) 23, "20ULU");
+  /** 20ULU: 23 */
+  public static final RadiotapVhtBandwidth BW_20ULU = new RadiotapVhtBandwidth((byte) 23, "20ULU");
 
-  /**
-   * 20UUL: 24
-   */
-  public static final RadiotapVhtBandwidth BW_20UUL
-    = new RadiotapVhtBandwidth((byte) 24, "20UUL");
+  /** 20UUL: 24 */
+  public static final RadiotapVhtBandwidth BW_20UUL = new RadiotapVhtBandwidth((byte) 24, "20UUL");
 
-  /**
-   * 20UUU: 25
-   */
-  public static final RadiotapVhtBandwidth BW_20UUU
-    = new RadiotapVhtBandwidth((byte) 25, "20UUU");
+  /** 20UUU: 25 */
+  public static final RadiotapVhtBandwidth BW_20UUU = new RadiotapVhtBandwidth((byte) 25, "20UUU");
 
-  private static final Map<Byte, RadiotapVhtBandwidth> registry
-    = new HashMap<Byte, RadiotapVhtBandwidth>();
+  private static final Map<Byte, RadiotapVhtBandwidth> registry =
+      new HashMap<Byte, RadiotapVhtBandwidth>();
 
   static {
     registry.put(BW_20.value(), BW_20);
@@ -213,7 +133,6 @@ public final class RadiotapVhtBandwidth extends NamedNumber<Byte, RadiotapVhtBan
   }
 
   /**
-   *
    * @param value value
    * @param name name
    */
@@ -222,21 +141,18 @@ public final class RadiotapVhtBandwidth extends NamedNumber<Byte, RadiotapVhtBan
   }
 
   /**
-   *
    * @param value value
    * @return a RadiotapVhtBandwidth object.
    */
   public static RadiotapVhtBandwidth getInstance(Byte value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new RadiotapVhtBandwidth(value, "unknown");
     }
   }
 
   /**
-   *
    * @param number number
    * @return a RadiotapVhtBandwidth object.
    */
@@ -249,12 +165,9 @@ public final class RadiotapVhtBandwidth extends NamedNumber<Byte, RadiotapVhtBan
     return value().compareTo(o.value());
   }
 
-  /**
-   *
-   */
+  /** */
   @Override
   public String valueAsString() {
     return String.valueOf(value() & 0xFF);
   }
-
 }

@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
@@ -21,18 +22,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IcmpV4CommonPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 7643067752830062365L;
 
   private final IcmpV4CommonHeader header;
   private final Packet payload;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -40,47 +38,41 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
    * @return a new IcmpV4CommonPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IcmpV4CommonPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IcmpV4CommonPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new IcmpV4CommonPacket(rawData, offset, length);
   }
 
-  private IcmpV4CommonPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private IcmpV4CommonPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     this.header = new IcmpV4CommonHeader(rawData, offset, length);
 
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      this.payload
-        = PacketFactories.getFactory(Packet.class, IcmpV4Type.class)
-            .newInstance(rawData, offset + header.length(), payloadLength, header.getType());
-    }
-    else {
+      this.payload =
+          PacketFactories.getFactory(Packet.class, IcmpV4Type.class)
+              .newInstance(rawData, offset + header.length(), payloadLength, header.getType());
+    } else {
       this.payload = null;
     }
   }
 
   private IcmpV4CommonPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.type == null
-      || builder.code == null
-    ) {
+    if (builder == null || builder.type == null || builder.code == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.type: ").append(builder.type)
-        .append(" builder.code: ").append(builder.code);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.type: ")
+          .append(builder.type)
+          .append(" builder.code: ")
+          .append(builder.code);
       throw new NullPointerException(sb.toString());
     }
 
     this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
-    this.header = new IcmpV4CommonHeader(
-                    builder,
-                    payload != null ? payload.getRawData() : new byte[0]
-                  );
+    this.header =
+        new IcmpV4CommonHeader(builder, payload != null ? payload.getRawData() : new byte[0]);
   }
 
   @Override
@@ -99,10 +91,8 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
   }
 
   /**
-   *
    * @param acceptZero acceptZero
-   * @return true if the packet represented by this object has a valid checksum;
-   *         false otherwise.
+   * @return true if the packet represented by this object has a valid checksum; false otherwise.
    */
   public boolean hasValidChecksum(boolean acceptZero) {
     byte[] payloadData = payload != null ? payload.getRawData() : new byte[0];
@@ -122,9 +112,8 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  public static final
-  class Builder extends AbstractBuilder
-  implements ChecksumBuilder<IcmpV4CommonPacket> {
+  public static final class Builder extends AbstractBuilder
+      implements ChecksumBuilder<IcmpV4CommonPacket> {
 
     private IcmpV4Type type;
     private IcmpV4Code code;
@@ -132,9 +121,7 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     private Packet.Builder payloadBuilder;
     private boolean correctChecksumAtBuild;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IcmpV4CommonPacket packet) {
@@ -145,7 +132,6 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param type type
      * @return this Builder object for method chaining.
      */
@@ -155,7 +141,6 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param code code
      * @return this Builder object for method chaining.
      */
@@ -165,7 +150,6 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param checksum checksum
      * @return this Builder object for method chaining.
      */
@@ -195,7 +179,6 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
     public IcmpV4CommonPacket build() {
       return new IcmpV4CommonPacket(this);
     }
-
   }
 
   /**
@@ -214,54 +197,40 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = 504881105187659087L;
 
-    private static final int TYPE_OFFSET
-      = 0;
-    private static final int TYPE_SIZE
-      = BYTE_SIZE_IN_BYTES;
-    private static final int CODE_OFFSET
-      = TYPE_OFFSET + TYPE_SIZE;
-    private static final int CODE_SIZE
-      = BYTE_SIZE_IN_BYTES;
-    private static final int CHECKSUM_OFFSET
-      = CODE_OFFSET + CODE_SIZE;
-    private static final int CHECKSUM_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int ICMPV4_COMMON_HEADER_SIZE
-      = CHECKSUM_OFFSET + CHECKSUM_SIZE;
+    private static final int TYPE_OFFSET = 0;
+    private static final int TYPE_SIZE = BYTE_SIZE_IN_BYTES;
+    private static final int CODE_OFFSET = TYPE_OFFSET + TYPE_SIZE;
+    private static final int CODE_SIZE = BYTE_SIZE_IN_BYTES;
+    private static final int CHECKSUM_OFFSET = CODE_OFFSET + CODE_SIZE;
+    private static final int CHECKSUM_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int ICMPV4_COMMON_HEADER_SIZE = CHECKSUM_OFFSET + CHECKSUM_SIZE;
 
     private final IcmpV4Type type;
     private final IcmpV4Code code;
     private final short checksum;
 
-    private IcmpV4CommonHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private IcmpV4CommonHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < ICMPV4_COMMON_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 common header(")
-          .append(ICMPV4_COMMON_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(ICMPV4_COMMON_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.type
-        = IcmpV4Type
-            .getInstance(ByteArrays.getByte(rawData, TYPE_OFFSET + offset));
-      this.code
-        = IcmpV4Code
-            .getInstance(type.value(), ByteArrays.getByte(rawData, CODE_OFFSET + offset));
-      this.checksum
-        = ByteArrays.getShort(rawData, CHECKSUM_OFFSET + offset);
+      this.type = IcmpV4Type.getInstance(ByteArrays.getByte(rawData, TYPE_OFFSET + offset));
+      this.code =
+          IcmpV4Code.getInstance(type.value(), ByteArrays.getByte(rawData, CODE_OFFSET + offset));
+      this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET + offset);
     }
 
     private IcmpV4CommonHeader(Builder builder, byte[] payload) {
@@ -271,12 +240,10 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
       if (builder.correctChecksumAtBuild) {
         if (PacketPropertiesLoader.getInstance().icmpV4CalcChecksum()) {
           this.checksum = calcChecksum(buildRawData(true), payload);
+        } else {
+          this.checksum = (short) 0;
         }
-        else {
-          this.checksum = (short)0;
-        }
-      }
-      else {
+      } else {
         this.checksum = builder.checksum;
       }
     }
@@ -287,41 +254,27 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
 
       if ((packetLength % 2) != 0) {
         data = new byte[packetLength + 1];
-      }
-      else {
+      } else {
         data = new byte[packetLength];
       }
 
-      System.arraycopy(
-        header, 0, data, 0, header.length
-      );
-      System.arraycopy(
-        payload, 0, data, header.length, payload.length
-      );
+      System.arraycopy(header, 0, data, 0, header.length);
+      System.arraycopy(payload, 0, data, header.length, payload.length);
 
       return ByteArrays.calcChecksum(data);
     }
 
-    /**
-     *
-     * @return type
-     */
+    /** @return type */
     public IcmpV4Type getType() {
       return type;
     }
 
-    /**
-     *
-     * @return code
-     */
+    /** @return code */
     public IcmpV4Code getCode() {
       return code;
     }
 
-    /**
-     *
-     * @return checksum
-     */
+    /** @return checksum */
     public short getChecksum() {
       return checksum;
     }
@@ -353,33 +306,25 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[ICMPv4 Common Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Type: ")
-        .append(type)
-        .append(ls);
-      sb.append("  Code: ")
-        .append(code)
-        .append(ls);
-      sb.append("  Checksum: 0x")
-        .append(ByteArrays.toHexString(checksum, ""))
-        .append(ls);
+      sb.append("[ICMPv4 Common Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Type: ").append(type).append(ls);
+      sb.append("  Code: ").append(code).append(ls);
+      sb.append("  Checksum: 0x").append(ByteArrays.toHexString(checksum, "")).append(ls);
 
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      IcmpV4CommonHeader other = (IcmpV4CommonHeader)obj;
-      return
-           checksum == other.checksum
-        && type.equals(other.type)
-        && code.equals(other.code);
+      IcmpV4CommonHeader other = (IcmpV4CommonHeader) obj;
+      return checksum == other.checksum && type.equals(other.type) && code.equals(other.code);
     }
 
     @Override
@@ -390,7 +335,5 @@ public final class IcmpV4CommonPacket extends AbstractPacket {
       result = 31 * result + checksum;
       return result;
     }
-
   }
-
 }

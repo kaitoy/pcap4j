@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.util.ByteArrays;
@@ -18,17 +19,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -7403391242412189831L;
 
   private final IcmpV4TimeExceededHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -36,20 +34,16 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
    * @return a new IcmpV4TimeExceededPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IcmpV4TimeExceededPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IcmpV4TimeExceededPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
 
     IcmpV4TimeExceededHeader header = new IcmpV4TimeExceededHeader(rawData, offset, length);
 
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      return new IcmpV4TimeExceededPacket(
-               header, rawData, offset + header.length(), payloadLength
-             );
-    }
-    else {
+      return new IcmpV4TimeExceededPacket(header, rawData, offset + header.length(), payloadLength);
+    } else {
       return new IcmpV4TimeExceededPacket(header);
     }
   }
@@ -59,8 +53,7 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
   }
 
   private IcmpV4TimeExceededPacket(
-    IcmpV4TimeExceededHeader header, byte[] rawData, int payloadOffset, int payloadLength
-  ) {
+      IcmpV4TimeExceededHeader header, byte[] rawData, int payloadOffset, int payloadLength) {
     super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }
@@ -84,14 +77,11 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  public static
-  final class Builder extends org.pcap4j.packet.IcmpV4InvokingPacketPacket.Builder {
+  public static final class Builder extends org.pcap4j.packet.IcmpV4InvokingPacketPacket.Builder {
 
     private int unused;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IcmpV4TimeExceededPacket packet) {
@@ -100,7 +90,6 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
     }
 
     /**
-     *
      * @param unused unused
      * @return this Builder object for method chaining.
      */
@@ -119,7 +108,6 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
     public IcmpV4TimeExceededPacket build() {
       return new IcmpV4TimeExceededPacket(this);
     }
-
   }
 
   /**
@@ -136,33 +124,27 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -4958423484698708497L;
 
-    private static final int UNUSED_OFFSET
-      = 0;
-    private static final int UNUSED_SIZE
-      = INT_SIZE_IN_BYTES;
-    private static final int ICMPV4_TIME_EXCEEDED_HEADER_SIZE
-      = UNUSED_OFFSET + UNUSED_SIZE;
+    private static final int UNUSED_OFFSET = 0;
+    private static final int UNUSED_SIZE = INT_SIZE_IN_BYTES;
+    private static final int ICMPV4_TIME_EXCEEDED_HEADER_SIZE = UNUSED_OFFSET + UNUSED_SIZE;
 
     private final int unused;
 
-    private IcmpV4TimeExceededHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private IcmpV4TimeExceededHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < ICMPV4_TIME_EXCEEDED_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 Time Exceeded Header(")
-          .append(ICMPV4_TIME_EXCEEDED_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(ICMPV4_TIME_EXCEEDED_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -173,11 +155,10 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
       this.unused = builder.unused;
     }
 
-    /**
-     *
-     * @return unused
-     */
-    public int getUnused() { return unused; }
+    /** @return unused */
+    public int getUnused() {
+      return unused;
+    }
 
     @Override
     protected List<byte[]> getRawFields() {
@@ -196,22 +177,21 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[ICMPv4 Time Exceeded Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Unused: ")
-        .append(unused)
-        .append(ls);
+      sb.append("[ICMPv4 Time Exceeded Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Unused: ").append(unused).append(ls);
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      IcmpV4TimeExceededHeader other = (IcmpV4TimeExceededHeader)obj;
+      IcmpV4TimeExceededHeader other = (IcmpV4TimeExceededHeader) obj;
       return unused == other.unused;
     }
 
@@ -221,7 +201,5 @@ public final class IcmpV4TimeExceededPacket extends IcmpV4InvokingPacketPacket {
       result = 31 * result + unused;
       return result;
     }
-
   }
-
 }

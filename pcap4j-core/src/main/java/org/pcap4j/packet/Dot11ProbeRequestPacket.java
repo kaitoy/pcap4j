@@ -12,7 +12,6 @@ import static org.pcap4j.packet.namednumber.Dot11InformationElementId.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.MacAddress;
 
@@ -25,17 +24,14 @@ import org.pcap4j.util.MacAddress;
  */
 public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -2305355759191727871L;
 
   private final Dot11ProbeRequestHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -43,17 +39,15 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
    * @return a new Dot11ProbeRequestPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot11ProbeRequestPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot11ProbeRequestPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     Dot11ProbeRequestHeader h = new Dot11ProbeRequestHeader(rawData, offset, length);
     return new Dot11ProbeRequestPacket(rawData, offset, length, h);
   }
 
   private Dot11ProbeRequestPacket(
-    byte[] rawData, int offset, int length, Dot11ProbeRequestHeader h
-  ) {
+      byte[] rawData, int offset, int length, Dot11ProbeRequestHeader h) {
     super(rawData, offset, length, h.length());
     this.header = h;
   }
@@ -99,9 +93,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
     private Dot11MeshIdElement meshId;
     private List<Dot11VendorSpecificElement> vendorSpecificElements;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(Dot11ProbeRequestPacket packet) {
@@ -154,8 +146,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
      * @return this Builder object for method chaining.
      */
     public Builder extendedSupportedRates(
-      Dot11ExtendedSupportedRatesElement extendedSupportedRates
-    ) {
+        Dot11ExtendedSupportedRatesElement extendedSupportedRates) {
       this.extendedSupportedRates = extendedSupportedRates;
       return this;
     }
@@ -174,8 +165,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
      * @return this Builder object for method chaining.
      */
     public Builder supportedOperatingClasses(
-      Dot11SupportedOperatingClassesElement supportedOperatingClasses
-    ) {
+        Dot11SupportedOperatingClassesElement supportedOperatingClasses) {
       this.supportedOperatingClasses = supportedOperatingClasses;
       return this;
     }
@@ -194,8 +184,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
      * @return this Builder object for method chaining.
      */
     public Builder twentyFortyBssCoexistence(
-      Dot112040BssCoexistenceElement twentyFortyBssCoexistence
-    ) {
+        Dot112040BssCoexistenceElement twentyFortyBssCoexistence) {
       this.twentyFortyBssCoexistence = twentyFortyBssCoexistence;
       return this;
     }
@@ -313,7 +302,6 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
       checkForNull();
       return newPacket(this);
     }
-
   }
 
   /**
@@ -469,9 +457,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
    */
   public static final class Dot11ProbeRequestHeader extends Dot11ManagementHeader {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -2203820242563461514L;
 
     private final Dot11SsidElement ssid;
@@ -489,9 +475,8 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
     private final Dot11MeshIdElement meshId;
     private final List<Dot11VendorSpecificElement> vendorSpecificElements;
 
-    private Dot11ProbeRequestHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private Dot11ProbeRequestHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       super(rawData, offset, length);
       int mgmtHeaderLen = super.calcLength();
       offset += mgmtHeaderLen;
@@ -502,8 +487,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
         int elemLen = ssid.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.ssid = null;
       }
       if (length > 0 && rawData[offset] == SUPPORTED_RATES.value().byteValue()) {
@@ -511,8 +495,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
         int elemLen = supportedRates.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.supportedRates = null;
       }
       if (length > 0 && rawData[offset] == REQUEST.value().byteValue()) {
@@ -520,38 +503,33 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
         int elemLen = request.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.request = null;
       }
       if (length > 0 && rawData[offset] == EXTENDED_SUPPORTED_RATES.value().byteValue()) {
-        this.extendedSupportedRates
-          = Dot11ExtendedSupportedRatesElement.newInstance(rawData, offset, length);
+        this.extendedSupportedRates =
+            Dot11ExtendedSupportedRatesElement.newInstance(rawData, offset, length);
         int elemLen = extendedSupportedRates.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.extendedSupportedRates = null;
       }
       if (length > 0 && rawData[offset] == DSSS_PARAMETER_SET.value().byteValue()) {
-        this.dsssParameterSet
-          = Dot11DsssParameterSetElement.newInstance(rawData, offset, length);
+        this.dsssParameterSet = Dot11DsssParameterSetElement.newInstance(rawData, offset, length);
         int elemLen = dsssParameterSet.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.dsssParameterSet = null;
       }
       if (length > 0 && rawData[offset] == SUPPORTED_OPERATING_CLASSES.value().byteValue()) {
-        this.supportedOperatingClasses
-          = Dot11SupportedOperatingClassesElement.newInstance(rawData, offset, length);
+        this.supportedOperatingClasses =
+            Dot11SupportedOperatingClassesElement.newInstance(rawData, offset, length);
         int elemLen = supportedOperatingClasses.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.supportedOperatingClasses = null;
       }
       if (length > 0 && rawData[offset] == HT_CAPABILITIES.value().byteValue()) {
@@ -559,28 +537,25 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
         int elemLen = htCapabilities.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.htCapabilities = null;
       }
       if (length > 0 && rawData[offset] == IE_20_40_BSS_COEXISTENCE.value().byteValue()) {
-        this.twentyFortyBssCoexistence
-          = Dot112040BssCoexistenceElement.newInstance(rawData, offset, length);
+        this.twentyFortyBssCoexistence =
+            Dot112040BssCoexistenceElement.newInstance(rawData, offset, length);
         int elemLen = twentyFortyBssCoexistence.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.twentyFortyBssCoexistence = null;
       }
       if (length > 0 && rawData[offset] == EXTENDED_CAPABILITIES.value().byteValue()) {
-        this.extendedCapabilities
-          = Dot11ExtendedCapabilitiesElement.newInstance(rawData, offset, length);
+        this.extendedCapabilities =
+            Dot11ExtendedCapabilitiesElement.newInstance(rawData, offset, length);
         int elemLen = extendedCapabilities.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.extendedCapabilities = null;
       }
       if (length > 0 && rawData[offset] == SSID_LIST.value().byteValue()) {
@@ -588,8 +563,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
         int elemLen = ssidList.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.ssidList = null;
       }
       if (length > 0 && rawData[offset] == CHANNEL_USAGE.value().byteValue()) {
@@ -597,8 +571,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
         int elemLen = channelUsage.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.channelUsage = null;
       }
       if (length > 0 && rawData[offset] == INTERWORKING.value().byteValue()) {
@@ -606,8 +579,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
         int elemLen = interworking.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.interworking = null;
       }
       if (length > 0 && rawData[offset] == MESH_ID.value().byteValue()) {
@@ -615,15 +587,14 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
         int elemLen = meshId.length();
         offset += elemLen;
         length -= elemLen;
-      }
-      else {
+      } else {
         this.meshId = null;
       }
 
       this.vendorSpecificElements = new ArrayList<Dot11VendorSpecificElement>();
       while (length > 0 && rawData[offset] == VENDOR_SPECIFIC.value().byteValue()) {
-        Dot11VendorSpecificElement elem
-          = Dot11VendorSpecificElement.newInstance(rawData, offset, length);
+        Dot11VendorSpecificElement elem =
+            Dot11VendorSpecificElement.newInstance(rawData, offset, length);
         vendorSpecificElements.add(elem);
         int elemLen = elem.length();
         offset += elemLen;
@@ -648,107 +619,78 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
       this.meshId = builder.meshId;
       if (builder.vendorSpecificElements == null) {
         this.vendorSpecificElements = Collections.emptyList();
-      }
-      else {
-        this.vendorSpecificElements
-          = new ArrayList<Dot11VendorSpecificElement>(builder.vendorSpecificElements);
+      } else {
+        this.vendorSpecificElements =
+            new ArrayList<Dot11VendorSpecificElement>(builder.vendorSpecificElements);
       }
     }
 
-    /**
-     * @return ssid. May be null.
-     */
+    /** @return ssid. May be null. */
     public Dot11SsidElement getSsid() {
       return ssid;
     }
 
-    /**
-     * @return supportedRates. May be null.
-     */
+    /** @return supportedRates. May be null. */
     public Dot11SupportedRatesElement getSupportedRates() {
       return supportedRates;
     }
 
-    /**
-     * @return request. May be null.
-     */
+    /** @return request. May be null. */
     public Dot11RequestElement getRequest() {
       return request;
     }
 
-    /**
-     * @return extendedSupportedRates. May be null.
-     */
+    /** @return extendedSupportedRates. May be null. */
     public Dot11ExtendedSupportedRatesElement getExtendedSupportedRates() {
       return extendedSupportedRates;
     }
 
-    /**
-     * @return dsssParameterSet. May be null.
-     */
+    /** @return dsssParameterSet. May be null. */
     public Dot11DsssParameterSetElement getDsssParameterSet() {
       return dsssParameterSet;
     }
 
-    /**
-     * @return supportedOperatingClasses. May be null.
-     */
+    /** @return supportedOperatingClasses. May be null. */
     public Dot11SupportedOperatingClassesElement getSupportedOperatingClasses() {
       return supportedOperatingClasses;
     }
 
-    /**
-     * @return htCapabilities. May be null.
-     */
+    /** @return htCapabilities. May be null. */
     public Dot11HTCapabilitiesElement getHtCapabilities() {
       return htCapabilities;
     }
 
-    /**
-     * @return twentyFortyBssCoexistence. May be null.
-     */
+    /** @return twentyFortyBssCoexistence. May be null. */
     public Dot112040BssCoexistenceElement get2040BssCoexistence() {
       return twentyFortyBssCoexistence;
     }
 
-    /**
-     * @return extendedCapabilities. May be null.
-     */
+    /** @return extendedCapabilities. May be null. */
     public Dot11ExtendedCapabilitiesElement getExtendedCapabilities() {
       return extendedCapabilities;
     }
 
-    /**
-     * @return ssidList. May be null.
-     */
+    /** @return ssidList. May be null. */
     public Dot11SsidListElement getSsidList() {
       return ssidList;
     }
 
-    /**
-     * @return channelUsage. May be null.
-     */
+    /** @return channelUsage. May be null. */
     public Dot11ChannelUsageElement getChannelUsage() {
       return channelUsage;
     }
 
-    /**
-     * @return interworking. May be null.
-     */
+    /** @return interworking. May be null. */
     public Dot11InterworkingElement getInterworking() {
       return interworking;
     }
 
-    /**
-     * @return meshId. May be null.
-     */
+    /** @return meshId. May be null. */
     public Dot11MeshIdElement getMeshId() {
       return meshId;
     }
 
-    /**
-     * @return vendorSpecificElements
-     */
+    /** @return vendorSpecificElements */
     public List<Dot11VendorSpecificElement> getVendorSpecificElements() {
       return new ArrayList<Dot11VendorSpecificElement>(vendorSpecificElements);
     }
@@ -796,7 +738,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
       if (meshId != null) {
         rawFields.add(meshId.getRawData());
       }
-      for (Dot11VendorSpecificElement elem: vendorSpecificElements) {
+      for (Dot11VendorSpecificElement elem : vendorSpecificElements) {
         rawFields.add(elem.getRawData());
       }
 
@@ -846,7 +788,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
       if (meshId != null) {
         len += meshId.length();
       }
-      for (Dot11VendorSpecificElement elem: vendorSpecificElements) {
+      for (Dot11VendorSpecificElement elem : vendorSpecificElements) {
         len += elem.length();
       }
 
@@ -859,8 +801,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
       String ls = System.getProperty("line.separator");
 
       sb.append(super.buildString());
-      sb.append("  Tags:")
-        .append(ls);
+      sb.append("  Tags:").append(ls);
       if (ssid != null) {
         sb.append(ssid.toString("    "));
       }
@@ -900,7 +841,7 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
       if (meshId != null) {
         sb.append(meshId.toString("    "));
       }
-      for (Dot11VendorSpecificElement elem: vendorSpecificElements) {
+      for (Dot11VendorSpecificElement elem : vendorSpecificElements) {
         sb.append(elem.toString("    "));
       }
 
@@ -918,113 +859,73 @@ public final class Dot11ProbeRequestPacket extends Dot11ManagementPacket {
       int result = super.calcHashCode();
       result = prime * result + ((channelUsage == null) ? 0 : channelUsage.hashCode());
       result = prime * result + ((dsssParameterSet == null) ? 0 : dsssParameterSet.hashCode());
-      result = prime * result
-          + ((extendedCapabilities == null) ? 0 : extendedCapabilities.hashCode());
-      result = prime * result
-          + ((extendedSupportedRates == null) ? 0 : extendedSupportedRates.hashCode());
+      result =
+          prime * result + ((extendedCapabilities == null) ? 0 : extendedCapabilities.hashCode());
+      result =
+          prime * result
+              + ((extendedSupportedRates == null) ? 0 : extendedSupportedRates.hashCode());
       result = prime * result + ((htCapabilities == null) ? 0 : htCapabilities.hashCode());
       result = prime * result + ((interworking == null) ? 0 : interworking.hashCode());
       result = prime * result + ((meshId == null) ? 0 : meshId.hashCode());
       result = prime * result + ((request == null) ? 0 : request.hashCode());
       result = prime * result + ((ssid == null) ? 0 : ssid.hashCode());
       result = prime * result + ((ssidList == null) ? 0 : ssidList.hashCode());
-      result = prime * result
-          + ((supportedOperatingClasses == null) ? 0 : supportedOperatingClasses.hashCode());
+      result =
+          prime * result
+              + ((supportedOperatingClasses == null) ? 0 : supportedOperatingClasses.hashCode());
       result = prime * result + ((supportedRates == null) ? 0 : supportedRates.hashCode());
-      result = prime * result
-          + ((twentyFortyBssCoexistence == null) ? 0 : twentyFortyBssCoexistence.hashCode());
+      result =
+          prime * result
+              + ((twentyFortyBssCoexistence == null) ? 0 : twentyFortyBssCoexistence.hashCode());
       result = prime * result + vendorSpecificElements.hashCode();
       return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (!super.equals(obj))
-        return false;
+      if (!super.equals(obj)) return false;
       Dot11ProbeRequestHeader other = (Dot11ProbeRequestHeader) obj;
       if (channelUsage == null) {
-        if (other.channelUsage != null)
-          return false;
-      }
-      else if (!channelUsage.equals(other.channelUsage))
-        return false;
+        if (other.channelUsage != null) return false;
+      } else if (!channelUsage.equals(other.channelUsage)) return false;
       if (dsssParameterSet == null) {
-        if (other.dsssParameterSet != null)
-          return false;
-      }
-      else if (!dsssParameterSet.equals(other.dsssParameterSet))
-        return false;
+        if (other.dsssParameterSet != null) return false;
+      } else if (!dsssParameterSet.equals(other.dsssParameterSet)) return false;
       if (extendedCapabilities == null) {
-        if (other.extendedCapabilities != null)
-          return false;
-      }
-      else if (!extendedCapabilities.equals(other.extendedCapabilities))
-        return false;
+        if (other.extendedCapabilities != null) return false;
+      } else if (!extendedCapabilities.equals(other.extendedCapabilities)) return false;
       if (extendedSupportedRates == null) {
-        if (other.extendedSupportedRates != null)
-          return false;
-      }
-      else if (!extendedSupportedRates.equals(other.extendedSupportedRates))
-        return false;
+        if (other.extendedSupportedRates != null) return false;
+      } else if (!extendedSupportedRates.equals(other.extendedSupportedRates)) return false;
       if (htCapabilities == null) {
-        if (other.htCapabilities != null)
-          return false;
-      }
-      else if (!htCapabilities.equals(other.htCapabilities))
-        return false;
+        if (other.htCapabilities != null) return false;
+      } else if (!htCapabilities.equals(other.htCapabilities)) return false;
       if (interworking == null) {
-        if (other.interworking != null)
-          return false;
-      }
-      else if (!interworking.equals(other.interworking))
-        return false;
+        if (other.interworking != null) return false;
+      } else if (!interworking.equals(other.interworking)) return false;
       if (meshId == null) {
-        if (other.meshId != null)
-          return false;
-      }
-      else if (!meshId.equals(other.meshId))
-        return false;
+        if (other.meshId != null) return false;
+      } else if (!meshId.equals(other.meshId)) return false;
       if (request == null) {
-        if (other.request != null)
-          return false;
-      }
-      else if (!request.equals(other.request))
-        return false;
+        if (other.request != null) return false;
+      } else if (!request.equals(other.request)) return false;
       if (ssid == null) {
-        if (other.ssid != null)
-          return false;
-      }
-      else if (!ssid.equals(other.ssid))
-        return false;
+        if (other.ssid != null) return false;
+      } else if (!ssid.equals(other.ssid)) return false;
       if (ssidList == null) {
-        if (other.ssidList != null)
-          return false;
-      }
-      else if (!ssidList.equals(other.ssidList))
-        return false;
+        if (other.ssidList != null) return false;
+      } else if (!ssidList.equals(other.ssidList)) return false;
       if (supportedOperatingClasses == null) {
-        if (other.supportedOperatingClasses != null)
-          return false;
-      }
-      else if (!supportedOperatingClasses.equals(other.supportedOperatingClasses))
-        return false;
+        if (other.supportedOperatingClasses != null) return false;
+      } else if (!supportedOperatingClasses.equals(other.supportedOperatingClasses)) return false;
       if (supportedRates == null) {
-        if (other.supportedRates != null)
-          return false;
-      }
-      else if (!supportedRates.equals(other.supportedRates))
-        return false;
+        if (other.supportedRates != null) return false;
+      } else if (!supportedRates.equals(other.supportedRates)) return false;
       if (twentyFortyBssCoexistence == null) {
-        if (other.twentyFortyBssCoexistence != null)
-          return false;
-      }
-      else if (!twentyFortyBssCoexistence.equals(other.twentyFortyBssCoexistence))
-        return false;
-      if (!vendorSpecificElements.equals(other.vendorSpecificElements))
-        return false;
+        if (other.twentyFortyBssCoexistence != null) return false;
+      } else if (!twentyFortyBssCoexistence.equals(other.twentyFortyBssCoexistence)) return false;
+      if (!vendorSpecificElements.equals(other.vendorSpecificElements)) return false;
       return true;
     }
-
   }
-
 }

@@ -7,6 +7,7 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.junit.AfterClass;
@@ -21,12 +22,10 @@ import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 @SuppressWarnings("javadoc")
 public class EthernetPacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(EthernetPacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(EthernetPacketTest.class);
 
   private final EthernetPacket packet;
   private final MacAddress dstAddr;
@@ -38,45 +37,39 @@ public class EthernetPacketTest extends AbstractPacketTest {
     this.dstAddr = MacAddress.ETHER_BROADCAST_ADDRESS;
     this.srcAddr = MacAddress.getByName("fe:00:00:00:00:01");
     this.type = EtherType.ARP;
-    this.pad = new byte[] {
-                 (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,
-                 (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,
-                 (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,
-                 (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,
-                 (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,
-               };
-
+    this.pad =
+        new byte[] {
+          (byte) 0, (byte) 1, (byte) 0, (byte) 1, (byte) 0, (byte) 1,
+          (byte) 0, (byte) 1, (byte) 0, (byte) 1, (byte) 0, (byte) 1,
+          (byte) 0, (byte) 1, (byte) 0, (byte) 1, (byte) 0, (byte) 1,
+          (byte) 0, (byte) 1, (byte) 0, (byte) 1, (byte) 0, (byte) 1,
+          (byte) 0, (byte) 1, (byte) 0, (byte) 1, (byte) 0, (byte) 1,
+        };
 
     ArpPacket.Builder ab = new ArpPacket.Builder();
     try {
       ab.hardwareType(ArpHardwareType.ETHERNET)
-        .protocolType(EtherType.IPV4)
-        .hardwareAddrLength((byte)MacAddress.SIZE_IN_BYTES)
-        .protocolAddrLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
-        .srcHardwareAddr(srcAddr)
-        .dstHardwareAddr(dstAddr)
-        .srcProtocolAddr(
-           InetAddress.getByAddress(
-             new byte[] { (byte)192, (byte)0, (byte)2, (byte)1 }
-           )
-         )
-        .dstProtocolAddr(
-           InetAddress.getByAddress(
-             new byte[] { (byte)192, (byte)0, (byte)2, (byte)2 }
-           )
-         )
-        .operation(ArpOperation.REQUEST);
+          .protocolType(EtherType.IPV4)
+          .hardwareAddrLength((byte) MacAddress.SIZE_IN_BYTES)
+          .protocolAddrLength((byte) ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
+          .srcHardwareAddr(srcAddr)
+          .dstHardwareAddr(dstAddr)
+          .srcProtocolAddr(
+              InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 1}))
+          .dstProtocolAddr(
+              InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 2}))
+          .operation(ArpOperation.REQUEST);
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
 
     EthernetPacket.Builder eb = new EthernetPacket.Builder();
     eb.dstAddr(dstAddr)
-      .srcAddr(srcAddr)
-      .type(type)
-      .payloadBuilder(ab)
-      .pad(pad)
-      .paddingAtBuild(false);
+        .srcAddr(srcAddr)
+        .type(type)
+        .payloadBuilder(ab)
+        .pad(pad)
+        .paddingAtBuild(false);
     this.packet = eb.build();
   }
 
@@ -92,20 +85,17 @@ public class EthernetPacketTest extends AbstractPacketTest {
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    logger.info(
-      "########## " + EthernetPacketTest.class.getSimpleName() + " START ##########"
-    );
+    logger.info("########## " + EthernetPacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Test
   public void testNewPacket() {
     try {
-      EthernetPacket p
-        = EthernetPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
+      EthernetPacket p =
+          EthernetPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
@@ -114,9 +104,8 @@ public class EthernetPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTester.testClass(EthernetPacket.class, packet);
+    RandomPacketTester.testClass(EthernetPacket.class, packet);
   }
-
 
   @Test
   public void testGetHeader() {
@@ -126,5 +115,4 @@ public class EthernetPacketTest extends AbstractPacketTest {
     assertEquals(type, h.getType());
     assertArrayEquals(pad, packet.getPad());
   }
-
 }

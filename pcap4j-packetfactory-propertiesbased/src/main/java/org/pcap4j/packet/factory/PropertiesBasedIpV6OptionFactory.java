@@ -18,20 +18,18 @@ import org.pcap4j.packet.namednumber.IpV6OptionType;
  * @author Kaito Yamada
  * @since pcap4j 0.9.14
  */
-public final class
-PropertiesBasedIpV6OptionFactory
-implements PacketFactory<IpV6Option, IpV6OptionType> {
+public final class PropertiesBasedIpV6OptionFactory
+    implements PacketFactory<IpV6Option, IpV6OptionType> {
 
-  private static final PropertiesBasedIpV6OptionFactory INSTANCE
-    = new PropertiesBasedIpV6OptionFactory();
+  private static final PropertiesBasedIpV6OptionFactory INSTANCE =
+      new PropertiesBasedIpV6OptionFactory();
 
   private PropertiesBasedIpV6OptionFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of PropertiesBasedIpV6OptionFactory.
-   */
-  public static PropertiesBasedIpV6OptionFactory getInstance() { return INSTANCE; }
+  /** @return the singleton instance of PropertiesBasedIpV6OptionFactory. */
+  public static PropertiesBasedIpV6OptionFactory getInstance() {
+    return INSTANCE;
+  }
 
   @Override
   public IpV6Option newInstance(byte[] rawData, int offset, int length, IpV6OptionType number) {
@@ -44,32 +42,27 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
   }
 
   /**
-   *
    * @param rawData rawData
    * @param offset offset
    * @param length length
    * @param dataClass dataClass
    * @return a new IpV6Option object.
    * @throws IllegalStateException if an access to the newInstance method of the dataClass fails.
-   * @throws IllegalArgumentException if an exception other than {@link IllegalRawDataException}
-   *                                  is thrown by newInstance method of the dataClass.
+   * @throws IllegalArgumentException if an exception other than {@link IllegalRawDataException} is
+   *     thrown by newInstance method of the dataClass.
    * @throws NullPointerException if any of arguments are null.
    */
   public IpV6Option newInstance(
-    byte[] rawData, int offset, int length, Class<? extends IpV6Option> dataClass
-  ) {
+      byte[] rawData, int offset, int length, Class<? extends IpV6Option> dataClass) {
     if (rawData == null || dataClass == null) {
       StringBuilder sb = new StringBuilder(50);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" dataClass: ")
-        .append(dataClass);
+      sb.append("rawData: ").append(rawData).append(" dataClass: ").append(dataClass);
       throw new NullPointerException(sb.toString());
     }
 
     try {
       Method newInstance = dataClass.getMethod("newInstance", byte[].class, int.class, int.class);
-      return (IpV6Option)newInstance.invoke(null, rawData, offset, length);
+      return (IpV6Option) newInstance.invoke(null, rawData, offset, length);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -98,5 +91,4 @@ implements PacketFactory<IpV6Option, IpV6OptionType> {
   public Class<? extends IpV6Option> getTargetClass() {
     return PacketFactoryPropertiesLoader.getInstance().getUnknownIpV6OptionClass();
   }
-
 }

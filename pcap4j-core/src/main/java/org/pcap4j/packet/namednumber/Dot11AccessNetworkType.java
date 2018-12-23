@@ -19,61 +19,43 @@ import java.util.Map;
  */
 public final class Dot11AccessNetworkType extends NamedNumber<Byte, Dot11AccessNetworkType> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 446760220104978318L;
 
-  /**
-   * Private network: 0
-   */
-  public static final Dot11AccessNetworkType PRIVATE_NETWORK
-    = new Dot11AccessNetworkType((byte) 0, "Private network");
+  /** Private network: 0 */
+  public static final Dot11AccessNetworkType PRIVATE_NETWORK =
+      new Dot11AccessNetworkType((byte) 0, "Private network");
 
-  /**
-   * Private network with guest access: 1
-   */
-  public static final Dot11AccessNetworkType PRIVATE_NETWORK_WITH_GUEST_ACCESS
-    = new Dot11AccessNetworkType((byte) 1, "Private network with guest access");
+  /** Private network with guest access: 1 */
+  public static final Dot11AccessNetworkType PRIVATE_NETWORK_WITH_GUEST_ACCESS =
+      new Dot11AccessNetworkType((byte) 1, "Private network with guest access");
 
-  /**
-   * Chargeable public network: 2
-   */
-  public static final Dot11AccessNetworkType CHARGEABLE_PUBLIC_NETWORK
-    = new Dot11AccessNetworkType((byte) 2, "Chargeable public network");
+  /** Chargeable public network: 2 */
+  public static final Dot11AccessNetworkType CHARGEABLE_PUBLIC_NETWORK =
+      new Dot11AccessNetworkType((byte) 2, "Chargeable public network");
 
-  /**
-   * Free public network: 3
-   */
-  public static final Dot11AccessNetworkType FREE_PUBLIC_NETWORK
-    = new Dot11AccessNetworkType((byte) 3, "Free public network");
+  /** Free public network: 3 */
+  public static final Dot11AccessNetworkType FREE_PUBLIC_NETWORK =
+      new Dot11AccessNetworkType((byte) 3, "Free public network");
 
-  /**
-   * Personal device network: 4
-   */
-  public static final Dot11AccessNetworkType PERSONAL_DEVICE_NETWORK
-    = new Dot11AccessNetworkType((byte) 4, "Personal device network");
+  /** Personal device network: 4 */
+  public static final Dot11AccessNetworkType PERSONAL_DEVICE_NETWORK =
+      new Dot11AccessNetworkType((byte) 4, "Personal device network");
 
-  /**
-   * Emergency services only network: 5
-   */
-  public static final Dot11AccessNetworkType EMERGENCY_SERVICES_ONLY_NETWORK
-    = new Dot11AccessNetworkType((byte) 5, "Emergency services only network");
+  /** Emergency services only network: 5 */
+  public static final Dot11AccessNetworkType EMERGENCY_SERVICES_ONLY_NETWORK =
+      new Dot11AccessNetworkType((byte) 5, "Emergency services only network");
 
-  /**
-   * Test or experimental: 14
-   */
-  public static final Dot11AccessNetworkType TEST_OR_EXPERIMENTAL
-    = new Dot11AccessNetworkType((byte) 14, "Test or experimental");
+  /** Test or experimental: 14 */
+  public static final Dot11AccessNetworkType TEST_OR_EXPERIMENTAL =
+      new Dot11AccessNetworkType((byte) 14, "Test or experimental");
 
-  /**
-   * Wildcard: 15
-   */
-  public static final Dot11AccessNetworkType WILDCARD
-    = new Dot11AccessNetworkType((byte)15, "Wildcard");
+  /** Wildcard: 15 */
+  public static final Dot11AccessNetworkType WILDCARD =
+      new Dot11AccessNetworkType((byte) 15, "Wildcard");
 
-  private static final Map<Byte, Dot11AccessNetworkType> registry
-    = new HashMap<Byte, Dot11AccessNetworkType>();
+  private static final Map<Byte, Dot11AccessNetworkType> registry =
+      new HashMap<Byte, Dot11AccessNetworkType>();
 
   static {
     registry.put(PRIVATE_NETWORK.value(), PRIVATE_NETWORK);
@@ -105,8 +87,7 @@ public final class Dot11AccessNetworkType extends NamedNumber<Byte, Dot11AccessN
   public static Dot11AccessNetworkType getInstance(Byte value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new Dot11AccessNetworkType(value, "unknown");
     }
   }
@@ -124,12 +105,9 @@ public final class Dot11AccessNetworkType extends NamedNumber<Byte, Dot11AccessN
     return value().compareTo(o.value());
   }
 
-  /**
-   *
-   */
+  /** */
   @Override
   public String valueAsString() {
     return String.valueOf(value() & 0xFF);
   }
-
 }

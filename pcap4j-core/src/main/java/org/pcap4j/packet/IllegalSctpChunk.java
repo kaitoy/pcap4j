@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.namednumber.SctpChunkType;
 import org.pcap4j.util.ByteArrays;
@@ -22,18 +21,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IllegalSctpChunk implements SctpChunk {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 7163848436153227901L;
 
   private final SctpChunkType type;
   private final byte[] rawData;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -52,30 +48,31 @@ public final class IllegalSctpChunk implements SctpChunk {
   }
 
   private IllegalSctpChunk(Builder builder) {
-    if (
-         builder == null
-      || builder.type == null
-      || builder.rawData == null
-    ) {
+    if (builder == null || builder.type == null || builder.rawData == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.type: ").append(builder.type)
-        .append(" builder.rawData: ").append(builder.rawData);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.type: ")
+          .append(builder.type)
+          .append(" builder.rawData: ")
+          .append(builder.rawData);
       throw new NullPointerException(sb.toString());
     }
 
     this.type = builder.type;
     this.rawData = new byte[builder.rawData.length];
-    System.arraycopy(
-      builder.rawData, 0, this.rawData, 0, builder.rawData.length
-    );
+    System.arraycopy(builder.rawData, 0, this.rawData, 0, builder.rawData.length);
   }
 
   @Override
-  public SctpChunkType getType() { return type; }
+  public SctpChunkType getType() {
+    return type;
+  }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -84,10 +81,7 @@ public final class IllegalSctpChunk implements SctpChunk {
     return copy;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -96,10 +90,8 @@ public final class IllegalSctpChunk implements SctpChunk {
   public String toString() {
     StringBuilder sb = new StringBuilder();
 
-    sb.append("[Type: ")
-      .append(type);
-    sb.append(", Illegal Raw Data: 0x")
-      .append(ByteArrays.toHexString(rawData, ""));
+    sb.append("[Type: ").append(type);
+    sb.append(", Illegal Raw Data: 0x").append(ByteArrays.toHexString(rawData, ""));
     sb.append("]");
 
     return sb.toString();
@@ -116,17 +108,12 @@ public final class IllegalSctpChunk implements SctpChunk {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     IllegalSctpChunk other = (IllegalSctpChunk) obj;
-    if (!Arrays.equals(rawData, other.rawData))
-      return false;
-    if (!type.equals(other.type))
-      return false;
+    if (!Arrays.equals(rawData, other.rawData)) return false;
+    if (!type.equals(other.type)) return false;
     return true;
   }
 
@@ -139,9 +126,7 @@ public final class IllegalSctpChunk implements SctpChunk {
     private SctpChunkType type;
     private byte[] rawData;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IllegalSctpChunk obj) {
@@ -167,13 +152,9 @@ public final class IllegalSctpChunk implements SctpChunk {
       return this;
     }
 
-    /**
-     * @return a new IllegalSctpChunk object.
-     */
+    /** @return a new IllegalSctpChunk object. */
     public IllegalSctpChunk build() {
       return new IllegalSctpChunk(this);
     }
-
   }
-
 }

@@ -36,16 +36,14 @@ public interface PacketFactory<T, N extends NamedNumber<?, ?>> {
 
   /**
    * @param number number
-   * @return a {@link java.lang.Class Class} object this factory instantiates
-   *         by {@link #newInstance(byte[], int, int, NamedNumber)} with the number argument.
+   * @return a {@link java.lang.Class Class} object this factory instantiates by {@link
+   *     #newInstance(byte[], int, int, NamedNumber)} with the number argument.
    */
   public Class<? extends T> getTargetClass(N number);
 
   /**
-   *
-   * @return a {@link java.lang.Class Class} object this factory instantiates
-   *         by {@link #newInstance(byte[], int, int)}.
+   * @return a {@link java.lang.Class Class} object this factory instantiates by {@link
+   *     #newInstance(byte[], int, int)}.
    */
   public Class<? extends T> getTargetClass();
-
 }

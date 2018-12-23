@@ -1,5 +1,6 @@
 package org.pcap4j.sample;
 
+import com.sun.jna.Platform;
 import java.io.IOException;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
@@ -11,25 +12,18 @@ import org.pcap4j.core.PcapStat;
 import org.pcap4j.core.RawPacketListener;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.NifSelector;
-import com.sun.jna.Platform;
 
 @SuppressWarnings("javadoc")
 public class LoopRaw {
 
-  private static final String COUNT_KEY
-    = LoopRaw.class.getName() + ".count";
-  private static final int COUNT
-    = Integer.getInteger(COUNT_KEY, 5);
+  private static final String COUNT_KEY = LoopRaw.class.getName() + ".count";
+  private static final int COUNT = Integer.getInteger(COUNT_KEY, 5);
 
-  private static final String READ_TIMEOUT_KEY
-    = LoopRaw.class.getName() + ".readTimeout";
-  private static final int READ_TIMEOUT
-    = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
+  private static final String READ_TIMEOUT_KEY = LoopRaw.class.getName() + ".readTimeout";
+  private static final int READ_TIMEOUT = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
 
-  private static final String SNAPLEN_KEY
-    = LoopRaw.class.getName() + ".snaplen";
-  private static final int SNAPLEN
-    = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
+  private static final String SNAPLEN_KEY = LoopRaw.class.getName() + ".snaplen";
+  private static final int SNAPLEN = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
 
   private LoopRaw() {}
 
@@ -55,18 +49,14 @@ public class LoopRaw {
 
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
-    final PcapHandle handle
-      = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+    final PcapHandle handle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
 
     if (filter.length() != 0) {
-      handle.setFilter(
-        filter,
-        BpfCompileMode.OPTIMIZE
-      );
+      handle.setFilter(filter, BpfCompileMode.OPTIMIZE);
     }
 
-    RawPacketListener listener
-      = new RawPacketListener() {
+    RawPacketListener listener =
+        new RawPacketListener() {
           @Override
           public void gotPacket(byte[] packet) {
             System.out.println(handle.getTimestamp());
@@ -90,5 +80,4 @@ public class LoopRaw {
 
     handle.close();
   }
-
 }

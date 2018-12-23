@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -37,18 +38,15 @@ public final class Ssh2String implements Serializable {
    * UTF-8 mapping does not alter the encoding of US-ASCII characters.
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1591381991570120515L;
 
   private final int length;
   private final byte[] string;
 
   /**
-   * Constructor.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * Constructor. This method validates the arguments by {@link ByteArrays#validateBounds(byte[],
+   * int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -61,43 +59,38 @@ public final class Ssh2String implements Serializable {
     if (length < 4) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The rawData length must be more than 3. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.length = ByteArrays.getInt(rawData, offset);
     if (this.length < 0) {
       StringBuilder sb = new StringBuilder(120);
-      sb.append(
-           "A string the length of which is longer than 2147483647 is not supported. length: "
-         )
-        .append(this.length & 0xFFFFFFFFL);
+      sb.append("A string the length of which is longer than 2147483647 is not supported. length: ")
+          .append(this.length & 0xFFFFFFFFL);
       throw new IllegalRawDataException(sb.toString());
     }
     if (length - 4 < this.length) {
       StringBuilder sb = new StringBuilder(110);
       sb.append("The data is too short to build an Ssh2String (")
-        .append(this.length + 4)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(this.length + 4)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.string = ByteArrays.getSubArray(rawData, 4 + offset, this.length);
   }
 
-  /**
-   *
-   * @param str str
-   */
+  /** @param str str */
   public Ssh2String(String str) {
     if (str == null) {
       throw new NullPointerException();
@@ -111,25 +104,17 @@ public final class Ssh2String implements Serializable {
     }
   }
 
-  /**
-   *
-   * @return value of the length field
-   */
+  /** @return value of the length field */
   public int getLength() {
     return length;
   }
 
-  /**
-   *
-   * @return string
-   */
+  /** @return string */
   public byte[] getString() {
     return ByteArrays.clone(string);
   }
 
-  /**
-   * @return string
-   */
+  /** @return string */
   public String getStringAsString() {
     try {
       return new String(string, "UTF-8");
@@ -138,18 +123,12 @@ public final class Ssh2String implements Serializable {
     }
   }
 
-  /**
-   *
-   * @return length
-   */
+  /** @return length */
   public int length() {
     return length + INT_SIZE_IN_BYTES;
   }
 
-  /**
-   *
-   * @return rawData
-   */
+  /** @return rawData */
   public byte[] getRawData() {
     byte[] rawData = new byte[length + 4];
     System.arraycopy(ByteArrays.toByteArray(length), 0, rawData, 0, INT_SIZE_IN_BYTES);
@@ -161,21 +140,23 @@ public final class Ssh2String implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder(50);
     sb.append(getStringAsString())
-      .append(" (")
-      .append(ByteArrays.toHexString(string, " "))
-      .append(")");
+        .append(" (")
+        .append(ByteArrays.toHexString(string, " "))
+        .append(")");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    Ssh2String other = (Ssh2String)obj;
-    return
-         length == other.length
-      && Arrays.equals(string, other.string);
+    Ssh2String other = (Ssh2String) obj;
+    return length == other.length && Arrays.equals(string, other.string);
   }
 
   @Override
@@ -185,5 +166,4 @@ public final class Ssh2String implements Serializable {
     result = 31 * result + Arrays.hashCode(string);
     return result;
   }
-
 }

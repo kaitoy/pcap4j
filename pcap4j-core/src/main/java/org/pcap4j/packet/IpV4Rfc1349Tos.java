@@ -17,9 +17,7 @@ import org.pcap4j.packet.namednumber.IpV4TosTos;
  */
 public final class IpV4Rfc1349Tos implements IpV4Tos {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 1760697525836662144L;
 
   /* http://www.ietf.org/rfc/rfc1349.txt
@@ -37,7 +35,6 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
   private final boolean mbz;
 
   /**
-   *
    * @param value value
    * @return a new IpV4Rfc1349Tos object.
    */
@@ -46,21 +43,20 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
   }
 
   private IpV4Rfc1349Tos(byte value) {
-    this.precedence = IpV4TosPrecedence.getInstance((byte)((value & 0xE0) >> 5));
-    this.tos = IpV4TosTos.getInstance((byte)(0x0F & (value >> 1)));
+    this.precedence = IpV4TosPrecedence.getInstance((byte) ((value & 0xE0) >> 5));
+    this.tos = IpV4TosTos.getInstance((byte) (0x0F & (value >> 1)));
     this.mbz = (value & 0x01) != 0;
   }
 
   private IpV4Rfc1349Tos(Builder builder) {
-    if (
-         builder == null
-      || builder.precedence == null
-      || builder.tos == null
-    ) {
+    if (builder == null || builder.precedence == null || builder.tos == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder").append(builder)
-        .append(" builder.precedence: ").append(builder.precedence)
-        .append(" builder.tos: ").append(builder.tos);
+      sb.append("builder")
+          .append(builder)
+          .append(" builder.precedence: ")
+          .append(builder.precedence)
+          .append(" builder.tos: ")
+          .append(builder.tos);
       throw new NullPointerException(sb.toString());
     }
 
@@ -69,62 +65,64 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
     this.mbz = builder.mbz;
   }
 
-  /**
-   *
-   * @return precedence
-   */
-  public IpV4TosPrecedence getPrecedence() { return precedence; }
+  /** @return precedence */
+  public IpV4TosPrecedence getPrecedence() {
+    return precedence;
+  }
 
-  /**
-   *
-   * @return tos
-   */
-  public IpV4TosTos getTos() { return tos; }
+  /** @return tos */
+  public IpV4TosTos getTos() {
+    return tos;
+  }
 
-  /**
-   *
-   * @return mbz
-   */
-  public boolean mbz() { return mbz; }
+  /** @return mbz */
+  public boolean mbz() {
+    return mbz;
+  }
 
   public byte value() {
-    byte value = (byte)(precedence.value() << 5);
-    value = (byte)(value | tos.value() << 1);
+    byte value = (byte) (precedence.value() << 5);
+    value = (byte) (value | tos.value() << 1);
     if (mbz) {
-      value = (byte)(value | 0x01);
+      value = (byte) (value | 0x01);
     }
     return value;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[precedence: ")
-      .append(precedence)
-      .append("] [tos: ")
-      .append(tos)
-      .append("] [mbz: ")
-      .append(mbz ? 1 : 0)
-      .append("]");
+        .append(precedence)
+        .append("] [tos: ")
+        .append(tos)
+        .append("] [mbz: ")
+        .append(mbz ? 1 : 0)
+        .append("]");
 
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     return (getClass().cast(obj)).value() == this.value();
   }
 
   @Override
-  public int hashCode() { return value(); }
+  public int hashCode() {
+    return value();
+  }
 
   /**
    * @author Kaito Yamada
@@ -136,9 +134,7 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
     private IpV4TosTos tos;
     private boolean mbz;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IpV4Rfc1349Tos tos) {
@@ -148,7 +144,6 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
     }
 
     /**
-     *
      * @param precedence precedence
      * @return this Builder object for method chaining.
      */
@@ -158,7 +153,6 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
     }
 
     /**
-     *
      * @param tos tos
      * @return this Builder object for method chaining.
      */
@@ -168,7 +162,6 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
     }
 
     /**
-     *
      * @param mbz mbz
      * @return this Builder object for method chaining.
      */
@@ -177,14 +170,9 @@ public final class IpV4Rfc1349Tos implements IpV4Tos {
       return this;
     }
 
-    /**
-     *
-     * @return a new IpV4Rfc1349Tos object.
-     */
+    /** @return a new IpV4Rfc1349Tos object. */
     public IpV4Rfc1349Tos build() {
       return new IpV4Rfc1349Tos(this);
     }
-
   }
-
 }

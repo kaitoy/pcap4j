@@ -17,17 +17,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 4289988881526919621L;
 
   private final IpV6ExtHopByHopOptionsHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -35,21 +32,18 @@ public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
    * @return a new IpV6ExtHopByHopOptionsPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IpV6ExtHopByHopOptionsPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IpV6ExtHopByHopOptionsPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
 
-    IpV6ExtHopByHopOptionsHeader optHeader
-      = new IpV6ExtHopByHopOptionsHeader(rawData, offset, length);
+    IpV6ExtHopByHopOptionsHeader optHeader =
+        new IpV6ExtHopByHopOptionsHeader(rawData, offset, length);
 
     int payloadLength = length - optHeader.length();
     if (payloadLength > 0) {
       return new IpV6ExtHopByHopOptionsPacket(
-               rawData, offset + optHeader.length(), payloadLength, optHeader
-             );
-    }
-    else {
+          rawData, offset + optHeader.length(), payloadLength, optHeader);
+    } else {
       return new IpV6ExtHopByHopOptionsPacket(optHeader);
     }
   }
@@ -59,9 +53,10 @@ public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
   }
 
   private IpV6ExtHopByHopOptionsPacket(
-    byte[] rawData, int payloadOffset, int payloadLength,
-    IpV6ExtHopByHopOptionsHeader optHeader
-  ) {
+      byte[] rawData,
+      int payloadOffset,
+      int payloadLength,
+      IpV6ExtHopByHopOptionsHeader optHeader) {
     super(rawData, payloadOffset, payloadLength, optHeader.getNextHeader());
     this.header = optHeader;
   }
@@ -85,12 +80,9 @@ public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public static final class Builder
-  extends org.pcap4j.packet.IpV6ExtOptionsPacket.Builder {
+  public static final class Builder extends org.pcap4j.packet.IpV6ExtOptionsPacket.Builder {
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IpV6ExtHopByHopOptionsPacket packet) {
@@ -125,15 +117,13 @@ public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
     public IpV6ExtHopByHopOptionsPacket build() {
       return new IpV6ExtHopByHopOptionsPacket(this);
     }
-
   }
 
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public static
-  final class IpV6ExtHopByHopOptionsHeader extends IpV6ExtOptionsHeader {
+  public static final class IpV6ExtHopByHopOptionsHeader extends IpV6ExtOptionsHeader {
 
     /*
      *  0                              16                            31
@@ -149,24 +139,21 @@ public final class IpV6ExtHopByHopOptionsPacket extends IpV6ExtOptionsPacket {
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -3903426584619413207L;
 
-    private IpV6ExtHopByHopOptionsHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private IpV6ExtHopByHopOptionsHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       super(rawData, offset, length);
     }
 
-    private IpV6ExtHopByHopOptionsHeader(Builder builder) { super(builder); }
+    private IpV6ExtHopByHopOptionsHeader(Builder builder) {
+      super(builder);
+    }
 
     @Override
     protected String getHeaderName() {
       return "IPv6 Hop-by-Hop Options Header";
     }
-
   }
-
 }

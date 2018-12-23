@@ -1,6 +1,7 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -24,8 +25,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class TcpPacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(TcpPacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(TcpPacketTest.class);
 
   private final TcpPort srcPort;
   private final TcpPort dstPort;
@@ -50,90 +50,77 @@ public class TcpPacketTest extends AbstractPacketTest {
 
   public TcpPacketTest() throws Exception {
     this.srcPort = TcpPort.SNMP;
-    this.dstPort = TcpPort.getInstance((short)0);
+    this.dstPort = TcpPort.getInstance((short) 0);
     this.sequenceNumber = 1234567;
     this.acknowledgmentNumber = 7654321;
     this.dataOffset = 15;
-    this.reserved = (byte)11;
+    this.reserved = (byte) 11;
     this.urg = false;
     this.ack = true;
     this.psh = false;
     this.rst = true;
     this.syn = false;
     this.fin = true;
-    this.window = (short)9999;
-    this.checksum = (short)0xABCD;
-    this.urgentPointer = (short)1111;
+    this.window = (short) 9999;
+    this.checksum = (short) 0xABCD;
+    this.urgentPointer = (short) 1111;
 
     this.options = new ArrayList<TcpOption>();
     options.add(
-      new TcpMaximumSegmentSizeOption.Builder()
-        .maxSegSize((short)5555)
-        .correctLengthAtBuild(true)
-        .build()
-    );
+        new TcpMaximumSegmentSizeOption.Builder()
+            .maxSegSize((short) 5555)
+            .correctLengthAtBuild(true)
+            .build());
     options.add(TcpNoOperationOption.getInstance());
     options.add(
-      new TcpWindowScaleOption.Builder()
-        .shiftCount((byte)2)
-        .correctLengthAtBuild(true)
-        .build()
-    );
+        new TcpWindowScaleOption.Builder().shiftCount((byte) 2).correctLengthAtBuild(true).build());
     options.add(TcpSackPermittedOption.getInstance());
     options.add(
-      new TcpTimestampsOption.Builder()
-        .tsValue(200)
-        .tsEchoReply(111)
-        .correctLengthAtBuild(true)
-        .build()
-    );
+        new TcpTimestampsOption.Builder()
+            .tsValue(200)
+            .tsEchoReply(111)
+            .correctLengthAtBuild(true)
+            .build());
     List<Sack> sacks = new ArrayList<Sack>();
     sacks.add(new Sack(2000, 4000));
     sacks.add(new Sack(6000, 10000));
-    options.add(
-      new TcpSackOption.Builder()
-        .sacks(sacks)
-        .correctLengthAtBuild(true)
-        .build()
-    );
+    options.add(new TcpSackOption.Builder().sacks(sacks).correctLengthAtBuild(true).build());
     options.add(TcpEndOfOptionList.getInstance());
 
-    this.padding = new byte[] { (byte)0xaa };
+    this.padding = new byte[] {(byte) 0xaa};
 
     try {
-      this.srcAddr
-        = (Inet4Address)InetAddress.getByName("192.168.0.1");
-      this.dstAddr
-        = (Inet4Address)InetAddress.getByName("192.168.0.2");
+      this.srcAddr = (Inet4Address) InetAddress.getByName("192.168.0.1");
+      this.dstAddr = (Inet4Address) InetAddress.getByName("192.168.0.2");
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
 
     UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
-    unknownb.rawData(new byte[] { (byte)0, (byte)1, (byte)2, (byte)3 });
+    unknownb.rawData(new byte[] {(byte) 0, (byte) 1, (byte) 2, (byte) 3});
 
     TcpPacket.Builder b = new TcpPacket.Builder();
     b.dstPort(dstPort)
-     .srcPort(srcPort)
-     .sequenceNumber(sequenceNumber)
-     .acknowledgmentNumber(acknowledgmentNumber)
-     .dataOffset(dataOffset)
-     .reserved(reserved)
-     .urg(urg)
-     .ack(ack)
-     .psh(psh)
-     .rst(rst)
-     .syn(syn)
-     .fin(fin)
-     .window(window)
-     .checksum(checksum)
-     .urgentPointer(urgentPointer)
-     .options(options)
-     .padding(padding)
-     .correctChecksumAtBuild(false)
-     .correctLengthAtBuild(false)
-     .paddingAtBuild(false)
-     .payloadBuilder(unknownb);
+        .srcPort(srcPort)
+        .sequenceNumber(sequenceNumber)
+        .acknowledgmentNumber(acknowledgmentNumber)
+        .dataOffset(dataOffset)
+        .reserved(reserved)
+        .urg(urg)
+        .ack(ack)
+        .psh(psh)
+        .rst(rst)
+        .syn(syn)
+        .fin(fin)
+        .window(window)
+        .checksum(checksum)
+        .urgentPointer(urgentPointer)
+        .options(options)
+        .padding(padding)
+        .correctChecksumAtBuild(false)
+        .correctLengthAtBuild(false)
+        .paddingAtBuild(false)
+        .payloadBuilder(unknownb);
 
     this.packet = b.build();
   }
@@ -147,45 +134,40 @@ public class TcpPacketTest extends AbstractPacketTest {
   protected Packet getWholePacket() {
     IpV4Packet.Builder IpV4b = new IpV4Packet.Builder();
     IpV4b.version(IpVersion.IPV4)
-         .tos(IpV4Rfc1349Tos.newInstance((byte)0))
-         .identification((short)100)
-         .ttl((byte)100)
-         .protocol(IpNumber.TCP)
-         .srcAddr(srcAddr)
-         .dstAddr(dstAddr)
-         .payloadBuilder(
-            packet.getBuilder()
-              .correctChecksumAtBuild(true)
-              .correctLengthAtBuild(true)
-              .paddingAtBuild(true)
-          )
-         .correctChecksumAtBuild(true)
-         .correctLengthAtBuild(true)
-         .paddingAtBuild(true);
+        .tos(IpV4Rfc1349Tos.newInstance((byte) 0))
+        .identification((short) 100)
+        .ttl((byte) 100)
+        .protocol(IpNumber.TCP)
+        .srcAddr(srcAddr)
+        .dstAddr(dstAddr)
+        .payloadBuilder(
+            packet
+                .getBuilder()
+                .correctChecksumAtBuild(true)
+                .correctLengthAtBuild(true)
+                .paddingAtBuild(true))
+        .correctChecksumAtBuild(true)
+        .correctLengthAtBuild(true)
+        .paddingAtBuild(true);
 
     EthernetPacket.Builder eb = new EthernetPacket.Builder();
     eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
-      .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-      .type(EtherType.IPV4)
-      .payloadBuilder(IpV4b)
-      .paddingAtBuild(true);
+        .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+        .type(EtherType.IPV4)
+        .payloadBuilder(IpV4b)
+        .paddingAtBuild(true);
 
-    eb.get(TcpPacket.Builder.class)
-      .dstAddr(dstAddr)
-      .srcAddr(srcAddr);
+    eb.get(TcpPacket.Builder.class).dstAddr(dstAddr).srcAddr(srcAddr);
     return eb.build();
   }
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    logger.info(
-      "########## " + TcpPacketTest.class.getSimpleName() + " START ##########"
-    );
+    logger.info("########## " + TcpPacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Test
   public void testNewPacket() {
@@ -199,9 +181,8 @@ public class TcpPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTester.testClass(TcpPacket.class, packet);
+    RandomPacketTester.testClass(TcpPacket.class, packet);
   }
-
 
   @Test
   public void testGetHeader() {
@@ -224,7 +205,7 @@ public class TcpPacketTest extends AbstractPacketTest {
     assertEquals(options.size(), h.getOptions().size());
 
     Iterator<TcpOption> iter = h.getOptions().iterator();
-    for (TcpOption o: options) {
+    for (TcpOption o : options) {
       TcpOption actual = iter.next();
       assertEquals(o, actual);
     }
@@ -236,87 +217,91 @@ public class TcpPacketTest extends AbstractPacketTest {
 
     b.sequenceNumber(0);
     b.acknowledgmentNumber(0);
-    b.window((short)0);
-    b.urgentPointer((short)0);
+    b.window((short) 0);
+    b.urgentPointer((short) 0);
     p = b.build();
-    assertEquals(0, (int)p.getHeader().getSequenceNumberAsLong());
-    assertEquals(0, (int)p.getHeader().getAcknowledgmentNumberAsLong());
-    assertEquals((short)0, (short)p.getHeader().getWindowAsInt());
-    assertEquals((short)0, (short)p.getHeader().getUrgentPointerAsInt());
+    assertEquals(0, (int) p.getHeader().getSequenceNumberAsLong());
+    assertEquals(0, (int) p.getHeader().getAcknowledgmentNumberAsLong());
+    assertEquals((short) 0, (short) p.getHeader().getWindowAsInt());
+    assertEquals((short) 0, (short) p.getHeader().getUrgentPointerAsInt());
 
     b.sequenceNumber(-1);
     b.acknowledgmentNumber(-1);
-    b.window((short)-1);
-    b.urgentPointer((short)-1);
+    b.window((short) -1);
+    b.urgentPointer((short) -1);
     p = b.build();
-    assertEquals(-1, (int)p.getHeader().getSequenceNumberAsLong());
-    assertEquals(-1, (int)p.getHeader().getAcknowledgmentNumberAsLong());
-    assertEquals((short)-1, (short)p.getHeader().getWindowAsInt());
-    assertEquals((short)-1, (short)p.getHeader().getUrgentPointerAsInt());
+    assertEquals(-1, (int) p.getHeader().getSequenceNumberAsLong());
+    assertEquals(-1, (int) p.getHeader().getAcknowledgmentNumberAsLong());
+    assertEquals((short) -1, (short) p.getHeader().getWindowAsInt());
+    assertEquals((short) -1, (short) p.getHeader().getUrgentPointerAsInt());
 
     b.sequenceNumber(-2147483648);
     b.acknowledgmentNumber(-2147483648);
-    b.window((short)-32768);
-    b.urgentPointer((short)-32768);
+    b.window((short) -32768);
+    b.urgentPointer((short) -32768);
     p = b.build();
-    assertEquals(-2147483648, (int)p.getHeader().getSequenceNumberAsLong());
-    assertEquals(-2147483648, (int)p.getHeader().getAcknowledgmentNumberAsLong());
-    assertEquals((short)-32768, (short)p.getHeader().getWindowAsInt());
-    assertEquals((short)-32768, (short)p.getHeader().getUrgentPointerAsInt());
+    assertEquals(-2147483648, (int) p.getHeader().getSequenceNumberAsLong());
+    assertEquals(-2147483648, (int) p.getHeader().getAcknowledgmentNumberAsLong());
+    assertEquals((short) -32768, (short) p.getHeader().getWindowAsInt());
+    assertEquals((short) -32768, (short) p.getHeader().getUrgentPointerAsInt());
 
     b.sequenceNumber(2147483647);
     b.acknowledgmentNumber(2147483647);
-    b.window((short)32767);
-    b.urgentPointer((short)32767);
+    b.window((short) 32767);
+    b.urgentPointer((short) 32767);
     p = b.build();
-    assertEquals(2147483647, (int)p.getHeader().getSequenceNumberAsLong());
-    assertEquals(2147483647, (int)p.getHeader().getAcknowledgmentNumberAsLong());
-    assertEquals((short)32767, (short)p.getHeader().getWindowAsInt());
-    assertEquals((short)32767, (short)p.getHeader().getUrgentPointerAsInt());
+    assertEquals(2147483647, (int) p.getHeader().getSequenceNumberAsLong());
+    assertEquals(2147483647, (int) p.getHeader().getAcknowledgmentNumberAsLong());
+    assertEquals((short) 32767, (short) p.getHeader().getWindowAsInt());
+    assertEquals((short) 32767, (short) p.getHeader().getUrgentPointerAsInt());
 
-    b.dataOffset((byte)0);
+    b.dataOffset((byte) 0);
     p = b.build();
-    assertEquals((byte)0, p.getHeader().getDataOffset());
+    assertEquals((byte) 0, p.getHeader().getDataOffset());
 
-    b.dataOffset((byte)15);
+    b.dataOffset((byte) 15);
     p = b.build();
-    assertEquals((byte)15, p.getHeader().getDataOffset());
+    assertEquals((byte) 15, p.getHeader().getDataOffset());
 
-    b.dataOffset((byte)16);
+    b.dataOffset((byte) 16);
     try {
       p = b.build();
       fail();
-    } catch (IllegalArgumentException e) {}
+    } catch (IllegalArgumentException e) {
+    }
 
-    b.dataOffset((byte)-1);
+    b.dataOffset((byte) -1);
     try {
       p = b.build();
       fail();
-    } catch (IllegalArgumentException e) {}
+    } catch (IllegalArgumentException e) {
+    }
 
-    b.dataOffset((byte)0);
+    b.dataOffset((byte) 0);
 
-    b.reserved((byte)0);
+    b.reserved((byte) 0);
     p = b.build();
-    assertEquals((byte)0, p.getHeader().getReserved());
+    assertEquals((byte) 0, p.getHeader().getReserved());
 
-    b.reserved((byte)63);
+    b.reserved((byte) 63);
     p = b.build();
-    assertEquals((byte)63, p.getHeader().getReserved());
+    assertEquals((byte) 63, p.getHeader().getReserved());
 
-    b.reserved((byte)64);
+    b.reserved((byte) 64);
     try {
       p = b.build();
       fail();
-    } catch (IllegalArgumentException e) {}
+    } catch (IllegalArgumentException e) {
+    }
 
-    b.reserved((byte)-1);
+    b.reserved((byte) -1);
     try {
       p = b.build();
       fail();
-    } catch (IllegalArgumentException e) {}
+    } catch (IllegalArgumentException e) {
+    }
 
-    b.reserved((byte)0);
+    b.reserved((byte) 0);
   }
 
   @Test
@@ -328,7 +313,7 @@ public class TcpPacketTest extends AbstractPacketTest {
     assertFalse(packet.hasValidChecksum(srcAddr, dstAddr, false));
     assertFalse(packet.hasValidChecksum(srcAddr, dstAddr, true));
 
-    b.checksum((short)0).correctChecksumAtBuild(false);
+    b.checksum((short) 0).correctChecksumAtBuild(false);
     p = b.build();
     assertFalse(p.hasValidChecksum(srcAddr, dstAddr, false));
     assertTrue(p.hasValidChecksum(srcAddr, dstAddr, true));
@@ -338,5 +323,4 @@ public class TcpPacketTest extends AbstractPacketTest {
     assertTrue(p.hasValidChecksum(srcAddr, dstAddr, false));
     assertTrue(p.hasValidChecksum(srcAddr, dstAddr, true));
   }
-
 }

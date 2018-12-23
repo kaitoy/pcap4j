@@ -1,6 +1,7 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.junit.AfterClass;
@@ -18,8 +19,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class ArpPacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(ArpPacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(ArpPacketTest.class);
 
   private final ArpPacket packet;
   private final ArpHardwareType hardwareType;
@@ -35,19 +35,15 @@ public class ArpPacketTest extends AbstractPacketTest {
   public ArpPacketTest() {
     this.hardwareType = ArpHardwareType.ETHERNET;
     this.protocolType = EtherType.IPV4;
-    this.hardwareLength = (byte)MacAddress.SIZE_IN_BYTES;
-    this.protocolLength = (byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
+    this.hardwareLength = (byte) MacAddress.SIZE_IN_BYTES;
+    this.protocolLength = (byte) ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
     this.srcHardwareAddr = MacAddress.getByName("fe:00:00:00:00:01");
     this.dstHardwareAddr = MacAddress.ETHER_BROADCAST_ADDRESS;
     try {
-      this.srcProtocolAddr
-        = InetAddress.getByAddress(
-            new byte[] { (byte)192, (byte)0, (byte)2, (byte)1 }
-          );
-      this.dstProtocolAddr
-        = InetAddress.getByAddress(
-            new byte[] { (byte)192, (byte)0, (byte)2, (byte)2 }
-          );
+      this.srcProtocolAddr =
+          InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 1});
+      this.dstProtocolAddr =
+          InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 2});
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
@@ -55,14 +51,14 @@ public class ArpPacketTest extends AbstractPacketTest {
 
     ArpPacket.Builder ab = new ArpPacket.Builder();
     ab.hardwareType(hardwareType)
-      .protocolType(protocolType)
-      .hardwareAddrLength(hardwareLength)
-      .protocolAddrLength(protocolLength)
-      .srcHardwareAddr(srcHardwareAddr)
-      .dstHardwareAddr(dstHardwareAddr)
-      .srcProtocolAddr(srcProtocolAddr)
-      .dstProtocolAddr(dstProtocolAddr)
-      .operation(operation);
+        .protocolType(protocolType)
+        .hardwareAddrLength(hardwareLength)
+        .protocolAddrLength(protocolLength)
+        .srcHardwareAddr(srcHardwareAddr)
+        .dstHardwareAddr(dstHardwareAddr)
+        .srcProtocolAddr(srcProtocolAddr)
+        .dstProtocolAddr(dstProtocolAddr)
+        .operation(operation);
     this.packet = ab.build();
   }
 
@@ -75,25 +71,21 @@ public class ArpPacketTest extends AbstractPacketTest {
   protected Packet getWholePacket() {
     EthernetPacket.Builder eb = new EthernetPacket.Builder();
     eb.dstAddr(packet.getHeader().getDstHardwareAddr())
-      .srcAddr(packet.getHeader().getSrcHardwareAddr())
-      .type(EtherType.ARP)
-      .payloadBuilder(new SimpleBuilder(packet))
-      .paddingAtBuild(true);
+        .srcAddr(packet.getHeader().getSrcHardwareAddr())
+        .type(EtherType.ARP)
+        .payloadBuilder(new SimpleBuilder(packet))
+        .paddingAtBuild(true);
     return eb.build();
   }
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    logger.info(
-      "########## " + ArpPacketTest.class.getSimpleName() + " START ##########"
-    );
+    logger.info("########## " + ArpPacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-    logger.info(
-      "########## " + ArpPacketTest.class.getSimpleName() + " END ##########"
-    );
+    logger.info("########## " + ArpPacketTest.class.getSimpleName() + " END ##########");
   }
 
   @Test
@@ -102,9 +94,9 @@ public class ArpPacketTest extends AbstractPacketTest {
     assertEquals(hardwareType, h.getHardwareType());
     assertEquals(protocolType, h.getProtocolType());
     assertEquals(hardwareLength, h.getHardwareAddrLength());
-    assertEquals(hardwareLength, (byte)h.getHardwareAddrLengthAsInt());
+    assertEquals(hardwareLength, (byte) h.getHardwareAddrLengthAsInt());
     assertEquals(protocolLength, h.getProtocolAddrLength());
-    assertEquals(protocolLength, (byte)h.getProtocolAddrLengthAsInt());
+    assertEquals(protocolLength, (byte) h.getProtocolAddrLengthAsInt());
     assertEquals(dstHardwareAddr, h.getDstHardwareAddr());
     assertEquals(srcHardwareAddr, h.getSrcHardwareAddr());
     assertEquals(dstProtocolAddr, h.getDstProtocolAddr());
@@ -114,35 +106,35 @@ public class ArpPacketTest extends AbstractPacketTest {
     ArpPacket.Builder ab = packet.getBuilder();
     ArpPacket p;
 
-    ab.hardwareAddrLength((byte)0);
-    ab.protocolAddrLength((byte)0);
+    ab.hardwareAddrLength((byte) 0);
+    ab.protocolAddrLength((byte) 0);
     p = ab.build();
-    assertEquals((byte)0, (byte)p.getHeader().getHardwareAddrLengthAsInt());
-    assertEquals((byte)0, (byte)p.getHeader().getProtocolAddrLengthAsInt());
+    assertEquals((byte) 0, (byte) p.getHeader().getHardwareAddrLengthAsInt());
+    assertEquals((byte) 0, (byte) p.getHeader().getProtocolAddrLengthAsInt());
 
-    ab.hardwareAddrLength((byte)50);
-    ab.protocolAddrLength((byte)50);
+    ab.hardwareAddrLength((byte) 50);
+    ab.protocolAddrLength((byte) 50);
     p = ab.build();
-    assertEquals((byte)50, (byte)p.getHeader().getHardwareAddrLengthAsInt());
-    assertEquals((byte)50, (byte)p.getHeader().getProtocolAddrLengthAsInt());
+    assertEquals((byte) 50, (byte) p.getHeader().getHardwareAddrLengthAsInt());
+    assertEquals((byte) 50, (byte) p.getHeader().getProtocolAddrLengthAsInt());
 
-    ab.hardwareAddrLength((byte)127);
-    ab.protocolAddrLength((byte)127);
+    ab.hardwareAddrLength((byte) 127);
+    ab.protocolAddrLength((byte) 127);
     p = ab.build();
-    assertEquals((byte)127, (byte)p.getHeader().getHardwareAddrLengthAsInt());
-    assertEquals((byte)127, (byte)p.getHeader().getProtocolAddrLengthAsInt());
+    assertEquals((byte) 127, (byte) p.getHeader().getHardwareAddrLengthAsInt());
+    assertEquals((byte) 127, (byte) p.getHeader().getProtocolAddrLengthAsInt());
 
-    ab.hardwareAddrLength((byte)-1);
-    ab.protocolAddrLength((byte)-1);
+    ab.hardwareAddrLength((byte) -1);
+    ab.protocolAddrLength((byte) -1);
     p = ab.build();
-    assertEquals((byte)-1, (byte)p.getHeader().getHardwareAddrLengthAsInt());
-    assertEquals((byte)-1, (byte)p.getHeader().getProtocolAddrLengthAsInt());
+    assertEquals((byte) -1, (byte) p.getHeader().getHardwareAddrLengthAsInt());
+    assertEquals((byte) -1, (byte) p.getHeader().getProtocolAddrLengthAsInt());
 
-    ab.hardwareAddrLength((byte)-128);
-    ab.protocolAddrLength((byte)-128);
+    ab.hardwareAddrLength((byte) -128);
+    ab.protocolAddrLength((byte) -128);
     p = ab.build();
-    assertEquals((byte)-128, (byte)p.getHeader().getHardwareAddrLengthAsInt());
-    assertEquals((byte)-128, (byte)p.getHeader().getProtocolAddrLengthAsInt());
+    assertEquals((byte) -128, (byte) p.getHeader().getHardwareAddrLengthAsInt());
+    assertEquals((byte) -128, (byte) p.getHeader().getProtocolAddrLengthAsInt());
   }
 
   @Test
@@ -153,14 +145,10 @@ public class ArpPacketTest extends AbstractPacketTest {
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
     }
-
   }
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTester.testClass(ArpPacket.class, packet);
+    RandomPacketTester.testClass(ArpPacket.class, packet);
   }
-
-
-
 }

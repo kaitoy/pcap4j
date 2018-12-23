@@ -15,18 +15,11 @@ package org.pcap4j.packet;
 public interface LengthBuilder<T> {
 
   /**
-   *
    * @param correctLengthAtBuild correctLengthAtBuild
    * @return LengthBuilder
    */
-  public LengthBuilder<T> correctLengthAtBuild(
-    boolean correctLengthAtBuild
-  );
+  public LengthBuilder<T> correctLengthAtBuild(boolean correctLengthAtBuild);
 
-  /**
-   *
-   * @return a new object.
-   */
+  /** @return a new object. */
   public T build();
-
 }

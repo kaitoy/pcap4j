@@ -13,49 +13,33 @@ import java.util.Map;
 /**
  * DNS Class
  *
- * @see <a href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-2">IANA Registry</a>
+ * @see <a
+ *     href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-2">IANA
+ *     Registry</a>
  * @author Kaito Yamada
  * @since pcap4j 1.7.1
  */
 public final class DnsClass extends NamedNumber<Short, DnsClass> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -8563135157139346618L;
 
-  /**
-   * Internet (IN): 1
-   */
-  public static final DnsClass IN
-    = new DnsClass((short) 1, "Internet (IN)");
+  /** Internet (IN): 1 */
+  public static final DnsClass IN = new DnsClass((short) 1, "Internet (IN)");
 
-  /**
-   * Chaos (CH): 3
-   */
-  public static final DnsClass CH
-    = new DnsClass((short) 3, "Chaos (CH)");
+  /** Chaos (CH): 3 */
+  public static final DnsClass CH = new DnsClass((short) 3, "Chaos (CH)");
 
-  /**
-   * Hesiod (HS): 4
-   */
-  public static final DnsClass HS
-    = new DnsClass((short) 4, "Hesiod (HS)");
+  /** Hesiod (HS): 4 */
+  public static final DnsClass HS = new DnsClass((short) 4, "Hesiod (HS)");
 
-  /**
-   * NONE: 254
-   */
-  public static final DnsClass NONE
-    = new DnsClass((short) 254, "NONE");
+  /** NONE: 254 */
+  public static final DnsClass NONE = new DnsClass((short) 254, "NONE");
 
-  /**
-   * ANY: 255
-   */
-  public static final DnsClass ANY
-    = new DnsClass((short) 255, "ANY");
+  /** ANY: 255 */
+  public static final DnsClass ANY = new DnsClass((short) 255, "ANY");
 
-  private static final Map<Short, DnsClass> registry
-    = new HashMap<Short, DnsClass>();
+  private static final Map<Short, DnsClass> registry = new HashMap<Short, DnsClass>();
 
   static {
     registry.put(IN.value(), IN);
@@ -80,8 +64,7 @@ public final class DnsClass extends NamedNumber<Short, DnsClass> {
   public static DnsClass getInstance(Short value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new DnsClass(value, "unknown");
     }
   }
@@ -103,5 +86,4 @@ public final class DnsClass extends NamedNumber<Short, DnsClass> {
   public int compareTo(DnsClass o) {
     return value().compareTo(o.value());
   }
-
 }

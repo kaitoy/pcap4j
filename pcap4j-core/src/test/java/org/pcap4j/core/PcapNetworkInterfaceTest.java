@@ -1,6 +1,7 @@
 package org.pcap4j.core;
 
 import static org.junit.Assert.*;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,32 +14,25 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class PcapNetworkInterfaceTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(PcapNetworkInterfaceTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(PcapNetworkInterfaceTest.class);
 
   @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-  }
+  public static void setUpBeforeClass() throws Exception {}
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Before
-  public void setUp() throws Exception {
-  }
+  public void setUp() throws Exception {}
 
   @After
-  public void tearDown() throws Exception {
-  }
+  public void tearDown() throws Exception {}
 
   @Test
   public void testOpenLive() throws Exception {
     PcapHandle handle;
     try {
-       handle =
-         Pcaps.findAllDevs().get(0)
-           .openLive(55555, PromiscuousMode.PROMISCUOUS, 100);
+      handle = Pcaps.findAllDevs().get(0).openLive(55555, PromiscuousMode.PROMISCUOUS, 100);
     } catch (IndexOutOfBoundsException e) {
       return;
     }
@@ -47,5 +41,4 @@ public class PcapNetworkInterfaceTest {
 
     logger.info(handle.toString());
   }
-
 }

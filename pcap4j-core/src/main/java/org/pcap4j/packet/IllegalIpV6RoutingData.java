@@ -17,17 +17,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IllegalIpV6RoutingData implements IpV6RoutingData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -6359533865311266265L;
 
   private final byte[] rawData;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -45,7 +42,9 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData {
   }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -57,18 +56,20 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[illegal data: ")
-      .append(ByteArrays.toHexString(rawData, ""))
-      .append("]");
+    sb.append("[illegal data: ").append(ByteArrays.toHexString(rawData, "")).append("]");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    IllegalIpV6RoutingData other = (IllegalIpV6RoutingData)obj;
+    IllegalIpV6RoutingData other = (IllegalIpV6RoutingData) obj;
     return Arrays.equals(other.rawData, rawData);
   }
 
@@ -76,5 +77,4 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData {
   public int hashCode() {
     return Arrays.hashCode(rawData);
   }
-
 }

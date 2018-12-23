@@ -7,6 +7,8 @@
 
 package org.pcap4j.core;
 
+import com.sun.jna.NativeLong;
+import com.sun.jna.Pointer;
 import java.io.Closeable;
 import java.sql.Timestamp;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -17,8 +19,6 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.sun.jna.NativeLong;
-import com.sun.jna.Pointer;
 
 /**
  * @author Kaito Yamada
@@ -39,16 +39,16 @@ public final class PcapDumper implements Closeable {
     this.dumper = dumper;
   }
 
-  Pointer getDumper() { return dumper; }
+  Pointer getDumper() {
+    return dumper;
+  }
+
+  /** @return true if this PcapDumper is open; false otherwise. */
+  public boolean isOpen() {
+    return open;
+  }
 
   /**
-   *
-   * @return true if this PcapDumper is open; false otherwise.
-   */
-  public boolean isOpen() { return open; }
-
-  /**
-   *
    * @param packet packet
    * @throws NotOpenException if this PcapHandle is not open.
    */
@@ -57,7 +57,6 @@ public final class PcapDumper implements Closeable {
   }
 
   /**
-   *
    * @param packet packet
    * @param timestamp timestamp
    * @throws NotOpenException if this PcapHandle is not open.
@@ -65,8 +64,7 @@ public final class PcapDumper implements Closeable {
   public void dump(Packet packet, Timestamp timestamp) throws NotOpenException {
     if (packet == null || timestamp == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("packet: ").append(packet)
-        .append(" ts: ").append(timestamp);
+      sb.append("packet: ").append(packet).append(" ts: ").append(timestamp);
       throw new NullPointerException(sb.toString());
     }
 
@@ -77,7 +75,6 @@ public final class PcapDumper implements Closeable {
   }
 
   /**
-   *
    * @param packet packet
    * @throws NotOpenException if this PcapHandle is not open.
    */
@@ -86,7 +83,6 @@ public final class PcapDumper implements Closeable {
   }
 
   /**
-   *
    * @param packet packet
    * @param timestamp timestamp
    * @throws NotOpenException if this PcapHandle is not open.
@@ -94,8 +90,7 @@ public final class PcapDumper implements Closeable {
   public void dumpRaw(byte[] packet, Timestamp timestamp) throws NotOpenException {
     if (packet == null || timestamp == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("packet: ").append(packet)
-        .append(" timestamp: ").append(timestamp);
+      sb.append("packet: ").append(packet).append(" timestamp: ").append(timestamp);
       throw new NullPointerException(sb.toString());
     }
 
@@ -193,9 +188,7 @@ public final class PcapDumper implements Closeable {
     return position;
   }
 
-  /**
-   *
-   */
+  /** */
   @Override
   public void close() {
     if (!open) {
@@ -217,5 +210,4 @@ public final class PcapDumper implements Closeable {
     NativeMappings.pcap_dump_close(dumper);
     logger.info("Closed.");
   }
-
 }

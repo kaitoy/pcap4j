@@ -27,10 +27,11 @@ public final class IpV4Helper {
 
   private static Comparator<IpV4Packet> comparator = new ComparatorImpl();
 
-  private IpV4Helper() { throw new AssertionError(); }
+  private IpV4Helper() {
+    throw new AssertionError();
+  }
 
   /**
-   *
    * @param packet packet
    * @param mtu mtu
    * @return a list containing fragmented packets.
@@ -46,45 +47,37 @@ public final class IpV4Helper {
     IpV4Header header = packet.getHeader();
     byte[] payload = packet.getPayload().getRawData();
     int max_payload_length = mtu - header.length();
-    int actual_max_payload_length
-      = max_payload_length % 8 == 0 ? max_payload_length
-                                    : max_payload_length - max_payload_length % 8;
+    int actual_max_payload_length =
+        max_payload_length % 8 == 0
+            ? max_payload_length
+            : max_payload_length - max_payload_length % 8;
     int rest_length = payload.length;
     int srcPos = 0;
     while (rest_length > 0) {
       if (rest_length > max_payload_length) {
         byte[] fragmented_payload = new byte[actual_max_payload_length];
-        System.arraycopy(
-          payload, srcPos, fragmented_payload, 0, actual_max_payload_length
-        );
+        System.arraycopy(payload, srcPos, fragmented_payload, 0, actual_max_payload_length);
 
         IpV4Packet.Builder b = packet.getBuilder();
         b.moreFragmentFlag(true)
-         .fragmentOffset((short)(srcPos / 8))
-         .payloadBuilder(
-            new UnknownPacket.Builder().rawData(fragmented_payload)
-          )
-         .correctChecksumAtBuild(true)
-         .correctLengthAtBuild(true);
+            .fragmentOffset((short) (srcPos / 8))
+            .payloadBuilder(new UnknownPacket.Builder().rawData(fragmented_payload))
+            .correctChecksumAtBuild(true)
+            .correctLengthAtBuild(true);
         list.add(b.build());
 
         rest_length -= fragmented_payload.length;
         srcPos += fragmented_payload.length;
-      }
-      else {
+      } else {
         byte[] fragmented_payload = new byte[rest_length];
-        System.arraycopy(
-          payload, srcPos, fragmented_payload, 0, rest_length
-        );
+        System.arraycopy(payload, srcPos, fragmented_payload, 0, rest_length);
 
         IpV4Packet.Builder b = packet.getBuilder();
         b.moreFragmentFlag(false)
-         .fragmentOffset((short)(srcPos / 8))
-         .payloadBuilder(
-            new UnknownPacket.Builder().rawData(fragmented_payload)
-          )
-         .correctChecksumAtBuild(true)
-         .correctLengthAtBuild(true);
+            .fragmentOffset((short) (srcPos / 8))
+            .payloadBuilder(new UnknownPacket.Builder().rawData(fragmented_payload))
+            .correctChecksumAtBuild(true)
+            .correctLengthAtBuild(true);
         list.add(b.build());
 
         break;
@@ -95,7 +88,6 @@ public final class IpV4Helper {
   }
 
   /**
-   *
    * @param list list
    * @return a defragmented packet.
    */
@@ -103,10 +95,10 @@ public final class IpV4Helper {
     Collections.sort(list, comparator);
 
     IpV4Header lastPacketHeader = list.get(list.size() - 1).getHeader();
-    int payloadLength
-      = lastPacketHeader.getFragmentOffset() * 8
-          + lastPacketHeader.getTotalLengthAsInt()
-          - lastPacketHeader.getIhl() * 4;
+    int payloadLength =
+        lastPacketHeader.getFragmentOffset() * 8
+            + lastPacketHeader.getTotalLengthAsInt()
+            - lastPacketHeader.getIhl() * 4;
     if (payloadLength <= 0) {
       throw new IllegalArgumentException("Can't defragment: " + list);
     }
@@ -114,11 +106,9 @@ public final class IpV4Helper {
     final byte[] defragmentedPayload = new byte[payloadLength];
     int destPos = 0;
     try {
-      for (IpV4Packet p: list) {
+      for (IpV4Packet p : list) {
         byte[] rawPayload = p.getPayload().getRawData();
-        System.arraycopy(
-          rawPayload, 0, defragmentedPayload, destPos, rawPayload.length
-        );
+        System.arraycopy(rawPayload, 0, defragmentedPayload, destPos, rawPayload.length);
         destPos += rawPayload.length;
       }
     } catch (NullPointerException e) {
@@ -132,20 +122,17 @@ public final class IpV4Helper {
     IpV4Packet.Builder b = list.get(0).getBuilder();
 
     b.moreFragmentFlag(false)
-     .fragmentOffset((short)0)
-     .payloadBuilder(
-        new SimpleBuilder(
-          PacketFactories.getFactory(Packet.class, IpNumber.class)
-            .newInstance(
-               defragmentedPayload,
-               0,
-               defragmentedPayload.length,
-               list.get(0).getHeader().getProtocol()
-             )
-        )
-      )
-     .correctChecksumAtBuild(true)
-     .correctLengthAtBuild(true);
+        .fragmentOffset((short) 0)
+        .payloadBuilder(
+            new SimpleBuilder(
+                PacketFactories.getFactory(Packet.class, IpNumber.class)
+                    .newInstance(
+                        defragmentedPayload,
+                        0,
+                        defragmentedPayload.length,
+                        list.get(0).getHeader().getProtocol())))
+        .correctChecksumAtBuild(true)
+        .correctLengthAtBuild(true);
 
     return b.build();
   }
@@ -154,10 +141,7 @@ public final class IpV4Helper {
 
     @Override
     public int compare(IpV4Packet p1, IpV4Packet p2) {
-      return p1.getHeader().getFragmentOffset()
-               - p2.getHeader().getFragmentOffset();
+      return p1.getHeader().getFragmentOffset() - p2.getHeader().getFragmentOffset();
     }
-
   }
-
 }

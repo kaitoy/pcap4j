@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
 import org.pcap4j.packet.namednumber.Dot11ChannelUsageMode;
 import org.pcap4j.packet.namednumber.Dot11InformationElementId;
 import org.pcap4j.util.ByteArrays;
@@ -27,8 +26,8 @@ import org.pcap4j.util.ByteArrays;
  * Element ID: 97
  * </pre>
  *
- * The Channel Usage element defines the channel usage information for noninfrastructure networks
- * or an off channel TDLS direct link.
+ * The Channel Usage element defines the channel usage information for noninfrastructure networks or
+ * an off channel TDLS direct link.
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
@@ -36,18 +35,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot11ChannelUsageElement extends Dot11InformationElement {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -6935079967608347323L;
 
   private final Dot11ChannelUsageMode usageMode;
   private final List<Dot11ChannelEntry> channelEntries;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -55,9 +51,8 @@ public final class Dot11ChannelUsageElement extends Dot11InformationElement {
    * @return a new Dot11ChannelUsageElement object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot11ChannelUsageElement newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot11ChannelUsageElement newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot11ChannelUsageElement(rawData, offset, length);
   }
@@ -68,21 +63,17 @@ public final class Dot11ChannelUsageElement extends Dot11InformationElement {
    * @param length length
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  private Dot11ChannelUsageElement(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot11ChannelUsageElement(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     super(rawData, offset, length, Dot11InformationElementId.CHANNEL_USAGE);
 
     int infoLen = getLengthAsInt();
     if (infoLen < 1) {
       throw new IllegalRawDataException(
-              "The length must be more than 0 but is actually: " + infoLen
-            );
+          "The length must be more than 0 but is actually: " + infoLen);
     }
-    if (((infoLen -1) % 2) != 0) {
-      throw new IllegalRawDataException(
-              "The ((length - 1) % 2) must be 0. length: " + infoLen
-            );
+    if (((infoLen - 1) % 2) != 0) {
+      throw new IllegalRawDataException("The ((length - 1) % 2) must be 0. length: " + infoLen);
     }
 
     this.usageMode = Dot11ChannelUsageMode.getInstance(rawData[offset + 2]);
@@ -94,35 +85,28 @@ public final class Dot11ChannelUsageElement extends Dot11InformationElement {
     }
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   private Dot11ChannelUsageElement(Builder builder) {
     super(builder);
 
     if (builder.channelEntries.size() > 127) {
-      throw new IllegalArgumentException(
-              "Too long channelEntries: " + builder.channelEntries
-            );
+      throw new IllegalArgumentException("Too long channelEntries: " + builder.channelEntries);
     }
 
     this.usageMode = builder.usageMode;
     if (builder.channelEntries == null) {
       this.channelEntries = Collections.emptyList();
-    }
-    else {
+    } else {
       this.channelEntries = new ArrayList<Dot11ChannelEntry>(builder.channelEntries);
     }
   }
 
-  /**
-   * @return usageMode
-   */
-  public Dot11ChannelUsageMode getUsageMode() { return usageMode; }
+  /** @return usageMode */
+  public Dot11ChannelUsageMode getUsageMode() {
+    return usageMode;
+  }
 
-  /**
-   * @return channelEntries
-   */
+  /** @return channelEntries */
   public ArrayList<Dot11ChannelEntry> getChannelEntries() {
     return new ArrayList<Dot11ChannelEntry>(channelEntries);
   }
@@ -149,10 +133,10 @@ public final class Dot11ChannelUsageElement extends Dot11InformationElement {
     return rawData;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public int hashCode() {
@@ -165,13 +149,10 @@ public final class Dot11ChannelUsageElement extends Dot11InformationElement {
 
   @Override
   public boolean equals(Object obj) {
-    if (!super.equals(obj))
-      return false;
+    if (!super.equals(obj)) return false;
     Dot11ChannelUsageElement other = (Dot11ChannelUsageElement) obj;
-    if (!channelEntries.equals(other.channelEntries))
-      return false;
-    if (!usageMode.equals(other.usageMode))
-      return false;
+    if (!channelEntries.equals(other.channelEntries)) return false;
+    if (!usageMode.equals(other.usageMode)) return false;
     return true;
   }
 
@@ -188,22 +169,12 @@ public final class Dot11ChannelUsageElement extends Dot11InformationElement {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Channel Usage:")
-      .append(ls);
-    sb.append(indent).append("  Element ID: ")
-      .append(getElementId())
-      .append(ls);
-    sb.append(indent).append("  Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes")
-      .append(ls);
-    sb.append(indent).append("  Usage Mode: ")
-      .append(usageMode)
-      .append(ls);
-    for (Dot11ChannelEntry ce: channelEntries) {
-      sb.append(indent).append("  Channel Entry: ")
-        .append(ce)
-        .append(ls);
+    sb.append(indent).append("Channel Usage:").append(ls);
+    sb.append(indent).append("  Element ID: ").append(getElementId()).append(ls);
+    sb.append(indent).append("  Length: ").append(getLengthAsInt()).append(" bytes").append(ls);
+    sb.append(indent).append("  Usage Mode: ").append(usageMode).append(ls);
+    for (Dot11ChannelEntry ce : channelEntries) {
+      sb.append(indent).append("  Channel Entry: ").append(ce).append(ls);
     }
 
     return sb.toString();
@@ -218,20 +189,13 @@ public final class Dot11ChannelUsageElement extends Dot11InformationElement {
     private Dot11ChannelUsageMode usageMode;
     private List<Dot11ChannelEntry> channelEntries;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {
       elementId(
-        Dot11InformationElementId.getInstance(
-          Dot11InformationElementId.CHANNEL_USAGE.value()
-        )
-      );
+          Dot11InformationElementId.getInstance(Dot11InformationElementId.CHANNEL_USAGE.value()));
     }
 
-    /**
-     * @param elem a Dot11ChannelUsageElement object.
-     */
+    /** @param elem a Dot11ChannelUsageElement object. */
     private Builder(Dot11ChannelUsageElement elem) {
       super(elem);
       this.usageMode = elem.usageMode;
@@ -278,7 +242,5 @@ public final class Dot11ChannelUsageElement extends Dot11InformationElement {
       }
       return new Dot11ChannelUsageElement(this);
     }
-
   }
-
 }

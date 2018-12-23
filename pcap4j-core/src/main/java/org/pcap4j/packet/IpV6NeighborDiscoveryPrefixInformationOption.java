@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.net.Inet6Address;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
@@ -18,7 +19,7 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.15
  */
 public final class IpV6NeighborDiscoveryPrefixInformationOption
-implements IpV6NeighborDiscoveryOption {
+    implements IpV6NeighborDiscoveryOption {
 
   /*
    *   0                   1                   2                   3
@@ -43,48 +44,30 @@ implements IpV6NeighborDiscoveryOption {
    *   Type=3
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1397830548673996516L;
 
-  private static final int TYPE_OFFSET
-    = 0;
-  private static final int TYPE_SIZE
-    = BYTE_SIZE_IN_BYTES;
-  private static final int LENGTH_OFFSET
-    = TYPE_OFFSET + TYPE_SIZE;
-  private static final int LENGTH_SIZE
-    = BYTE_SIZE_IN_BYTES;
-  private static final int PREFIX_LENGTH_OFFSET
-    = LENGTH_OFFSET + LENGTH_SIZE;
-  private static final int PREFIX_LENGTH_SIZE
-    = BYTE_SIZE_IN_BYTES;
-  private static final int L_A_RESERVED1_OFFSET
-    = PREFIX_LENGTH_OFFSET + PREFIX_LENGTH_SIZE;
-  private static final int L_A_RESERVED1_SIZE
-    = BYTE_SIZE_IN_BYTES;
-  private static final int VALID_LIFETIME_OFFSET
-    = L_A_RESERVED1_OFFSET + L_A_RESERVED1_SIZE;
-  private static final int VALID_LIFETIME_SIZE
-    = INT_SIZE_IN_BYTES;
-  private static final int PREFERRED_LIFETIME_OFFSET
-    = VALID_LIFETIME_OFFSET + VALID_LIFETIME_SIZE;
-  private static final int PREFERRED_LIFETIME_SIZE
-    = INT_SIZE_IN_BYTES;
-  private static final int RESERVED2_OFFSET
-    = PREFERRED_LIFETIME_OFFSET + PREFERRED_LIFETIME_SIZE;
-  private static final int RESERVED2_SIZE
-    = INT_SIZE_IN_BYTES;
-  private static final int PREFIX_OFFSET
-    = RESERVED2_OFFSET + RESERVED2_SIZE;
-  private static final int PREFIX_SIZE
-    = INET6_ADDRESS_SIZE_IN_BYTES;
-  private static final int IPV6_NEIGHBOR_DISCOVERY_PREFIX_INFORMATION_OPTION_SIZE
-    = PREFIX_OFFSET + PREFIX_SIZE;
+  private static final int TYPE_OFFSET = 0;
+  private static final int TYPE_SIZE = BYTE_SIZE_IN_BYTES;
+  private static final int LENGTH_OFFSET = TYPE_OFFSET + TYPE_SIZE;
+  private static final int LENGTH_SIZE = BYTE_SIZE_IN_BYTES;
+  private static final int PREFIX_LENGTH_OFFSET = LENGTH_OFFSET + LENGTH_SIZE;
+  private static final int PREFIX_LENGTH_SIZE = BYTE_SIZE_IN_BYTES;
+  private static final int L_A_RESERVED1_OFFSET = PREFIX_LENGTH_OFFSET + PREFIX_LENGTH_SIZE;
+  private static final int L_A_RESERVED1_SIZE = BYTE_SIZE_IN_BYTES;
+  private static final int VALID_LIFETIME_OFFSET = L_A_RESERVED1_OFFSET + L_A_RESERVED1_SIZE;
+  private static final int VALID_LIFETIME_SIZE = INT_SIZE_IN_BYTES;
+  private static final int PREFERRED_LIFETIME_OFFSET = VALID_LIFETIME_OFFSET + VALID_LIFETIME_SIZE;
+  private static final int PREFERRED_LIFETIME_SIZE = INT_SIZE_IN_BYTES;
+  private static final int RESERVED2_OFFSET = PREFERRED_LIFETIME_OFFSET + PREFERRED_LIFETIME_SIZE;
+  private static final int RESERVED2_SIZE = INT_SIZE_IN_BYTES;
+  private static final int PREFIX_OFFSET = RESERVED2_OFFSET + RESERVED2_SIZE;
+  private static final int PREFIX_SIZE = INET6_ADDRESS_SIZE_IN_BYTES;
+  private static final int IPV6_NEIGHBOR_DISCOVERY_PREFIX_INFORMATION_OPTION_SIZE =
+      PREFIX_OFFSET + PREFIX_SIZE;
 
-  private final IpV6NeighborDiscoveryOptionType type
-    = IpV6NeighborDiscoveryOptionType.PREFIX_INFORMATION;
+  private final IpV6NeighborDiscoveryOptionType type =
+      IpV6NeighborDiscoveryOptionType.PREFIX_INFORMATION;
   private final byte length;
   private final byte prefixLength;
   private final boolean onLinkFlag; // L field
@@ -96,9 +79,8 @@ implements IpV6NeighborDiscoveryOption {
   private final Inet6Address prefix;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -107,51 +89,47 @@ implements IpV6NeighborDiscoveryOption {
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV6NeighborDiscoveryPrefixInformationOption newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+      byte[] rawData, int offset, int length) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new IpV6NeighborDiscoveryPrefixInformationOption(rawData, offset, length);
   }
 
-  private IpV6NeighborDiscoveryPrefixInformationOption(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private IpV6NeighborDiscoveryPrefixInformationOption(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if (length < IPV6_NEIGHBOR_DISCOVERY_PREFIX_INFORMATION_OPTION_SIZE) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 31. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (rawData[TYPE_OFFSET + offset] != getType().value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The type must be: ")
-        .append(getType().valueAsString())
-        .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(getType().valueAsString())
+          .append(" rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.length = rawData[LENGTH_OFFSET + offset];
     int lengthFieldAsInt = getLengthAsInt();
     if (lengthFieldAsInt * 8 != IPV6_NEIGHBOR_DISCOVERY_PREFIX_INFORMATION_OPTION_SIZE) {
-      throw new IllegalRawDataException(
-                  "Invalid value of length field: " + lengthFieldAsInt
-                );
+      throw new IllegalRawDataException("Invalid value of length field: " + lengthFieldAsInt);
     }
 
     this.prefixLength = ByteArrays.getByte(rawData, PREFIX_LENGTH_OFFSET + offset);
     byte tmp = ByteArrays.getByte(rawData, L_A_RESERVED1_OFFSET + offset);
     this.onLinkFlag = (tmp & 0x80) != 0;
     this.addressConfigurationFlag = (tmp & 0x40) != 0;
-    this.reserved1 = (byte)(0x3F & tmp);
+    this.reserved1 = (byte) (0x3F & tmp);
     this.validLifetime = ByteArrays.getInt(rawData, VALID_LIFETIME_OFFSET + offset);
     this.preferredLifetime = ByteArrays.getInt(rawData, PREFERRED_LIFETIME_OFFSET + offset);
     this.reserved2 = ByteArrays.getInt(rawData, RESERVED2_OFFSET + offset);
@@ -159,19 +137,13 @@ implements IpV6NeighborDiscoveryOption {
   }
 
   private IpV6NeighborDiscoveryPrefixInformationOption(Builder builder) {
-    if (
-         builder == null
-      || builder.prefix == null
-    ) {
+    if (builder == null || builder.prefix == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.prefix: ").append(builder.prefix);
+      sb.append("builder: ").append(builder).append(" builder.prefix: ").append(builder.prefix);
       throw new NullPointerException(sb.toString());
     }
     if ((builder.reserved1 & 0xC0) != 0) {
-      throw new IllegalArgumentException(
-              "Invalid reserved1: " + builder.reserved1
-            );
+      throw new IllegalArgumentException("Invalid reserved1: " + builder.reserved1);
     }
 
     this.prefixLength = builder.prefixLength;
@@ -184,9 +156,8 @@ implements IpV6NeighborDiscoveryOption {
     this.prefix = builder.prefix;
 
     if (builder.correctLengthAtBuild) {
-      this.length = (byte)(length() / 8);
-    }
-    else {
+      this.length = (byte) (length() / 8);
+    } else {
       this.length = builder.length;
     }
   }
@@ -196,101 +167,67 @@ implements IpV6NeighborDiscoveryOption {
     return type;
   }
 
-  /**
-   *
-   * @return length
-   */
-  public byte getLength() { return length; }
+  /** @return length */
+  public byte getLength() {
+    return length;
+  }
 
-  /**
-   *
-   * @return length
-   */
-  public int getLengthAsInt() { return 0xFF & length; }
+  /** @return length */
+  public int getLengthAsInt() {
+    return 0xFF & length;
+  }
 
-  /**
-   *
-   * @return prefixLength
-   */
+  /** @return prefixLength */
   public byte getPrefixLength() {
     return prefixLength;
   }
 
-  /**
-   *
-   * @return prefixLength
-   */
+  /** @return prefixLength */
   public int getPrefixLengthAsInt() {
     return 0xFF & prefixLength;
   }
 
-  /**
-   *
-   * @return onLinkFlag
-   */
+  /** @return onLinkFlag */
   public boolean getOnLinkFlag() {
     return onLinkFlag;
   }
 
-  /**
-   *
-   * @return addressConfigurationFlag
-   */
+  /** @return addressConfigurationFlag */
   public boolean getAddressConfigurationFlag() {
     return addressConfigurationFlag;
   }
 
-  /**
-   *
-   * @return reserved1
-   */
+  /** @return reserved1 */
   public byte getReserved1() {
     return reserved1;
   }
 
-  /**
-   *
-   * @return validLifetime
-   */
+  /** @return validLifetime */
   public int getValidLifetime() {
     return validLifetime;
   }
 
-  /**
-   * @return validLifetime
-   */
+  /** @return validLifetime */
   public long getValidLifetimeAsLong() {
     return validLifetime & 0xFFFFFFFFL;
   }
 
-  /**
-   *
-   * @return preferredLifetime
-   */
+  /** @return preferredLifetime */
   public int getPreferredLifetime() {
     return preferredLifetime;
   }
 
-  /**
-   *
-   * @return preferredLifetime
-   */
+  /** @return preferredLifetime */
   public long getPreferredLifetimeAsLong() {
     return preferredLifetime & 0xFFFFFFFFL;
   }
 
-  /**
-   *
-   * @return reserved2
-   */
+  /** @return reserved2 */
   public int getReserved2() {
     return reserved2;
   }
 
-  /**
-   *
-   * @return prefix
-   */
+  /** @return prefix */
   public Inet6Address getPrefix() {
     return prefix;
   }
@@ -306,7 +243,7 @@ implements IpV6NeighborDiscoveryOption {
     rawData[TYPE_OFFSET] = getType().value();
     rawData[LENGTH_OFFSET] = length;
     rawData[PREFIX_LENGTH_OFFSET] = prefixLength;
-    rawData[L_A_RESERVED1_OFFSET] = (byte)(0x3F & reserved1);
+    rawData[L_A_RESERVED1_OFFSET] = (byte) (0x3F & reserved1);
     if (onLinkFlag) {
       rawData[L_A_RESERVED1_OFFSET] |= 1 << 7;
     }
@@ -314,28 +251,24 @@ implements IpV6NeighborDiscoveryOption {
       rawData[L_A_RESERVED1_OFFSET] |= 1 << 6;
     }
     System.arraycopy(
-      ByteArrays.toByteArray(validLifetime), 0,
-      rawData, VALID_LIFETIME_OFFSET, VALID_LIFETIME_SIZE
-    );
+        ByteArrays.toByteArray(validLifetime),
+        0,
+        rawData,
+        VALID_LIFETIME_OFFSET,
+        VALID_LIFETIME_SIZE);
     System.arraycopy(
-      ByteArrays.toByteArray(preferredLifetime), 0,
-      rawData, PREFERRED_LIFETIME_OFFSET, PREFERRED_LIFETIME_SIZE
-    );
+        ByteArrays.toByteArray(preferredLifetime),
+        0,
+        rawData,
+        PREFERRED_LIFETIME_OFFSET,
+        PREFERRED_LIFETIME_SIZE);
     System.arraycopy(
-      ByteArrays.toByteArray(reserved2), 0,
-      rawData, RESERVED2_OFFSET, RESERVED2_SIZE
-    );
-    System.arraycopy(
-      ByteArrays.toByteArray(prefix), 0,
-      rawData, PREFIX_OFFSET, PREFIX_SIZE
-    );
+        ByteArrays.toByteArray(reserved2), 0, rawData, RESERVED2_OFFSET, RESERVED2_SIZE);
+    System.arraycopy(ByteArrays.toByteArray(prefix), 0, rawData, PREFIX_OFFSET, PREFIX_SIZE);
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -343,48 +276,40 @@ implements IpV6NeighborDiscoveryOption {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Type: ")
-      .append(getType());
-    sb.append("] [Length: ")
-      .append(getLengthAsInt())
-      .append(" (").append(getLengthAsInt() * 8);
-    sb.append(" bytes)] [Prefix Length: ")
-      .append(getPrefixLengthAsInt());
-    sb.append("] [on-link flag: ")
-      .append(getOnLinkFlag());
-    sb.append("] [address-configuration flag: ")
-      .append(getAddressConfigurationFlag());
-    sb.append("] [Reserved1: ")
-      .append(getReserved1());
-    sb.append("] [Valid Lifetime: ")
-      .append(getValidLifetimeAsLong());
-    sb.append("] [Preferred Lifetime: ")
-      .append(getPreferredLifetimeAsLong());
-    sb.append("] [Reserved2: ")
-      .append(getReserved2());
-    sb.append("] [Prefix: ")
-      .append(getPrefix());
+    sb.append("[Type: ").append(getType());
+    sb.append("] [Length: ").append(getLengthAsInt()).append(" (").append(getLengthAsInt() * 8);
+    sb.append(" bytes)] [Prefix Length: ").append(getPrefixLengthAsInt());
+    sb.append("] [on-link flag: ").append(getOnLinkFlag());
+    sb.append("] [address-configuration flag: ").append(getAddressConfigurationFlag());
+    sb.append("] [Reserved1: ").append(getReserved1());
+    sb.append("] [Valid Lifetime: ").append(getValidLifetimeAsLong());
+    sb.append("] [Preferred Lifetime: ").append(getPreferredLifetimeAsLong());
+    sb.append("] [Reserved2: ").append(getReserved2());
+    sb.append("] [Prefix: ").append(getPrefix());
     sb.append("]");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    IpV6NeighborDiscoveryPrefixInformationOption other
-      = (IpV6NeighborDiscoveryPrefixInformationOption)obj;
-    return
-         prefix.equals(other.prefix)
-      && prefixLength == other.prefixLength
-      && validLifetime == other.validLifetime
-      && preferredLifetime == other.preferredLifetime
-      && onLinkFlag == other.onLinkFlag
-      && addressConfigurationFlag == other.addressConfigurationFlag
-      && reserved1 == other.reserved1
-      && reserved2 == other.reserved2
-      && length == other.length;
+    IpV6NeighborDiscoveryPrefixInformationOption other =
+        (IpV6NeighborDiscoveryPrefixInformationOption) obj;
+    return prefix.equals(other.prefix)
+        && prefixLength == other.prefixLength
+        && validLifetime == other.validLifetime
+        && preferredLifetime == other.preferredLifetime
+        && onLinkFlag == other.onLinkFlag
+        && addressConfigurationFlag == other.addressConfigurationFlag
+        && reserved1 == other.reserved1
+        && reserved2 == other.reserved2
+        && length == other.length;
   }
 
   @Override
@@ -407,7 +332,7 @@ implements IpV6NeighborDiscoveryOption {
    * @since pcap4j 0.9.15
    */
   public static final class Builder
-  implements LengthBuilder<IpV6NeighborDiscoveryPrefixInformationOption> {
+      implements LengthBuilder<IpV6NeighborDiscoveryPrefixInformationOption> {
 
     private byte length;
     private byte prefixLength;
@@ -420,9 +345,7 @@ implements IpV6NeighborDiscoveryOption {
     private Inet6Address prefix;
     private boolean correctLengthAtBuild;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IpV6NeighborDiscoveryPrefixInformationOption option) {
@@ -438,7 +361,6 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     /**
-     *
      * @param length length
      * @return this Builder object for method chaining.
      */
@@ -448,7 +370,6 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     /**
-     *
      * @param prefixLength prefixLength
      * @return this Builder object for method chaining.
      */
@@ -458,7 +379,6 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     /**
-     *
      * @param onLinkFlag onLinkFlag
      * @return this Builder object for method chaining.
      */
@@ -468,7 +388,6 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     /**
-     *
      * @param addressConfigurationFlag addressConfigurationFlag
      * @return this Builder object for method chaining.
      */
@@ -478,7 +397,6 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     /**
-     *
      * @param reserved1 reserved1
      * @return this Builder object for method chaining.
      */
@@ -488,7 +406,6 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     /**
-     *
      * @param validLifetime validLifetime
      * @return this Builder object for method chaining.
      */
@@ -498,7 +415,6 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     /**
-     *
      * @param preferredLifetime preferredLifetime
      * @return this Builder object for method chaining.
      */
@@ -508,7 +424,6 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     /**
-     *
      * @param reserved2 reserved2
      * @return this Builder object for method chaining.
      */
@@ -518,7 +433,6 @@ implements IpV6NeighborDiscoveryOption {
     }
 
     /**
-     *
      * @param prefix prefix
      * @return this Builder object for method chaining.
      */
@@ -537,7 +451,5 @@ implements IpV6NeighborDiscoveryOption {
     public IpV6NeighborDiscoveryPrefixInformationOption build() {
       return new IpV6NeighborDiscoveryPrefixInformationOption(this);
     }
-
   }
-
 }

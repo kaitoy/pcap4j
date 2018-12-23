@@ -9,7 +9,6 @@ package org.pcap4j.packet;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.namednumber.Dot11InformationElementId;
 import org.pcap4j.util.ByteArrays;
 
@@ -24,8 +23,8 @@ import org.pcap4j.util.ByteArrays;
  * Element ID: 84
  * </pre>
  *
- * The SSID List field is a list of SSID elements, each including the element ID,
- * length field and SSID information field for which the STA is requesting information.
+ * The SSID List field is a list of SSID elements, each including the element ID, length field and
+ * SSID information field for which the STA is requesting information.
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
@@ -33,17 +32,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot11SsidListElement extends Dot11InformationElement {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 1424839847229135121L;
 
   private final List<Dot11SsidElement> ssidList;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -51,9 +47,8 @@ public final class Dot11SsidListElement extends Dot11InformationElement {
    * @return a new Dot11SsidListElement object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot11SsidListElement newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot11SsidListElement newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot11SsidListElement(rawData, offset, length);
   }
@@ -64,14 +59,13 @@ public final class Dot11SsidListElement extends Dot11InformationElement {
    * @param length length
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  private Dot11SsidListElement(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot11SsidListElement(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     super(rawData, offset, length, Dot11InformationElementId.SSID_LIST);
 
     int infoLen = getLengthAsInt();
     this.ssidList = new ArrayList<Dot11SsidElement>();
-    for (int i = offset + 2; infoLen > 0;) {
+    for (int i = offset + 2; infoLen > 0; ) {
       Dot11SsidElement ssid = Dot11SsidElement.newInstance(rawData, i, infoLen);
       ssidList.add(ssid);
       int ssidLen = ssid.length();
@@ -80,17 +74,13 @@ public final class Dot11SsidListElement extends Dot11InformationElement {
     }
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   private Dot11SsidListElement(Builder builder) {
     super(builder);
     this.ssidList = new ArrayList<Dot11SsidElement>(builder.ssidList);
   }
 
-  /**
-   * @return ssidList
-   */
+  /** @return ssidList */
   public List<Dot11SsidElement> getSsidList() {
     return new ArrayList<Dot11SsidElement>(ssidList);
   }
@@ -98,7 +88,7 @@ public final class Dot11SsidListElement extends Dot11InformationElement {
   @Override
   public int length() {
     int len = 2;
-    for (Dot11SsidElement ssid: ssidList) {
+    for (Dot11SsidElement ssid : ssidList) {
       len += ssid.length();
     }
     return len;
@@ -110,7 +100,7 @@ public final class Dot11SsidListElement extends Dot11InformationElement {
     rawData[0] = getElementId().value();
     rawData[1] = getLength();
     int offset = 2;
-    for (Dot11SsidElement ssid: ssidList) {
+    for (Dot11SsidElement ssid : ssidList) {
       byte[] rawSsid = ssid.getRawData();
       System.arraycopy(rawSsid, 0, rawData, offset, rawSsid.length);
       offset += rawSsid.length;
@@ -118,10 +108,10 @@ public final class Dot11SsidListElement extends Dot11InformationElement {
     return rawData;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public int hashCode() {
@@ -133,11 +123,9 @@ public final class Dot11SsidListElement extends Dot11InformationElement {
 
   @Override
   public boolean equals(Object obj) {
-    if (!super.equals(obj))
-      return false;
+    if (!super.equals(obj)) return false;
     Dot11SsidListElement other = (Dot11SsidListElement) obj;
-    if (!ssidList.equals(other.ssidList))
-      return false;
+    if (!ssidList.equals(other.ssidList)) return false;
     return true;
   }
 
@@ -154,19 +142,11 @@ public final class Dot11SsidListElement extends Dot11InformationElement {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("SSID List:")
-      .append(ls);
-    sb.append(indent).append("  Element ID: ")
-      .append(getElementId())
-      .append(ls);
-    sb.append(indent).append("  Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes")
-      .append(ls);
-    for (Dot11SsidElement ssid: ssidList) {
-      sb.append(indent).append("  SSID: ")
-        .append(ssid.getSsid())
-        .append(ls);
+    sb.append(indent).append("SSID List:").append(ls);
+    sb.append(indent).append("  Element ID: ").append(getElementId()).append(ls);
+    sb.append(indent).append("  Length: ").append(getLengthAsInt()).append(" bytes").append(ls);
+    for (Dot11SsidElement ssid : ssidList) {
+      sb.append(indent).append("  SSID: ").append(ssid.getSsid()).append(ls);
     }
 
     return sb.toString();
@@ -176,25 +156,16 @@ public final class Dot11SsidListElement extends Dot11InformationElement {
    * @author Kaito Yamada
    * @since pcap4j 1.7.0
    */
-  public static final class
-  Builder extends Dot11InformationElement.Builder {
+  public static final class Builder extends Dot11InformationElement.Builder {
 
     private List<Dot11SsidElement> ssidList;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {
-      elementId(
-        Dot11InformationElementId.getInstance(
-          Dot11InformationElementId.SSID_LIST.value()
-        )
-      );
+      elementId(Dot11InformationElementId.getInstance(Dot11InformationElementId.SSID_LIST.value()));
     }
 
-    /**
-     * @param elem a Dot11SsidListElement object.
-     */
+    /** @param elem a Dot11SsidListElement object. */
     private Builder(Dot11SsidListElement elem) {
       super(elem);
       this.ssidList = elem.ssidList;
@@ -230,7 +201,7 @@ public final class Dot11SsidListElement extends Dot11InformationElement {
       }
 
       int len = 0;
-      for (Dot11SsidElement ssid: ssidList) {
+      for (Dot11SsidElement ssid : ssidList) {
         len += ssid.length();
       }
       if (len > 255) {
@@ -242,7 +213,5 @@ public final class Dot11SsidListElement extends Dot11InformationElement {
       }
       return new Dot11SsidListElement(this);
     }
-
   }
-
 }

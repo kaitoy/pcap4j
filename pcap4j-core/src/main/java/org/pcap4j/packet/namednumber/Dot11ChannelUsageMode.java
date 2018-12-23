@@ -17,28 +17,21 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 1.7.0
  */
-public final class Dot11ChannelUsageMode
-extends NamedNumber<Byte, Dot11ChannelUsageMode> {
+public final class Dot11ChannelUsageMode extends NamedNumber<Byte, Dot11ChannelUsageMode> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -8113989723106251697L;
 
-  /**
-   * Noninfrastructure IEEE 802.11 network: 0
-   */
-  public static final Dot11ChannelUsageMode NONINFRASTRUCTURE_DOT_11
-    = new Dot11ChannelUsageMode((byte)0, "Noninfrastructure IEEE 802.11 network");
+  /** Noninfrastructure IEEE 802.11 network: 0 */
+  public static final Dot11ChannelUsageMode NONINFRASTRUCTURE_DOT_11 =
+      new Dot11ChannelUsageMode((byte) 0, "Noninfrastructure IEEE 802.11 network");
 
-  /**
-   * Off-channel TDLS direct link: 1
-   */
-  public static final Dot11ChannelUsageMode OFF_CHANNEL_TDLS_DIRECT_LINK
-    = new Dot11ChannelUsageMode((byte)1, "Off-channel TDLS direct link");
+  /** Off-channel TDLS direct link: 1 */
+  public static final Dot11ChannelUsageMode OFF_CHANNEL_TDLS_DIRECT_LINK =
+      new Dot11ChannelUsageMode((byte) 1, "Off-channel TDLS direct link");
 
-  private static final Map<Byte, Dot11ChannelUsageMode> registry
-    = new HashMap<Byte, Dot11ChannelUsageMode>();
+  private static final Map<Byte, Dot11ChannelUsageMode> registry =
+      new HashMap<Byte, Dot11ChannelUsageMode>();
 
   static {
     registry.put(NONINFRASTRUCTURE_DOT_11.value(), NONINFRASTRUCTURE_DOT_11);
@@ -46,7 +39,6 @@ extends NamedNumber<Byte, Dot11ChannelUsageMode> {
   }
 
   /**
-   *
    * @param value value
    * @param name name
    */
@@ -55,21 +47,18 @@ extends NamedNumber<Byte, Dot11ChannelUsageMode> {
   }
 
   /**
-   *
    * @param value value
    * @return a Dot11ChannelUsageMode object.
    */
   public static Dot11ChannelUsageMode getInstance(Byte value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new Dot11ChannelUsageMode(value, "unknown");
     }
   }
 
   /**
-   *
    * @param number number
    * @return a Dot11ChannelUsageMode object.
    */
@@ -82,12 +71,9 @@ extends NamedNumber<Byte, Dot11ChannelUsageMode> {
     return value().compareTo(o.value());
   }
 
-  /**
-   *
-   */
+  /** */
   @Override
   public String valueAsString() {
     return String.valueOf(value() & 0xFF);
   }
-
 }

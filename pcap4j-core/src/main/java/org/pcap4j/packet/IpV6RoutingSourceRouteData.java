@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,18 +22,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -7972526977248222954L;
 
   private final int reserved;
   private final List<Inet6Address> addresses;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -40,52 +38,46 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
    * @return a new IpV6RoutingSourceRouteData object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IpV6RoutingSourceRouteData newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IpV6RoutingSourceRouteData newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new IpV6RoutingSourceRouteData(rawData, offset, length);
   }
 
-  private IpV6RoutingSourceRouteData(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private IpV6RoutingSourceRouteData(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if (length < 4) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("rawData length must be more than 3. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (((length - 4) % INET6_ADDRESS_SIZE_IN_BYTES) != 0) {
       StringBuilder sb = new StringBuilder(100);
-      sb.append("(length -4 ) % ").append(INET6_ADDRESS_SIZE_IN_BYTES)
-        .append(" must be 0. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+      sb.append("(length -4 ) % ")
+          .append(INET6_ADDRESS_SIZE_IN_BYTES)
+          .append(" must be 0. rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.reserved = ByteArrays.getInt(rawData, offset);
     this.addresses = new ArrayList<Inet6Address>();
 
-    for (
-      int i = INT_SIZE_IN_BYTES;
-      i < length;
-      i += INET6_ADDRESS_SIZE_IN_BYTES
-    ) {
+    for (int i = INT_SIZE_IN_BYTES; i < length; i += INET6_ADDRESS_SIZE_IN_BYTES) {
       addresses.add(ByteArrays.getInet6Address(rawData, i + offset));
     }
   }
 
   /**
-   *
    * @param reserved reserved
    * @param addresses addresses
    */
@@ -105,20 +97,12 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
   @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
-    System.arraycopy(
-      ByteArrays.toByteArray(reserved), 0, rawData, 0, INT_SIZE_IN_BYTES
-    );
+    System.arraycopy(ByteArrays.toByteArray(reserved), 0, rawData, 0, INT_SIZE_IN_BYTES);
 
     Iterator<Inet6Address> iter = addresses.iterator();
-    for (
-        int i = INT_SIZE_IN_BYTES;
-        i < rawData.length;
-        i += INET6_ADDRESS_SIZE_IN_BYTES
-      ) {
+    for (int i = INT_SIZE_IN_BYTES; i < rawData.length; i += INET6_ADDRESS_SIZE_IN_BYTES) {
       System.arraycopy(
-        ByteArrays.toByteArray(iter.next()), 0,
-        rawData, i, INET6_ADDRESS_SIZE_IN_BYTES
-      );
+          ByteArrays.toByteArray(iter.next()), 0, rawData, i, INET6_ADDRESS_SIZE_IN_BYTES);
     }
     return rawData;
   }
@@ -126,12 +110,9 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[reserved: ")
-      .append(reserved)
-      .append("] [addresses:");
-    for (Inet6Address addr: addresses) {
-      sb.append(" ")
-        .append(addr);
+    sb.append("[reserved: ").append(reserved).append("] [addresses:");
+    for (Inet6Address addr : addresses) {
+      sb.append(" ").append(addr);
     }
     sb.append("]");
     return sb.toString();
@@ -139,13 +120,15 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    IpV6RoutingSourceRouteData other = (IpV6RoutingSourceRouteData)obj;
-    return
-         reserved == other.reserved
-      && addresses.equals(other.addresses);
+    IpV6RoutingSourceRouteData other = (IpV6RoutingSourceRouteData) obj;
+    return reserved == other.reserved && addresses.equals(other.addresses);
   }
 
   @Override
@@ -155,5 +138,4 @@ public final class IpV6RoutingSourceRouteData implements IpV6RoutingData {
     result = 31 * result + addresses.hashCode();
     return result;
   }
-
 }

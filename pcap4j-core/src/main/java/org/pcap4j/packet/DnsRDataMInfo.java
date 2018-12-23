@@ -45,18 +45,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class DnsRDataMInfo implements DnsRData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3803968528398017544L;
 
   private final DnsDomainName rMailBx;
   private final DnsDomainName eMailBx;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -64,9 +61,8 @@ public final class DnsRDataMInfo implements DnsRData {
    * @return a new DnsRDataMInfo object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsRDataMInfo newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsRDataMInfo newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsRDataMInfo(rawData, offset, length);
   }
@@ -77,11 +73,11 @@ public final class DnsRDataMInfo implements DnsRData {
     if (rMailBxLen == length) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build eMailBx in DnsRDataMInfo. data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -89,15 +85,14 @@ public final class DnsRDataMInfo implements DnsRData {
   }
 
   private DnsRDataMInfo(Builder builder) {
-    if (
-         builder == null
-      || builder.rMailBx == null
-      || builder.eMailBx == null
-    ) {
+    if (builder == null || builder.rMailBx == null || builder.eMailBx == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.rMailBx: ").append(builder.rMailBx)
-        .append(" builder.eMailBx: ").append(builder.eMailBx);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.rMailBx: ")
+          .append(builder.rMailBx)
+          .append(" builder.eMailBx: ")
+          .append(builder.eMailBx);
       throw new NullPointerException(sb.toString());
     }
 
@@ -105,15 +100,15 @@ public final class DnsRDataMInfo implements DnsRData {
     this.eMailBx = builder.eMailBx;
   }
 
-  /**
-   * @return rMailBx
-   */
-  public DnsDomainName getRMailBx() { return rMailBx; }
+  /** @return rMailBx */
+  public DnsDomainName getRMailBx() {
+    return rMailBx;
+  }
 
-  /**
-   * @return eMailBx
-   */
-  public DnsDomainName getEMailBx() { return eMailBx; }
+  /** @return eMailBx */
+  public DnsDomainName getEMailBx() {
+    return eMailBx;
+  }
 
   @Override
   public int length() {
@@ -135,10 +130,10 @@ public final class DnsRDataMInfo implements DnsRData {
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -162,14 +157,17 @@ public final class DnsRDataMInfo implements DnsRData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("MINFO RDATA:")
-      .append(ls)
-      .append(indent).append("  RMAILBX: ")
-      .append(rMailBx.toString(headerRawData))
-      .append(ls)
-      .append(indent).append("  EMAILBX: ")
-      .append(eMailBx.toString(headerRawData))
-      .append(ls);
+    sb.append(indent)
+        .append("MINFO RDATA:")
+        .append(ls)
+        .append(indent)
+        .append("  RMAILBX: ")
+        .append(rMailBx.toString(headerRawData))
+        .append(ls)
+        .append(indent)
+        .append("  EMAILBX: ")
+        .append(eMailBx.toString(headerRawData))
+        .append(ls);
 
     return sb.toString();
   }
@@ -213,9 +211,7 @@ public final class DnsRDataMInfo implements DnsRData {
     private DnsDomainName rMailBx;
     private DnsDomainName eMailBx;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(DnsRDataMInfo obj) {
@@ -241,13 +237,9 @@ public final class DnsRDataMInfo implements DnsRData {
       return this;
     }
 
-    /**
-     * @return a new DnsRDataMInfo object.
-     */
+    /** @return a new DnsRDataMInfo object. */
     public DnsRDataMInfo build() {
       return new DnsRDataMInfo(this);
     }
-
   }
-
 }

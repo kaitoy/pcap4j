@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.nio.ByteOrder;
-
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
@@ -21,9 +20,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class RadiotapDataAMpduStatus implements RadiotapData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 5595179236319330489L;
 
   private static final int LENGTH = 8;
@@ -48,11 +45,9 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
   private final byte delimiterCrcValue;
   private final byte reserved;
 
-
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -60,24 +55,24 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
    * @return a new RadiotapAMpduStatus object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapDataAMpduStatus newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static RadiotapDataAMpduStatus newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new RadiotapDataAMpduStatus(rawData, offset, length);
   }
 
-  private RadiotapDataAMpduStatus(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataAMpduStatus(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapAMpduStatus (")
-        .append(LENGTH)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(LENGTH)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -128,142 +123,102 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
     this.reserved = builder.reserved;
   }
 
-  /**
-   * @return referenceNumber
-   */
+  /** @return referenceNumber */
   public int getReferenceNumber() {
     return referenceNumber;
   }
 
-  /**
-   * @return referenceNumber
-   */
+  /** @return referenceNumber */
   public long getReferenceNumberAsLong() {
     return referenceNumber & 0xFFFFFFFFL;
   }
 
-  /**
-   * @return true if the driver reports 0-length subframes; false otherwise.
-   */
+  /** @return true if the driver reports 0-length subframes; false otherwise. */
   public boolean getDriverReportsZeroLengthSubframes() {
     return driverReportsZeroLengthSubframes;
   }
 
-  /**
-   * @return true if this is a 0-length subframe; false otherwise.
-   */
+  /** @return true if this is a 0-length subframe; false otherwise. */
   public boolean isZeroLengthSubframe() {
     return zeroLengthSubframe;
   }
 
-  /**
-   * @return true if the last subframe is known; false otherwise.
-   */
+  /** @return true if the last subframe is known; false otherwise. */
   public boolean isLastSubframeKnown() {
     return lastSubframeKnown;
   }
 
-  /**
-   * @return true if this is the last subframe; false otherwise.
-   */
+  /** @return true if this is the last subframe; false otherwise. */
   public boolean isLastSubframe() {
     return lastSubframe;
   }
 
-  /**
-   * @return true if delimiter CRC error on this subframe; false otherwise.
-   */
+  /** @return true if delimiter CRC error on this subframe; false otherwise. */
   public boolean isDelimiterCrcError() {
     return delimiterCrcError;
   }
 
-  /**
-   * @return true if the delimiter CRC value is known; false otherwise.
-   */
+  /** @return true if the delimiter CRC value is known; false otherwise. */
   public boolean isDelimiterCrcValueKnown() {
     return delimiterCrcValueKnown;
   }
 
-  /**
-   * @return true if the 10th MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the 10th MSB of the flags field is set to 1; false otherwise. */
   public boolean getTenthMsbOfFlags() {
     return tenthMsbOfFlags;
   }
 
-  /**
-   * @return true if the 9th MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the 9th MSB of the flags field is set to 1; false otherwise. */
   public boolean getNinthMsbOfFlags() {
     return ninthMsbOfFlags;
   }
 
-  /**
-   * @return true if the 8th MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the 8th MSB of the flags field is set to 1; false otherwise. */
   public boolean getEighthMsbOfFlags() {
     return eighthMsbOfFlags;
   }
 
-  /**
-   * @return true if the 7th MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the 7th MSB of the flags field is set to 1; false otherwise. */
   public boolean getSeventhMsbOfFlags() {
     return seventhMsbOfFlags;
   }
 
-  /**
-   * @return true if the 6th MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the 6th MSB of the flags field is set to 1; false otherwise. */
   public boolean getSixthMsbOfFlags() {
     return sixthMsbOfFlags;
   }
 
-  /**
-   * @return true if the 5th MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the 5th MSB of the flags field is set to 1; false otherwise. */
   public boolean getFifthMsbOfFlags() {
     return fifthMsbOfFlags;
   }
 
-  /**
-   * @return true if the 4th MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the 4th MSB of the flags field is set to 1; false otherwise. */
   public boolean getFourthMsbOfFlags() {
     return fourthMsbOfFlags;
   }
 
-  /**
-   * @return true if the 3rd MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the 3rd MSB of the flags field is set to 1; false otherwise. */
   public boolean getThirdMsbOfFlags() {
     return thirdMsbOfFlags;
   }
 
-  /**
-   * @return true if the 2nd MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the 2nd MSB of the flags field is set to 1; false otherwise. */
   public boolean getSecondMsbOfFlags() {
     return secondMsbOfFlags;
   }
 
-  /**
-   * @return true if the MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the MSB of the flags field is set to 1; false otherwise. */
   public boolean getMsbOfFlags() {
     return msbOfFlags;
   }
 
-  /**
-   * @return delimiterCrcValue
-   */
+  /** @return delimiterCrcValue */
   public byte getDelimiterCrcValue() {
     return delimiterCrcValue;
   }
 
-  /**
-   * @return reserved
-   */
+  /** @return reserved */
   public byte getReserved() {
     return reserved;
   }
@@ -278,35 +233,65 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
     byte[] data = new byte[LENGTH];
 
     System.arraycopy(
-      ByteArrays.toByteArray(referenceNumber, ByteOrder.LITTLE_ENDIAN), 0,
-      data, 0, 4
-    );
-    if (driverReportsZeroLengthSubframes) { data[4] |= 0x01; }
-    if (zeroLengthSubframe) { data[4] |= 0x02; }
-    if (lastSubframeKnown) { data[4] |= 0x04; }
-    if (lastSubframe) { data[4] |= 0x08; }
-    if (delimiterCrcError) { data[4] |= 0x10; }
-    if (delimiterCrcValueKnown) { data[4] |= 0x20; }
-    if (tenthMsbOfFlags) { data[4] |= 0x40; }
-    if (ninthMsbOfFlags) { data[4] |= 0x80; }
-    if (eighthMsbOfFlags) { data[5] |= 0x01; }
-    if (seventhMsbOfFlags) { data[5] |= 0x02; }
-    if (sixthMsbOfFlags) { data[5] |= 0x04; }
-    if (fifthMsbOfFlags) { data[5] |= 0x08; }
-    if (fourthMsbOfFlags) { data[5] |= 0x10; }
-    if (thirdMsbOfFlags) { data[5] |= 0x20; }
-    if (secondMsbOfFlags) { data[5] |= 0x40; }
-    if (msbOfFlags) { data[5] |= 0x80; }
+        ByteArrays.toByteArray(referenceNumber, ByteOrder.LITTLE_ENDIAN), 0, data, 0, 4);
+    if (driverReportsZeroLengthSubframes) {
+      data[4] |= 0x01;
+    }
+    if (zeroLengthSubframe) {
+      data[4] |= 0x02;
+    }
+    if (lastSubframeKnown) {
+      data[4] |= 0x04;
+    }
+    if (lastSubframe) {
+      data[4] |= 0x08;
+    }
+    if (delimiterCrcError) {
+      data[4] |= 0x10;
+    }
+    if (delimiterCrcValueKnown) {
+      data[4] |= 0x20;
+    }
+    if (tenthMsbOfFlags) {
+      data[4] |= 0x40;
+    }
+    if (ninthMsbOfFlags) {
+      data[4] |= 0x80;
+    }
+    if (eighthMsbOfFlags) {
+      data[5] |= 0x01;
+    }
+    if (seventhMsbOfFlags) {
+      data[5] |= 0x02;
+    }
+    if (sixthMsbOfFlags) {
+      data[5] |= 0x04;
+    }
+    if (fifthMsbOfFlags) {
+      data[5] |= 0x08;
+    }
+    if (fourthMsbOfFlags) {
+      data[5] |= 0x10;
+    }
+    if (thirdMsbOfFlags) {
+      data[5] |= 0x20;
+    }
+    if (secondMsbOfFlags) {
+      data[5] |= 0x40;
+    }
+    if (msbOfFlags) {
+      data[5] |= 0x80;
+    }
     data[6] = delimiterCrcValue;
     data[7] = reserved;
 
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -318,65 +303,85 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("A-MPDU status: ")
-      .append(ls)
-      .append(indent).append("  reference number: ")
-      .append(getReferenceNumberAsLong())
-      .append(ls)
-      .append(indent).append("  driver reports 0-length subframes: ")
-      .append(driverReportsZeroLengthSubframes)
-      .append(ls)
-      .append(indent).append("  0-length subframe: ")
-      .append(zeroLengthSubframe)
-      .append(ls)
-      .append(indent).append("  last subframe is known: ")
-      .append(lastSubframeKnown)
-      .append(ls)
-      .append(indent).append("  last subframe: ")
-      .append(lastSubframe)
-      .append(ls)
-      .append(indent).append("  delimiter CRC error: ")
-      .append(delimiterCrcError)
-      .append(ls)
-      .append(indent).append("  delimiter CRC value is known: ")
-      .append(delimiterCrcValueKnown)
-      .append(ls)
-      .append(indent).append("  10th MSB of flags: ")
-      .append(tenthMsbOfFlags)
-      .append(ls)
-      .append(indent).append("  9th MSB of flags: ")
-      .append(ninthMsbOfFlags)
-      .append(ls)
-      .append(indent).append("  8th MSB of flags: ")
-      .append(eighthMsbOfFlags)
-      .append(ls)
-      .append(indent).append("  7th MSB of flags: ")
-      .append(seventhMsbOfFlags)
-      .append(ls)
-      .append(indent).append("  6th MSB of flags: ")
-      .append(sixthMsbOfFlags)
-      .append(ls)
-      .append(indent).append("  5th MSB of flags: ")
-      .append(fifthMsbOfFlags)
-      .append(ls)
-      .append(indent).append("  4th MSB of flags: ")
-      .append(fourthMsbOfFlags)
-      .append(ls)
-      .append(indent).append("  3rd MSB of flags: ")
-      .append(thirdMsbOfFlags)
-      .append(ls)
-      .append(indent).append("  2nd MSB of flags: ")
-      .append(secondMsbOfFlags)
-      .append(ls)
-      .append(indent).append("  MSB of flags: ")
-      .append(msbOfFlags)
-      .append(ls)
-      .append(indent).append("  delimiter CRC value: 0x")
-      .append(ByteArrays.toHexString(delimiterCrcValue, ""))
-      .append(ls)
-      .append(indent).append("  reserved: 0x")
-      .append(ByteArrays.toHexString(reserved, ""))
-      .append(ls);
+    sb.append(indent)
+        .append("A-MPDU status: ")
+        .append(ls)
+        .append(indent)
+        .append("  reference number: ")
+        .append(getReferenceNumberAsLong())
+        .append(ls)
+        .append(indent)
+        .append("  driver reports 0-length subframes: ")
+        .append(driverReportsZeroLengthSubframes)
+        .append(ls)
+        .append(indent)
+        .append("  0-length subframe: ")
+        .append(zeroLengthSubframe)
+        .append(ls)
+        .append(indent)
+        .append("  last subframe is known: ")
+        .append(lastSubframeKnown)
+        .append(ls)
+        .append(indent)
+        .append("  last subframe: ")
+        .append(lastSubframe)
+        .append(ls)
+        .append(indent)
+        .append("  delimiter CRC error: ")
+        .append(delimiterCrcError)
+        .append(ls)
+        .append(indent)
+        .append("  delimiter CRC value is known: ")
+        .append(delimiterCrcValueKnown)
+        .append(ls)
+        .append(indent)
+        .append("  10th MSB of flags: ")
+        .append(tenthMsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  9th MSB of flags: ")
+        .append(ninthMsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  8th MSB of flags: ")
+        .append(eighthMsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  7th MSB of flags: ")
+        .append(seventhMsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  6th MSB of flags: ")
+        .append(sixthMsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  5th MSB of flags: ")
+        .append(fifthMsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  4th MSB of flags: ")
+        .append(fourthMsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  3rd MSB of flags: ")
+        .append(thirdMsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  2nd MSB of flags: ")
+        .append(secondMsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  MSB of flags: ")
+        .append(msbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  delimiter CRC value: 0x")
+        .append(ByteArrays.toHexString(delimiterCrcValue, ""))
+        .append(ls)
+        .append(indent)
+        .append("  reserved: 0x")
+        .append(ByteArrays.toHexString(reserved, ""))
+        .append(ls);
 
     return sb.toString();
   }
@@ -409,51 +414,29 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     RadiotapDataAMpduStatus other = (RadiotapDataAMpduStatus) obj;
-    if (delimiterCrcError != other.delimiterCrcError)
-      return false;
-    if (delimiterCrcValue != other.delimiterCrcValue)
-      return false;
-    if (delimiterCrcValueKnown != other.delimiterCrcValueKnown)
-      return false;
-    if (driverReportsZeroLengthSubframes != other.driverReportsZeroLengthSubframes)
-      return false;
-    if (eighthMsbOfFlags != other.eighthMsbOfFlags)
-      return false;
-    if (fifthMsbOfFlags != other.fifthMsbOfFlags)
-      return false;
-    if (fourthMsbOfFlags != other.fourthMsbOfFlags)
-      return false;
-    if (lastSubframe != other.lastSubframe)
-      return false;
-    if (lastSubframeKnown != other.lastSubframeKnown)
-      return false;
-    if (msbOfFlags != other.msbOfFlags)
-      return false;
-    if (ninthMsbOfFlags != other.ninthMsbOfFlags)
-      return false;
-    if (referenceNumber != other.referenceNumber)
-      return false;
-    if (reserved != other.reserved)
-      return false;
-    if (secondMsbOfFlags != other.secondMsbOfFlags)
-      return false;
-    if (seventhMsbOfFlags != other.seventhMsbOfFlags)
-      return false;
-    if (sixthMsbOfFlags != other.sixthMsbOfFlags)
-      return false;
-    if (tenthMsbOfFlags != other.tenthMsbOfFlags)
-      return false;
-    if (thirdMsbOfFlags != other.thirdMsbOfFlags)
-      return false;
-    if (zeroLengthSubframe != other.zeroLengthSubframe)
-      return false;
+    if (delimiterCrcError != other.delimiterCrcError) return false;
+    if (delimiterCrcValue != other.delimiterCrcValue) return false;
+    if (delimiterCrcValueKnown != other.delimiterCrcValueKnown) return false;
+    if (driverReportsZeroLengthSubframes != other.driverReportsZeroLengthSubframes) return false;
+    if (eighthMsbOfFlags != other.eighthMsbOfFlags) return false;
+    if (fifthMsbOfFlags != other.fifthMsbOfFlags) return false;
+    if (fourthMsbOfFlags != other.fourthMsbOfFlags) return false;
+    if (lastSubframe != other.lastSubframe) return false;
+    if (lastSubframeKnown != other.lastSubframeKnown) return false;
+    if (msbOfFlags != other.msbOfFlags) return false;
+    if (ninthMsbOfFlags != other.ninthMsbOfFlags) return false;
+    if (referenceNumber != other.referenceNumber) return false;
+    if (reserved != other.reserved) return false;
+    if (secondMsbOfFlags != other.secondMsbOfFlags) return false;
+    if (seventhMsbOfFlags != other.seventhMsbOfFlags) return false;
+    if (sixthMsbOfFlags != other.sixthMsbOfFlags) return false;
+    if (tenthMsbOfFlags != other.tenthMsbOfFlags) return false;
+    if (thirdMsbOfFlags != other.thirdMsbOfFlags) return false;
+    if (zeroLengthSubframe != other.zeroLengthSubframe) return false;
     return true;
   }
 
@@ -483,9 +466,7 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
     private byte delimiterCrcValue;
     private byte reserved;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(RadiotapDataAMpduStatus obj) {
@@ -681,13 +662,9 @@ public final class RadiotapDataAMpduStatus implements RadiotapData {
       return this;
     }
 
-    /**
-     * @return a new RadiotapAMpduStatus object.
-     */
+    /** @return a new RadiotapAMpduStatus object. */
     public RadiotapDataAMpduStatus build() {
       return new RadiotapDataAMpduStatus(this);
     }
-
   }
-
 }

@@ -15,19 +15,17 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
-public final class IllegalIpV4InternetTimestampOptionData implements IpV4InternetTimestampOptionData {
+public final class IllegalIpV4InternetTimestampOptionData
+    implements IpV4InternetTimestampOptionData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2799097946096468081L;
 
   private final byte[] rawData;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -35,8 +33,7 @@ public final class IllegalIpV4InternetTimestampOptionData implements IpV4Interne
    * @return a new IllegalIpV4InternetTimestampOptionData object.
    */
   public static IllegalIpV4InternetTimestampOptionData newInstance(
-    byte[] rawData, int offset, int length
-  ) {
+      byte[] rawData, int offset, int length) {
     ByteArrays.validateBounds(rawData, offset, length);
     return new IllegalIpV4InternetTimestampOptionData(rawData, offset, length);
   }
@@ -47,7 +44,9 @@ public final class IllegalIpV4InternetTimestampOptionData implements IpV4Interne
   }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -59,19 +58,20 @@ public final class IllegalIpV4InternetTimestampOptionData implements IpV4Interne
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[illegal data: ")
-      .append(ByteArrays.toHexString(rawData, ""))
-      .append("]");
+    sb.append("[illegal data: ").append(ByteArrays.toHexString(rawData, "")).append("]");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    IllegalIpV4InternetTimestampOptionData other
-      = (IllegalIpV4InternetTimestampOptionData)obj;
+    IllegalIpV4InternetTimestampOptionData other = (IllegalIpV4InternetTimestampOptionData) obj;
     return Arrays.equals(other.rawData, rawData);
   }
 
@@ -79,5 +79,4 @@ public final class IllegalIpV4InternetTimestampOptionData implements IpV4Interne
   public int hashCode() {
     return Arrays.hashCode(rawData);
   }
-
 }

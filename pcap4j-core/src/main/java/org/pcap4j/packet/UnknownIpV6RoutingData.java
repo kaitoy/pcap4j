@@ -17,17 +17,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class UnknownIpV6RoutingData implements IpV6RoutingData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -6359533865311266265L;
 
   private final byte[] rawData;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -35,34 +32,32 @@ public final class UnknownIpV6RoutingData implements IpV6RoutingData {
    * @return a new UnknownIpV6RoutingData object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static UnknownIpV6RoutingData newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static UnknownIpV6RoutingData newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new UnknownIpV6RoutingData(rawData, offset, length);
   }
 
-  private UnknownIpV6RoutingData(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private UnknownIpV6RoutingData(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if (length < 4) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("rawData length must be more than 3. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (((length + 4) % 8) != 0) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("(length + 4) % 8 must be 0. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -71,7 +66,9 @@ public final class UnknownIpV6RoutingData implements IpV6RoutingData {
   }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -83,18 +80,20 @@ public final class UnknownIpV6RoutingData implements IpV6RoutingData {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[data: ")
-      .append(ByteArrays.toHexString(rawData, " "))
-      .append("]");
+    sb.append("[data: ").append(ByteArrays.toHexString(rawData, " ")).append("]");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    UnknownIpV6RoutingData other = (UnknownIpV6RoutingData)obj;
+    UnknownIpV6RoutingData other = (UnknownIpV6RoutingData) obj;
     return Arrays.equals(rawData, other.rawData);
   }
 
@@ -102,5 +101,4 @@ public final class UnknownIpV6RoutingData implements IpV6RoutingData {
   public int hashCode() {
     return Arrays.hashCode(rawData);
   }
-
 }

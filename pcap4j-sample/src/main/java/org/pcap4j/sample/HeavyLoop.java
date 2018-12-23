@@ -32,11 +32,10 @@ public class HeavyLoop {
 
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
-    final PcapHandle handle
-      = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
+    final PcapHandle handle = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
 
-    PacketListener listener
-      = new PacketListener() {
+    PacketListener listener =
+        new PacketListener() {
           @Override
           public void gotPacket(Packet packet) {
             System.out.println(handle.getTimestamp());
@@ -61,5 +60,4 @@ public class HeavyLoop {
 
     handle.close();
   }
-
 }

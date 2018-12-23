@@ -34,22 +34,21 @@ public final class PcapIpV4Address extends AbstractPcapAddress {
 
   @Override
   public Inet4Address getAddress() {
-    return (Inet4Address)super.getAddress();
+    return (Inet4Address) super.getAddress();
   }
 
   @Override
   public Inet4Address getNetmask() {
-    return (Inet4Address)super.getNetmask();
+    return (Inet4Address) super.getNetmask();
   }
 
   @Override
   public Inet4Address getBroadcastAddress() {
-    return (Inet4Address)super.getBroadcastAddress();
+    return (Inet4Address) super.getBroadcastAddress();
   }
 
   @Override
   public Inet4Address getDestinationAddress() {
-    return (Inet4Address)super.getDestinationAddress();
+    return (Inet4Address) super.getDestinationAddress();
   }
-
 }

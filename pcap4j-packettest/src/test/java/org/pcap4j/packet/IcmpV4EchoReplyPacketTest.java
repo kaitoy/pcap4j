@@ -1,6 +1,7 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -20,24 +21,21 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class IcmpV4EchoReplyPacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(IcmpV4EchoReplyPacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(IcmpV4EchoReplyPacketTest.class);
 
   private final IcmpV4EchoReplyPacket packet;
   private final short identifier;
   private final short sequenceNumber;
 
   public IcmpV4EchoReplyPacketTest() {
-    this.identifier = (short)1234;
-    this.sequenceNumber = (short)4321;
+    this.identifier = (short) 1234;
+    this.sequenceNumber = (short) 4321;
 
     UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
-    unknownb.rawData(new byte[] { (byte)0, (byte)1, (byte)2, (byte)3 });
+    unknownb.rawData(new byte[] {(byte) 0, (byte) 1, (byte) 2, (byte) 3});
 
     IcmpV4EchoReplyPacket.Builder b = new IcmpV4EchoReplyPacket.Builder();
-    b.identifier(identifier)
-     .sequenceNumber(sequenceNumber)
-     .payloadBuilder(unknownb);
+    b.identifier(identifier).sequenceNumber(sequenceNumber).payloadBuilder(unknownb);
     this.packet = b.build();
   }
 
@@ -49,57 +47,52 @@ public class IcmpV4EchoReplyPacketTest extends AbstractPacketTest {
   @Override
   protected Packet getWholePacket() throws UnknownHostException {
     IcmpV4CommonPacket.Builder icmpV4b = new IcmpV4CommonPacket.Builder();
-    icmpV4b.type(IcmpV4Type.ECHO_REPLY)
-           .code(IcmpV4Code.NO_CODE)
-           .payloadBuilder(new SimpleBuilder(packet))
-           .correctChecksumAtBuild(true)
-           ;
+    icmpV4b
+        .type(IcmpV4Type.ECHO_REPLY)
+        .code(IcmpV4Code.NO_CODE)
+        .payloadBuilder(new SimpleBuilder(packet))
+        .correctChecksumAtBuild(true);
 
     IpV4Packet.Builder ipv4b = new IpV4Packet.Builder();
-    ipv4b.version(IpVersion.IPV4)
-         .tos(IpV4Rfc1349Tos.newInstance((byte)0))
-         .identification((short)100)
-         .ttl((byte)100)
-         .protocol(IpNumber.ICMPV4)
-         .srcAddr(
-            (Inet4Address)InetAddress.getByAddress(
-              new byte[] { (byte)192, (byte)0, (byte)2, (byte)1 }
-            )
-          )
+    ipv4b
+        .version(IpVersion.IPV4)
+        .tos(IpV4Rfc1349Tos.newInstance((byte) 0))
+        .identification((short) 100)
+        .ttl((byte) 100)
+        .protocol(IpNumber.ICMPV4)
+        .srcAddr(
+            (Inet4Address)
+                InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 1}))
         .dstAddr(
-           (Inet4Address)InetAddress.getByAddress(
-             new byte[] { (byte)192, (byte)0, (byte)2, (byte)2 }
-           )
-         )
+            (Inet4Address)
+                InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 2}))
         .payloadBuilder(icmpV4b)
         .correctChecksumAtBuild(true)
         .correctLengthAtBuild(true);
 
     EthernetPacket.Builder eb = new EthernetPacket.Builder();
     eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
-      .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-      .type(EtherType.IPV4)
-      .payloadBuilder(ipv4b)
-      .paddingAtBuild(true);
+        .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+        .type(EtherType.IPV4)
+        .payloadBuilder(ipv4b)
+        .paddingAtBuild(true);
     return eb.build();
   }
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
-      "########## " + IcmpV4EchoReplyPacketTest.class.getSimpleName() + " START ##########"
-    );
+        "########## " + IcmpV4EchoReplyPacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Test
   public void testNewPacket() {
     try {
-      IcmpV4EchoReplyPacket p
-        = IcmpV4EchoReplyPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
+      IcmpV4EchoReplyPacket p =
+          IcmpV4EchoReplyPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
@@ -115,35 +108,34 @@ public class IcmpV4EchoReplyPacketTest extends AbstractPacketTest {
     IcmpV4EchoReplyPacket.Builder b = packet.getBuilder();
     IcmpV4EchoReplyPacket p;
 
-    b.identifier((short)0);
-    b.sequenceNumber((short)0);
+    b.identifier((short) 0);
+    b.sequenceNumber((short) 0);
     p = b.build();
-    assertEquals((short)0, (short)p.getHeader().getIdentifierAsInt());
-    assertEquals((short)0, (short)p.getHeader().getSequenceNumberAsInt());
+    assertEquals((short) 0, (short) p.getHeader().getIdentifierAsInt());
+    assertEquals((short) 0, (short) p.getHeader().getSequenceNumberAsInt());
 
-    b.identifier((short)10000);
-    b.sequenceNumber((short)10000);
+    b.identifier((short) 10000);
+    b.sequenceNumber((short) 10000);
     p = b.build();
-    assertEquals((short)10000, (short)p.getHeader().getIdentifierAsInt());
-    assertEquals((short)10000, (short)p.getHeader().getSequenceNumberAsInt());
+    assertEquals((short) 10000, (short) p.getHeader().getIdentifierAsInt());
+    assertEquals((short) 10000, (short) p.getHeader().getSequenceNumberAsInt());
 
-    b.identifier((short)32767);
-    b.sequenceNumber((short)32767);
+    b.identifier((short) 32767);
+    b.sequenceNumber((short) 32767);
     p = b.build();
-    assertEquals((short)32767, (short)p.getHeader().getIdentifierAsInt());
-    assertEquals((short)32767, (short)p.getHeader().getSequenceNumberAsInt());
+    assertEquals((short) 32767, (short) p.getHeader().getIdentifierAsInt());
+    assertEquals((short) 32767, (short) p.getHeader().getSequenceNumberAsInt());
 
-    b.identifier((short)-1);
-    b.sequenceNumber((short)-1);
+    b.identifier((short) -1);
+    b.sequenceNumber((short) -1);
     p = b.build();
-    assertEquals((short)-1, (short)p.getHeader().getIdentifierAsInt());
-    assertEquals((short)-1, (short)p.getHeader().getSequenceNumberAsInt());
+    assertEquals((short) -1, (short) p.getHeader().getIdentifierAsInt());
+    assertEquals((short) -1, (short) p.getHeader().getSequenceNumberAsInt());
 
-    b.identifier((short)-32768);
-    b.sequenceNumber((short)-32768);
+    b.identifier((short) -32768);
+    b.sequenceNumber((short) -32768);
     p = b.build();
-    assertEquals((short)-32768, (short)p.getHeader().getIdentifierAsInt());
-    assertEquals((short)-32768, (short)p.getHeader().getSequenceNumberAsInt());
+    assertEquals((short) -32768, (short) p.getHeader().getIdentifierAsInt());
+    assertEquals((short) -32768, (short) p.getHeader().getSequenceNumberAsInt());
   }
-
 }

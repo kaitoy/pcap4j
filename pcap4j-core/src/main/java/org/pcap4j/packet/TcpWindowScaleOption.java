@@ -26,9 +26,7 @@ public final class TcpWindowScaleOption implements TcpOption {
    *        1         1         1
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1755743386204601523L;
 
   private final TcpOptionKind kind = TcpOptionKind.WINDOW_SCALE;
@@ -36,9 +34,8 @@ public final class TcpWindowScaleOption implements TcpOption {
   private final byte shiftCount;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -46,46 +43,41 @@ public final class TcpWindowScaleOption implements TcpOption {
    * @return a new TcpWindowScaleOption object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static TcpWindowScaleOption newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static TcpWindowScaleOption newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new TcpWindowScaleOption(rawData, offset, length);
   }
 
-  private TcpWindowScaleOption(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private TcpWindowScaleOption(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if (length < 3) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 2. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (rawData[offset] != kind.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The kind must be: ")
-        .append(kind.valueAsString())
-        .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(kind.valueAsString())
+          .append(" rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.length = rawData[1 + offset];
     if (this.length != 3) {
-      throw new IllegalRawDataException(
-                  "The value of length field must be 3 but: " + this.length
-                );
+      throw new IllegalRawDataException("The value of length field must be 3 but: " + this.length);
     }
-
 
     this.shiftCount = rawData[2 + offset];
   }
@@ -98,9 +90,8 @@ public final class TcpWindowScaleOption implements TcpOption {
     this.shiftCount = builder.shiftCount;
 
     if (builder.correctLengthAtBuild) {
-      this.length = (byte)length();
-    }
-    else {
+      this.length = (byte) length();
+    } else {
       this.length = builder.length;
     }
   }
@@ -110,32 +101,30 @@ public final class TcpWindowScaleOption implements TcpOption {
     return kind;
   }
 
-  /**
-   *
-   * @return length
-   */
-  public byte getLength() { return length; }
+  /** @return length */
+  public byte getLength() {
+    return length;
+  }
 
-  /**
-   *
-   * @return length
-   */
-  public int getLengthAsInt() { return 0xFF & length; }
+  /** @return length */
+  public int getLengthAsInt() {
+    return 0xFF & length;
+  }
 
-  /**
-   *
-   * @return shiftCount
-   */
-  public byte getShiftCount() { return shiftCount; }
+  /** @return shiftCount */
+  public byte getShiftCount() {
+    return shiftCount;
+  }
 
-  /**
-   *
-   * @return shiftCount
-   */
-  public int getShiftCountAsInt() { return 0xFF & shiftCount; }
+  /** @return shiftCount */
+  public int getShiftCountAsInt() {
+    return 0xFF & shiftCount;
+  }
 
   @Override
-  public int length() { return 3; }
+  public int length() {
+    return 3;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -146,10 +135,7 @@ public final class TcpWindowScaleOption implements TcpOption {
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -157,25 +143,24 @@ public final class TcpWindowScaleOption implements TcpOption {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Kind: ")
-      .append(kind);
-    sb.append("] [Length: ")
-      .append(getLengthAsInt());
-    sb.append(" bytes] [Shift Count: ")
-      .append(getShiftCountAsInt());
+    sb.append("[Kind: ").append(kind);
+    sb.append("] [Length: ").append(getLengthAsInt());
+    sb.append(" bytes] [Shift Count: ").append(getShiftCountAsInt());
     sb.append("]");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    TcpWindowScaleOption other = (TcpWindowScaleOption)obj;
-    return
-         length == other.length
-      && shiftCount == other.shiftCount;
+    TcpWindowScaleOption other = (TcpWindowScaleOption) obj;
+    return length == other.length && shiftCount == other.shiftCount;
   }
 
   @Override
@@ -190,16 +175,13 @@ public final class TcpWindowScaleOption implements TcpOption {
    * @author Kaito Yamada
    * @since pcap4j 1.2.0
    */
-  public static final class Builder
-  implements LengthBuilder<TcpWindowScaleOption> {
+  public static final class Builder implements LengthBuilder<TcpWindowScaleOption> {
 
     private byte length;
     private byte shiftCount;
     private boolean correctLengthAtBuild;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(TcpWindowScaleOption option) {
@@ -208,7 +190,6 @@ public final class TcpWindowScaleOption implements TcpOption {
     }
 
     /**
-     *
      * @param length length
      * @return this Builder object for method chaining.
      */
@@ -218,7 +199,6 @@ public final class TcpWindowScaleOption implements TcpOption {
     }
 
     /**
-     *
      * @param shiftCount shiftCount
      * @return this Builder object for method chaining.
      */
@@ -237,7 +217,5 @@ public final class TcpWindowScaleOption implements TcpOption {
     public TcpWindowScaleOption build() {
       return new TcpWindowScaleOption(this);
     }
-
   }
-
 }

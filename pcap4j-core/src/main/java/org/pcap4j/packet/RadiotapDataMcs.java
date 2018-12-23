@@ -19,9 +19,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class RadiotapDataMcs implements RadiotapData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 8914690461479810322L;
 
   private static final int LENGTH = 3;
@@ -42,11 +40,9 @@ public final class RadiotapDataMcs implements RadiotapData {
   private final boolean nessLsb;
   private final byte mcsRateIndex;
 
-
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -54,9 +50,8 @@ public final class RadiotapDataMcs implements RadiotapData {
    * @return a new RadiotapMcs object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapDataMcs newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static RadiotapDataMcs newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new RadiotapDataMcs(rawData, offset, length);
   }
@@ -65,13 +60,13 @@ public final class RadiotapDataMcs implements RadiotapData {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapMcs (")
-        .append(LENGTH)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(LENGTH)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -120,24 +115,25 @@ public final class RadiotapDataMcs implements RadiotapData {
   }
 
   private RadiotapDataMcs(Builder builder) {
-    if (
-         builder == null
-      || builder.bandwidth == null
-      || builder.htFormat == null
-      || builder.fecType == null
-    ) {
+    if (builder == null
+        || builder.bandwidth == null
+        || builder.htFormat == null
+        || builder.fecType == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.bandwidth: ").append(builder.bandwidth)
-        .append(" builder.htFormat: ").append(builder.htFormat)
-        .append(" builder.fecType: ").append(builder.fecType);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.bandwidth: ")
+          .append(builder.bandwidth)
+          .append(" builder.htFormat: ")
+          .append(builder.htFormat)
+          .append(" builder.fecType: ")
+          .append(builder.fecType);
       throw new NullPointerException(sb.toString());
     }
     if ((builder.numStbcStreams & 0xFC) != 0) {
       throw new IllegalArgumentException(
-              "(builder.numStbcStreams & 0xFC) must be 0. builder.numStbcStreams: "
-                + builder.numStbcStreams
-            );
+          "(builder.numStbcStreams & 0xFC) must be 0. builder.numStbcStreams: "
+              + builder.numStbcStreams);
     }
 
     this.bandwidthKnown = builder.bandwidthKnown;
@@ -157,121 +153,87 @@ public final class RadiotapDataMcs implements RadiotapData {
     this.mcsRateIndex = builder.mcsRateIndex;
   }
 
-  /**
-   * @return true if the bandwidth is known; false otherwise.
-   */
+  /** @return true if the bandwidth is known; false otherwise. */
   public boolean isBandwidthKnown() {
     return bandwidthKnown;
   }
 
-  /**
-   * @return true if the MCS index is known; false otherwise.
-   */
+  /** @return true if the MCS index is known; false otherwise. */
   public boolean isMcsIndexKnown() {
     return mcsIndexKnown;
   }
 
-  /**
-   * @return true if the guard interval is known; false otherwise.
-   */
+  /** @return true if the guard interval is known; false otherwise. */
   public boolean isGuardIntervalKnown() {
     return guardIntervalKnown;
   }
 
-  /**
-   * @return true if the HT format is known; false otherwise.
-   */
+  /** @return true if the HT format is known; false otherwise. */
   public boolean isHtFormatKnown() {
     return htFormatKnown;
   }
 
-  /**
-   * @return true if the FEC type is known; false otherwise.
-   */
+  /** @return true if the FEC type is known; false otherwise. */
   public boolean isFecTypeKnown() {
     return fecTypeKnown;
   }
 
-  /**
-   * @return true if the STBC is known; false otherwise.
-   */
+  /** @return true if the STBC is known; false otherwise. */
   public boolean isStbcKnown() {
     return stbcKnown;
   }
 
-  /**
-   * @return true if the Ness is known; false otherwise.
-   */
+  /** @return true if the Ness is known; false otherwise. */
   public boolean isNessKnown() {
     return nessKnown;
   }
 
-  /**
-   * @return true if the MSB of Ness is 1; false otherwise.
-   */
+  /** @return true if the MSB of Ness is 1; false otherwise. */
   public boolean getNessMsb() {
     return nessMsb;
   }
 
-  /**
-   * @return bandwidth
-   */
+  /** @return bandwidth */
   public Bandwidth getBandwidth() {
     return bandwidth;
   }
 
-  /**
-   * @return true if the guard interval is short; false otherwise.
-   */
+  /** @return true if the guard interval is short; false otherwise. */
   public boolean isShortGuardInterval() {
     return shortGuardInterval;
   }
 
-  /**
-   * @return htFormat
-   */
+  /** @return htFormat */
   public HtFormat getHtFormat() {
     return htFormat;
   }
 
-  /**
-   * @return fecType
-   */
+  /** @return fecType */
   public RadiotapFecType getFecType() {
     return fecType;
   }
 
-  /**
-   * @return numStbcStreams
-   */
+  /** @return numStbcStreams */
   public byte getNumStbcStreams() {
     return numStbcStreams;
   }
 
-  /**
-   * @return numStbcStreams
-   */
+  /** @return numStbcStreams */
   public int getNumStbcStreamsAsInt() {
     return numStbcStreams;
   }
 
-  /**
-   * @return true if LSB of Ness is 1; false otherwise.
-   */
+  /** @return true if LSB of Ness is 1; false otherwise. */
   public boolean getNessLsb() {
     return nessLsb;
   }
 
-  /**
-   * @return mcsRateIndex
-   */
+  /** @return mcsRateIndex */
   public byte getMcsRateIndex() {
     return mcsRateIndex;
   }
 
-  /**
-   * @return mcsRateIndex
-   */
+  /** @return mcsRateIndex */
   public int getMcsRateIndexAsInt() {
     return mcsRateIndex & 0xFF;
   }
@@ -285,31 +247,55 @@ public final class RadiotapDataMcs implements RadiotapData {
   public byte[] getRawData() {
     byte[] data = new byte[LENGTH];
 
-    if (bandwidthKnown) { data[0] |= 0x01; }
-    if (mcsIndexKnown) { data[0] |= 0x02; }
-    if (guardIntervalKnown) { data[0] |= 0x04; }
-    if (htFormatKnown) { data[0] |= 0x08; }
-    if (fecTypeKnown) { data[0] |= 0x10; }
-    if (stbcKnown) { data[0] |= 0x20; }
-    if (nessKnown) { data[0] |= 0x40; }
-    if (nessMsb) { data[0] |= 0x80; }
+    if (bandwidthKnown) {
+      data[0] |= 0x01;
+    }
+    if (mcsIndexKnown) {
+      data[0] |= 0x02;
+    }
+    if (guardIntervalKnown) {
+      data[0] |= 0x04;
+    }
+    if (htFormatKnown) {
+      data[0] |= 0x08;
+    }
+    if (fecTypeKnown) {
+      data[0] |= 0x10;
+    }
+    if (stbcKnown) {
+      data[0] |= 0x20;
+    }
+    if (nessKnown) {
+      data[0] |= 0x40;
+    }
+    if (nessMsb) {
+      data[0] |= 0x80;
+    }
 
     data[1] = (byte) bandwidth.value;
-    if (shortGuardInterval) { data[1] |= 0x04; }
-    if (htFormat == HtFormat.GREENFIELD) { data[1] |= 0x08; }
-    if (fecType == RadiotapFecType.LDPC) { data[1] |= 0x10; }
+    if (shortGuardInterval) {
+      data[1] |= 0x04;
+    }
+    if (htFormat == HtFormat.GREENFIELD) {
+      data[1] |= 0x08;
+    }
+    if (fecType == RadiotapFecType.LDPC) {
+      data[1] |= 0x10;
+    }
     data[1] |= numStbcStreams << 5;
-    if (nessLsb) { data[1] |= 0x80; }
+    if (nessLsb) {
+      data[1] |= 0x80;
+    }
 
     data[2] = mcsRateIndex;
 
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -321,53 +307,69 @@ public final class RadiotapDataMcs implements RadiotapData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("MCS: ")
-      .append(ls)
-      .append(indent).append("  bandwidth known: ")
-      .append(bandwidthKnown)
-      .append(ls)
-      .append(indent).append("  MCS index known: ")
-      .append(mcsIndexKnown)
-      .append(ls)
-      .append(indent).append("  guard interval known: ")
-      .append(guardIntervalKnown)
-      .append(ls)
-      .append(indent).append("  HT format known: ")
-      .append(htFormatKnown)
-      .append(ls)
-      .append(indent).append("  FEC type known: ")
-      .append(fecTypeKnown)
-      .append(ls)
-      .append(indent).append("  STBC known: ")
-      .append(stbcKnown)
-      .append(ls)
-      .append(indent).append("  Ness known: ")
-      .append(nessKnown)
-      .append(ls)
-      .append(indent).append("  Ness data known: ")
-      .append(nessMsb)
-      .append(ls)
-      .append(indent).append("  bandwidth: ")
-      .append(bandwidth)
-      .append(ls)
-      .append(indent).append("  short guard interval: ")
-      .append(shortGuardInterval)
-      .append(ls)
-      .append(indent).append("  HT format: ")
-      .append(htFormat)
-      .append(ls)
-      .append(indent).append("  FEC type: ")
-      .append(fecType)
-      .append(ls)
-      .append(indent).append("  Number of STBC streams: ")
-      .append(numStbcStreams)
-      .append(ls)
-      .append(indent).append("  Ness: ")
-      .append(nessLsb)
-      .append(ls)
-      .append(indent).append("  MCS rate index: ")
-      .append(getMcsRateIndexAsInt())
-      .append(ls);
+    sb.append(indent)
+        .append("MCS: ")
+        .append(ls)
+        .append(indent)
+        .append("  bandwidth known: ")
+        .append(bandwidthKnown)
+        .append(ls)
+        .append(indent)
+        .append("  MCS index known: ")
+        .append(mcsIndexKnown)
+        .append(ls)
+        .append(indent)
+        .append("  guard interval known: ")
+        .append(guardIntervalKnown)
+        .append(ls)
+        .append(indent)
+        .append("  HT format known: ")
+        .append(htFormatKnown)
+        .append(ls)
+        .append(indent)
+        .append("  FEC type known: ")
+        .append(fecTypeKnown)
+        .append(ls)
+        .append(indent)
+        .append("  STBC known: ")
+        .append(stbcKnown)
+        .append(ls)
+        .append(indent)
+        .append("  Ness known: ")
+        .append(nessKnown)
+        .append(ls)
+        .append(indent)
+        .append("  Ness data known: ")
+        .append(nessMsb)
+        .append(ls)
+        .append(indent)
+        .append("  bandwidth: ")
+        .append(bandwidth)
+        .append(ls)
+        .append(indent)
+        .append("  short guard interval: ")
+        .append(shortGuardInterval)
+        .append(ls)
+        .append(indent)
+        .append("  HT format: ")
+        .append(htFormat)
+        .append(ls)
+        .append(indent)
+        .append("  FEC type: ")
+        .append(fecType)
+        .append(ls)
+        .append(indent)
+        .append("  Number of STBC streams: ")
+        .append(numStbcStreams)
+        .append(ls)
+        .append(indent)
+        .append("  Ness: ")
+        .append(nessLsb)
+        .append(ls)
+        .append(indent)
+        .append("  MCS rate index: ")
+        .append(getMcsRateIndexAsInt())
+        .append(ls);
 
     return sb.toString();
   }
@@ -396,43 +398,25 @@ public final class RadiotapDataMcs implements RadiotapData {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     RadiotapDataMcs other = (RadiotapDataMcs) obj;
-    if (bandwidth != other.bandwidth)
-      return false;
-    if (bandwidthKnown != other.bandwidthKnown)
-      return false;
-    if (fecType != other.fecType)
-      return false;
-    if (fecTypeKnown != other.fecTypeKnown)
-      return false;
-    if (guardIntervalKnown != other.guardIntervalKnown)
-      return false;
-    if (htFormat != other.htFormat)
-      return false;
-    if (htFormatKnown != other.htFormatKnown)
-      return false;
-    if (mcsIndexKnown != other.mcsIndexKnown)
-      return false;
-    if (mcsRateIndex != other.mcsRateIndex)
-      return false;
-    if (nessLsb != other.nessLsb)
-      return false;
-    if (nessMsb != other.nessMsb)
-      return false;
-    if (nessKnown != other.nessKnown)
-      return false;
-    if (numStbcStreams != other.numStbcStreams)
-      return false;
-    if (shortGuardInterval != other.shortGuardInterval)
-      return false;
-    if (stbcKnown != other.stbcKnown)
-      return false;
+    if (bandwidth != other.bandwidth) return false;
+    if (bandwidthKnown != other.bandwidthKnown) return false;
+    if (fecType != other.fecType) return false;
+    if (fecTypeKnown != other.fecTypeKnown) return false;
+    if (guardIntervalKnown != other.guardIntervalKnown) return false;
+    if (htFormat != other.htFormat) return false;
+    if (htFormatKnown != other.htFormatKnown) return false;
+    if (mcsIndexKnown != other.mcsIndexKnown) return false;
+    if (mcsRateIndex != other.mcsRateIndex) return false;
+    if (nessLsb != other.nessLsb) return false;
+    if (nessMsb != other.nessMsb) return false;
+    if (nessKnown != other.nessKnown) return false;
+    if (numStbcStreams != other.numStbcStreams) return false;
+    if (shortGuardInterval != other.shortGuardInterval) return false;
+    if (stbcKnown != other.stbcKnown) return false;
     return true;
   }
 
@@ -458,9 +442,7 @@ public final class RadiotapDataMcs implements RadiotapData {
     private boolean nessLsb;
     private byte mcsRateIndex;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(RadiotapDataMcs obj) {
@@ -616,13 +598,10 @@ public final class RadiotapDataMcs implements RadiotapData {
       return this;
     }
 
-    /**
-     * @return a new RadiotapMcs object.
-     */
+    /** @return a new RadiotapMcs object. */
     public RadiotapDataMcs build() {
       return new RadiotapDataMcs(this);
     }
-
   }
 
   /**
@@ -631,24 +610,16 @@ public final class RadiotapDataMcs implements RadiotapData {
    */
   public static enum Bandwidth {
 
-    /**
-     * 20
-     */
+    /** 20 */
     BW_20(0, "20"),
 
-    /**
-     * 40
-     */
+    /** 40 */
     BW_40(1, "40"),
 
-    /**
-     * 20L
-     */
+    /** 20L */
     BW_20L(2, "20L"),
 
-    /**
-     * 20U
-     */
+    /** 20U */
     BW_20U(3, "20U");
 
     private final int value;
@@ -659,17 +630,12 @@ public final class RadiotapDataMcs implements RadiotapData {
       this.name = name;
     }
 
-    /**
-     *
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -677,13 +643,9 @@ public final class RadiotapDataMcs implements RadiotapData {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder();
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
-
   }
 
   /**
@@ -692,14 +654,10 @@ public final class RadiotapDataMcs implements RadiotapData {
    */
   public static enum HtFormat {
 
-    /**
-     * mixed
-     */
+    /** mixed */
     MIXED(0),
 
-    /**
-     * greenfield
-     */
+    /** greenfield */
     GREENFIELD(1);
 
     private final int value;
@@ -708,14 +666,9 @@ public final class RadiotapDataMcs implements RadiotapData {
       this.value = value;
     }
 
-    /**
-     *
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
-
   }
-
 }

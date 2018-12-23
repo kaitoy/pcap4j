@@ -19,103 +19,61 @@ import java.util.Map;
  */
 public final class SctpChunkType extends NamedNumber<Byte, SctpChunkType> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -5598298520049931819L;
 
-  /**
-   * Payload Data: 0
-   */
-  public static final SctpChunkType DATA
-    = new SctpChunkType((byte)0, "Payload Data");
+  /** Payload Data: 0 */
+  public static final SctpChunkType DATA = new SctpChunkType((byte) 0, "Payload Data");
 
-  /**
-   * Initiation: 1
-   */
-  public static final SctpChunkType INIT
-    = new SctpChunkType((byte)1, "Initiation");
+  /** Initiation: 1 */
+  public static final SctpChunkType INIT = new SctpChunkType((byte) 1, "Initiation");
 
-  /**
-   * Initiation Acknowledgement: 2
-   */
-  public static final SctpChunkType INIT_ACK
-    = new SctpChunkType((byte)2, "Initiation Acknowledgement");
+  /** Initiation Acknowledgement: 2 */
+  public static final SctpChunkType INIT_ACK =
+      new SctpChunkType((byte) 2, "Initiation Acknowledgement");
 
-  /**
-   * Selective Acknowledgement: 3
-   */
-  public static final SctpChunkType SACK
-    = new SctpChunkType((byte)3, "Selective Acknowledgement");
+  /** Selective Acknowledgement: 3 */
+  public static final SctpChunkType SACK = new SctpChunkType((byte) 3, "Selective Acknowledgement");
 
-  /**
-   * Heartbeat Request: 4
-   */
-  public static final SctpChunkType HEARTBEAT
-    = new SctpChunkType((byte)4, "Heartbeat Request");
+  /** Heartbeat Request: 4 */
+  public static final SctpChunkType HEARTBEAT = new SctpChunkType((byte) 4, "Heartbeat Request");
 
-  /**
-   * Heartbeat Acknowledgement: 5
-   */
-  public static final SctpChunkType HEARTBEAT_ACK
-    = new SctpChunkType((byte)5, "Heartbeat Acknowledgement");
+  /** Heartbeat Acknowledgement: 5 */
+  public static final SctpChunkType HEARTBEAT_ACK =
+      new SctpChunkType((byte) 5, "Heartbeat Acknowledgement");
 
-  /**
-   * Abort: 6
-   */
-  public static final SctpChunkType ABORT
-    = new SctpChunkType((byte)6, "Abort");
+  /** Abort: 6 */
+  public static final SctpChunkType ABORT = new SctpChunkType((byte) 6, "Abort");
 
-  /**
-   * Shutdown: 7
-   */
-  public static final SctpChunkType SHUTDOWN
-    = new SctpChunkType((byte)7, "Shutdown");
+  /** Shutdown: 7 */
+  public static final SctpChunkType SHUTDOWN = new SctpChunkType((byte) 7, "Shutdown");
 
-  /**
-   * Shutdown Acknowledgement: 8
-   */
-  public static final SctpChunkType SHUTDOWN_ACK
-    = new SctpChunkType((byte)8, "Shutdown Acknowledgement");
+  /** Shutdown Acknowledgement: 8 */
+  public static final SctpChunkType SHUTDOWN_ACK =
+      new SctpChunkType((byte) 8, "Shutdown Acknowledgement");
 
-  /**
-   * Operation Error: 9
-   */
-  public static final SctpChunkType ERROR
-    = new SctpChunkType((byte)9, "Operation Error");
+  /** Operation Error: 9 */
+  public static final SctpChunkType ERROR = new SctpChunkType((byte) 9, "Operation Error");
 
-  /**
-   * State Cookie: 10
-   */
-  public static final SctpChunkType COOKIE_ECHO
-    = new SctpChunkType((byte)10, "State Cookie");
+  /** State Cookie: 10 */
+  public static final SctpChunkType COOKIE_ECHO = new SctpChunkType((byte) 10, "State Cookie");
 
-  /**
-   * Cookie Acknowledgement: 11
-   */
-  public static final SctpChunkType COOKIE_ACK
-    = new SctpChunkType((byte)11, "Cookie Acknowledgement");
+  /** Cookie Acknowledgement: 11 */
+  public static final SctpChunkType COOKIE_ACK =
+      new SctpChunkType((byte) 11, "Cookie Acknowledgement");
 
-  /**
-   * Explicit Congestion Notification Echo: 12
-   */
-  public static final SctpChunkType ECNE
-    = new SctpChunkType((byte)12, "Explicit Congestion Notification Echo");
+  /** Explicit Congestion Notification Echo: 12 */
+  public static final SctpChunkType ECNE =
+      new SctpChunkType((byte) 12, "Explicit Congestion Notification Echo");
 
-  /**
-   * Congestion Window Reduced: 13
-   */
-  public static final SctpChunkType CWR
-    = new SctpChunkType((byte)13, "Congestion Window Reduced");
+  /** Congestion Window Reduced: 13 */
+  public static final SctpChunkType CWR = new SctpChunkType((byte) 13, "Congestion Window Reduced");
 
-  /**
-   * Shutdown Complete: 14
-   */
-  public static final SctpChunkType SHUTDOWN_COMPLETE
-    = new SctpChunkType((byte)14, "Shutdown Complete");
+  /** Shutdown Complete: 14 */
+  public static final SctpChunkType SHUTDOWN_COMPLETE =
+      new SctpChunkType((byte) 14, "Shutdown Complete");
 
-  private static final Map<Byte, SctpChunkType> registry
-    = new HashMap<Byte, SctpChunkType>();
+  private static final Map<Byte, SctpChunkType> registry = new HashMap<Byte, SctpChunkType>();
 
   static {
     registry.put(DATA.value(), DATA);
@@ -135,9 +93,7 @@ public final class SctpChunkType extends NamedNumber<Byte, SctpChunkType> {
     registry.put(SHUTDOWN_COMPLETE.value(), SHUTDOWN_COMPLETE);
   }
 
-  /**
-   * @return an ActionForUnkownType object.
-   */
+  /** @return an ActionForUnkownType object. */
   public ActionForUnkownType getActionForUnkownType() {
     int val = (value() >> 6) & 0x03;
     return ActionForUnkownType.values()[val];
@@ -158,8 +114,7 @@ public final class SctpChunkType extends NamedNumber<Byte, SctpChunkType> {
   public static SctpChunkType getInstance(Byte value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new SctpChunkType(value, "unknown");
     }
   }
@@ -172,16 +127,12 @@ public final class SctpChunkType extends NamedNumber<Byte, SctpChunkType> {
     return registry.put(type.value(), type);
   }
 
-  /**
-   * @return the value of this object as an int.
-   */
+  /** @return the value of this object as an int. */
   public int valueAsInt() {
     return 0xFF & value();
   }
 
-  /**
-   * @return a string representation of this value.
-   */
+  /** @return a string representation of this value. */
   @Override
   public String valueAsString() {
     return String.valueOf(valueAsInt());
@@ -213,17 +164,13 @@ public final class SctpChunkType extends NamedNumber<Byte, SctpChunkType> {
      */
     DISCARD_AND_REPORT,
 
-    /**
-     * Skip this chunk and continue processing.
-     */
+    /** Skip this chunk and continue processing. */
     SKIP,
 
     /**
-     * Skip this chunk and continue processing, but report in an ERROR chunk using the
-     * 'Unrecognized Chunk Type' cause of error.
+     * Skip this chunk and continue processing, but report in an ERROR chunk using the 'Unrecognized
+     * Chunk Type' cause of error.
      */
     SKIP_AND_REPORT,
-
   }
-
 }

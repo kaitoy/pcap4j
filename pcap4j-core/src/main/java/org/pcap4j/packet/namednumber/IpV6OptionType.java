@@ -14,110 +14,68 @@ import org.pcap4j.util.ByteArrays;
 /**
  * IpV6 Option Type
  *
- * @see <a href="http://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xml#ipv6-parameters-2">IANA Registry</a>
+ * @see <a
+ *     href="http://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xml#ipv6-parameters-2">IANA
+ *     Registry</a>
  * @see <a href="http://tools.ietf.org/html/rfc2460#section-4.2">RFC 2460 section 4.2</a>
  * @author Kaito Yamada
  * @since pcap4j 0.9.10
  */
 public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2460312908857953021L;
 
-  /**
-   * Pad1: 0x00
-   */
-  public static final IpV6OptionType PAD1
-    = new IpV6OptionType((byte)0x00, "Pad1");
+  /** Pad1: 0x00 */
+  public static final IpV6OptionType PAD1 = new IpV6OptionType((byte) 0x00, "Pad1");
 
-  /**
-   * PadN: 0x01
-   */
-  public static final IpV6OptionType PADN
-    = new IpV6OptionType((byte)0x01, "PadN");
+  /** PadN: 0x01 */
+  public static final IpV6OptionType PADN = new IpV6OptionType((byte) 0x01, "PadN");
 
-  /**
-   * Jumbo Payload: 0xC2
-   */
-  public static final IpV6OptionType JUMBO_PAYLOAD
-    = new IpV6OptionType((byte)0xC2, "Jumbo Payload");
+  /** Jumbo Payload: 0xC2 */
+  public static final IpV6OptionType JUMBO_PAYLOAD =
+      new IpV6OptionType((byte) 0xC2, "Jumbo Payload");
 
-  /**
-   * RPL: 0x63
-   */
-  public static final IpV6OptionType RPL
-    = new IpV6OptionType((byte)0x63, "RPL");
+  /** RPL: 0x63 */
+  public static final IpV6OptionType RPL = new IpV6OptionType((byte) 0x63, "RPL");
 
-  /**
-   * Tunnel Encapsulation Limit: 0x04
-   */
-  public static final IpV6OptionType TUNNEL_ENCAPSULATION_LIMIT
-    = new IpV6OptionType((byte)0x04, "Tunnel Encapsulation Limit");
+  /** Tunnel Encapsulation Limit: 0x04 */
+  public static final IpV6OptionType TUNNEL_ENCAPSULATION_LIMIT =
+      new IpV6OptionType((byte) 0x04, "Tunnel Encapsulation Limit");
 
-  /**
-   * Router Alert: 0x05
-   */
-  public static final IpV6OptionType ROUTER_ALERT
-    = new IpV6OptionType((byte)0x05, "Router Alert");
+  /** Router Alert: 0x05 */
+  public static final IpV6OptionType ROUTER_ALERT = new IpV6OptionType((byte) 0x05, "Router Alert");
 
-  /**
-   * Quick-Start: 0x26
-   */
-  public static final IpV6OptionType QUICK_START
-    = new IpV6OptionType((byte)0x26, "Quick-Start");
+  /** Quick-Start: 0x26 */
+  public static final IpV6OptionType QUICK_START = new IpV6OptionType((byte) 0x26, "Quick-Start");
 
-  /**
-   * CALIPSO: 0x07
-   */
-  public static final IpV6OptionType CALIPSO
-    = new IpV6OptionType((byte)0x07, "CALIPSO");
+  /** CALIPSO: 0x07 */
+  public static final IpV6OptionType CALIPSO = new IpV6OptionType((byte) 0x07, "CALIPSO");
 
-  /**
-   * SMF_DPD: 0x08
-   */
-  public static final IpV6OptionType SMF_DPD
-    = new IpV6OptionType((byte)0x08, "SMF_DPD");
+  /** SMF_DPD: 0x08 */
+  public static final IpV6OptionType SMF_DPD = new IpV6OptionType((byte) 0x08, "SMF_DPD");
 
-  /**
-   * Home Address: 0xC9
-   */
-  public static final IpV6OptionType HOME_ADDRESS
-    = new IpV6OptionType((byte)0xC9, "Home Address");
+  /** Home Address: 0xC9 */
+  public static final IpV6OptionType HOME_ADDRESS = new IpV6OptionType((byte) 0xC9, "Home Address");
 
-  /**
-   * Endpoint Identification: 0x8A
-   */
-  public static final IpV6OptionType ENDPOINT_IDENTIFICATION
-    = new IpV6OptionType((byte)0x8A, "Endpoint Identification");
+  /** Endpoint Identification: 0x8A */
+  public static final IpV6OptionType ENDPOINT_IDENTIFICATION =
+      new IpV6OptionType((byte) 0x8A, "Endpoint Identification");
 
-  /**
-   * ILNP Nonce: 0x8B
-   */
-  public static final IpV6OptionType ILNP_NONCE
-    = new IpV6OptionType((byte)0x8B, "ILNP Nonce");
+  /** ILNP Nonce: 0x8B */
+  public static final IpV6OptionType ILNP_NONCE = new IpV6OptionType((byte) 0x8B, "ILNP Nonce");
 
-  /**
-   * Line-Identification: 0x8C
-   */
-  public static final IpV6OptionType LINE_IDENTIFICATION
-    = new IpV6OptionType((byte)0x8C, "Line-Identification");
+  /** Line-Identification: 0x8C */
+  public static final IpV6OptionType LINE_IDENTIFICATION =
+      new IpV6OptionType((byte) 0x8C, "Line-Identification");
 
-  /**
-   * MPL: 0x6D
-   */
-  public static final IpV6OptionType MPL
-    = new IpV6OptionType((byte)0x6D, "MPL");
+  /** MPL: 0x6D */
+  public static final IpV6OptionType MPL = new IpV6OptionType((byte) 0x6D, "MPL");
 
-  /**
-   * IP_DFF: 0xEE
-   */
-  public static final IpV6OptionType IP_DFF
-    = new IpV6OptionType((byte)0xEE, "IP_DFF");
+  /** IP_DFF: 0xEE */
+  public static final IpV6OptionType IP_DFF = new IpV6OptionType((byte) 0xEE, "IP_DFF");
 
-  private static final Map<Byte, IpV6OptionType> registry
-    = new HashMap<Byte, IpV6OptionType>();
+  private static final Map<Byte, IpV6OptionType> registry = new HashMap<Byte, IpV6OptionType>();
 
   static {
     registry.put(PAD1.value(), PAD1);
@@ -140,7 +98,6 @@ public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
   private final IpV6OptionTypeAction action;
 
   /**
-   *
    * @param value value
    * @param name name
    */
@@ -166,21 +123,18 @@ public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
   }
 
   /**
-   *
    * @param value value
    * @return a IpV6OptionType object.
    */
   public static IpV6OptionType getInstance(Byte value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new IpV6OptionType(value, "unknown");
     }
   }
 
   /**
-   *
    * @param type type
    * @return a IpV6OptionType object.
    */
@@ -210,17 +164,16 @@ public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
   /**
    * The chg field (The third-highest-order bit of the Option Type)
    *
-   * @return true if the option data may change en-route;
-   *         false the option data does not change en-route.
+   * @return true if the option data may change en-route; false the option data does not change
+   *     en-route.
    */
   public boolean optionDataMayChange() {
     return (value() & 0x20) != 0;
   }
 
   /**
-   * The act field (The highest-order two bits of the Option Type).
-   * This specifies the action that must be taken if the
-   * processing IPv6 node does not recognize the Option Type.
+   * The act field (The highest-order two bits of the Option Type). This specifies the action that
+   * must be taken if the processing IPv6 node does not recognize the Option Type.
    *
    * @see <a href="http://tools.ietf.org/html/rfc2460#section-4.2">RFC 2460 section 4.2</a>
    * @author Kaito
@@ -228,31 +181,25 @@ public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
    */
   public static enum IpV6OptionTypeAction {
 
-    /**
-     * Skip over this option and continue processing the header: 0
-     */
-    SKIP((byte)0),
+    /** Skip over this option and continue processing the header: 0 */
+    SKIP((byte) 0),
+
+    /** Discard the packet: 1 */
+    DISCARD((byte) 1),
 
     /**
-     * Discard the packet: 1
+     * Discard the packet and, regardless of whether or not the packet's Destination Address was a
+     * multicast address, send an ICMP Parameter Problem, Code 2, message to the packet's Source
+     * Address, pointing to the unrecognized Option Type: 2
      */
-    DISCARD((byte)1),
+    DISCARD_AND_SEND_ICMP((byte) 2),
 
     /**
-     * Discard the packet and, regardless of whether or not the
-     * packet's Destination Address was a multicast address, send an
-     * ICMP Parameter Problem, Code 2, message to the packet's
-     * Source Address, pointing to the unrecognized Option Type: 2
+     * Discard the packet and, only if the packet's Destination Address was not a multicast address,
+     * send an ICMP Parameter Problem, Code 2, message to the packet's Source Address, pointing to
+     * the unrecognized Option Type: 3
      */
-    DISCARD_AND_SEND_ICMP((byte)2),
-
-    /**
-     * Discard the packet and, only if the packet's Destination
-     * Address was not a multicast address, send an ICMP Parameter
-     * Problem, Code 2, message to the packet's Source Address,
-     * pointing to the unrecognized Option Type: 3
-     */
-    DISCARD_AND_SEND_ICMP_IF_NOT_MULTICAST((byte)3);
+    DISCARD_AND_SEND_ICMP_IF_NOT_MULTICAST((byte) 3);
 
     private final byte value;
 
@@ -260,14 +207,9 @@ public final class IpV6OptionType extends NamedNumber<Byte, IpV6OptionType> {
       this.value = value;
     }
 
-    /**
-     *
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
-
   }
-
 }

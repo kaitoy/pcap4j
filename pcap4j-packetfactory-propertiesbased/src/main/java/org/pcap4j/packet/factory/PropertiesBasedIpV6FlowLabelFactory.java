@@ -8,6 +8,7 @@
 package org.pcap4j.packet.factory;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
@@ -19,18 +20,17 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.14
  */
 public final class PropertiesBasedIpV6FlowLabelFactory
-implements PacketFactory<IpV6FlowLabel, NotApplicable> {
+    implements PacketFactory<IpV6FlowLabel, NotApplicable> {
 
-  private static final PropertiesBasedIpV6FlowLabelFactory INSTANCE
-    = new PropertiesBasedIpV6FlowLabelFactory();
+  private static final PropertiesBasedIpV6FlowLabelFactory INSTANCE =
+      new PropertiesBasedIpV6FlowLabelFactory();
 
   private PropertiesBasedIpV6FlowLabelFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of PropertiesBasedIpV6FlowLabelFactory.
-   */
-  public static PropertiesBasedIpV6FlowLabelFactory getInstance() { return INSTANCE; }
+  /** @return the singleton instance of PropertiesBasedIpV6FlowLabelFactory. */
+  public static PropertiesBasedIpV6FlowLabelFactory getInstance() {
+    return INSTANCE;
+  }
 
   @Override
   @Deprecated
@@ -44,9 +44,8 @@ implements PacketFactory<IpV6FlowLabel, NotApplicable> {
   }
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -58,8 +57,7 @@ implements PacketFactory<IpV6FlowLabel, NotApplicable> {
    * @throws NullPointerException if any of arguments are null.
    */
   public IpV6FlowLabel newInstance(
-    byte[] rawData, int offset, int length, Class<? extends IpV6FlowLabel> clazz
-  ) {
+      byte[] rawData, int offset, int length, Class<? extends IpV6FlowLabel> clazz) {
     ByteArrays.validateBounds(rawData, offset, length);
     if (clazz == null) {
       throw new NullPointerException("clazz is null.");
@@ -70,7 +68,7 @@ implements PacketFactory<IpV6FlowLabel, NotApplicable> {
 
     try {
       Method newInstance = clazz.getMethod("newInstance", int.class);
-      return (IpV6FlowLabel)newInstance.invoke(null, ByteArrays.getInt(rawData, offset));
+      return (IpV6FlowLabel) newInstance.invoke(null, ByteArrays.getInt(rawData, offset));
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -94,5 +92,4 @@ implements PacketFactory<IpV6FlowLabel, NotApplicable> {
   public Class<? extends IpV6FlowLabel> getTargetClass() {
     return PacketFactoryPropertiesLoader.getInstance().getIpV6FlowLabelClass();
   }
-
 }

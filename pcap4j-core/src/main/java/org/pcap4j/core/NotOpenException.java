@@ -13,24 +13,16 @@ package org.pcap4j.core;
  */
 public final class NotOpenException extends Exception {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -3852491522682861395L;
 
-  /**
-   *
-   */
+  /** */
   public NotOpenException() {
     super();
   }
 
-  /**
-   *
-   * @param message message
-   */
-  public NotOpenException(String message){
+  /** @param message message */
+  public NotOpenException(String message) {
     super(message);
   }
-
 }

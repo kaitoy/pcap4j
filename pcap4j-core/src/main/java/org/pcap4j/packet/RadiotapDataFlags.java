@@ -11,8 +11,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
- * Radiotap Flags field.
- * Properties of transmitted and received frames.
+ * Radiotap Flags field. Properties of transmitted and received frames.
  *
  * @see <a href="http://www.radiotap.org/defined-fields/Flags">Radiotap</a>
  * @author Kaito Yamada
@@ -20,9 +19,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class RadiotapDataFlags implements RadiotapData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3144457914168529098L;
 
   private static final int LENGTH = 1;
@@ -37,9 +34,8 @@ public final class RadiotapDataFlags implements RadiotapData {
   private final boolean shortGuardInterval;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -47,9 +43,8 @@ public final class RadiotapDataFlags implements RadiotapData {
    * @return a new RadiotapFlags object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapDataFlags newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static RadiotapDataFlags newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new RadiotapDataFlags(rawData, offset, length);
   }
@@ -58,13 +53,13 @@ public final class RadiotapDataFlags implements RadiotapData {
     if (length < 1) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapFlags (")
-        .append(LENGTH)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(LENGTH)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -93,58 +88,42 @@ public final class RadiotapDataFlags implements RadiotapData {
     this.shortGuardInterval = builder.shortGuardInterval;
   }
 
-  /**
-   * @return cfp
-   */
+  /** @return cfp */
   public boolean isCfp() {
     return cfp;
   }
 
-  /**
-   * @return shortPreamble
-   */
+  /** @return shortPreamble */
   public boolean isShortPreamble() {
     return shortPreamble;
   }
 
-  /**
-   * @return wepEncrypted
-   */
+  /** @return wepEncrypted */
   public boolean isWepEncrypted() {
     return wepEncrypted;
   }
 
-  /**
-   * @return fragmented
-   */
+  /** @return fragmented */
   public boolean isFragmented() {
     return fragmented;
   }
 
-  /**
-   * @return includingFcs
-   */
+  /** @return includingFcs */
   public boolean isIncludingFcs() {
     return includingFcs;
   }
 
-  /**
-   * @return padding
-   */
+  /** @return padding */
   public boolean hasPadding() {
     return padding;
   }
 
-  /**
-   * @return badFcs
-   */
+  /** @return badFcs */
   public boolean isBadFcs() {
     return badFcs;
   }
 
-  /**
-   * @return shortGuardInterval
-   */
+  /** @return shortGuardInterval */
   public boolean isShortGuardInterval() {
     return shortGuardInterval;
   }
@@ -157,21 +136,37 @@ public final class RadiotapDataFlags implements RadiotapData {
   @Override
   public byte[] getRawData() {
     byte[] data = new byte[1];
-    if (cfp) { data[0] |= 0x01; }
-    if (shortPreamble) { data[0] |= 0x02; }
-    if (wepEncrypted) { data[0] |= 0x04; }
-    if (fragmented) { data[0] |= 0x08; }
-    if (includingFcs) { data[0] |= 0x10; }
-    if (padding) { data[0] |= 0x20; }
-    if (badFcs) { data[0] |= 0x40; }
-    if (shortGuardInterval) { data[0] |= 0x80; }
+    if (cfp) {
+      data[0] |= 0x01;
+    }
+    if (shortPreamble) {
+      data[0] |= 0x02;
+    }
+    if (wepEncrypted) {
+      data[0] |= 0x04;
+    }
+    if (fragmented) {
+      data[0] |= 0x08;
+    }
+    if (includingFcs) {
+      data[0] |= 0x10;
+    }
+    if (padding) {
+      data[0] |= 0x20;
+    }
+    if (badFcs) {
+      data[0] |= 0x40;
+    }
+    if (shortGuardInterval) {
+      data[0] |= 0x80;
+    }
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -183,32 +178,41 @@ public final class RadiotapDataFlags implements RadiotapData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Flags: ")
-      .append(ls)
-      .append(indent).append("  CFP: ")
-      .append(cfp)
-      .append(ls)
-      .append(indent).append("  Short Preamble: ")
-      .append(shortPreamble)
-      .append(ls)
-      .append(indent).append("  WEP: ")
-      .append(wepEncrypted)
-      .append(ls)
-      .append(indent).append("  Fragmented: ")
-      .append(fragmented)
-      .append(ls)
-      .append(indent).append("  FCS: ")
-      .append(includingFcs)
-      .append(ls)
-      .append(indent).append("  PAD: ")
-      .append(padding)
-      .append(ls)
-      .append(indent).append("  Bad FCS: ")
-      .append(badFcs)
-      .append(ls)
-      .append(indent).append("  Short Guard Interval: ")
-      .append(shortGuardInterval)
-      .append(ls);
+    sb.append(indent)
+        .append("Flags: ")
+        .append(ls)
+        .append(indent)
+        .append("  CFP: ")
+        .append(cfp)
+        .append(ls)
+        .append(indent)
+        .append("  Short Preamble: ")
+        .append(shortPreamble)
+        .append(ls)
+        .append(indent)
+        .append("  WEP: ")
+        .append(wepEncrypted)
+        .append(ls)
+        .append(indent)
+        .append("  Fragmented: ")
+        .append(fragmented)
+        .append(ls)
+        .append(indent)
+        .append("  FCS: ")
+        .append(includingFcs)
+        .append(ls)
+        .append(indent)
+        .append("  PAD: ")
+        .append(padding)
+        .append(ls)
+        .append(indent)
+        .append("  Bad FCS: ")
+        .append(badFcs)
+        .append(ls)
+        .append(indent)
+        .append("  Short Guard Interval: ")
+        .append(shortGuardInterval)
+        .append(ls);
 
     return sb.toString();
   }
@@ -230,29 +234,18 @@ public final class RadiotapDataFlags implements RadiotapData {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     RadiotapDataFlags other = (RadiotapDataFlags) obj;
-    if (badFcs != other.badFcs)
-      return false;
-    if (cfp != other.cfp)
-      return false;
-    if (fragmented != other.fragmented)
-      return false;
-    if (includingFcs != other.includingFcs)
-      return false;
-    if (padding != other.padding)
-      return false;
-    if (shortGuardInterval != other.shortGuardInterval)
-      return false;
-    if (shortPreamble != other.shortPreamble)
-      return false;
-    if (wepEncrypted != other.wepEncrypted)
-      return false;
+    if (badFcs != other.badFcs) return false;
+    if (cfp != other.cfp) return false;
+    if (fragmented != other.fragmented) return false;
+    if (includingFcs != other.includingFcs) return false;
+    if (padding != other.padding) return false;
+    if (shortGuardInterval != other.shortGuardInterval) return false;
+    if (shortPreamble != other.shortPreamble) return false;
+    if (wepEncrypted != other.wepEncrypted) return false;
     return true;
   }
 
@@ -271,9 +264,7 @@ public final class RadiotapDataFlags implements RadiotapData {
     private boolean badFcs;
     private boolean shortGuardInterval;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(RadiotapDataFlags obj) {
@@ -352,13 +343,9 @@ public final class RadiotapDataFlags implements RadiotapData {
       return this;
     }
 
-    /**
-     * @return a new RadiotapFlags object.
-     */
+    /** @return a new RadiotapFlags object. */
     public RadiotapDataFlags build() {
       return new RadiotapDataFlags(this);
     }
-
   }
-
 }

@@ -15,10 +15,6 @@ import org.pcap4j.packet.Packet;
  */
 public interface PacketListener {
 
-  /**
-   *
-   * @param packet packet
-   */
+  /** @param packet packet */
   public void gotPacket(Packet packet);
-
 }

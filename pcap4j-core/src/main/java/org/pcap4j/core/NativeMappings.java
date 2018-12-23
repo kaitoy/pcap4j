@@ -7,16 +7,6 @@
 
 package org.pcap4j.core;
 
-import java.lang.reflect.Method;
-import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sun.jna.Callback;
 import com.sun.jna.Function;
 import com.sun.jna.FunctionMapper;
@@ -29,6 +19,14 @@ import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import java.lang.reflect.Method;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kaito Yamada
@@ -38,20 +36,14 @@ final class NativeMappings {
 
   private static final Logger LOG = LoggerFactory.getLogger(NativeMappings.class);
 
-  static final String PCAP_LIB_NAME
-    = System.getProperty(
-        NativeMappings.class.getPackage().getName() + ".pcapLibName",
-        Platform.isWindows() ? "wpcap" : "pcap"
-      );
+  static final String PCAP_LIB_NAME =
+      System.getProperty(
+          NativeMappings.class.getPackage().getName() + ".pcapLibName",
+          Platform.isWindows() ? "wpcap" : "pcap");
 
-  static final Function PCAP_DUMP
-    = Function.getFunction(
-        PCAP_LIB_NAME,
-        "pcap_dump"
-      );
+  static final Function PCAP_DUMP = Function.getFunction(PCAP_LIB_NAME, "pcap_dump");
 
-  static final Map<String, Object> NATIVE_LOAD_LIBRARY_OPTIONS
-    = new HashMap<String, Object>();
+  static final Map<String, Object> NATIVE_LOAD_LIBRARY_OPTIONS = new HashMap<String, Object>();
 
   // LITTLE_ENDIAN: SPARC, JVM
   // BIG_ENDIAN: x86, network bite order
@@ -59,22 +51,21 @@ final class NativeMappings {
 
   static final int SBIOCSTIME = 0x4201;
 
-  static final Pointer ERRNO_P
-    = Platform.isSolaris() ? NativeLibrary.getInstance(PCAP_LIB_NAME)
-                               .getGlobalVariableAddress("errno")
-                           : null;
+  static final Pointer ERRNO_P =
+      Platform.isSolaris()
+          ? NativeLibrary.getInstance(PCAP_LIB_NAME).getGlobalVariableAddress("errno")
+          : null;
 
   // see pcap-int.h: struct pcap
   static int getFdFromPcapT(Pointer p) {
-    if (Platform.isWindows()) { return -1; }
+    if (Platform.isWindows()) {
+      return -1;
+    }
     return p.getInt(0);
   }
 
   static {
-    Native.register(
-      NativeMappings.class,
-      NativeLibrary.getInstance(PCAP_LIB_NAME)
-    );
+    Native.register(NativeMappings.class, NativeLibrary.getInstance(PCAP_LIB_NAME));
 
     // for interface mapping
     final Map<String, String> funcMap = new HashMap<String, String>();
@@ -83,27 +74,20 @@ final class NativeMappings {
     funcMap.put("dos_pcap_stats_ex", "pcap_stats_ex");
     funcMap.put("win_pcap_stats_ex", "pcap_stats_ex");
     funcMap.put(
-      "pcap_open_offline_with_tstamp_precision",
-      "pcap_open_offline_with_tstamp_precision"
-    );
-    funcMap.put(
-      "pcap_open_dead_with_tstamp_precision",
-      "pcap_open_dead_with_tstamp_precision"
-    );
+        "pcap_open_offline_with_tstamp_precision", "pcap_open_offline_with_tstamp_precision");
+    funcMap.put("pcap_open_dead_with_tstamp_precision", "pcap_open_dead_with_tstamp_precision");
     funcMap.put("pcap_set_tstamp_precision", "pcap_set_tstamp_precision");
     funcMap.put("pcap_set_immediate_mode", "pcap_set_immediate_mode");
 
     NATIVE_LOAD_LIBRARY_OPTIONS.put(
-      Library.OPTION_FUNCTION_MAPPER,
-      new FunctionMapper() {
+        Library.OPTION_FUNCTION_MAPPER,
+        new FunctionMapper() {
 
-        @Override
-        public String getFunctionName(NativeLibrary library, Method method) {
-          return funcMap.get(method.getName());
-        }
-
-      }
-    );
+          @Override
+          public String getFunctionName(NativeLibrary library, Method method) {
+            return funcMap.get(method.getName());
+          }
+        });
 
     LOG.info("Pcap4J successfully loaded a native pcap library: {}", pcap_lib_version());
   }
@@ -113,7 +97,8 @@ final class NativeMappings {
   // int pcap_findalldevs(pcap_if_t **alldevsp, char *errbuf)
   static native int pcap_findalldevs(PointerByReference alldevsp, PcapErrbuf errbuf);
 
-  // TODO WinPcap: int pcap_findalldevs_ex(char *host, char *port, SOCKET sockctrl, struct pcap_rmtauth *auth, pcap_if_t **alldevs, char *errbuf)
+  // TODO WinPcap: int pcap_findalldevs_ex(char *host, char *port, SOCKET sockctrl, struct
+  // pcap_rmtauth *auth, pcap_if_t **alldevs, char *errbuf)
 
   // void  pcap_freealldevs (pcap_if_t *alldevsp)
   static native void pcap_freealldevs(Pointer alldevsp);
@@ -122,14 +107,14 @@ final class NativeMappings {
   static native Pointer pcap_lookupdev(PcapErrbuf errbuf);
 
   // int pcap_lookupnet(char *device, bpf_u_int32 *netp, bpf_u_int32 *maskp, char *errbuf)
-  static native int pcap_lookupnet(String device, IntByReference netp, IntByReference maskp, PcapErrbuf errbuf);
+  static native int pcap_lookupnet(
+      String device, IntByReference netp, IntByReference maskp, PcapErrbuf errbuf);
 
   // pcap_t *pcap_open_live(
   //   const char *device, int snaplen, int promisc, int to_ms, char *errbuf
   // )
-  static native  Pointer pcap_open_live(
-    String device, int snaplen, int promisc, int to_ms, PcapErrbuf errbuf
-  );
+  static native Pointer pcap_open_live(
+      String device, int snaplen, int promisc, int to_ms, PcapErrbuf errbuf);
 
   // pcap_t *pcap_open_dead (int linktype, int snaplen)
   static native Pointer pcap_open_dead(int linktype, int snaplen);
@@ -137,7 +122,8 @@ final class NativeMappings {
   // pcap_t *pcap_open_offline(const char *fname, char *errbuf)
   static native Pointer pcap_open_offline(String fname, PcapErrbuf errbuf);
 
-  // TODO WinPcap: pcap_t *pcap_open(const char *source, int snaplen, int flags, int read_timeout, struct pcap_rmtauth *auth, char *errbuf)
+  // TODO WinPcap: pcap_t *pcap_open(const char *source, int snaplen, int flags, int read_timeout,
+  // struct pcap_rmtauth *auth, char *errbuf)
 
   // int pcap_setnonblock(pcap_t *p, int nonblock, char *errbuf)
   static native int pcap_setnonblock(Pointer p, int nonblock, PcapErrbuf errbuf);
@@ -173,6 +159,7 @@ final class NativeMappings {
 
   // int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user)
   static native int pcap_loop(Pointer p, int cnt, pcap_handler callback, Pointer user);
+
   static native int pcap_loop(Pointer p, int cnt, Function callback, Pointer user);
 
   // void pcap_breakloop(pcap_t *p)
@@ -182,27 +169,24 @@ final class NativeMappings {
   //   pcap_t *p, struct bpf_program *fp, char *str,
   //   int optimize, bpf_u_int32 netmask
   // )
-  static native int pcap_compile(
-    Pointer p, bpf_program fp, String str, int optimize, int netmask
-  );
+  static native int pcap_compile(Pointer p, bpf_program fp, String str, int optimize, int netmask);
 
   // int pcap_compile_nopcap(
   //   int snaplen_arg, int linktype_arg, struct bpf_program *program, char *buf,
   //   int optimize, bpf_u_int32 mask
   // )
   static native int pcap_compile_nopcap(
-    int snaplen_arg, int linktype_arg, bpf_program fp, String buf,
-    int optimize, int mask
-  );
+      int snaplen_arg, int linktype_arg, bpf_program fp, String buf, int optimize, int mask);
 
   // u_int bpf_filter(const struct bpf_insn *, const u_char *, u_int, u_int)
-  static native int bpf_filter(bpf_insn.ByReference bpf_insn, byte[] packet, int wirelen, int buflen);
+  static native int bpf_filter(
+      bpf_insn.ByReference bpf_insn, byte[] packet, int wirelen, int buflen);
 
   // int pcap_setfilter(pcap_t *p, struct bpf_program *fp)
   static native int pcap_setfilter(Pointer p, bpf_program fp);
 
   // void pcap_freecode(struct bpf_program *fp)
-  static native void  pcap_freecode(bpf_program fp);
+  static native void pcap_freecode(bpf_program fp);
 
   // int pcap_sendpacket(pcap_t *p, const u_char *buf, int size)
   static native int pcap_sendpacket(Pointer p, byte[] buf, int size);
@@ -279,14 +263,11 @@ final class NativeMappings {
   // interface mappings
   interface PcapLibrary extends Library {
 
-    static final PcapLibrary INSTANCE
-      = (PcapLibrary)Native.load(
-          PCAP_LIB_NAME,
-          PcapLibrary.class,
-          NATIVE_LOAD_LIBRARY_OPTIONS
-        );
+    static final PcapLibrary INSTANCE =
+        (PcapLibrary) Native.load(PCAP_LIB_NAME, PcapLibrary.class, NATIVE_LOAD_LIBRARY_OPTIONS);
 
-    // The following functions can't be mapped directly because they are supported by not all OSes
+    // The following functions can't be mapped directly because they are supported by not all
+    // OSes
     // or by only very new versions of pcap libraries.
     // If you add a method here you need to put the method to funcMap in static initialization
     // block above.
@@ -297,13 +278,14 @@ final class NativeMappings {
     // int strioctl(int fd, int cmd, int len, char *dp)
     int strioctl(int fd, int cmd, int len, Pointer dp);
 
-    //int pcap_stats_ex(pcap_t *p, struct pcap_stat_ex *ps)
+    // int pcap_stats_ex(pcap_t *p, struct pcap_stat_ex *ps)
     int dos_pcap_stats_ex(Pointer p, pcap_stat_ex ps);
 
     // struct pcap_stat* pcap_stats_ex(pcap_t *p, int *pcap_stat_size)
     Pointer win_pcap_stats_ex(Pointer p, IntByReference pcap_stat_size);
 
-    // pcap_t *pcap_open_offline_with_tstamp_precision(const char *fname, u_int precision, char*errbuf);
+    // pcap_t *pcap_open_offline_with_tstamp_precision(const char *fname, u_int precision,
+    // char*errbuf);
     Pointer pcap_open_offline_with_tstamp_precision(String fname, int precision, PcapErrbuf errbuf);
 
     // pcap_t *pcap_open_dead_with_tstamp_precision(int linktype, int snaplen, u_int precision);
@@ -311,10 +293,9 @@ final class NativeMappings {
 
     // int pcap_set_tstamp_precision(pcap_t *p, int tstamp_precision)
     int pcap_set_tstamp_precision(Pointer p, int tstamp_precision);
-    
+
     // int pcap_set_immediate_mode(pcap_t *p, int immediate_mode)
     int pcap_set_immediate_mode(Pointer p, int immediate_mode);
-
   }
 
   static interface pcap_handler extends Callback {
@@ -323,7 +304,6 @@ final class NativeMappings {
     //   u_char *args, const struct pcap_pkthdr *header, const u_char *packet
     // );
     public void got_packet(Pointer args, Pointer header, Pointer packet);
-
   }
 
   public static class pcap_if extends Structure {
@@ -341,9 +321,7 @@ final class NativeMappings {
       read();
     }
 
-    public static
-    class ByReference
-    extends pcap_if implements Structure.ByReference {}
+    public static class ByReference extends pcap_if implements Structure.ByReference {}
 
     @Override
     protected List<String> getFieldOrder() {
@@ -355,7 +333,6 @@ final class NativeMappings {
       list.add("flags");
       return list;
     }
-
   }
 
   public static class pcap_addr extends Structure {
@@ -373,9 +350,7 @@ final class NativeMappings {
       read();
     }
 
-    public static
-    class ByReference
-    extends pcap_addr implements Structure.ByReference {}
+    public static class ByReference extends pcap_addr implements Structure.ByReference {}
 
     @Override
     protected List<String> getFieldOrder() {
@@ -387,13 +362,12 @@ final class NativeMappings {
       list.add("dstaddr");
       return list;
     }
-
   }
 
   public static class sockaddr extends Structure {
 
     public short sa_family; // u_short
-    public byte[] sa_data = new byte[14];  // char[14]
+    public byte[] sa_data = new byte[14]; // char[14]
 
     public sockaddr() {}
 
@@ -402,9 +376,7 @@ final class NativeMappings {
       read();
     }
 
-    public static
-    class ByReference
-    extends sockaddr implements Structure.ByReference {}
+    public static class ByReference extends sockaddr implements Structure.ByReference {}
 
     @Override
     protected List<String> getFieldOrder() {
@@ -417,31 +389,25 @@ final class NativeMappings {
     short getSaFamily() {
       if (isWindowsType()) {
         return sa_family;
-      }
-      else {
+      } else {
         if (NATIVE_BYTE_ORDER.equals(ByteOrder.BIG_ENDIAN)) {
-          return (short)(0xFF & sa_family);
-        }
-        else {
-          return (short)(0xFF & (sa_family >> 8));
+          return (short) (0xFF & sa_family);
+        } else {
+          return (short) (0xFF & (sa_family >> 8));
         }
       }
     }
 
     static boolean isWindowsType() {
-      if (
-           Platform.isMac()
-        || Platform.isFreeBSD()
-        || Platform.isOpenBSD()
-        || Platform.iskFreeBSD()
-      ) {
+      if (Platform.isMac()
+          || Platform.isFreeBSD()
+          || Platform.isOpenBSD()
+          || Platform.iskFreeBSD()) {
         return false;
-      }
-      else {
+      } else {
         return true;
       }
     }
-
   }
 
   public static class sockaddr_in extends Structure {
@@ -471,17 +437,14 @@ final class NativeMappings {
     short getSaFamily() {
       if (sockaddr.isWindowsType()) {
         return sin_family;
-      }
-      else {
+      } else {
         if (NATIVE_BYTE_ORDER.equals(ByteOrder.BIG_ENDIAN)) {
-          return (short)(0xFF & sin_family);
-        }
-        else {
-          return (short)(0xFF & (sin_family >> 8));
+          return (short) (0xFF & sin_family);
+        } else {
+          return (short) (0xFF & (sin_family >> 8));
         }
       }
     }
-
   }
 
   public static class in_addr extends Structure {
@@ -496,7 +459,6 @@ final class NativeMappings {
       list.add("s_addr");
       return list;
     }
-
   }
 
   public static class sockaddr_in6 extends Structure {
@@ -528,22 +490,19 @@ final class NativeMappings {
     short getSaFamily() {
       if (sockaddr.isWindowsType()) {
         return sin6_family;
-      }
-      else {
+      } else {
         if (NATIVE_BYTE_ORDER.equals(ByteOrder.BIG_ENDIAN)) {
-          return (short)(0xFF & sin6_family);
-        }
-        else {
-          return (short)(0xFF & (sin6_family >> 8));
+          return (short) (0xFF & sin6_family);
+        } else {
+          return (short) (0xFF & (sin6_family >> 8));
         }
       }
     }
-
   }
 
   public static class in6_addr extends Structure {
 
-    public byte[] s6_addr = new byte[16];   // unsigned char[16]
+    public byte[] s6_addr = new byte[16]; // unsigned char[16]
 
     public in6_addr() {}
 
@@ -553,7 +512,6 @@ final class NativeMappings {
       list.add("s6_addr");
       return list;
     }
-
   }
 
   // Linux specific
@@ -590,17 +548,14 @@ final class NativeMappings {
     short getSaFamily() {
       if (sockaddr.isWindowsType()) {
         return sll_family;
-      }
-      else {
+      } else {
         if (NATIVE_BYTE_ORDER.equals(ByteOrder.BIG_ENDIAN)) {
-          return (short)(0xFF & sll_family);
-        }
-        else {
-          return (short)(0xFF & (sll_family >> 8));
+          return (short) (0xFF & sll_family);
+        } else {
+          return (short) (0xFF & (sll_family >> 8));
         }
       }
     }
-
   }
 
   // Mac OS X and BSD specific
@@ -614,8 +569,8 @@ final class NativeMappings {
     public byte sdl_alen; // u_char
     public byte sdl_slen; // u_char
     public byte[] sdl_data = new byte[46]; // unsigned char[46]
-                                           // minimum work area, can be larger;
-                                           // contains both if name and ll address
+    // minimum work area, can be larger;
+    // contains both if name and ll address
 
     public sockaddr_dl() {}
 
@@ -641,7 +596,6 @@ final class NativeMappings {
     byte[] getAddress() {
       return getPointer().getByteArray(8 + (0xFF & sdl_nlen), 0xFF & sdl_alen);
     }
-
   }
 
   public static class pcap_pkthdr extends Structure {
@@ -650,9 +604,9 @@ final class NativeMappings {
     public static final int CAPLEN_OFFSET;
     public static final int LEN_OFFSET;
 
-    public timeval ts;// struct timeval
+    public timeval ts; // struct timeval
     public int caplen; // bpf_u_int32
-    public int len;// bpf_u_int32
+    public int len; // bpf_u_int32
 
     static {
       pcap_pkthdr ph = new pcap_pkthdr();
@@ -668,9 +622,7 @@ final class NativeMappings {
       read();
     }
 
-    public static
-    class ByReference
-    extends pcap_pkthdr implements Structure.ByReference {}
+    public static class ByReference extends pcap_pkthdr implements Structure.ByReference {}
 
     @Override
     protected List<String> getFieldOrder() {
@@ -696,7 +648,6 @@ final class NativeMappings {
     static int getLen(Pointer p) {
       return p.getInt(LEN_OFFSET);
     }
-
   }
 
   public static class timeval extends Structure {
@@ -722,7 +673,6 @@ final class NativeMappings {
       list.add("tv_usec");
       return list;
     }
-
   }
 
   public static class bpf_program extends Structure {
@@ -741,7 +691,6 @@ final class NativeMappings {
       list.add("bf_insns");
       return list;
     }
-
   }
 
   public static class bpf_insn extends Structure {
@@ -751,13 +700,11 @@ final class NativeMappings {
     public byte jf; // u_char
     public int k; // bpf_u_int32
 
-    public bpf_insn()  {
+    public bpf_insn() {
       setAutoSynch(false);
     }
 
-    public static
-    class ByReference
-    extends bpf_insn implements Structure.ByReference {}
+    public static class ByReference extends bpf_insn implements Structure.ByReference {}
 
     @Override
     protected List<String> getFieldOrder() {
@@ -768,7 +715,6 @@ final class NativeMappings {
       list.add("k");
       return list;
     }
-
   };
 
   public static class pcap_stat extends Structure {
@@ -795,9 +741,7 @@ final class NativeMappings {
       read();
     }
 
-    public static
-    class ByReference
-    extends pcap_stat implements Structure.ByReference {}
+    public static class ByReference extends pcap_stat implements Structure.ByReference {}
 
     @Override
     protected List<String> getFieldOrder() {
@@ -819,7 +763,6 @@ final class NativeMappings {
     static int getPsIfdrop(Pointer p) {
       return p.getInt(PS_IFDROP_OFFSET);
     }
-
   };
 
   public static class win_pcap_stat extends pcap_stat {
@@ -840,9 +783,7 @@ final class NativeMappings {
       read();
     }
 
-    public static
-    class ByReference
-    extends win_pcap_stat implements Structure.ByReference {}
+    public static class ByReference extends win_pcap_stat implements Structure.ByReference {}
 
     @Override
     protected List<String> getFieldOrder() {
@@ -854,29 +795,28 @@ final class NativeMappings {
     static int getBsCapt(Pointer p) {
       return p.getInt(BS_CAPT_OFFSET);
     }
-
   };
 
   public static class pcap_stat_ex extends Structure {
 
-    public NativeLong rx_packets;        /* total packets received       */ // u_long
-    public NativeLong tx_packets;        /* total packets transmitted    */ // u_long
-    public NativeLong rx_bytes;          /* total bytes received         */ // u_long
-    public NativeLong tx_bytes;          /* total bytes transmitted      */ // u_long
-    public NativeLong rx_errors;         /* bad packets received         */ // u_long
-    public NativeLong tx_errors;         /* packet transmit problems     */ // u_long
-    public NativeLong rx_dropped;        /* no space in Rx buffers       */ // u_long
-    public NativeLong tx_dropped;        /* no space available for Tx    */ // u_long
-    public NativeLong multicast;         /* multicast packets received   */ // u_long
+    public NativeLong rx_packets; /* total packets received       */ // u_long
+    public NativeLong tx_packets; /* total packets transmitted    */ // u_long
+    public NativeLong rx_bytes; /* total bytes received         */ // u_long
+    public NativeLong tx_bytes; /* total bytes transmitted      */ // u_long
+    public NativeLong rx_errors; /* bad packets received         */ // u_long
+    public NativeLong tx_errors; /* packet transmit problems     */ // u_long
+    public NativeLong rx_dropped; /* no space in Rx buffers       */ // u_long
+    public NativeLong tx_dropped; /* no space available for Tx    */ // u_long
+    public NativeLong multicast; /* multicast packets received   */ // u_long
     public NativeLong collisions; // u_long
 
     /* detailed rx_errors: */
     public NativeLong rx_length_errors; // u_long
-    public NativeLong rx_over_errors;    /* receiver ring buff overflow  */ // u_long
-    public NativeLong rx_crc_errors;     /* recv'd pkt with crc error    */ // u_long
-    public NativeLong rx_frame_errors;   /* recv'd frame alignment error */ // u_long
-    public NativeLong rx_fifo_errors;    /* recv'r fifo overrun          */ // u_long
-    public NativeLong rx_missed_errors;  /* recv'r missed packet         */ // u_long
+    public NativeLong rx_over_errors; /* receiver ring buff overflow  */ // u_long
+    public NativeLong rx_crc_errors; /* recv'd pkt with crc error    */ // u_long
+    public NativeLong rx_frame_errors; /* recv'd frame alignment error */ // u_long
+    public NativeLong rx_fifo_errors; /* recv'r fifo overrun          */ // u_long
+    public NativeLong rx_missed_errors; /* recv'r missed packet         */ // u_long
 
     /* detailed tx_errors */
     public NativeLong tx_aborted_errors; // u_long
@@ -887,9 +827,7 @@ final class NativeMappings {
 
     public pcap_stat_ex() {}
 
-    public static
-    class ByReference
-    extends pcap_stat_ex implements Structure.ByReference {}
+    public static class ByReference extends pcap_stat_ex implements Structure.ByReference {}
 
     @Override
     protected List<String> getFieldOrder() {
@@ -917,7 +855,6 @@ final class NativeMappings {
       list.add("tx_window_errors");
       return list;
     }
-
   };
 
   public static class PcapErrbuf extends Structure {
@@ -945,7 +882,5 @@ final class NativeMappings {
     public String toString() {
       return Native.toString(buf);
     }
-
   }
-
 }

@@ -17,19 +17,16 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.14
  */
-public final class PropertiesBasedIpV4TosFactory
-implements PacketFactory<IpV4Tos, NotApplicable> {
+public final class PropertiesBasedIpV4TosFactory implements PacketFactory<IpV4Tos, NotApplicable> {
 
-  private static final PropertiesBasedIpV4TosFactory INSTANCE
-    = new PropertiesBasedIpV4TosFactory();
+  private static final PropertiesBasedIpV4TosFactory INSTANCE = new PropertiesBasedIpV4TosFactory();
 
   private PropertiesBasedIpV4TosFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of PropertiesBasedIpV4TosFactory
-   */
-  public static PropertiesBasedIpV4TosFactory getInstance() { return INSTANCE; }
+  /** @return the singleton instance of PropertiesBasedIpV4TosFactory */
+  public static PropertiesBasedIpV4TosFactory getInstance() {
+    return INSTANCE;
+  }
 
   @Override
   @Deprecated
@@ -43,9 +40,8 @@ implements PacketFactory<IpV4Tos, NotApplicable> {
   }
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -53,13 +49,12 @@ implements PacketFactory<IpV4Tos, NotApplicable> {
    * @param tosClass tosClass
    * @return a new IpV4Tos object.
    * @throws IllegalStateException if an access to the newInstance method of the tosClass fails.
-   * @throws IllegalArgumentException if an exception is thrown by
-   *                                  newInstance method of the tosClass.
+   * @throws IllegalArgumentException if an exception is thrown by newInstance method of the
+   *     tosClass.
    * @throws NullPointerException if any of arguments are null.
    */
   public IpV4Tos newInstance(
-    byte[] rawData, int offset, int length, Class<? extends IpV4Tos> tosClass
-  ) {
+      byte[] rawData, int offset, int length, Class<? extends IpV4Tos> tosClass) {
     ByteArrays.validateBounds(rawData, offset, length);
     if (tosClass == null) {
       throw new NullPointerException("tosClass is null.");
@@ -67,7 +62,7 @@ implements PacketFactory<IpV4Tos, NotApplicable> {
 
     try {
       Method newInstance = tosClass.getMethod("newInstance", byte.class);
-      return (IpV4Tos)newInstance.invoke(null, rawData[offset]);
+      return (IpV4Tos) newInstance.invoke(null, rawData[offset]);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -91,5 +86,4 @@ implements PacketFactory<IpV4Tos, NotApplicable> {
   public Class<? extends IpV4Tos> getTargetClass() {
     return PacketFactoryPropertiesLoader.getInstance().getIpV4TosClass();
   }
-
 }

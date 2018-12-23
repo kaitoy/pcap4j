@@ -18,48 +18,44 @@ import org.pcap4j.packet.namednumber.PppDllProtocol;
  * @since pcap4j 1.4.0
  */
 public final class StaticPppDllProtocolPacketFactory
-extends AbstractStaticPacketFactory<PppDllProtocol> {
+    extends AbstractStaticPacketFactory<PppDllProtocol> {
 
-  private static final StaticPppDllProtocolPacketFactory INSTANCE
-    = new StaticPppDllProtocolPacketFactory();
+  private static final StaticPppDllProtocolPacketFactory INSTANCE =
+      new StaticPppDllProtocolPacketFactory();
 
   private StaticPppDllProtocolPacketFactory() {
     instantiaters.put(
-      PppDllProtocol.IPV4, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IpV4Packet.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV4Packet> getTargetClass() {
-          return IpV4Packet.class;
-        }
-      }
-    );
+        PppDllProtocol.IPV4,
+        new PacketInstantiater() {
+          @Override
+          public Packet newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return IpV4Packet.newPacket(rawData, offset, length);
+          }
+
+          @Override
+          public Class<IpV4Packet> getTargetClass() {
+            return IpV4Packet.class;
+          }
+        });
     instantiaters.put(
-      PppDllProtocol.IPV6, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IpV6Packet.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV6Packet> getTargetClass() {
-          return IpV6Packet.class;
-        }
-      }
-    );
+        PppDllProtocol.IPV6,
+        new PacketInstantiater() {
+          @Override
+          public Packet newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return IpV6Packet.newPacket(rawData, offset, length);
+          }
+
+          @Override
+          public Class<IpV6Packet> getTargetClass() {
+            return IpV6Packet.class;
+          }
+        });
   };
 
-  /**
-   *
-   * @return the singleton instance of StaticPppDllProtocolPacketFactory.
-   */
+  /** @return the singleton instance of StaticPppDllProtocolPacketFactory. */
   public static StaticPppDllProtocolPacketFactory getInstance() {
     return INSTANCE;
   }
-
 }

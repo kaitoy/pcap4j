@@ -17,15 +17,19 @@ import org.pcap4j.packet.UdpPacket;
 
 /**
  * A utility class for operating on packets.
+ *
  * @author Kaito Yamada
  * @since pcap4j 1.7.2
  */
 public final class Packets {
 
-  private Packets() { throw new AssertionError(); }
+  private Packets() {
+    throw new AssertionError();
+  }
 
   /**
    * Checks if the given packet contains a TCP packet ({@link TcpPacket}).
+   *
    * @param packet packet
    * @return true if the packet contains a TCP packet; false otherwise.
    */
@@ -35,6 +39,7 @@ public final class Packets {
 
   /**
    * Checks if the given packet contains a Udp packet ({@link UdpPacket}).
+   *
    * @param packet packet
    * @return true if the packet contains a UDP packet; false otherwise.
    */
@@ -44,6 +49,7 @@ public final class Packets {
 
   /**
    * Checks if the given packet contains an IPv4 packet ({@link IpV4Packet}).
+   *
    * @param packet packet
    * @return true if the packet contains an IPv4 packet; false otherwise.
    */
@@ -53,6 +59,7 @@ public final class Packets {
 
   /**
    * Checks if the given packet contains an IPv6 packet ({@link IpV6Packet}).
+   *
    * @param packet packet
    * @return true if the packet contains an IPv6 packet; false otherwise.
    */
@@ -62,6 +69,7 @@ public final class Packets {
 
   /**
    * Checks if the given packet contains an IP packet ({@link IpPacket}).
+   *
    * @param packet packet
    * @return true if the packet contains an IP packet; false otherwise.
    */
@@ -71,11 +79,11 @@ public final class Packets {
 
   /**
    * Checks if the given packet contains an Ethernet packet ({@link EthernetPacket}).
+   *
    * @param packet packet
    * @return true if the packet contains an Ethernet packet; false otherwise.
    */
   public static boolean containsEthernetPacket(Packet packet) {
     return packet.contains(EthernetPacket.class);
   }
-
 }

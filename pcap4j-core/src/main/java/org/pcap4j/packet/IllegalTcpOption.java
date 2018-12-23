@@ -18,18 +18,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IllegalTcpOption implements TcpOption {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 4128600756828920489L;
 
   private final TcpOptionKind kind;
   private final byte[] rawData;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -48,30 +45,31 @@ public final class IllegalTcpOption implements TcpOption {
   }
 
   private IllegalTcpOption(Builder builder) {
-    if (
-        builder == null
-     || builder.kind == null
-     || builder.rawData == null
-   ) {
-     StringBuilder sb = new StringBuilder();
-     sb.append("builder: ").append(builder)
-       .append(" builder.kind: ").append(builder.kind)
-       .append(" builder.rawData: ").append(builder.rawData);
-     throw new NullPointerException(sb.toString());
-   }
+    if (builder == null || builder.kind == null || builder.rawData == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.kind: ")
+          .append(builder.kind)
+          .append(" builder.rawData: ")
+          .append(builder.rawData);
+      throw new NullPointerException(sb.toString());
+    }
 
-   this.kind = builder.kind;
-   this.rawData = new byte[builder.rawData.length];
-   System.arraycopy(
-     builder.rawData, 0, this.rawData, 0, builder.rawData.length
-   );
+    this.kind = builder.kind;
+    this.rawData = new byte[builder.rawData.length];
+    System.arraycopy(builder.rawData, 0, this.rawData, 0, builder.rawData.length);
   }
 
   @Override
-  public TcpOptionKind getKind() { return kind; }
+  public TcpOptionKind getKind() {
+    return kind;
+  }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -80,10 +78,7 @@ public final class IllegalTcpOption implements TcpOption {
     return copy;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -92,22 +87,24 @@ public final class IllegalTcpOption implements TcpOption {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[Kind: ")
-      .append(kind)
-      .append("] [Illegal Raw Data: 0x")
-      .append(ByteArrays.toHexString(rawData, ""))
-      .append("]");
+        .append(kind)
+        .append("] [Illegal Raw Data: 0x")
+        .append(ByteArrays.toHexString(rawData, ""))
+        .append("]");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    IllegalTcpOption other = (IllegalTcpOption)obj;
-    return
-         kind.equals(other.kind)
-      && Arrays.equals(other.rawData, rawData);
+    IllegalTcpOption other = (IllegalTcpOption) obj;
+    return kind.equals(other.kind) && Arrays.equals(other.rawData, rawData);
   }
 
   @Override
@@ -127,9 +124,7 @@ public final class IllegalTcpOption implements TcpOption {
     private TcpOptionKind kind;
     private byte[] rawData;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IllegalTcpOption option) {
@@ -138,7 +133,6 @@ public final class IllegalTcpOption implements TcpOption {
     }
 
     /**
-     *
      * @param kind kind
      * @return this Builder object for method chaining.
      */
@@ -148,7 +142,6 @@ public final class IllegalTcpOption implements TcpOption {
     }
 
     /**
-     *
      * @param rawData rawData
      * @return this Builder object for method chaining.
      */
@@ -157,14 +150,9 @@ public final class IllegalTcpOption implements TcpOption {
       return this;
     }
 
-    /**
-     *
-     * @return a new IllegalTcpOption object.
-     */
+    /** @return a new IllegalTcpOption object. */
     public IllegalTcpOption build() {
       return new IllegalTcpOption(this);
     }
-
   }
-
 }

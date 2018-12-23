@@ -16,9 +16,7 @@ import org.pcap4j.packet.namednumber.IpV4TosPrecedence;
  */
 public final class IpV4Rfc791Tos implements IpV4Tos {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 1760697525836662144L;
 
   /* http://www.ietf.org/rfc/rfc791.txt
@@ -39,7 +37,6 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
   private final boolean eighthBit;
 
   /**
-   *
    * @param value value
    * @return a new IpV4Rfc791Tos object.
    */
@@ -49,7 +46,7 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
 
   private IpV4Rfc791Tos(byte value) {
 
-    this.precedence = IpV4TosPrecedence.getInstance((byte)((value & 0xE0) >> 5));
+    this.precedence = IpV4TosPrecedence.getInstance((byte) ((value & 0xE0) >> 5));
     this.lowDelay = (value & 0x10) != 0;
     this.highThroughput = (value & 0x08) != 0;
     this.highReliability = (value & 0x04) != 0;
@@ -58,13 +55,12 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
   }
 
   private IpV4Rfc791Tos(Builder builder) {
-    if (
-         builder == null
-      || builder.precedence == null
-    ) {
+    if (builder == null || builder.precedence == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder").append(builder)
-        .append(" builder.precedence: ").append(builder.precedence);
+      sb.append("builder")
+          .append(builder)
+          .append(" builder.precedence: ")
+          .append(builder.precedence);
       throw new NullPointerException(sb.toString());
     }
 
@@ -76,68 +72,57 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
     this.eighthBit = builder.eighthBit;
   }
 
-  /**
-   *
-   * @return precedence
-   */
+  /** @return precedence */
   public IpV4TosPrecedence getPrecedence() {
     return precedence;
   }
 
-  /**
-   *
-   * @return lowDelay
-   */
-  public boolean isLowDelay() { return lowDelay; }
+  /** @return lowDelay */
+  public boolean isLowDelay() {
+    return lowDelay;
+  }
 
-  /**
-   *
-   * @return highThroughput
-   */
-  public boolean isHighThroughput() { return highThroughput; }
+  /** @return highThroughput */
+  public boolean isHighThroughput() {
+    return highThroughput;
+  }
 
-  /**
-   *
-   * @return highReliability
-   */
-  public boolean isHighReliability() { return highReliability; }
+  /** @return highReliability */
+  public boolean isHighReliability() {
+    return highReliability;
+  }
 
-  /**
-   *
-   * @return seventhBit
-   */
-  public boolean getSeventhBit() { return seventhBit; }
+  /** @return seventhBit */
+  public boolean getSeventhBit() {
+    return seventhBit;
+  }
 
-  /**
-   *
-   * @return eighthBit
-   */
-  public boolean getEighthBit() { return eighthBit; }
+  /** @return eighthBit */
+  public boolean getEighthBit() {
+    return eighthBit;
+  }
 
   public byte value() {
-    byte value = (byte)(precedence.value() << 5);
+    byte value = (byte) (precedence.value() << 5);
     if (lowDelay) {
-      value = (byte)(value | 0x10);
+      value = (byte) (value | 0x10);
     }
     if (highThroughput) {
-      value = (byte)(value | 0x08);
+      value = (byte) (value | 0x08);
     }
     if (highReliability) {
-      value = (byte)(value | 0x04);
+      value = (byte) (value | 0x04);
     }
     if (seventhBit) {
-      value = (byte)(value | 0x02);
+      value = (byte) (value | 0x02);
     }
     if (eighthBit) {
-      value = (byte)(value | 0x01);
+      value = (byte) (value | 0x01);
     }
     return value;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -146,31 +131,37 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[precedence: ")
-      .append(precedence)
-      .append("] [lowDelay: ")
-      .append(lowDelay)
-      .append("] [highThroughput: ")
-      .append(highThroughput)
-      .append("] [highReliability: ")
-      .append(highReliability)
-      .append("] [seventhBit: ")
-      .append(seventhBit ? 1 : 0)
-      .append("] [eighthBit: ")
-      .append(eighthBit ? 1 : 0)
-      .append("]");
+        .append(precedence)
+        .append("] [lowDelay: ")
+        .append(lowDelay)
+        .append("] [highThroughput: ")
+        .append(highThroughput)
+        .append("] [highReliability: ")
+        .append(highReliability)
+        .append("] [seventhBit: ")
+        .append(seventhBit ? 1 : 0)
+        .append("] [eighthBit: ")
+        .append(eighthBit ? 1 : 0)
+        .append("]");
 
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     return (getClass().cast(obj)).value() == this.value();
   }
 
   @Override
-  public int hashCode() { return value(); }
+  public int hashCode() {
+    return value();
+  }
 
   /**
    * @author Kaito Yamada
@@ -185,9 +176,7 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
     private boolean seventhBit;
     private boolean eighthBit;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IpV4Rfc791Tos tos) {
@@ -200,7 +189,6 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
     }
 
     /**
-     *
      * @param precedence precedence
      * @return this Builder object for method chaining.
      */
@@ -210,7 +198,6 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
     }
 
     /**
-     *
      * @param lowDelay lowDelay
      * @return this Builder object for method chaining.
      */
@@ -220,7 +207,6 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
     }
 
     /**
-     *
      * @param highThroughput highThroughput
      * @return this Builder object for method chaining.
      */
@@ -230,7 +216,6 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
     }
 
     /**
-     *
      * @param highRelibility highRelibility
      * @return this Builder object for method chaining.
      */
@@ -240,7 +225,6 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
     }
 
     /**
-     *
      * @param seventhBit seventhBit
      * @return this Builder object for method chaining.
      */
@@ -250,7 +234,6 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
     }
 
     /**
-     *
      * @param eighthBit eighthBit
      * @return this Builder object for method chaining.
      */
@@ -259,14 +242,9 @@ public final class IpV4Rfc791Tos implements IpV4Tos {
       return this;
     }
 
-    /**
-     *
-     * @return a new IpV4Rfc791Tos object.
-     */
+    /** @return a new IpV4Rfc791Tos object. */
     public IpV4Rfc791Tos build() {
       return new IpV4Rfc791Tos(this);
     }
-
   }
-
 }

@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.namednumber.Dot11InformationElementId;
 import org.pcap4j.util.ByteArrays;
 
@@ -25,9 +24,8 @@ import org.pcap4j.util.ByteArrays;
  *
  * The Mesh ID element is used to advertise the identification of an MBSS. The Mesh ID element is
  * transmitted in Mesh Peering Open frames, Mesh Peering Confirm frames, Mesh Peering Close frames,
- * Beacon frames, and Probe Request and Response frames.
- * A Mesh ID field of length 0 indicates the wildcard Mesh ID, which is used within Probe Request
- * frame.
+ * Beacon frames, and Probe Request and Response frames. A Mesh ID field of length 0 indicates the
+ * wildcard Mesh ID, which is used within Probe Request frame.
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
@@ -35,17 +33,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot11MeshIdElement extends Dot11InformationElement {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 8808363321385383483L;
 
   private final byte[] meshId;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -53,9 +48,8 @@ public final class Dot11MeshIdElement extends Dot11InformationElement {
    * @return a new Dot11MeshIdElement object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot11MeshIdElement newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot11MeshIdElement newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot11MeshIdElement(rawData, offset, length);
   }
@@ -66,23 +60,19 @@ public final class Dot11MeshIdElement extends Dot11InformationElement {
    * @param length length
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  private Dot11MeshIdElement(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot11MeshIdElement(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     super(rawData, offset, length, Dot11InformationElementId.MESH_ID);
 
     int infoLen = getLengthAsInt();
     if (infoLen == 0) {
       this.meshId = new byte[0];
-    }
-    else {
+    } else {
       this.meshId = ByteArrays.getSubArray(rawData, offset + 2, infoLen);
     }
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   private Dot11MeshIdElement(Builder builder) {
     super(builder);
 
@@ -93,10 +83,10 @@ public final class Dot11MeshIdElement extends Dot11InformationElement {
     this.meshId = ByteArrays.clone(builder.meshId);
   }
 
-  /**
-   * @return meshId
-   */
-  public byte[] getMeshId() { return ByteArrays.clone(meshId); }
+  /** @return meshId */
+  public byte[] getMeshId() {
+    return ByteArrays.clone(meshId);
+  }
 
   @Override
   public int length() {
@@ -112,11 +102,10 @@ public final class Dot11MeshIdElement extends Dot11InformationElement {
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public int hashCode() {
@@ -128,11 +117,9 @@ public final class Dot11MeshIdElement extends Dot11InformationElement {
 
   @Override
   public boolean equals(Object obj) {
-    if (!super.equals(obj))
-      return false;
+    if (!super.equals(obj)) return false;
     Dot11MeshIdElement other = (Dot11MeshIdElement) obj;
-    if (!Arrays.equals(meshId, other.meshId))
-      return false;
+    if (!Arrays.equals(meshId, other.meshId)) return false;
     return true;
   }
 
@@ -149,21 +136,16 @@ public final class Dot11MeshIdElement extends Dot11InformationElement {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Mesh ID:")
-      .append(ls);
-    sb.append(indent).append("  Element ID: ")
-      .append(getElementId())
-      .append(ls);
-    sb.append(indent).append("  Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes")
-      .append(ls);
-    sb.append(indent).append("  Mesh ID: ")
-      .append(new String(meshId))
-      .append(" (0x")
-      .append(ByteArrays.toHexString(meshId, ""))
-      .append(")")
-      .append(ls);
+    sb.append(indent).append("Mesh ID:").append(ls);
+    sb.append(indent).append("  Element ID: ").append(getElementId()).append(ls);
+    sb.append(indent).append("  Length: ").append(getLengthAsInt()).append(" bytes").append(ls);
+    sb.append(indent)
+        .append("  Mesh ID: ")
+        .append(new String(meshId))
+        .append(" (0x")
+        .append(ByteArrays.toHexString(meshId, ""))
+        .append(")")
+        .append(ls);
 
     return sb.toString();
   }
@@ -176,20 +158,12 @@ public final class Dot11MeshIdElement extends Dot11InformationElement {
 
     private byte[] meshId;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {
-      elementId(
-        Dot11InformationElementId.getInstance(
-          Dot11InformationElementId.MESH_ID.value()
-        )
-      );
+      elementId(Dot11InformationElementId.getInstance(Dot11InformationElementId.MESH_ID.value()));
     }
 
-    /**
-     * @param elem a Dot11MeshIdElement object.
-     */
+    /** @param elem a Dot11MeshIdElement object. */
     private Builder(Dot11MeshIdElement elem) {
       super(elem);
       this.meshId = elem.meshId;
@@ -226,7 +200,5 @@ public final class Dot11MeshIdElement extends Dot11InformationElement {
       }
       return new Dot11MeshIdElement(this);
     }
-
   }
-
 }

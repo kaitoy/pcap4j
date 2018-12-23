@@ -18,15 +18,12 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class GtpSelector extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 5081921978086270980L;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -34,9 +31,8 @@ public final class GtpSelector extends AbstractPacket {
    * @return a new Packet object representing an GTP (version x) packet.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Packet newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Packet newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
 
     int ver = (rawData[offset] >> 5) & 0x07;
@@ -49,20 +45,21 @@ public final class GtpSelector extends AbstractPacket {
           case GTP_PRIME:
           default:
             return PacketFactories.getFactory(Packet.class, NotApplicable.class)
-                     .newInstance(rawData, offset, length, NotApplicable.UNKNOWN);
+                .newInstance(rawData, offset, length, NotApplicable.UNKNOWN);
         }
       case 2:
       default:
         return PacketFactories.getFactory(Packet.class, NotApplicable.class)
-                 .newInstance(rawData, offset, length, NotApplicable.UNKNOWN);
+            .newInstance(rawData, offset, length, NotApplicable.UNKNOWN);
     }
   }
 
-  private GtpSelector() { throw new AssertionError(); }
+  private GtpSelector() {
+    throw new AssertionError();
+  }
 
   @Override
   public Builder getBuilder() {
     throw new UnsupportedOperationException();
   }
-
 }

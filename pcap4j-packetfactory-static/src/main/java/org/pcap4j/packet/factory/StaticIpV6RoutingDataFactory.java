@@ -21,48 +21,40 @@ import org.pcap4j.packet.namednumber.IpV6RoutingType;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6RoutingDataFactory
-implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
+    implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
 
-  private static final StaticIpV6RoutingDataFactory INSTANCE
-    = new StaticIpV6RoutingDataFactory();
-  private final Map<IpV6RoutingType, Instantiater> instantiaters
-    = new HashMap<IpV6RoutingType, Instantiater>();
+  private static final StaticIpV6RoutingDataFactory INSTANCE = new StaticIpV6RoutingDataFactory();
+  private final Map<IpV6RoutingType, Instantiater> instantiaters =
+      new HashMap<IpV6RoutingType, Instantiater>();
 
   private StaticIpV6RoutingDataFactory() {
     instantiaters.put(
-      IpV6RoutingType.SOURCE_ROUTE, new Instantiater() {
-        @Override
-        public IpV6RoutingData newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IpV6RoutingSourceRouteData.newInstance(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV6RoutingSourceRouteData> getTargetClass() {
-          return IpV6RoutingSourceRouteData.class;
-        }
-      }
-    );
+        IpV6RoutingType.SOURCE_ROUTE,
+        new Instantiater() {
+          @Override
+          public IpV6RoutingData newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return IpV6RoutingSourceRouteData.newInstance(rawData, offset, length);
+          }
+
+          @Override
+          public Class<IpV6RoutingSourceRouteData> getTargetClass() {
+            return IpV6RoutingSourceRouteData.class;
+          }
+        });
   };
 
-  /**
-   *
-   * @return the singleton instance of StaticIpV6RoutingDataFactory.
-   */
+  /** @return the singleton instance of StaticIpV6RoutingDataFactory. */
   public static StaticIpV6RoutingDataFactory getInstance() {
     return INSTANCE;
   }
 
   @Override
   public IpV6RoutingData newInstance(
-    byte[] rawData, int offset, int length, IpV6RoutingType number
-  ) {
+      byte[] rawData, int offset, int length, IpV6RoutingType number) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" number: ")
-        .append(number);
+      sb.append("rawData: ").append(rawData).append(" number: ").append(number);
       throw new NullPointerException(sb.toString());
     }
 
@@ -103,12 +95,9 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
 
   private static interface Instantiater {
 
-    public IpV6RoutingData newInstance(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException;
+    public IpV6RoutingData newInstance(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException;
 
     public Class<? extends IpV6RoutingData> getTargetClass();
-
   }
-
 }

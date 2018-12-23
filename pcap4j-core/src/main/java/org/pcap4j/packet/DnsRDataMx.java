@@ -39,18 +39,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class DnsRDataMx implements DnsRData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -5914050306503756427L;
 
   private final short preference;
   private final DnsDomainName exchange;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -58,9 +55,8 @@ public final class DnsRDataMx implements DnsRData {
    * @return a new DnsRDataMx object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsRDataMx newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsRDataMx newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsRDataMx(rawData, offset, length);
   }
@@ -69,34 +65,26 @@ public final class DnsRDataMx implements DnsRData {
     if (length < SHORT_SIZE_IN_BYTES + 1) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a DnsRDataMx (")
-        .append(SHORT_SIZE_IN_BYTES + 1)
-        .append(" bytes at least). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(SHORT_SIZE_IN_BYTES + 1)
+          .append(" bytes at least). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.preference
-      = ByteArrays.getShort(rawData, offset);
-    this.exchange
-      = DnsDomainName.newInstance(
-          rawData,
-          offset + SHORT_SIZE_IN_BYTES,
-          length - SHORT_SIZE_IN_BYTES
-        );
+    this.preference = ByteArrays.getShort(rawData, offset);
+    this.exchange =
+        DnsDomainName.newInstance(
+            rawData, offset + SHORT_SIZE_IN_BYTES, length - SHORT_SIZE_IN_BYTES);
   }
 
   private DnsRDataMx(Builder builder) {
-    if (
-         builder == null
-      || builder.exchange == null
-    ) {
+    if (builder == null || builder.exchange == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.exchange: ").append(builder.exchange);
+      sb.append("builder: ").append(builder).append(" builder.exchange: ").append(builder.exchange);
       throw new NullPointerException(sb.toString());
     }
 
@@ -104,20 +92,20 @@ public final class DnsRDataMx implements DnsRData {
     this.exchange = builder.exchange;
   }
 
-  /**
-   * @return preference
-   */
-  public short getPreference() { return preference; }
+  /** @return preference */
+  public short getPreference() {
+    return preference;
+  }
 
-  /**
-   * @return preference
-   */
-  public int getPreferenceAsInt() { return preference; }
+  /** @return preference */
+  public int getPreferenceAsInt() {
+    return preference;
+  }
 
-  /**
-   * @return exchange
-   */
-  public DnsDomainName getExchange() { return exchange; }
+  /** @return exchange */
+  public DnsDomainName getExchange() {
+    return exchange;
+  }
 
   @Override
   public int length() {
@@ -133,10 +121,10 @@ public final class DnsRDataMx implements DnsRData {
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -160,14 +148,17 @@ public final class DnsRDataMx implements DnsRData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("MX RDATA:")
-      .append(ls)
-      .append(indent).append("  PREFERENCE: ")
-      .append(preference)
-      .append(ls)
-      .append(indent).append("  EXCHANGE: ")
-      .append(exchange.toString(headerRawData))
-      .append(ls);
+    sb.append(indent)
+        .append("MX RDATA:")
+        .append(ls)
+        .append(indent)
+        .append("  PREFERENCE: ")
+        .append(preference)
+        .append(ls)
+        .append(indent)
+        .append("  EXCHANGE: ")
+        .append(exchange.toString(headerRawData))
+        .append(ls);
 
     return sb.toString();
   }
@@ -211,9 +202,7 @@ public final class DnsRDataMx implements DnsRData {
     private short preference;
     private DnsDomainName exchange;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(DnsRDataMx obj) {
@@ -239,13 +228,9 @@ public final class DnsRDataMx implements DnsRData {
       return this;
     }
 
-    /**
-     * @return a new DnsRDataMx object.
-     */
+    /** @return a new DnsRDataMx object. */
     public DnsRDataMx build() {
       return new DnsRDataMx(this);
     }
-
   }
-
 }

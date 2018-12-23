@@ -17,9 +17,7 @@ import org.pcap4j.packet.namednumber.NotApplicable;
  */
 abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -739710899445035385L;
 
   /*
@@ -31,54 +29,47 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
    */
   private final Packet payload;
 
-  /**
-   *
-   */
+  /** */
   protected IcmpV4InvokingPacketPacket() {
     this.payload = null;
   }
 
   /**
-   *
    * @param rawData rawData
    * @param payloadOffset payloadOffset
    * @param payloadLength payloadLength
    */
   protected IcmpV4InvokingPacketPacket(byte[] rawData, int payloadOffset, int payloadLength) {
-    Packet p = PacketFactories.getFactory(Packet.class, EtherType.class)
-                 .newInstance(rawData, payloadOffset, payloadLength, EtherType.IPV4);
+    Packet p =
+        PacketFactories.getFactory(Packet.class, EtherType.class)
+            .newInstance(rawData, payloadOffset, payloadLength, EtherType.IPV4);
 
     if (p instanceof IllegalPacket) {
       this.payload = p;
-    }
-    else if (p.contains(IllegalPacket.class)) {
+    } else if (p.contains(IllegalPacket.class)) {
       Packet.Builder builder = p.getBuilder();
       byte[] ipRawData = p.get(IllegalPacket.class).getRawData();
-      builder.getOuterOf(IllegalPacket.Builder.class)
-                .payloadBuilder(
-                  PacketFactories.getFactory(Packet.class, NotApplicable.class)
-                    .newInstance(ipRawData, 0, ipRawData.length, NotApplicable.UNKNOWN)
-                      .getBuilder()
-                 );
-      for (Packet.Builder b: builder) {
+      builder
+          .getOuterOf(IllegalPacket.Builder.class)
+          .payloadBuilder(
+              PacketFactories.getFactory(Packet.class, NotApplicable.class)
+                  .newInstance(ipRawData, 0, ipRawData.length, NotApplicable.UNKNOWN)
+                  .getBuilder());
+      for (Packet.Builder b : builder) {
         if (b instanceof LengthBuilder) {
-          ((LengthBuilder<?>)b).correctLengthAtBuild(false);
+          ((LengthBuilder<?>) b).correctLengthAtBuild(false);
         }
         if (b instanceof ChecksumBuilder) {
-          ((ChecksumBuilder<?>)b).correctChecksumAtBuild(false);
+          ((ChecksumBuilder<?>) b).correctChecksumAtBuild(false);
         }
       }
       this.payload = builder.build();
-    }
-    else {
+    } else {
       this.payload = p;
     }
   }
 
-  /**
-   *
-   * @param builder builder
-   */
+  /** @param builder builder */
   protected IcmpV4InvokingPacketPacket(Builder builder) {
     if (builder == null) {
       StringBuilder sb = new StringBuilder();
@@ -98,25 +89,19 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.15
    */
-  static abstract class Builder extends AbstractBuilder {
+  abstract static class Builder extends AbstractBuilder {
 
     private Packet payload;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
-    /**
-     *
-     * @param packet packet
-     */
+    /** @param packet packet */
     protected Builder(IcmpV4InvokingPacketPacket packet) {
       this.payload = packet.payload;
     }
 
     /**
-     *
      * @param payload payload
      * @return this Builder object for method chaining.
      */
@@ -124,7 +109,5 @@ abstract class IcmpV4InvokingPacketPacket extends AbstractPacket {
       this.payload = payload;
       return this;
     }
-
   }
-
 }

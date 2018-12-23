@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.namednumber.SctpChunkType;
 import org.pcap4j.util.ByteArrays;
@@ -34,9 +33,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class UnknownSctpChunk implements SctpChunk {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2870805088630768174L;
 
   private final SctpChunkType type;
@@ -46,9 +43,8 @@ public final class UnknownSctpChunk implements SctpChunk {
   private final byte[] padding;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -56,24 +52,21 @@ public final class UnknownSctpChunk implements SctpChunk {
    * @return a new UnknownSctpChunk object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static UnknownSctpChunk newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static UnknownSctpChunk newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new UnknownSctpChunk(rawData, offset, length);
   }
 
-  private UnknownSctpChunk(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private UnknownSctpChunk(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < 4) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data length must be more than 3. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -84,23 +77,23 @@ public final class UnknownSctpChunk implements SctpChunk {
     if (length < lengthAsInt) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option (")
-        .append(lengthAsInt)
-        .append("). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(lengthAsInt)
+          .append("). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (lengthAsInt < 4) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The value of the length field must be more than 3. data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -111,32 +104,26 @@ public final class UnknownSctpChunk implements SctpChunk {
       if (paddingLen != 0 && paddingLen != 4 && length >= lengthAsInt + paddingLen) {
         this.padding = new byte[paddingLen];
         System.arraycopy(rawData, lengthAsInt + offset, padding, 0, paddingLen);
-      }
-      else {
+      } else {
         this.padding = new byte[0];
       }
-    }
-    else {
+    } else {
       this.value = new byte[0];
       this.padding = new byte[0];
     }
   }
 
   private UnknownSctpChunk(Builder builder) {
-    if (
-         builder == null
-      || builder.type == null
-    ) {
+    if (builder == null || builder.type == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.type: ").append(builder.type);
+      sb.append("builder: ").append(builder).append(" builder.type: ").append(builder.type);
       throw new NullPointerException(sb.toString());
     }
     if (builder.value.length + 4 > 0xFFFF) {
-      StringBuilder sb
-        = new StringBuilder()
-            .append("(value.length + 4) must be less than or equal to 0xFFFF. builder.value: ")
-            .append(ByteArrays.toHexString(builder.value, " "));
+      StringBuilder sb =
+          new StringBuilder()
+              .append("(value.length + 4) must be less than or equal to 0xFFFF. builder.value: ")
+              .append(ByteArrays.toHexString(builder.value, " "));
       throw new IllegalArgumentException(sb.toString());
     }
 
@@ -144,15 +131,13 @@ public final class UnknownSctpChunk implements SctpChunk {
     this.flags = builder.flags;
     if (builder.value != null) {
       this.value = ByteArrays.clone(builder.value);
-    }
-    else {
+    } else {
       this.value = new byte[0];
     }
 
     if (builder.correctLengthAtBuild) {
       this.length = (short) (4 + value.length);
-    }
-    else {
+    } else {
       this.length = builder.length;
     }
 
@@ -160,49 +145,44 @@ public final class UnknownSctpChunk implements SctpChunk {
       int paddingLen = 4 - (value.length + 4) % 4;
       if (paddingLen != 0 && paddingLen != 4) {
         this.padding = new byte[paddingLen];
-      }
-      else {
+      } else {
         this.padding = new byte[0];
       }
-    }
-    else {
+    } else {
       if (builder.padding != null) {
         this.padding = ByteArrays.clone(builder.padding);
-      }
-      else {
+      } else {
         this.padding = new byte[0];
       }
     }
   }
 
   @Override
-  public SctpChunkType getType() { return type; }
+  public SctpChunkType getType() {
+    return type;
+  }
 
-  /**
-   * @return flags
-   */
-  public byte getFlags() { return flags; }
+  /** @return flags */
+  public byte getFlags() {
+    return flags;
+  }
 
-  /**
-   * @return length
-   */
-  public short getLength() { return length; }
+  /** @return length */
+  public short getLength() {
+    return length;
+  }
 
-  /**
-   * @return length
-   */
-  public int getLengthAsInt() { return 0xFFFF & length; }
+  /** @return length */
+  public int getLengthAsInt() {
+    return 0xFFFF & length;
+  }
 
-  /**
-   * @return value
-   */
+  /** @return value */
   public byte[] getValue() {
     return ByteArrays.clone(value);
   }
 
-  /**
-   * @return padding
-   */
+  /** @return padding */
   public byte[] getPadding() {
     return ByteArrays.clone(padding);
   }
@@ -224,12 +204,11 @@ public final class UnknownSctpChunk implements SctpChunk {
   }
 
   @Override
-  public int length() { return 4 + value.length + padding.length; }
+  public int length() {
+    return 4 + value.length + padding.length;
+  }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -238,19 +217,17 @@ public final class UnknownSctpChunk implements SctpChunk {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[Type: ")
-      .append(type)
-      .append(", Flags: 0x")
-      .append(ByteArrays.toHexString(flags, " "))
-      .append(", Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes");
+        .append(type)
+        .append(", Flags: 0x")
+        .append(ByteArrays.toHexString(flags, " "))
+        .append(", Length: ")
+        .append(getLengthAsInt())
+        .append(" bytes");
     if (value.length != 0) {
-      sb.append(", Value: 0x")
-        .append(ByteArrays.toHexString(value, ""));
+      sb.append(", Value: 0x").append(ByteArrays.toHexString(value, ""));
     }
     if (padding.length != 0) {
-      sb.append(", Padding: 0x")
-        .append(ByteArrays.toHexString(padding, ""));
+      sb.append(", Padding: 0x").append(ByteArrays.toHexString(padding, ""));
     }
     sb.append("]");
 
@@ -271,23 +248,15 @@ public final class UnknownSctpChunk implements SctpChunk {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     UnknownSctpChunk other = (UnknownSctpChunk) obj;
-    if (flags != other.flags)
-      return false;
-    if (length != other.length)
-      return false;
-    if (!Arrays.equals(padding, other.padding))
-      return false;
-    if (!type.equals(other.type))
-      return false;
-    if (!Arrays.equals(value, other.value))
-      return false;
+    if (flags != other.flags) return false;
+    if (length != other.length) return false;
+    if (!Arrays.equals(padding, other.padding)) return false;
+    if (!type.equals(other.type)) return false;
+    if (!Arrays.equals(value, other.value)) return false;
     return true;
   }
 
@@ -305,9 +274,7 @@ public final class UnknownSctpChunk implements SctpChunk {
     private boolean correctLengthAtBuild;
     private boolean paddingAtBuild;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(UnknownSctpChunk obj) {
@@ -382,7 +349,5 @@ public final class UnknownSctpChunk implements SctpChunk {
     public UnknownSctpChunk build() {
       return new UnknownSctpChunk(this);
     }
-
   }
-
 }

@@ -18,13 +18,9 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NotApplicable> {
 
-  private static final StaticIpV4TosFactory INSTANCE
-    = new StaticIpV4TosFactory();
+  private static final StaticIpV4TosFactory INSTANCE = new StaticIpV4TosFactory();
 
-  /**
-   *
-   * @return the singleton instance of StaticIpV4TosFactory.
-   */
+  /** @return the singleton instance of StaticIpV4TosFactory. */
   public static StaticIpV4TosFactory getInstance() {
     return INSTANCE;
   }
@@ -51,5 +47,4 @@ public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NotApp
   public Class<? extends IpV4Tos> getTargetClass() {
     return IpV4Rfc1349Tos.class;
   }
-
 }

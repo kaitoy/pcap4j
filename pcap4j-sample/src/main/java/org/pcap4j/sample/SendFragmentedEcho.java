@@ -34,30 +34,21 @@ import org.pcap4j.util.NifSelector;
 @SuppressWarnings("javadoc")
 public class SendFragmentedEcho {
 
-  private static final String COUNT_KEY
-    = SendFragmentedEcho.class.getName() + ".count";
-  private static final int COUNT
-    = Integer.getInteger(COUNT_KEY, 3);
+  private static final String COUNT_KEY = SendFragmentedEcho.class.getName() + ".count";
+  private static final int COUNT = Integer.getInteger(COUNT_KEY, 3);
 
-  private static final String READ_TIMEOUT_KEY
-    = SendFragmentedEcho.class.getName() + ".readTimeout";
-  private static final int READ_TIMEOUT
-    = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
+  private static final String READ_TIMEOUT_KEY =
+      SendFragmentedEcho.class.getName() + ".readTimeout";
+  private static final int READ_TIMEOUT = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
 
-  private static final String SNAPLEN_KEY
-    = SendFragmentedEcho.class.getName() + ".snaplen";
-  private static final int SNAPLEN
-    = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
+  private static final String SNAPLEN_KEY = SendFragmentedEcho.class.getName() + ".snaplen";
+  private static final int SNAPLEN = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
 
-  private static final String TU_KEY
-    = SendFragmentedEcho.class.getName() + ".tu";
-  private static final int TU
-    = Integer.getInteger(TU_KEY, 4000); // [bytes]
+  private static final String TU_KEY = SendFragmentedEcho.class.getName() + ".tu";
+  private static final int TU = Integer.getInteger(TU_KEY, 4000); // [bytes]
 
-  private static final String MTU_KEY
-    = SendFragmentedEcho.class.getName() + ".mtu";
-  private static final int MTU
-    = Integer.getInteger(MTU_KEY, 1403); // [bytes]
+  private static final String MTU_KEY = SendFragmentedEcho.class.getName() + ".mtu";
+  private static final int MTU = Integer.getInteger(MTU_KEY, 1403); // [bytes]
 
   private SendFragmentedEcho() {}
 
@@ -86,21 +77,17 @@ public class SendFragmentedEcho {
 
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
-    PcapHandle handle
-      = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
-    PcapHandle sendHandle
-      = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+    PcapHandle handle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+    PcapHandle sendHandle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
     ExecutorService pool = Executors.newSingleThreadExecutor();
 
     MacAddress srcMacAddr = MacAddress.getByName(strSrcMacAddress, ":");
     try {
       handle.setFilter(
-        "icmp and ether dst " + Pcaps.toBpfString(srcMacAddr),
-        BpfCompileMode.OPTIMIZE
-      );
+          "icmp and ether dst " + Pcaps.toBpfString(srcMacAddr), BpfCompileMode.OPTIMIZE);
 
-      PacketListener listener
-        = new PacketListener() {
+      PacketListener listener =
+          new PacketListener() {
             @Override
             public void gotPacket(Packet packet) {
               System.out.println(packet);
@@ -112,59 +99,56 @@ public class SendFragmentedEcho {
 
       byte[] echoData = new byte[TU - 28];
       for (int i = 0; i < echoData.length; i++) {
-        echoData[i] = (byte)i;
+        echoData[i] = (byte) i;
       }
 
       IcmpV4EchoPacket.Builder echoBuilder = new IcmpV4EchoPacket.Builder();
       echoBuilder
-        .identifier((short)1)
-        .payloadBuilder(new UnknownPacket.Builder().rawData(echoData));
+          .identifier((short) 1)
+          .payloadBuilder(new UnknownPacket.Builder().rawData(echoData));
 
       IcmpV4CommonPacket.Builder icmpV4CommonBuilder = new IcmpV4CommonPacket.Builder();
       icmpV4CommonBuilder
-        .type(IcmpV4Type.ECHO)
-        .code(IcmpV4Code.NO_CODE)
-        .payloadBuilder(echoBuilder)
-        .correctChecksumAtBuild(true);
-
+          .type(IcmpV4Type.ECHO)
+          .code(IcmpV4Code.NO_CODE)
+          .payloadBuilder(echoBuilder)
+          .correctChecksumAtBuild(true);
 
       IpV4Packet.Builder ipV4Builder = new IpV4Packet.Builder();
       try {
         ipV4Builder
-          .version(IpVersion.IPV4)
-          .tos(IpV4Rfc791Tos.newInstance((byte)0))
-          .ttl((byte)100)
-          .protocol(IpNumber.ICMPV4)
-          .srcAddr((Inet4Address)InetAddress.getByName(strSrcIpAddress))
-          .dstAddr((Inet4Address)InetAddress.getByName(strDstIpAddress))
-          .payloadBuilder(icmpV4CommonBuilder)
-          .correctChecksumAtBuild(true)
-          .correctLengthAtBuild(true);
+            .version(IpVersion.IPV4)
+            .tos(IpV4Rfc791Tos.newInstance((byte) 0))
+            .ttl((byte) 100)
+            .protocol(IpNumber.ICMPV4)
+            .srcAddr((Inet4Address) InetAddress.getByName(strSrcIpAddress))
+            .dstAddr((Inet4Address) InetAddress.getByName(strDstIpAddress))
+            .payloadBuilder(icmpV4CommonBuilder)
+            .correctChecksumAtBuild(true)
+            .correctLengthAtBuild(true);
       } catch (UnknownHostException e1) {
         throw new IllegalArgumentException(e1);
       }
 
       EthernetPacket.Builder etherBuilder = new EthernetPacket.Builder();
-      etherBuilder.dstAddr(MacAddress.getByName(strDstMacAddress, ":"))
-                  .srcAddr(srcMacAddr)
-                  .type(EtherType.IPV4)
-                  .paddingAtBuild(true);
+      etherBuilder
+          .dstAddr(MacAddress.getByName(strDstMacAddress, ":"))
+          .srcAddr(srcMacAddr)
+          .type(EtherType.IPV4)
+          .paddingAtBuild(true);
 
       for (int i = 0; i < COUNT; i++) {
-        echoBuilder.sequenceNumber((short)i);
-        ipV4Builder.identification((short)i);
+        echoBuilder.sequenceNumber((short) i);
+        ipV4Builder.identification((short) i);
 
-        for (
-          final Packet ipV4Packet: IpV4Helper.fragment(ipV4Builder.build(), MTU)
-        ) {
+        for (final Packet ipV4Packet : IpV4Helper.fragment(ipV4Builder.build(), MTU)) {
           etherBuilder.payloadBuilder(
-            new AbstractBuilder() {
-              @Override
-              public Packet build() {
-                return ipV4Packet;
-              }
-            }
-          );
+              new AbstractBuilder() {
+                @Override
+                public Packet build() {
+                  return ipV4Packet;
+                }
+              });
 
           Packet p = etherBuilder.build();
           sendHandle.sendPacket(p);
@@ -188,10 +172,12 @@ public class SendFragmentedEcho {
       if (handle != null && handle.isOpen()) {
         try {
           handle.breakLoop();
-        } catch (NotOpenException noe) {}
+        } catch (NotOpenException noe) {
+        }
         try {
           Thread.sleep(1000);
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException e) {
+        }
         handle.close();
       }
       if (sendHandle != null && sendHandle.isOpen()) {
@@ -224,7 +210,5 @@ public class SendFragmentedEcho {
         e.printStackTrace();
       }
     }
-
   }
-
 }

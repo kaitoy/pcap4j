@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
 import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;
 import org.pcap4j.util.ByteArrays;
 
@@ -22,7 +21,7 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.11
  */
 public final class IpV4InternetTimestampOptionTimestamps
-implements IpV4InternetTimestampOptionData {
+    implements IpV4InternetTimestampOptionData {
 
   /*   0                            15                              31
    *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -33,17 +32,14 @@ implements IpV4InternetTimestampOptionData {
    *                                   .
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -2067863811913941432L;
 
   private final List<Integer> timestamps;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -52,26 +48,21 @@ implements IpV4InternetTimestampOptionData {
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
   public static IpV4InternetTimestampOptionTimestamps newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+      byte[] rawData, int offset, int length) throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new IpV4InternetTimestampOptionTimestamps(rawData, offset, length);
   }
 
-  private IpV4InternetTimestampOptionTimestamps(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private IpV4InternetTimestampOptionTimestamps(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if ((length % INT_SIZE_IN_BYTES) != 0) {
       StringBuilder sb = new StringBuilder(100);
-      sb.append(
-          "The raw data length must be an integer multiple of 4 octets long."
-            + " rawData: "
-        )
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+      sb.append("The raw data length must be an integer multiple of 4 octets long." + " rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -81,10 +72,7 @@ implements IpV4InternetTimestampOptionData {
     }
   }
 
-  /**
-   *
-   * @param timestamps timestamps
-   */
+  /** @param timestamps timestamps */
   public IpV4InternetTimestampOptionTimestamps(List<Integer> timestamps) {
     if (timestamps == null) {
       throw new NullPointerException("timestamps may not be null");
@@ -92,24 +80,20 @@ implements IpV4InternetTimestampOptionData {
     this.timestamps = new ArrayList<Integer>(timestamps);
   }
 
-  /**
-   *
-   * @return timestamps
-   */
+  /** @return timestamps */
   public List<Integer> getTimestamps() {
     return new ArrayList<Integer>(timestamps);
   }
 
-  public int length() { return timestamps.size() * INT_SIZE_IN_BYTES; }
+  public int length() {
+    return timestamps.size() * INT_SIZE_IN_BYTES;
+  }
 
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     Iterator<Integer> iter = timestamps.iterator();
     for (int i = 0; i < rawData.length; i += INT_SIZE_IN_BYTES) {
-      System.arraycopy(
-        ByteArrays.toByteArray(iter.next()), 0,
-        rawData, 0, INT_SIZE_IN_BYTES
-      );
+      System.arraycopy(ByteArrays.toByteArray(iter.next()), 0, rawData, 0, INT_SIZE_IN_BYTES);
     }
     return rawData;
   }
@@ -118,9 +102,8 @@ implements IpV4InternetTimestampOptionData {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[timestamps:");
-    for (Integer ts: timestamps) {
-      sb.append(" ")
-        .append(ts & 0xFFFFFFFFL);
+    for (Integer ts : timestamps) {
+      sb.append(" ").append(ts & 0xFFFFFFFFL);
     }
     sb.append("]");
     return sb.toString();
@@ -128,8 +111,12 @@ implements IpV4InternetTimestampOptionData {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     return Arrays.equals((getClass().cast(obj)).getRawData(), getRawData());
   }
 
@@ -137,5 +124,4 @@ implements IpV4InternetTimestampOptionData {
   public int hashCode() {
     return Arrays.hashCode(getRawData());
   }
-
 }

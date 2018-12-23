@@ -13,85 +13,53 @@ import java.util.Map;
 /**
  * DNS RCODE
  *
- * @see <a href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6">IANA Registry</a>
+ * @see <a
+ *     href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6">IANA
+ *     Registry</a>
  * @author Kaito Yamada
  * @since pcap4j 1.7.1
  */
 public final class DnsRCode extends NamedNumber<Byte, DnsRCode> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1275148349508319228L;
 
-  /**
-   * No Error: 0
-   */
-  public static final DnsRCode NO_ERROR
-    = new DnsRCode((byte) 0, "No Error");
+  /** No Error: 0 */
+  public static final DnsRCode NO_ERROR = new DnsRCode((byte) 0, "No Error");
 
-  /**
-   * Format Error: 1
-   */
-  public static final DnsRCode FORM_ERR
-    = new DnsRCode((byte) 1, "Format Error");
+  /** Format Error: 1 */
+  public static final DnsRCode FORM_ERR = new DnsRCode((byte) 1, "Format Error");
 
-  /**
-   * Server Failure: 2
-   */
-  public static final DnsRCode SERV_FAIL
-    = new DnsRCode((byte) 2, "Server Failure");
+  /** Server Failure: 2 */
+  public static final DnsRCode SERV_FAIL = new DnsRCode((byte) 2, "Server Failure");
 
-  /**
-   * Non-Existent Domain: 3
-   */
-  public static final DnsRCode NX_DOMAIN
-    = new DnsRCode((byte) 3, "Non-Existent Domain");
+  /** Non-Existent Domain: 3 */
+  public static final DnsRCode NX_DOMAIN = new DnsRCode((byte) 3, "Non-Existent Domain");
 
-  /**
-   * Not Implemented: 4
-   */
-  public static final DnsRCode NOT_IMP
-    = new DnsRCode((byte) 4, "Not Implemented");
+  /** Not Implemented: 4 */
+  public static final DnsRCode NOT_IMP = new DnsRCode((byte) 4, "Not Implemented");
 
-  /**
-   * Query Refused: 5
-   */
-  public static final DnsRCode REFUSED
-    = new DnsRCode((byte) 5, "Query Refused");
+  /** Query Refused: 5 */
+  public static final DnsRCode REFUSED = new DnsRCode((byte) 5, "Query Refused");
 
-  /**
-   * Name Exists when it should not: 6
-   */
-  public static final DnsRCode YX_DOMAIN
-    = new DnsRCode((byte) 6, "Name Exists when it should not");
+  /** Name Exists when it should not: 6 */
+  public static final DnsRCode YX_DOMAIN = new DnsRCode((byte) 6, "Name Exists when it should not");
 
-  /**
-   * RR Set Exists when it should not: 7
-   */
-  public static final DnsRCode YX_RR_SET
-    = new DnsRCode((byte) 7, "RR Set Exists when it should not");
+  /** RR Set Exists when it should not: 7 */
+  public static final DnsRCode YX_RR_SET =
+      new DnsRCode((byte) 7, "RR Set Exists when it should not");
 
-  /**
-   * RR Set that should exist does not: 8
-   */
-  public static final DnsRCode NX_RR_SET
-    = new DnsRCode((byte) 8, "RR Set that should exist does not");
+  /** RR Set that should exist does not: 8 */
+  public static final DnsRCode NX_RR_SET =
+      new DnsRCode((byte) 8, "RR Set that should exist does not");
 
-  /**
-   * Not Authorized: 9
-   */
-  public static final DnsRCode NOT_AUTH
-    = new DnsRCode((byte) 9, "Not Authorized");
+  /** Not Authorized: 9 */
+  public static final DnsRCode NOT_AUTH = new DnsRCode((byte) 9, "Not Authorized");
 
-  /**
-   * Name not contained in zone: 10
-   */
-  public static final DnsRCode NOT_ZONE
-    = new DnsRCode((byte) 10, "Name not contained in zone");
+  /** Name not contained in zone: 10 */
+  public static final DnsRCode NOT_ZONE = new DnsRCode((byte) 10, "Name not contained in zone");
 
-  private static final Map<Byte, DnsRCode> registry
-    = new HashMap<Byte, DnsRCode>();
+  private static final Map<Byte, DnsRCode> registry = new HashMap<Byte, DnsRCode>();
 
   static {
     registry.put(NO_ERROR.value(), NO_ERROR);
@@ -115,9 +83,7 @@ public final class DnsRCode extends NamedNumber<Byte, DnsRCode> {
     super(value, name);
     if ((value & 0xF0) != 0) {
       throw new IllegalArgumentException(
-              value + " is invalid value. "
-                +"DNS RCODE must be between 0 and 15"
-            );
+          value + " is invalid value. " + "DNS RCODE must be between 0 and 15");
     }
   }
 
@@ -128,8 +94,7 @@ public final class DnsRCode extends NamedNumber<Byte, DnsRCode> {
   public static DnsRCode getInstance(Byte value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new DnsRCode(value, "unknown");
     }
   }
@@ -146,5 +111,4 @@ public final class DnsRCode extends NamedNumber<Byte, DnsRCode> {
   public int compareTo(DnsRCode o) {
     return value().compareTo(o.value());
   }
-
 }

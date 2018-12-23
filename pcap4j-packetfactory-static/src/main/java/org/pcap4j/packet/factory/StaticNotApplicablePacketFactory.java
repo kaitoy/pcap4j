@@ -21,88 +21,85 @@ import org.pcap4j.packet.namednumber.NotApplicable;
  * @since pcap4j 1.4.0
  */
 public final class StaticNotApplicablePacketFactory
-extends AbstractStaticPacketFactory<NotApplicable> {
+    extends AbstractStaticPacketFactory<NotApplicable> {
 
-  private static final StaticNotApplicablePacketFactory INSTANCE
-    = new StaticNotApplicablePacketFactory();
+  private static final StaticNotApplicablePacketFactory INSTANCE =
+      new StaticNotApplicablePacketFactory();
 
   private StaticNotApplicablePacketFactory() {
     instantiaters.put(
-      NotApplicable.UNKNOWN, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return UnknownPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<UnknownPacket> getTargetClass() {
-          return UnknownPacket.class;
-        }
-      }
-    );
+        NotApplicable.UNKNOWN,
+        new PacketInstantiater() {
+          @Override
+          public Packet newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return UnknownPacket.newPacket(rawData, offset, length);
+          }
+
+          @Override
+          public Class<UnknownPacket> getTargetClass() {
+            return UnknownPacket.class;
+          }
+        });
     instantiaters.put(
-      NotApplicable.FRAGMENTED, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return FragmentedPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<FragmentedPacket> getTargetClass() {
-          return FragmentedPacket.class;
-        }
-      }
-    );
+        NotApplicable.FRAGMENTED,
+        new PacketInstantiater() {
+          @Override
+          public Packet newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return FragmentedPacket.newPacket(rawData, offset, length);
+          }
+
+          @Override
+          public Class<FragmentedPacket> getTargetClass() {
+            return FragmentedPacket.class;
+          }
+        });
     instantiaters.put(
-      NotApplicable.UNKNOWN_IP_V6_EXTENSION, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IpV6ExtUnknownPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV6ExtUnknownPacket> getTargetClass() {
-          return IpV6ExtUnknownPacket.class;
-        }
-      }
-    );
+        NotApplicable.UNKNOWN_IP_V6_EXTENSION,
+        new PacketInstantiater() {
+          @Override
+          public Packet newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return IpV6ExtUnknownPacket.newPacket(rawData, offset, length);
+          }
+
+          @Override
+          public Class<IpV6ExtUnknownPacket> getTargetClass() {
+            return IpV6ExtUnknownPacket.class;
+          }
+        });
     instantiaters.put(
-      NotApplicable.COMPRESSED, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return CompressedPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<CompressedPacket> getTargetClass() {
-          return CompressedPacket.class;
-        }
-      }
-    );
+        NotApplicable.COMPRESSED,
+        new PacketInstantiater() {
+          @Override
+          public Packet newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return CompressedPacket.newPacket(rawData, offset, length);
+          }
+
+          @Override
+          public Class<CompressedPacket> getTargetClass() {
+            return CompressedPacket.class;
+          }
+        });
     instantiaters.put(
-      NotApplicable.ENCRYPTED, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return EncryptedPacket.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<EncryptedPacket> getTargetClass() {
-          return EncryptedPacket.class;
-        }
-      }
-    );
+        NotApplicable.ENCRYPTED,
+        new PacketInstantiater() {
+          @Override
+          public Packet newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return EncryptedPacket.newPacket(rawData, offset, length);
+          }
+
+          @Override
+          public Class<EncryptedPacket> getTargetClass() {
+            return EncryptedPacket.class;
+          }
+        });
   };
 
-  /**
-   *
-   * @return the singleton instance of StaticNaPacketFactory.
-   */
+  /** @return the singleton instance of StaticNaPacketFactory. */
   public static StaticNotApplicablePacketFactory getInstance() {
     return INSTANCE;
   }

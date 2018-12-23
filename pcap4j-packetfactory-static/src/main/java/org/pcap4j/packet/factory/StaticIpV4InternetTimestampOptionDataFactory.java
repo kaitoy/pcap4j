@@ -23,78 +23,71 @@ import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV4InternetTimestampOptionDataFactory
-implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampOptionFlag> {
+    implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampOptionFlag> {
 
-  private static final StaticIpV4InternetTimestampOptionDataFactory INSTANCE
-    = new StaticIpV4InternetTimestampOptionDataFactory();
-  private final Map<IpV4InternetTimestampOptionFlag, Instantiater> instantiaters
-    = new HashMap<IpV4InternetTimestampOptionFlag, Instantiater>();
+  private static final StaticIpV4InternetTimestampOptionDataFactory INSTANCE =
+      new StaticIpV4InternetTimestampOptionDataFactory();
+  private final Map<IpV4InternetTimestampOptionFlag, Instantiater> instantiaters =
+      new HashMap<IpV4InternetTimestampOptionFlag, Instantiater>();
 
   private StaticIpV4InternetTimestampOptionDataFactory() {
     instantiaters.put(
-      IpV4InternetTimestampOptionFlag.TIMESTAMPS_ONLY, new Instantiater() {
-        @Override
-        public IpV4InternetTimestampOptionData newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IpV4InternetTimestampOptionTimestamps.newInstance(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV4InternetTimestampOptionTimestamps> getTargetClass() {
-          return IpV4InternetTimestampOptionTimestamps.class;
-        }
-      }
-    );
+        IpV4InternetTimestampOptionFlag.TIMESTAMPS_ONLY,
+        new Instantiater() {
+          @Override
+          public IpV4InternetTimestampOptionData newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return IpV4InternetTimestampOptionTimestamps.newInstance(rawData, offset, length);
+          }
+
+          @Override
+          public Class<IpV4InternetTimestampOptionTimestamps> getTargetClass() {
+            return IpV4InternetTimestampOptionTimestamps.class;
+          }
+        });
     instantiaters.put(
-      IpV4InternetTimestampOptionFlag.EACH_TIMESTAMP_PRECEDED_WITH_ADDRESS, new Instantiater() {
-        @Override
-        public IpV4InternetTimestampOptionData newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IpV4InternetTimestampOptionTimestampsWithAddresses
-                   .newInstance(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV4InternetTimestampOptionTimestampsWithAddresses> getTargetClass() {
-          return IpV4InternetTimestampOptionTimestampsWithAddresses.class;
-        }
-      }
-    );
+        IpV4InternetTimestampOptionFlag.EACH_TIMESTAMP_PRECEDED_WITH_ADDRESS,
+        new Instantiater() {
+          @Override
+          public IpV4InternetTimestampOptionData newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return IpV4InternetTimestampOptionTimestampsWithAddresses.newInstance(
+                rawData, offset, length);
+          }
+
+          @Override
+          public Class<IpV4InternetTimestampOptionTimestampsWithAddresses> getTargetClass() {
+            return IpV4InternetTimestampOptionTimestampsWithAddresses.class;
+          }
+        });
     instantiaters.put(
-      IpV4InternetTimestampOptionFlag.ADDRESS_PRESPECIFIED, new Instantiater() {
-        @Override
-        public IpV4InternetTimestampOptionData newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IpV4InternetTimestampOptionAddressPrespecified
-                   .newInstance(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV4InternetTimestampOptionAddressPrespecified> getTargetClass() {
-          return IpV4InternetTimestampOptionAddressPrespecified.class;
-        }
-      }
-    );
+        IpV4InternetTimestampOptionFlag.ADDRESS_PRESPECIFIED,
+        new Instantiater() {
+          @Override
+          public IpV4InternetTimestampOptionData newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return IpV4InternetTimestampOptionAddressPrespecified.newInstance(
+                rawData, offset, length);
+          }
+
+          @Override
+          public Class<IpV4InternetTimestampOptionAddressPrespecified> getTargetClass() {
+            return IpV4InternetTimestampOptionAddressPrespecified.class;
+          }
+        });
   };
 
-  /**
-   *
-   * @return the singleton instance of StaticIpV4InternetTimestampOptionDataFactory.
-   */
+  /** @return the singleton instance of StaticIpV4InternetTimestampOptionDataFactory. */
   public static StaticIpV4InternetTimestampOptionDataFactory getInstance() {
     return INSTANCE;
   }
 
   @Override
   public IpV4InternetTimestampOptionData newInstance(
-    byte[] rawData, int offset, int length, IpV4InternetTimestampOptionFlag number
-  ) {
+      byte[] rawData, int offset, int length, IpV4InternetTimestampOptionFlag number) {
     if (rawData == null || number == null) {
       StringBuilder sb = new StringBuilder(40);
-      sb.append("rawData: ")
-        .append(rawData)
-        .append(" number: ")
-        .append(number);
+      sb.append("rawData: ").append(rawData).append(" number: ").append(number);
       throw new NullPointerException(sb.toString());
     }
 
@@ -116,8 +109,8 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
   }
 
   @Override
-  public Class<? extends IpV4InternetTimestampOptionData>
-  getTargetClass(IpV4InternetTimestampOptionFlag number) {
+  public Class<? extends IpV4InternetTimestampOptionData> getTargetClass(
+      IpV4InternetTimestampOptionFlag number) {
     if (number == null) {
       throw new NullPointerException("number must not be null.");
     }
@@ -132,12 +125,9 @@ implements PacketFactory<IpV4InternetTimestampOptionData, IpV4InternetTimestampO
 
   private static interface Instantiater {
 
-    public IpV4InternetTimestampOptionData newInstance(
-      byte [] rawData, int offset, int length
-    ) throws IllegalRawDataException;
+    public IpV4InternetTimestampOptionData newInstance(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException;
 
     public Class<? extends IpV4InternetTimestampOptionData> getTargetClass();
-
   }
-
 }

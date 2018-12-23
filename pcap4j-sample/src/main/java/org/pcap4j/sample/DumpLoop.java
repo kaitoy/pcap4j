@@ -13,25 +13,17 @@ import org.pcap4j.util.NifSelector;
 @SuppressWarnings("javadoc")
 public class DumpLoop {
 
-  private static final String COUNT_KEY
-    = DumpLoop.class.getName() + ".count";
-  private static final int COUNT
-    = Integer.getInteger(COUNT_KEY, 5);
+  private static final String COUNT_KEY = DumpLoop.class.getName() + ".count";
+  private static final int COUNT = Integer.getInteger(COUNT_KEY, 5);
 
-  private static final String READ_TIMEOUT_KEY
-    = DumpLoop.class.getName() + ".readTimeout";
-  private static final int READ_TIMEOUT
-    = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
+  private static final String READ_TIMEOUT_KEY = DumpLoop.class.getName() + ".readTimeout";
+  private static final int READ_TIMEOUT = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
 
-  private static final String SNAPLEN_KEY
-    = DumpLoop.class.getName() + ".snaplen";
-  private static final int SNAPLEN
-    = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
+  private static final String SNAPLEN_KEY = DumpLoop.class.getName() + ".snaplen";
+  private static final int SNAPLEN = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
 
-  private static final String PCAP_FILE_KEY
-    = DumpLoop.class.getName() + ".pcapFile";
-  private static final String PCAP_FILE
-    = System.getProperty(PCAP_FILE_KEY, "DumpLoop.pcap");
+  private static final String PCAP_FILE_KEY = DumpLoop.class.getName() + ".pcapFile";
+  private static final String PCAP_FILE = System.getProperty(PCAP_FILE_KEY, "DumpLoop.pcap");
 
   private DumpLoop() {}
 
@@ -57,13 +49,9 @@ public class DumpLoop {
 
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
-    final PcapHandle handle
-      = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+    final PcapHandle handle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
 
-    handle.setFilter(
-      filter,
-      BpfCompileMode.OPTIMIZE
-    );
+    handle.setFilter(filter, BpfCompileMode.OPTIMIZE);
 
     PcapDumper dumper = handle.dumpOpen(PCAP_FILE);
     try {
@@ -75,5 +63,4 @@ public class DumpLoop {
     dumper.close();
     handle.close();
   }
-
 }

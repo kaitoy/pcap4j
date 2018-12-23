@@ -9,7 +9,6 @@ package org.pcap4j.packet.factory;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.pcap4j.packet.DnsResourceRecord.DnsRData;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IpV4InternetTimestampOption;
@@ -46,10 +45,10 @@ final class PacketFactoryBinder {
 
   private static final PacketFactoryBinder INSTANCE = new PacketFactoryBinder();
 
-  private final Map<Class<? extends NamedNumber<?, ?>>, PacketFactory<?, ?>> packetFactories
-    = new HashMap<Class<? extends NamedNumber<?, ?>>, PacketFactory<?, ?>>();
-  private final Map<Class<?>, PacketFactory<?, ?>> packetpPieceFactories
-    = new HashMap<Class<?>, PacketFactory<?, ?>>();
+  private final Map<Class<? extends NamedNumber<?, ?>>, PacketFactory<?, ?>> packetFactories =
+      new HashMap<Class<? extends NamedNumber<?, ?>>, PacketFactory<?, ?>>();
+  private final Map<Class<?>, PacketFactory<?, ?>> packetpPieceFactories =
+      new HashMap<Class<?>, PacketFactory<?, ?>>();
 
   private PacketFactoryBinder() {
     packetFactories.put(DataLinkType.class, StaticDataLinkTypePacketFactory.getInstance());
@@ -66,72 +65,38 @@ final class PacketFactoryBinder {
     packetFactories.put(ProtocolFamily.class, StaticProtocolFamilyPacketFactory.getInstance());
     packetFactories.put(Dot11FrameType.class, StaticDot11FrameTypePacketFactory.getInstance());
 
+    packetpPieceFactories.put(IpV4Option.class, StaticIpV4OptionFactory.getInstance());
     packetpPieceFactories.put(
-      IpV4Option.class,
-      StaticIpV4OptionFactory.getInstance()
-    );
+        IpV4InternetTimestampOption.class,
+        StaticIpV4InternetTimestampOptionDataFactory.getInstance());
+    packetpPieceFactories.put(TcpOption.class, StaticTcpOptionFactory.getInstance());
+    packetpPieceFactories.put(IpV6Option.class, StaticIpV6OptionFactory.getInstance());
+    packetpPieceFactories.put(IpV6RoutingData.class, StaticIpV6RoutingDataFactory.getInstance());
     packetpPieceFactories.put(
-      IpV4InternetTimestampOption.class,
-      StaticIpV4InternetTimestampOptionDataFactory.getInstance()
-    );
-    packetpPieceFactories.put(
-      TcpOption.class,
-      StaticTcpOptionFactory.getInstance()
-    );
-    packetpPieceFactories.put(
-      IpV6Option.class,
-      StaticIpV6OptionFactory.getInstance()
-    );
-    packetpPieceFactories.put(
-      IpV6RoutingData.class,
-      StaticIpV6RoutingDataFactory.getInstance()
-    );
-    packetpPieceFactories.put(
-      IpV6NeighborDiscoveryOption.class,
-      StaticIpV6NeighborDiscoveryOptionFactory.getInstance()
-    );
-    packetpPieceFactories.put(
-      IpV4Tos.class,
-      StaticIpV4TosFactory.getInstance()
-    );
-    packetpPieceFactories.put(
-      IpV6TrafficClass.class,
-      StaticIpV6TrafficClassFactory.getInstance()
-    );
-    packetpPieceFactories.put(
-      IpV6FlowLabel.class,
-      StaticIpV6FlowLabelFactory.getInstance()
-    );
-    packetpPieceFactories.put(
-      RadiotapData.class,
-      StaticRadiotapDataFieldFactory.getInstance()
-    );
-    packetpPieceFactories.put(
-      SctpChunk.class,
-      StaticSctpChunkFactory.getInstance()
-    );
-    packetpPieceFactories.put(
-      DnsRData.class,
-      StaticDnsRDataFactory.getInstance()
-    );
+        IpV6NeighborDiscoveryOption.class, StaticIpV6NeighborDiscoveryOptionFactory.getInstance());
+    packetpPieceFactories.put(IpV4Tos.class, StaticIpV4TosFactory.getInstance());
+    packetpPieceFactories.put(IpV6TrafficClass.class, StaticIpV6TrafficClassFactory.getInstance());
+    packetpPieceFactories.put(IpV6FlowLabel.class, StaticIpV6FlowLabelFactory.getInstance());
+    packetpPieceFactories.put(RadiotapData.class, StaticRadiotapDataFieldFactory.getInstance());
+    packetpPieceFactories.put(SctpChunk.class, StaticSctpChunkFactory.getInstance());
+    packetpPieceFactories.put(DnsRData.class, StaticDnsRDataFactory.getInstance());
   }
 
-  public static PacketFactoryBinder getInstance() { return INSTANCE; }
+  public static PacketFactoryBinder getInstance() {
+    return INSTANCE;
+  }
 
   @SuppressWarnings("unchecked")
   public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
-    Class<T> targetClass, Class<N> numberClass
-  ) {
+      Class<T> targetClass, Class<N> numberClass) {
     if (Packet.class.isAssignableFrom(targetClass)) {
       PacketFactory<T, N> factory = (PacketFactory<T, N>) packetFactories.get(numberClass);
       if (factory != null) {
         return factory;
-      }
-      else {
+      } else {
         return (PacketFactory<T, N>) StaticUnknownPacketFactory.getInstance();
       }
     }
-    return (PacketFactory<T, N>)packetpPieceFactories.get(targetClass);
+    return (PacketFactory<T, N>) packetpPieceFactories.get(targetClass);
   }
-
 }

@@ -26,23 +26,16 @@ import org.pcap4j.util.NifSelector;
 @SuppressWarnings("javadoc")
 public class SendArpRequest {
 
-  private static final String COUNT_KEY
-    = SendArpRequest.class.getName() + ".count";
-  private static final int COUNT
-    = Integer.getInteger(COUNT_KEY, 1);
+  private static final String COUNT_KEY = SendArpRequest.class.getName() + ".count";
+  private static final int COUNT = Integer.getInteger(COUNT_KEY, 1);
 
-  private static final String READ_TIMEOUT_KEY
-    = SendArpRequest.class.getName() + ".readTimeout";
-  private static final int READ_TIMEOUT
-    = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
+  private static final String READ_TIMEOUT_KEY = SendArpRequest.class.getName() + ".readTimeout";
+  private static final int READ_TIMEOUT = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
 
-  private static final String SNAPLEN_KEY
-    = SendArpRequest.class.getName() + ".snaplen";
-  private static final int SNAPLEN
-    = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
+  private static final String SNAPLEN_KEY = SendArpRequest.class.getName() + ".snaplen";
+  private static final int SNAPLEN = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
 
-  private static final MacAddress SRC_MAC_ADDR
-    = MacAddress.getByName("fe:00:01:02:03:04");
+  private static final MacAddress SRC_MAC_ADDR = MacAddress.getByName("fe:00:01:02:03:04");
 
   private static MacAddress resolvedAddr;
 
@@ -71,22 +64,22 @@ public class SendArpRequest {
 
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
-    PcapHandle handle
-      = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
-    PcapHandle sendHandle
-      = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+    PcapHandle handle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+    PcapHandle sendHandle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
     ExecutorService pool = Executors.newSingleThreadExecutor();
 
     try {
       handle.setFilter(
-        "arp and src host " + strDstIpAddress
-          + " and dst host " + strSrcIpAddress
-          + " and ether dst " + Pcaps.toBpfString(SRC_MAC_ADDR),
-        BpfCompileMode.OPTIMIZE
-      );
+          "arp and src host "
+              + strDstIpAddress
+              + " and dst host "
+              + strSrcIpAddress
+              + " and ether dst "
+              + Pcaps.toBpfString(SRC_MAC_ADDR),
+          BpfCompileMode.OPTIMIZE);
 
-      PacketListener listener
-        = new PacketListener() {
+      PacketListener listener =
+          new PacketListener() {
             @Override
             public void gotPacket(Packet packet) {
               if (packet.contains(ArpPacket.class)) {
@@ -105,25 +98,26 @@ public class SendArpRequest {
       ArpPacket.Builder arpBuilder = new ArpPacket.Builder();
       try {
         arpBuilder
-          .hardwareType(ArpHardwareType.ETHERNET)
-          .protocolType(EtherType.IPV4)
-          .hardwareAddrLength((byte)MacAddress.SIZE_IN_BYTES)
-          .protocolAddrLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
-          .operation(ArpOperation.REQUEST)
-          .srcHardwareAddr(SRC_MAC_ADDR)
-          .srcProtocolAddr(InetAddress.getByName(strSrcIpAddress))
-          .dstHardwareAddr(MacAddress.ETHER_BROADCAST_ADDRESS)
-          .dstProtocolAddr(InetAddress.getByName(strDstIpAddress));
+            .hardwareType(ArpHardwareType.ETHERNET)
+            .protocolType(EtherType.IPV4)
+            .hardwareAddrLength((byte) MacAddress.SIZE_IN_BYTES)
+            .protocolAddrLength((byte) ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
+            .operation(ArpOperation.REQUEST)
+            .srcHardwareAddr(SRC_MAC_ADDR)
+            .srcProtocolAddr(InetAddress.getByName(strSrcIpAddress))
+            .dstHardwareAddr(MacAddress.ETHER_BROADCAST_ADDRESS)
+            .dstProtocolAddr(InetAddress.getByName(strDstIpAddress));
       } catch (UnknownHostException e) {
         throw new IllegalArgumentException(e);
       }
 
       EthernetPacket.Builder etherBuilder = new EthernetPacket.Builder();
-      etherBuilder.dstAddr(MacAddress.ETHER_BROADCAST_ADDRESS)
-                  .srcAddr(SRC_MAC_ADDR)
-                  .type(EtherType.ARP)
-                  .payloadBuilder(arpBuilder)
-                  .paddingAtBuild(true);
+      etherBuilder
+          .dstAddr(MacAddress.ETHER_BROADCAST_ADDRESS)
+          .srcAddr(SRC_MAC_ADDR)
+          .type(EtherType.ARP)
+          .payloadBuilder(arpBuilder)
+          .paddingAtBuild(true);
 
       for (int i = 0; i < COUNT; i++) {
         Packet p = etherBuilder.build();
@@ -172,7 +166,5 @@ public class SendArpRequest {
         e.printStackTrace();
       }
     }
-
   }
-
 }

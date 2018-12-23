@@ -1,5 +1,6 @@
 package org.pcap4j.sample;
 
+import com.sun.jna.Platform;
 import java.io.IOException;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
@@ -12,35 +13,25 @@ import org.pcap4j.core.PcapStat;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.NifSelector;
-import com.sun.jna.Platform;
 
 @SuppressWarnings("javadoc")
 public class GetNextRawPacket {
 
-  private static final String COUNT_KEY
-    = GetNextRawPacket.class.getName() + ".count";
-  private static final int COUNT
-    = Integer.getInteger(COUNT_KEY, 5);
+  private static final String COUNT_KEY = GetNextRawPacket.class.getName() + ".count";
+  private static final int COUNT = Integer.getInteger(COUNT_KEY, 5);
 
-  private static final String READ_TIMEOUT_KEY
-    = GetNextRawPacket.class.getName() + ".readTimeout";
-  private static final int READ_TIMEOUT
-    = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
+  private static final String READ_TIMEOUT_KEY = GetNextRawPacket.class.getName() + ".readTimeout";
+  private static final int READ_TIMEOUT = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
 
-  private static final String SNAPLEN_KEY
-    = GetNextRawPacket.class.getName() + ".snaplen";
-  private static final int SNAPLEN
-    = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
+  private static final String SNAPLEN_KEY = GetNextRawPacket.class.getName() + ".snaplen";
+  private static final int SNAPLEN = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
 
-  private static final String BUFFER_SIZE_KEY
-    = GetNextRawPacket.class.getName() + ".bufferSize";
-  private static final int BUFFER_SIZE
-    = Integer.getInteger(BUFFER_SIZE_KEY, 1 * 1024 * 1024); // [bytes]
+  private static final String BUFFER_SIZE_KEY = GetNextRawPacket.class.getName() + ".bufferSize";
+  private static final int BUFFER_SIZE =
+      Integer.getInteger(BUFFER_SIZE_KEY, 1 * 1024 * 1024); // [bytes]
 
-  private static final String NIF_NAME_KEY
-  = GetNextRawPacket.class.getName() + ".nifName";
-  private static final String NIF_NAME
-    = System.getProperty(NIF_NAME_KEY);
+  private static final String NIF_NAME_KEY = GetNextRawPacket.class.getName() + ".nifName";
+  private static final String NIF_NAME = System.getProperty(NIF_NAME_KEY);
 
   private GetNextRawPacket() {}
 
@@ -57,8 +48,7 @@ public class GetNextRawPacket {
     PcapNetworkInterface nif;
     if (NIF_NAME != null) {
       nif = Pcaps.getDevByName(NIF_NAME);
-    }
-    else {
+    } else {
       try {
         nif = new NifSelector().selectNetworkInterface();
       } catch (IOException e) {
@@ -72,33 +62,29 @@ public class GetNextRawPacket {
     }
 
     System.out.println(nif.getName() + " (" + nif.getDescription() + ")");
-    for (PcapAddress addr: nif.getAddresses()) {
+    for (PcapAddress addr : nif.getAddresses()) {
       if (addr.getAddress() != null) {
         System.out.println("IP address: " + addr.getAddress());
       }
     }
     System.out.println("");
 
-    PcapHandle handle
-      = new PcapHandle.Builder(nif.getName())
-          .snaplen(SNAPLEN)
-          .promiscuousMode(PromiscuousMode.PROMISCUOUS)
-          .timeoutMillis(READ_TIMEOUT)
-          .bufferSize(BUFFER_SIZE)
-          .build();
+    PcapHandle handle =
+        new PcapHandle.Builder(nif.getName())
+            .snaplen(SNAPLEN)
+            .promiscuousMode(PromiscuousMode.PROMISCUOUS)
+            .timeoutMillis(READ_TIMEOUT)
+            .bufferSize(BUFFER_SIZE)
+            .build();
 
-    handle.setFilter(
-      filter,
-      BpfCompileMode.OPTIMIZE
-    );
+    handle.setFilter(filter, BpfCompileMode.OPTIMIZE);
 
     int num = 0;
     while (true) {
       byte[] packet = handle.getNextRawPacket();
       if (packet == null) {
         continue;
-      }
-      else {
+      } else {
         System.out.println(handle.getTimestamp());
         System.out.println(ByteArrays.toHexString(packet, " "));
         num++;
@@ -118,5 +104,4 @@ public class GetNextRawPacket {
 
     handle.close();
   }
-
 }

@@ -17,8 +17,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class PacketFactories {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(PacketFactories.class);
+  private static final Logger logger = LoggerFactory.getLogger(PacketFactories.class);
   private static final PacketFactoryBinder FACTORY_BINDER;
 
   static {
@@ -34,10 +33,11 @@ public final class PacketFactories {
     FACTORY_BINDER = factoryBinder;
   }
 
-  private PacketFactories() { throw new AssertionError(); }
+  private PacketFactories() {
+    throw new AssertionError();
+  }
 
   /**
-   *
    * @param <T> target
    * @param <N> number
    * @param targetClass targetClass
@@ -45,22 +45,17 @@ public final class PacketFactories {
    * @return a {@link org.pcap4j.packet.factory.PacketFactory PacketFactory} object.
    */
   public static <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getFactory(
-    Class<T> targetClass, Class<N> numberClass
-  ) {
+      Class<T> targetClass, Class<N> numberClass) {
     if (numberClass == null || targetClass == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("numberClass: ").append(numberClass)
-        .append(" targetClass: ").append(targetClass);
+      sb.append("numberClass: ").append(numberClass).append(" targetClass: ").append(targetClass);
       throw new NullPointerException(sb.toString());
     }
 
     if (FACTORY_BINDER != null) {
       return FACTORY_BINDER.getPacketFactory(targetClass, numberClass);
-    }
-    else {
+    } else {
       return SimplePacketFactoryBinder.getInstance().getPacketFactory(targetClass, numberClass);
     }
-
   }
-
 }

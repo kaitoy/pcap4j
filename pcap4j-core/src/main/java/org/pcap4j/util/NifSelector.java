@@ -25,14 +25,10 @@ public class NifSelector {
   private static String LINE_SEPARATOR = System.getProperty("line.separator");
 
   /**
-   *
-   * @return a PcapNetworkInterface object which represents
-   *         a selected network interface.
+   * @return a PcapNetworkInterface object which represents a selected network interface.
    * @throws IOException if no network interface is available.
    */
-  public
-  final PcapNetworkInterface selectNetworkInterface()
-  throws IOException {
+  public final PcapNetworkInterface selectNetworkInterface() throws IOException {
     List<PcapNetworkInterface> allDevs = null;
     try {
       allDevs = Pcaps.findAllDevs();
@@ -50,7 +46,6 @@ public class NifSelector {
   }
 
   /**
-   *
    * @param msg msg
    * @throws IOException if fails to write.
    */
@@ -59,43 +54,34 @@ public class NifSelector {
   }
 
   /**
-   *
    * @return string
    * @throws IOException if fails to read.
    */
   protected String read() throws IOException {
-    BufferedReader reader
-      = new BufferedReader(new InputStreamReader(System.in));
+    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     return reader.readLine();
   }
 
   /**
-   *
    * @param nifs nifs
    * @throws IOException if fails to show.
    */
-  protected
-  void showNifList(List<PcapNetworkInterface> nifs)
-  throws IOException {
+  protected void showNifList(List<PcapNetworkInterface> nifs) throws IOException {
     StringBuilder sb = new StringBuilder(200);
     int nifIdx = 0;
-    for (PcapNetworkInterface nif: nifs) {
-      sb.append("NIF[").append(nifIdx).append("]: ")
-        .append(nif.getName()).append(LINE_SEPARATOR);
+    for (PcapNetworkInterface nif : nifs) {
+      sb.append("NIF[").append(nifIdx).append("]: ").append(nif.getName()).append(LINE_SEPARATOR);
 
       if (nif.getDescription() != null) {
-        sb.append("      : description: ")
-          .append(nif.getDescription()).append(LINE_SEPARATOR);
+        sb.append("      : description: ").append(nif.getDescription()).append(LINE_SEPARATOR);
       }
 
-      for (LinkLayerAddress addr: nif.getLinkLayerAddresses()) {
-        sb.append("      : link layer address: ")
-          .append(addr).append(LINE_SEPARATOR);
+      for (LinkLayerAddress addr : nif.getLinkLayerAddresses()) {
+        sb.append("      : link layer address: ").append(addr).append(LINE_SEPARATOR);
       }
 
-      for (PcapAddress addr: nif.getAddresses()) {
-        sb.append("      : address: ")
-          .append(addr.getAddress()).append(LINE_SEPARATOR);
+      for (PcapAddress addr : nif.getAddresses()) {
+        sb.append("      : address: ").append(addr.getAddress()).append(LINE_SEPARATOR);
       }
       nifIdx++;
     }
@@ -105,15 +91,11 @@ public class NifSelector {
   }
 
   /**
-   *
    * @param nifs nifs
-   * @return a PcapNetworkInterface object which represents
-   *         a selected network interface.
+   * @return a PcapNetworkInterface object which represents a selected network interface.
    * @throws IOException if fails in something around IO.
    */
-  protected
-  PcapNetworkInterface doSelect(List<PcapNetworkInterface> nifs)
-  throws IOException {
+  protected PcapNetworkInterface doSelect(List<PcapNetworkInterface> nifs) throws IOException {
     int nifIdx;
     while (true) {
       write("Select a device number to capture packets, or enter 'q' to quit > ");
@@ -132,8 +114,7 @@ public class NifSelector {
         if (nifIdx < 0 || nifIdx >= nifs.size()) {
           write("Invalid input." + LINE_SEPARATOR);
           continue;
-        }
-        else {
+        } else {
           break;
         }
       } catch (NumberFormatException e) {
@@ -144,5 +125,4 @@ public class NifSelector {
 
     return nifs.get(nifIdx);
   }
-
 }

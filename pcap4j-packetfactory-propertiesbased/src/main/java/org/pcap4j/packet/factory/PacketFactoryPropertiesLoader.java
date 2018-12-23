@@ -53,177 +53,107 @@ import org.pcap4j.util.PropertiesLoader;
  */
 public final class PacketFactoryPropertiesLoader {
 
-  /**
-   *
-   */
-  public static final String PACKET_FACTORY_PROPERTIES_PATH_KEY
-    = PacketFactoryPropertiesLoader.class.getPackage().getName()
-        + ".properties";
+  /** */
+  public static final String PACKET_FACTORY_PROPERTIES_PATH_KEY =
+      PacketFactoryPropertiesLoader.class.getPackage().getName() + ".properties";
 
-  /**
-   *
-   */
-  public static final String PACKET_CLASS_KEY_BASE
-    = Packet.class.getName() + ".classFor.";
+  /** */
+  public static final String PACKET_CLASS_KEY_BASE = Packet.class.getName() + ".classFor.";
 
-  /**
-   *
-   */
-  public static final String UNKNOWN_PACKET_CLASS_KEY
-    = PACKET_CLASS_KEY_BASE + "unknownNumber";
+  /** */
+  public static final String UNKNOWN_PACKET_CLASS_KEY = PACKET_CLASS_KEY_BASE + "unknownNumber";
 
-  /**
-   *
-   */
-  public static final String IPV4_OPTION_CLASS_KEY_BASE
-    = IpV4Option.class.getName() + ".classFor.";
+  /** */
+  public static final String IPV4_OPTION_CLASS_KEY_BASE = IpV4Option.class.getName() + ".classFor.";
 
-  /**
-   *
-   */
-  public static final String UNKNOWN_IPV4_OPTION_KEY
-    = IPV4_OPTION_CLASS_KEY_BASE + "unknownNumber";
+  /** */
+  public static final String UNKNOWN_IPV4_OPTION_KEY = IPV4_OPTION_CLASS_KEY_BASE + "unknownNumber";
 
-  /**
-   *
-   */
-  public static final String TCP_OPTION_CLASS_KEY_BASE
-    = TcpOption.class.getName() + ".classFor.";
+  /** */
+  public static final String TCP_OPTION_CLASS_KEY_BASE = TcpOption.class.getName() + ".classFor.";
 
-  /**
-   *
-   */
-  public static final String UNKNOWN_TCP_OPTION_KEY
-    = TCP_OPTION_CLASS_KEY_BASE + "unknownNumber";
+  /** */
+  public static final String UNKNOWN_TCP_OPTION_KEY = TCP_OPTION_CLASS_KEY_BASE + "unknownNumber";
 
-  /**
-   *
-   */
-  public static final String IPV4_INTERNET_TIMESTAMP_DATA_CLASS_KEY_BASE
-    = IpV4InternetTimestampOptionData.class.getName() + ".classFor.";
+  /** */
+  public static final String IPV4_INTERNET_TIMESTAMP_DATA_CLASS_KEY_BASE =
+      IpV4InternetTimestampOptionData.class.getName() + ".classFor.";
 
-  /**
-   *
-   */
-  public static final String UNKNOWN_IPV4_INTERNET_TIMESTAMP_DATA_KEY
-    = IPV4_OPTION_CLASS_KEY_BASE + "unknownNumber";
+  /** */
+  public static final String UNKNOWN_IPV4_INTERNET_TIMESTAMP_DATA_KEY =
+      IPV4_OPTION_CLASS_KEY_BASE + "unknownNumber";
 
-  /**
-   *
-   */
-  public static final String IPV6_OPTION_CLASS_KEY_BASE
-    = IpV6Option.class.getName() + ".classFor.";
+  /** */
+  public static final String IPV6_OPTION_CLASS_KEY_BASE = IpV6Option.class.getName() + ".classFor.";
 
-  /**
-   *
-   */
-  public static final String UNKNOWN_IPV6_OPTION_KEY
-    = IPV6_OPTION_CLASS_KEY_BASE + "unknownNumber";
+  /** */
+  public static final String UNKNOWN_IPV6_OPTION_KEY = IPV6_OPTION_CLASS_KEY_BASE + "unknownNumber";
 
-  /**
-   *
-   */
-  public static final String IPV6_ROUTING_DATA_CLASS_KEY_BASE
-    = IpV6RoutingData.class.getName() + ".classFor.";
+  /** */
+  public static final String IPV6_ROUTING_DATA_CLASS_KEY_BASE =
+      IpV6RoutingData.class.getName() + ".classFor.";
 
-  /**
-   *
-   */
-  public static final String UNKNOWN_IPV6_ROUTING_DATA_KEY
-    = IPV6_ROUTING_DATA_CLASS_KEY_BASE + "unknownNumber";
+  /** */
+  public static final String UNKNOWN_IPV6_ROUTING_DATA_KEY =
+      IPV6_ROUTING_DATA_CLASS_KEY_BASE + "unknownNumber";
 
-  /**
-   *
-   */
-  public static final String IPV6_NEIGHBOR_DISCOVERY_OPTION_CLASS_KEY_BASE
-    = IpV6NeighborDiscoveryOption.class.getName() + ".classFor.";
+  /** */
+  public static final String IPV6_NEIGHBOR_DISCOVERY_OPTION_CLASS_KEY_BASE =
+      IpV6NeighborDiscoveryOption.class.getName() + ".classFor.";
 
-  /**
-   *
-   */
-  public static final String UNKNOWN_IPV6_NEIGHBOR_DISCOVERY_OPTION_KEY
-    = IPV6_NEIGHBOR_DISCOVERY_OPTION_CLASS_KEY_BASE + "unknownNumber";
+  /** */
+  public static final String UNKNOWN_IPV6_NEIGHBOR_DISCOVERY_OPTION_KEY =
+      IPV6_NEIGHBOR_DISCOVERY_OPTION_CLASS_KEY_BASE + "unknownNumber";
 
-  /**
-   *
-   */
-  public static final String RADIOTAP_DATA_FIELD_CLASS_KEY_BASE
-    = RadiotapData.class.getName() + ".classFor.";
+  /** */
+  public static final String RADIOTAP_DATA_FIELD_CLASS_KEY_BASE =
+      RadiotapData.class.getName() + ".classFor.";
 
-  /**
-   *
-   */
-  public static final String UNKNOWN_RADIOTAP_DATA_FIELD_KEY
-    = RADIOTAP_DATA_FIELD_CLASS_KEY_BASE + "unknownNumber";
+  /** */
+  public static final String UNKNOWN_RADIOTAP_DATA_FIELD_KEY =
+      RADIOTAP_DATA_FIELD_CLASS_KEY_BASE + "unknownNumber";
 
-  /**
-   *
-   */
-  public static final String SCTP_CHUNK_CLASS_KEY_BASE
-    = SctpChunk.class.getName() + ".classFor.";
+  /** */
+  public static final String SCTP_CHUNK_CLASS_KEY_BASE = SctpChunk.class.getName() + ".classFor.";
 
-  /**
-   *
-   */
-  public static final String UNKNOWN_SCTP_CHUNK_KEY
-    = SCTP_CHUNK_CLASS_KEY_BASE + "unknownNumber";
+  /** */
+  public static final String UNKNOWN_SCTP_CHUNK_KEY = SCTP_CHUNK_CLASS_KEY_BASE + "unknownNumber";
 
-  /**
-   *
-   */
-  public static final String DNS_RDATA_CLASS_KEY_BASE
-    = DnsRData.class.getName() + ".classFor.";
+  /** */
+  public static final String DNS_RDATA_CLASS_KEY_BASE = DnsRData.class.getName() + ".classFor.";
 
-  /**
-   *
-   */
-  public static final String UNKNOWN_DNS_RDATA_KEY
-    = DNS_RDATA_CLASS_KEY_BASE + "unknownNumber";
+  /** */
+  public static final String UNKNOWN_DNS_RDATA_KEY = DNS_RDATA_CLASS_KEY_BASE + "unknownNumber";
 
-  /**
-   *
-   */
-  public static final String IPV4_TOS_CLASS_KEY
-    = IpV4Tos.class.getName() + ".class";
+  /** */
+  public static final String IPV4_TOS_CLASS_KEY = IpV4Tos.class.getName() + ".class";
 
-  /**
-   *
-   */
-  public static final String IPV6_TRAFFIC_CLASS_CLASS_KEY
-    = IpV6TrafficClass.class.getName() + ".class";
+  /** */
+  public static final String IPV6_TRAFFIC_CLASS_CLASS_KEY =
+      IpV6TrafficClass.class.getName() + ".class";
 
-  /**
-   *
-   */
-  public static final String IPV6_FLOW_LABEL_CLASS_KEY
-    = IpV6FlowLabel.class.getName() + ".class";
+  /** */
+  public static final String IPV6_FLOW_LABEL_CLASS_KEY = IpV6FlowLabel.class.getName() + ".class";
 
-  private static final PacketFactoryPropertiesLoader INSTANCE
-    = new PacketFactoryPropertiesLoader();
+  private static final PacketFactoryPropertiesLoader INSTANCE = new PacketFactoryPropertiesLoader();
 
-  private PropertiesLoader loader
-    = new PropertiesLoader(
-        System.getProperty(
-          PACKET_FACTORY_PROPERTIES_PATH_KEY,
-          PacketFactoryPropertiesLoader.class.getPackage().getName()
-            .replace('.', '/') + "/packet-factory.properties"
-        ),
-        true,
-        true
-      );
+  private PropertiesLoader loader =
+      new PropertiesLoader(
+          System.getProperty(
+              PACKET_FACTORY_PROPERTIES_PATH_KEY,
+              PacketFactoryPropertiesLoader.class.getPackage().getName().replace('.', '/')
+                  + "/packet-factory.properties"),
+          true,
+          true);
 
   private PacketFactoryPropertiesLoader() {}
 
-  /**
-   *
-   * @return the singleton instance of PacketFactoryPropertiesLoader.
-   */
+  /** @return the singleton instance of PacketFactoryPropertiesLoader. */
   public static PacketFactoryPropertiesLoader getInstance() {
     return INSTANCE;
   }
 
   /**
-   *
    * @param <T> number
    * @param number number
    * @return a class which implements Packet for a specified NamedNumber.
@@ -238,62 +168,40 @@ public final class PacketFactoryPropertiesLoader {
     }
 
     StringBuilder sb = new StringBuilder(110);
-    sb.append(PACKET_CLASS_KEY_BASE)
-      .append(number.getClass().getName())
-      .append(".")
-      .append(val);
-    return loader.<Packet>getClass(
-             sb.toString(),
-             getUnknownPacketClass()
-           );
+    sb.append(PACKET_CLASS_KEY_BASE).append(number.getClass().getName()).append(".").append(val);
+    return loader.<Packet>getClass(sb.toString(), getUnknownPacketClass());
   }
 
-  /**
-   *
-   * @return a class which implements Packet for an unknown packet.
-   */
+  /** @return a class which implements Packet for an unknown packet. */
   public Class<? extends Packet> getUnknownPacketClass() {
-    return loader.<Packet>getClass(
-             UNKNOWN_PACKET_CLASS_KEY,
-             UnknownPacket.class
-           );
+    return loader.<Packet>getClass(UNKNOWN_PACKET_CLASS_KEY, UnknownPacket.class);
   }
 
   /**
-   *
    * @param targetClass targetClass
    * @param numberClass numberClass
-   * @return a class which implements
-   *         {@link org.pcap4j.packet.factory.PacketFactory PacketFactory}
-   *         for specified classes.
+   * @return a class which implements {@link org.pcap4j.packet.factory.PacketFactory PacketFactory}
+   *     for specified classes.
    */
   public Class<? extends PacketFactory<?, ?>> getPacketFactoryClass(
-    Class<?> targetClass, Class<? extends NamedNumber<?, ?>> numberClass
-  ) {
+      Class<?> targetClass, Class<? extends NamedNumber<?, ?>> numberClass) {
     StringBuilder sb = new StringBuilder(200);
     sb.append(targetClass.getName());
     if (!numberClass.equals(NotApplicable.class)) {
-      sb.append(".classifiedBy.")
-        .append(numberClass.getName());
+      sb.append(".classifiedBy.").append(numberClass.getName());
     }
     sb.append(".isMadeBy");
     String key = sb.toString();
 
-    Class<? extends PacketFactory<?, ?>> factory
-      = loader.getClass(
-          key,
-          null
-        );
+    Class<? extends PacketFactory<?, ?>> factory = loader.getClass(key, null);
 
     if (factory == null) {
       String value = loader.getProp().getProperty(key);
       if (value == null) {
         throw new IllegalStateException("Can't get a value by the key: " + key);
-      }
-      else {
+      } else {
         sb = new StringBuilder(110);
-        sb.append("Invalid value(").append(value)
-          .append(") for the key: ").append(key);
+        sb.append("Invalid value(").append(value).append(") for the key: ").append(key);
         throw new IllegalStateException(sb.toString());
       }
     }
@@ -302,298 +210,189 @@ public final class PacketFactoryPropertiesLoader {
   }
 
   /**
-   *
    * @param type type
    * @return a class which implements IpV4Option for a specified type.
    */
   public Class<? extends IpV4Option> getIpV4OptionClass(IpV4OptionType type) {
     StringBuilder sb = new StringBuilder(120);
     sb.append(IPV4_OPTION_CLASS_KEY_BASE)
-      .append(type.getClass().getName())
-      .append(".")
-      .append(type.valueAsString());
-    return loader.<IpV4Option>getClass(
-             sb.toString(),
-             getUnknownIpV4OptionClass()
-           );
+        .append(type.getClass().getName())
+        .append(".")
+        .append(type.valueAsString());
+    return loader.<IpV4Option>getClass(sb.toString(), getUnknownIpV4OptionClass());
   }
 
-  /**
-   *
-   * @return a class which implements IpV4Option for an unknown type.
-   */
+  /** @return a class which implements IpV4Option for an unknown type. */
   public Class<? extends IpV4Option> getUnknownIpV4OptionClass() {
-    return loader.<IpV4Option>getClass(
-             UNKNOWN_IPV4_OPTION_KEY,
-             UnknownIpV4Option.class
-           );
+    return loader.<IpV4Option>getClass(UNKNOWN_IPV4_OPTION_KEY, UnknownIpV4Option.class);
   }
 
   /**
-   *
    * @param type type
    * @return a class which implements TcpOption for a specified type.
    */
   public Class<? extends TcpOption> getTcpOptionClass(TcpOptionKind type) {
     StringBuilder sb = new StringBuilder(120);
     sb.append(TCP_OPTION_CLASS_KEY_BASE)
-      .append(type.getClass().getName())
-      .append(".")
-      .append(type.valueAsString());
-    return loader.<TcpOption>getClass(
-             sb.toString(),
-             getUnknownTcpOptionClass()
-           );
+        .append(type.getClass().getName())
+        .append(".")
+        .append(type.valueAsString());
+    return loader.<TcpOption>getClass(sb.toString(), getUnknownTcpOptionClass());
   }
 
-  /**
-   *
-   * @return a class which implements TcpOption for an unknown type.
-   */
+  /** @return a class which implements TcpOption for an unknown type. */
   public Class<? extends TcpOption> getUnknownTcpOptionClass() {
-    return loader.<TcpOption>getClass(
-             UNKNOWN_TCP_OPTION_KEY,
-             UnknownTcpOption.class
-           );
+    return loader.<TcpOption>getClass(UNKNOWN_TCP_OPTION_KEY, UnknownTcpOption.class);
   }
 
   /**
-   *
    * @param flag flag
-   * @return a class which implements IpV4InternetTimestampOptionData
-   *         for a specified flag.
+   * @return a class which implements IpV4InternetTimestampOptionData for a specified flag.
    */
-  public Class<? extends IpV4InternetTimestampOptionData>
-  getIpV4InternetTimestampDataClass(IpV4InternetTimestampOptionFlag flag) {
+  public Class<? extends IpV4InternetTimestampOptionData> getIpV4InternetTimestampDataClass(
+      IpV4InternetTimestampOptionFlag flag) {
     StringBuilder sb = new StringBuilder(150);
     sb.append(IPV4_INTERNET_TIMESTAMP_DATA_CLASS_KEY_BASE)
-      .append(flag.getClass().getName())
-      .append(".")
-      .append(flag.valueAsString());
+        .append(flag.getClass().getName())
+        .append(".")
+        .append(flag.valueAsString());
     return loader.<IpV4InternetTimestampOptionData>getClass(
-             sb.toString(),
-             getUnknownIpV4InternetTimestampDataClass()
-           );
+        sb.toString(), getUnknownIpV4InternetTimestampDataClass());
   }
 
-  /**
-   *
-   * @return a class which implements IpV4InternetTimestampOptionData
-   *         for an unknown flag.
-   */
+  /** @return a class which implements IpV4InternetTimestampOptionData for an unknown flag. */
   public Class<? extends IpV4InternetTimestampOptionData>
-  getUnknownIpV4InternetTimestampDataClass() {
+      getUnknownIpV4InternetTimestampDataClass() {
     return loader.<IpV4InternetTimestampOptionData>getClass(
-             UNKNOWN_IPV4_INTERNET_TIMESTAMP_DATA_KEY,
-             UnknownIpV4InternetTimestampOptionData.class
-           );
+        UNKNOWN_IPV4_INTERNET_TIMESTAMP_DATA_KEY, UnknownIpV4InternetTimestampOptionData.class);
   }
 
   /**
-   *
    * @param type type
    * @return a class which implements IpV6Option for a specified type.
    */
   public Class<? extends IpV6Option> getIpV6OptionClass(IpV6OptionType type) {
     StringBuilder sb = new StringBuilder(120);
     sb.append(IPV6_OPTION_CLASS_KEY_BASE)
-      .append(type.getClass().getName())
-      .append(".")
-      .append(type.valueAsString());
-    return loader.<IpV6Option>getClass(
-             sb.toString(),
-             getUnknownIpV6OptionClass()
-           );
+        .append(type.getClass().getName())
+        .append(".")
+        .append(type.valueAsString());
+    return loader.<IpV6Option>getClass(sb.toString(), getUnknownIpV6OptionClass());
   }
 
-  /**
-   *
-   * @return a class which implements IpV6Option for an unknown type.
-   */
+  /** @return a class which implements IpV6Option for an unknown type. */
   public Class<? extends IpV6Option> getUnknownIpV6OptionClass() {
-    return loader.<IpV6Option>getClass(
-             UNKNOWN_IPV6_OPTION_KEY,
-             UnknownIpV6Option.class
-           );
+    return loader.<IpV6Option>getClass(UNKNOWN_IPV6_OPTION_KEY, UnknownIpV6Option.class);
   }
 
   /**
-   *
    * @param type type
    * @return a class which implements IpV6RoutingData for a specified type.
    */
-  public Class<? extends IpV6RoutingData> getIpV6RoutingDataClass(
-    IpV6RoutingType type
-  ) {
+  public Class<? extends IpV6RoutingData> getIpV6RoutingDataClass(IpV6RoutingType type) {
     StringBuilder sb = new StringBuilder(120);
     sb.append(IPV6_ROUTING_DATA_CLASS_KEY_BASE)
-      .append(type.getClass().getName())
-      .append(".")
-      .append(type.valueAsString());
-    return loader.<IpV6RoutingData>getClass(
-             sb.toString(),
-             getUnknownIpV6RoutingDataClass()
-           );
+        .append(type.getClass().getName())
+        .append(".")
+        .append(type.valueAsString());
+    return loader.<IpV6RoutingData>getClass(sb.toString(), getUnknownIpV6RoutingDataClass());
   }
 
-  /**
-   *
-   * @return a class which implements IpV6RoutingData for an unknown type.
-   */
+  /** @return a class which implements IpV6RoutingData for an unknown type. */
   public Class<? extends IpV6RoutingData> getUnknownIpV6RoutingDataClass() {
     return loader.<IpV6RoutingData>getClass(
-             UNKNOWN_IPV6_ROUTING_DATA_KEY,
-             UnknownIpV6RoutingData.class
-           );
+        UNKNOWN_IPV6_ROUTING_DATA_KEY, UnknownIpV6RoutingData.class);
   }
 
   /**
-   *
    * @param type type
    * @return a class which implements IpV6NeighborDiscoveryOption for a specified type.
    */
-  public Class<? extends IpV6NeighborDiscoveryOption>
-  getIpV6NeighborDiscoveryOptionClass(IpV6NeighborDiscoveryOptionType type) {
+  public Class<? extends IpV6NeighborDiscoveryOption> getIpV6NeighborDiscoveryOptionClass(
+      IpV6NeighborDiscoveryOptionType type) {
     StringBuilder sb = new StringBuilder(120);
     sb.append(IPV6_NEIGHBOR_DISCOVERY_OPTION_CLASS_KEY_BASE)
-      .append(type.getClass().getName())
-      .append(".")
-      .append(type.valueAsString());
+        .append(type.getClass().getName())
+        .append(".")
+        .append(type.valueAsString());
     return loader.<IpV6NeighborDiscoveryOption>getClass(
-             sb.toString(),
-             getUnknownIpV6NeighborDiscoveryOptionClass()
-           );
+        sb.toString(), getUnknownIpV6NeighborDiscoveryOptionClass());
+  }
+
+  /** @return a class which implements IpV6NeighborDiscoveryOption for an unknown type. */
+  public Class<? extends IpV6NeighborDiscoveryOption> getUnknownIpV6NeighborDiscoveryOptionClass() {
+    return loader.<IpV6NeighborDiscoveryOption>getClass(
+        UNKNOWN_IPV6_NEIGHBOR_DISCOVERY_OPTION_KEY, UnknownIpV6NeighborDiscoveryOption.class);
   }
 
   /**
-   *
-   * @return a class which implements IpV6NeighborDiscoveryOption for an unknown type.
-   */
-  public Class<? extends IpV6NeighborDiscoveryOption>
-  getUnknownIpV6NeighborDiscoveryOptionClass() {
-    return loader.<IpV6NeighborDiscoveryOption>getClass(
-             UNKNOWN_IPV6_NEIGHBOR_DISCOVERY_OPTION_KEY,
-             UnknownIpV6NeighborDiscoveryOption.class
-           );
-  }
-
-  /**
-   *
    * @param num num
    * @return a class which implements RadiotapDataField for a specified type.
    */
-  public Class<? extends RadiotapData>
-  getRadiotapDataFieldClass(RadiotapPresentBitNumber num) {
+  public Class<? extends RadiotapData> getRadiotapDataFieldClass(RadiotapPresentBitNumber num) {
     StringBuilder sb = new StringBuilder(120);
     sb.append(RADIOTAP_DATA_FIELD_CLASS_KEY_BASE)
-      .append(num.getClass().getName())
-      .append(".")
-      .append(num.valueAsString());
+        .append(num.getClass().getName())
+        .append(".")
+        .append(num.valueAsString());
+    return loader.<RadiotapData>getClass(sb.toString(), getUnknownRadiotapDataFieldClass());
+  }
+
+  /** @return a class which implements RadiotapDataField for an unknown type. */
+  public Class<? extends RadiotapData> getUnknownRadiotapDataFieldClass() {
     return loader.<RadiotapData>getClass(
-             sb.toString(),
-             getUnknownRadiotapDataFieldClass()
-           );
+        UNKNOWN_RADIOTAP_DATA_FIELD_KEY, UnknownRadiotapData.class);
   }
 
   /**
-   *
-   * @return a class which implements RadiotapDataField for an unknown type.
-   */
-  public Class<? extends RadiotapData>
-  getUnknownRadiotapDataFieldClass() {
-    return loader.<RadiotapData>getClass(
-             UNKNOWN_RADIOTAP_DATA_FIELD_KEY,
-             UnknownRadiotapData.class
-           );
-  }
-
-  /**
-   *
    * @param type type
    * @return a class which implements SctpChunk for a specified type.
    */
   public Class<? extends SctpChunk> getSctpChunkClass(SctpChunkType type) {
     StringBuilder sb = new StringBuilder(120);
     sb.append(SCTP_CHUNK_CLASS_KEY_BASE)
-      .append(type.getClass().getName())
-      .append(".")
-      .append(type.valueAsString());
-    return loader.<SctpChunk>getClass(
-             sb.toString(),
-             getUnknownSctpChunkClass()
-           );
+        .append(type.getClass().getName())
+        .append(".")
+        .append(type.valueAsString());
+    return loader.<SctpChunk>getClass(sb.toString(), getUnknownSctpChunkClass());
   }
 
-  /**
-   *
-   * @return a class which implements SctpChunk for an unknown type.
-   */
+  /** @return a class which implements SctpChunk for an unknown type. */
   public Class<? extends SctpChunk> getUnknownSctpChunkClass() {
-    return loader.<SctpChunk>getClass(
-             UNKNOWN_SCTP_CHUNK_KEY,
-             UnknownSctpChunk.class
-           );
+    return loader.<SctpChunk>getClass(UNKNOWN_SCTP_CHUNK_KEY, UnknownSctpChunk.class);
   }
 
   /**
-   *
    * @param type type
    * @return a class which implements DnsRData for a specified type.
    */
   public Class<? extends DnsRData> getDnsRDataClass(DnsResourceRecordType type) {
     StringBuilder sb = new StringBuilder(120);
     sb.append(DNS_RDATA_CLASS_KEY_BASE)
-      .append(type.getClass().getName())
-      .append(".")
-      .append(type.valueAsString());
-    return loader.<DnsRData>getClass(
-             sb.toString(),
-             getUnknownDnsRDataClass()
-           );
+        .append(type.getClass().getName())
+        .append(".")
+        .append(type.valueAsString());
+    return loader.<DnsRData>getClass(sb.toString(), getUnknownDnsRDataClass());
   }
 
-  /**
-   *
-   * @return a class which implements DnsRData for an unknown type.
-   */
+  /** @return a class which implements DnsRData for an unknown type. */
   public Class<? extends DnsRData> getUnknownDnsRDataClass() {
-    return loader.<DnsRData>getClass(
-             UNKNOWN_DNS_RDATA_KEY,
-             UnknownDnsRData.class
-           );
+    return loader.<DnsRData>getClass(UNKNOWN_DNS_RDATA_KEY, UnknownDnsRData.class);
   }
 
-  /**
-   *
-   * @return a class which implements IpV4Tos.
-   */
+  /** @return a class which implements IpV4Tos. */
   public Class<? extends IpV4Tos> getIpV4TosClass() {
-    return loader.<IpV4Tos>getClass(
-             IPV4_TOS_CLASS_KEY,
-             IpV4Rfc1349Tos.class
-           );
+    return loader.<IpV4Tos>getClass(IPV4_TOS_CLASS_KEY, IpV4Rfc1349Tos.class);
   }
 
-  /**
-   *
-   * @return a class which implements IpV6TrafficClass.
-   */
+  /** @return a class which implements IpV6TrafficClass. */
   public Class<? extends IpV6TrafficClass> getIpV6TrafficClassClass() {
     return loader.<IpV6TrafficClass>getClass(
-             IPV6_TRAFFIC_CLASS_CLASS_KEY,
-             IpV6SimpleTrafficClass.class
-           );
+        IPV6_TRAFFIC_CLASS_CLASS_KEY, IpV6SimpleTrafficClass.class);
   }
 
-  /**
-   *
-   * @return a class which implements IpV6FlowLabel.
-   */
+  /** @return a class which implements IpV6FlowLabel. */
   public Class<? extends IpV6FlowLabel> getIpV6FlowLabelClass() {
-    return loader.<IpV6FlowLabel>getClass(
-             IPV6_FLOW_LABEL_CLASS_KEY,
-             IpV6SimpleFlowLabel.class
-           );
+    return loader.<IpV6FlowLabel>getClass(IPV6_FLOW_LABEL_CLASS_KEY, IpV6SimpleFlowLabel.class);
   }
-
 }

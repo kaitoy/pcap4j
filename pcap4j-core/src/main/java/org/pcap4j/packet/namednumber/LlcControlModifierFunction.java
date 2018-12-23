@@ -17,75 +17,54 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
-public final class LlcControlModifierFunction extends NamedNumber<Byte, LlcControlModifierFunction> {
+public final class LlcControlModifierFunction
+    extends NamedNumber<Byte, LlcControlModifierFunction> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 468392162004904375L;
 
-  /**
-   * Unnumbered information (UI): 0
-   */
-  public static final LlcControlModifierFunction UI
-    = new LlcControlModifierFunction((byte)0, "UI");
+  /** Unnumbered information (UI): 0 */
+  public static final LlcControlModifierFunction UI =
+      new LlcControlModifierFunction((byte) 0, "UI");
 
-  /**
-   * Disconnect mode (DM): 3
-   */
-  public static final LlcControlModifierFunction DM
-    = new LlcControlModifierFunction((byte)3, "DM");
+  /** Disconnect mode (DM): 3 */
+  public static final LlcControlModifierFunction DM =
+      new LlcControlModifierFunction((byte) 3, "DM");
 
-  /**
-   * Disconnect (DISC): 16
-   */
-  public static final LlcControlModifierFunction DISC
-    = new LlcControlModifierFunction((byte)16, "DISC");
+  /** Disconnect (DISC): 16 */
+  public static final LlcControlModifierFunction DISC =
+      new LlcControlModifierFunction((byte) 16, "DISC");
 
-  /**
-   * Unnumbered acknowledgment (UA): 24
-   */
-  public static final LlcControlModifierFunction UA
-    = new LlcControlModifierFunction((byte)24, "UA");
+  /** Unnumbered acknowledgment (UA): 24 */
+  public static final LlcControlModifierFunction UA =
+      new LlcControlModifierFunction((byte) 24, "UA");
 
-  /**
-   * Acknowledged connectionless information/acknowledgment 0 (AC0): 25
-   */
-  public static final LlcControlModifierFunction AC0
-    = new LlcControlModifierFunction((byte)25, "AC0");
+  /** Acknowledged connectionless information/acknowledgment 0 (AC0): 25 */
+  public static final LlcControlModifierFunction AC0 =
+      new LlcControlModifierFunction((byte) 25, "AC0");
 
-  /**
-   * Set asynchronous balanced mode extended (SABME): 16
-   */
-  public static final LlcControlModifierFunction SABME
-    = new LlcControlModifierFunction((byte)27, "SABME");
+  /** Set asynchronous balanced mode extended (SABME): 16 */
+  public static final LlcControlModifierFunction SABME =
+      new LlcControlModifierFunction((byte) 27, "SABME");
 
-  /**
-   * Frame reject (FRMR): 33
-   */
-  public static final LlcControlModifierFunction FRMR
-    = new LlcControlModifierFunction((byte)33, "FRMR");
+  /** Frame reject (FRMR): 33 */
+  public static final LlcControlModifierFunction FRMR =
+      new LlcControlModifierFunction((byte) 33, "FRMR");
 
-  /**
-   * Exchange identification (XID): 43
-   */
-  public static final LlcControlModifierFunction XID
-    = new LlcControlModifierFunction((byte)43, "XID");
+  /** Exchange identification (XID): 43 */
+  public static final LlcControlModifierFunction XID =
+      new LlcControlModifierFunction((byte) 43, "XID");
 
-  /**
-   * Test (TEST): 56
-   */
-  public static final LlcControlModifierFunction TEST
-    = new LlcControlModifierFunction((byte)56, "TEST");
+  /** Test (TEST): 56 */
+  public static final LlcControlModifierFunction TEST =
+      new LlcControlModifierFunction((byte) 56, "TEST");
 
-  /**
-   * Acknowledged connectionless information/acknowledgment 1 (AC1): 57
-   */
-  public static final LlcControlModifierFunction AC1
-    = new LlcControlModifierFunction((byte)57, "AC1");
+  /** Acknowledged connectionless information/acknowledgment 1 (AC1): 57 */
+  public static final LlcControlModifierFunction AC1 =
+      new LlcControlModifierFunction((byte) 57, "AC1");
 
-  private static final Map<Byte, LlcControlModifierFunction> registry
-    = new HashMap<Byte, LlcControlModifierFunction>();
+  private static final Map<Byte, LlcControlModifierFunction> registry =
+      new HashMap<Byte, LlcControlModifierFunction>();
 
   static {
     registry.put(UI.value(), UI);
@@ -101,7 +80,6 @@ public final class LlcControlModifierFunction extends NamedNumber<Byte, LlcContr
   }
 
   /**
-   *
    * @param value value
    * @param name name
    */
@@ -109,27 +87,23 @@ public final class LlcControlModifierFunction extends NamedNumber<Byte, LlcContr
     super(value, name);
     if (value < 0 || value > 59 || (value & 0x04) != 0) {
       throw new IllegalArgumentException(
-              "value must be (value >= 0 || value <= 55 || (value & 0x04) == 0). value: " + value
-            );
+          "value must be (value >= 0 || value <= 55 || (value & 0x04) == 0). value: " + value);
     }
   }
 
   /**
-   *
    * @param value value
    * @return a LlcControlModifierFunction object.
    */
   public static LlcControlModifierFunction getInstance(Byte value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new LlcControlModifierFunction(value, "unknown");
     }
   }
 
   /**
-   *
    * @param number number
    * @return a LlcControlModifierFunction object.
    */
@@ -141,5 +115,4 @@ public final class LlcControlModifierFunction extends NamedNumber<Byte, LlcContr
   public int compareTo(LlcControlModifierFunction o) {
     return value().compareTo(o.value());
   }
-
 }

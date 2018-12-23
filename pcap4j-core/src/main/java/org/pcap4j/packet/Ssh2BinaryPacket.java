@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,9 +66,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
    * whichever is larger) bytes (plus 'mac').
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 6484755289384336675L;
 
   private final Ssh2BinaryHeader header;
@@ -76,9 +75,8 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
   private final byte[] mac;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -86,9 +84,8 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
    * @return a new Ssh2BinaryPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Ssh2BinaryPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Ssh2BinaryPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Ssh2BinaryPacket(rawData, offset, length);
   }
@@ -97,71 +94,56 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     this.header = new Ssh2BinaryHeader(rawData, offset, length);
 
     int payloadLength = header.getPacketLength() - header.getPaddingLengthAsInt() - 1;
-    if (
-         payloadLength < 0
-      || payloadLength > length - Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE
-    ) {
+    if (payloadLength < 0 || payloadLength > length - Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("rawData is too short. rawData length: ")
-        .append(length)
-        .append(", header.getPacketLength(): ")
-        .append(header.getPacketLength())
-        .append(", header.getPaddingLengthAsInt(): ")
-        .append(header.getPaddingLengthAsInt());
+          .append(length)
+          .append(", header.getPacketLength(): ")
+          .append(header.getPacketLength())
+          .append(", header.getPaddingLengthAsInt(): ")
+          .append(header.getPaddingLengthAsInt());
       throw new IllegalRawDataException(sb.toString());
     }
 
     int payloadOffset = Ssh2BinaryHeader.SSH2_BINARY_HEADER_SIZE + offset;
     if (payloadLength > 0) {
-      this.payload
-        = PacketFactories.getFactory(Packet.class, Ssh2MessageNumber.class)
-            .newInstance(
-               rawData,
-               payloadOffset,
-               payloadLength,
-               Ssh2MessageNumber.getInstance(rawData[payloadOffset])
-             );
-    }
-    else {
+      this.payload =
+          PacketFactories.getFactory(Packet.class, Ssh2MessageNumber.class)
+              .newInstance(
+                  rawData,
+                  payloadOffset,
+                  payloadLength,
+                  Ssh2MessageNumber.getInstance(rawData[payloadOffset]));
+    } else {
       this.payload = null;
     }
 
     try {
-      this.randomPadding
-        = ByteArrays.getSubArray(
-            rawData,
-            payloadOffset + payloadLength,
-            header.getPaddingLength()
-          );
+      this.randomPadding =
+          ByteArrays.getSubArray(rawData, payloadOffset + payloadLength, header.getPaddingLength());
 
-      this.mac
-        = ByteArrays.getSubArray(
-            rawData,
-            payloadOffset + payloadLength + randomPadding.length
-          );
+      this.mac =
+          ByteArrays.getSubArray(rawData, payloadOffset + payloadLength + randomPadding.length);
     } catch (Exception e) {
       throw new IllegalRawDataException(e);
     }
   }
 
   private Ssh2BinaryPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.randomPadding == null
-      || builder.mac == null
-    ) {
+    if (builder == null || builder.randomPadding == null || builder.mac == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.randomPadding: ").append(builder.randomPadding)
-        .append(" builder.mac: ").append(builder.mac);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.randomPadding: ")
+          .append(builder.randomPadding)
+          .append(" builder.mac: ")
+          .append(builder.mac);
       throw new NullPointerException(sb.toString());
     }
 
     if (!builder.paddingAtBuild && builder.randomPadding == null) {
       throw new NullPointerException(
-                  "builder.randomPadding must not be null"
-                    + " if builder.paddingAtBuild is false"
-                );
+          "builder.randomPadding must not be null" + " if builder.paddingAtBuild is false");
     }
 
     this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
@@ -171,19 +153,15 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
       int blockSize = builder.cipherBlockSize > 8 ? builder.cipherBlockSize : 8;
       int paddingSize = payloadLength % blockSize;
       this.randomPadding = new byte[paddingSize];
-    }
-    else {
+    } else {
       this.randomPadding = new byte[builder.randomPadding.length];
       System.arraycopy(
-        builder.randomPadding, 0, this.randomPadding, 0, builder.randomPadding.length
-      );
+          builder.randomPadding, 0, this.randomPadding, 0, builder.randomPadding.length);
     }
 
-    this.header = new Ssh2BinaryHeader(builder, payloadLength, (byte)randomPadding.length);
+    this.header = new Ssh2BinaryHeader(builder, payloadLength, (byte) randomPadding.length);
     this.mac = new byte[builder.mac.length];
-    System.arraycopy(
-      builder.mac, 0, this.mac, 0, builder.mac.length
-    );
+    System.arraycopy(builder.mac, 0, this.mac, 0, builder.mac.length);
   }
 
   @Override
@@ -196,20 +174,14 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     return payload;
   }
 
-  /**
-   *
-   * @return randomPadding
-   */
+  /** @return randomPadding */
   public byte[] getRandomPadding() {
     byte[] copy = new byte[randomPadding.length];
     System.arraycopy(randomPadding, 0, copy, 0, randomPadding.length);
     return copy;
   }
 
-  /**
-   *
-   * @return mac
-   */
+  /** @return mac */
   public byte[] getMac() {
     byte[] copy = new byte[mac.length];
     System.arraycopy(mac, 0, copy, 0, mac.length);
@@ -229,21 +201,14 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     byte[] rawData = super.buildRawData();
     if (randomPadding.length != 0) {
       System.arraycopy(
-        randomPadding,
-        0,
-        rawData,
-        rawData.length - randomPadding.length - mac.length,
-        randomPadding.length
-      );
+          randomPadding,
+          0,
+          rawData,
+          rawData.length - randomPadding.length - mac.length,
+          randomPadding.length);
     }
     if (mac.length != 0) {
-      System.arraycopy(
-        mac,
-        0,
-        rawData,
-        rawData.length - mac.length,
-        mac.length
-      );
+      System.arraycopy(mac, 0, rawData, rawData.length - mac.length, mac.length);
     }
     return rawData;
   }
@@ -259,22 +224,22 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     if (randomPadding.length != 0) {
       String ls = System.getProperty("line.separator");
       sb.append("[random padding (")
-        .append(randomPadding.length)
-        .append(" bytes)]")
-        .append(ls)
-        .append("  Hex stream: ")
-        .append(ByteArrays.toHexString(randomPadding, " "))
-        .append(ls);
+          .append(randomPadding.length)
+          .append(" bytes)]")
+          .append(ls)
+          .append("  Hex stream: ")
+          .append(ByteArrays.toHexString(randomPadding, " "))
+          .append(ls);
     }
     if (mac.length != 0) {
       String ls = System.getProperty("line.separator");
       sb.append("[mac (")
-        .append(mac.length)
-        .append(" bytes)]")
-        .append(ls)
-        .append("  Hex stream: ")
-        .append(ByteArrays.toHexString(mac, " "))
-        .append(ls);
+          .append(mac.length)
+          .append(" bytes)]")
+          .append(ls)
+          .append("  Hex stream: ")
+          .append(ByteArrays.toHexString(mac, " "))
+          .append(ls);
     }
 
     return sb.toString();
@@ -288,12 +253,9 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
   @Override
   public boolean equals(Object obj) {
     if (super.equals(obj)) {
-      Ssh2BinaryPacket other = (Ssh2BinaryPacket)obj;
-      return
-           Arrays.equals(randomPadding, other.randomPadding)
-        && Arrays.equals(mac, other.mac);
-    }
-    else {
+      Ssh2BinaryPacket other = (Ssh2BinaryPacket) obj;
+      return Arrays.equals(randomPadding, other.randomPadding) && Arrays.equals(mac, other.mac);
+    } else {
       return false;
     }
   }
@@ -307,12 +269,11 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
   }
 
   /**
-   *
    * @author Kaito Yamada
    * @since pcap4j 1.0.1
    */
   public static final class Builder extends AbstractBuilder
-  implements LengthBuilder<Ssh2BinaryPacket>{
+      implements LengthBuilder<Ssh2BinaryPacket> {
 
     private int packetLength;
     private byte paddingLength;
@@ -323,10 +284,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     private int cipherBlockSize = 0;
     private boolean paddingAtBuild;
 
-
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(Ssh2BinaryPacket packet) {
@@ -338,7 +296,6 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param packetLength packetLength
      * @return this Builder object for method chaining.
      */
@@ -348,7 +305,6 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param paddingLength paddingLength
      * @return this Builder object for method chaining.
      */
@@ -369,7 +325,6 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param randomPadding randomPadding
      * @return this Builder object for method chaining.
      */
@@ -379,7 +334,6 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param mac mac
      * @return this Builder object for method chaining.
      */
@@ -395,7 +349,6 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param cipherBlockSize cipherBlockSize
      * @return this Builder object for method chaining.
      */
@@ -405,7 +358,6 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param paddingAtBuild paddingAtBuild
      * @return this Builder object for method chaining.
      */
@@ -418,11 +370,9 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     public Ssh2BinaryPacket build() {
       return new Ssh2BinaryPacket(this);
     }
-
   }
 
   /**
-   *
    * @author Kaito Yamada
    * @version pcap4j 1.0.1
    */
@@ -439,9 +389,7 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
      * +-+-+-+-+-+-+-+-+
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -7927092563030949527L;
 
     private static final int PACKET_LENGTH_OFFSET = 0;
@@ -453,19 +401,18 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     private final int packetLength;
     private final byte paddingLength;
 
-    private Ssh2BinaryHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private Ssh2BinaryHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < SSH2_BINARY_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(100);
         sb.append("The data is too short to build an SSH2 Binary header(")
-          .append(SSH2_BINARY_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(SSH2_BINARY_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -474,8 +421,9 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
 
       if (packetLength < 0) {
         StringBuilder sb = new StringBuilder(120);
-        sb.append("The packet length which is longer than 2147483647 is not supported. packet length: ")
-          .append(getPacketLengthAsLong());
+        sb.append(
+                "The packet length which is longer than 2147483647 is not supported. packet length: ")
+            .append(getPacketLengthAsLong());
         throw new IllegalRawDataException(sb.toString());
       }
     }
@@ -484,48 +432,36 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
       if (builder.correctLengthAtBuild) {
         this.packetLength = payloadLength;
         this.paddingLength = paddingLength;
-      }
-      else {
+      } else {
         this.packetLength = builder.packetLength;
         this.paddingLength = builder.paddingLength;
       }
 
       if (packetLength < 0) {
         StringBuilder sb = new StringBuilder(120);
-        sb.append("The packet length which is longer than 2147483647 is not supported. packet length: ")
-          .append(builder.packetLength & 0xFFFFFFFFL);
+        sb.append(
+                "The packet length which is longer than 2147483647 is not supported. packet length: ")
+            .append(builder.packetLength & 0xFFFFFFFFL);
         throw new IllegalArgumentException(sb.toString());
       }
     }
 
-    /**
-     *
-     * @return packetLength
-     */
+    /** @return packetLength */
     public int getPacketLength() {
       return packetLength;
     }
 
-    /**
-     *
-     * @return packetLength
-     */
+    /** @return packetLength */
     public long getPacketLengthAsLong() {
       return 0xFFFFFFFFL & packetLength;
     }
 
-    /**
-     *
-     * @return paddingLength
-     */
+    /** @return paddingLength */
     public byte getPaddingLength() {
       return paddingLength;
     }
 
-    /**
-     *
-     * @return paddingLength
-     */
+    /** @return paddingLength */
     public int getPaddingLengthAsInt() {
       return 0xFF & paddingLength;
     }
@@ -539,36 +475,33 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
     }
 
     @Override
-    public int length() { return SSH2_BINARY_HEADER_SIZE; }
+    public int length() {
+      return SSH2_BINARY_HEADER_SIZE;
+    }
 
     @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[SSH2 Binary Packet Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  packet_length: ")
-        .append(packetLength)
-        .append(ls);
-      sb.append("  padding_length: ")
-        .append(paddingLength)
-        .append(ls);
+      sb.append("[SSH2 Binary Packet Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  packet_length: ").append(packetLength).append(ls);
+      sb.append("  padding_length: ").append(paddingLength).append(ls);
 
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      Ssh2BinaryHeader other = (Ssh2BinaryHeader)obj;
-      return
-           packetLength == other.packetLength
-        && paddingLength == other.paddingLength;
+      Ssh2BinaryHeader other = (Ssh2BinaryHeader) obj;
+      return packetLength == other.packetLength && paddingLength == other.paddingLength;
     }
 
     @Override
@@ -578,7 +511,5 @@ public final class Ssh2BinaryPacket extends AbstractPacket {
       result = 31 * result + paddingLength;
       return result;
     }
-
   }
-
 }

@@ -1,6 +1,7 @@
 package org.pcap4j.core;
 
 import static org.junit.Assert.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,7 +50,8 @@ public class DltRawTest {
   @Before
   public void setUp() throws Exception {
     originalLineSeparator = System.setProperty("line.separator", "\r\n");
-    resourceDirPath = System.getProperty(AbstractPacketTest.RESOURCE_DIR_PROP, "src/test/resources");
+    resourceDirPath =
+        System.getProperty(AbstractPacketTest.RESOURCE_DIR_PROP, "src/test/resources");
     tmpDirPath = System.getProperty(AbstractPacketTest.TMP_DIR_PROP, "testdata");
 
     File tmpDir = new File(tmpDirPath);
@@ -67,10 +69,13 @@ public class DltRawTest {
 
   @Test
   public void testDump() throws Exception {
-    String dumpFile = new StringBuilder()
-                        .append(tmpDirPath).append("/")
-                        .append(getClass().getSimpleName()).append(".pcap")
-                        .toString();
+    String dumpFile =
+        new StringBuilder()
+            .append(tmpDirPath)
+            .append("/")
+            .append(getClass().getSimpleName())
+            .append(".pcap")
+            .toString();
     PcapHandle handle = Pcaps.openDead(DataLinkType.RAW, 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
     Timestamp ts = new Timestamp(0);
@@ -79,13 +84,14 @@ public class DltRawTest {
     dumper.close();
     handle.close();
 
-    FileInputStream in1
-      = new FileInputStream(
-          new StringBuilder()
-            .append(resourceDirPath).append("/")
-            .append(getClass().getSimpleName()).append(".pcap")
-            .toString()
-        );
+    FileInputStream in1 =
+        new FileInputStream(
+            new StringBuilder()
+                .append(resourceDirPath)
+                .append("/")
+                .append(getClass().getSimpleName())
+                .append(".pcap")
+                .toString());
     FileInputStream in2 = new FileInputStream(dumpFile);
 
     byte[] buffer1 = new byte[100];
@@ -102,24 +108,28 @@ public class DltRawTest {
 
   @Test
   public void testRead() throws Exception {
-    String pcapFile = new StringBuilder()
-                        .append(resourceDirPath).append("/")
-                        .append(getClass().getSimpleName()).append(".pcap")
-                        .toString();
+    String pcapFile =
+        new StringBuilder()
+            .append(resourceDirPath)
+            .append("/")
+            .append(getClass().getSimpleName())
+            .append(".pcap")
+            .toString();
     PcapHandle ph = Pcaps.openOffline(pcapFile);
     StringBuilder sb = new StringBuilder(1000);
     sb.append(ph.getNextPacket().toString())
-      .append(System.getProperty("line.separator"))
-      .append(ph.getNextPacket().toString());
+        .append(System.getProperty("line.separator"))
+        .append(ph.getNextPacket().toString());
     ph.close();
 
-    FileReader fr
-      = new FileReader(
-          new StringBuilder()
-            .append(resourceDirPath).append("/")
-            .append(getClass().getSimpleName()).append(".log")
-            .toString()
-        );
+    FileReader fr =
+        new FileReader(
+            new StringBuilder()
+                .append(resourceDirPath)
+                .append("/")
+                .append(getClass().getSimpleName())
+                .append(".log")
+                .toString());
     BufferedReader fbr = new BufferedReader(fr);
     StringReader sr = new StringReader(sb.toString());
     BufferedReader sbr = new BufferedReader(sr);
@@ -138,44 +148,40 @@ public class DltRawTest {
   }
 
   private static Packet newIpV4Packet() {
-    short identifier = (short)1234;
-    short sequenceNumber = (short)4321;
+    short identifier = (short) 1234;
+    short sequenceNumber = (short) 4321;
 
     UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
-    unknownb.rawData(new byte[] { (byte)0, (byte)1, (byte)2, (byte)3 });
+    unknownb.rawData(new byte[] {(byte) 0, (byte) 1, (byte) 2, (byte) 3});
 
     IcmpV4EchoPacket.Builder b = new IcmpV4EchoPacket.Builder();
-    b.identifier(identifier)
-     .sequenceNumber(sequenceNumber)
-     .payloadBuilder(unknownb);
+    b.identifier(identifier).sequenceNumber(sequenceNumber).payloadBuilder(unknownb);
     IcmpV4EchoPacket packet = b.build();
 
     IcmpV4CommonPacket.Builder icmpV4b = new IcmpV4CommonPacket.Builder();
-    icmpV4b.type(IcmpV4Type.ECHO)
-      .code(IcmpV4Code.NO_CODE)
-      .payloadBuilder(new SimpleBuilder(packet))
-      .correctChecksumAtBuild(true);
+    icmpV4b
+        .type(IcmpV4Type.ECHO)
+        .code(IcmpV4Code.NO_CODE)
+        .payloadBuilder(new SimpleBuilder(packet))
+        .correctChecksumAtBuild(true);
 
     IpV4Packet.Builder ipv4b = new IpV4Packet.Builder();
     try {
-      ipv4b.version(IpVersion.IPV4)
-        .tos(IpV4Rfc1349Tos.newInstance((byte)0))
-        .identification((short)100)
-        .ttl((byte)100)
-        .protocol(IpNumber.ICMPV4)
-        .srcAddr(
-           (Inet4Address)InetAddress.getByAddress(
-             new byte[] { (byte)192, (byte)0, (byte)2, (byte)1 }
-           )
-         )
-       .dstAddr(
-          (Inet4Address)InetAddress.getByAddress(
-            new byte[] { (byte)192, (byte)0, (byte)2, (byte)2 }
-          )
-        )
-       .payloadBuilder(icmpV4b)
-       .correctChecksumAtBuild(true)
-       .correctLengthAtBuild(true);
+      ipv4b
+          .version(IpVersion.IPV4)
+          .tos(IpV4Rfc1349Tos.newInstance((byte) 0))
+          .identification((short) 100)
+          .ttl((byte) 100)
+          .protocol(IpNumber.ICMPV4)
+          .srcAddr(
+              (Inet4Address)
+                  InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 1}))
+          .dstAddr(
+              (Inet4Address)
+                  InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 2}))
+          .payloadBuilder(icmpV4b)
+          .correctChecksumAtBuild(true)
+          .correctLengthAtBuild(true);
     } catch (UnknownHostException e) {
       throw new AssertionError("Never get here.");
     }
@@ -184,46 +190,45 @@ public class DltRawTest {
   }
 
   private static Packet newIpV6Packet() {
-    short identifier = (short)1234;
-    short sequenceNumber = (short)4321;
+    short identifier = (short) 1234;
+    short sequenceNumber = (short) 4321;
 
     UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
-    unknownb.rawData(new byte[] { (byte)0, (byte)1, (byte)2, (byte)3 });
+    unknownb.rawData(new byte[] {(byte) 0, (byte) 1, (byte) 2, (byte) 3});
 
     IcmpV6EchoRequestPacket.Builder b = new IcmpV6EchoRequestPacket.Builder();
-    b.identifier(identifier)
-     .sequenceNumber(sequenceNumber)
-     .payloadBuilder(unknownb);
+    b.identifier(identifier).sequenceNumber(sequenceNumber).payloadBuilder(unknownb);
     Packet packet = b.build();
 
     Inet6Address srcAddr;
     Inet6Address dstAddr;
     try {
-      srcAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:1");
-      dstAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:2");
+      srcAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:1");
+      dstAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:2");
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
     IcmpV6CommonPacket.Builder icmpV6b = new IcmpV6CommonPacket.Builder();
-    icmpV6b.type(IcmpV6Type.ECHO_REQUEST)
-           .code(IcmpV6Code.NO_CODE)
-           .srcAddr(srcAddr)
-           .dstAddr(dstAddr)
-           .payloadBuilder(new SimpleBuilder(packet))
-           .correctChecksumAtBuild(true);
+    icmpV6b
+        .type(IcmpV6Type.ECHO_REQUEST)
+        .code(IcmpV6Code.NO_CODE)
+        .srcAddr(srcAddr)
+        .dstAddr(dstAddr)
+        .payloadBuilder(new SimpleBuilder(packet))
+        .correctChecksumAtBuild(true);
 
     IpV6Packet.Builder ipv6b = new IpV6Packet.Builder();
-    ipv6b.version(IpVersion.IPV6)
-         .trafficClass(IpV6SimpleTrafficClass.newInstance((byte)0x12))
-         .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
-         .nextHeader(IpNumber.ICMPV6)
-         .hopLimit((byte)100)
-         .srcAddr(srcAddr)
-         .dstAddr(dstAddr)
-         .correctLengthAtBuild(true)
-         .payloadBuilder(icmpV6b);
+    ipv6b
+        .version(IpVersion.IPV6)
+        .trafficClass(IpV6SimpleTrafficClass.newInstance((byte) 0x12))
+        .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
+        .nextHeader(IpNumber.ICMPV6)
+        .hopLimit((byte) 100)
+        .srcAddr(srcAddr)
+        .dstAddr(dstAddr)
+        .correctLengthAtBuild(true)
+        .payloadBuilder(icmpV6b);
 
     return ipv6b.build();
   }
-
 }

@@ -12,25 +12,21 @@ import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.util.ByteArrays;
 
-
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.11
  */
 public final class IllegalIpV4Option implements IpV4Option {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -5887663161675479542L;
 
   private final IpV4OptionType type;
   private final byte[] rawData;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -49,30 +45,31 @@ public final class IllegalIpV4Option implements IpV4Option {
   }
 
   private IllegalIpV4Option(Builder builder) {
-    if (
-        builder == null
-     || builder.type == null
-     || builder.rawData == null
-   ) {
-     StringBuilder sb = new StringBuilder();
-     sb.append("builder: ").append(builder)
-       .append(" builder.type: ").append(builder.type)
-       .append(" builder.rawData: ").append(builder.rawData);
-     throw new NullPointerException(sb.toString());
-   }
+    if (builder == null || builder.type == null || builder.rawData == null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.type: ")
+          .append(builder.type)
+          .append(" builder.rawData: ")
+          .append(builder.rawData);
+      throw new NullPointerException(sb.toString());
+    }
 
-   this.type = builder.type;
-   this.rawData = new byte[builder.rawData.length];
-   System.arraycopy(
-     builder.rawData, 0, this.rawData, 0, builder.rawData.length
-   );
+    this.type = builder.type;
+    this.rawData = new byte[builder.rawData.length];
+    System.arraycopy(builder.rawData, 0, this.rawData, 0, builder.rawData.length);
   }
 
   @Override
-  public IpV4OptionType getType() { return type; }
+  public IpV4OptionType getType() {
+    return type;
+  }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -81,10 +78,7 @@ public final class IllegalIpV4Option implements IpV4Option {
     return copy;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -93,22 +87,24 @@ public final class IllegalIpV4Option implements IpV4Option {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[option-type: ")
-      .append(type)
-      .append("] [Illegal Raw Data: 0x")
-      .append(ByteArrays.toHexString(rawData, ""))
-      .append("]");
+        .append(type)
+        .append("] [Illegal Raw Data: 0x")
+        .append(ByteArrays.toHexString(rawData, ""))
+        .append("]");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    IllegalIpV4Option other = (IllegalIpV4Option)obj;
-    return
-         type.equals(other.type)
-      && Arrays.equals(other.rawData, rawData);
+    IllegalIpV4Option other = (IllegalIpV4Option) obj;
+    return type.equals(other.type) && Arrays.equals(other.rawData, rawData);
   }
 
   @Override
@@ -128,9 +124,7 @@ public final class IllegalIpV4Option implements IpV4Option {
     private IpV4OptionType type;
     private byte[] rawData;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IllegalIpV4Option option) {
@@ -139,7 +133,6 @@ public final class IllegalIpV4Option implements IpV4Option {
     }
 
     /**
-     *
      * @param type type
      * @return this Builder object for method chaining.
      */
@@ -149,7 +142,6 @@ public final class IllegalIpV4Option implements IpV4Option {
     }
 
     /**
-     *
      * @param rawData rawData
      * @return this Builder object for method chaining.
      */
@@ -158,14 +150,9 @@ public final class IllegalIpV4Option implements IpV4Option {
       return this;
     }
 
-    /**
-     *
-     * @return a new IllegalIpV4Option object.
-     */
+    /** @return a new IllegalIpV4Option object. */
     public IllegalIpV4Option build() {
       return new IllegalIpV4Option(this);
     }
-
   }
-
 }

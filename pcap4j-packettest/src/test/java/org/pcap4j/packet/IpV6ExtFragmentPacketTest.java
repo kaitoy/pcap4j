@@ -1,6 +1,7 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -29,8 +30,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(IpV6ExtFragmentPacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(IpV6ExtFragmentPacketTest.class);
 
   private final IpNumber nextHeader;
   private final byte reserved;
@@ -46,31 +46,28 @@ public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
 
   public IpV6ExtFragmentPacketTest() throws Exception {
     this.nextHeader = IpNumber.UDP;
-    this.reserved = (byte)99;
-    this.fragmentOffset = (short)0;
-    this.res = (byte)1;
+    this.reserved = (byte) 99;
+    this.fragmentOffset = (short) 0;
+    this.res = (byte) 1;
     this.m = true;
     this.identification = 654321;
 
     try {
-      srcAddr
-        = (Inet6Address)InetAddress.getByName("2001:db8::3:2:1");
-      dstAddr
-        = (Inet6Address)InetAddress.getByName("2001:db8::3:2:2");
+      srcAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:1");
+      dstAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:2");
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
 
     UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
     unknownb.rawData(
-      new byte[] {
-        (byte)0, (byte)1, (byte)2, (byte)3,
-        (byte)4, (byte)5, (byte)6, (byte)7
-      }
-    );
+        new byte[] {
+          (byte) 0, (byte) 1, (byte) 2, (byte) 3,
+          (byte) 4, (byte) 5, (byte) 6, (byte) 7
+        });
 
     UdpPacket.Builder udpb = new UdpPacket.Builder();
-    udpb.dstPort(UdpPort.getInstance((short)0))
+    udpb.dstPort(UdpPort.getInstance((short) 0))
         .srcPort(UdpPort.SNMP_TRAP)
         .dstAddr(dstAddr)
         .srcAddr(srcAddr)
@@ -80,29 +77,22 @@ public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
 
     byte[] rawPayload = udpb.build().getRawData();
 
-    IpV6ExtFragmentPacket.Builder b
-      = new IpV6ExtFragmentPacket.Builder();
+    IpV6ExtFragmentPacket.Builder b = new IpV6ExtFragmentPacket.Builder();
     b.nextHeader(nextHeader)
-     .reserved(reserved)
-     .fragmentOffset(fragmentOffset)
-     .res(res)
-     .m(m)
-     .identification(identification)
-     .payloadBuilder(
-        new FragmentedPacket.Builder()
-          .rawData(ByteArrays.getSubArray(rawPayload, 0, 8)
-        )
-      );
+        .reserved(reserved)
+        .fragmentOffset(fragmentOffset)
+        .res(res)
+        .m(m)
+        .identification(identification)
+        .payloadBuilder(
+            new FragmentedPacket.Builder().rawData(ByteArrays.getSubArray(rawPayload, 0, 8)));
 
     this.packet1 = b.build();
 
-    b.fragmentOffset((short)1)
-     .m(false)
-     .payloadBuilder(
-       new FragmentedPacket.Builder()
-         .rawData(ByteArrays.getSubArray(rawPayload, 8, 8)
-       )
-     );
+    b.fragmentOffset((short) 1)
+        .m(false)
+        .payloadBuilder(
+            new FragmentedPacket.Builder().rawData(ByteArrays.getSubArray(rawPayload, 8, 8)));
 
     this.packet2 = b.build();
   }
@@ -120,19 +110,17 @@ public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
-      "########## " + IpV6ExtFragmentPacketTest.class.getSimpleName() + " START ##########"
-    );
+        "########## " + IpV6ExtFragmentPacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Test
   public void testNewPacket() {
     try {
-      IpV6ExtFragmentPacket p
-        = IpV6ExtFragmentPacket.newPacket(packet1.getRawData(), 0, packet1.getRawData().length);
+      IpV6ExtFragmentPacket p =
+          IpV6ExtFragmentPacket.newPacket(packet1.getRawData(), 0, packet1.getRawData().length);
       assertEquals(packet1, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
@@ -153,13 +141,14 @@ public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
   @Test
   @Override
   public void testToString() throws Exception {
-    FileReader fr
-      = new FileReader(
-          new StringBuilder()
-            .append(resourceDirPath).append("/")
-            .append(getClass().getSimpleName()).append(".log")
-            .toString()
-        );
+    FileReader fr =
+        new FileReader(
+            new StringBuilder()
+                .append(resourceDirPath)
+                .append("/")
+                .append(getClass().getSimpleName())
+                .append(".log")
+                .toString());
     BufferedReader fbr = new BufferedReader(fr);
     StringReader sr = new StringReader(packet1.toString());
     BufferedReader sbr = new BufferedReader(sr);
@@ -190,34 +179,37 @@ public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
   @Test
   @Override
   public void testDump() throws Exception {
-    String dumpFile = new StringBuilder()
-                        .append(tmpDirPath).append("/")
-                        .append(getClass().getSimpleName()).append(".pcap")
-                        .toString();
+    String dumpFile =
+        new StringBuilder()
+            .append(tmpDirPath)
+            .append("/")
+            .append(getClass().getSimpleName())
+            .append(".pcap")
+            .toString();
 
     IpV6Packet.Builder ipV6b = new IpV6Packet.Builder();
-    ipV6b.version(IpVersion.IPV6)
-         .trafficClass(IpV6SimpleTrafficClass.newInstance((byte)0x12))
-         .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
-         .nextHeader(IpNumber.IPV6_FRAG)
-         .hopLimit((byte)100)
-         .srcAddr(srcAddr)
-         .dstAddr(dstAddr)
-         .payloadBuilder(packet1.getBuilder())
-         .correctLengthAtBuild(true);
+    ipV6b
+        .version(IpVersion.IPV6)
+        .trafficClass(IpV6SimpleTrafficClass.newInstance((byte) 0x12))
+        .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
+        .nextHeader(IpNumber.IPV6_FRAG)
+        .hopLimit((byte) 100)
+        .srcAddr(srcAddr)
+        .dstAddr(dstAddr)
+        .payloadBuilder(packet1.getBuilder())
+        .correctLengthAtBuild(true);
 
     EthernetPacket.Builder eb = new EthernetPacket.Builder();
     eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
-      .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-      .type(EtherType.IPV6)
-      .payloadBuilder(ipV6b)
-      .paddingAtBuild(true);
+        .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+        .type(EtherType.IPV6)
+        .payloadBuilder(ipV6b)
+        .paddingAtBuild(true);
 
     EthernetPacket ep1 = eb.build();
 
     ipV6b.payloadBuilder(packet2.getBuilder());
     EthernetPacket ep2 = eb.build();
-
 
     PcapHandle handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
@@ -232,13 +224,14 @@ public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
     assertEquals(ep2, reader.getNextPacket());
     reader.close();
 
-    FileInputStream in1
-      = new FileInputStream(
-          new StringBuilder()
-            .append(resourceDirPath).append("/")
-            .append(getClass().getSimpleName()).append(".pcap")
-            .toString()
-        );
+    FileInputStream in1 =
+        new FileInputStream(
+            new StringBuilder()
+                .append(resourceDirPath)
+                .append("/")
+                .append(getClass().getSimpleName())
+                .append(".pcap")
+                .toString());
     FileInputStream in2 = new FileInputStream(dumpFile);
 
     byte[] buffer1 = new byte[100];
@@ -252,5 +245,4 @@ public class IpV6ExtFragmentPacketTest extends AbstractPacketTest {
     in1.close();
     in2.close();
   }
-
 }

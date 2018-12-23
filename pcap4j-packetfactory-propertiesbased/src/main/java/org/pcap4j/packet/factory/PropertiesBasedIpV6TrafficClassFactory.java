@@ -18,22 +18,22 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.14
  */
 public final class PropertiesBasedIpV6TrafficClassFactory
-implements PacketFactory<IpV6TrafficClass, NotApplicable> {
+    implements PacketFactory<IpV6TrafficClass, NotApplicable> {
 
-  private static final PropertiesBasedIpV6TrafficClassFactory INSTANCE
-    = new PropertiesBasedIpV6TrafficClassFactory();
+  private static final PropertiesBasedIpV6TrafficClassFactory INSTANCE =
+      new PropertiesBasedIpV6TrafficClassFactory();
 
   private PropertiesBasedIpV6TrafficClassFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of PropertiesBasedIpV6TrafficClassFactory.
-   */
-  public static PropertiesBasedIpV6TrafficClassFactory getInstance() { return INSTANCE; }
+  /** @return the singleton instance of PropertiesBasedIpV6TrafficClassFactory. */
+  public static PropertiesBasedIpV6TrafficClassFactory getInstance() {
+    return INSTANCE;
+  }
 
   @Override
   @Deprecated
-  public IpV6TrafficClass newInstance(byte[] rawData, int offset, int length, NotApplicable number) {
+  public IpV6TrafficClass newInstance(
+      byte[] rawData, int offset, int length, NotApplicable number) {
     return newInstance(rawData, offset, length);
   }
 
@@ -43,9 +43,8 @@ implements PacketFactory<IpV6TrafficClass, NotApplicable> {
   }
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -57,8 +56,7 @@ implements PacketFactory<IpV6TrafficClass, NotApplicable> {
    * @throws NullPointerException if any of arguments are null.
    */
   public IpV6TrafficClass newInstance(
-    byte[] rawData, int offset, int length, Class<? extends IpV6TrafficClass> clazz
-  ) {
+      byte[] rawData, int offset, int length, Class<? extends IpV6TrafficClass> clazz) {
     ByteArrays.validateBounds(rawData, offset, length);
     if (clazz == null) {
       throw new NullPointerException("clazz is null.");
@@ -66,7 +64,7 @@ implements PacketFactory<IpV6TrafficClass, NotApplicable> {
 
     try {
       Method newInstance = clazz.getMethod("newInstance", byte.class);
-      return (IpV6TrafficClass)newInstance.invoke(null, rawData[offset]);
+      return (IpV6TrafficClass) newInstance.invoke(null, rawData[offset]);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -90,5 +88,4 @@ implements PacketFactory<IpV6TrafficClass, NotApplicable> {
   public Class<? extends IpV6TrafficClass> getTargetClass() {
     return PacketFactoryPropertiesLoader.getInstance().getIpV6TrafficClassClass();
   }
-
 }

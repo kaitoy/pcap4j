@@ -13,49 +13,33 @@ import java.util.Map;
 /**
  * DNS OpCode
  *
- * @see <a href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-5">IANA Registry</a>
+ * @see <a
+ *     href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-5">IANA
+ *     Registry</a>
  * @author Kaito Yamada
  * @since pcap4j 1.7.1
  */
 public final class DnsOpCode extends NamedNumber<Byte, DnsOpCode> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -7397483318208343692L;
 
-  /**
-   * Query: 0
-   */
-  public static final DnsOpCode QUERY
-    = new DnsOpCode((byte) 0, "Query");
+  /** Query: 0 */
+  public static final DnsOpCode QUERY = new DnsOpCode((byte) 0, "Query");
 
-  /**
-   * IQuery: 1
-   */
-  public static final DnsOpCode IQUERY
-    = new DnsOpCode((byte) 1, "IQuery");
+  /** IQuery: 1 */
+  public static final DnsOpCode IQUERY = new DnsOpCode((byte) 1, "IQuery");
 
-  /**
-   * Status: 2
-   */
-  public static final DnsOpCode STATUS
-    = new DnsOpCode((byte) 2, "Status");
+  /** Status: 2 */
+  public static final DnsOpCode STATUS = new DnsOpCode((byte) 2, "Status");
 
-  /**
-   * Notify: 4
-   */
-  public static final DnsOpCode NOTIFY
-    = new DnsOpCode((byte) 4, "Notify");
+  /** Notify: 4 */
+  public static final DnsOpCode NOTIFY = new DnsOpCode((byte) 4, "Notify");
 
-  /**
-   * Update: 5
-   */
-  public static final DnsOpCode UPDATE
-    = new DnsOpCode((byte) 5, "Update");
+  /** Update: 5 */
+  public static final DnsOpCode UPDATE = new DnsOpCode((byte) 5, "Update");
 
-  private static final Map<Byte, DnsOpCode> registry
-    = new HashMap<Byte, DnsOpCode>();
+  private static final Map<Byte, DnsOpCode> registry = new HashMap<Byte, DnsOpCode>();
 
   static {
     registry.put(QUERY.value(), QUERY);
@@ -73,9 +57,7 @@ public final class DnsOpCode extends NamedNumber<Byte, DnsOpCode> {
     super(value, name);
     if ((value & 0xF0) != 0) {
       throw new IllegalArgumentException(
-              value + " is invalid value. "
-                +"DNS OpCode must be between 0 and 15"
-            );
+          value + " is invalid value. " + "DNS OpCode must be between 0 and 15");
     }
   }
 
@@ -86,8 +68,7 @@ public final class DnsOpCode extends NamedNumber<Byte, DnsOpCode> {
   public static DnsOpCode getInstance(Byte value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new DnsOpCode(value, "unknown");
     }
   }
@@ -104,5 +85,4 @@ public final class DnsOpCode extends NamedNumber<Byte, DnsOpCode> {
   public int compareTo(DnsOpCode o) {
     return value().compareTo(o.value());
   }
-
 }

@@ -8,6 +8,7 @@
 package org.pcap4j.packet.factory;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
 import org.pcap4j.packet.IpV6SimpleFlowLabel;
 import org.pcap4j.packet.namednumber.NotApplicable;
@@ -18,15 +19,11 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6FlowLabelFactory
-implements PacketFactory<IpV6FlowLabel, NotApplicable> {
+    implements PacketFactory<IpV6FlowLabel, NotApplicable> {
 
-  private static final StaticIpV6FlowLabelFactory INSTANCE
-    = new StaticIpV6FlowLabelFactory();
+  private static final StaticIpV6FlowLabelFactory INSTANCE = new StaticIpV6FlowLabelFactory();
 
-  /**
-   *
-   * @return the singleton instance of StaticIpV6FlowLabelFactory.
-   */
+  /** @return the singleton instance of StaticIpV6FlowLabelFactory. */
   public static StaticIpV6FlowLabelFactory getInstance() {
     return INSTANCE;
   }
@@ -43,11 +40,11 @@ implements PacketFactory<IpV6FlowLabel, NotApplicable> {
     if (length < INT_SIZE_IN_BYTES) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("rawData is too short: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalArgumentException(sb.toString());
     }
 
@@ -64,5 +61,4 @@ implements PacketFactory<IpV6FlowLabel, NotApplicable> {
   public Class<? extends IpV6FlowLabel> getTargetClass() {
     return IpV6SimpleFlowLabel.class;
   }
-
 }

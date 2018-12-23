@@ -18,48 +18,44 @@ import org.pcap4j.packet.namednumber.ProtocolFamily;
  * @since pcap4j 1.5.0
  */
 public final class StaticProtocolFamilyPacketFactory
-extends AbstractStaticPacketFactory<ProtocolFamily> {
+    extends AbstractStaticPacketFactory<ProtocolFamily> {
 
-  private static final StaticProtocolFamilyPacketFactory INSTANCE
-    = new StaticProtocolFamilyPacketFactory();
+  private static final StaticProtocolFamilyPacketFactory INSTANCE =
+      new StaticProtocolFamilyPacketFactory();
 
   private StaticProtocolFamilyPacketFactory() {
     instantiaters.put(
-      ProtocolFamily.PF_INET, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IpV4Packet.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV4Packet> getTargetClass() {
-          return IpV4Packet.class;
-        }
-      }
-    );
+        ProtocolFamily.PF_INET,
+        new PacketInstantiater() {
+          @Override
+          public Packet newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return IpV4Packet.newPacket(rawData, offset, length);
+          }
+
+          @Override
+          public Class<IpV4Packet> getTargetClass() {
+            return IpV4Packet.class;
+          }
+        });
     instantiaters.put(
-      ProtocolFamily.PF_INET6, new PacketInstantiater() {
-        @Override
-        public Packet newInstance(
-          byte[] rawData, int offset, int length
-        ) throws IllegalRawDataException {
-          return IpV6Packet.newPacket(rawData, offset, length);
-        }
-        @Override
-        public Class<IpV6Packet> getTargetClass() {
-          return IpV6Packet.class;
-        }
-      }
-    );
+        ProtocolFamily.PF_INET6,
+        new PacketInstantiater() {
+          @Override
+          public Packet newInstance(byte[] rawData, int offset, int length)
+              throws IllegalRawDataException {
+            return IpV6Packet.newPacket(rawData, offset, length);
+          }
+
+          @Override
+          public Class<IpV6Packet> getTargetClass() {
+            return IpV6Packet.class;
+          }
+        });
   };
 
-  /**
-   *
-   * @return the singleton instance of StaticProtocolFamilyPacketFactory.
-   */
+  /** @return the singleton instance of StaticProtocolFamilyPacketFactory. */
   public static StaticProtocolFamilyPacketFactory getInstance() {
     return INSTANCE;
   }
-
 }
