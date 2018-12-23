@@ -23,15 +23,12 @@ public final class IpV4RecordRouteOption extends IpV4RouteOption {
    *    Type=7
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -3620689882998826146L;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -39,16 +36,14 @@ public final class IpV4RecordRouteOption extends IpV4RouteOption {
    * @return a new IpV4RecordRouteOption object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IpV4RecordRouteOption newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IpV4RecordRouteOption newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new IpV4RecordRouteOption(rawData, offset, length);
   }
 
-  private IpV4RecordRouteOption(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private IpV4RecordRouteOption(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     super(rawData, offset, length);
   }
 
@@ -61,10 +56,7 @@ public final class IpV4RecordRouteOption extends IpV4RouteOption {
     return IpV4OptionType.RECORD_ROUTE;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   @Override
   public Builder getBuilder() {
     return new Builder(this);
@@ -74,27 +66,19 @@ public final class IpV4RecordRouteOption extends IpV4RouteOption {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  public static final class
-  Builder extends IpV4RouteOption.Builder<IpV4RecordRouteOption> {
+  public static final class Builder extends IpV4RouteOption.Builder<IpV4RecordRouteOption> {
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IpV4RecordRouteOption option) {
       super(option);
     }
 
-    /**
-     *
-     * @return a new IpV4RecordRouteOption object.
-     */
+    /** @return a new IpV4RecordRouteOption object. */
     @Override
     public IpV4RecordRouteOption build() {
       return new IpV4RecordRouteOption(this);
     }
-
   }
-
 }

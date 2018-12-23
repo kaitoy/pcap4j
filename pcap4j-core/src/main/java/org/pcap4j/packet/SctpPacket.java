@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.SctpChunkType;
 import org.pcap4j.packet.namednumber.SctpPort;
@@ -30,9 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class SctpPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1082956644945517426L;
 
   private static final Logger logger = LoggerFactory.getLogger(SctpPacket.class);
@@ -41,9 +38,8 @@ public final class SctpPacket extends AbstractPacket {
   private final Packet payload;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -51,9 +47,8 @@ public final class SctpPacket extends AbstractPacket {
    * @return a new SctpPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static SctpPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static SctpPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new SctpPacket(rawData, offset, length);
   }
@@ -64,15 +59,14 @@ public final class SctpPacket extends AbstractPacket {
   }
 
   private SctpPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.srcPort == null
-      || builder.dstPort == null
-    ) {
+    if (builder == null || builder.srcPort == null || builder.dstPort == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.srcPort: ").append(builder.srcPort)
-        .append(" builder.dstPort: ").append(builder.dstPort);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.srcPort: ")
+          .append(builder.srcPort)
+          .append(" builder.dstPort: ")
+          .append(builder.dstPort);
       throw new NullPointerException(sb.toString());
     }
 
@@ -95,10 +89,7 @@ public final class SctpPacket extends AbstractPacket {
     return new Builder(this);
   }
 
-
-  /**
-   * @return true if the checksum in this header is valid; false otherwise.
-   */
+  /** @return true if the checksum in this header is valid; false otherwise. */
   public boolean hasValidChecksum() {
     return header.calcChecksum() == header.checksum;
   }
@@ -107,8 +98,7 @@ public final class SctpPacket extends AbstractPacket {
    * @author Jeff Myers (myersj@gmail.com)
    * @since pcap4j 1.6.6
    */
-  public static final
-  class Builder extends AbstractBuilder implements ChecksumBuilder<SctpPacket>{
+  public static final class Builder extends AbstractBuilder implements ChecksumBuilder<SctpPacket> {
 
     private SctpPort srcPort;
     private SctpPort dstPort;
@@ -118,15 +108,10 @@ public final class SctpPacket extends AbstractPacket {
     private boolean correctChecksumAtBuild;
     private Packet.Builder payloadBuilder;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
-    /**
-     *
-     * @param packet packet
-     */
+    /** @param packet packet */
     public Builder(SctpPacket packet) {
       this.srcPort = packet.header.srcPort;
       this.dstPort = packet.header.dstPort;
@@ -137,7 +122,6 @@ public final class SctpPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param srcPort srcPort
      * @return this Builder object for method chaining.
      */
@@ -147,7 +131,6 @@ public final class SctpPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param dstPort dstPort
      * @return this Builder object for method chaining.
      */
@@ -157,7 +140,6 @@ public final class SctpPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param verificationTag verification tag
      * @return this Builder object for method chaining.
      */
@@ -167,7 +149,6 @@ public final class SctpPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param checksum checksum
      * @return this Builder object for method chaining.
      */
@@ -206,7 +187,6 @@ public final class SctpPacket extends AbstractPacket {
     public SctpPacket build() {
       return new SctpPacket(this);
     }
-
   }
 
   /**
@@ -235,29 +215,18 @@ public final class SctpPacket extends AbstractPacket {
    */
   public static final class SctpHeader extends AbstractHeader {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -8223170335586535940L;
 
-    private static final int SRC_PORT_OFFSET
-      = 0;
-    private static final int SRC_PORT_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int DST_PORT_OFFSET
-      = SRC_PORT_OFFSET + SRC_PORT_SIZE;
-    private static final int DST_PORT_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int VERIFICATION_TAG_OFFSET
-      = DST_PORT_OFFSET + DST_PORT_SIZE;
-    private static final int VERIFICAION_TAG_SIZE
-      = INT_SIZE_IN_BYTES;
-    private static final int CHECKSUM_OFFSET
-      = VERIFICATION_TAG_OFFSET + VERIFICAION_TAG_SIZE;
-    private static final int CHECKSUM_SIZE
-      = INT_SIZE_IN_BYTES;
-    private static final int CHUNKS_OFFSET
-      = CHECKSUM_OFFSET + CHECKSUM_SIZE;
+    private static final int SRC_PORT_OFFSET = 0;
+    private static final int SRC_PORT_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int DST_PORT_OFFSET = SRC_PORT_OFFSET + SRC_PORT_SIZE;
+    private static final int DST_PORT_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int VERIFICATION_TAG_OFFSET = DST_PORT_OFFSET + DST_PORT_SIZE;
+    private static final int VERIFICAION_TAG_SIZE = INT_SIZE_IN_BYTES;
+    private static final int CHECKSUM_OFFSET = VERIFICATION_TAG_OFFSET + VERIFICAION_TAG_SIZE;
+    private static final int CHECKSUM_SIZE = INT_SIZE_IN_BYTES;
+    private static final int CHUNKS_OFFSET = CHECKSUM_OFFSET + CHECKSUM_SIZE;
 
     private final SctpPort srcPort;
     private final SctpPort dstPort;
@@ -269,20 +238,18 @@ public final class SctpPacket extends AbstractPacket {
       if (length < CHUNKS_OFFSET) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build a SCTP header(")
-          .append(CHUNKS_OFFSET)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(CHUNKS_OFFSET)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.srcPort
-        = SctpPort.getInstance(ByteArrays.getShort(rawData, SRC_PORT_OFFSET + offset));
-      this.dstPort
-        = SctpPort.getInstance(ByteArrays.getShort(rawData, DST_PORT_OFFSET + offset));
+      this.srcPort = SctpPort.getInstance(ByteArrays.getShort(rawData, SRC_PORT_OFFSET + offset));
+      this.dstPort = SctpPort.getInstance(ByteArrays.getShort(rawData, DST_PORT_OFFSET + offset));
       this.verificationTag = ByteArrays.getInt(rawData, VERIFICATION_TAG_OFFSET + offset);
       this.checksum = ByteArrays.getInt(rawData, CHECKSUM_OFFSET + offset);
 
@@ -293,9 +260,9 @@ public final class SctpPacket extends AbstractPacket {
         while (length != 0) {
           SctpChunkType type = SctpChunkType.getInstance(rawData[offset]);
           SctpChunk newOne;
-          newOne = PacketFactories
-                     .getFactory(SctpChunk.class, SctpChunkType.class)
-                        .newInstance(rawData, offset, length, type);
+          newOne =
+              PacketFactories.getFactory(SctpChunk.class, SctpChunkType.class)
+                  .newInstance(rawData, offset, length, type);
           chunks.add(newOne);
           int newOneLen = newOne.length();
           offset += newOneLen;
@@ -313,15 +280,13 @@ public final class SctpPacket extends AbstractPacket {
       this.verificationTag = builder.verificationTag;
       if (builder.chunks != null) {
         this.chunks = new ArrayList<SctpChunk>(builder.chunks);
-      }
-      else {
+      } else {
         this.chunks = Collections.emptyList();
       }
 
       if (builder.correctChecksumAtBuild) {
         this.checksum = calcChecksum();
-      }
-      else {
+      } else {
         this.checksum = builder.checksum;
       }
     }
@@ -340,51 +305,36 @@ public final class SctpPacket extends AbstractPacket {
 
       if (PacketPropertiesLoader.getInstance().sctpCalcChecksumByAdler32()) {
         return ByteArrays.calcAdler32Checksum(data);
-      }
-      else {
+      } else {
         int crc = ByteArrays.calcCrc32cChecksum(data);
-        return   (crc << 24)
-               | (crc & 0x0000FF00) << 8
-               | (crc & 0x00FF0000) >> 8
-               | (crc & 0xFF000000) >>> 24;
+        return (crc << 24)
+            | (crc & 0x0000FF00) << 8
+            | (crc & 0x00FF0000) >> 8
+            | (crc & 0xFF000000) >>> 24;
       }
     }
 
-    /**
-     *
-     * @return srcPort
-     */
+    /** @return srcPort */
     public SctpPort getSrcPort() {
       return srcPort;
     }
 
-    /**
-     *
-     * @return dstPort
-     */
+    /** @return dstPort */
     public SctpPort getDstPort() {
       return dstPort;
     }
 
-    /**
-     *
-     * @return verification tag
-     */
+    /** @return verification tag */
     public int getVerificationTag() {
       return verificationTag;
     }
 
-    /**
-     *
-     * @return checksum
-     */
+    /** @return checksum */
     public int getChecksum() {
       return checksum;
     }
 
-    /**
-     * @return chunks
-     */
+    /** @return chunks */
     public List<SctpChunk> getChunks() {
       return new ArrayList<SctpChunk>(chunks);
     }
@@ -396,7 +346,7 @@ public final class SctpPacket extends AbstractPacket {
       rawFields.add(ByteArrays.toByteArray(dstPort.value()));
       rawFields.add(ByteArrays.toByteArray(verificationTag));
       rawFields.add(ByteArrays.toByteArray(checksum));
-      for (SctpChunk chunk: chunks) {
+      for (SctpChunk chunk : chunks) {
         rawFields.add(chunk.getRawData());
       }
       return rawFields;
@@ -405,7 +355,7 @@ public final class SctpPacket extends AbstractPacket {
     @Override
     protected int calcLength() {
       int len = CHUNKS_OFFSET;
-      for (SctpChunk chunk: chunks) {
+      for (SctpChunk chunk : chunks) {
         len += chunk.length();
       }
       return len;
@@ -416,44 +366,35 @@ public final class SctpPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[SCTP Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Source port: ")
-        .append(getSrcPort())
-        .append(ls);
-      sb.append("  Destination port: ")
-        .append(getDstPort())
-        .append(ls);
+      sb.append("[SCTP Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Source port: ").append(getSrcPort()).append(ls);
+      sb.append("  Destination port: ").append(getDstPort()).append(ls);
       sb.append("  Verification tag: 0x")
-        .append(ByteArrays.toHexString(verificationTag, ""))
-        .append(ls);
-      sb.append("  Checksum: 0x")
-        .append(ByteArrays.toHexString(checksum, ""))
-        .append(ls);
-      sb.append("  Chunks:")
-        .append(ls);
-      for (SctpChunk chunk: chunks) {
-        sb.append("    ")
-          .append(chunk)
+          .append(ByteArrays.toHexString(verificationTag, ""))
           .append(ls);
+      sb.append("  Checksum: 0x").append(ByteArrays.toHexString(checksum, "")).append(ls);
+      sb.append("  Chunks:").append(ls);
+      for (SctpChunk chunk : chunks) {
+        sb.append("    ").append(chunk).append(ls);
       }
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      SctpHeader other = (SctpHeader)obj;
-      return
-           checksum == other.checksum
-        && verificationTag == other.verificationTag
-        && srcPort.equals(other.srcPort)
-        && dstPort.equals(other.dstPort)
-        && chunks.equals(other.chunks);
+      SctpHeader other = (SctpHeader) obj;
+      return checksum == other.checksum
+          && verificationTag == other.verificationTag
+          && srcPort.equals(other.srcPort)
+          && dstPort.equals(other.dstPort)
+          && chunks.equals(other.chunks);
     }
 
     @Override
@@ -466,15 +407,13 @@ public final class SctpPacket extends AbstractPacket {
       result = 31 * result + chunks.hashCode();
       return result;
     }
-
   }
 
   /**
-   * The interface representing an SCTP Chunk Field.
-   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * classes which implement this interface must implement the following method:
-   * {@code public static SctpChunk newInstance(byte[] rawData, int offset, int length)
-   * throws IllegalRawDataException}
+   * The interface representing an SCTP Chunk Field. If you use {@link
+   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
+   * which implement this interface must implement the following method: {@code public static
+   * SctpChunk newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException}
    *
    * @see <a href="https://tools.ietf.org/html/rfc4960#section-3.2">RFC 4960</a>
    * @author Kaito Yamada
@@ -482,24 +421,13 @@ public final class SctpPacket extends AbstractPacket {
    */
   public interface SctpChunk extends Serializable {
 
-    /**
-     *
-     * @return type
-     */
+    /** @return type */
     public SctpChunkType getType();
 
-    /**
-     *
-     * @return length
-     */
+    /** @return length */
     public int length();
 
-    /**
-     *
-     * @return raw data
-     */
+    /** @return raw data */
     public byte[] getRawData();
-
   }
-
 }

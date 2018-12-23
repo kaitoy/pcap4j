@@ -24,9 +24,7 @@ public final class IpV4StreamIdOption implements IpV4Option {
    *   Type=136 Length=4
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -2067863811913941432L;
 
   private final IpV4OptionType type = IpV4OptionType.STREAM_ID;
@@ -34,9 +32,8 @@ public final class IpV4StreamIdOption implements IpV4Option {
   private final short streamId;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -44,42 +41,38 @@ public final class IpV4StreamIdOption implements IpV4Option {
    * @return a new IpV4StreamIdOption object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IpV4StreamIdOption newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IpV4StreamIdOption newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new IpV4StreamIdOption(rawData, offset, length);
   }
 
-  private IpV4StreamIdOption(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private IpV4StreamIdOption(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if (length < 4) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 3. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (rawData[0 + offset] != getType().value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The type must be: ")
-        .append(getType().valueAsString())
-        .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(getType().valueAsString())
+          .append(" rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (rawData[1 + offset] != 4) {
-      throw new IllegalRawDataException(
-                  "Invalid value of length field: " + rawData[1 + offset]
-                );
+      throw new IllegalRawDataException("Invalid value of length field: " + rawData[1 + offset]);
     }
 
     this.length = rawData[1 + offset];
@@ -94,9 +87,8 @@ public final class IpV4StreamIdOption implements IpV4Option {
     this.streamId = builder.streamId;
 
     if (builder.correctLengthAtBuild) {
-      this.length = (byte)length();
-    }
-    else {
+      this.length = (byte) length();
+    } else {
       this.length = builder.length;
     }
   }
@@ -106,47 +98,42 @@ public final class IpV4StreamIdOption implements IpV4Option {
     return type;
   }
 
-  /**
-   *
-   * @return length
-   */
-  public byte getLength() { return length; }
+  /** @return length */
+  public byte getLength() {
+    return length;
+  }
 
-  /**
-   *
-   * @return length
-   */
-  public int getLengthAsInt() { return 0xFF & length; }
+  /** @return length */
+  public int getLengthAsInt() {
+    return 0xFF & length;
+  }
 
-  /**
-   *
-   * @return streamId
-   */
-  public short getStreamId() { return streamId; }
+  /** @return streamId */
+  public short getStreamId() {
+    return streamId;
+  }
 
-  /**
-   *
-   * @return streamId
-   */
-  public int getStreamIdAsInt() { return 0xFFFF & streamId; }
+  /** @return streamId */
+  public int getStreamIdAsInt() {
+    return 0xFFFF & streamId;
+  }
 
   @Override
-  public int length() { return 4; }
+  public int length() {
+    return 4;
+  }
 
   @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[0] = getType().value();
     rawData[1] = length;
-    rawData[2] = (byte)(streamId >> 8);
-    rawData[3] = (byte)streamId;
+    rawData[2] = (byte) (streamId >> 8);
+    rawData[3] = (byte) streamId;
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -154,22 +141,23 @@ public final class IpV4StreamIdOption implements IpV4Option {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[option-type: ")
-      .append(getType());
-    sb.append("] [option-length: ")
-      .append(getLengthAsInt());
-    sb.append(" bytes] [streamId: ")
-      .append(getStreamIdAsInt());
+    sb.append("[option-type: ").append(getType());
+    sb.append("] [option-length: ").append(getLengthAsInt());
+    sb.append(" bytes] [streamId: ").append(getStreamIdAsInt());
     sb.append("]");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    IpV4StreamIdOption other = (IpV4StreamIdOption)obj;
+    IpV4StreamIdOption other = (IpV4StreamIdOption) obj;
     return streamId == other.streamId && length == other.length;
   }
 
@@ -185,16 +173,13 @@ public final class IpV4StreamIdOption implements IpV4Option {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  public static final class Builder
-  implements LengthBuilder<IpV4StreamIdOption> {
+  public static final class Builder implements LengthBuilder<IpV4StreamIdOption> {
 
     private byte length;
     private short streamId;
     private boolean correctLengthAtBuild;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IpV4StreamIdOption option) {
@@ -203,7 +188,6 @@ public final class IpV4StreamIdOption implements IpV4Option {
     }
 
     /**
-     *
      * @param length length
      * @return this Builder object for method chaining.
      */
@@ -213,7 +197,6 @@ public final class IpV4StreamIdOption implements IpV4Option {
     }
 
     /**
-     *
      * @param streamId streamId
      * @return this Builder object for method chaining.
      */
@@ -232,7 +215,5 @@ public final class IpV4StreamIdOption implements IpV4Option {
     public IpV4StreamIdOption build() {
       return new IpV4StreamIdOption(this);
     }
-
   }
-
 }

@@ -25,16 +25,14 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
 
   private StaticIpV6OptionFactory() {}
 
-  /**
-   * @return the singleton instance of StaticIpV6OptionFactory.
-   */
+  /** @return the singleton instance of StaticIpV6OptionFactory. */
   public static StaticIpV6OptionFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6OptionType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6OptionType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -50,8 +48,8 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6OptionType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6OptionType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -59,9 +57,7 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
    * @param number see {@link PacketFactory#newInstance}.
    * @return see {@link PacketFactory#newInstance}.
    */
-  public IpV6Option newInstance(
-    byte[] rawData, int offset, int length, IpV6OptionType number
-  ) {
+  public IpV6Option newInstance(byte[] rawData, int offset, int length, IpV6OptionType number) {
     try {
       switch (Byte.toUnsignedInt(number.value())) {
         case 0:
@@ -76,8 +72,8 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6OptionType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6OptionType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -87,8 +83,7 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
    * @return see {@link PacketFactory#newInstance}.
    */
   public IpV6Option newInstance(
-    byte[] rawData, int offset, int length, IpV6OptionType number1, IpV6OptionType number2
-  ) {
+      byte[] rawData, int offset, int length, IpV6OptionType number1, IpV6OptionType number2) {
     try {
       switch (Byte.toUnsignedInt(number1.value())) {
         case 0:
@@ -110,11 +105,9 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
   }
 
   @Override
-  public IpV6Option newInstance(
-    byte[] rawData, int offset, int length, IpV6OptionType... numbers
-  ) {
+  public IpV6Option newInstance(byte[] rawData, int offset, int length, IpV6OptionType... numbers) {
     try {
-      for (IpV6OptionType num: numbers) {
+      for (IpV6OptionType num : numbers) {
         switch (Byte.toUnsignedInt(num.value())) {
           case 0:
             return IpV6Pad1Option.newInstance(rawData, offset, length);
@@ -127,5 +120,4 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
       return IllegalIpV6Option.newInstance(rawData, offset, length, e);
     }
   }
-
 }

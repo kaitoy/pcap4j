@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.namednumber.Dot11InformationElementId;
 import org.pcap4j.util.ByteArrays;
 
@@ -25,10 +24,10 @@ import org.pcap4j.util.ByteArrays;
  * </pre>
  *
  * The Vendor Specific element is used to carry information not defined in this standard within a
- * single defined format, so that reserved element IDs are not usurped for nonstandard purposes
- * and so that interoperability is more easily achieved in the presence of nonstandard information.
- * The element requires that the first 3 or more octets of the Information field identify the
- * entity that has defined the content of the particular Vendor Specific element.
+ * single defined format, so that reserved element IDs are not usurped for nonstandard purposes and
+ * so that interoperability is more easily achieved in the presence of nonstandard information. The
+ * element requires that the first 3 or more octets of the Information field identify the entity
+ * that has defined the content of the particular Vendor Specific element.
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
@@ -36,17 +35,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot11VendorSpecificElement extends Dot11InformationElement {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2095272309443428672L;
 
   private final byte[] information;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -54,9 +50,8 @@ public final class Dot11VendorSpecificElement extends Dot11InformationElement {
    * @return a new Dot11VendorSpecificElement object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot11VendorSpecificElement newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot11VendorSpecificElement newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot11VendorSpecificElement(rawData, offset, length);
   }
@@ -67,22 +62,18 @@ public final class Dot11VendorSpecificElement extends Dot11InformationElement {
    * @param length length
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  private Dot11VendorSpecificElement(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot11VendorSpecificElement(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     super(rawData, offset, length, Dot11InformationElementId.VENDOR_SPECIFIC);
     int infoLen = getLengthAsInt();
     if (infoLen == 0) {
       this.information = new byte[0];
-    }
-    else {
+    } else {
       this.information = ByteArrays.getSubArray(rawData, offset + 2, infoLen);
     }
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   private Dot11VendorSpecificElement(Builder builder) {
     super(builder);
 
@@ -93,9 +84,7 @@ public final class Dot11VendorSpecificElement extends Dot11InformationElement {
     this.information = ByteArrays.clone(builder.information);
   }
 
-  /**
-   * @return information
-   */
+  /** @return information */
   public byte[] getInformation() {
     return ByteArrays.clone(information);
   }
@@ -114,11 +103,10 @@ public final class Dot11VendorSpecificElement extends Dot11InformationElement {
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public int hashCode() {
@@ -130,11 +118,9 @@ public final class Dot11VendorSpecificElement extends Dot11InformationElement {
 
   @Override
   public boolean equals(Object obj) {
-    if (!super.equals(obj))
-      return false;
+    if (!super.equals(obj)) return false;
     Dot11VendorSpecificElement other = (Dot11VendorSpecificElement) obj;
-    if (!Arrays.equals(information, other.information))
-      return false;
+    if (!Arrays.equals(information, other.information)) return false;
     return true;
   }
 
@@ -151,18 +137,13 @@ public final class Dot11VendorSpecificElement extends Dot11InformationElement {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Vendor Specific:")
-      .append(ls);
-    sb.append(indent).append("  Element ID: ")
-      .append(getElementId())
-      .append(ls);
-    sb.append(indent).append("  Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes")
-      .append(ls);
-    sb.append(indent).append("  Information: 0x")
-      .append(ByteArrays.toHexString(information, ""))
-      .append(ls);
+    sb.append(indent).append("Vendor Specific:").append(ls);
+    sb.append(indent).append("  Element ID: ").append(getElementId()).append(ls);
+    sb.append(indent).append("  Length: ").append(getLengthAsInt()).append(" bytes").append(ls);
+    sb.append(indent)
+        .append("  Information: 0x")
+        .append(ByteArrays.toHexString(information, ""))
+        .append(ls);
 
     return sb.toString();
   }
@@ -171,25 +152,17 @@ public final class Dot11VendorSpecificElement extends Dot11InformationElement {
    * @author Kaito Yamada
    * @since pcap4j 1.7.0
    */
-  public static final class
-  Builder extends Dot11InformationElement.Builder {
+  public static final class Builder extends Dot11InformationElement.Builder {
 
     private byte[] information;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {
       elementId(
-        Dot11InformationElementId.getInstance(
-          Dot11InformationElementId.VENDOR_SPECIFIC.value()
-        )
-      );
+          Dot11InformationElementId.getInstance(Dot11InformationElementId.VENDOR_SPECIFIC.value()));
     }
 
-    /**
-     * @param elem a Dot11VendorSpecificElement object.
-     */
+    /** @param elem a Dot11VendorSpecificElement object. */
     private Builder(Dot11VendorSpecificElement elem) {
       super(elem);
       this.information = elem.information;
@@ -226,7 +199,5 @@ public final class Dot11VendorSpecificElement extends Dot11InformationElement {
       }
       return new Dot11VendorSpecificElement(this);
     }
-
   }
-
 }

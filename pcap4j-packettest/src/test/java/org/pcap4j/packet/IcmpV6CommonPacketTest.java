@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -19,12 +18,10 @@ import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 @SuppressWarnings("javadoc")
 public class IcmpV6CommonPacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(IcmpV6CommonPacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(IcmpV6CommonPacketTest.class);
 
   private final IcmpV6CommonPacket packet;
   private final IcmpV6Type type;
@@ -35,33 +32,29 @@ public class IcmpV6CommonPacketTest extends AbstractPacketTest {
 
   public IcmpV6CommonPacketTest() {
     UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
-    unknownb.rawData(new byte[] { (byte)0, (byte)1, (byte)2, (byte)3 });
+    unknownb.rawData(new byte[] {(byte) 0, (byte) 1, (byte) 2, (byte) 3});
 
     IcmpV6EchoRequestPacket.Builder echob = new IcmpV6EchoRequestPacket.Builder();
-    echob.identifier((short)100)
-         .sequenceNumber((short)10)
-         .payloadBuilder(unknownb);
+    echob.identifier((short) 100).sequenceNumber((short) 10).payloadBuilder(unknownb);
 
     this.type = IcmpV6Type.ECHO_REQUEST;
     this.code = IcmpV6Code.NO_CODE;
-    this.checksum = (short)0x1234;
+    this.checksum = (short) 0x1234;
     try {
-      this.srcAddr
-        = (Inet6Address)InetAddress.getByName("2001:db8::3:2:1");
-      this.dstAddr
-        = (Inet6Address)InetAddress.getByName("2001:db8::3:2:2");
+      this.srcAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:1");
+      this.dstAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:2");
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
 
     IcmpV6CommonPacket.Builder b = new IcmpV6CommonPacket.Builder();
     b.type(type)
-     .code(code)
-     .checksum(checksum)
-     .srcAddr(srcAddr)
-     .dstAddr(dstAddr)
-     .correctChecksumAtBuild(false)
-     .payloadBuilder(echob);
+        .code(code)
+        .checksum(checksum)
+        .srcAddr(srcAddr)
+        .dstAddr(dstAddr)
+        .correctChecksumAtBuild(false)
+        .payloadBuilder(echob);
     this.packet = b.build();
   }
 
@@ -73,44 +66,40 @@ public class IcmpV6CommonPacketTest extends AbstractPacketTest {
   @Override
   protected Packet getWholePacket() {
     IpV6Packet.Builder ipv6b = new IpV6Packet.Builder();
-    ipv6b.version(IpVersion.IPV6)
-         .trafficClass(IpV6SimpleTrafficClass.newInstance((byte)0x12))
-         .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
-         .nextHeader(IpNumber.ICMPV6)
-         .hopLimit((byte)100)
-         .srcAddr(srcAddr)
-         .dstAddr(dstAddr)
-         .correctLengthAtBuild(true)
-         .payloadBuilder(
-            packet.getBuilder()
-              .srcAddr(srcAddr).dstAddr(dstAddr).correctChecksumAtBuild(true)
-          );
+    ipv6b
+        .version(IpVersion.IPV6)
+        .trafficClass(IpV6SimpleTrafficClass.newInstance((byte) 0x12))
+        .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
+        .nextHeader(IpNumber.ICMPV6)
+        .hopLimit((byte) 100)
+        .srcAddr(srcAddr)
+        .dstAddr(dstAddr)
+        .correctLengthAtBuild(true)
+        .payloadBuilder(
+            packet.getBuilder().srcAddr(srcAddr).dstAddr(dstAddr).correctChecksumAtBuild(true));
 
     EthernetPacket.Builder eb = new EthernetPacket.Builder();
     eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
-      .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-      .type(EtherType.IPV6)
-      .payloadBuilder(ipv6b)
-      .paddingAtBuild(true);
+        .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+        .type(EtherType.IPV6)
+        .payloadBuilder(ipv6b)
+        .paddingAtBuild(true);
     return eb.build();
   }
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    logger.info(
-      "########## " + IcmpV6CommonPacketTest.class.getSimpleName() + " START ##########"
-    );
+    logger.info("########## " + IcmpV6CommonPacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Test
   public void testNewPacket() {
     try {
-      IcmpV6CommonPacket p
-        = IcmpV6CommonPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
+      IcmpV6CommonPacket p =
+          IcmpV6CommonPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
@@ -119,7 +108,7 @@ public class IcmpV6CommonPacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTester.testClass(IcmpV6CommonPacket.class, packet);
+    RandomPacketTester.testClass(IcmpV6CommonPacket.class, packet);
   }
 
   @Test
@@ -139,15 +128,14 @@ public class IcmpV6CommonPacketTest extends AbstractPacketTest {
     assertFalse(packet.hasValidChecksum(srcAddr, dstAddr, false));
     assertFalse(packet.hasValidChecksum(srcAddr, dstAddr, true));
 
-    b.checksum((short)0).correctChecksumAtBuild(false);
+    b.checksum((short) 0).correctChecksumAtBuild(false);
     p = b.build();
     assertFalse(p.hasValidChecksum(srcAddr, dstAddr, false));
     assertTrue(p.hasValidChecksum(srcAddr, dstAddr, true));
 
-    b.checksum((short)1234).correctChecksumAtBuild(true);
+    b.checksum((short) 1234).correctChecksumAtBuild(true);
     p = b.build();
     assertTrue(p.hasValidChecksum(srcAddr, dstAddr, false));
     assertTrue(p.hasValidChecksum(srcAddr, dstAddr, true));
   }
-
 }

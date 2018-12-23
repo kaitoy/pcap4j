@@ -1,5 +1,23 @@
 package org.pcap4j.packet;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.StringReader;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,30 +38,10 @@ import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.StringReader;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 @SuppressWarnings("javadoc")
 public class IpV4PacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(IpV4PacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(IpV4PacketTest.class);
 
   private final IpVersion version;
   private final byte ihl;
@@ -66,56 +64,51 @@ public class IpV4PacketTest extends AbstractPacketTest {
 
   public IpV4PacketTest() throws Exception {
     this.version = IpVersion.IPV4;
-    this.ihl = (byte)9;
-    this.tos = IpV4Rfc1349Tos.newInstance((byte)0x75);
-    this.totalLength = (short)44;
-    this.identification = (short)123;
+    this.ihl = (byte) 9;
+    this.tos = IpV4Rfc1349Tos.newInstance((byte) 0x75);
+    this.totalLength = (short) 44;
+    this.identification = (short) 123;
     this.reservedFlag = true;
     this.dontFragmentFlag = false;
     this.moreFragmentFlag = true;
-    this.fragmentOffset = (short)0;
+    this.fragmentOffset = (short) 0;
     this.ttl = 111;
     this.protocol = IpNumber.UDP;
-    this.headerChecksum = (short)0xEEEE;
+    this.headerChecksum = (short) 0xEEEE;
     try {
-      this.srcAddr
-        = (Inet4Address)InetAddress.getByAddress(
-            new byte[] { (byte)192, (byte)0, (byte)2, (byte)1 }
-          );
-      this.dstAddr
-        = (Inet4Address)InetAddress.getByAddress(
-            new byte[] { (byte)192, (byte)0, (byte)2, (byte)2 }
-          );
+      this.srcAddr =
+          (Inet4Address)
+              InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 1});
+      this.dstAddr =
+          (Inet4Address)
+              InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 2});
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
 
     List<Inet4Address> routeData = new ArrayList<Inet4Address>();
-    routeData.add((Inet4Address)InetAddress.getByName("192.168.1.1"));
-    routeData.add((Inet4Address)InetAddress.getByName("192.168.1.2"));
+    routeData.add((Inet4Address) InetAddress.getByName("192.168.1.1"));
+    routeData.add((Inet4Address) InetAddress.getByName("192.168.1.2"));
     IpV4LooseSourceRouteOption.Builder lsrrb = new IpV4LooseSourceRouteOption.Builder();
-    lsrrb.pointer((byte)8)
-         .routeData(routeData)
-         .correctLengthAtBuild(true);
+    lsrrb.pointer((byte) 8).routeData(routeData).correctLengthAtBuild(true);
     this.options.add(lsrrb.build());
     this.options.add(IpV4NoOperationOption.getInstance());
     this.options.add(IpV4NoOperationOption.getInstance());
     this.options.add(IpV4NoOperationOption.getInstance());
     this.options.add(IpV4EndOfOptionList.getInstance());
 
-    this.padding = new byte[] { (byte)0xAA };
+    this.padding = new byte[] {(byte) 0xAA};
 
     UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
     unknownb.rawData(
-      new byte[] {
-        (byte)0, (byte)1, (byte)2, (byte)3,
-        (byte)0, (byte)1, (byte)2, (byte)3
-      }
-    );
+        new byte[] {
+          (byte) 0, (byte) 1, (byte) 2, (byte) 3,
+          (byte) 0, (byte) 1, (byte) 2, (byte) 3
+        });
 
     UdpPacket.Builder udpb = new UdpPacket.Builder();
     udpb.srcPort(UdpPort.SNMP)
-        .dstPort(UdpPort.getInstance((short)0))
+        .dstPort(UdpPort.getInstance((short) 0))
         .srcAddr(srcAddr)
         .dstAddr(dstAddr)
         .payloadBuilder(unknownb)
@@ -126,36 +119,32 @@ public class IpV4PacketTest extends AbstractPacketTest {
 
     IpV4Packet.Builder b = new IpV4Packet.Builder();
     b.version(version)
-     .ihl(ihl)
-     .tos(tos)
-     .totalLength(totalLength)
-     .identification(identification)
-     .reservedFlag(reservedFlag)
-     .dontFragmentFlag(dontFragmentFlag)
-     .moreFragmentFlag(moreFragmentFlag)
-     .fragmentOffset(fragmentOffset)
-     .ttl(ttl)
-     .protocol(protocol)
-     .headerChecksum(headerChecksum)
-     .srcAddr(srcAddr)
-     .dstAddr(dstAddr)
-     .options(options)
-     .padding(padding)
-     .correctChecksumAtBuild(false)
-     .correctLengthAtBuild(false)
-     .paddingAtBuild(false)
-     .payloadBuilder(
-        new FragmentedPacket.Builder()
-          .rawData(ByteArrays.getSubArray(rawPayload, 0, 8))
-      );
+        .ihl(ihl)
+        .tos(tos)
+        .totalLength(totalLength)
+        .identification(identification)
+        .reservedFlag(reservedFlag)
+        .dontFragmentFlag(dontFragmentFlag)
+        .moreFragmentFlag(moreFragmentFlag)
+        .fragmentOffset(fragmentOffset)
+        .ttl(ttl)
+        .protocol(protocol)
+        .headerChecksum(headerChecksum)
+        .srcAddr(srcAddr)
+        .dstAddr(dstAddr)
+        .options(options)
+        .padding(padding)
+        .correctChecksumAtBuild(false)
+        .correctLengthAtBuild(false)
+        .paddingAtBuild(false)
+        .payloadBuilder(
+            new FragmentedPacket.Builder().rawData(ByteArrays.getSubArray(rawPayload, 0, 8)));
     this.packet1 = b.build();
 
-    b.fragmentOffset((short)1)
-     .moreFragmentFlag(false)
-     .payloadBuilder(
-        new FragmentedPacket.Builder()
-          .rawData(ByteArrays.getSubArray(rawPayload, 8, 8))
-      );
+    b.fragmentOffset((short) 1)
+        .moreFragmentFlag(false)
+        .payloadBuilder(
+            new FragmentedPacket.Builder().rawData(ByteArrays.getSubArray(rawPayload, 8, 8)));
     this.packet2 = b.build();
   }
 
@@ -171,14 +160,11 @@ public class IpV4PacketTest extends AbstractPacketTest {
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    logger.info(
-      "########## " + IpV4PacketTest.class.getSimpleName() + " START ##########"
-    );
+    logger.info("########## " + IpV4PacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Test
   public void testNewPacket() {
@@ -192,7 +178,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
 
   @Test
   public void testNewPacketRandom() {
-      RandomPacketTester.testClass(IpV4Packet.class, packet1);
+    RandomPacketTester.testClass(IpV4Packet.class, packet1);
   }
 
   @Test
@@ -215,7 +201,7 @@ public class IpV4PacketTest extends AbstractPacketTest {
     assertEquals(options.size(), h.getOptions().size());
 
     Iterator<IpV4Option> iter = h.getOptions().iterator();
-    for (IpV4Option expected: options) {
+    for (IpV4Option expected : options) {
       IpV4Option actual = iter.next();
       assertEquals(expected, actual);
     }
@@ -225,81 +211,85 @@ public class IpV4PacketTest extends AbstractPacketTest {
     IpV4Packet.Builder b = packet1.getBuilder();
     IpV4Packet p;
 
-    b.ihl((byte)0);
+    b.ihl((byte) 0);
     p = b.build();
-    assertEquals((byte)0, p.getHeader().getIhl());
+    assertEquals((byte) 0, p.getHeader().getIhl());
 
-    b.ihl((byte)15);
+    b.ihl((byte) 15);
     p = b.build();
-    assertEquals((byte)15, p.getHeader().getIhl());
+    assertEquals((byte) 15, p.getHeader().getIhl());
 
-    b.ihl((byte)16);
+    b.ihl((byte) 16);
     try {
       p = b.build();
       fail();
-    } catch (IllegalArgumentException e) {}
+    } catch (IllegalArgumentException e) {
+    }
 
-    b.ihl((byte)-1);
+    b.ihl((byte) -1);
     try {
       p = b.build();
       fail();
-    } catch (IllegalArgumentException e) {}
+    } catch (IllegalArgumentException e) {
+    }
 
-    b.ihl((byte)1);
+    b.ihl((byte) 1);
 
-    b.fragmentOffset((short)0);
+    b.fragmentOffset((short) 0);
     p = b.build();
-    assertEquals((short)0, p.getHeader().getFragmentOffset());
+    assertEquals((short) 0, p.getHeader().getFragmentOffset());
 
-    b.fragmentOffset((short)8191);
+    b.fragmentOffset((short) 8191);
     p = b.build();
-    assertEquals((short)8191, p.getHeader().getFragmentOffset());
+    assertEquals((short) 8191, p.getHeader().getFragmentOffset());
 
-    b.fragmentOffset((short)8192);
+    b.fragmentOffset((short) 8192);
     try {
       p = b.build();
       fail();
-    } catch (IllegalArgumentException e) {}
+    } catch (IllegalArgumentException e) {
+    }
 
-    b.fragmentOffset((short)-1);
+    b.fragmentOffset((short) -1);
     try {
       p = b.build();
       fail();
-    } catch (IllegalArgumentException e) {}
+    } catch (IllegalArgumentException e) {
+    }
 
-    b.fragmentOffset((short)0);
+    b.fragmentOffset((short) 0);
 
-    b.totalLength((short)0);
-    b.identification((short)0);
-    b.ttl((byte)0);
+    b.totalLength((short) 0);
+    b.identification((short) 0);
+    b.ttl((byte) 0);
     p = b.build();
-    assertEquals((short)0, (short)p.getHeader().getTotalLengthAsInt());
-    assertEquals((short)0, (short)p.getHeader().getIdentificationAsInt());
-    assertEquals((byte)0, (byte)p.getHeader().getTtlAsInt());
+    assertEquals((short) 0, (short) p.getHeader().getTotalLengthAsInt());
+    assertEquals((short) 0, (short) p.getHeader().getIdentificationAsInt());
+    assertEquals((byte) 0, (byte) p.getHeader().getTtlAsInt());
 
-    b.totalLength((short)32767);
-    b.identification((short)32767);
-    b.ttl((byte)127);
+    b.totalLength((short) 32767);
+    b.identification((short) 32767);
+    b.ttl((byte) 127);
     p = b.build();
-    assertEquals((short)32767, (short)p.getHeader().getTotalLengthAsInt());
-    assertEquals((short)32767, (short)p.getHeader().getIdentificationAsInt());
-    assertEquals((byte)127, (byte)p.getHeader().getTtlAsInt());
+    assertEquals((short) 32767, (short) p.getHeader().getTotalLengthAsInt());
+    assertEquals((short) 32767, (short) p.getHeader().getIdentificationAsInt());
+    assertEquals((byte) 127, (byte) p.getHeader().getTtlAsInt());
 
-    b.totalLength((short)-1);
-    b.identification((short)-1);
-    b.ttl((byte)0);
+    b.totalLength((short) -1);
+    b.identification((short) -1);
+    b.ttl((byte) 0);
     p = b.build();
-    assertEquals((short)-1, (short)p.getHeader().getTotalLengthAsInt());
-    assertEquals((short)-1, (short)p.getHeader().getIdentificationAsInt());
-    assertEquals((byte)0, (byte)p.getHeader().getTtlAsInt());
+    assertEquals((short) -1, (short) p.getHeader().getTotalLengthAsInt());
+    assertEquals((short) -1, (short) p.getHeader().getIdentificationAsInt());
+    assertEquals((byte) 0, (byte) p.getHeader().getTtlAsInt());
 
-    b.totalLength((short)-32768);
-    b.identification((short)-32768);
-    b.ttl((byte)-128);
+    b.totalLength((short) -32768);
+    b.identification((short) -32768);
+    b.ttl((byte) -128);
     p = b.build();
-    assertEquals((short)-32768, (short)p.getHeader().getTotalLengthAsInt());
-    assertEquals((short)-32768, (short)p.getHeader().getIdentificationAsInt());
-    assertEquals((byte)-128, (byte)p.getHeader().getTtlAsInt());
+    assertEquals((short) -32768, (short) p.getHeader().getTotalLengthAsInt());
+    assertEquals((short) -32768, (short) p.getHeader().getIdentificationAsInt());
+    assertEquals((byte) -128, (byte) p.getHeader().getTtlAsInt());
   }
 
   @Test
@@ -307,12 +297,10 @@ public class IpV4PacketTest extends AbstractPacketTest {
     assertFalse(packet1.getHeader().hasValidChecksum(false));
     assertFalse(packet1.getHeader().hasValidChecksum(true));
 
-
     IpV4Packet.Builder b = packet1.getBuilder();
     IpV4Packet p;
 
-    b.headerChecksum((short)0)
-     .correctChecksumAtBuild(false);
+    b.headerChecksum((short) 0).correctChecksumAtBuild(false);
     p = b.build();
     assertFalse(p.getHeader().hasValidChecksum(false));
     assertTrue(p.getHeader().hasValidChecksum(true));
@@ -332,13 +320,14 @@ public class IpV4PacketTest extends AbstractPacketTest {
   @Test
   @Override
   public void testToString() throws Exception {
-    FileReader fr
-      = new FileReader(
-          new StringBuilder()
-            .append(resourceDirPath).append("/")
-            .append(getClass().getSimpleName()).append(".log")
-            .toString()
-        );
+    FileReader fr =
+        new FileReader(
+            new StringBuilder()
+                .append(resourceDirPath)
+                .append("/")
+                .append(getClass().getSimpleName())
+                .append(".log")
+                .toString());
     BufferedReader fbr = new BufferedReader(fr);
     StringReader sr = new StringReader(packet1.toString());
     BufferedReader sbr = new BufferedReader(sr);
@@ -382,31 +371,31 @@ public class IpV4PacketTest extends AbstractPacketTest {
   @Test
   @Override
   public void testDump() throws Exception {
-    String dumpFile = new StringBuilder()
-                        .append(tmpDirPath).append("/")
-                        .append(getClass().getSimpleName()).append(".pcap")
-                        .toString();
+    String dumpFile =
+        new StringBuilder()
+            .append(tmpDirPath)
+            .append("/")
+            .append(getClass().getSimpleName())
+            .append(".pcap")
+            .toString();
 
     EthernetPacket.Builder eb = new EthernetPacket.Builder();
     eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
-      .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-      .type(EtherType.IPV4)
-      .payloadBuilder(
-         packet1.getBuilder()
-           .correctChecksumAtBuild(true)
-           .correctLengthAtBuild(true)
-           .paddingAtBuild(true)
-       )
-      .paddingAtBuild(true);
+        .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+        .type(EtherType.IPV4)
+        .payloadBuilder(
+            packet1
+                .getBuilder()
+                .correctChecksumAtBuild(true)
+                .correctLengthAtBuild(true)
+                .paddingAtBuild(true))
+        .paddingAtBuild(true);
     EthernetPacket ep1 = eb.build();
 
-    EthernetPacket ep2
-      = eb.payloadBuilder(
-             packet2.getBuilder()
-               .correctChecksumAtBuild(true)
-               .correctLengthAtBuild(true)
-           )
-          .build();
+    EthernetPacket ep2 =
+        eb.payloadBuilder(
+                packet2.getBuilder().correctChecksumAtBuild(true).correctLengthAtBuild(true))
+            .build();
 
     PcapHandle handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
     PcapDumper dumper = handle.dumpOpen(dumpFile);
@@ -421,13 +410,14 @@ public class IpV4PacketTest extends AbstractPacketTest {
     assertEquals(ep2, reader.getNextPacket().getPacket());
     reader.close();
 
-    FileInputStream in1
-      = new FileInputStream(
-          new StringBuilder()
-            .append(resourceDirPath).append("/")
-            .append(getClass().getSimpleName()).append(".pcap")
-            .toString()
-        );
+    FileInputStream in1 =
+        new FileInputStream(
+            new StringBuilder()
+                .append(resourceDirPath)
+                .append("/")
+                .append(getClass().getSimpleName())
+                .append(".pcap")
+                .toString());
     FileInputStream in2 = new FileInputStream(dumpFile);
 
     byte[] buffer1 = new byte[100];
@@ -441,5 +431,4 @@ public class IpV4PacketTest extends AbstractPacketTest {
     in1.close();
     in2.close();
   }
-
 }

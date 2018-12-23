@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.packet.namednumber.PppDllProtocol;
@@ -21,17 +22,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public class HdlcPppPacket extends AbstractPppPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -5976235177385846196L;
 
   private final HdlcPppHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -39,15 +37,15 @@ public class HdlcPppPacket extends AbstractPppPacket {
    * @return a new HdlcPppPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static HdlcPppPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static HdlcPppPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     HdlcPppHeader header = new HdlcPppHeader(rawData, offset, length);
     return new HdlcPppPacket(rawData, offset, length, header);
   }
 
-  private HdlcPppPacket(byte[] rawData, int offset, int length, HdlcPppHeader header) throws IllegalRawDataException {
+  private HdlcPppPacket(byte[] rawData, int offset, int length, HdlcPppHeader header)
+      throws IllegalRawDataException {
     super(rawData, offset, length, header);
     this.header = header;
   }
@@ -73,12 +71,10 @@ public class HdlcPppPacket extends AbstractPppPacket {
    */
   public static class Builder extends AbstractPppPacket.Builder {
 
-    private byte address = (byte)0xFF;
-    private byte control = (byte)0x03;
+    private byte address = (byte) 0xFF;
+    private byte control = (byte) 0x03;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(HdlcPppPacket packet) {
@@ -88,7 +84,6 @@ public class HdlcPppPacket extends AbstractPppPacket {
     }
 
     /**
-     *
      * @param address 0xFF by default. Don't change it to comply with the protocol.
      * @return this Builder object for method chaining.
      */
@@ -98,7 +93,6 @@ public class HdlcPppPacket extends AbstractPppPacket {
     }
 
     /**
-     *
      * @param control 0x03 by default. Don't change it to comply with the protocol.
      * @return this Builder object for method chaining.
      */
@@ -129,7 +123,6 @@ public class HdlcPppPacket extends AbstractPppPacket {
     public HdlcPppPacket build() {
       return new HdlcPppPacket(this);
     }
-
   }
 
   /**
@@ -157,9 +150,7 @@ public class HdlcPppPacket extends AbstractPppPacket {
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -6084002362363168427L;
 
     private static final int ADDRESS_OFFSET = 0;
@@ -178,13 +169,13 @@ public class HdlcPppPacket extends AbstractPppPacket {
       if (length < HDLC_PPP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(100);
         sb.append("The data is too short to build an HDLC PPP header(")
-          .append(HDLC_PPP_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(HDLC_PPP_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -198,18 +189,12 @@ public class HdlcPppPacket extends AbstractPppPacket {
       this.control = builder.control;
     }
 
-    /**
-     *
-     * @return address
-     */
+    /** @return address */
     public byte getAddress() {
       return address;
     }
 
-    /**
-     *
-     * @return control
-     */
+    /** @return control */
     public byte getControl() {
       return control;
     }
@@ -233,31 +218,22 @@ public class HdlcPppPacket extends AbstractPppPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[HDLC-encapsulated PPP Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Address: 0x")
-        .append(String.format("%02x", address))
-        .append(ls);
-      sb.append("  Control: 0x")
-        .append(String.format("%02x", control))
-        .append(ls);
-      sb.append("  Protocol: ")
-        .append(getProtocol())
-        .append(ls);
+      sb.append("[HDLC-encapsulated PPP Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Address: 0x").append(String.format("%02x", address)).append(ls);
+      sb.append("  Control: 0x").append(String.format("%02x", control)).append(ls);
+      sb.append("  Protocol: ").append(getProtocol()).append(ls);
 
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (!super.equals(obj)) { return false; }
+      if (!super.equals(obj)) {
+        return false;
+      }
 
-      HdlcPppHeader other = (HdlcPppHeader)obj;
-      return
-           address == other.address
-        && control == other.control;
+      HdlcPppHeader other = (HdlcPppHeader) obj;
+      return address == other.address && control == other.control;
     }
 
     @Override
@@ -267,7 +243,5 @@ public class HdlcPppPacket extends AbstractPppPacket {
       result = 31 * result + control;
       return result;
     }
-
   }
-
 }

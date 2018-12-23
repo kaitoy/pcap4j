@@ -24,17 +24,14 @@ public final class StaticTcpPortPacketFactory implements PacketFactory<Packet, T
 
   private StaticTcpPortPacketFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of StaticTcpPortPacketFactory.
-   */
+  /** @return the singleton instance of StaticTcpPortPacketFactory. */
   public static StaticTcpPortPacketFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, TcpPort...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, TcpPort...)} and exists only
+   * for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -46,8 +43,8 @@ public final class StaticTcpPortPacketFactory implements PacketFactory<Packet, T
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, TcpPort...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, TcpPort...)} and exists only
+   * for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -68,8 +65,8 @@ public final class StaticTcpPortPacketFactory implements PacketFactory<Packet, T
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, TcpPort...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, TcpPort...)} and exists only
+   * for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -79,8 +76,7 @@ public final class StaticTcpPortPacketFactory implements PacketFactory<Packet, T
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(
-    byte[] rawData, int offset, int length, TcpPort number1, TcpPort number2
-  ) {
+      byte[] rawData, int offset, int length, TcpPort number1, TcpPort number2) {
     try {
       switch (Short.toUnsignedInt(number1.value())) {
         case 53:
@@ -100,7 +96,7 @@ public final class StaticTcpPortPacketFactory implements PacketFactory<Packet, T
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, TcpPort... numbers) {
     try {
-      for (TcpPort num: numbers) {
+      for (TcpPort num : numbers) {
         switch (Short.toUnsignedInt(num.value())) {
           case 53:
             return DnsPacket.newPacket(rawData, offset, length);
@@ -111,5 +107,4 @@ public final class StaticTcpPortPacketFactory implements PacketFactory<Packet, T
       return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
-
 }

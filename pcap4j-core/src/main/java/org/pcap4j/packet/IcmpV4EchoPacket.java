@@ -17,18 +17,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IcmpV4EchoPacket extends IcmpIdentifiablePacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -122451430580609855L;
 
   private final IcmpV4EchoHeader header;
   private final Packet payload;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -36,9 +33,8 @@ public final class IcmpV4EchoPacket extends IcmpIdentifiablePacket {
    * @return a new IcmpV4EchoPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IcmpV4EchoPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IcmpV4EchoPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new IcmpV4EchoPacket(rawData, offset, length);
   }
@@ -48,11 +44,10 @@ public final class IcmpV4EchoPacket extends IcmpIdentifiablePacket {
 
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      this.payload
-        = PacketFactories.getFactory(Packet.class, NotApplicable.class)
-            .newInstance(rawData, offset + header.length(), payloadLength, NotApplicable.UNKNOWN);
-    }
-    else {
+      this.payload =
+          PacketFactories.getFactory(Packet.class, NotApplicable.class)
+              .newInstance(rawData, offset + header.length(), payloadLength, NotApplicable.UNKNOWN);
+    } else {
       this.payload = null;
     }
   }
@@ -82,14 +77,11 @@ public final class IcmpV4EchoPacket extends IcmpIdentifiablePacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  public static
-  final class Builder extends org.pcap4j.packet.IcmpIdentifiablePacket.Builder {
+  public static final class Builder extends org.pcap4j.packet.IcmpIdentifiablePacket.Builder {
 
     private Packet.Builder payloadBuilder;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IcmpV4EchoPacket packet) {
@@ -124,7 +116,6 @@ public final class IcmpV4EchoPacket extends IcmpIdentifiablePacket {
     public IcmpV4EchoPacket build() {
       return new IcmpV4EchoPacket(this);
     }
-
   }
 
   /**
@@ -143,24 +134,21 @@ public final class IcmpV4EchoPacket extends IcmpIdentifiablePacket {
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -1302478674628547524L;
 
-    private IcmpV4EchoHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private IcmpV4EchoHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       super(rawData, offset, length);
     }
 
-    private IcmpV4EchoHeader(Builder builder) { super(builder); }
+    private IcmpV4EchoHeader(Builder builder) {
+      super(builder);
+    }
 
     @Override
     protected String getHeaderName() {
       return "ICMPv4 Echo Header";
     }
-
   }
-
 }

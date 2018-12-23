@@ -7,6 +7,7 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import org.junit.AfterClass;
@@ -22,12 +23,10 @@ import org.pcap4j.packet.namednumber.PppDllProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 @SuppressWarnings("javadoc")
 public class PppPacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(PppPacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(PppPacketTest.class);
 
   private final PppDllProtocol protocol;
   private final byte[] pad;
@@ -35,54 +34,50 @@ public class PppPacketTest extends AbstractPacketTest {
 
   public PppPacketTest() throws Exception {
     this.protocol = PppDllProtocol.IPV4;
-    this.pad = new byte[] {
-                 (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,
-                 (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,
-                 (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,
-                 (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,
-                 (byte)0, (byte)1, (byte)0, (byte)1, (byte)0, (byte)1,
-               };
+    this.pad =
+        new byte[] {
+          (byte) 0, (byte) 1, (byte) 0, (byte) 1, (byte) 0, (byte) 1,
+          (byte) 0, (byte) 1, (byte) 0, (byte) 1, (byte) 0, (byte) 1,
+          (byte) 0, (byte) 1, (byte) 0, (byte) 1, (byte) 0, (byte) 1,
+          (byte) 0, (byte) 1, (byte) 0, (byte) 1, (byte) 0, (byte) 1,
+          (byte) 0, (byte) 1, (byte) 0, (byte) 1, (byte) 0, (byte) 1,
+        };
 
-    UnknownPacket.Builder unknownb
-      = new UnknownPacket.Builder()
-          .rawData(new byte[] { (byte)0, (byte)1, (byte)2, (byte)3 });
+    UnknownPacket.Builder unknownb =
+        new UnknownPacket.Builder().rawData(new byte[] {(byte) 0, (byte) 1, (byte) 2, (byte) 3});
 
-    IcmpV4EchoPacket.Builder echob
-      = new IcmpV4EchoPacket.Builder()
-          .identifier((short)1234)
-          .sequenceNumber((short)4321)
-          .payloadBuilder(unknownb);
+    IcmpV4EchoPacket.Builder echob =
+        new IcmpV4EchoPacket.Builder()
+            .identifier((short) 1234)
+            .sequenceNumber((short) 4321)
+            .payloadBuilder(unknownb);
 
-    IcmpV4CommonPacket.Builder icmpb
-      = new IcmpV4CommonPacket.Builder()
-          .type(IcmpV4Type.ECHO)
-          .code(IcmpV4Code.NO_CODE)
-          .correctChecksumAtBuild(true)
-          .payloadBuilder(echob);
+    IcmpV4CommonPacket.Builder icmpb =
+        new IcmpV4CommonPacket.Builder()
+            .type(IcmpV4Type.ECHO)
+            .code(IcmpV4Code.NO_CODE)
+            .correctChecksumAtBuild(true)
+            .payloadBuilder(echob);
 
-    IpV4Packet.Builder ipb
-      = new IpV4Packet.Builder()
-          .version(IpVersion.IPV4)
-          .tos(IpV4Rfc1349Tos.newInstance((byte)0x75))
-          .identification((short)123)
-          .reservedFlag(false)
-          .dontFragmentFlag(false)
-          .moreFragmentFlag(false)
-          .fragmentOffset((short)0)
-          .ttl((byte)111)
-          .protocol(IpNumber.ICMPV4)
-          .srcAddr((Inet4Address)InetAddress.getByName("192.0.2.1"))
-          .dstAddr((Inet4Address)InetAddress.getByName("192.0.2.2"))
-          .correctChecksumAtBuild(true)
-          .correctLengthAtBuild(true)
-          .paddingAtBuild(true)
-          .payloadBuilder(icmpb);
+    IpV4Packet.Builder ipb =
+        new IpV4Packet.Builder()
+            .version(IpVersion.IPV4)
+            .tos(IpV4Rfc1349Tos.newInstance((byte) 0x75))
+            .identification((short) 123)
+            .reservedFlag(false)
+            .dontFragmentFlag(false)
+            .moreFragmentFlag(false)
+            .fragmentOffset((short) 0)
+            .ttl((byte) 111)
+            .protocol(IpNumber.ICMPV4)
+            .srcAddr((Inet4Address) InetAddress.getByName("192.0.2.1"))
+            .dstAddr((Inet4Address) InetAddress.getByName("192.0.2.2"))
+            .correctChecksumAtBuild(true)
+            .correctLengthAtBuild(true)
+            .paddingAtBuild(true)
+            .payloadBuilder(icmpb);
 
-    PppPacket.Builder b
-      = new PppPacket.Builder()
-          .protocol(protocol)
-          .payloadBuilder(ipb)
-          .pad(pad);
+    PppPacket.Builder b = new PppPacket.Builder().protocol(protocol).payloadBuilder(ipb).pad(pad);
     this.packet = b.build();
   }
 
@@ -98,20 +93,16 @@ public class PppPacketTest extends AbstractPacketTest {
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    logger.info(
-      "########## " + PppPacketTest.class.getSimpleName() + " START ##########"
-    );
+    logger.info("########## " + PppPacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Test
   public void testNewPacket() {
     try {
-      PppPacket p
-        = PppPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
+      PppPacket p = PppPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
@@ -129,5 +120,4 @@ public class PppPacketTest extends AbstractPacketTest {
   protected DataLinkType getDataLinkType() {
     return DataLinkType.PPP;
   }
-
 }

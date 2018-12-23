@@ -51,9 +51,8 @@ public final class DnsRDataCaa implements DnsRData {
   private final String value;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -61,9 +60,8 @@ public final class DnsRDataCaa implements DnsRData {
    * @return a new DnsRDataCaa object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsRDataCaa newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsRDataCaa newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsRDataCaa(rawData, offset, length);
   }
@@ -72,13 +70,13 @@ public final class DnsRDataCaa implements DnsRData {
     if (length < CAA_RR_MIN_LEN) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a DnsRDataCaa (Min: ")
-        .append(CAA_RR_MIN_LEN)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(CAA_RR_MIN_LEN)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -94,13 +92,13 @@ public final class DnsRDataCaa implements DnsRData {
     if (length < cursor + tagLen) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a DnsRDataCaa (Tag Length: ")
-        .append(tagLen)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(tagLen)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     this.tag = new String(rawData, offset + cursor, tagLen);
@@ -113,22 +111,24 @@ public final class DnsRDataCaa implements DnsRData {
   private DnsRDataCaa(Builder builder) {
     if (builder.tag == null || builder.value == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append(" builder.tag: ").append(builder.tag)
-        .append(" builder.value: ").append(builder.value);
+      sb.append(" builder.tag: ")
+          .append(builder.tag)
+          .append(" builder.value: ")
+          .append(builder.value);
       throw new NullPointerException(sb.toString());
     }
 
     if ((builder.reservedFlags & 0x80) != 0) {
       StringBuilder sb = new StringBuilder();
       sb.append("(builder.reservedFlags & 0x80) must be zero. builder.reservedFlags: ")
-        .append(builder.reservedFlags);
+          .append(builder.reservedFlags);
       throw new IllegalArgumentException(sb.toString());
     }
 
     if (builder.tag.getBytes().length > 255) {
       StringBuilder sb = new StringBuilder();
       sb.append("builder.tag.getBytes().length must be less than 256. builder.tag: ")
-        .append(builder.tag);
+          .append(builder.tag);
       throw new IllegalArgumentException(sb.toString());
     }
 
@@ -138,30 +138,22 @@ public final class DnsRDataCaa implements DnsRData {
     this.value = builder.value;
   }
 
-  /**
-   * @return true if the Issuer Critical Flag is set to 1; false otherwise.
-   */
+  /** @return true if the Issuer Critical Flag is set to 1; false otherwise. */
   public boolean isCritical() {
     return critical;
   }
 
-  /**
-   * @return reservedFlags (Bit 1 to 7 of the Flags field)
-   */
+  /** @return reservedFlags (Bit 1 to 7 of the Flags field) */
   public byte getReservedFlags() {
     return reservedFlags;
   }
 
-  /**
-   * @return tag
-   */
+  /** @return tag */
   public String getTag() {
     return tag;
   }
 
-  /**
-   * @return value
-   */
+  /** @return value */
   public String getValue() {
     return value;
   }
@@ -193,30 +185,35 @@ public final class DnsRDataCaa implements DnsRData {
     return rawData;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString(String indent) {
     String ls = System.getProperty("line.separator");
 
     StringBuilder sb = new StringBuilder();
-    sb.append(indent).append("CAA RDATA:")
-      .append(ls)
-      .append(indent).append("  Issuer Critical: ")
-      .append(critical)
-      .append(ls)
-      .append(indent).append("  Reserved Flags: 0x")
-      .append(ByteArrays.toHexString(reservedFlags, ""))
-      .append(ls)
-      .append(indent).append("  Tag: ")
-      .append(tag)
-      .append(ls)
-      .append(indent).append("  Value: ")
-      .append(value)
-      .append(ls);
+    sb.append(indent)
+        .append("CAA RDATA:")
+        .append(ls)
+        .append(indent)
+        .append("  Issuer Critical: ")
+        .append(critical)
+        .append(ls)
+        .append(indent)
+        .append("  Reserved Flags: 0x")
+        .append(ByteArrays.toHexString(reservedFlags, ""))
+        .append(ls)
+        .append(indent)
+        .append("  Tag: ")
+        .append(tag)
+        .append(ls)
+        .append(indent)
+        .append("  Value: ")
+        .append(value)
+        .append(ls);
 
     return sb.toString();
   }
@@ -319,12 +316,9 @@ public final class DnsRDataCaa implements DnsRData {
       return this;
     }
 
-    /**
-     * @return a new DnsRDataCaa object.
-     */
+    /** @return a new DnsRDataCaa object. */
     public DnsRDataCaa build() {
-          return new DnsRDataCaa(this);
-      }
+      return new DnsRDataCaa(this);
+    }
   }
-
 }

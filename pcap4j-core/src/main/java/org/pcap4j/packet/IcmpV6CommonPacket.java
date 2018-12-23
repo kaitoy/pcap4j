@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.*;
 import org.pcap4j.util.ByteArrays;
@@ -24,18 +23,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IcmpV6CommonPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 7643067752830062365L;
 
   private final IcmpV6CommonHeader header;
   private final Packet payload;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -43,56 +39,51 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
    * @return a new IcmpV6CommonPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IcmpV6CommonPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IcmpV6CommonPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new IcmpV6CommonPacket(rawData, offset, length);
   }
 
-  private IcmpV6CommonPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private IcmpV6CommonPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     this.header = new IcmpV6CommonHeader(rawData, offset, length);
 
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      this.payload
-        = PacketFactories.getFactory(Packet.class, IcmpV6Type.class)
-            .newInstance(rawData, offset + header.length(), payloadLength, header.getType());
-    }
-    else {
+      this.payload =
+          PacketFactories.getFactory(Packet.class, IcmpV6Type.class)
+              .newInstance(rawData, offset + header.length(), payloadLength, header.getType());
+    } else {
       this.payload = null;
     }
   }
 
   private IcmpV6CommonPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.type == null
-      || builder.code == null
-    ) {
+    if (builder == null || builder.type == null || builder.code == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.type: ").append(builder.type)
-        .append(" builder.code: ").append(builder.code);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.type: ")
+          .append(builder.type)
+          .append(" builder.code: ")
+          .append(builder.code);
       throw new NullPointerException(sb.toString());
     }
 
     if (builder.correctChecksumAtBuild) {
       if (builder.srcAddr == null || builder.dstAddr == null) {
         StringBuilder sb = new StringBuilder();
-        sb.append("builder.srcAddr: ").append(builder.srcAddr)
-          .append(" builder.dstAddr: ").append(builder.dstAddr);
+        sb.append("builder.srcAddr: ")
+            .append(builder.srcAddr)
+            .append(" builder.dstAddr: ")
+            .append(builder.dstAddr);
         throw new NullPointerException(sb.toString());
       }
     }
 
     this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
-    this.header = new IcmpV6CommonHeader(
-                    builder,
-                    payload.getRawData()
-                  );
+    this.header = new IcmpV6CommonHeader(builder, payload.getRawData());
   }
 
   @Override
@@ -111,32 +102,26 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
   }
 
   /**
-   *
    * @param srcAddr srcAddr
    * @param dstAddr dstAddr
    * @param acceptZero acceptZero
-   * @return true if the packet represented by this object has a valid checksum;
-   *         false otherwise.
+   * @return true if the packet represented by this object has a valid checksum; false otherwise.
    */
-  public boolean hasValidChecksum(
-    Inet6Address srcAddr, Inet6Address dstAddr, boolean acceptZero
-  ) {
+  public boolean hasValidChecksum(Inet6Address srcAddr, Inet6Address dstAddr, boolean acceptZero) {
     if (srcAddr == null || dstAddr == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("srcAddr: ").append(srcAddr)
-        .append(" dstAddr: ").append(dstAddr);
+      sb.append("srcAddr: ").append(srcAddr).append(" dstAddr: ").append(dstAddr);
       throw new NullPointerException(sb.toString());
     }
     if (!srcAddr.getClass().isInstance(dstAddr)) {
       StringBuilder sb = new StringBuilder();
-      sb.append("srcAddr: ").append(srcAddr)
-        .append(" dstAddr: ").append(dstAddr);
+      sb.append("srcAddr: ").append(srcAddr).append(" dstAddr: ").append(dstAddr);
       throw new IllegalArgumentException(sb.toString());
     }
 
     byte[] payloadData = payload != null ? payload.getRawData() : new byte[0];
-    short calculatedChecksum
-      = header.calcChecksum(srcAddr, dstAddr, header.getRawData(), payloadData);
+    short calculatedChecksum =
+        header.calcChecksum(srcAddr, dstAddr, header.getRawData(), payloadData);
     if (calculatedChecksum == 0) {
       return true;
     }
@@ -152,9 +137,8 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.15
    */
-  public static final
-  class Builder extends AbstractBuilder
-  implements ChecksumBuilder<IcmpV6CommonPacket> {
+  public static final class Builder extends AbstractBuilder
+      implements ChecksumBuilder<IcmpV6CommonPacket> {
 
     private IcmpV6Type type;
     private IcmpV6Code code;
@@ -164,9 +148,7 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
     private Inet6Address dstAddr;
     private boolean correctChecksumAtBuild;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IcmpV6CommonPacket packet) {
@@ -177,7 +159,6 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param type type
      * @return this Builder object for method chaining.
      */
@@ -187,7 +168,6 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param code code
      * @return this Builder object for method chaining.
      */
@@ -197,7 +177,6 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param checksum checksum
      * @return this Builder object for method chaining.
      */
@@ -218,7 +197,6 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
     }
 
     /**
-     *
      * used for checksum calculation.
      *
      * @param srcAddr srcAddr
@@ -230,7 +208,6 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
     }
 
     /**
-     *
      * used for checksum calculation.
      *
      * @param dstAddr dstAddr
@@ -251,7 +228,6 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
     public IcmpV6CommonPacket build() {
       return new IcmpV6CommonPacket(this);
     }
-
   }
 
   /**
@@ -270,25 +246,16 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -7473322861606186L;
 
-    private static final int TYPE_OFFSET
-      = 0;
-    private static final int TYPE_SIZE
-      = BYTE_SIZE_IN_BYTES;
-    private static final int CODE_OFFSET
-      = TYPE_OFFSET + TYPE_SIZE;
-    private static final int CODE_SIZE
-      = BYTE_SIZE_IN_BYTES;
-    private static final int CHECKSUM_OFFSET
-      = CODE_OFFSET + CODE_SIZE;
-    private static final int CHECKSUM_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int ICMPV6_COMMON_HEADER_SIZE
-      = CHECKSUM_OFFSET + CHECKSUM_SIZE;
+    private static final int TYPE_OFFSET = 0;
+    private static final int TYPE_SIZE = BYTE_SIZE_IN_BYTES;
+    private static final int CODE_OFFSET = TYPE_OFFSET + TYPE_SIZE;
+    private static final int CODE_SIZE = BYTE_SIZE_IN_BYTES;
+    private static final int CHECKSUM_OFFSET = CODE_OFFSET + CODE_SIZE;
+    private static final int CHECKSUM_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int ICMPV6_COMMON_HEADER_SIZE = CHECKSUM_OFFSET + CHECKSUM_SIZE;
 
     private static final int ICMPV6_PSEUDO_HEADER_SIZE = 40;
 
@@ -296,28 +263,25 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
     private final IcmpV6Code code;
     private final short checksum;
 
-    private IcmpV6CommonHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private IcmpV6CommonHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < ICMPV6_COMMON_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv6 common header(")
-          .append(ICMPV6_COMMON_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(ICMPV6_COMMON_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.type
-        = IcmpV6Type.getInstance(ByteArrays.getByte(rawData, TYPE_OFFSET + offset));
-      this.code
-        = IcmpV6Code.getInstance(type.value(), ByteArrays.getByte(rawData, CODE_OFFSET + offset));
-      this.checksum
-        = ByteArrays.getShort(rawData, CHECKSUM_OFFSET + offset);
+      this.type = IcmpV6Type.getInstance(ByteArrays.getByte(rawData, TYPE_OFFSET + offset));
+      this.code =
+          IcmpV6Code.getInstance(type.value(), ByteArrays.getByte(rawData, CODE_OFFSET + offset));
+      this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET + offset);
     }
 
     private IcmpV6CommonHeader(Builder builder, byte[] payload) {
@@ -326,26 +290,18 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
 
       if (builder.correctChecksumAtBuild) {
         if (PacketPropertiesLoader.getInstance().icmpV6CalcChecksum()) {
-          this.checksum
-            = calcChecksum(
-                builder.srcAddr,
-                builder.dstAddr,
-                buildRawData(true),
-                payload
-              );
+          this.checksum =
+              calcChecksum(builder.srcAddr, builder.dstAddr, buildRawData(true), payload);
+        } else {
+          this.checksum = (short) 0;
         }
-        else {
-          this.checksum = (short)0;
-        }
-      }
-      else {
+      } else {
         this.checksum = builder.checksum;
       }
     }
 
     private short calcChecksum(
-      Inet6Address srcAddr, Inet6Address dstAddr, byte[] header, byte[] payload
-    ) {
+        Inet6Address srcAddr, Inet6Address dstAddr, byte[] header, byte[] payload) {
       byte[] data;
       int destPos;
       int totalLength = payload.length + length();
@@ -353,8 +309,7 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
       if ((totalLength % 2) != 0) {
         data = new byte[totalLength + 1 + ICMPV6_PSEUDO_HEADER_SIZE];
         destPos = totalLength + 1;
-      }
-      else {
+      } else {
         data = new byte[totalLength + ICMPV6_PSEUDO_HEADER_SIZE];
         destPos = totalLength;
       }
@@ -363,16 +318,10 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
       System.arraycopy(payload, 0, data, header.length, payload.length);
 
       // pseudo header
-      System.arraycopy(
-        srcAddr.getAddress(), 0,
-        data, destPos, srcAddr.getAddress().length
-      );
+      System.arraycopy(srcAddr.getAddress(), 0, data, destPos, srcAddr.getAddress().length);
       destPos += srcAddr.getAddress().length;
 
-      System.arraycopy(
-        dstAddr.getAddress(), 0,
-        data, destPos, dstAddr.getAddress().length
-      );
+      System.arraycopy(dstAddr.getAddress(), 0, data, destPos, dstAddr.getAddress().length);
       destPos += dstAddr.getAddress().length;
 
       destPos += 3;
@@ -381,34 +330,23 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
       destPos++;
 
       System.arraycopy(
-        ByteArrays.toByteArray((short)totalLength), 0,
-        data, destPos, SHORT_SIZE_IN_BYTES
-      );
+          ByteArrays.toByteArray((short) totalLength), 0, data, destPos, SHORT_SIZE_IN_BYTES);
       destPos += SHORT_SIZE_IN_BYTES;
 
       return ByteArrays.calcChecksum(data);
     }
 
-    /**
-     *
-     * @return type
-     */
+    /** @return type */
     public IcmpV6Type getType() {
       return type;
     }
 
-    /**
-     *
-     * @return code
-     */
+    /** @return code */
     public IcmpV6Code getCode() {
       return code;
     }
 
-    /**
-     *
-     * @return checksum
-     */
+    /** @return checksum */
     public short getChecksum() {
       return checksum;
     }
@@ -440,33 +378,25 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[ICMPv6 Common Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Type: ")
-        .append(type)
-        .append(ls);
-      sb.append("  Code: ")
-        .append(code)
-        .append(ls);
-      sb.append("  Checksum: 0x")
-        .append(ByteArrays.toHexString(checksum, ""))
-        .append(ls);
+      sb.append("[ICMPv6 Common Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Type: ").append(type).append(ls);
+      sb.append("  Code: ").append(code).append(ls);
+      sb.append("  Checksum: 0x").append(ByteArrays.toHexString(checksum, "")).append(ls);
 
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      IcmpV6CommonHeader other = (IcmpV6CommonHeader)obj;
-      return
-           checksum == other.checksum
-        && type.equals(other.type)
-        && code.equals(other.code);
+      IcmpV6CommonHeader other = (IcmpV6CommonHeader) obj;
+      return checksum == other.checksum && type.equals(other.type) && code.equals(other.code);
     }
 
     @Override
@@ -477,39 +407,27 @@ public final class IcmpV6CommonPacket extends AbstractPacket {
       result = 31 * result + checksum;
       return result;
     }
-
   }
 
   /**
-   * The interface representing an IPv6 neighbor discovery option.
-   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * classes which implement this interface must implement the following method:
-   * {@code public static IpV6NeighborDiscoveryOption newInstance(byte[] rawData, int offset, int length)
-   * throws IllegalRawDataException}
+   * The interface representing an IPv6 neighbor discovery option. If you use {@link
+   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
+   * which implement this interface must implement the following method: {@code public static
+   * IpV6NeighborDiscoveryOption newInstance(byte[] rawData, int offset, int length) throws
+   * IllegalRawDataException}
    *
    * @author Kaito Yamada
    * @since pcap4j 0.9.15
    */
   public interface IpV6NeighborDiscoveryOption extends Serializable {
 
-    /**
-     *
-     * @return type
-     */
+    /** @return type */
     public IpV6NeighborDiscoveryOptionType getType();
 
-    /**
-     *
-     * @return length
-     */
+    /** @return length */
     public int length();
 
-    /**
-     *
-     * @return raw data
-     */
+    /** @return raw data */
     public byte[] getRawData();
-
   }
-
 }

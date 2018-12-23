@@ -26,27 +26,23 @@ public final class IpV6Pad1Option implements IpV6Option {
    *   +-+-+-+-+-+-+-+-+
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2182260121605325195L;
 
   private static final IpV6Pad1Option INSTANCE = new IpV6Pad1Option();
 
-  private static final IpV6OptionType type = IpV6OptionType.getInstance((byte)0);
+  private static final IpV6OptionType type = IpV6OptionType.getInstance((byte) 0);
 
   private IpV6Pad1Option() {}
 
-  /**
-   *
-   * @return the singleton instance of IpV6Pad1Option.
-   */
-  public static IpV6Pad1Option getInstance() { return INSTANCE; }
+  /** @return the singleton instance of IpV6Pad1Option. */
+  public static IpV6Pad1Option getInstance() {
+    return INSTANCE;
+  }
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -54,35 +50,39 @@ public final class IpV6Pad1Option implements IpV6Option {
    * @return the singleton instance of IpV6Pad1Option.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IpV6Pad1Option newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IpV6Pad1Option newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     if (rawData[offset] != type.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The type must be: ")
-        .append(type.valueAsString())
-        .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "));
+          .append(type.valueAsString())
+          .append(" rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "));
       throw new IllegalRawDataException(sb.toString());
     }
     return INSTANCE;
   }
 
   @Override
-  public IpV6OptionType getType() { return type; }
+  public IpV6OptionType getType() {
+    return type;
+  }
 
   @Override
-  public int length() { return 1; }
+  public int length() {
+    return 1;
+  }
 
   @Override
-  public byte[] getRawData() { return new byte[1]; }
+  public byte[] getRawData() {
+    return new byte[1];
+  }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Option Type: ")
-      .append(type);
+    sb.append("[Option Type: ").append(type);
     sb.append("]");
     return sb.toString();
   }
@@ -92,5 +92,4 @@ public final class IpV6Pad1Option implements IpV6Option {
   private Object readResolve() throws ObjectStreamException {
     return INSTANCE;
   }
-
 }

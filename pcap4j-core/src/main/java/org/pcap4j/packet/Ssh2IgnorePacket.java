@@ -18,17 +18,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Ssh2IgnorePacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2975421692356921479L;
 
   private final Ssh2IgnoreHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -36,9 +33,8 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
    * @return a new Ssh2IgnorePacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Ssh2IgnorePacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Ssh2IgnorePacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Ssh2IgnorePacket(rawData, offset, length);
   }
@@ -48,13 +44,9 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
   }
 
   private Ssh2IgnorePacket(Builder builder) {
-    if (
-         builder == null
-      || builder.data == null
-    ) {
+    if (builder == null || builder.data == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.data: ").append(builder.data);
+      sb.append("builder: ").append(builder).append(" builder.data: ").append(builder.data);
       throw new NullPointerException(sb.toString());
     }
 
@@ -72,7 +64,6 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
   }
 
   /**
-   *
    * @author Kaito Yamada
    * @since pcap4j 1.0.1
    */
@@ -80,9 +71,7 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
 
     private Ssh2String data;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(Ssh2IgnorePacket packet) {
@@ -90,7 +79,6 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param data data
      * @return this Builder object for method chaining.
      */
@@ -103,11 +91,9 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
     public Ssh2IgnorePacket build() {
       return new Ssh2IgnorePacket(this);
     }
-
   }
 
   /**
-   *
    * @author Kaito Yamada
    * @version pcap4j 1.0.1
    */
@@ -120,38 +106,33 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
      * string    data
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = 5835008308161430239L;
 
     private final Ssh2MessageNumber messageNumber = Ssh2MessageNumber.SSH_MSG_IGNORE;
     private final Ssh2String data;
 
-    private Ssh2IgnoreHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private Ssh2IgnoreHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < 5) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an SSH2 Ignore header. data: ")
-          .append(new String(rawData))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(new String(rawData))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
-      if (
-        !Ssh2MessageNumber.getInstance(rawData[offset])
-          .equals(Ssh2MessageNumber.SSH_MSG_IGNORE)
-      ) {
+      if (!Ssh2MessageNumber.getInstance(rawData[offset])
+          .equals(Ssh2MessageNumber.SSH_MSG_IGNORE)) {
         StringBuilder sb = new StringBuilder(120);
         sb.append("The data is not an SSH2 Ignore message. data: ")
-          .append(new String(rawData))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(new String(rawData))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -162,18 +143,12 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
       this.data = builder.data;
     }
 
-    /**
-     *
-     * @return messageNumber
-     */
+    /** @return messageNumber */
     public Ssh2MessageNumber getMessageNumber() {
       return messageNumber;
     }
 
-    /**
-     *
-     * @return data
-     */
+    /** @return data */
     public Ssh2String getData() {
       return data;
     }
@@ -187,33 +162,32 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
     }
 
     @Override
-    protected int calcLength() { return data.length() + 1; }
+    protected int calcLength() {
+      return data.length() + 1;
+    }
 
     @Override
     protected String buildString() {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[SSH2 Ignore Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Message Number: ")
-        .append(messageNumber)
-        .append(ls);
-      sb.append("  data: ")
-        .append(data)
-        .append(ls);
+      sb.append("[SSH2 Ignore Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Message Number: ").append(messageNumber).append(ls);
+      sb.append("  data: ").append(data).append(ls);
 
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      Ssh2IgnoreHeader other = (Ssh2IgnoreHeader)obj;
+      Ssh2IgnoreHeader other = (Ssh2IgnoreHeader) obj;
       return data.equals(other.data);
     }
 
@@ -223,7 +197,5 @@ public final class Ssh2IgnorePacket extends AbstractPacket {
       result = 31 * result + data.hashCode();
       return result;
     }
-
   }
-
 }

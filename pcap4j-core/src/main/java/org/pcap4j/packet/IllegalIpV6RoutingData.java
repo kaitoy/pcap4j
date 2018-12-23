@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.IpV6ExtRoutingPacket.IpV6RoutingData;
 import org.pcap4j.util.ByteArrays;
 
@@ -18,18 +17,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IllegalIpV6RoutingData implements IpV6RoutingData, IllegalRawDataHolder {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -7203099918284013972L;
 
   private final byte[] rawData;
   private final IllegalRawDataException cause;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -38,8 +34,7 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData, IllegalRaw
    * @return a new IllegalIpV6RoutingData object.
    */
   public static IllegalIpV6RoutingData newInstance(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     if (cause == null) {
       throw new NullPointerException("cause is null.");
     }
@@ -48,15 +43,16 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData, IllegalRaw
   }
 
   private IllegalIpV6RoutingData(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     this.rawData = new byte[length];
     System.arraycopy(rawData, offset, this.rawData, 0, length);
     this.cause = cause;
   }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -74,10 +70,10 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData, IllegalRaw
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[illegal data: ")
-      .append(ByteArrays.toHexString(rawData, ""))
-      .append("] [cause: ")
-      .append(cause)
-      .append("]");
+        .append(ByteArrays.toHexString(rawData, ""))
+        .append("] [cause: ")
+        .append(cause)
+        .append("]");
     return sb.toString();
   }
 
@@ -110,5 +106,4 @@ public final class IllegalIpV6RoutingData implements IpV6RoutingData, IllegalRaw
     }
     return true;
   }
-
 }

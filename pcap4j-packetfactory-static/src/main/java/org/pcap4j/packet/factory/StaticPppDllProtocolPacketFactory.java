@@ -20,23 +20,21 @@ import org.pcap4j.packet.namednumber.PppDllProtocol;
  * @since pcap4j 1.4.0
  */
 public final class StaticPppDllProtocolPacketFactory
-implements PacketFactory<Packet, PppDllProtocol> {
+    implements PacketFactory<Packet, PppDllProtocol> {
 
-  private static final StaticPppDllProtocolPacketFactory INSTANCE
-    = new StaticPppDllProtocolPacketFactory();
+  private static final StaticPppDllProtocolPacketFactory INSTANCE =
+      new StaticPppDllProtocolPacketFactory();
 
   private StaticPppDllProtocolPacketFactory() {}
 
-  /**
-   * @return the singleton instance of StaticPppDllProtocolPacketFactory.
-   */
+  /** @return the singleton instance of StaticPppDllProtocolPacketFactory. */
   public static StaticPppDllProtocolPacketFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, PppDllProtocol...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, PppDllProtocol...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -48,8 +46,8 @@ implements PacketFactory<Packet, PppDllProtocol> {
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, PppDllProtocol...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, PppDllProtocol...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -72,8 +70,8 @@ implements PacketFactory<Packet, PppDllProtocol> {
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, PppDllProtocol...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, PppDllProtocol...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -83,8 +81,7 @@ implements PacketFactory<Packet, PppDllProtocol> {
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(
-    byte[] rawData, int offset, int length, PppDllProtocol number1, PppDllProtocol number2
-  ) {
+      byte[] rawData, int offset, int length, PppDllProtocol number1, PppDllProtocol number2) {
     try {
       switch (Short.toUnsignedInt(number1.value())) {
         case 0x0021:
@@ -108,7 +105,7 @@ implements PacketFactory<Packet, PppDllProtocol> {
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, PppDllProtocol... numbers) {
     try {
-      for (PppDllProtocol num: numbers) {
+      for (PppDllProtocol num : numbers) {
         switch (Short.toUnsignedInt(num.value())) {
           case 0x0021:
             return IpV4Packet.newPacket(rawData, offset, length);
@@ -121,5 +118,4 @@ implements PacketFactory<Packet, PppDllProtocol> {
       return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
-
 }

@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 import org.pcap4j.util.ByteArrays;
@@ -19,9 +18,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IllegalTcpOption implements TcpOption, IllegalRawDataHolder {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -7145613685760784276L;
 
   private final TcpOptionKind kind;
@@ -29,9 +26,8 @@ public final class IllegalTcpOption implements TcpOption, IllegalRawDataHolder {
   private final IllegalRawDataException cause;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -40,8 +36,7 @@ public final class IllegalTcpOption implements TcpOption, IllegalRawDataHolder {
    * @return a new IllegalTcpOption object.
    */
   public static IllegalTcpOption newInstance(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     if (cause == null) {
       throw new NullPointerException("cause is null.");
     }
@@ -57,10 +52,14 @@ public final class IllegalTcpOption implements TcpOption, IllegalRawDataHolder {
   }
 
   @Override
-  public TcpOptionKind getKind() { return kind; }
+  public TcpOptionKind getKind() {
+    return kind;
+  }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -78,12 +77,12 @@ public final class IllegalTcpOption implements TcpOption, IllegalRawDataHolder {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[Kind: ")
-      .append(kind)
-      .append("] [Illegal Raw Data: 0x")
-      .append(ByteArrays.toHexString(rawData, ""))
-      .append("] [cause: ")
-      .append(cause)
-      .append("]");
+        .append(kind)
+        .append("] [Illegal Raw Data: 0x")
+        .append(ByteArrays.toHexString(rawData, ""))
+        .append("] [cause: ")
+        .append(cause)
+        .append("]");
     return sb.toString();
   }
 
@@ -116,5 +115,4 @@ public final class IllegalTcpOption implements TcpOption, IllegalRawDataHolder {
     }
     return true;
   }
-
 }

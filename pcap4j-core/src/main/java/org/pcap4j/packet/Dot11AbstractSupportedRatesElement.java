@@ -10,7 +10,6 @@ package org.pcap4j.packet;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.namednumber.Dot11BssMembershipSelector;
 import org.pcap4j.packet.namednumber.Dot11InformationElementId;
 
@@ -23,9 +22,7 @@ import org.pcap4j.packet.namednumber.Dot11InformationElementId;
  */
 public abstract class Dot11AbstractSupportedRatesElement extends Dot11InformationElement {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1751480012950433980L;
 
   private final List<Rate> rates;
@@ -40,8 +37,8 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
   protected Dot11AbstractSupportedRatesElement(
-    byte[] rawData, int offset, int length, Dot11InformationElementId id
-  ) throws IllegalRawDataException {
+      byte[] rawData, int offset, int length, Dot11InformationElementId id)
+      throws IllegalRawDataException {
     super(rawData, offset, length, id);
 
     this.rates = new ArrayList<Rate>();
@@ -53,12 +50,11 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
       boolean basic = (next & 0x80) != 0;
       byte val = (byte) (next & 0x7F);
       if (Dot11BssMembershipSelector.isRegistered(val)) {
-        BssMembershipSelector sel
-          = new BssMembershipSelector(basic, Dot11BssMembershipSelector.getInstance(val));
+        BssMembershipSelector sel =
+            new BssMembershipSelector(basic, Dot11BssMembershipSelector.getInstance(val));
         bssMembershipSelectors.add(sel);
         ratesAndBssMembershipSelectors.add(sel);
-      }
-      else {
+      } else {
         Rate rate = new Rate(basic, val);
         rates.add(rate);
         ratesAndBssMembershipSelectors.add(rate);
@@ -66,47 +62,37 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
     }
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   protected Dot11AbstractSupportedRatesElement(Builder builder) {
     super(builder);
 
     if (builder.ratesAndBssMembershipSelectors.size() > 255) {
       throw new IllegalArgumentException(
-              "Too long ratesAndBssMembershipSelectors: " + builder.ratesAndBssMembershipSelectors
-            );
+          "Too long ratesAndBssMembershipSelectors: " + builder.ratesAndBssMembershipSelectors);
     }
 
     this.rates = new ArrayList<Rate>();
     this.bssMembershipSelectors = new ArrayList<BssMembershipSelector>();
-    for (Datum obj: builder.ratesAndBssMembershipSelectors) {
+    for (Datum obj : builder.ratesAndBssMembershipSelectors) {
       if (obj instanceof Rate) {
         rates.add((Rate) obj);
-      }
-      else if (obj instanceof BssMembershipSelector) {
+      } else if (obj instanceof BssMembershipSelector) {
         bssMembershipSelectors.add((BssMembershipSelector) obj);
-      }
-      else {
+      } else {
         throw new IllegalArgumentException(
-                "An illegal object in builder.ratesAndBssMembershipSelectors: " + obj
-              );
+            "An illegal object in builder.ratesAndBssMembershipSelectors: " + obj);
       }
     }
-    this.ratesAndBssMembershipSelectors
-      = new ArrayList<Datum>(builder.ratesAndBssMembershipSelectors);
+    this.ratesAndBssMembershipSelectors =
+        new ArrayList<Datum>(builder.ratesAndBssMembershipSelectors);
   }
 
-  /**
-   * @return rates
-   */
+  /** @return rates */
   public List<Rate> getRates() {
     return new ArrayList<Rate>(rates);
   }
 
-  /**
-   * @return bssMembershipSelectors
-   */
+  /** @return bssMembershipSelectors */
   public List<BssMembershipSelector> getBssMembershipSelectors() {
     return new ArrayList<BssMembershipSelector>(bssMembershipSelectors);
   }
@@ -122,16 +108,14 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
     rawData[0] = getElementId().value();
     rawData[1] = getLength();
     int i = 2;
-    for (Datum datum: ratesAndBssMembershipSelectors) {
+    for (Datum datum : ratesAndBssMembershipSelectors) {
       rawData[i] = datum.getRawData();
       i++;
     }
     return rawData;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public abstract Builder getBuilder();
 
   @Override
@@ -144,11 +128,9 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
 
   @Override
   public boolean equals(Object obj) {
-    if (!super.equals(obj))
-      return false;
+    if (!super.equals(obj)) return false;
     Dot11AbstractSupportedRatesElement other = (Dot11AbstractSupportedRatesElement) obj;
-    if (!ratesAndBssMembershipSelectors.equals(other.ratesAndBssMembershipSelectors))
-      return false;
+    if (!ratesAndBssMembershipSelectors.equals(other.ratesAndBssMembershipSelectors)) return false;
     return true;
   }
 
@@ -165,27 +147,17 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append(getElementName()).append(":")
-      .append(ls);
-    sb.append(indent).append("  Element ID: ")
-      .append(getElementId())
-      .append(ls);
-    sb.append(indent).append("  Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes")
-      .append(ls);
-    for (Datum datum: ratesAndBssMembershipSelectors) {
-      sb.append(indent).append("  ")
-        .append(datum)
-        .append(ls);
+    sb.append(indent).append(getElementName()).append(":").append(ls);
+    sb.append(indent).append("  Element ID: ").append(getElementId()).append(ls);
+    sb.append(indent).append("  Length: ").append(getLengthAsInt()).append(" bytes").append(ls);
+    for (Datum datum : ratesAndBssMembershipSelectors) {
+      sb.append(indent).append("  ").append(datum).append(ls);
     }
 
     return sb.toString();
   }
 
-  /**
-   * @return element name
-   */
+  /** @return element name */
   protected abstract String getElementName();
 
   /**
@@ -194,11 +166,8 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
    */
   public interface Datum extends Serializable {
 
-    /**
-     * @return the raw data.
-     */
+    /** @return the raw data. */
     public byte getRawData();
-
   }
 
   /**
@@ -207,9 +176,7 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
    */
   public static final class Rate implements Datum {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -3227287901080960330L;
 
     private final boolean basic;
@@ -222,30 +189,23 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
     public Rate(boolean basic, byte rate) {
       if (rate < 0) {
         throw new IllegalArgumentException(
-                "The rate must be between 0 to 127 but is actually: " + rate
-              );
+            "The rate must be between 0 to 127 but is actually: " + rate);
       }
       this.basic = basic;
       this.rate = rate;
     }
 
-    /**
-     * @return true if this is a basic rate; false otherwise.
-     */
+    /** @return true if this is a basic rate; false otherwise. */
     public boolean isBasic() {
       return basic;
     }
 
-    /**
-     * @return rate
-     */
+    /** @return rate */
     public byte getRate() {
       return rate;
     }
 
-    /**
-     * @return rate in Mbit/sec.
-     */
+    /** @return rate in Mbit/sec. */
     public double getRateInMbitPerSec() {
       return rate * 0.5;
     }
@@ -257,12 +217,12 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
 
     @Override
     public String toString() {
-      StringBuilder sb
-        = new StringBuilder(50)
-            .append("Supported Rate: ")
-            .append(getRateInMbitPerSec())
-            .append(" Mbit/sec")
-            .append(basic ? " (basic)" : " (non-basic)");
+      StringBuilder sb =
+          new StringBuilder(50)
+              .append("Supported Rate: ")
+              .append(getRateInMbitPerSec())
+              .append(" Mbit/sec")
+              .append(basic ? " (basic)" : " (non-basic)");
       return sb.toString();
     }
 
@@ -277,20 +237,14 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
 
     @Override
     public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
+      if (this == obj) return true;
+      if (obj == null) return false;
+      if (getClass() != obj.getClass()) return false;
       Rate other = (Rate) obj;
-      if (basic != other.basic)
-        return false;
-      if (rate != other.rate)
-        return false;
+      if (basic != other.basic) return false;
+      if (rate != other.rate) return false;
       return true;
     }
-
   }
 
   /**
@@ -299,9 +253,7 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
    */
   public static final class BssMembershipSelector implements Datum {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = 5749787247631286263L;
 
     private final boolean basic;
@@ -319,16 +271,12 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
       this.selector = selector;
     }
 
-    /**
-     * @return true if this is a basic rate; false otherwise.
-     */
+    /** @return true if this is a basic rate; false otherwise. */
     public boolean isBasic() {
       return basic;
     }
 
-    /**
-     * @return selector
-     */
+    /** @return selector */
     public Dot11BssMembershipSelector getSelector() {
       return selector;
     }
@@ -341,11 +289,11 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
 
     @Override
     public String toString() {
-      StringBuilder sb
-        = new StringBuilder(50)
-            .append("BSS Membership Selector: ")
-            .append(selector)
-            .append(basic ? " (basic)" : " (non-basic)");
+      StringBuilder sb =
+          new StringBuilder(50)
+              .append("BSS Membership Selector: ")
+              .append(selector)
+              .append(basic ? " (basic)" : " (non-basic)");
       return sb.toString();
     }
 
@@ -360,38 +308,28 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
 
     @Override
     public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
+      if (this == obj) return true;
+      if (obj == null) return false;
+      if (getClass() != obj.getClass()) return false;
       BssMembershipSelector other = (BssMembershipSelector) obj;
-      if (basic != other.basic)
-        return false;
-      if (!selector.equals(other.selector))
-        return false;
+      if (basic != other.basic) return false;
+      if (!selector.equals(other.selector)) return false;
       return true;
     }
-
   }
 
   /**
    * @author Kaito Yamada
    * @since pcap4j 1.7.0
    */
-  public static abstract class Builder extends Dot11InformationElement.Builder {
+  public abstract static class Builder extends Dot11InformationElement.Builder {
 
     private List<Datum> ratesAndBssMembershipSelectors;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
-    /**
-     * @param elem element.
-     */
+    /** @param elem element. */
     protected Builder(Dot11AbstractSupportedRatesElement elem) {
       super(elem);
       this.ratesAndBssMembershipSelectors = elem.ratesAndBssMembershipSelectors;
@@ -406,9 +344,7 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
       return this;
     }
 
-    /**
-     * Call me before build().
-     */
+    /** Call me before build(). */
     protected void preBuild() {
       if (ratesAndBssMembershipSelectors == null) {
         throw new NullPointerException("ratesAndBssMembershipSelectors is null.");
@@ -417,7 +353,5 @@ public abstract class Dot11AbstractSupportedRatesElement extends Dot11Informatio
         length((byte) ratesAndBssMembershipSelectors.size());
       }
     }
-
   }
-
 }

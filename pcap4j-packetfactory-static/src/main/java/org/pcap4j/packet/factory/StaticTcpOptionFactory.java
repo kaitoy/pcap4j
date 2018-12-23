@@ -30,17 +30,14 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
 
   private StaticTcpOptionFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of StaticTcpOptionFactory.
-   */
+  /** @return the singleton instance of StaticTcpOptionFactory. */
   public static StaticTcpOptionFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, TcpOptionKind...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, TcpOptionKind...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -56,8 +53,8 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, TcpOptionKind...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, TcpOptionKind...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -90,8 +87,8 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, TcpOptionKind...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, TcpOptionKind...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -101,8 +98,7 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
    * @return see {@link PacketFactory#newInstance}.
    */
   public TcpOption newInstance(
-    byte[] rawData, int offset, int length, TcpOptionKind number1, TcpOptionKind number2
-  ) {
+      byte[] rawData, int offset, int length, TcpOptionKind number1, TcpOptionKind number2) {
     try {
       switch (Byte.toUnsignedInt(number1.value())) {
         case 0:
@@ -146,7 +142,7 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
   @Override
   public TcpOption newInstance(byte[] rawData, int offset, int length, TcpOptionKind... numbers) {
     try {
-      for (TcpOptionKind num: numbers) {
+      for (TcpOptionKind num : numbers) {
         switch (Byte.toUnsignedInt(num.value())) {
           case 0:
             return TcpEndOfOptionList.newInstance(rawData, offset, length);
@@ -169,5 +165,4 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
       return IllegalTcpOption.newInstance(rawData, offset, length, e);
     }
   }
-
 }

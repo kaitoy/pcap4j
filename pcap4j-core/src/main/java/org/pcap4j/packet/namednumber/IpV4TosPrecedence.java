@@ -19,61 +19,38 @@ import java.util.Map;
  */
 public final class IpV4TosPrecedence extends NamedNumber<Byte, IpV4TosPrecedence> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3155818580398801532L;
 
-  /**
-   * Routine: 0
-   */
-  public static final IpV4TosPrecedence ROUTINE
-    = new IpV4TosPrecedence((byte)0, "Routine");
+  /** Routine: 0 */
+  public static final IpV4TosPrecedence ROUTINE = new IpV4TosPrecedence((byte) 0, "Routine");
 
-  /**
-   * Priority: 1
-   */
-  public static final IpV4TosPrecedence PRIORITY
-    = new IpV4TosPrecedence((byte)1, "Priority");
+  /** Priority: 1 */
+  public static final IpV4TosPrecedence PRIORITY = new IpV4TosPrecedence((byte) 1, "Priority");
 
-  /**
-   * Immediate: 2
-   */
-  public static final IpV4TosPrecedence IMMEDIATE
-    = new IpV4TosPrecedence((byte)2, "Immediate");
+  /** Immediate: 2 */
+  public static final IpV4TosPrecedence IMMEDIATE = new IpV4TosPrecedence((byte) 2, "Immediate");
 
-  /**
-   * Flash: 3
-   */
-  public static final IpV4TosPrecedence FLASH
-    = new IpV4TosPrecedence((byte)3, "Flash");
+  /** Flash: 3 */
+  public static final IpV4TosPrecedence FLASH = new IpV4TosPrecedence((byte) 3, "Flash");
 
-  /**
-   * Flash Override: 4
-   */
-  public static final IpV4TosPrecedence FLASH_OVERRIDE
-    = new IpV4TosPrecedence((byte)4, "Flash Override");
+  /** Flash Override: 4 */
+  public static final IpV4TosPrecedence FLASH_OVERRIDE =
+      new IpV4TosPrecedence((byte) 4, "Flash Override");
 
-  /**
-   * CRITIC/ECP: 5
-   */
-  public static final IpV4TosPrecedence CRITIC_ECP
-    = new IpV4TosPrecedence((byte)5, "CRITIC/ECP");
+  /** CRITIC/ECP: 5 */
+  public static final IpV4TosPrecedence CRITIC_ECP = new IpV4TosPrecedence((byte) 5, "CRITIC/ECP");
 
-  /**
-   * Internetwork Control/ECP: 6
-   */
-  public static final IpV4TosPrecedence INTERNETWORK_CONTROL
-    = new IpV4TosPrecedence((byte)6, "Internetwork Control/ECP");
+  /** Internetwork Control/ECP: 6 */
+  public static final IpV4TosPrecedence INTERNETWORK_CONTROL =
+      new IpV4TosPrecedence((byte) 6, "Internetwork Control/ECP");
 
-  /**
-   * Network Control: 7
-   */
-  public static final IpV4TosPrecedence NETWORK_CONTROL
-    = new IpV4TosPrecedence((byte)7, "Network Control");
+  /** Network Control: 7 */
+  public static final IpV4TosPrecedence NETWORK_CONTROL =
+      new IpV4TosPrecedence((byte) 7, "Network Control");
 
-  private static final Map<Byte, IpV4TosPrecedence> registry
-    = new HashMap<Byte, IpV4TosPrecedence>();
+  private static final Map<Byte, IpV4TosPrecedence> registry =
+      new HashMap<Byte, IpV4TosPrecedence>();
 
   static {
     registry.put(ROUTINE.value(), ROUTINE);
@@ -87,7 +64,6 @@ public final class IpV4TosPrecedence extends NamedNumber<Byte, IpV4TosPrecedence
   }
 
   /**
-   *
    * @param value value
    * @param name name
    */
@@ -95,28 +71,23 @@ public final class IpV4TosPrecedence extends NamedNumber<Byte, IpV4TosPrecedence
     super(value, name);
     if ((value & 0xF8) != 0) {
       throw new IllegalArgumentException(
-              value + " is invalid value. "
-                +"Precedence field of IPv4 TOS must be between 0 and 7"
-            );
+          value + " is invalid value. " + "Precedence field of IPv4 TOS must be between 0 and 7");
     }
   }
 
   /**
-   *
    * @param value value
    * @return a IpV4TosPrecedence object.
    */
   public static IpV4TosPrecedence getInstance(Byte value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new IpV4TosPrecedence(value, "unknown");
     }
   }
 
   /**
-   *
    * @param precedence precedence
    * @return a IpV4TosPrecedence object.
    */
@@ -128,5 +99,4 @@ public final class IpV4TosPrecedence extends NamedNumber<Byte, IpV4TosPrecedence
   public int compareTo(IpV4TosPrecedence o) {
     return value().compareTo(o.value());
   }
-
 }

@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,8 +22,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class GtpV1PacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(GtpV1PacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(GtpV1PacketTest.class);
 
   private final GtpVersion version;
   private final ProtocolType protocolType;
@@ -55,22 +53,22 @@ public class GtpV1PacketTest extends AbstractPacketTest {
     this.nextExtensionHeaderType = GtpV1ExtensionHeaderType.PDCP_PDU_NUMBER;
 
     UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
-    unknownb.rawData(new byte[] { (byte)0, (byte)1, (byte)2, (byte)3 });
+    unknownb.rawData(new byte[] {(byte) 0, (byte) 1, (byte) 2, (byte) 3});
 
     GtpV1Packet.Builder b = new GtpV1Packet.Builder();
     b.version(version)
-     .protocolType(protocolType)
-     .reserved(reserved)
-     .extensionHeaderFlag(extensionHeaderFlag)
-     .sequenceNumberFlag(sequenceNumberFlag)
-     .nPduNumberFlag(nPduNumberFlag)
-     .messageType(messageType)
-     .length(length)
-     .teid(teid)
-     .sequenceNumber(sequenceNumber)
-     .nPduNumber(nPduNumber)
-     .nextExtensionHeaderType(nextExtensionHeaderType)
-     .payloadBuilder(unknownb);
+        .protocolType(protocolType)
+        .reserved(reserved)
+        .extensionHeaderFlag(extensionHeaderFlag)
+        .sequenceNumberFlag(sequenceNumberFlag)
+        .nPduNumberFlag(nPduNumberFlag)
+        .messageType(messageType)
+        .length(length)
+        .teid(teid)
+        .sequenceNumber(sequenceNumber)
+        .nPduNumber(nPduNumber)
+        .nextExtensionHeaderType(nextExtensionHeaderType)
+        .payloadBuilder(unknownb);
 
     this.packet = b.build();
   }
@@ -85,53 +83,48 @@ public class GtpV1PacketTest extends AbstractPacketTest {
     Inet6Address srcAddr;
     Inet6Address dstAddr;
     try {
-      srcAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:1");
-      dstAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:2");
+      srcAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:1");
+      dstAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:2");
     } catch (Exception e) {
       throw new AssertionError("Never get here.");
     }
 
     UdpPacket.Builder b = new UdpPacket.Builder();
     b.dstPort(UdpPort.GTP_C)
-     .srcPort(UdpPort.getInstance((short)12345))
-     .correctChecksumAtBuild(true)
-     .correctLengthAtBuild(true)
-     .payloadBuilder(packet.getBuilder().correctLengthAtBuild(true));
+        .srcPort(UdpPort.getInstance((short) 12345))
+        .correctChecksumAtBuild(true)
+        .correctLengthAtBuild(true)
+        .payloadBuilder(packet.getBuilder().correctLengthAtBuild(true));
 
     IpV6Packet.Builder IpV6b = new IpV6Packet.Builder();
     IpV6b.version(IpVersion.IPV6)
-         .trafficClass(IpV6SimpleTrafficClass.newInstance((byte)0x12))
-         .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
-         .nextHeader(IpNumber.UDP)
-         .hopLimit((byte)100)
-         .srcAddr(srcAddr)
-         .dstAddr(dstAddr)
-         .payloadBuilder(b)
-         .correctLengthAtBuild(true);
+        .trafficClass(IpV6SimpleTrafficClass.newInstance((byte) 0x12))
+        .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
+        .nextHeader(IpNumber.UDP)
+        .hopLimit((byte) 100)
+        .srcAddr(srcAddr)
+        .dstAddr(dstAddr)
+        .payloadBuilder(b)
+        .correctLengthAtBuild(true);
 
     EthernetPacket.Builder eb = new EthernetPacket.Builder();
     eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
-      .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-      .type(EtherType.IPV6)
-      .payloadBuilder(IpV6b)
-      .paddingAtBuild(true);
+        .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+        .type(EtherType.IPV6)
+        .payloadBuilder(IpV6b)
+        .paddingAtBuild(true);
 
-    eb.get(UdpPacket.Builder.class)
-      .dstAddr(dstAddr)
-      .srcAddr(srcAddr);
+    eb.get(UdpPacket.Builder.class).dstAddr(dstAddr).srcAddr(srcAddr);
     return eb.build();
   }
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    logger.info(
-      "########## " + GtpV1PacketTest.class.getSimpleName() + " START ##########"
-    );
+    logger.info("########## " + GtpV1PacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Test
   public void testNewPacket() {
@@ -225,5 +218,4 @@ public class GtpV1PacketTest extends AbstractPacketTest {
     p = b.build();
     assertEquals((byte) -128, p.getHeader().getNPduNumberAsInt().byteValue());
   }
-
 }

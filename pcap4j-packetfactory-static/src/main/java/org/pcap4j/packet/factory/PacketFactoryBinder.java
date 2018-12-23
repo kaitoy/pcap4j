@@ -7,8 +7,6 @@
 
 package org.pcap4j.packet.factory;
 
-import java.io.ObjectStreamException;
-
 import org.pcap4j.packet.namednumber.NamedNumber;
 
 /**
@@ -21,12 +19,13 @@ final class PacketFactoryBinder {
 
   private PacketFactoryBinder() {}
 
-  public static PacketFactoryBinder getInstance() { return INSTANCE; }
+  public static PacketFactoryBinder getInstance() {
+    return INSTANCE;
+  }
 
   @SuppressWarnings("unchecked")
   public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
-    Class<T> targetClass, Class<N> numberClass
-  ) {
+      Class<T> targetClass, Class<N> numberClass) {
     switch (targetClass.getName()) {
       case "org.pcap4j.packet.Packet":
         switch (numberClass.getName()) {
@@ -87,5 +86,4 @@ final class PacketFactoryBinder {
         throw new IllegalStateException("Unsupported target: " + targetClass);
     }
   }
-
 }

@@ -16,16 +16,13 @@ import java.net.Inet4Address;
  */
 public final class Inet4NetworkAddress implements Serializable {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -8599700451783666420L;
 
   private final Inet4Address networkAddress;
   private final Inet4Address mask;
 
   /**
-   *
    * @param networkAddress networkAddress
    * @param mask mask
    */
@@ -34,20 +31,13 @@ public final class Inet4NetworkAddress implements Serializable {
     this.mask = mask;
   }
 
-  /**
-   *
-   * @return networkAddress
-   */
+  /** @return networkAddress */
   public Inet4Address getNetworkAddress() {
     return networkAddress;
   }
 
-  /**
-   *
-   * @return mask
-   */
+  /** @return mask */
   public Inet4Address getMask() {
     return mask;
   }
-
 }

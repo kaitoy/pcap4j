@@ -13,17 +13,14 @@ import org.pcap4j.util.ByteArrays;
 /**
  * The Control field of an LLC header in I-format.
  *
- * <pre>
- * {@code
+ * <pre>{@code
  *    0     1     2     3     4     5     6     7
  * +-----+-----+-----+-----+-----+-----+-----+-----+
  * |     receive sequence number             | P/F |
  * +-----+-----+-----+-----+-----+-----+-----+-----+
  * |        send sequence number             |  0  |
  * +-----+-----+-----+-----+-----+-----+-----+-----+
- * }
- *
- * </pre>
+ * }</pre>
  *
  * @see <a href="http://standards.ieee.org/about/get/802/802.2.html">IEEE 802.2</a>
  * @author Kaito Yamada
@@ -31,9 +28,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class LlcControlInformation implements LlcControl {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -4014592337107864662L;
 
   private final byte receiveSequenceNumber;
@@ -52,16 +47,14 @@ public final class LlcControlInformation implements LlcControl {
   private LlcControlInformation(short value) throws IllegalRawDataException {
     if ((value & 0x0100) != 0) {
       StringBuilder sb = new StringBuilder(50);
-      sb.append("value & 0x0100 must be 0. value: ")
-        .append(ByteArrays.toHexString(value, " "));
+      sb.append("value & 0x0100 must be 0. value: ").append(ByteArrays.toHexString(value, " "));
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.receiveSequenceNumber = (byte) ((value >> 1) & 0x7F);
     if ((value & 0x0001) == 0) {
       this.pfBit = false;
-    }
-    else {
+    } else {
       this.pfBit = true;
     }
     this.sendSequenceNumber = (byte) ((value >> 9) & 0x7F);
@@ -73,15 +66,12 @@ public final class LlcControlInformation implements LlcControl {
     }
     if (builder.receiveSequenceNumber < 0) {
       throw new IllegalArgumentException(
-              "receiveSequenceNumber must be positive. receiveSequenceNumber: "
-                + builder.receiveSequenceNumber
-            );
+          "receiveSequenceNumber must be positive. receiveSequenceNumber: "
+              + builder.receiveSequenceNumber);
     }
     if (builder.sendSequenceNumber < 0) {
       throw new IllegalArgumentException(
-              "sendSequenceNumber must be positive. sendSequenceNumber: "
-                + builder.sendSequenceNumber
-            );
+          "sendSequenceNumber must be positive. sendSequenceNumber: " + builder.sendSequenceNumber);
     }
 
     this.receiveSequenceNumber = builder.receiveSequenceNumber;
@@ -89,31 +79,30 @@ public final class LlcControlInformation implements LlcControl {
     this.sendSequenceNumber = builder.sendSequenceNumber;
   }
 
-  /**
-   * @return receiveSequenceNumber
-   */
-  public byte getReceiveSequenceNumber() { return receiveSequenceNumber; }
+  /** @return receiveSequenceNumber */
+  public byte getReceiveSequenceNumber() {
+    return receiveSequenceNumber;
+  }
 
-  /**
-   * @return receiveSequenceNumber
-   */
-  public int getReceiveSequenceNumberAsInt() { return receiveSequenceNumber; }
+  /** @return receiveSequenceNumber */
+  public int getReceiveSequenceNumberAsInt() {
+    return receiveSequenceNumber;
+  }
 
-  /**
-   *
-   * @return true if the P/F bit is set to 1; otherwise false.
-   */
-  public boolean getPfBit() { return pfBit; }
+  /** @return true if the P/F bit is set to 1; otherwise false. */
+  public boolean getPfBit() {
+    return pfBit;
+  }
 
-  /**
-   * @return sendSequenceNumber
-   */
-  public byte getSendSequenceNumber() { return sendSequenceNumber; }
+  /** @return sendSequenceNumber */
+  public byte getSendSequenceNumber() {
+    return sendSequenceNumber;
+  }
 
-  /**
-   * @return sendSequenceNumber
-   */
-  public int getSendSequenceNumberAsInt() { return sendSequenceNumber; }
+  /** @return sendSequenceNumber */
+  public int getSendSequenceNumberAsInt() {
+    return sendSequenceNumber;
+  }
 
   @Override
   public int length() {
@@ -131,21 +120,21 @@ public final class LlcControlInformation implements LlcControl {
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[receive sequence number: ")
-      .append(receiveSequenceNumber)
-      .append("] [P/F bit: ")
-      .append(pfBit ? 1 : 0)
-      .append("] [send sequence number: ")
-      .append(sendSequenceNumber)
-      .append("]");
+        .append(receiveSequenceNumber)
+        .append("] [P/F bit: ")
+        .append(pfBit ? 1 : 0)
+        .append("] [send sequence number: ")
+        .append(sendSequenceNumber)
+        .append("]");
 
     return sb.toString();
   }
@@ -162,12 +151,16 @@ public final class LlcControlInformation implements LlcControl {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     LlcControlInformation other = (LlcControlInformation) obj;
-    return    receiveSequenceNumber == other.receiveSequenceNumber
-           && sendSequenceNumber == other.sendSequenceNumber
-           && pfBit == other.pfBit;
+    return receiveSequenceNumber == other.receiveSequenceNumber
+        && sendSequenceNumber == other.sendSequenceNumber
+        && pfBit == other.pfBit;
   }
 
   /**
@@ -180,9 +173,7 @@ public final class LlcControlInformation implements LlcControl {
     private boolean pfBit;
     private byte sendSequenceNumber;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(LlcControlInformation ctrl) {
@@ -218,13 +209,9 @@ public final class LlcControlInformation implements LlcControl {
       return this;
     }
 
-    /**
-     * @return a new LlcControlInformation object.
-     */
+    /** @return a new LlcControlInformation object. */
     public LlcControlInformation build() {
       return new LlcControlInformation(this);
     }
-
   }
-
 }

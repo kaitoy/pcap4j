@@ -27,23 +27,21 @@ import org.pcap4j.packet.namednumber.DataLinkType;
  */
 public final class StaticDataLinkTypePacketFactory implements PacketFactory<Packet, DataLinkType> {
 
-  private static final StaticDataLinkTypePacketFactory INSTANCE
-    = new StaticDataLinkTypePacketFactory();
+  private static final StaticDataLinkTypePacketFactory INSTANCE =
+      new StaticDataLinkTypePacketFactory();
 
   private static final int RAW = DataLinkType.RAW.value();
 
   private StaticDataLinkTypePacketFactory() {}
 
-  /**
-   * @return the singleton instance of StaticDataLinkTypePacketFactory.
-   */
+  /** @return the singleton instance of StaticDataLinkTypePacketFactory. */
   public static StaticDataLinkTypePacketFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, DataLinkType...)} and
-   * exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, DataLinkType...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -55,8 +53,8 @@ public final class StaticDataLinkTypePacketFactory implements PacketFactory<Pack
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, DataLinkType...)} and
-   * exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, DataLinkType...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -93,8 +91,8 @@ public final class StaticDataLinkTypePacketFactory implements PacketFactory<Pack
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, DataLinkType...)} and
-   * exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, DataLinkType...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -104,8 +102,7 @@ public final class StaticDataLinkTypePacketFactory implements PacketFactory<Pack
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(
-    byte[] rawData, int offset, int length, DataLinkType number1, DataLinkType number2
-  ) {
+      byte[] rawData, int offset, int length, DataLinkType number1, DataLinkType number2) {
     try {
       int val = number1.value();
       switch (val) {
@@ -157,7 +154,7 @@ public final class StaticDataLinkTypePacketFactory implements PacketFactory<Pack
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, DataLinkType... numbers) {
     try {
-      for (DataLinkType num: numbers) {
+      for (DataLinkType num : numbers) {
         int val = num.value();
         switch (val) {
           case 0:
@@ -184,5 +181,4 @@ public final class StaticDataLinkTypePacketFactory implements PacketFactory<Pack
       return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
-
 }

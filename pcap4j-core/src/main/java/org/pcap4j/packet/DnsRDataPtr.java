@@ -31,17 +31,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class DnsRDataPtr implements DnsRData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3845617703457911405L;
 
   private final DnsDomainName ptrDName;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -49,9 +46,8 @@ public final class DnsRDataPtr implements DnsRData {
    * @return a new DnsRDataPtr object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsRDataPtr newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsRDataPtr newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsRDataPtr(rawData, offset, length);
   }
@@ -61,23 +57,19 @@ public final class DnsRDataPtr implements DnsRData {
   }
 
   private DnsRDataPtr(Builder builder) {
-    if (
-         builder == null
-      || builder.ptrDName == null
-    ) {
+    if (builder == null || builder.ptrDName == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.ptrDName: ").append(builder.ptrDName);
+      sb.append("builder: ").append(builder).append(" builder.ptrDName: ").append(builder.ptrDName);
       throw new NullPointerException(sb.toString());
     }
 
     this.ptrDName = builder.ptrDName;
   }
 
-  /**
-   * @return ptrDName
-   */
-  public DnsDomainName getPtrDName() { return ptrDName; }
+  /** @return ptrDName */
+  public DnsDomainName getPtrDName() {
+    return ptrDName;
+  }
 
   @Override
   public int length() {
@@ -89,10 +81,10 @@ public final class DnsRDataPtr implements DnsRData {
     return ptrDName.getRawData();
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -116,11 +108,13 @@ public final class DnsRDataPtr implements DnsRData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("PTR RDATA:")
-      .append(ls)
-      .append(indent).append("  PTRDNAME: ")
-      .append(ptrDName.toString(headerRawData))
-      .append(ls);
+    sb.append(indent)
+        .append("PTR RDATA:")
+        .append(ls)
+        .append(indent)
+        .append("  PTRDNAME: ")
+        .append(ptrDName.toString(headerRawData))
+        .append(ls);
 
     return sb.toString();
   }
@@ -132,8 +126,12 @@ public final class DnsRDataPtr implements DnsRData {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     DnsRDataPtr other = (DnsRDataPtr) obj;
     return ptrDName.equals(other.ptrDName);
   }
@@ -146,9 +144,7 @@ public final class DnsRDataPtr implements DnsRData {
 
     private DnsDomainName ptrDName;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(DnsRDataPtr obj) {
@@ -164,13 +160,9 @@ public final class DnsRDataPtr implements DnsRData {
       return this;
     }
 
-    /**
-     * @return a new DnsRDataPtr object.
-     */
+    /** @return a new DnsRDataPtr object. */
     public DnsRDataPtr build() {
       return new DnsRDataPtr(this);
     }
-
   }
-
 }

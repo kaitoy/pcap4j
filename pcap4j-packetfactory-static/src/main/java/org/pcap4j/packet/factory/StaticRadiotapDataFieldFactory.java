@@ -36,16 +36,14 @@ import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
  * @since pcap4j 1.6.5
  */
 public final class StaticRadiotapDataFieldFactory
-implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
+    implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
 
-  private static final StaticRadiotapDataFieldFactory INSTANCE
-    = new StaticRadiotapDataFieldFactory();
+  private static final StaticRadiotapDataFieldFactory INSTANCE =
+      new StaticRadiotapDataFieldFactory();
 
   private StaticRadiotapDataFieldFactory() {}
 
-  /**
-   * @return the singleton instance of StaticRadiotapDataFieldFactory.
-   */
+  /** @return the singleton instance of StaticRadiotapDataFieldFactory. */
   public static StaticRadiotapDataFieldFactory getInstance() {
     return INSTANCE;
   }
@@ -74,8 +72,7 @@ implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
    * @return see {@link PacketFactory#newInstance}.
    */
   public RadiotapData newInstance(
-    byte[] rawData, int offset, int length, RadiotapPresentBitNumber number
-  ) {
+      byte[] rawData, int offset, int length, RadiotapPresentBitNumber number) {
     try {
       switch (number.value()) {
         case 0:
@@ -133,9 +130,11 @@ implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
    * @return see {@link PacketFactory#newInstance}.
    */
   public RadiotapData newInstance(
-    byte[] rawData, int offset, int length,
-    RadiotapPresentBitNumber number1, RadiotapPresentBitNumber number2
-  ) {
+      byte[] rawData,
+      int offset,
+      int length,
+      RadiotapPresentBitNumber number1,
+      RadiotapPresentBitNumber number2) {
     try {
       switch (number1.value()) {
         case 0:
@@ -222,10 +221,9 @@ implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
 
   @Override
   public RadiotapData newInstance(
-    byte[] rawData, int offset, int length, RadiotapPresentBitNumber... numbers
-  ) {
+      byte[] rawData, int offset, int length, RadiotapPresentBitNumber... numbers) {
     try {
-      for (RadiotapPresentBitNumber num: numbers) {
+      for (RadiotapPresentBitNumber num : numbers) {
         switch (num.value()) {
           case 0:
             return RadiotapDataTsft.newInstance(rawData, offset, length);
@@ -270,5 +268,4 @@ implements PacketFactory<RadiotapData, RadiotapPresentBitNumber> {
       return IllegalRadiotapData.newInstance(rawData, offset, length, e);
     }
   }
-
 }

@@ -19,21 +19,18 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.11
  */
 public final class IpV4SecurityOptionHandlingRestrictions
-extends NamedNumber<Short, IpV4SecurityOptionHandlingRestrictions> {
+    extends NamedNumber<Short, IpV4SecurityOptionHandlingRestrictions> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3041825811304706489L;
 
-  private static final Map<Short, IpV4SecurityOptionHandlingRestrictions> registry
-    = new HashMap<Short, IpV4SecurityOptionHandlingRestrictions>();
+  private static final Map<Short, IpV4SecurityOptionHandlingRestrictions> registry =
+      new HashMap<Short, IpV4SecurityOptionHandlingRestrictions>();
 
   static {
   }
 
   /**
-   *
    * @param value value
    * @param name name
    */
@@ -42,29 +39,23 @@ extends NamedNumber<Short, IpV4SecurityOptionHandlingRestrictions> {
   }
 
   /**
-   *
    * @param value value
    * @return a IpV4SecurityOptionHandlingRestrictions object.
    */
-  public static IpV4SecurityOptionHandlingRestrictions getInstance(
-    Short value
-  ) {
+  public static IpV4SecurityOptionHandlingRestrictions getInstance(Short value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new IpV4SecurityOptionHandlingRestrictions(value, "unknown");
     }
   }
 
   /**
-   *
    * @param number number
    * @return a IpV4SecurityOptionHandlingRestrictions object.
    */
   public static IpV4SecurityOptionHandlingRestrictions register(
-    IpV4SecurityOptionHandlingRestrictions number
-  ) {
+      IpV4SecurityOptionHandlingRestrictions number) {
     return registry.put(number.value(), number);
   }
 
@@ -77,5 +68,4 @@ extends NamedNumber<Short, IpV4SecurityOptionHandlingRestrictions> {
   public int compareTo(IpV4SecurityOptionHandlingRestrictions o) {
     return value().compareTo(o.value());
   }
-
 }

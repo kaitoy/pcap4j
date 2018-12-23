@@ -19,43 +19,31 @@ import java.util.Map;
  */
 public final class LinuxSllPacketType extends NamedNumber<Short, LinuxSllPacketType> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 8331027096398154722L;
 
-  /**
-   * A packet addressed to the local host: 0
-   */
-  public static final LinuxSllPacketType LINUX_SLL_HOST
-    = new LinuxSllPacketType((short)0, "A packet addressed to the local host");
+  /** A packet addressed to the local host: 0 */
+  public static final LinuxSllPacketType LINUX_SLL_HOST =
+      new LinuxSllPacketType((short) 0, "A packet addressed to the local host");
 
-  /**
-   * A physical layer broadcast packet: 1
-   */
-  public static final LinuxSllPacketType LINUX_SLL_BROADCAST
-    = new LinuxSllPacketType((short)1, "A physical layer broadcast packet");
+  /** A physical layer broadcast packet: 1 */
+  public static final LinuxSllPacketType LINUX_SLL_BROADCAST =
+      new LinuxSllPacketType((short) 1, "A physical layer broadcast packet");
 
-  /**
-   * A packet sent to a physical layer multicast address: 2
-   */
-  public static final LinuxSllPacketType LINUX_SLL_MULTICAST
-    = new LinuxSllPacketType((short)2, "A packet sent to a physical layer multicast address");
+  /** A packet sent to a physical layer multicast address: 2 */
+  public static final LinuxSllPacketType LINUX_SLL_MULTICAST =
+      new LinuxSllPacketType((short) 2, "A packet sent to a physical layer multicast address");
 
-  /**
-   * A packet to some other host that has been caught by a device driver in promiscuous mode: 3
-   */
-  public static final LinuxSllPacketType LINUX_SLL_OTHERHOST
-    = new LinuxSllPacketType((short)3, "A packet to some other host");
+  /** A packet to some other host that has been caught by a device driver in promiscuous mode: 3 */
+  public static final LinuxSllPacketType LINUX_SLL_OTHERHOST =
+      new LinuxSllPacketType((short) 3, "A packet to some other host");
 
-  /**
-   * A packet originated from the local host that is looped back to a packet socket: 4
-   */
-  public static final LinuxSllPacketType LINUX_SLL_OUTGOING
-    = new LinuxSllPacketType((short)4, "A packet originated from the local host");
+  /** A packet originated from the local host that is looped back to a packet socket: 4 */
+  public static final LinuxSllPacketType LINUX_SLL_OUTGOING =
+      new LinuxSllPacketType((short) 4, "A packet originated from the local host");
 
-  private static final Map<Short, LinuxSllPacketType> registry
-    = new HashMap<Short, LinuxSllPacketType>();
+  private static final Map<Short, LinuxSllPacketType> registry =
+      new HashMap<Short, LinuxSllPacketType>();
 
   static {
     registry.put(LINUX_SLL_HOST.value(), LINUX_SLL_HOST);
@@ -66,7 +54,6 @@ public final class LinuxSllPacketType extends NamedNumber<Short, LinuxSllPacketT
   }
 
   /**
-   *
    * @param value value
    * @param name name
    */
@@ -75,21 +62,18 @@ public final class LinuxSllPacketType extends NamedNumber<Short, LinuxSllPacketT
   }
 
   /**
-   *
    * @param value value
    * @return a EtherType object.
    */
   public static LinuxSllPacketType getInstance(Short value) {
     if (registry.containsKey(value)) {
       return registry.get(value);
-    }
-    else {
+    } else {
       return new LinuxSllPacketType(value, "unknown");
     }
   }
 
   /**
-   *
    * @param type type
    * @return a EtherType object.
    */
@@ -101,5 +85,4 @@ public final class LinuxSllPacketType extends NamedNumber<Short, LinuxSllPacketT
   public int compareTo(LinuxSllPacketType o) {
     return value().compareTo(o.value());
   }
-
 }

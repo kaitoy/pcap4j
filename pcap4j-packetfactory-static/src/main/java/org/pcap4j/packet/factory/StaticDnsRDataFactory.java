@@ -41,10 +41,7 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
 
   private StaticDnsRDataFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of StaticDnsRDataFactory.
-   */
+  /** @return the singleton instance of StaticDnsRDataFactory. */
   public static StaticDnsRDataFactory getInstance() {
     return INSTANCE;
   }
@@ -73,8 +70,7 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
    * @return see {@link PacketFactory#newInstance}.
    */
   public DnsRData newInstance(
-    byte[] rawData, int offset, int length, DnsResourceRecordType number
-  ) {
+      byte[] rawData, int offset, int length, DnsResourceRecordType number) {
     try {
       switch (Short.toUnsignedInt(number.value())) {
         case 1:
@@ -132,9 +128,11 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
    * @return see {@link PacketFactory#newInstance}.
    */
   public DnsRData newInstance(
-    byte[] rawData, int offset, int length,
-    DnsResourceRecordType number1, DnsResourceRecordType number2
-  ) {
+      byte[] rawData,
+      int offset,
+      int length,
+      DnsResourceRecordType number1,
+      DnsResourceRecordType number2) {
     try {
       switch (Short.toUnsignedInt(number1.value())) {
         case 1:
@@ -221,10 +219,9 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
 
   @Override
   public DnsRData newInstance(
-    byte[] rawData, int offset, int length, DnsResourceRecordType... numbers
-  ) {
+      byte[] rawData, int offset, int length, DnsResourceRecordType... numbers) {
     try {
-      for (DnsResourceRecordType num: numbers) {
+      for (DnsResourceRecordType num : numbers) {
         switch (Short.toUnsignedInt(num.value())) {
           case 1:
             return DnsRDataA.newInstance(rawData, offset, length);
@@ -269,5 +266,4 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
       return IllegalDnsRData.newInstance(rawData, offset, length, e);
     }
   }
-
 }

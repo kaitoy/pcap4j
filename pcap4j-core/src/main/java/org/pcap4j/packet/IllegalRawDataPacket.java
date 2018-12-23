@@ -8,8 +8,8 @@
 package org.pcap4j.packet;
 
 /**
- * A marker interface which denotes a {@link Packet} object created due to an
- * {@link IllegalRawDataException}.
+ * A marker interface which denotes a {@link Packet} object created due to an {@link
+ * IllegalRawDataException}.
  *
  * @author Kaito Yamada
  * @since pcap4j 2.0.0

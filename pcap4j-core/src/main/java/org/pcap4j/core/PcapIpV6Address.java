@@ -34,22 +34,21 @@ public final class PcapIpV6Address extends AbstractPcapAddress {
 
   @Override
   public Inet6Address getAddress() {
-    return (Inet6Address)super.getAddress();
+    return (Inet6Address) super.getAddress();
   }
 
   @Override
   public Inet6Address getNetmask() {
-    return (Inet6Address)super.getNetmask();
+    return (Inet6Address) super.getNetmask();
   }
 
   @Override
   public Inet6Address getBroadcastAddress() {
-    return (Inet6Address)super.getBroadcastAddress();
+    return (Inet6Address) super.getBroadcastAddress();
   }
 
   @Override
   public Inet6Address getDestinationAddress() {
-    return (Inet6Address)super.getDestinationAddress();
+    return (Inet6Address) super.getDestinationAddress();
   }
-
 }

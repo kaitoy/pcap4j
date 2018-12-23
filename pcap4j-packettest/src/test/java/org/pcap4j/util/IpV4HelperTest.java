@@ -6,6 +6,18 @@
 */
 package org.pcap4j.util;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -29,20 +41,6 @@ import org.pcap4j.packet.namednumber.IcmpV4Type;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-
-
 @SuppressWarnings("javadoc")
 public class IpV4HelperTest {
 
@@ -50,12 +48,10 @@ public class IpV4HelperTest {
   private String tmpDirPath;
 
   @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-  }
+  public static void setUpBeforeClass() throws Exception {}
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Before
   public void setUp() throws Exception {
@@ -71,56 +67,54 @@ public class IpV4HelperTest {
   }
 
   @After
-  public void tearDown() throws Exception {
-  }
+  public void tearDown() throws Exception {}
 
   @Test
   public void testFragmentDefragment() throws Exception {
-    String dumpFile = new StringBuilder()
-                        .append(tmpDirPath).append("/")
-                        .append(getClass().getSimpleName()).append(".pcap")
-                        .toString();
+    String dumpFile =
+        new StringBuilder()
+            .append(tmpDirPath)
+            .append("/")
+            .append(getClass().getSimpleName())
+            .append(".pcap")
+            .toString();
 
     UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
     unknownb.rawData(new byte[4000]);
 
     IcmpV4EchoPacket.Builder echob = new IcmpV4EchoPacket.Builder();
-    echob.identifier((short)1234)
-         .sequenceNumber((short)4321)
-         .payloadBuilder(unknownb);
+    echob.identifier((short) 1234).sequenceNumber((short) 4321).payloadBuilder(unknownb);
 
     IcmpV4CommonPacket.Builder icmpV4b = new IcmpV4CommonPacket.Builder();
-    icmpV4b.type(IcmpV4Type.ECHO)
-           .code(IcmpV4Code.NO_CODE)
-           .payloadBuilder(echob)
-           .correctChecksumAtBuild(true);
+    icmpV4b
+        .type(IcmpV4Type.ECHO)
+        .code(IcmpV4Code.NO_CODE)
+        .payloadBuilder(echob)
+        .correctChecksumAtBuild(true);
 
     IpV4Packet.Builder ipv4b = new IpV4Packet.Builder();
-    ipv4b.version(IpVersion.IPV4)
-         .tos(IpV4Rfc1349Tos.newInstance((byte)0))
-         .identification((short)100)
-         .ttl((byte)100)
-         .protocol(IpNumber.ICMPV4)
-         .srcAddr(
-            (Inet4Address)InetAddress.getByAddress(
-              new byte[] { (byte)192, (byte)0, (byte)2, (byte)1 }
-            )
-          )
+    ipv4b
+        .version(IpVersion.IPV4)
+        .tos(IpV4Rfc1349Tos.newInstance((byte) 0))
+        .identification((short) 100)
+        .ttl((byte) 100)
+        .protocol(IpNumber.ICMPV4)
+        .srcAddr(
+            (Inet4Address)
+                InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 1}))
         .dstAddr(
-           (Inet4Address)InetAddress.getByAddress(
-             new byte[] { (byte)192, (byte)0, (byte)2, (byte)2 }
-           )
-         )
+            (Inet4Address)
+                InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 2}))
         .payloadBuilder(icmpV4b)
         .correctChecksumAtBuild(true)
         .correctLengthAtBuild(true);
 
     EthernetPacket.Builder eb = new EthernetPacket.Builder();
     eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
-      .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-      .type(EtherType.IPV4)
-      .payloadBuilder(ipv4b)
-      .paddingAtBuild(true);
+        .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+        .type(EtherType.IPV4)
+        .payloadBuilder(ipv4b)
+        .paddingAtBuild(true);
 
     EthernetPacket orgPacket = eb.build();
 
@@ -130,7 +124,7 @@ public class IpV4HelperTest {
     dumper.dump(orgPacket, ts);
 
     List<IpV4Packet> list = new ArrayList<IpV4Packet>();
-    for (IpV4Packet p: IpV4Helper.fragment((IpV4Packet)orgPacket.getPayload(), 987)) {
+    for (IpV4Packet p : IpV4Helper.fragment((IpV4Packet) orgPacket.getPayload(), 987)) {
       EthernetPacket ep = eb.payloadBuilder(new SimpleBuilder(p)).build();
       dumper.dump(ep, ts);
       list.add(p);
@@ -141,18 +135,16 @@ public class IpV4HelperTest {
 
     Collections.shuffle(list);
     assertEquals(
-      orgPacket,
-      eb.payloadBuilder(new SimpleBuilder(IpV4Helper.defragment(list)))
-        .build()
-    );
+        orgPacket, eb.payloadBuilder(new SimpleBuilder(IpV4Helper.defragment(list))).build());
 
-    FileInputStream in1
-      = new FileInputStream(
-          new StringBuilder()
-            .append(resourceDir).append("/")
-            .append(getClass().getSimpleName()).append(".pcap")
-            .toString()
-        );
+    FileInputStream in1 =
+        new FileInputStream(
+            new StringBuilder()
+                .append(resourceDir)
+                .append("/")
+                .append(getClass().getSimpleName())
+                .append(".pcap")
+                .toString());
     FileInputStream in2 = new FileInputStream(dumpFile);
 
     byte[] buffer1 = new byte[100];
@@ -166,5 +158,4 @@ public class IpV4HelperTest {
     in1.close();
     in2.close();
   }
-
 }

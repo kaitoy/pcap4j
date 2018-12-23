@@ -1,6 +1,7 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -24,30 +25,28 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class IcmpV6RouterSolicitationPacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(IcmpV6RouterSolicitationPacketTest.class);
+  private static final Logger logger =
+      LoggerFactory.getLogger(IcmpV6RouterSolicitationPacketTest.class);
 
   private final IcmpV6RouterSolicitationPacket packet;
   private final int reserved;
-  private final List<IpV6NeighborDiscoveryOption> options
-    = new ArrayList<IpV6NeighborDiscoveryOption>();
+  private final List<IpV6NeighborDiscoveryOption> options =
+      new ArrayList<IpV6NeighborDiscoveryOption>();
 
   public IcmpV6RouterSolicitationPacketTest() {
     this.reserved = 123454321;
 
-    IpV6NeighborDiscoverySourceLinkLayerAddressOption.Builder opt
-      = new IpV6NeighborDiscoverySourceLinkLayerAddressOption.Builder();
+    IpV6NeighborDiscoverySourceLinkLayerAddressOption.Builder opt =
+        new IpV6NeighborDiscoverySourceLinkLayerAddressOption.Builder();
     opt.linkLayerAddress(
-          new byte[] {
-            (byte)0xff, (byte)0x00, (byte)0x00, (byte)0x01, (byte)0x02, (byte)0x03
-          }
-        )
-       .correctLengthAtBuild(true);
+            new byte[] {
+              (byte) 0xff, (byte) 0x00, (byte) 0x00, (byte) 0x01, (byte) 0x02, (byte) 0x03
+            })
+        .correctLengthAtBuild(true);
     this.options.add(opt.build());
 
     IcmpV6RouterSolicitationPacket.Builder b = new IcmpV6RouterSolicitationPacket.Builder();
-    b.reserved(reserved)
-     .options(options);
+    b.reserved(reserved).options(options);
     this.packet = b.build();
   }
 
@@ -61,56 +60,58 @@ public class IcmpV6RouterSolicitationPacketTest extends AbstractPacketTest {
     Inet6Address srcAddr;
     Inet6Address dstAddr;
     try {
-      srcAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:1");
-      dstAddr = (Inet6Address)InetAddress.getByName("2001:db8::3:2:2");
+      srcAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:1");
+      dstAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:2");
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
     IcmpV6CommonPacket.Builder icmpV6b = new IcmpV6CommonPacket.Builder();
-    icmpV6b.type(IcmpV6Type.ROUTER_SOLICITATION)
-           .code(IcmpV6Code.NO_CODE)
-           .srcAddr(srcAddr)
-           .dstAddr(dstAddr)
-           .payloadBuilder(new SimpleBuilder(packet))
-           .correctChecksumAtBuild(true);
+    icmpV6b
+        .type(IcmpV6Type.ROUTER_SOLICITATION)
+        .code(IcmpV6Code.NO_CODE)
+        .srcAddr(srcAddr)
+        .dstAddr(dstAddr)
+        .payloadBuilder(new SimpleBuilder(packet))
+        .correctChecksumAtBuild(true);
 
     IpV6Packet.Builder ipv6b = new IpV6Packet.Builder();
-    ipv6b.version(IpVersion.IPV6)
-         .trafficClass(IpV6SimpleTrafficClass.newInstance((byte)0x12))
-         .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
-         .nextHeader(IpNumber.ICMPV6)
-         .hopLimit((byte)100)
-         .srcAddr(srcAddr)
-         .dstAddr(dstAddr)
-         .correctLengthAtBuild(true)
-         .payloadBuilder(icmpV6b);
+    ipv6b
+        .version(IpVersion.IPV6)
+        .trafficClass(IpV6SimpleTrafficClass.newInstance((byte) 0x12))
+        .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
+        .nextHeader(IpNumber.ICMPV6)
+        .hopLimit((byte) 100)
+        .srcAddr(srcAddr)
+        .dstAddr(dstAddr)
+        .correctLengthAtBuild(true)
+        .payloadBuilder(icmpV6b);
 
     EthernetPacket.Builder eb = new EthernetPacket.Builder();
     eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
-      .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-      .type(EtherType.IPV6)
-      .payloadBuilder(ipv6b)
-      .paddingAtBuild(true);
+        .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+        .type(EtherType.IPV6)
+        .payloadBuilder(ipv6b)
+        .paddingAtBuild(true);
     return eb.build();
   }
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
-      "########## " + IcmpV6RouterSolicitationPacketTest.class.getSimpleName() + " START ##########"
-    );
+        "########## "
+            + IcmpV6RouterSolicitationPacketTest.class.getSimpleName()
+            + " START ##########");
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Test
   public void testNewPacket() {
     try {
-      IcmpV6RouterSolicitationPacket p
-        = IcmpV6RouterSolicitationPacket
-            .newPacket(packet.getRawData(), 0, packet.getRawData().length);
+      IcmpV6RouterSolicitationPacket p =
+          IcmpV6RouterSolicitationPacket.newPacket(
+              packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
@@ -123,10 +124,9 @@ public class IcmpV6RouterSolicitationPacketTest extends AbstractPacketTest {
     assertEquals(reserved, h.getReserved());
 
     Iterator<IpV6NeighborDiscoveryOption> iter = h.getOptions().iterator();
-    for (IpV6NeighborDiscoveryOption expected: options) {
+    for (IpV6NeighborDiscoveryOption expected : options) {
       IpV6NeighborDiscoveryOption actual = iter.next();
       assertEquals(expected, actual);
     }
   }
-
 }

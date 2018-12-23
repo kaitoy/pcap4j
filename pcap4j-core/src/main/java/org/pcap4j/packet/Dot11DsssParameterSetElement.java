@@ -22,8 +22,8 @@ import org.pcap4j.util.ByteArrays;
  * </pre>
  *
  * The DSSS Parameter Set element contains information to allow channel number identification for
- * STAs. The Information field contains a single parameter containing the dot11CurrentChannel.
- * The length of the dot11CurrentChannel parameter is 1 octet.
+ * STAs. The Information field contains a single parameter containing the dot11CurrentChannel. The
+ * length of the dot11CurrentChannel parameter is 1 octet.
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
@@ -31,17 +31,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot11DsssParameterSetElement extends Dot11InformationElement {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3289074676325930942L;
 
   private final byte currentChannel;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -49,9 +46,8 @@ public final class Dot11DsssParameterSetElement extends Dot11InformationElement 
    * @return a new Dot11DsssParameterSetElement object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot11DsssParameterSetElement newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot11DsssParameterSetElement newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot11DsssParameterSetElement(rawData, offset, length);
   }
@@ -62,37 +58,33 @@ public final class Dot11DsssParameterSetElement extends Dot11InformationElement 
    * @param length length
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  private Dot11DsssParameterSetElement(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot11DsssParameterSetElement(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     super(rawData, offset, length, Dot11InformationElementId.DSSS_PARAMETER_SET);
 
     if (getLengthAsInt() != 1) {
       throw new IllegalRawDataException(
-              "The length must be 1 but is actually: " + getLengthAsInt()
-            );
+          "The length must be 1 but is actually: " + getLengthAsInt());
     }
 
     this.currentChannel = rawData[offset + 2];
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   private Dot11DsssParameterSetElement(Builder builder) {
     super(builder);
     this.currentChannel = builder.currentChannel;
   }
 
-  /**
-   * @return currentChannel
-   */
-  public byte getCurrentChannel() { return currentChannel; }
+  /** @return currentChannel */
+  public byte getCurrentChannel() {
+    return currentChannel;
+  }
 
-  /**
-   * @return currentChannel
-   */
-  public int getCurrentChannelAsInt() { return currentChannel & 0xFF; }
+  /** @return currentChannel */
+  public int getCurrentChannelAsInt() {
+    return currentChannel & 0xFF;
+  }
 
   @Override
   public int length() {
@@ -108,11 +100,10 @@ public final class Dot11DsssParameterSetElement extends Dot11InformationElement 
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public int hashCode() {
@@ -124,11 +115,9 @@ public final class Dot11DsssParameterSetElement extends Dot11InformationElement 
 
   @Override
   public boolean equals(Object obj) {
-    if (!super.equals(obj))
-      return false;
+    if (!super.equals(obj)) return false;
     Dot11DsssParameterSetElement other = (Dot11DsssParameterSetElement) obj;
-    if (currentChannel != other.currentChannel)
-      return false;
+    if (currentChannel != other.currentChannel) return false;
     return true;
   }
 
@@ -145,18 +134,10 @@ public final class Dot11DsssParameterSetElement extends Dot11InformationElement 
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("DSSS Parameter Set:")
-      .append(ls);
-    sb.append(indent).append("  Element ID: ")
-      .append(getElementId())
-      .append(ls);
-    sb.append(indent).append("  Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes")
-      .append(ls);
-    sb.append(indent).append("  Current Channel: ")
-      .append(getCurrentChannelAsInt())
-      .append(ls);
+    sb.append(indent).append("DSSS Parameter Set:").append(ls);
+    sb.append(indent).append("  Element ID: ").append(getElementId()).append(ls);
+    sb.append(indent).append("  Length: ").append(getLengthAsInt()).append(" bytes").append(ls);
+    sb.append(indent).append("  Current Channel: ").append(getCurrentChannelAsInt()).append(ls);
 
     return sb.toString();
   }
@@ -169,20 +150,14 @@ public final class Dot11DsssParameterSetElement extends Dot11InformationElement 
 
     private byte currentChannel;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {
       elementId(
-        Dot11InformationElementId.getInstance(
-          Dot11InformationElementId.DSSS_PARAMETER_SET.value()
-        )
-      );
+          Dot11InformationElementId.getInstance(
+              Dot11InformationElementId.DSSS_PARAMETER_SET.value()));
     }
 
-    /**
-     * @param elem a Dot11DsssParameterSetElement object.
-     */
+    /** @param elem a Dot11DsssParameterSetElement object. */
     private Builder(Dot11DsssParameterSetElement elem) {
       super(elem);
       this.currentChannel = elem.currentChannel;
@@ -216,7 +191,5 @@ public final class Dot11DsssParameterSetElement extends Dot11InformationElement 
       }
       return new Dot11DsssParameterSetElement(this);
     }
-
   }
-
 }

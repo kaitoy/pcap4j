@@ -8,11 +8,11 @@
 package org.pcap4j.packet;
 
 import java.io.Serializable;
-
 import org.pcap4j.util.ByteArrays;
 
 /**
  * HT Control field of an IEEE802.11 frame.
+ *
  * <pre style="white-space: pre;">
  *      0          1          2          3          4          5          6          7
  * +----------+----------+----------+----------+----------+----------+----------+----------+
@@ -36,9 +36,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot11HtControl implements Serializable {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 8919536873635707080L;
 
   private final Dot11LinkAdaptationControl linkAdaptationControl;
@@ -57,9 +55,8 @@ public final class Dot11HtControl implements Serializable {
   private final boolean rdgOrMorePpdu;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -67,26 +64,23 @@ public final class Dot11HtControl implements Serializable {
    * @return a new Dot11HtControl object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot11HtControl newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot11HtControl newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot11HtControl(rawData, offset, length);
   }
 
-  private Dot11HtControl(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot11HtControl(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < 4) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a Dot11HtControl (")
-        .append(2)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(2)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -111,25 +105,27 @@ public final class Dot11HtControl implements Serializable {
   }
 
   private Dot11HtControl(Builder builder) {
-    if (
-         builder == null
-      || builder.linkAdaptationControl == null
-      || builder.calibrationPosition == null
-      || builder.csiOrSteering == null
-    ) {
+    if (builder == null
+        || builder.linkAdaptationControl == null
+        || builder.calibrationPosition == null
+        || builder.csiOrSteering == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.linkAdaptationControl: ").append(builder.linkAdaptationControl)
-        .append(" builder.calibrationPosition: ").append(builder.calibrationPosition)
-        .append(" builder.csiOrSteering: ").append(builder.csiOrSteering);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.linkAdaptationControl: ")
+          .append(builder.linkAdaptationControl)
+          .append(" builder.calibrationPosition: ")
+          .append(builder.calibrationPosition)
+          .append(" builder.csiOrSteering: ")
+          .append(builder.csiOrSteering);
       throw new NullPointerException(sb.toString());
     }
 
     if ((builder.calibrationSequence & 0xFC) != 0) {
       StringBuilder sb = new StringBuilder(150);
       sb.append("(builder.calibrationSequence & 0xFC) must be zero.")
-        .append(" builder.calibrationSequence: ")
-        .append(builder.calibrationSequence);
+          .append(" builder.calibrationSequence: ")
+          .append(builder.calibrationSequence);
       throw new IllegalArgumentException(sb.toString());
     }
 
@@ -149,130 +145,94 @@ public final class Dot11HtControl implements Serializable {
     this.rdgOrMorePpdu = builder.rdgOrMorePpdu;
   }
 
-  /**
-   * @return linkAdaptationControl
-   */
+  /** @return linkAdaptationControl */
   public Dot11LinkAdaptationControl getLinkAdaptationControl() {
     return linkAdaptationControl;
   }
 
-  /**
-   * @return calibrationPosition
-   */
+  /** @return calibrationPosition */
   public CalibrationPosition getCalibrationPosition() {
     return calibrationPosition;
   }
 
-  /**
-   * @return calibrationSequence
-   */
+  /** @return calibrationSequence */
   public byte getCalibrationSequence() {
     return calibrationSequence;
   }
 
-  /**
-   * @return calibrationSequence
-   */
+  /** @return calibrationSequence */
   public int getCalibrationSequenceAsInt() {
     return calibrationSequence;
   }
 
-  /**
-   * @return true if the bit 20 is set to 1; false otherwise.
-   */
+  /** @return true if the bit 20 is set to 1; false otherwise. */
   public boolean getBit20() {
     return bit20;
   }
 
-  /**
-   * @return true if the bit 21 is set to 1; false otherwise.
-   */
+  /** @return true if the bit 21 is set to 1; false otherwise. */
   public boolean getBit21() {
     return bit21;
   }
 
-  /**
-   * @return csiOrSteering
-   */
+  /** @return csiOrSteering */
   public CsiOrSteering getCsiOrSteering() {
     return csiOrSteering;
   }
 
-  /**
-   * @return true if the NDP Announcement field is set to 1; false otherwise.
-   */
+  /** @return true if the NDP Announcement field is set to 1; false otherwise. */
   public boolean getNdpAnnouncement() {
     return ndpAnnouncement;
   }
 
-  /**
-   * @return true if the bit 25 is set to 1; false otherwise.
-   */
+  /** @return true if the bit 25 is set to 1; false otherwise. */
   public boolean getBit25() {
     return bit25;
   }
 
-  /**
-   * @return true if the bit 26 is set to 1; false otherwise.
-   */
+  /** @return true if the bit 26 is set to 1; false otherwise. */
   public boolean getBit26() {
     return bit26;
   }
 
-  /**
-   * @return true if the bit 27 is set to 1; false otherwise.
-   */
+  /** @return true if the bit 27 is set to 1; false otherwise. */
   public boolean getBit27() {
     return bit27;
   }
 
-  /**
-   * @return true if the bit 28 is set to 1; false otherwise.
-   */
+  /** @return true if the bit 28 is set to 1; false otherwise. */
   public boolean getBit28() {
     return bit28;
   }
 
-  /**
-   * @return true if the bit 29 is set to 1; false otherwise.
-   */
+  /** @return true if the bit 29 is set to 1; false otherwise. */
   public boolean getBit29() {
     return bit29;
   }
 
-  /**
-   * @return true if the AC Constraint field is set to 1; false otherwise.
-   */
+  /** @return true if the AC Constraint field is set to 1; false otherwise. */
   public boolean getAcConstraint() {
     return acConstraint;
   }
 
-  /**
-   * @return true if the RDG/More PPDU field is set to 1; false otherwise.
-   */
+  /** @return true if the RDG/More PPDU field is set to 1; false otherwise. */
   public boolean getRdgOrMorePpdu() {
     return rdgOrMorePpdu;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
 
-  /**
-   * @return the raw data.
-   */
+  /** @return the raw data. */
   public byte[] getRawData() {
     byte[] data = new byte[length()];
 
     System.arraycopy(linkAdaptationControl.getRawData(), 0, data, 0, 2);
-    data[2] = (byte) (
-                  (csiOrSteering.value << 6)
-                | (calibrationSequence << 2)
-                | calibrationPosition.value
-              );
+    data[2] =
+        (byte)
+            ((csiOrSteering.value << 6) | (calibrationSequence << 2) | calibrationPosition.value);
     if (bit20) {
       data[2] |= 0x10;
     }
@@ -307,9 +267,7 @@ public final class Dot11HtControl implements Serializable {
     return data;
   }
 
-  /**
-   * @return length
-   */
+  /** @return length */
   public int length() {
     return 4;
   }
@@ -327,34 +285,62 @@ public final class Dot11HtControl implements Serializable {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Link Adaptation Control: ")
-      .append(linkAdaptationControl).append(ls)
-      .append(indent).append("Calibration Position: ")
-      .append(calibrationPosition).append(ls)
-      .append(indent).append("Calibration Sequence: ")
-      .append(calibrationSequence).append(ls)
-      .append(indent).append("Bit 20: ")
-      .append(bit20).append(ls)
-      .append(indent).append("Bit 21: ")
-      .append(bit21).append(ls)
-      .append(indent).append("CSI/Steering: ")
-      .append(csiOrSteering).append(ls)
-      .append(indent).append("NDP Announcement: ")
-      .append(ndpAnnouncement).append(ls)
-      .append(indent).append("Bit 25: ")
-      .append(bit25).append(ls)
-      .append(indent).append("Bit 26: ")
-      .append(bit26).append(ls)
-      .append(indent).append("Bit 27: ")
-      .append(bit27).append(ls)
-      .append(indent).append("Bit 28: ")
-      .append(bit28).append(ls)
-      .append(indent).append("Bit 29: ")
-      .append(bit29).append(ls)
-      .append(indent).append("AC Constraint: ")
-      .append(acConstraint).append(ls)
-      .append(indent).append("RDG/More PPDU: ")
-      .append(rdgOrMorePpdu).append(ls);
+    sb.append(indent)
+        .append("Link Adaptation Control: ")
+        .append(linkAdaptationControl)
+        .append(ls)
+        .append(indent)
+        .append("Calibration Position: ")
+        .append(calibrationPosition)
+        .append(ls)
+        .append(indent)
+        .append("Calibration Sequence: ")
+        .append(calibrationSequence)
+        .append(ls)
+        .append(indent)
+        .append("Bit 20: ")
+        .append(bit20)
+        .append(ls)
+        .append(indent)
+        .append("Bit 21: ")
+        .append(bit21)
+        .append(ls)
+        .append(indent)
+        .append("CSI/Steering: ")
+        .append(csiOrSteering)
+        .append(ls)
+        .append(indent)
+        .append("NDP Announcement: ")
+        .append(ndpAnnouncement)
+        .append(ls)
+        .append(indent)
+        .append("Bit 25: ")
+        .append(bit25)
+        .append(ls)
+        .append(indent)
+        .append("Bit 26: ")
+        .append(bit26)
+        .append(ls)
+        .append(indent)
+        .append("Bit 27: ")
+        .append(bit27)
+        .append(ls)
+        .append(indent)
+        .append("Bit 28: ")
+        .append(bit28)
+        .append(ls)
+        .append(indent)
+        .append("Bit 29: ")
+        .append(bit29)
+        .append(ls)
+        .append(indent)
+        .append("AC Constraint: ")
+        .append(acConstraint)
+        .append(ls)
+        .append(indent)
+        .append("RDG/More PPDU: ")
+        .append(rdgOrMorePpdu)
+        .append(ls);
 
     return sb.toString();
   }
@@ -446,24 +432,16 @@ public final class Dot11HtControl implements Serializable {
    */
   public static enum CalibrationPosition {
 
-    /**
-     * not a calibration frame: 0
-     */
+    /** not a calibration frame: 0 */
     NOT_CALIBRATION(0, "not a calibration frame"),
 
-    /**
-     * calibration start: 1
-     */
+    /** calibration start: 1 */
     CALIBRATION_START(1, "calibration start"),
 
-    /**
-     * sounding response: 2
-     */
+    /** sounding response: 2 */
     SOUNDING_RESPONSE(2, "sounding response"),
 
-    /**
-     * sounding complete: 3
-     */
+    /** sounding complete: 3 */
     SOUNDING_COMPLETE(3, "sounding complete");
 
     private final int value;
@@ -474,16 +452,12 @@ public final class Dot11HtControl implements Serializable {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -491,10 +465,7 @@ public final class Dot11HtControl implements Serializable {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -503,14 +474,13 @@ public final class Dot11HtControl implements Serializable {
      * @return the CalibrationPosition object the value of which is the given value.
      */
     public static CalibrationPosition getInstance(int value) {
-      for (CalibrationPosition cp: values()) {
+      for (CalibrationPosition cp : values()) {
         if (cp.value == value) {
           return cp;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -522,24 +492,16 @@ public final class Dot11HtControl implements Serializable {
    */
   public static enum CsiOrSteering {
 
-    /**
-     * No feedback required: 0
-     */
+    /** No feedback required: 0 */
     NO_FEEDBACK_REQUIRED(0, "No feedback required"),
 
-    /**
-     * CSI: 1
-     */
+    /** CSI: 1 */
     CSI(1, "CSI"),
 
-    /**
-     * Noncompressed beamforming: 2
-     */
+    /** Noncompressed beamforming: 2 */
     NONCOMPRESSED_BEAMFORMING(2, "Noncompressed beamforming"),
 
-    /**
-     * Compressed beamforming: 3
-     */
+    /** Compressed beamforming: 3 */
     COMPRESSED_BEAMFORMING(3, "Compressed beamforming");
 
     private final int value;
@@ -550,16 +512,12 @@ public final class Dot11HtControl implements Serializable {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -567,10 +525,7 @@ public final class Dot11HtControl implements Serializable {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -579,14 +534,13 @@ public final class Dot11HtControl implements Serializable {
      * @return the CsiSteering object the value of which is the given value.
      */
     public static CsiOrSteering getInstance(int value) {
-      for (CsiOrSteering val: values()) {
+      for (CsiOrSteering val : values()) {
         if (val.value == value) {
           return val;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -610,9 +564,7 @@ public final class Dot11HtControl implements Serializable {
     private boolean acConstraint;
     private boolean rdgOrMorePpdu;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(Dot11HtControl obj) {
@@ -758,14 +710,9 @@ public final class Dot11HtControl implements Serializable {
       return this;
     }
 
-    /**
-     *
-     * @return a new Dot11HtControl object.
-     */
+    /** @return a new Dot11HtControl object. */
     public Dot11HtControl build() {
       return new Dot11HtControl(this);
     }
-
   }
-
 }

@@ -11,8 +11,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
- * Radiotap FHSS field.
- * The hop set and pattern for frequency-hopping radios.
+ * Radiotap FHSS field. The hop set and pattern for frequency-hopping radios.
  *
  * @see <a href="http://www.radiotap.org/defined-fields/FHSS">Radiotap</a>
  * @author Kaito Yamada
@@ -20,9 +19,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class RadiotapDataFhss implements RadiotapData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 132223820938643993L;
 
   private static final int LENGTH = 2;
@@ -31,9 +28,8 @@ public final class RadiotapDataFhss implements RadiotapData {
   private final byte hopPattern;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -41,9 +37,8 @@ public final class RadiotapDataFhss implements RadiotapData {
    * @return a new RadiotapFhss object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapDataFhss newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static RadiotapDataFhss newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new RadiotapDataFhss(rawData, offset, length);
   }
@@ -52,13 +47,13 @@ public final class RadiotapDataFhss implements RadiotapData {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapFhss (")
-        .append(LENGTH)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(LENGTH)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -75,25 +70,25 @@ public final class RadiotapDataFhss implements RadiotapData {
     this.hopPattern = builder.hopPattern;
   }
 
-  /**
-   * @return hopSet
-   */
-  public byte getHopSet() { return hopSet; }
+  /** @return hopSet */
+  public byte getHopSet() {
+    return hopSet;
+  }
 
-  /**
-   * @return hopSet
-   */
-  public int getHopSetAsInt() { return hopSet & 0xFF; }
+  /** @return hopSet */
+  public int getHopSetAsInt() {
+    return hopSet & 0xFF;
+  }
 
-  /**
-   * @return hopPattern
-   */
-  public byte getHopPattern() { return hopPattern; }
+  /** @return hopPattern */
+  public byte getHopPattern() {
+    return hopPattern;
+  }
 
-  /**
-   * @return hopPattern
-   */
-  public int getHopPatternAsInt() { return hopPattern & 0xFF; }
+  /** @return hopPattern */
+  public int getHopPatternAsInt() {
+    return hopPattern & 0xFF;
+  }
 
   @Override
   public int length() {
@@ -108,10 +103,10 @@ public final class RadiotapDataFhss implements RadiotapData {
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -123,14 +118,17 @@ public final class RadiotapDataFhss implements RadiotapData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("FHSS: ")
-      .append(ls)
-      .append(indent).append("  Hop set: ")
-      .append(getHopSetAsInt())
-      .append(ls)
-      .append(indent).append("  Hop pattern: ")
-      .append(getHopPatternAsInt())
-      .append(ls);
+    sb.append(indent)
+        .append("FHSS: ")
+        .append(ls)
+        .append(indent)
+        .append("  Hop set: ")
+        .append(getHopSetAsInt())
+        .append(ls)
+        .append(indent)
+        .append("  Hop pattern: ")
+        .append(getHopPatternAsInt())
+        .append(ls);
 
     return sb.toString();
   }
@@ -146,17 +144,12 @@ public final class RadiotapDataFhss implements RadiotapData {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     RadiotapDataFhss other = (RadiotapDataFhss) obj;
-    if (hopPattern != other.hopPattern)
-      return false;
-    if (hopSet != other.hopSet)
-      return false;
+    if (hopPattern != other.hopPattern) return false;
+    if (hopSet != other.hopSet) return false;
     return true;
   }
 
@@ -169,9 +162,7 @@ public final class RadiotapDataFhss implements RadiotapData {
     private byte hopSet;
     private byte hopPattern;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(RadiotapDataFhss obj) {
@@ -197,13 +188,9 @@ public final class RadiotapDataFhss implements RadiotapData {
       return this;
     }
 
-    /**
-     * @return a new RadiotapFhss object.
-     */
+    /** @return a new RadiotapFhss object. */
     public RadiotapDataFhss build() {
       return new RadiotapDataFhss(this);
     }
-
   }
-
 }

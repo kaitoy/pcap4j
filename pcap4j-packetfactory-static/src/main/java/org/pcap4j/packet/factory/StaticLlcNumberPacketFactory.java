@@ -21,21 +21,18 @@ import org.pcap4j.packet.namednumber.LlcNumber;
  */
 public final class StaticLlcNumberPacketFactory implements PacketFactory<Packet, LlcNumber> {
 
-  private static final StaticLlcNumberPacketFactory INSTANCE
-    = new StaticLlcNumberPacketFactory();
+  private static final StaticLlcNumberPacketFactory INSTANCE = new StaticLlcNumberPacketFactory();
 
   private StaticLlcNumberPacketFactory() {}
 
-  /**
-   * @return the singleton instance of StaticLlcNumberPacketFactory.
-   */
+  /** @return the singleton instance of StaticLlcNumberPacketFactory. */
   public static StaticLlcNumberPacketFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, LlcNumber...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, LlcNumber...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -47,8 +44,8 @@ public final class StaticLlcNumberPacketFactory implements PacketFactory<Packet,
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, LlcNumber...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, LlcNumber...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -71,8 +68,8 @@ public final class StaticLlcNumberPacketFactory implements PacketFactory<Packet,
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, LlcNumber...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, LlcNumber...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -82,8 +79,7 @@ public final class StaticLlcNumberPacketFactory implements PacketFactory<Packet,
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(
-    byte[] rawData, int offset, int length, LlcNumber number1, LlcNumber number2
-  ) {
+      byte[] rawData, int offset, int length, LlcNumber number1, LlcNumber number2) {
     try {
       switch (Byte.toUnsignedInt(number1.value())) {
         case 152:
@@ -107,7 +103,7 @@ public final class StaticLlcNumberPacketFactory implements PacketFactory<Packet,
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, LlcNumber... numbers) {
     try {
-      for (LlcNumber num: numbers) {
+      for (LlcNumber num : numbers) {
         switch (Byte.toUnsignedInt(num.value())) {
           case 152:
             return ArpPacket.newPacket(rawData, offset, length);
@@ -120,5 +116,4 @@ public final class StaticLlcNumberPacketFactory implements PacketFactory<Packet,
       return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
-
 }

@@ -31,17 +31,14 @@ public final class StaticIpV4OptionFactory implements PacketFactory<IpV4Option, 
 
   private StaticIpV4OptionFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of StaticIpV4OptionFactory.
-   */
+  /** @return the singleton instance of StaticIpV4OptionFactory. */
   public static StaticIpV4OptionFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpV4OptionType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV4OptionType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -57,8 +54,8 @@ public final class StaticIpV4OptionFactory implements PacketFactory<IpV4Option, 
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpV4OptionType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV4OptionType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -93,8 +90,8 @@ public final class StaticIpV4OptionFactory implements PacketFactory<IpV4Option, 
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpV4OptionType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV4OptionType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -104,8 +101,7 @@ public final class StaticIpV4OptionFactory implements PacketFactory<IpV4Option, 
    * @return see {@link PacketFactory#newInstance}.
    */
   public IpV4Option newInstance(
-    byte[] rawData, int offset, int length, IpV4OptionType number1, IpV4OptionType number2
-  ) {
+      byte[] rawData, int offset, int length, IpV4OptionType number1, IpV4OptionType number2) {
     try {
       switch (Byte.toUnsignedInt(number1.value())) {
         case 0:
@@ -153,7 +149,7 @@ public final class StaticIpV4OptionFactory implements PacketFactory<IpV4Option, 
   @Override
   public IpV4Option newInstance(byte[] rawData, int offset, int length, IpV4OptionType... numbers) {
     try {
-      for (IpV4OptionType num: numbers) {
+      for (IpV4OptionType num : numbers) {
         switch (Byte.toUnsignedInt(num.value())) {
           case 0:
             return IpV4EndOfOptionList.newInstance(rawData, offset, length);
@@ -178,5 +174,4 @@ public final class StaticIpV4OptionFactory implements PacketFactory<IpV4Option, 
       return IllegalIpV4Option.newInstance(rawData, offset, length, e);
     }
   }
-
 }

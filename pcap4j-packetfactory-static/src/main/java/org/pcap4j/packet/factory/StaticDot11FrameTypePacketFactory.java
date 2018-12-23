@@ -19,23 +19,21 @@ import org.pcap4j.packet.namednumber.Dot11FrameType;
  * @since pcap4j 1.7.0
  */
 public final class StaticDot11FrameTypePacketFactory
-implements PacketFactory<Packet, Dot11FrameType> {
+    implements PacketFactory<Packet, Dot11FrameType> {
 
-  private static final StaticDot11FrameTypePacketFactory INSTANCE
-    = new StaticDot11FrameTypePacketFactory();
+  private static final StaticDot11FrameTypePacketFactory INSTANCE =
+      new StaticDot11FrameTypePacketFactory();
 
   private StaticDot11FrameTypePacketFactory() {}
 
-  /**
-   * @return the singleton instance of StaticDot11FrameTypePacketFactory.
-   */
+  /** @return the singleton instance of StaticDot11FrameTypePacketFactory. */
   public static StaticDot11FrameTypePacketFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, Dot11FrameType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, Dot11FrameType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -47,8 +45,8 @@ implements PacketFactory<Packet, Dot11FrameType> {
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, Dot11FrameType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, Dot11FrameType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -69,8 +67,8 @@ implements PacketFactory<Packet, Dot11FrameType> {
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, Dot11FrameType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, Dot11FrameType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -80,8 +78,7 @@ implements PacketFactory<Packet, Dot11FrameType> {
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(
-    byte[] rawData, int offset, int length, Dot11FrameType number1, Dot11FrameType number2
-  ) {
+      byte[] rawData, int offset, int length, Dot11FrameType number1, Dot11FrameType number2) {
     try {
       switch (Byte.toUnsignedInt(number1.value())) {
         case 4:
@@ -101,7 +98,7 @@ implements PacketFactory<Packet, Dot11FrameType> {
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, Dot11FrameType... numbers) {
     try {
-      for (Dot11FrameType num: numbers) {
+      for (Dot11FrameType num : numbers) {
         switch (Byte.toUnsignedInt(num.value())) {
           case 4:
             return Dot11ProbeRequestPacket.newPacket(rawData, offset, length);
@@ -112,5 +109,4 @@ implements PacketFactory<Packet, Dot11FrameType> {
       return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
-
 }

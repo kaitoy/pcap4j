@@ -13,44 +13,28 @@ package org.pcap4j.packet;
  */
 public enum GtpVersion {
 
-  /**
-   * v0
-   */
+  /** v0 */
   V0(0),
 
-  /**
-   * v1
-   */
+  /** v1 */
   V1(1),
 
-  /**
-   * v2
-   */
+  /** v2 */
   V2(2),
 
-  /**
-   * v3
-   */
+  /** v3 */
   V3(3),
 
-  /**
-   * v4
-   */
+  /** v4 */
   V4(4),
 
-  /**
-   * v5
-   */
+  /** v5 */
   V5(5),
 
-  /**
-   * v6
-   */
+  /** v6 */
   V6(6),
 
-  /**
-   * v7
-   */
+  /** v7 */
   V7(7);
 
   private final int value;
@@ -64,7 +48,7 @@ public enum GtpVersion {
    * @return a GtpVersion object.
    */
   public static GtpVersion getInstance(int value) {
-    for (GtpVersion ver: values()) {
+    for (GtpVersion ver : values()) {
       if (ver.value == value) {
         return ver;
       }
@@ -72,12 +56,8 @@ public enum GtpVersion {
     throw new IllegalArgumentException("Invalid value: " + value);
   }
 
-  /**
-   *
-   * @return value
-   */
+  /** @return value */
   public int getValue() {
     return value;
   }
-
 }

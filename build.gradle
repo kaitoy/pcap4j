@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016-2017  Pcap4J.org
+  _##  Copyright (C) 2016-2018  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -8,14 +8,19 @@
 buildscript {
   repositories {
     jcenter()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
   }
   dependencies {
     classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+    classpath "com.diffplug.spotless:spotless-plugin-gradle:3.16.0"
   }
 }
 
 allprojects {
   apply plugin: 'java'
+  apply plugin: "com.diffplug.gradle.spotless"
 
   group = 'org.pcap4j'
   version = '2.0.0-beta-SNAPSHOT'
@@ -34,6 +39,16 @@ allprojects {
       bottom "Copyright &copy; 2011 - ${currentYear} Pcap4J.org. All rights reserved."
       showFromProtected()
       addStringOption 'Xdoclint:all,-reference', '-quiet'
+    }
+  }
+
+  spotless {
+    lineEndings 'UNIX'
+    java {
+      googleJavaFormat()
+      removeUnusedImports()
+      trimTrailingWhitespace()
+      endWithNewline()
     }
   }
 

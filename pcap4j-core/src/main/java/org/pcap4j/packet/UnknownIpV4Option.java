@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.util.ByteArrays;
@@ -19,9 +18,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class UnknownIpV4Option implements IpV4Option {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 5843622351774970021L;
 
   private final IpV4OptionType type;
@@ -29,9 +26,8 @@ public final class UnknownIpV4Option implements IpV4Option {
   private final byte[] data;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -39,24 +35,21 @@ public final class UnknownIpV4Option implements IpV4Option {
    * @return a new UnknownIpV4Option object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static UnknownIpV4Option newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static UnknownIpV4Option newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new UnknownIpV4Option(rawData, offset, length);
   }
 
-  private UnknownIpV4Option(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private UnknownIpV4Option(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     if (length < 2) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data length must be more than 1. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -66,13 +59,13 @@ public final class UnknownIpV4Option implements IpV4Option {
     if (length < lengthFieldAsInt) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option (")
-        .append(lengthFieldAsInt)
-        .append("). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(lengthFieldAsInt)
+          .append("). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -80,51 +73,44 @@ public final class UnknownIpV4Option implements IpV4Option {
   }
 
   private UnknownIpV4Option(Builder builder) {
-    if (
-         builder == null
-      || builder.type == null
-      || builder.data == null
-    ) {
+    if (builder == null || builder.type == null || builder.data == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.type: ").append(builder.type)
-        .append(" builder.data: ").append(builder.data);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.type: ")
+          .append(builder.type)
+          .append(" builder.data: ")
+          .append(builder.data);
       throw new NullPointerException(sb.toString());
     }
 
     this.type = builder.type;
     this.data = new byte[builder.data.length];
-    System.arraycopy(
-      builder.data, 0, this.data, 0, builder.data.length
-    );
+    System.arraycopy(builder.data, 0, this.data, 0, builder.data.length);
 
     if (builder.correctLengthAtBuild) {
-      this.length = (byte)length();
-    }
-    else {
+      this.length = (byte) length();
+    } else {
       this.length = builder.length;
     }
   }
 
   @Override
-  public IpV4OptionType getType() { return type; }
+  public IpV4OptionType getType() {
+    return type;
+  }
 
-  /**
-   *
-   * @return length
-   */
-  public byte getLength() { return length; }
+  /** @return length */
+  public byte getLength() {
+    return length;
+  }
 
-  /**
-   *
-   * @return length
-   */
-  public int getLengthAsInt() { return 0xFF & length; }
+  /** @return length */
+  public int getLengthAsInt() {
+    return 0xFF & length;
+  }
 
-  /**
-   *
-   * @return data
-   */
+  /** @return data */
   public byte[] getData() {
     byte[] copy = new byte[data.length];
     System.arraycopy(data, 0, copy, 0, data.length);
@@ -141,12 +127,11 @@ public final class UnknownIpV4Option implements IpV4Option {
   }
 
   @Override
-  public int length() { return data.length + 2; }
+  public int length() {
+    return data.length + 2;
+  }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -155,25 +140,26 @@ public final class UnknownIpV4Option implements IpV4Option {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[option-type: ")
-      .append(type)
-      .append("] [option-length: ")
-      .append(getLengthAsInt())
-      .append(" bytes] [option-data: 0x")
-      .append(ByteArrays.toHexString(data, ""))
-      .append("]");
+        .append(type)
+        .append("] [option-length: ")
+        .append(getLengthAsInt())
+        .append(" bytes] [option-data: 0x")
+        .append(ByteArrays.toHexString(data, ""))
+        .append("]");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    UnknownIpV4Option other = (UnknownIpV4Option)obj;
-    return
-         type.equals(other.type)
-      && length == other.length
-      && Arrays.equals(data, other.data);
+    UnknownIpV4Option other = (UnknownIpV4Option) obj;
+    return type.equals(other.type) && length == other.length && Arrays.equals(data, other.data);
   }
 
   @Override
@@ -189,17 +175,14 @@ public final class UnknownIpV4Option implements IpV4Option {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  public static final class
-  Builder implements LengthBuilder<UnknownIpV4Option> {
+  public static final class Builder implements LengthBuilder<UnknownIpV4Option> {
 
     private IpV4OptionType type;
     private byte length;
     private byte[] data;
     private boolean correctLengthAtBuild;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(UnknownIpV4Option option) {
@@ -209,7 +192,6 @@ public final class UnknownIpV4Option implements IpV4Option {
     }
 
     /**
-     *
      * @param type type
      * @return this Builder object for method chaining.
      */
@@ -219,7 +201,6 @@ public final class UnknownIpV4Option implements IpV4Option {
     }
 
     /**
-     *
      * @param length length
      * @return this Builder object for method chaining.
      */
@@ -229,7 +210,6 @@ public final class UnknownIpV4Option implements IpV4Option {
     }
 
     /**
-     *
      * @param data data
      * @return this Builder object for method chaining.
      */
@@ -248,7 +228,5 @@ public final class UnknownIpV4Option implements IpV4Option {
     public UnknownIpV4Option build() {
       return new UnknownIpV4Option(this);
     }
-
   }
-
 }

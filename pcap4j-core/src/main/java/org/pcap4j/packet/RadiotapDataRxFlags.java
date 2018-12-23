@@ -11,8 +11,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
- * Radiotap RX flags field.
- * Properties of received frames.
+ * Radiotap RX flags field. Properties of received frames.
  *
  * @see <a href="http://www.radiotap.org/defined-fields/RX%20flags">Radiotap</a>
  * @author Kaito Yamada
@@ -20,9 +19,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class RadiotapDataRxFlags implements RadiotapData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1269108995049803687L;
 
   private static final int LENGTH = 2;
@@ -45,9 +42,8 @@ public final class RadiotapDataRxFlags implements RadiotapData {
   private final boolean sixteenthLsb;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -55,24 +51,24 @@ public final class RadiotapDataRxFlags implements RadiotapData {
    * @return a new RadiotapRxFlags object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapDataRxFlags newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static RadiotapDataRxFlags newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new RadiotapDataRxFlags(rawData, offset, length);
   }
 
-  private RadiotapDataRxFlags(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataRxFlags(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapRxFlags (")
-        .append(LENGTH)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(LENGTH)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -117,114 +113,82 @@ public final class RadiotapDataRxFlags implements RadiotapData {
     this.sixteenthLsb = builder.sixteenthLsb;
   }
 
-  /**
-   * @return true if the LSB is set to 1; otherwise false.
-   */
+  /** @return true if the LSB is set to 1; otherwise false. */
   public boolean getLsb() {
     return lsb;
   }
 
-  /**
-   * @return badPlcpCrc
-   */
+  /** @return badPlcpCrc */
   public boolean isBadPlcpCrc() {
     return badPlcpCrc;
   }
 
-  /**
-   * @return true if the third LSB is set to 1; otherwise false.
-   */
+  /** @return true if the third LSB is set to 1; otherwise false. */
   public boolean getThirdLsb() {
     return thirdLsb;
   }
 
-  /**
-   * @return true if the fourth LSB is set to 1; otherwise false.
-   */
+  /** @return true if the fourth LSB is set to 1; otherwise false. */
   public boolean getFourthLsb() {
     return fourthLsb;
   }
 
-  /**
-   * @return true if the fifth LSB is set to 1; otherwise false.
-   */
+  /** @return true if the fifth LSB is set to 1; otherwise false. */
   public boolean getFifthLsb() {
     return fifthLsb;
   }
 
-  /**
-   * @return true if the sixth LSB is set to 1; otherwise false.
-   */
+  /** @return true if the sixth LSB is set to 1; otherwise false. */
   public boolean getSixthLsb() {
     return sixthLsb;
   }
 
-  /**
-   * @return true if the seventh LSB is set to 1; otherwise false.
-   */
+  /** @return true if the seventh LSB is set to 1; otherwise false. */
   public boolean getSeventhLsb() {
     return seventhLsb;
   }
 
-  /**
-   * @return true if the eighth LSB is set to 1; otherwise false.
-   */
+  /** @return true if the eighth LSB is set to 1; otherwise false. */
   public boolean getEighthLsb() {
     return eighthLsb;
   }
 
-  /**
-   * @return true if the ninth LSB is set to 1; otherwise false.
-   */
+  /** @return true if the ninth LSB is set to 1; otherwise false. */
   public boolean getNinthLsb() {
     return ninthLsb;
   }
 
-  /**
-   * @return true if the tenth LSB is set to 1; otherwise false.
-   */
+  /** @return true if the tenth LSB is set to 1; otherwise false. */
   public boolean getTenthLsb() {
     return tenthLsb;
   }
 
-  /**
-   * @return true if the eleventh LSB is set to 1; otherwise false.
-   */
+  /** @return true if the eleventh LSB is set to 1; otherwise false. */
   public boolean getEleventhLsb() {
     return eleventhLsb;
   }
 
-  /**
-   * @return true if the twelveth LSB is set to 1; otherwise false.
-   */
+  /** @return true if the twelveth LSB is set to 1; otherwise false. */
   public boolean getTwelvethLsb() {
     return twelvethLsb;
   }
 
-  /**
-   * @return true if the thirteenth LSB is set to 1; otherwise false.
-   */
+  /** @return true if the thirteenth LSB is set to 1; otherwise false. */
   public boolean getThirteenthLsb() {
     return thirteenthLsb;
   }
 
-  /**
-   * @return true if the fourteenth LSB is set to 1; otherwise false.
-   */
+  /** @return true if the fourteenth LSB is set to 1; otherwise false. */
   public boolean getFourteenthLsb() {
     return fourteenthLsb;
   }
 
-  /**
-   * @return true if the fifteenth LSB is set to 1; otherwise false.
-   */
+  /** @return true if the fifteenth LSB is set to 1; otherwise false. */
   public boolean getFifteenthLsb() {
     return fifteenthLsb;
   }
 
-  /**
-   * @return true if the sixteenth LSB is set to 1; otherwise false.
-   */
+  /** @return true if the sixteenth LSB is set to 1; otherwise false. */
   public boolean getSixteenthLsb() {
     return sixteenthLsb;
   }
@@ -237,29 +201,61 @@ public final class RadiotapDataRxFlags implements RadiotapData {
   @Override
   public byte[] getRawData() {
     byte[] data = new byte[2];
-    if (lsb) { data[0] |= 0x01; }
-    if (badPlcpCrc) { data[0] |= 0x02; }
-    if (thirdLsb) { data[0] |= 0x04; }
-    if (fourthLsb) { data[0] |= 0x08; }
-    if (fifthLsb) { data[0] |= 0x10; }
-    if (sixthLsb) { data[0] |= 0x20; }
-    if (seventhLsb) { data[0] |= 0x40; }
-    if (eighthLsb) { data[0] |= 0x80; }
-    if (ninthLsb) { data[1] |= 0x01; }
-    if (tenthLsb) { data[1] |= 0x02; }
-    if (eleventhLsb) { data[1] |= 0x04; }
-    if (twelvethLsb) { data[1] |= 0x08; }
-    if (thirteenthLsb) { data[1] |= 0x10; }
-    if (fourteenthLsb) { data[1] |= 0x20; }
-    if (fifteenthLsb) { data[1] |= 0x40; }
-    if (sixteenthLsb) { data[1] |= 0x80; }
+    if (lsb) {
+      data[0] |= 0x01;
+    }
+    if (badPlcpCrc) {
+      data[0] |= 0x02;
+    }
+    if (thirdLsb) {
+      data[0] |= 0x04;
+    }
+    if (fourthLsb) {
+      data[0] |= 0x08;
+    }
+    if (fifthLsb) {
+      data[0] |= 0x10;
+    }
+    if (sixthLsb) {
+      data[0] |= 0x20;
+    }
+    if (seventhLsb) {
+      data[0] |= 0x40;
+    }
+    if (eighthLsb) {
+      data[0] |= 0x80;
+    }
+    if (ninthLsb) {
+      data[1] |= 0x01;
+    }
+    if (tenthLsb) {
+      data[1] |= 0x02;
+    }
+    if (eleventhLsb) {
+      data[1] |= 0x04;
+    }
+    if (twelvethLsb) {
+      data[1] |= 0x08;
+    }
+    if (thirteenthLsb) {
+      data[1] |= 0x10;
+    }
+    if (fourteenthLsb) {
+      data[1] |= 0x20;
+    }
+    if (fifteenthLsb) {
+      data[1] |= 0x40;
+    }
+    if (sixteenthLsb) {
+      data[1] |= 0x80;
+    }
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -271,56 +267,73 @@ public final class RadiotapDataRxFlags implements RadiotapData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("RX flags: ")
-      .append(ls)
-      .append(indent).append("  LSB: ")
-      .append(lsb)
-      .append(ls)
-      .append(indent).append("  Bad PLCP CRC: ")
-      .append(badPlcpCrc)
-      .append(ls)
-      .append(indent).append("  3rd LSB: ")
-      .append(thirdLsb)
-      .append(ls)
-      .append(indent).append("  4th LSB: ")
-      .append(fourthLsb)
-      .append(ls)
-      .append(indent).append("  5th LSB: ")
-      .append(fifthLsb)
-      .append(ls)
-      .append(indent).append("  6th LSB: ")
-      .append(sixthLsb)
-      .append(ls)
-      .append(indent).append("  7th LSB: ")
-      .append(seventhLsb)
-      .append(ls)
-      .append(indent).append("  8th LSB: ")
-      .append(eighthLsb)
-      .append(ls)
-      .append(indent).append("  9th LSB: ")
-      .append(ninthLsb)
-      .append(ls)
-      .append(indent).append("  10th LSB: ")
-      .append(tenthLsb)
-      .append(ls)
-      .append(indent).append("  11th LSB: ")
-      .append(eleventhLsb)
-      .append(ls)
-      .append(indent).append("  12th LSB: ")
-      .append(twelvethLsb)
-      .append(ls)
-      .append(indent).append("  13th LSB: ")
-      .append(thirteenthLsb)
-      .append(ls)
-      .append(indent).append("  14th LSB: ")
-      .append(fourteenthLsb)
-      .append(ls)
-      .append(indent).append("  15th LSB: ")
-      .append(fifteenthLsb)
-      .append(ls)
-      .append(indent).append("  16th LSB: ")
-      .append(sixteenthLsb)
-      .append(ls);
+    sb.append(indent)
+        .append("RX flags: ")
+        .append(ls)
+        .append(indent)
+        .append("  LSB: ")
+        .append(lsb)
+        .append(ls)
+        .append(indent)
+        .append("  Bad PLCP CRC: ")
+        .append(badPlcpCrc)
+        .append(ls)
+        .append(indent)
+        .append("  3rd LSB: ")
+        .append(thirdLsb)
+        .append(ls)
+        .append(indent)
+        .append("  4th LSB: ")
+        .append(fourthLsb)
+        .append(ls)
+        .append(indent)
+        .append("  5th LSB: ")
+        .append(fifthLsb)
+        .append(ls)
+        .append(indent)
+        .append("  6th LSB: ")
+        .append(sixthLsb)
+        .append(ls)
+        .append(indent)
+        .append("  7th LSB: ")
+        .append(seventhLsb)
+        .append(ls)
+        .append(indent)
+        .append("  8th LSB: ")
+        .append(eighthLsb)
+        .append(ls)
+        .append(indent)
+        .append("  9th LSB: ")
+        .append(ninthLsb)
+        .append(ls)
+        .append(indent)
+        .append("  10th LSB: ")
+        .append(tenthLsb)
+        .append(ls)
+        .append(indent)
+        .append("  11th LSB: ")
+        .append(eleventhLsb)
+        .append(ls)
+        .append(indent)
+        .append("  12th LSB: ")
+        .append(twelvethLsb)
+        .append(ls)
+        .append(indent)
+        .append("  13th LSB: ")
+        .append(thirteenthLsb)
+        .append(ls)
+        .append(indent)
+        .append("  14th LSB: ")
+        .append(fourteenthLsb)
+        .append(ls)
+        .append(indent)
+        .append("  15th LSB: ")
+        .append(fifteenthLsb)
+        .append(ls)
+        .append(indent)
+        .append("  16th LSB: ")
+        .append(sixteenthLsb)
+        .append(ls);
 
     return sb.toString();
   }
@@ -350,45 +363,26 @@ public final class RadiotapDataRxFlags implements RadiotapData {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     RadiotapDataRxFlags other = (RadiotapDataRxFlags) obj;
-    if (sixthLsb != other.sixthLsb)
-      return false;
-    if (eleventhLsb != other.eleventhLsb)
-      return false;
-    if (ninthLsb != other.ninthLsb)
-      return false;
-    if (fourthLsb != other.fourthLsb)
-      return false;
-    if (twelvethLsb != other.twelvethLsb)
-      return false;
-    if (thirteenthLsb != other.thirteenthLsb)
-      return false;
-    if (fifteenthLsb != other.fifteenthLsb)
-      return false;
-    if (lsb != other.lsb)
-      return false;
-    if (seventhLsb != other.seventhLsb)
-      return false;
-    if (tenthLsb != other.tenthLsb)
-      return false;
-    if (sixteenthLsb != other.sixteenthLsb)
-      return false;
-    if (badPlcpCrc != other.badPlcpCrc)
-      return false;
-    if (fourteenthLsb != other.fourteenthLsb)
-      return false;
-    if (thirdLsb != other.thirdLsb)
-      return false;
-    if (fifthLsb != other.fifthLsb)
-      return false;
-    if (eighthLsb != other.eighthLsb)
-      return false;
+    if (sixthLsb != other.sixthLsb) return false;
+    if (eleventhLsb != other.eleventhLsb) return false;
+    if (ninthLsb != other.ninthLsb) return false;
+    if (fourthLsb != other.fourthLsb) return false;
+    if (twelvethLsb != other.twelvethLsb) return false;
+    if (thirteenthLsb != other.thirteenthLsb) return false;
+    if (fifteenthLsb != other.fifteenthLsb) return false;
+    if (lsb != other.lsb) return false;
+    if (seventhLsb != other.seventhLsb) return false;
+    if (tenthLsb != other.tenthLsb) return false;
+    if (sixteenthLsb != other.sixteenthLsb) return false;
+    if (badPlcpCrc != other.badPlcpCrc) return false;
+    if (fourteenthLsb != other.fourteenthLsb) return false;
+    if (thirdLsb != other.thirdLsb) return false;
+    if (fifthLsb != other.fifthLsb) return false;
+    if (eighthLsb != other.eighthLsb) return false;
     return true;
   }
 
@@ -415,9 +409,7 @@ public final class RadiotapDataRxFlags implements RadiotapData {
     private boolean fifteenthLsb;
     private boolean sixteenthLsb;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(RadiotapDataRxFlags obj) {
@@ -583,13 +575,9 @@ public final class RadiotapDataRxFlags implements RadiotapData {
       return this;
     }
 
-    /**
-     * @return a new RadiotapRxFlags object.
-     */
+    /** @return a new RadiotapRxFlags object. */
     public RadiotapDataRxFlags build() {
       return new RadiotapDataRxFlags(this);
     }
-
   }
-
 }

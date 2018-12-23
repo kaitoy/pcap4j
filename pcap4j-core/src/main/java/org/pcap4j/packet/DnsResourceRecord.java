@@ -10,7 +10,6 @@ package org.pcap4j.packet;
 import static org.pcap4j.util.ByteArrays.*;
 
 import java.io.Serializable;
-
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.DnsClass;
 import org.pcap4j.packet.namednumber.DnsResourceRecordType;
@@ -48,9 +47,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class DnsResourceRecord implements Serializable {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 4951400991563055073L;
 
   private final DnsDomainName name;
@@ -61,9 +58,8 @@ public final class DnsResourceRecord implements Serializable {
   private final DnsRData rData;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -71,16 +67,13 @@ public final class DnsResourceRecord implements Serializable {
    * @return a new DnsResourceRecord object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsResourceRecord newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsResourceRecord newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsResourceRecord(rawData, offset, length);
   }
 
-  private DnsResourceRecord(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private DnsResourceRecord(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     int cursor = 0;
     this.name = DnsDomainName.newInstance(rawData, offset, length);
     cursor += name.length();
@@ -88,77 +81,69 @@ public final class DnsResourceRecord implements Serializable {
     if (length - cursor < SHORT_SIZE_IN_BYTES * 3 + INT_SIZE_IN_BYTES) {
       StringBuilder sb = new StringBuilder(200);
       sb.append(
-           "The data is too short to build type, class, ttl, and rdlength of DnsResourceRecord. "
-             + "data: "
-         )
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length)
-        .append(", cursor: ")
-        .append(cursor);
+              "The data is too short to build type, class, ttl, and rdlength of DnsResourceRecord. "
+                  + "data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length)
+          .append(", cursor: ")
+          .append(cursor);
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.dataType
-      = DnsResourceRecordType.getInstance(ByteArrays.getShort(rawData, offset + cursor));
+    this.dataType =
+        DnsResourceRecordType.getInstance(ByteArrays.getShort(rawData, offset + cursor));
     cursor += SHORT_SIZE_IN_BYTES;
-    this.dataClass
-      = DnsClass.getInstance(ByteArrays.getShort(rawData, offset + cursor));
+    this.dataClass = DnsClass.getInstance(ByteArrays.getShort(rawData, offset + cursor));
     cursor += SHORT_SIZE_IN_BYTES;
-    this.ttl
-      = ByteArrays.getInt(rawData, offset + cursor);
+    this.ttl = ByteArrays.getInt(rawData, offset + cursor);
     cursor += INT_SIZE_IN_BYTES;
-    this.rdLength
-      = ByteArrays.getShort(rawData, offset + cursor);
+    this.rdLength = ByteArrays.getShort(rawData, offset + cursor);
     cursor += SHORT_SIZE_IN_BYTES;
 
     int rdLen = getRdLengthAsInt();
     if (length - cursor < rdLen) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build rData of DnsResourceRecord (")
-        .append(rdLen)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length)
-        .append(", cursor: ")
-        .append(cursor)
-        .append(", dataType: ")
-        .append(dataType);
+          .append(rdLen)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length)
+          .append(", cursor: ")
+          .append(cursor)
+          .append(", dataType: ")
+          .append(dataType);
       throw new IllegalRawDataException(sb.toString());
     }
 
     if (rdLen != 0) {
-      this.rData = PacketFactories
-                     .getFactory(DnsRData.class, DnsResourceRecordType.class)
-                     .newInstance(
-                       rawData,
-                       offset + cursor,
-                       rdLen,
-                       dataType
-                     );
-    }
-    else {
+      this.rData =
+          PacketFactories.getFactory(DnsRData.class, DnsResourceRecordType.class)
+              .newInstance(rawData, offset + cursor, rdLen, dataType);
+    } else {
       this.rData = null;
     }
   }
 
   private DnsResourceRecord(Builder builder) {
-    if (
-         builder == null
-      || builder.name == null
-      || builder.dataType == null
-      || builder.dataClass == null
-    ) {
+    if (builder == null
+        || builder.name == null
+        || builder.dataType == null
+        || builder.dataClass == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder").append(builder)
-        .append(" builder.name: ").append(builder.name)
-        .append(" builder.dataType: ").append(builder.dataType)
-        .append(" builder.dataClass: ").append(builder.dataClass);
+      sb.append("builder")
+          .append(builder)
+          .append(" builder.name: ")
+          .append(builder.name)
+          .append(" builder.dataType: ")
+          .append(builder.dataType)
+          .append(" builder.dataClass: ")
+          .append(builder.dataClass);
       throw new NullPointerException(sb.toString());
     }
 
@@ -172,127 +157,86 @@ public final class DnsResourceRecord implements Serializable {
       int rdLen = rData == null ? 0 : rData.length();
       if ((rdLen & 0xFFFF0000) != 0) {
         throw new IllegalArgumentException(
-                "(rData.length() & 0xFFFF0000) must be zero. rData: " + rData
-              );
+            "(rData.length() & 0xFFFF0000) must be zero. rData: " + rData);
       }
       this.rdLength = (short) rdLen;
-    }
-    else {
+    } else {
       this.rdLength = builder.rdLength;
     }
   }
 
-  /**
-   * @return name
-   */
+  /** @return name */
   public DnsDomainName getName() {
     return name;
   }
 
-  /**
-   * @return dataType
-   */
+  /** @return dataType */
   public DnsResourceRecordType getDataType() {
     return dataType;
   }
 
-  /**
-   * @return dataClass
-   */
+  /** @return dataClass */
   public DnsClass getDataClass() {
     return dataClass;
   }
 
-  /**
-   * @return ttl
-   */
+  /** @return ttl */
   public int getTtl() {
     return ttl;
   }
 
-  /**
-   * @return ttl
-   */
+  /** @return ttl */
   public long getTtlAsLong() {
     return ttl & 0xFFFFFFFFL;
   }
 
-  /**
-   * @return rdLength
-   */
+  /** @return rdLength */
   public short getRdLength() {
     return rdLength;
   }
 
-  /**
-   * @return rdLength
-   */
+  /** @return rdLength */
   public int getRdLengthAsInt() {
     return rdLength & 0xFFFF;
   }
 
-  /**
-   * @return rData. May be null.
-   */
+  /** @return rData. May be null. */
   public DnsRData getRData() {
     return rData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
 
-  /**
-   * @return the raw data.
-   */
+  /** @return the raw data. */
   public byte[] getRawData() {
     byte[] data = new byte[length()];
     int cursor = 0;
 
     byte[] rawName = name.getRawData();
-    System.arraycopy(
-        rawName, 0,
-      data, 0, rawName.length
-    );
+    System.arraycopy(rawName, 0, data, 0, rawName.length);
     cursor += rawName.length;
     System.arraycopy(
-      ByteArrays.toByteArray(dataType.value()), 0,
-      data, cursor, SHORT_SIZE_IN_BYTES
-    );
+        ByteArrays.toByteArray(dataType.value()), 0, data, cursor, SHORT_SIZE_IN_BYTES);
     cursor += SHORT_SIZE_IN_BYTES;
     System.arraycopy(
-      ByteArrays.toByteArray(dataClass.value()), 0,
-      data, cursor, SHORT_SIZE_IN_BYTES
-    );
+        ByteArrays.toByteArray(dataClass.value()), 0, data, cursor, SHORT_SIZE_IN_BYTES);
     cursor += SHORT_SIZE_IN_BYTES;
-    System.arraycopy(
-      ByteArrays.toByteArray(ttl), 0,
-      data, cursor, INT_SIZE_IN_BYTES
-    );
+    System.arraycopy(ByteArrays.toByteArray(ttl), 0, data, cursor, INT_SIZE_IN_BYTES);
     cursor += INT_SIZE_IN_BYTES;
-    System.arraycopy(
-      ByteArrays.toByteArray(rdLength), 0,
-      data, cursor, SHORT_SIZE_IN_BYTES
-    );
+    System.arraycopy(ByteArrays.toByteArray(rdLength), 0, data, cursor, SHORT_SIZE_IN_BYTES);
     if (rData != null) {
       cursor += SHORT_SIZE_IN_BYTES;
       byte[] rawRData = rData.getRawData();
-      System.arraycopy(
-        rawRData, 0,
-        data, cursor, rawRData.length
-      );
+      System.arraycopy(rawRData, 0, data, cursor, rawRData.length);
     }
 
     return data;
   }
 
-  /**
-   * @return length
-   */
+  /** @return length */
   public int length() {
     int rDataLen = rData == null ? 0 : rData.length();
     return name.length() + SHORT_SIZE_IN_BYTES * 3 + INT_SIZE_IN_BYTES + rDataLen;
@@ -327,23 +271,35 @@ public final class DnsResourceRecord implements Serializable {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("NAME: ")
-      .append(headerRawData != null ? name.toString(headerRawData) : name).append(ls)
-      .append(indent).append("TYPE: ")
-      .append(dataType).append(ls)
-      .append(indent).append("CLASS: ")
-      .append(dataClass).append(ls)
-      .append(indent).append("TTL: ")
-      .append(getTtlAsLong()).append(ls)
-      .append(indent).append("RDLENGTH: ")
-      .append(getRdLengthAsInt()).append(ls);
-      if (rData != null) {
-        sb.append(indent).append("RDATA:").append(ls)
+    sb.append(indent)
+        .append("NAME: ")
+        .append(headerRawData != null ? name.toString(headerRawData) : name)
+        .append(ls)
+        .append(indent)
+        .append("TYPE: ")
+        .append(dataType)
+        .append(ls)
+        .append(indent)
+        .append("CLASS: ")
+        .append(dataClass)
+        .append(ls)
+        .append(indent)
+        .append("TTL: ")
+        .append(getTtlAsLong())
+        .append(ls)
+        .append(indent)
+        .append("RDLENGTH: ")
+        .append(getRdLengthAsInt())
+        .append(ls);
+    if (rData != null) {
+      sb.append(indent)
+          .append("RDATA:")
+          .append(ls)
           .append(
-            headerRawData != null ? rData.toString(indent + "  ", headerRawData)
-                                  : rData.toString(indent + "  ")
-          );
-      }
+              headerRawData != null
+                  ? rData.toString(indent + "  ", headerRawData)
+                  : rData.toString(indent + "  "));
+    }
 
     return sb.toString();
   }
@@ -392,7 +348,7 @@ public final class DnsResourceRecord implements Serializable {
    * @author Kaito Yamada
    * @since pcap4j 1.7.1
    */
-  public static final class Builder implements LengthBuilder<DnsResourceRecord>{
+  public static final class Builder implements LengthBuilder<DnsResourceRecord> {
 
     private DnsDomainName name;
     private DnsResourceRecordType dataType;
@@ -402,9 +358,7 @@ public final class DnsResourceRecord implements Serializable {
     private DnsRData rData;
     private boolean correctLengthAtBuild = false;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(DnsResourceRecord obj) {
@@ -476,39 +430,28 @@ public final class DnsResourceRecord implements Serializable {
       return this;
     }
 
-    /**
-     *
-     * @return a new DnsResourceRecord object.
-     */
+    /** @return a new DnsResourceRecord object. */
     @Override
     public DnsResourceRecord build() {
       return new DnsResourceRecord(this);
     }
-
   }
 
   /**
-   * The interface representing an RDATA.
-   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * classes which implement this interface must implement the following method:
-   * {@code public static IpV4Option newInstance(byte[] rawData, int offset, int length)
-   * throws IllegalRawDataException}
+   * The interface representing an RDATA. If you use {@link
+   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
+   * which implement this interface must implement the following method: {@code public static
+   * IpV4Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException}
    *
    * @author Kaito Yamada
    * @since pcap4j 1.7.1
    */
   public interface DnsRData extends Serializable {
 
-    /**
-     *
-     * @return length
-     */
+    /** @return length */
     public int length();
 
-    /**
-     *
-     * @return raw data
-     */
+    /** @return raw data */
     public byte[] getRawData();
 
     /**
@@ -523,7 +466,5 @@ public final class DnsResourceRecord implements Serializable {
      * @return String representation of this object.
      */
     public String toString(String indent, byte[] headerRawData);
-
   }
-
 }

@@ -7,6 +7,9 @@
 
 package org.pcap4j.core;
 
+import com.sun.jna.Pointer;
+import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.PointerByReference;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -24,9 +27,6 @@ import org.pcap4j.util.Inet4NetworkAddress;
 import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.PointerByReference;
 
 /**
  * @author Kaito Yamada
@@ -36,27 +36,24 @@ public final class Pcaps {
 
   private static final Logger logger = LoggerFactory.getLogger(Pcaps.class);
 
-  private Pcaps() { throw new AssertionError(); }
+  private Pcaps() {
+    throw new AssertionError();
+  }
 
   /**
-   * Gets all devices.
-   * This method is not thread-safe.
+   * Gets all devices. This method is not thread-safe.
    *
    * @return a list of PcapNetworkInterfaces.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static
-  List<PcapNetworkInterface> findAllDevs() throws PcapNativeException {
+  public static List<PcapNetworkInterface> findAllDevs() throws PcapNativeException {
     PointerByReference alldevsPP = new PointerByReference();
     PcapErrbuf errbuf = new PcapErrbuf();
 
     int rc = NativeMappings.pcap_findalldevs(alldevsPP, errbuf);
     if (rc != 0) {
       StringBuilder sb = new StringBuilder(50);
-      sb.append("Return code: ")
-        .append(rc)
-        .append(", Message: ")
-        .append(errbuf);
+      sb.append("Return code: ").append(rc).append(", Message: ").append(errbuf);
       throw new PcapNativeException(sb.toString(), rc);
     }
     if (errbuf.length() != 0) {
@@ -83,16 +80,13 @@ public final class Pcaps {
   }
 
   /**
-   * Gets a device by IP address.
-   * This method is not thread-safe.
+   * Gets a device by IP address. This method is not thread-safe.
    *
    * @param addr addr
    * @return a PcapNetworkInterface.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static PcapNetworkInterface getDevByAddress(
-    InetAddress addr
-  ) throws PcapNativeException {
+  public static PcapNetworkInterface getDevByAddress(InetAddress addr) throws PcapNativeException {
     if (addr == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("addr: ").append(addr);
@@ -100,8 +94,8 @@ public final class Pcaps {
     }
 
     List<PcapNetworkInterface> allDevs = findAllDevs();
-    for (PcapNetworkInterface pif: allDevs) {
-      for (PcapAddress paddr: pif.getAddresses()) {
+    for (PcapNetworkInterface pif : allDevs) {
+      for (PcapAddress paddr : pif.getAddresses()) {
         if (paddr.getAddress().equals(addr)) {
           return pif;
         }
@@ -112,16 +106,13 @@ public final class Pcaps {
   }
 
   /**
-   * Gets a device by name.
-   * This method is not thread-safe.
+   * Gets a device by name. This method is not thread-safe.
    *
    * @param name name
    * @return a PcapNetworkInterface.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static PcapNetworkInterface getDevByName(
-    String name
-  ) throws PcapNativeException {
+  public static PcapNetworkInterface getDevByName(String name) throws PcapNativeException {
     if (name == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("name: ").append(name);
@@ -129,7 +120,7 @@ public final class Pcaps {
     }
 
     List<PcapNetworkInterface> allDevs = findAllDevs();
-    for (PcapNetworkInterface pif: allDevs) {
+    for (PcapNetworkInterface pif : allDevs) {
       if (pif.getName().equals(name)) {
         return pif;
       }
@@ -139,7 +130,6 @@ public final class Pcaps {
   }
 
   /**
-   *
    * @return a name of a network interface.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
@@ -155,14 +145,11 @@ public final class Pcaps {
   }
 
   /**
-   *
    * @param devName devName
    * @return an {@link org.pcap4j.util.Inet4NetworkAddress Inet4NetworkAddress} object.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static Inet4NetworkAddress lookupNet(
-    String devName
-  ) throws PcapNativeException {
+  public static Inet4NetworkAddress lookupNet(String devName) throws PcapNativeException {
     if (devName == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("devName: ").append(devName);
@@ -181,20 +168,15 @@ public final class Pcaps {
     int net = netp.getValue();
     int mask = maskp.getValue();
 
-    return new Inet4NetworkAddress(
-                 Inets.itoInetAddress(net), Inets.itoInetAddress(mask)
-               );
+    return new Inet4NetworkAddress(Inets.itoInetAddress(net), Inets.itoInetAddress(mask));
   }
 
   /**
-   *
    * @param filePath "-" means stdin
    * @return a new PcapHandle object.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static PcapHandle openOffline(
-    String filePath
-  ) throws PcapNativeException {
+  public static PcapHandle openOffline(String filePath) throws PcapNativeException {
     if (filePath == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("filePath: ").append(filePath);
@@ -202,8 +184,7 @@ public final class Pcaps {
     }
 
     PcapErrbuf errbuf = new PcapErrbuf();
-    Pointer handle
-      = NativeMappings.pcap_open_offline(filePath, errbuf);
+    Pointer handle = NativeMappings.pcap_open_offline(filePath, errbuf);
 
     if (handle == null || errbuf.length() != 0) {
       throw new PcapNativeException(errbuf.toString());
@@ -213,34 +194,33 @@ public final class Pcaps {
   }
 
   /**
-   *
    * @param filePath "-" means stdin
    * @param precision precision
    * @return a new PcapHandle object.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static PcapHandle openOffline(
-    String filePath, TimestampPrecision precision
-  ) throws PcapNativeException {
+  public static PcapHandle openOffline(String filePath, TimestampPrecision precision)
+      throws PcapNativeException {
     if (filePath == null || precision == null) {
-      StringBuilder sb
-        = new StringBuilder()
-            .append("filePath: ").append(filePath)
-            .append(" precision: ").append(precision);
+      StringBuilder sb =
+          new StringBuilder()
+              .append("filePath: ")
+              .append(filePath)
+              .append(" precision: ")
+              .append(precision);
       throw new NullPointerException(sb.toString());
     }
 
     PcapErrbuf errbuf = new PcapErrbuf();
     Pointer handle;
     try {
-      handle = PcapLibrary.INSTANCE.pcap_open_offline_with_tstamp_precision(
-                 filePath, precision.getValue(), errbuf
-               );
+      handle =
+          PcapLibrary.INSTANCE.pcap_open_offline_with_tstamp_precision(
+              filePath, precision.getValue(), errbuf);
     } catch (UnsatisfiedLinkError e) {
       throw new PcapNativeException(
-              "pcap_open_offline_with_tstamp_precision is not supported by the pcap library"
-                + " installed in this environment."
-            );
+          "pcap_open_offline_with_tstamp_precision is not supported by the pcap library"
+              + " installed in this environment.");
     }
 
     if (handle == null || errbuf.length() != 0) {
@@ -251,27 +231,25 @@ public final class Pcaps {
   }
 
   /**
-   *
    * @param dlt dlt
    * @param snaplen Snapshot length, which is the number of bytes captured for each packet.
    * @return a new PcapHandle object.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static PcapHandle openDead(
-    DataLinkType dlt, int snaplen
-  ) throws PcapNativeException {
+  public static PcapHandle openDead(DataLinkType dlt, int snaplen) throws PcapNativeException {
     if (dlt == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("dlt: ").append(dlt);
       throw new NullPointerException(sb.toString());
     }
 
-    Pointer handle
-      = NativeMappings.pcap_open_dead(dlt.value(), snaplen);
+    Pointer handle = NativeMappings.pcap_open_dead(dlt.value(), snaplen);
     if (handle == null) {
       StringBuilder sb = new StringBuilder(50);
-      sb.append("Failed to open a PcapHandle. dlt: ").append(dlt)
-        .append(" snaplen: ").append(snaplen);
+      sb.append("Failed to open a PcapHandle. dlt: ")
+          .append(dlt)
+          .append(" snaplen: ")
+          .append(snaplen);
       throw new PcapNativeException(sb.toString());
     }
 
@@ -279,43 +257,39 @@ public final class Pcaps {
   }
 
   /**
-   *
    * @param dlt dlt
    * @param snaplen Snapshot length, which is the number of bytes captured for each packet.
    * @param precision precision
    * @return a new PcapHandle object.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static PcapHandle openDead(
-    DataLinkType dlt, int snaplen, TimestampPrecision precision
-  ) throws PcapNativeException {
+  public static PcapHandle openDead(DataLinkType dlt, int snaplen, TimestampPrecision precision)
+      throws PcapNativeException {
     if (dlt == null || precision == null) {
-      StringBuilder sb
-        = new StringBuilder()
-            .append("dlt: ").append(dlt)
-            .append(" precision: ").append(precision);
+      StringBuilder sb =
+          new StringBuilder().append("dlt: ").append(dlt).append(" precision: ").append(precision);
       throw new NullPointerException(sb.toString());
     }
 
     Pointer handle;
     try {
-      handle = PcapLibrary.INSTANCE.pcap_open_dead_with_tstamp_precision(
-                 dlt.value(),
-                 snaplen,
-                 precision.getValue()
-               );
+      handle =
+          PcapLibrary.INSTANCE.pcap_open_dead_with_tstamp_precision(
+              dlt.value(), snaplen, precision.getValue());
     } catch (UnsatisfiedLinkError e) {
       throw new PcapNativeException(
-              "pcap_open_dead_with_tstamp_precision is not supported by the pcap library"
-                + " installed in this environment."
-            );
+          "pcap_open_dead_with_tstamp_precision is not supported by the pcap library"
+              + " installed in this environment.");
     }
 
     if (handle == null) {
       StringBuilder sb = new StringBuilder(50);
-      sb.append("Failed to open a PcapHandle. dlt: ").append(dlt)
-        .append(" snaplen: ").append(snaplen)
-        .append(" precision: ").append(precision);
+      sb.append("Failed to open a PcapHandle. dlt: ")
+          .append(dlt)
+          .append(" snaplen: ")
+          .append(snaplen)
+          .append(" precision: ")
+          .append(precision);
       throw new PcapNativeException(sb.toString());
     }
 
@@ -323,7 +297,6 @@ public final class Pcaps {
   }
 
   /**
-   *
    * @param snaplen snaplen
    * @param dlt dlt
    * @param bpfExpression bpfExpression
@@ -333,33 +306,36 @@ public final class Pcaps {
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
   public static BpfProgram compileFilter(
-    int snaplen, DataLinkType dlt, String bpfExpression,
-    BpfCompileMode mode, Inet4Address netmask
-  ) throws PcapNativeException {
-    if (
-         dlt == null
-      || bpfExpression == null
-      || mode == null
-      || netmask == null
-    ) {
+      int snaplen,
+      DataLinkType dlt,
+      String bpfExpression,
+      BpfCompileMode mode,
+      Inet4Address netmask)
+      throws PcapNativeException {
+    if (dlt == null || bpfExpression == null || mode == null || netmask == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("dlt: ").append(dlt)
-        .append(" bpfExpression: ").append(bpfExpression)
-        .append(" mode: ").append(mode)
-        .append(" netmask: ").append(netmask);
+      sb.append("dlt: ")
+          .append(dlt)
+          .append(" bpfExpression: ")
+          .append(bpfExpression)
+          .append(" mode: ")
+          .append(mode)
+          .append(" netmask: ")
+          .append(netmask);
       throw new NullPointerException(sb.toString());
     }
 
     bpf_program prog = new bpf_program();
-    int rc = NativeMappings.pcap_compile_nopcap(
-               snaplen, dlt.value(), prog, bpfExpression, mode.getValue(),
-               ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0)
-             );
+    int rc =
+        NativeMappings.pcap_compile_nopcap(
+            snaplen,
+            dlt.value(),
+            prog,
+            bpfExpression,
+            mode.getValue(),
+            ByteArrays.getInt(ByteArrays.toByteArray(netmask), 0));
     if (rc < 0) {
-      throw new PcapNativeException(
-                  "Failed to compile the BPF expression: " + bpfExpression,
-                  rc
-                );
+      throw new PcapNativeException("Failed to compile the BPF expression: " + bpfExpression, rc);
     }
     return new BpfProgram(prog, bpfExpression);
   }
@@ -369,9 +345,7 @@ public final class Pcaps {
    * @return a {@link org.pcap4j.packet.namednumber.DataLinkType DataLinkType} object.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static DataLinkType dataLinkNameToVal(
-    String name
-  ) throws PcapNativeException {
+  public static DataLinkType dataLinkNameToVal(String name) throws PcapNativeException {
     if (name == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("name: ").append(name);
@@ -381,9 +355,7 @@ public final class Pcaps {
     int rc = NativeMappings.pcap_datalink_name_to_val(name);
     if (rc < 0) {
       throw new PcapNativeException(
-                  "Failed to convert the data link name to the value: " + name,
-                  rc
-                );
+          "Failed to convert the data link name to the value: " + name, rc);
     }
     return DataLinkType.getInstance(rc);
   }
@@ -393,9 +365,7 @@ public final class Pcaps {
    * @return data link type name
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static String dataLinkTypeToName(
-    DataLinkType dlt
-  ) throws PcapNativeException {
+  public static String dataLinkTypeToName(DataLinkType dlt) throws PcapNativeException {
     if (dlt == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("dlt: ").append(dlt);
@@ -409,14 +379,11 @@ public final class Pcaps {
    * @return data link type name
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static String dataLinkValToName(
-    int dataLinkVal
-  ) throws PcapNativeException {
+  public static String dataLinkValToName(int dataLinkVal) throws PcapNativeException {
     String name = NativeMappings.pcap_datalink_val_to_name(dataLinkVal);
     if (name == null) {
       throw new PcapNativeException(
-                  "Failed to convert the data link value to the name: " + dataLinkVal
-                );
+          "Failed to convert the data link value to the name: " + dataLinkVal);
     }
     return name;
   }
@@ -426,9 +393,7 @@ public final class Pcaps {
    * @return a short description of that data link type.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static String dataLinkTypeToDescription(
-    DataLinkType dlt
-  ) throws PcapNativeException {
+  public static String dataLinkTypeToDescription(DataLinkType dlt) throws PcapNativeException {
     if (dlt == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("dlt: ").append(dlt);
@@ -442,14 +407,11 @@ public final class Pcaps {
    * @return a short description of that data link type.
    * @throws PcapNativeException if an error occurs in the pcap native library.
    */
-  public static String dataLinkValToDescription(
-    int dataLinkVal
-  ) throws PcapNativeException {
+  public static String dataLinkValToDescription(int dataLinkVal) throws PcapNativeException {
     String descr = NativeMappings.pcap_datalink_val_to_description(dataLinkVal);
     if (descr == null) {
       throw new PcapNativeException(
-                  "Failed to convert the data link value to the description: " + dataLinkVal
-                );
+          "Failed to convert the data link value to the description: " + dataLinkVal);
     }
     return descr;
   }
@@ -463,19 +425,18 @@ public final class Pcaps {
   }
 
   /**
-   * @return a string giving information about the version of the libpcap library being used;
-   *         note that it contains more information than just a version number.
+   * @return a string giving information about the version of the libpcap library being used; note
+   *     that it contains more information than just a version number.
    */
   public static String libVersion() {
     return NativeMappings.pcap_lib_version();
   }
 
   /**
-   *
    * @param inetAddr Inet4Address or Inet6Address
    * @return a string representation of an InetAddress for BPF.
    */
-  public static String toBpfString(InetAddress inetAddr){
+  public static String toBpfString(InetAddress inetAddr) {
     if (inetAddr == null) {
       StringBuilder sb = new StringBuilder();
       sb.append("inetAddr: ").append(inetAddr);
@@ -487,7 +448,6 @@ public final class Pcaps {
   }
 
   /**
-   *
    * @param macAddr macAddr
    * @return a string representation of a MAC address for BPF.
    */
@@ -509,6 +469,4 @@ public final class Pcaps {
 
     return builder.toString();
   }
-
 }
-

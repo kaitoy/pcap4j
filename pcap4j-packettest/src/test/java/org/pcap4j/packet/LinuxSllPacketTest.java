@@ -1,6 +1,7 @@
 package org.pcap4j.packet;
 
 import static org.junit.Assert.*;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.junit.AfterClass;
@@ -21,8 +22,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class LinuxSllPacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(LinuxSllPacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(LinuxSllPacketTest.class);
 
   private final LinuxSllPacket packet;
   private final LinuxSllPacketType packetType;
@@ -36,47 +36,37 @@ public class LinuxSllPacketTest extends AbstractPacketTest {
     this.packetType = LinuxSllPacketType.LINUX_SLL_HOST;
     this.hardwareType = ArpHardwareType.ETHERNET;
     this.hardwareLength = 4;
-    this.addressField
-      = new byte[] {
-          (byte)0xFF, (byte)0xEE, (byte)0xDD, (byte)0xCC,
-          0x11, 0x22, 0x33, 0x44
-        };
-    this.address = LinkLayerAddress.getByAddress(
-                     new byte[] {(byte)0xFF, (byte)0xEE, (byte)0xDD, (byte)0xCC}
-                   );
+    this.addressField =
+        new byte[] {(byte) 0xFF, (byte) 0xEE, (byte) 0xDD, (byte) 0xCC, 0x11, 0x22, 0x33, 0x44};
+    this.address =
+        LinkLayerAddress.getByAddress(
+            new byte[] {(byte) 0xFF, (byte) 0xEE, (byte) 0xDD, (byte) 0xCC});
     this.protocol = EtherType.ARP;
-
 
     ArpPacket.Builder ab = new ArpPacket.Builder();
     try {
       ab.hardwareType(ArpHardwareType.ETHERNET)
-        .protocolType(EtherType.IPV4)
-        .hardwareAddrLength((byte)MacAddress.SIZE_IN_BYTES)
-        .protocolAddrLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
-        .srcHardwareAddr(MacAddress.getByName("aa:bb:cc:dd:ee:ff"))
-        .dstHardwareAddr(MacAddress.getByName("11:22:33:44:55:66"))
-        .srcProtocolAddr(
-           InetAddress.getByAddress(
-             new byte[] { (byte)192, (byte)0, (byte)2, (byte)1 }
-           )
-         )
-        .dstProtocolAddr(
-           InetAddress.getByAddress(
-             new byte[] { (byte)192, (byte)0, (byte)2, (byte)2 }
-           )
-         )
-        .operation(ArpOperation.REQUEST);
+          .protocolType(EtherType.IPV4)
+          .hardwareAddrLength((byte) MacAddress.SIZE_IN_BYTES)
+          .protocolAddrLength((byte) ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
+          .srcHardwareAddr(MacAddress.getByName("aa:bb:cc:dd:ee:ff"))
+          .dstHardwareAddr(MacAddress.getByName("11:22:33:44:55:66"))
+          .srcProtocolAddr(
+              InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 1}))
+          .dstProtocolAddr(
+              InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) 2}))
+          .operation(ArpOperation.REQUEST);
     } catch (UnknownHostException e) {
       throw new AssertionError();
     }
 
     LinuxSllPacket.Builder eb = new LinuxSllPacket.Builder();
     eb.packetType(packetType)
-      .addressType(hardwareType)
-      .addressLength(hardwareLength)
-      .address(addressField)
-      .protocol(protocol)
-      .payloadBuilder(ab);
+        .addressType(hardwareType)
+        .addressLength(hardwareLength)
+        .address(addressField)
+        .protocol(protocol)
+        .payloadBuilder(ab);
     this.packet = eb.build();
   }
 
@@ -97,20 +87,17 @@ public class LinuxSllPacketTest extends AbstractPacketTest {
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    logger.info(
-      "########## " + LinuxSllPacketTest.class.getSimpleName() + " START ##########"
-    );
+    logger.info("########## " + LinuxSllPacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Test
   public void testNewPacket() {
     try {
-      LinuxSllPacket p
-        = LinuxSllPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
+      LinuxSllPacket p =
+          LinuxSllPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
@@ -127,5 +114,4 @@ public class LinuxSllPacketTest extends AbstractPacketTest {
     assertArrayEquals(addressField, h.getAddressField());
     assertEquals(protocol, h.getProtocol());
   }
-
 }

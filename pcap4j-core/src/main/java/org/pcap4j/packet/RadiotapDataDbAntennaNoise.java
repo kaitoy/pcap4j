@@ -11,9 +11,8 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
- * Radiotap dB antenna noise field.
- * RF noise power at the antenna, decibel difference from an arbitrary, fixed reference.
- * This field contains a single unsigned 8-bit value.
+ * Radiotap dB antenna noise field. RF noise power at the antenna, decibel difference from an
+ * arbitrary, fixed reference. This field contains a single unsigned 8-bit value.
  *
  * @see <a href="http://www.radiotap.org/defined-fields/dB%20antenna%20noise">Radiotap</a>
  * @author Kaito Yamada
@@ -21,9 +20,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class RadiotapDataDbAntennaNoise implements RadiotapData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3285930614145918404L;
 
   private static final int LENGTH = 1;
@@ -31,9 +28,8 @@ public final class RadiotapDataDbAntennaNoise implements RadiotapData {
   private final byte antennaNoise;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -41,24 +37,24 @@ public final class RadiotapDataDbAntennaNoise implements RadiotapData {
    * @return a new RadiotapDbAntennaNoise object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapDataDbAntennaNoise newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static RadiotapDataDbAntennaNoise newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new RadiotapDataDbAntennaNoise(rawData, offset, length);
   }
 
-  private RadiotapDataDbAntennaNoise(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataDbAntennaNoise(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapDbAntennaNoise (")
-        .append(LENGTH)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(LENGTH)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -73,15 +69,15 @@ public final class RadiotapDataDbAntennaNoise implements RadiotapData {
     this.antennaNoise = builder.antennaNoise;
   }
 
-  /**
-   * @return antennaNoise (unit: dB)
-   */
-  public byte getAntennaNoise() { return antennaNoise; }
+  /** @return antennaNoise (unit: dB) */
+  public byte getAntennaNoise() {
+    return antennaNoise;
+  }
 
-  /**
-   * @return antennaNoise (unit: dB)
-   */
-  public int getAntennaNoiseAsInt() { return antennaNoise & 0xFF; }
+  /** @return antennaNoise (unit: dB) */
+  public int getAntennaNoiseAsInt() {
+    return antennaNoise & 0xFF;
+  }
 
   @Override
   public int length() {
@@ -93,10 +89,10 @@ public final class RadiotapDataDbAntennaNoise implements RadiotapData {
     return ByteArrays.toByteArray(antennaNoise);
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -108,12 +104,14 @@ public final class RadiotapDataDbAntennaNoise implements RadiotapData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("dB antenna noise: ")
-      .append(ls)
-      .append(indent).append("  Antenna noise: ")
-      .append(getAntennaNoiseAsInt())
-      .append(" dB")
-      .append(ls);
+    sb.append(indent)
+        .append("dB antenna noise: ")
+        .append(ls)
+        .append(indent)
+        .append("  Antenna noise: ")
+        .append(getAntennaNoiseAsInt())
+        .append(" dB")
+        .append(ls);
 
     return sb.toString();
   }
@@ -125,8 +123,12 @@ public final class RadiotapDataDbAntennaNoise implements RadiotapData {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     RadiotapDataDbAntennaNoise other = (RadiotapDataDbAntennaNoise) obj;
     return antennaNoise == other.antennaNoise;
   }
@@ -139,9 +141,7 @@ public final class RadiotapDataDbAntennaNoise implements RadiotapData {
 
     private byte antennaNoise;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(RadiotapDataDbAntennaNoise obj) {
@@ -157,13 +157,9 @@ public final class RadiotapDataDbAntennaNoise implements RadiotapData {
       return this;
     }
 
-    /**
-     * @return a new RadiotapDbAntennaNoise object.
-     */
+    /** @return a new RadiotapDbAntennaNoise object. */
     public RadiotapDataDbAntennaNoise build() {
       return new RadiotapDataDbAntennaNoise(this);
     }
-
   }
-
 }

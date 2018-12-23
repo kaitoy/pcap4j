@@ -8,21 +8,19 @@
 package org.pcap4j.packet;
 
 import java.io.Serializable;
-
 import org.pcap4j.util.ByteArrays;
 
 /**
  * Link Adaptation Control field of an IEEE802.11 frame.
- * <pre>
- * {@code
+ *
+ * <pre>{@code
  *      0        1        2        3        4        5        6        7
  * +--------+--------+--------+--------+--------+--------+--------+--------+
  * |VHT_MFB |  TRQ   |                MAI                |       MFSI      |
  * +--------+--------+--------+--------+--------+--------+--------+--------+
  * |  MFSI  |                           MFB/ASELC                          |
  * +--------+--------+--------+--------+--------+--------+--------+--------+
- * }
- * </pre>
+ * }</pre>
  *
  * @see <a href="http://standards.ieee.org/getieee802/download/802.11-2012.pdf">IEEE802.11</a>
  * @author Kaito Yamada
@@ -30,14 +28,10 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot11LinkAdaptationControl implements Serializable {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 7735461000002622072L;
 
-  /**
-   * ASELI
-   */
+  /** ASELI */
   public static final byte ASELI = 14;
 
   private final boolean vhtMfb;
@@ -49,9 +43,8 @@ public final class Dot11LinkAdaptationControl implements Serializable {
   private final Aselc aselc;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -59,26 +52,24 @@ public final class Dot11LinkAdaptationControl implements Serializable {
    * @return a new Dot11LinkAdaptationControl object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot11LinkAdaptationControl newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot11LinkAdaptationControl newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot11LinkAdaptationControl(rawData, offset, length);
   }
 
-  private Dot11LinkAdaptationControl(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot11LinkAdaptationControl(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if (length < 2) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a Dot11LinkAdaptationControl (")
-        .append(2)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(2)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -89,8 +80,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
     this.aseli = ((first >> 2) & 0x0F) == ASELI;
     if (aseli) {
       this.mai = null;
-    }
-    else {
+    } else {
       this.mai = new Mai((first & 0x04) != 0, (byte) ((first >> 3) & 0x07));
     }
     this.mfsi = (byte) (((first >> 6) & 0x03) | ((second & 0x01) << 2));
@@ -106,18 +96,15 @@ public final class Dot11LinkAdaptationControl implements Serializable {
     }
     if ((builder.maiOrAseli & 0xF0) != 0) {
       throw new IllegalArgumentException(
-              "(builder.maiOrAseli & 0xF0) must be zero. builder.maiOrAseli: " + builder.maiOrAseli
-            );
+          "(builder.maiOrAseli & 0xF0) must be zero. builder.maiOrAseli: " + builder.maiOrAseli);
     }
     if ((builder.mfsi & 0xF8) != 0) {
       throw new IllegalArgumentException(
-              "(builder.mfsi & 0xF8) must be zero. builder.mfsi: " + builder.mfsi
-            );
+          "(builder.mfsi & 0xF8) must be zero. builder.mfsi: " + builder.mfsi);
     }
     if ((builder.mfbOrAselc & 0x80) != 0) {
       throw new IllegalArgumentException(
-              "(builder.mfbOrAselc & 0x80) must be zero. builder.mfbOrAselc: " + builder.mfbOrAselc
-            );
+          "(builder.mfbOrAselc & 0x80) must be zero. builder.mfbOrAselc: " + builder.mfbOrAselc);
     }
 
     this.vhtMfb = builder.vhtMfb;
@@ -125,8 +112,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
     this.aseli = builder.maiOrAseli == ASELI;
     if (aseli) {
       this.mai = null;
-    }
-    else {
+    } else {
       this.mai = new Mai(builder.maiOrAseli);
     }
     this.mfsi = builder.mfsi;
@@ -134,16 +120,12 @@ public final class Dot11LinkAdaptationControl implements Serializable {
     this.aselc = new Aselc(builder.mfbOrAselc);
   }
 
-  /**
-   * @return true if the VHT_MFB field is set to 1; false otherwise.
-   */
+  /** @return true if the VHT_MFB field is set to 1; false otherwise. */
   public boolean isVhtMfb() {
     return vhtMfb;
   }
 
-  /**
-   * @return true if the TRQ field is set to 1; false otherwise.
-   */
+  /** @return true if the TRQ field is set to 1; false otherwise. */
   public boolean isTrq() {
     return trq;
   }
@@ -158,76 +140,64 @@ public final class Dot11LinkAdaptationControl implements Serializable {
 
   /**
    * @return a {@link Mai} object if {@link #isAselIndicated() isAselIndicated} returns false;
-   *         otherwise null.
+   *     otherwise null.
    */
   public Mai getMai() {
     return mai;
   }
 
-  /**
-   * @return mfsi
-   */
+  /** @return mfsi */
   public byte getMfsi() {
     return mfsi;
   }
 
-  /**
-   * @return mfsi
-   */
+  /** @return mfsi */
   public int getMfsiAsInt() {
     return mfsi;
   }
 
   /**
-   * @return the value of MFB if {@link #isAselIndicated() isAselIndicated} returns false;
-   *         otherwise null.
+   * @return the value of MFB if {@link #isAselIndicated() isAselIndicated} returns false; otherwise
+   *     null.
    */
   public Byte getMfb() {
     if (aseli) {
       return null;
-    }
-    else {
+    } else {
       return mfb;
     }
   }
 
   /**
-   * @return the value of MFB if {@link #isAselIndicated() isAselIndicated} returns false;
-   *         otherwise null.
+   * @return the value of MFB if {@link #isAselIndicated() isAselIndicated} returns false; otherwise
+   *     null.
    */
   public Integer getMfbAsInteger() {
     if (aseli) {
       return null;
-    }
-    else {
+    } else {
       return (int) mfb;
     }
   }
 
   /**
    * @return an {@link Aselc} object if {@link #isAselIndicated() isAselIndicated} returns true;
-   *         otherwise null.
+   *     otherwise null.
    */
   public Aselc getAselc() {
     if (aseli) {
       return aselc;
-    }
-    else {
+    } else {
       return null;
     }
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
 
-  /**
-   * @return the raw data.
-   */
+  /** @return the raw data. */
   public byte[] getRawData() {
     byte[] data = new byte[2];
 
@@ -247,9 +217,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
     return data;
   }
 
-  /**
-   * @return length
-   */
+  /** @return length */
   public int length() {
     return 2;
   }
@@ -259,25 +227,20 @@ public final class Dot11LinkAdaptationControl implements Serializable {
     StringBuilder sb = new StringBuilder(250);
 
     sb.append("[VHT_MFB: ")
-      .append(vhtMfb)
-      .append(", TRQ: ")
-      .append(trq)
-      .append(", ASELI: ")
-      .append(aseli);
+        .append(vhtMfb)
+        .append(", TRQ: ")
+        .append(trq)
+        .append(", ASELI: ")
+        .append(aseli);
 
     if (!aseli) {
-      sb.append(", MAI: ")
-        .append(mai);
+      sb.append(", MAI: ").append(mai);
     }
-    sb.append(", MFSI: ")
-      .append(mfsi);
+    sb.append(", MFSI: ").append(mfsi);
     if (aseli) {
-      sb.append(", ASELC: ")
-        .append(aselc);
-    }
-    else {
-      sb.append(", MFB: ")
-        .append(mfb);
+      sb.append(", ASELC: ").append(aselc);
+    } else {
+      sb.append(", MFB: ").append(mfb);
     }
     sb.append("]");
 
@@ -299,29 +262,18 @@ public final class Dot11LinkAdaptationControl implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     Dot11LinkAdaptationControl other = (Dot11LinkAdaptationControl) obj;
     if (mai == null) {
-      if (other.mai != null)
-        return false;
-    }
-    else if (!mai.equals(other.mai))
-      return false;
-    if (!mfb.equals(other.mfb))
-      return false;
-    if (mfsi != other.mfsi)
-      return false;
-    if (aseli != other.aseli)
-      return false;
-    if (vhtMfb != other.vhtMfb)
-      return false;
-    if (trq != other.trq)
-      return false;
+      if (other.mai != null) return false;
+    } else if (!mai.equals(other.mai)) return false;
+    if (!mfb.equals(other.mfb)) return false;
+    if (mfsi != other.mfsi) return false;
+    if (aseli != other.aseli) return false;
+    if (vhtMfb != other.vhtMfb) return false;
+    if (trq != other.trq) return false;
     return true;
   }
 
@@ -340,9 +292,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
    */
   public static final class Mai implements Serializable {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -7417614720576047794L;
 
     private final boolean mrq;
@@ -360,36 +310,27 @@ public final class Dot11LinkAdaptationControl implements Serializable {
       this.msi = msi;
     }
 
-    /**
-     * @param rawData the raw data which the MRQ is encoded at the LSB.
-     */
+    /** @param rawData the raw data which the MRQ is encoded at the LSB. */
     public Mai(byte rawData) {
       this.mrq = (rawData & 0x01) != 0;
       this.msi = (byte) ((rawData >> 1) & 0x07);
     }
 
-    /**
-     * @return mrq
-     */
+    /** @return mrq */
     public boolean isMrq() {
       return mrq;
     }
 
-    /**
-     * @return msi
-     */
+    /** @return msi */
     public byte getMsi() {
       return msi;
     }
 
-    /**
-     * @return the raw data
-     */
+    /** @return the raw data */
     public byte getRawData() {
       if (mrq) {
         return (byte) ((msi << 1) | 1);
-      }
-      else {
+      } else {
         return (byte) (msi << 1);
       }
     }
@@ -398,11 +339,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
     public String toString() {
       StringBuilder sb = new StringBuilder(250);
 
-      sb.append("[MRQ: ")
-        .append(mrq)
-        .append(", MSI: ")
-        .append(msi)
-        .append("]");
+      sb.append("[MRQ: ").append(mrq).append(", MSI: ").append(msi).append("]");
 
       return sb.toString();
     }
@@ -418,24 +355,19 @@ public final class Dot11LinkAdaptationControl implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
+      if (this == obj) return true;
+      if (obj == null) return false;
+      if (getClass() != obj.getClass()) return false;
       Mai other = (Mai) obj;
-      if (mrq != other.mrq)
-        return false;
-      if (msi != other.msi)
-        return false;
+      if (mrq != other.mrq) return false;
+      if (msi != other.msi) return false;
       return true;
     }
-
   }
 
   /**
    * ASELC subfield
+   *
    * <pre style="white-space: pre;">
    *    0    1    2    3    4    5
    * +----+----+----+----+----+----+----+
@@ -448,9 +380,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
    */
   public static final class Aselc implements Serializable {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -5404846090809709793L;
 
     private final AselCommand command;
@@ -471,31 +401,23 @@ public final class Dot11LinkAdaptationControl implements Serializable {
       this.data = data;
     }
 
-    /**
-     * @param rawData the raw data which the ASEL Command is encoded in 3 bits from the LSB.
-     */
+    /** @param rawData the raw data which the ASEL Command is encoded in 3 bits from the LSB. */
     public Aselc(byte rawData) {
       this.command = AselCommand.getInstance(rawData & 0x07);
       this.data = (byte) ((rawData >> 3) & 0x0F);
     }
 
-    /**
-     * @return command
-     */
+    /** @return command */
     public AselCommand getCommand() {
       return command;
     }
 
-    /**
-     * @return data
-     */
+    /** @return data */
     public byte getData() {
       return data;
     }
 
-    /**
-     * @return the raw data.
-     */
+    /** @return the raw data. */
     public byte getRawData() {
       return (byte) ((command.value << 4) | (data));
     }
@@ -511,17 +433,12 @@ public final class Dot11LinkAdaptationControl implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
+      if (this == obj) return true;
+      if (obj == null) return false;
+      if (getClass() != obj.getClass()) return false;
       Aselc other = (Aselc) obj;
-      if (command != other.command)
-        return false;
-      if (data != other.data)
-        return false;
+      if (command != other.command) return false;
+      if (data != other.data) return false;
       return true;
     }
 
@@ -529,15 +446,10 @@ public final class Dot11LinkAdaptationControl implements Serializable {
     public String toString() {
       StringBuilder sb = new StringBuilder(250);
 
-      sb.append("[ASEL Command: ")
-        .append(command)
-        .append(", ASEL Data: ")
-        .append(data)
-        .append("]");
+      sb.append("[ASEL Command: ").append(command).append(", ASEL Data: ").append(data).append("]");
 
       return sb.toString();
     }
-
   }
 
   /**
@@ -546,9 +458,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
    */
   public static enum AselCommand {
 
-    /**
-     * Transmit Antenna Selection Sounding Indication (TXASSI): 0
-     */
+    /** Transmit Antenna Selection Sounding Indication (TXASSI): 0 */
     TXASSI(0, "TXASSI"),
 
     /**
@@ -556,24 +466,16 @@ public final class Dot11LinkAdaptationControl implements Serializable {
      */
     TXASSR(1, "TXASSR"),
 
-    /**
-     * Receive Antenna Selection Sounding Indication (RXASSI): 2
-     */
+    /** Receive Antenna Selection Sounding Indication (RXASSI): 2 */
     RXASSI(2, "RXASSI"),
 
-    /**
-     * Receive Antenna Selection Sounding Request (RXASSR): 3
-     */
+    /** Receive Antenna Selection Sounding Request (RXASSR): 3 */
     RXASSR(3, "RXASSR"),
 
-    /**
-     * Sounding Label: 4
-     */
+    /** Sounding Label: 4 */
     SOUNDING_LABEL(4, "Sounding Label"),
 
-    /**
-     * No Feedback Due to ASEL Training Failure or Stale Feedback: 5
-     */
+    /** No Feedback Due to ASEL Training Failure or Stale Feedback: 5 */
     NO_FEEDBACK(5, "No Feedback"),
 
     /**
@@ -582,9 +484,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
      */
     TXASSI_CSI(6, "TXASSI-CSI"),
 
-    /**
-     * Reserved: 7
-     */
+    /** Reserved: 7 */
     SEVEN(7, "Reserved");
 
     private final int value;
@@ -595,16 +495,12 @@ public final class Dot11LinkAdaptationControl implements Serializable {
       this.name = name;
     }
 
-    /**
-     * @return value
-     */
+    /** @return value */
     public int getValue() {
       return value;
     }
 
-    /**
-     * @return name
-     */
+    /** @return name */
     public String getName() {
       return name;
     }
@@ -612,10 +508,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder(50);
-      sb.append(value)
-        .append(" (")
-        .append(name)
-        .append(")");
+      sb.append(value).append(" (").append(name).append(")");
       return sb.toString();
     }
 
@@ -624,14 +517,13 @@ public final class Dot11LinkAdaptationControl implements Serializable {
      * @return the AselCommand object the value of which is the given value.
      */
     public static AselCommand getInstance(int value) {
-      for (AselCommand com: values()) {
+      for (AselCommand com : values()) {
         if (com.value == value) {
           return com;
         }
       }
       throw new IllegalArgumentException("Invalid value: " + value);
     }
-
   }
 
   /**
@@ -646,9 +538,7 @@ public final class Dot11LinkAdaptationControl implements Serializable {
     private byte mfsi;
     private byte mfbOrAselc;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(Dot11LinkAdaptationControl obj) {
@@ -723,14 +613,9 @@ public final class Dot11LinkAdaptationControl implements Serializable {
       return this;
     }
 
-    /**
-     *
-     * @return a new Dot11LinkAdaptationControl object.
-     */
+    /** @return a new Dot11LinkAdaptationControl object. */
     public Dot11LinkAdaptationControl build() {
       return new Dot11LinkAdaptationControl(this);
     }
-
   }
-
 }

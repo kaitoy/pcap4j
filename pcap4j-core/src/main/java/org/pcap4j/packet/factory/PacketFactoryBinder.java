@@ -19,12 +19,12 @@ final class PacketFactoryBinder {
 
   private PacketFactoryBinder() {}
 
-  public static PacketFactoryBinder getInstance() { return INSTANCE; }
-
-  public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
-    Class<T> targetClass, Class<N> numberClass
-  ) {
-    throw new UnsupportedOperationException("This code is never included in pcap4j-core.jar.");
+  public static PacketFactoryBinder getInstance() {
+    return INSTANCE;
   }
 
+  public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
+      Class<T> targetClass, Class<N> numberClass) {
+    throw new UnsupportedOperationException("This code is never included in pcap4j-core.jar.");
+  }
 }

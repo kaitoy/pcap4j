@@ -14,8 +14,7 @@ import org.pcap4j.util.ByteArrays;
 /**
  * The Control field of an LLC header in S-format.
  *
- * <pre>
- * {@code
+ * <pre>{@code
  *    0     1     2     3     4     5     6     7
  * +-----+-----+-----+-----+-----+-----+-----+-----+
  * |     receive sequence number             | P/F |
@@ -24,9 +23,7 @@ import org.pcap4j.util.ByteArrays;
  * |      reserved         |supervisory|  0  |  1  |
  * |                       | func bits |     |     |
  * +-----+-----+-----+-----+-----+-----+-----+-----+
- * }
- *
- * </pre>
+ * }</pre>
  *
  * @see <a href="http://standards.ieee.org/about/get/802/802.2.html">IEEE 802.2</a>
  * @author Kaito Yamada
@@ -34,9 +31,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class LlcControlSupervisory implements LlcControl {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2248935134729569341L;
 
   private final byte receiveSequenceNumber;
@@ -57,42 +52,38 @@ public final class LlcControlSupervisory implements LlcControl {
     if ((value & 0x0300) != 0x0100) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("value & 0x0300 must be 0x0100. value: ")
-        .append(ByteArrays.toHexString(value, " "));
+          .append(ByteArrays.toHexString(value, " "));
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.receiveSequenceNumber = (byte) ((value >> 1) & 0x7F);
     if ((value & 0x0001) == 0) {
       this.pfBit = false;
-    }
-    else {
+    } else {
       this.pfBit = true;
     }
     this.reserved = (byte) ((value >> 12) & 0x0F);
-    this.supervisoryFunction
-      = LlcControlSupervisoryFunction.getInstance((byte) ((value >> 10) & 0x03));
+    this.supervisoryFunction =
+        LlcControlSupervisoryFunction.getInstance((byte) ((value >> 10) & 0x03));
   }
 
   private LlcControlSupervisory(Builder builder) {
-    if (
-         builder == null
-      || builder.supervisoryFunction == null
-    ) {
+    if (builder == null || builder.supervisoryFunction == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.supervisoryFunction: ").append(builder.supervisoryFunction);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.supervisoryFunction: ")
+          .append(builder.supervisoryFunction);
       throw new NullPointerException(sb.toString());
     }
     if (builder.receiveSequenceNumber < 0) {
       throw new IllegalArgumentException(
-              "receiveSequenceNumber must be positive. receiveSequenceNumber: "
-                + builder.receiveSequenceNumber
-            );
+          "receiveSequenceNumber must be positive. receiveSequenceNumber: "
+              + builder.receiveSequenceNumber);
     }
     if ((builder.reserved & 0xFF00) != 0) {
       throw new IllegalArgumentException(
-              "reserved & 0xFF00 must be 0. reserved: " + builder.reserved
-            );
+          "reserved & 0xFF00 must be 0. reserved: " + builder.reserved);
     }
 
     this.receiveSequenceNumber = builder.receiveSequenceNumber;
@@ -101,30 +92,30 @@ public final class LlcControlSupervisory implements LlcControl {
     this.supervisoryFunction = builder.supervisoryFunction;
   }
 
-  /**
-   * @return receiveSequenceNumber
-   */
-  public byte getReceiveSequenceNumber() { return receiveSequenceNumber; }
+  /** @return receiveSequenceNumber */
+  public byte getReceiveSequenceNumber() {
+    return receiveSequenceNumber;
+  }
 
-  /**
-   * @return receiveSequenceNumber
-   */
-  public int getReceiveSequenceNumberAsInt() { return receiveSequenceNumber; }
+  /** @return receiveSequenceNumber */
+  public int getReceiveSequenceNumberAsInt() {
+    return receiveSequenceNumber;
+  }
 
-  /**
-   * @return true if the P/F bit is set to 1; otherwise false.
-   */
-  public boolean getPfBit() { return pfBit; }
+  /** @return true if the P/F bit is set to 1; otherwise false. */
+  public boolean getPfBit() {
+    return pfBit;
+  }
 
-  /**
-   * @return reserved
-   */
-  public byte getReserved() { return reserved; }
+  /** @return reserved */
+  public byte getReserved() {
+    return reserved;
+  }
 
-  /**
-   * @return supervisoryFunction
-   */
-  public LlcControlSupervisoryFunction getLlcSupervisoryFunction() { return supervisoryFunction; }
+  /** @return supervisoryFunction */
+  public LlcControlSupervisoryFunction getLlcSupervisoryFunction() {
+    return supervisoryFunction;
+  }
 
   @Override
   public int length() {
@@ -142,23 +133,23 @@ public final class LlcControlSupervisory implements LlcControl {
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[receive sequence number: ")
-      .append(receiveSequenceNumber)
-      .append("] [P/F bit: ")
-      .append(pfBit ? 1 : 0)
-      .append("] [reserved: ")
-      .append(reserved)
-      .append("] [supervisory function: ")
-      .append(supervisoryFunction)
-      .append("]");
+        .append(receiveSequenceNumber)
+        .append("] [P/F bit: ")
+        .append(pfBit ? 1 : 0)
+        .append("] [reserved: ")
+        .append(reserved)
+        .append("] [supervisory function: ")
+        .append(supervisoryFunction)
+        .append("]");
 
     return sb.toString();
   }
@@ -176,13 +167,17 @@ public final class LlcControlSupervisory implements LlcControl {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     LlcControlSupervisory other = (LlcControlSupervisory) obj;
-    return    receiveSequenceNumber == other.receiveSequenceNumber
-           && supervisoryFunction.equals(other.supervisoryFunction)
-           && reserved == other.reserved
-           && pfBit == other.pfBit;
+    return receiveSequenceNumber == other.receiveSequenceNumber
+        && supervisoryFunction.equals(other.supervisoryFunction)
+        && reserved == other.reserved
+        && pfBit == other.pfBit;
   }
 
   /**
@@ -196,9 +191,7 @@ public final class LlcControlSupervisory implements LlcControl {
     private byte reserved;
     private LlcControlSupervisoryFunction supervisoryFunction;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(LlcControlSupervisory ctrl) {
@@ -244,13 +237,9 @@ public final class LlcControlSupervisory implements LlcControl {
       return this;
     }
 
-    /**
-     * @return a new LlcControlSupervisory object.
-     */
+    /** @return a new LlcControlSupervisory object. */
     public LlcControlSupervisory build() {
       return new LlcControlSupervisory(this);
     }
-
   }
-
 }

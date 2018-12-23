@@ -1,6 +1,7 @@
 package org.pcap4j.core;
 
 import static org.junit.Assert.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -24,11 +25,9 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class PcapDumperTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(PcapDumperTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(PcapDumperTest.class);
 
-  private static final String TMP_DIR_PROP
-    = PcapDumperTest.class.getName() + ".tmpDir";
+  private static final String TMP_DIR_PROP = PcapDumperTest.class.getName() + ".tmpDir";
 
   private String tmpDirPath;
   private File dumpFile;
@@ -36,25 +35,24 @@ public class PcapDumperTest {
   private PcapHandle handle;
   private PcapDumper dumper;
 
-
   static {
     try {
       ArpPacket.Builder ab = new ArpPacket.Builder();
       ab.hardwareType(ArpHardwareType.ETHERNET)
-        .protocolType(EtherType.IPV4)
-        .hardwareAddrLength((byte)MacAddress.SIZE_IN_BYTES)
-        .protocolAddrLength((byte)ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
-        .srcHardwareAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-        .dstHardwareAddr(MacAddress.ETHER_BROADCAST_ADDRESS)
-        .srcProtocolAddr(InetAddress.getByName("192.0.2.1"))
-        .dstProtocolAddr(InetAddress.getByName("192.0.2.2"))
-        .operation(ArpOperation.REQUEST);
+          .protocolType(EtherType.IPV4)
+          .hardwareAddrLength((byte) MacAddress.SIZE_IN_BYTES)
+          .protocolAddrLength((byte) ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES)
+          .srcHardwareAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+          .dstHardwareAddr(MacAddress.ETHER_BROADCAST_ADDRESS)
+          .srcProtocolAddr(InetAddress.getByName("192.0.2.1"))
+          .dstProtocolAddr(InetAddress.getByName("192.0.2.2"))
+          .operation(ArpOperation.REQUEST);
       EthernetPacket.Builder eb = new EthernetPacket.Builder();
       eb.dstAddr(MacAddress.ETHER_BROADCAST_ADDRESS)
-        .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-        .type(EtherType.ARP)
-        .payloadBuilder(ab)
-        .paddingAtBuild(true);
+          .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+          .type(EtherType.ARP)
+          .payloadBuilder(ab)
+          .paddingAtBuild(true);
       packet = eb.build();
     } catch (Exception e) {
       throw new AssertionError(e);
@@ -62,16 +60,14 @@ public class PcapDumperTest {
   }
 
   @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-  }
+  public static void setUpBeforeClass() throws Exception {}
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Before
   public void setUp() throws Exception {
-    tmpDirPath  = System.getProperty(TMP_DIR_PROP, "testdata");
+    tmpDirPath = System.getProperty(TMP_DIR_PROP, "testdata");
 
     File tmpDir = new File(tmpDirPath);
     if (!tmpDir.exists()) {
@@ -80,8 +76,7 @@ public class PcapDumperTest {
       }
     }
 
-    dumpFile
-      = new File(tmpDirPath + "/" + PcapDumperTest.class.getSimpleName() + ".pcap");
+    dumpFile = new File(tmpDirPath + "/" + PcapDumperTest.class.getSimpleName() + ".pcap");
 
     dumpFile.delete();
     handle = Pcaps.openDead(DataLinkType.EN10MB, 65536);
@@ -118,5 +113,4 @@ public class PcapDumperTest {
     assertTrue(position >= initialPosition);
     assertTrue(position >= packet.length());
   }
-
 }

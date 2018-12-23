@@ -33,18 +33,13 @@ public final class Ssh2NameList implements Serializable {
    * for the individual names, nor for the list as a whole.
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 8625201821104360377L;
 
   private final int length;
   private final List<String> list;
 
-  /**
-   *
-   * @param list list
-   */
+  /** @param list list */
   public Ssh2NameList(List<String> list) {
     if (list == null) {
       throw new NullPointerException("list may not be null");
@@ -54,22 +49,18 @@ public final class Ssh2NameList implements Serializable {
     this.length = calcLength();
   }
 
-  /**
-   *
-   * @param names names
-   */
+  /** @param names names */
   public Ssh2NameList(String... names) {
     this.list = new ArrayList<String>();
-    for (String name: names) {
+    for (String name : names) {
       list.add(name);
     }
     this.length = calcLength();
   }
 
   /**
-   * Constructor.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * Constructor. This method validates the arguments by {@link ByteArrays#validateBounds(byte[],
+   * int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -82,31 +73,32 @@ public final class Ssh2NameList implements Serializable {
     if (length < 4) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The rawData length must be more than 3. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.length = ByteArrays.getInt(rawData, offset);
     if (this.length < 0) {
       StringBuilder sb = new StringBuilder(120);
-      sb.append("A name-list the length of which is longer than 2147483647 is not supported. length: ")
-        .append(this.length & 0xFFFFFFFFL);
+      sb.append(
+              "A name-list the length of which is longer than 2147483647 is not supported. length: ")
+          .append(this.length & 0xFFFFFFFFL);
       throw new IllegalRawDataException(sb.toString());
     }
     if (length - 4 < this.length) {
       StringBuilder sb = new StringBuilder(110);
       sb.append("The data is too short to build an Ssh2NameList (")
-        .append(this.length + 4)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(this.length + 4)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -128,45 +120,27 @@ public final class Ssh2NameList implements Serializable {
     return len;
   }
 
-  /**
-   *
-   * @return value of the length field
-   */
+  /** @return value of the length field */
   public int getLength() {
     return length;
   }
 
-  /**
-   *
-   * @return list
-   */
+  /** @return list */
   public List<String> getList() {
     return new ArrayList<String>(list);
   }
 
-  /**
-   *
-   * @return length
-   */
+  /** @return length */
   public int length() {
     return getRawData().length;
   }
 
-  /**
-   *
-   * @return rawData
-   */
+  /** @return rawData */
   public byte[] getRawData() {
     String csv = toString();
     byte[] rawData = new byte[csv.length() + 4];
-    System.arraycopy(
-      ByteArrays.toByteArray(length), 0,
-      rawData, 0, ByteArrays.INT_SIZE_IN_BYTES
-    );
-    System.arraycopy(
-      csv.getBytes(), 0,
-      rawData, 4, csv.length()
-    );
+    System.arraycopy(ByteArrays.toByteArray(length), 0, rawData, 0, ByteArrays.INT_SIZE_IN_BYTES);
+    System.arraycopy(csv.getBytes(), 0, rawData, 4, csv.length());
 
     return rawData;
   }
@@ -187,13 +161,15 @@ public final class Ssh2NameList implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    Ssh2NameList other = (Ssh2NameList)obj;
-    return
-         length == other.length
-      && list.equals(other.list);
+    Ssh2NameList other = (Ssh2NameList) obj;
+    return length == other.length && list.equals(other.list);
   }
 
   @Override
@@ -203,5 +179,4 @@ public final class Ssh2NameList implements Serializable {
     result = 31 * result + list.hashCode();
     return result;
   }
-
 }

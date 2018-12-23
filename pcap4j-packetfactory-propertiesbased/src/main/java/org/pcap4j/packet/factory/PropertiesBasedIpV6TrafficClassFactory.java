@@ -7,10 +7,8 @@
 
 package org.pcap4j.packet.factory;
 
-import java.io.ObjectStreamException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
@@ -20,33 +18,31 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.14
  */
 public final class PropertiesBasedIpV6TrafficClassFactory
-implements PacketFactory<IpV6TrafficClass, NotApplicable> {
+    implements PacketFactory<IpV6TrafficClass, NotApplicable> {
 
-  private static final PropertiesBasedIpV6TrafficClassFactory INSTANCE
-    = new PropertiesBasedIpV6TrafficClassFactory();
+  private static final PropertiesBasedIpV6TrafficClassFactory INSTANCE =
+      new PropertiesBasedIpV6TrafficClassFactory();
 
   private PropertiesBasedIpV6TrafficClassFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of PropertiesBasedIpV6TrafficClassFactory.
-   */
-  public static PropertiesBasedIpV6TrafficClassFactory getInstance() { return INSTANCE; }
+  /** @return the singleton instance of PropertiesBasedIpV6TrafficClassFactory. */
+  public static PropertiesBasedIpV6TrafficClassFactory getInstance() {
+    return INSTANCE;
+  }
 
   @Override
   public IpV6TrafficClass newInstance(
-    byte[] rawData, int offset, int length, NotApplicable... numbers
-  ) {
+      byte[] rawData, int offset, int length, NotApplicable... numbers) {
     ByteArrays.validateBounds(rawData, offset, length);
-    Class<? extends IpV6TrafficClass> clazz
-      = PacketFactoryPropertiesLoader.getInstance().getIpV6TrafficClassClass();
+    Class<? extends IpV6TrafficClass> clazz =
+        PacketFactoryPropertiesLoader.getInstance().getIpV6TrafficClassClass();
     if (clazz == null) {
       throw new NullPointerException("clazz is null.");
     }
 
     try {
       Method newInstance = clazz.getMethod("newInstance", byte.class);
-      return (IpV6TrafficClass)newInstance.invoke(null, rawData[offset]);
+      return (IpV6TrafficClass) newInstance.invoke(null, rawData[offset]);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -59,5 +55,4 @@ implements PacketFactory<IpV6TrafficClass, NotApplicable> {
       throw new IllegalArgumentException(e);
     }
   }
-
 }

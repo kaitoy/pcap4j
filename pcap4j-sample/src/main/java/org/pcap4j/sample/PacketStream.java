@@ -1,5 +1,7 @@
 package org.pcap4j.sample;
 
+import java.io.IOException;
+import java.util.stream.Stream;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
@@ -9,26 +11,17 @@ import org.pcap4j.core.PcapPacket;
 import org.pcap4j.util.NifSelector;
 import org.pcap4j.util.Packets;
 
-import java.io.IOException;
-import java.util.stream.Stream;
-
 @SuppressWarnings("javadoc")
 public class PacketStream {
 
-  private static final String COUNT_KEY
-    = PacketStream.class.getName() + ".count";
-  private static final int COUNT
-    = Integer.getInteger(COUNT_KEY, 5);
+  private static final String COUNT_KEY = PacketStream.class.getName() + ".count";
+  private static final int COUNT = Integer.getInteger(COUNT_KEY, 5);
 
-  private static final String READ_TIMEOUT_KEY
-    = PacketStream.class.getName() + ".readTimeout";
-  private static final int READ_TIMEOUT
-    = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
+  private static final String READ_TIMEOUT_KEY = PacketStream.class.getName() + ".readTimeout";
+  private static final int READ_TIMEOUT = Integer.getInteger(READ_TIMEOUT_KEY, 10); // [ms]
 
-  private static final String SNAPLEN_KEY
-    = PacketStream.class.getName() + ".snaplen";
-  private static final int SNAPLEN
-    = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
+  private static final String SNAPLEN_KEY = PacketStream.class.getName() + ".snaplen";
+  private static final int SNAPLEN = Integer.getInteger(SNAPLEN_KEY, 65536); // [bytes]
 
   private PacketStream() {}
 
@@ -52,15 +45,9 @@ public class PacketStream {
 
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
-    try (
-      PcapHandle handle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
-      Stream<PcapPacket> stream = handle.stream()
-    ) {
-      stream
-        .limit(COUNT)
-        .filter(Packets::containsUdpPacket)
-        .forEach(System.out::println);
+    try (PcapHandle handle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+        Stream<PcapPacket> stream = handle.stream()) {
+      stream.limit(COUNT).filter(Packets::containsUdpPacket).forEach(System.out::println);
     }
   }
-
 }

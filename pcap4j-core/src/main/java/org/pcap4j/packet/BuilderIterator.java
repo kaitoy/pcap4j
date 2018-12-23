@@ -20,10 +20,7 @@ public final class BuilderIterator implements Iterator<Builder> {
   private Builder next;
   private Builder previous = null;
 
-  /**
-   *
-   * @param b b
-   */
+  /** @param b b */
   public BuilderIterator(Builder b) {
     this.next = b;
   }
@@ -45,12 +42,9 @@ public final class BuilderIterator implements Iterator<Builder> {
     return previous;
   }
 
-  /**
-   * @throws UnsupportedOperationException always.
-   */
+  /** @throws UnsupportedOperationException always. */
   @Override
   public void remove() {
     throw new UnsupportedOperationException();
   }
-
 }

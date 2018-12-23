@@ -22,16 +22,14 @@ public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NotApp
 
   private StaticIpV4TosFactory() {}
 
-  /**
-   * @return the singleton instance of StaticIpV4TosFactory.
-   */
+  /** @return the singleton instance of StaticIpV4TosFactory. */
   public static StaticIpV4TosFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, NotApplicable...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, NotApplicable...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -48,5 +46,4 @@ public final class StaticIpV4TosFactory implements PacketFactory<IpV4Tos, NotApp
     ByteArrays.validateBounds(rawData, offset, length);
     return IpV4Rfc1349Tos.newInstance(rawData[offset]);
   }
-
 }

@@ -25,17 +25,14 @@ public final class StaticUdpPortPacketFactory implements PacketFactory<Packet, U
 
   private StaticUdpPortPacketFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of StaticUdpPortPacketFactory.
-   */
+  /** @return the singleton instance of StaticUdpPortPacketFactory. */
   public static StaticUdpPortPacketFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, UdpPort...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, UdpPort...)} and exists only
+   * for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -47,8 +44,8 @@ public final class StaticUdpPortPacketFactory implements PacketFactory<Packet, U
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, UdpPort...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, UdpPort...)} and exists only
+   * for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -75,8 +72,8 @@ public final class StaticUdpPortPacketFactory implements PacketFactory<Packet, U
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, UdpPort...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, UdpPort...)} and exists only
+   * for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -86,8 +83,7 @@ public final class StaticUdpPortPacketFactory implements PacketFactory<Packet, U
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(
-    byte[] rawData, int offset, int length, UdpPort number1, UdpPort number2
-  ) {
+      byte[] rawData, int offset, int length, UdpPort number1, UdpPort number2) {
     try {
       switch (Short.toUnsignedInt(number1.value())) {
         case 53:
@@ -119,7 +115,7 @@ public final class StaticUdpPortPacketFactory implements PacketFactory<Packet, U
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, UdpPort... numbers) {
     try {
-      for (UdpPort num: numbers) {
+      for (UdpPort num : numbers) {
         switch (Short.toUnsignedInt(num.value())) {
           case 53:
             return DnsPacket.newPacket(rawData, offset, length);
@@ -136,5 +132,4 @@ public final class StaticUdpPortPacketFactory implements PacketFactory<Packet, U
       return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
-
 }

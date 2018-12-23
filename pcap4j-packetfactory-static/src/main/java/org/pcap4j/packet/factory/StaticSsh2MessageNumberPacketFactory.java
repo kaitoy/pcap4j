@@ -19,24 +19,21 @@ import org.pcap4j.packet.namednumber.Ssh2MessageNumber;
  * @since pcap4j 1.0.1
  */
 public final class StaticSsh2MessageNumberPacketFactory
-implements PacketFactory<Packet, Ssh2MessageNumber> {
+    implements PacketFactory<Packet, Ssh2MessageNumber> {
 
-  private static final StaticSsh2MessageNumberPacketFactory INSTANCE
-    = new StaticSsh2MessageNumberPacketFactory();
+  private static final StaticSsh2MessageNumberPacketFactory INSTANCE =
+      new StaticSsh2MessageNumberPacketFactory();
 
   private StaticSsh2MessageNumberPacketFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of StaticSsh2MessageNumberPacketFactory.
-   */
+  /** @return the singleton instance of StaticSsh2MessageNumberPacketFactory. */
   public static StaticSsh2MessageNumberPacketFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, Ssh2MessageNumber...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, Ssh2MessageNumber...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -48,8 +45,8 @@ implements PacketFactory<Packet, Ssh2MessageNumber> {
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, Ssh2MessageNumber...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, Ssh2MessageNumber...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -70,8 +67,8 @@ implements PacketFactory<Packet, Ssh2MessageNumber> {
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, Ssh2MessageNumber...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, Ssh2MessageNumber...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -81,8 +78,11 @@ implements PacketFactory<Packet, Ssh2MessageNumber> {
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(
-    byte[] rawData, int offset, int length, Ssh2MessageNumber number1, Ssh2MessageNumber number2
-  ) {
+      byte[] rawData,
+      int offset,
+      int length,
+      Ssh2MessageNumber number1,
+      Ssh2MessageNumber number2) {
     try {
       switch (Byte.toUnsignedInt(number1.value())) {
         case 20:
@@ -102,7 +102,7 @@ implements PacketFactory<Packet, Ssh2MessageNumber> {
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, Ssh2MessageNumber... numbers) {
     try {
-      for (Ssh2MessageNumber num: numbers) {
+      for (Ssh2MessageNumber num : numbers) {
         switch (Byte.toUnsignedInt(num.value())) {
           case 20:
             return Ssh2KexInitPacket.newPacket(rawData, offset, length);
@@ -113,5 +113,4 @@ implements PacketFactory<Packet, Ssh2MessageNumber> {
       return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
-
 }

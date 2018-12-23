@@ -8,13 +8,11 @@
 package org.pcap4j.packet;
 
 import java.nio.ByteOrder;
-
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
- * Radiotap Channel field.
- * Tx/Rx frequency in MHz and flags.
+ * Radiotap Channel field. Tx/Rx frequency in MHz and flags.
  *
  * @see <a href="http://www.radiotap.org/defined-fields/Rate">Radiotap</a>
  * @author Kaito Yamada
@@ -22,9 +20,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class RadiotapDataChannel implements RadiotapData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3645927613193110605L;
 
   private static final int LENGTH = 4;
@@ -48,9 +44,8 @@ public final class RadiotapDataChannel implements RadiotapData {
   private final boolean quarterRate;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -58,24 +53,24 @@ public final class RadiotapDataChannel implements RadiotapData {
    * @return a new RadiotapChannel object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapDataChannel newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static RadiotapDataChannel newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new RadiotapDataChannel(rawData, offset, length);
   }
 
-  private RadiotapDataChannel(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+  private RadiotapDataChannel(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapChannel (")
-        .append(LENGTH)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(LENGTH)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -127,123 +122,95 @@ public final class RadiotapDataChannel implements RadiotapData {
    *
    * @return frequency (unit: MHz)
    */
-  public short getFrequency() { return frequency; }
+  public short getFrequency() {
+    return frequency;
+  }
 
   /**
    * Tx/Rx frequency in MHz
    *
    * @return frequency (unit: MHz)
    */
-  public int getFrequencyAsInt() { return frequency & 0xFFFF; }
+  public int getFrequencyAsInt() {
+    return frequency & 0xFFFF;
+  }
 
-  /**
-   * @return true if the LSB of the flags field is set to 1; otherwise false.
-   */
+  /** @return true if the LSB of the flags field is set to 1; otherwise false. */
   public boolean getLsbOfFlags() {
     return lsbOfFlags;
   }
 
-  /**
-   * @return true if the second LSB of the flags field is set to 1; otherwise false.
-   */
+  /** @return true if the second LSB of the flags field is set to 1; otherwise false. */
   public boolean getSecondLsbOfFlags() {
     return secondLsbOfFlags;
   }
 
-  /**
-   * @return true if the third LSB of the flags field is set to 1; otherwise false.
-   */
+  /** @return true if the third LSB of the flags field is set to 1; otherwise false. */
   public boolean getThirdLsbOfFlags() {
     return thirdLsbOfFlags;
   }
 
-  /**
-   * @return true if the fourth LSB of the flags field is set to 1; otherwise false.
-   */
+  /** @return true if the fourth LSB of the flags field is set to 1; otherwise false. */
   public boolean getFourthLsbOfFlags() {
     return fourthLsbOfFlags;
   }
 
-  /**
-   * @return turbo
-   */
+  /** @return turbo */
   public boolean isTurbo() {
     return turbo;
   }
 
-  /**
-   * @return cck
-   */
+  /** @return cck */
   public boolean isCck() {
     return cck;
   }
 
-  /**
-   * @return ofdm
-   */
+  /** @return ofdm */
   public boolean isOfdm() {
     return ofdm;
   }
 
-  /**
-   * @return twoGhzSpectrum
-   */
+  /** @return twoGhzSpectrum */
   public boolean isTwoGhzSpectrum() {
     return twoGhzSpectrum;
   }
 
-  /**
-   * @return fiveGhzSpectrum
-   */
+  /** @return fiveGhzSpectrum */
   public boolean isFiveGhzSpectrum() {
     return fiveGhzSpectrum;
   }
 
-  /**
-   * @return onlyPassiveScan
-   */
+  /** @return onlyPassiveScan */
   public boolean isOnlyPassiveScan() {
     return onlyPassiveScan;
   }
 
-  /**
-   * @return dynamicCckOfdm
-   */
+  /** @return dynamicCckOfdm */
   public boolean isDynamicCckOfdm() {
     return dynamicCckOfdm;
   }
 
-  /**
-   * @return gfsk
-   */
+  /** @return gfsk */
   public boolean isGfsk() {
     return gfsk;
   }
 
-  /**
-   * @return gsm
-   */
+  /** @return gsm */
   public boolean isGsm() {
     return gsm;
   }
 
-  /**
-   * @return staticTurbo
-   */
+  /** @return staticTurbo */
   public boolean isStaticTurbo() {
     return staticTurbo;
   }
 
-  /**
-   * @return halfRate
-   */
+  /** @return halfRate */
   public boolean isHalfRate() {
     return halfRate;
   }
 
-  /**
-   * @return quarterRate
-   */
+  /** @return quarterRate */
   public boolean isQuarterRate() {
     return quarterRate;
   }
@@ -257,32 +224,66 @@ public final class RadiotapDataChannel implements RadiotapData {
   public byte[] getRawData() {
     byte[] data = new byte[4];
     System.arraycopy(
-      ByteArrays.toByteArray(frequency, ByteOrder.LITTLE_ENDIAN), 0,
-      data, 0, ByteArrays.SHORT_SIZE_IN_BYTES
-    );
-    if (lsbOfFlags) { data[2] |= 0x01; }
-    if (secondLsbOfFlags) { data[2] |= 0x02; }
-    if (thirdLsbOfFlags) { data[2] |= 0x04; }
-    if (fourthLsbOfFlags) { data[2] |= 0x08; }
-    if (turbo) { data[2] |= 0x10; }
-    if (cck) { data[2] |= 0x20; }
-    if (ofdm) { data[2] |= 0x40; }
-    if (twoGhzSpectrum) { data[2] |= 0x80; }
-    if (fiveGhzSpectrum) { data[3] |= 0x01; }
-    if (onlyPassiveScan) { data[3] |= 0x02; }
-    if (dynamicCckOfdm) { data[3] |= 0x04; }
-    if (gfsk) { data[3] |= 0x08; }
-    if (gsm) { data[3] |= 0x10; }
-    if (staticTurbo) { data[3] |= 0x20; }
-    if (halfRate) { data[3] |= 0x40; }
-    if (quarterRate) { data[3] |= 0x80; }
+        ByteArrays.toByteArray(frequency, ByteOrder.LITTLE_ENDIAN),
+        0,
+        data,
+        0,
+        ByteArrays.SHORT_SIZE_IN_BYTES);
+    if (lsbOfFlags) {
+      data[2] |= 0x01;
+    }
+    if (secondLsbOfFlags) {
+      data[2] |= 0x02;
+    }
+    if (thirdLsbOfFlags) {
+      data[2] |= 0x04;
+    }
+    if (fourthLsbOfFlags) {
+      data[2] |= 0x08;
+    }
+    if (turbo) {
+      data[2] |= 0x10;
+    }
+    if (cck) {
+      data[2] |= 0x20;
+    }
+    if (ofdm) {
+      data[2] |= 0x40;
+    }
+    if (twoGhzSpectrum) {
+      data[2] |= 0x80;
+    }
+    if (fiveGhzSpectrum) {
+      data[3] |= 0x01;
+    }
+    if (onlyPassiveScan) {
+      data[3] |= 0x02;
+    }
+    if (dynamicCckOfdm) {
+      data[3] |= 0x04;
+    }
+    if (gfsk) {
+      data[3] |= 0x08;
+    }
+    if (gsm) {
+      data[3] |= 0x10;
+    }
+    if (staticTurbo) {
+      data[3] |= 0x20;
+    }
+    if (halfRate) {
+      data[3] |= 0x40;
+    }
+    if (quarterRate) {
+      data[3] |= 0x80;
+    }
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -294,60 +295,78 @@ public final class RadiotapDataChannel implements RadiotapData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Channel: ")
-      .append(ls)
-      .append(indent).append("  Frequency: ")
-      .append(getFrequencyAsInt())
-      .append(" MHz")
-      .append(ls)
-      .append(indent).append("  LSB of flags: ")
-      .append(lsbOfFlags)
-      .append(ls)
-      .append(indent).append("  2nd LSB of flags: ")
-      .append(secondLsbOfFlags)
-      .append(ls)
-      .append(indent).append("  3rd LSB of flags: ")
-      .append(thirdLsbOfFlags)
-      .append(ls)
-      .append(indent).append("  4th LSB of flags: ")
-      .append(fourthLsbOfFlags)
-      .append(ls)
-      .append(indent).append("  Turbo: ")
-      .append(turbo)
-      .append(ls)
-      .append(indent).append("  CCK: ")
-      .append(cck)
-      .append(ls)
-      .append(indent).append("  OFDM: ")
-      .append(ofdm)
-      .append(ls)
-      .append(indent).append("  2 GHz spectrum: ")
-      .append(twoGhzSpectrum)
-      .append(ls)
-      .append(indent).append("  5 GHz spectrum: ")
-      .append(fiveGhzSpectrum)
-      .append(ls)
-      .append(indent).append("  Only passive scan: ")
-      .append(onlyPassiveScan)
-      .append(ls)
-      .append(indent).append("  Dynamic CCK-OFDM: ")
-      .append(dynamicCckOfdm)
-      .append(ls)
-      .append(indent).append("  GFSK: ")
-      .append(gfsk)
-      .append(ls)
-      .append(indent).append("  GSM: ")
-      .append(gsm)
-      .append(ls)
-      .append(indent).append("  Static Turbo: ")
-      .append(staticTurbo)
-      .append(ls)
-      .append(indent).append("  Half rate: ")
-      .append(halfRate)
-      .append(ls)
-      .append(indent).append("  Quarter rate: ")
-      .append(quarterRate)
-      .append(ls);
+    sb.append(indent)
+        .append("Channel: ")
+        .append(ls)
+        .append(indent)
+        .append("  Frequency: ")
+        .append(getFrequencyAsInt())
+        .append(" MHz")
+        .append(ls)
+        .append(indent)
+        .append("  LSB of flags: ")
+        .append(lsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  2nd LSB of flags: ")
+        .append(secondLsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  3rd LSB of flags: ")
+        .append(thirdLsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  4th LSB of flags: ")
+        .append(fourthLsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  Turbo: ")
+        .append(turbo)
+        .append(ls)
+        .append(indent)
+        .append("  CCK: ")
+        .append(cck)
+        .append(ls)
+        .append(indent)
+        .append("  OFDM: ")
+        .append(ofdm)
+        .append(ls)
+        .append(indent)
+        .append("  2 GHz spectrum: ")
+        .append(twoGhzSpectrum)
+        .append(ls)
+        .append(indent)
+        .append("  5 GHz spectrum: ")
+        .append(fiveGhzSpectrum)
+        .append(ls)
+        .append(indent)
+        .append("  Only passive scan: ")
+        .append(onlyPassiveScan)
+        .append(ls)
+        .append(indent)
+        .append("  Dynamic CCK-OFDM: ")
+        .append(dynamicCckOfdm)
+        .append(ls)
+        .append(indent)
+        .append("  GFSK: ")
+        .append(gfsk)
+        .append(ls)
+        .append(indent)
+        .append("  GSM: ")
+        .append(gsm)
+        .append(ls)
+        .append(indent)
+        .append("  Static Turbo: ")
+        .append(staticTurbo)
+        .append(ls)
+        .append(indent)
+        .append("  Half rate: ")
+        .append(halfRate)
+        .append(ls)
+        .append(indent)
+        .append("  Quarter rate: ")
+        .append(quarterRate)
+        .append(ls);
 
     return sb.toString();
   }
@@ -378,47 +397,27 @@ public final class RadiotapDataChannel implements RadiotapData {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     RadiotapDataChannel other = (RadiotapDataChannel) obj;
-    if (cck != other.cck)
-      return false;
-    if (dynamicCckOfdm != other.dynamicCckOfdm)
-      return false;
-    if (fiveGhzSpectrum != other.fiveGhzSpectrum)
-      return false;
-    if (fourthLsbOfFlags != other.fourthLsbOfFlags)
-      return false;
-    if (frequency != other.frequency)
-      return false;
-    if (gfsk != other.gfsk)
-      return false;
-    if (gsm != other.gsm)
-      return false;
-    if (halfRate != other.halfRate)
-      return false;
-    if (lsbOfFlags != other.lsbOfFlags)
-      return false;
-    if (ofdm != other.ofdm)
-      return false;
-    if (onlyPassiveScan != other.onlyPassiveScan)
-      return false;
-    if (quarterRate != other.quarterRate)
-      return false;
-    if (secondLsbOfFlags != other.secondLsbOfFlags)
-      return false;
-    if (staticTurbo != other.staticTurbo)
-      return false;
-    if (thirdLsbOfFlags != other.thirdLsbOfFlags)
-      return false;
-    if (turbo != other.turbo)
-      return false;
-    if (twoGhzSpectrum != other.twoGhzSpectrum)
-      return false;
+    if (cck != other.cck) return false;
+    if (dynamicCckOfdm != other.dynamicCckOfdm) return false;
+    if (fiveGhzSpectrum != other.fiveGhzSpectrum) return false;
+    if (fourthLsbOfFlags != other.fourthLsbOfFlags) return false;
+    if (frequency != other.frequency) return false;
+    if (gfsk != other.gfsk) return false;
+    if (gsm != other.gsm) return false;
+    if (halfRate != other.halfRate) return false;
+    if (lsbOfFlags != other.lsbOfFlags) return false;
+    if (ofdm != other.ofdm) return false;
+    if (onlyPassiveScan != other.onlyPassiveScan) return false;
+    if (quarterRate != other.quarterRate) return false;
+    if (secondLsbOfFlags != other.secondLsbOfFlags) return false;
+    if (staticTurbo != other.staticTurbo) return false;
+    if (thirdLsbOfFlags != other.thirdLsbOfFlags) return false;
+    if (turbo != other.turbo) return false;
+    if (twoGhzSpectrum != other.twoGhzSpectrum) return false;
     return true;
   }
 
@@ -446,9 +445,7 @@ public final class RadiotapDataChannel implements RadiotapData {
     private boolean halfRate;
     private boolean quarterRate;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(RadiotapDataChannel obj) {
@@ -624,13 +621,9 @@ public final class RadiotapDataChannel implements RadiotapData {
       return this;
     }
 
-    /**
-     * @return a new RadiotapChannel object.
-     */
+    /** @return a new RadiotapChannel object. */
     public RadiotapDataChannel build() {
       return new RadiotapDataChannel(this);
     }
-
   }
-
 }

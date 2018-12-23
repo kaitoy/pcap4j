@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.DataLinkType;
@@ -31,9 +30,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class RadiotapPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 4121827899399388949L;
 
   private static final Logger logger = LoggerFactory.getLogger(RadiotapPacket.class);
@@ -42,9 +39,8 @@ public final class RadiotapPacket extends AbstractPacket {
   private final Packet payload;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -52,39 +48,35 @@ public final class RadiotapPacket extends AbstractPacket {
    * @return a new RadiotapPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static RadiotapPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new RadiotapPacket(rawData, offset, length);
   }
 
-  private RadiotapPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private RadiotapPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     this.header = new RadiotapHeader(rawData, offset, length);
 
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      this.payload
-        = PacketFactories.getFactory(Packet.class, DataLinkType.class)
-            .newInstance(rawData, offset + header.length(), payloadLength, DataLinkType.IEEE802_11);
-    }
-    else {
+      this.payload =
+          PacketFactories.getFactory(Packet.class, DataLinkType.class)
+              .newInstance(
+                  rawData, offset + header.length(), payloadLength, DataLinkType.IEEE802_11);
+    } else {
       this.payload = null;
     }
   }
 
   private RadiotapPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.presentBitmasks == null
-      || builder.dataFields == null
-    ) {
+    if (builder == null || builder.presentBitmasks == null || builder.dataFields == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.presentBitmasks: ").append(builder.presentBitmasks)
-        .append(" builder.dataFields: ").append(builder.dataFields);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.presentBitmasks: ")
+          .append(builder.presentBitmasks)
+          .append(" builder.dataFields: ")
+          .append(builder.dataFields);
       throw new NullPointerException(sb.toString());
     }
 
@@ -111,8 +103,8 @@ public final class RadiotapPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 1.6.5
    */
-  public static final class Builder
-  extends AbstractBuilder implements LengthBuilder<RadiotapPacket> {
+  public static final class Builder extends AbstractBuilder
+      implements LengthBuilder<RadiotapPacket> {
 
     private byte version;
     private byte pad;
@@ -122,9 +114,7 @@ public final class RadiotapPacket extends AbstractPacket {
     private Packet.Builder payloadBuilder;
     private boolean correctLengthAtBuild;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(RadiotapPacket packet) {
@@ -137,7 +127,6 @@ public final class RadiotapPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param version version
      * @return this Builder object for method chaining.
      */
@@ -156,7 +145,6 @@ public final class RadiotapPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param length length
      * @return this Builder object for method chaining.
      */
@@ -166,7 +154,6 @@ public final class RadiotapPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param presentBitmasks presentBitmasks
      * @return this Builder object for method chaining.
      */
@@ -176,7 +163,6 @@ public final class RadiotapPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param dataFields dataFields
      * @return this Builder object for method chaining.
      */
@@ -197,9 +183,7 @@ public final class RadiotapPacket extends AbstractPacket {
     }
 
     @Override
-    public Builder correctLengthAtBuild(
-      boolean correctLengthAtBuild
-    ) {
+    public Builder correctLengthAtBuild(boolean correctLengthAtBuild) {
       this.correctLengthAtBuild = correctLengthAtBuild;
       return this;
     }
@@ -208,7 +192,6 @@ public final class RadiotapPacket extends AbstractPacket {
     public RadiotapPacket build() {
       return new RadiotapPacket(this);
     }
-
   }
 
   /**
@@ -229,29 +212,18 @@ public final class RadiotapPacket extends AbstractPacket {
    */
   public static final class RadiotapHeader extends AbstractHeader {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -5384412750993783312L;
 
-    private static final int VERSION_OFFSET
-      = 0;
-    private static final int VERSION_SIZE
-      = BYTE_SIZE_IN_BYTES;
-    private static final int PAD_OFFSET
-      = VERSION_OFFSET + VERSION_SIZE;
-    private static final int PAD_SIZE
-      = BYTE_SIZE_IN_BYTES;
-    private static final int LENGTH_OFFSET
-      = PAD_OFFSET + PAD_SIZE;
-    private static final int LENGTH_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int PRESENT_OFFSET
-      = LENGTH_OFFSET + LENGTH_SIZE;
-    private static final int PRESENT_SIZE
-      = INT_SIZE_IN_BYTES;
-    private static final int MIN_RADIOTAP_HEADER_SIZE
-      = PRESENT_OFFSET + PRESENT_SIZE;
+    private static final int VERSION_OFFSET = 0;
+    private static final int VERSION_SIZE = BYTE_SIZE_IN_BYTES;
+    private static final int PAD_OFFSET = VERSION_OFFSET + VERSION_SIZE;
+    private static final int PAD_SIZE = BYTE_SIZE_IN_BYTES;
+    private static final int LENGTH_OFFSET = PAD_OFFSET + PAD_SIZE;
+    private static final int LENGTH_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int PRESENT_OFFSET = LENGTH_OFFSET + LENGTH_SIZE;
+    private static final int PRESENT_SIZE = INT_SIZE_IN_BYTES;
+    private static final int MIN_RADIOTAP_HEADER_SIZE = PRESENT_OFFSET + PRESENT_SIZE;
 
     private final byte version;
     private final byte pad;
@@ -259,19 +231,17 @@ public final class RadiotapPacket extends AbstractPacket {
     private final List<RadiotapPresentBitmask> presentBitmasks;
     private final List<RadiotapData> dataFields;
 
-    private RadiotapHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private RadiotapHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
       if (length < MIN_RADIOTAP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(200);
         sb.append("The data is too short to build a RadiotapHeader (")
-          .append(MIN_RADIOTAP_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(MIN_RADIOTAP_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -283,25 +253,25 @@ public final class RadiotapPacket extends AbstractPacket {
       if (length < getLengthAsInt()) {
         StringBuilder sb = new StringBuilder(200);
         sb.append("The data is too short to build a RadiotapHeader (")
-          .append(getLengthAsInt())
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(getLengthAsInt())
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
       if (getLengthAsInt() < MIN_RADIOTAP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(200);
         sb.append("The value of the length field is too small to build a RadiotapHeader (")
-          .append(MIN_RADIOTAP_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(MIN_RADIOTAP_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -313,17 +283,17 @@ public final class RadiotapPacket extends AbstractPacket {
         if (remainingLength < INT_SIZE_IN_BYTES) {
           StringBuilder sb = new StringBuilder(200);
           sb.append("Something went wrong during parsing present bitmasks. data: ")
-            .append(ByteArrays.toHexString(rawData, " "))
-            .append(", offset: ")
-            .append(offset)
-            .append(", length: ")
-            .append(length);
+              .append(ByteArrays.toHexString(rawData, " "))
+              .append(", offset: ")
+              .append(offset)
+              .append(", length: ")
+              .append(length);
           throw new IllegalRawDataException(sb.toString());
         }
 
-        RadiotapPresentBitmask mask
-          = RadiotapPresentBitmask
-              .newInstance(rawData, nextPresentOffset, remainingLength, bitNumOffset, namespace);
+        RadiotapPresentBitmask mask =
+            RadiotapPresentBitmask.newInstance(
+                rawData, nextPresentOffset, remainingLength, bitNumOffset, namespace);
         presentBitmasks.add(mask);
 
         nextPresentOffset += INT_SIZE_IN_BYTES;
@@ -334,28 +304,26 @@ public final class RadiotapPacket extends AbstractPacket {
         if (mask.isRadiotapNamespaceNext()) {
           namespace = "";
           bitNumOffset = 0;
-        }
-        else if (mask.isVendorNamespaceNext()) {
+        } else if (mask.isVendorNamespaceNext()) {
           namespace = "unknown";
           bitNumOffset = 0;
-        }
-        else {
+        } else {
           bitNumOffset += 32;
         }
       }
 
       this.dataFields = new ArrayList<RadiotapData>();
       int nextFieldOffset = nextPresentOffset;
-      PacketFactory<RadiotapData, RadiotapPresentBitNumber> factory
-        = PacketFactories.getFactory(RadiotapData.class, RadiotapPresentBitNumber.class);
+      PacketFactory<RadiotapData, RadiotapPresentBitNumber> factory =
+          PacketFactories.getFactory(RadiotapData.class, RadiotapPresentBitNumber.class);
       boolean breaking = false;
       try {
-        for (RadiotapPresentBitmask mask: presentBitmasks) {
+        for (RadiotapPresentBitmask mask : presentBitmasks) {
           if (breaking) {
             break;
           }
 
-          for (RadiotapPresentBitNumber num: mask.getBitNumbers()) {
+          for (RadiotapPresentBitNumber num : mask.getBitNumbers()) {
             int alignment = num.getRequiredAlignment();
             int padSize = alignment - ((nextFieldOffset - offset) % alignment);
             if (padSize != alignment) {
@@ -364,8 +332,7 @@ public final class RadiotapPacket extends AbstractPacket {
                 break;
               }
 
-              RadiotapData pad
-                = RadiotapDataPad.newInstance(rawData, nextFieldOffset, padSize);
+              RadiotapData pad = RadiotapDataPad.newInstance(rawData, nextFieldOffset, padSize);
               dataFields.add(pad);
               nextFieldOffset += padSize;
               remainingLength -= padSize;
@@ -376,13 +343,8 @@ public final class RadiotapPacket extends AbstractPacket {
               break;
             }
 
-            RadiotapData field
-              = factory.newInstance(
-                  rawData,
-                  nextFieldOffset,
-                  remainingLength,
-                  num
-                );
+            RadiotapData field =
+                factory.newInstance(rawData, nextFieldOffset, remainingLength, num);
             dataFields.add(field);
             int fieldLen = field.length();
             nextFieldOffset += fieldLen;
@@ -394,75 +356,54 @@ public final class RadiotapPacket extends AbstractPacket {
       }
 
       if (remainingLength != 0) {
-        dataFields.add(
-          factory.newInstance(rawData, nextFieldOffset, remainingLength)
-        );
+        dataFields.add(factory.newInstance(rawData, nextFieldOffset, remainingLength));
       }
     }
 
     private RadiotapHeader(Builder builder) {
       this.version = builder.version;
       this.pad = builder.pad;
-      this.presentBitmasks
-        = new ArrayList<RadiotapPresentBitmask>(builder.presentBitmasks);
+      this.presentBitmasks = new ArrayList<RadiotapPresentBitmask>(builder.presentBitmasks);
       this.dataFields = new ArrayList<RadiotapData>(builder.dataFields);
 
       if (builder.correctLengthAtBuild) {
         this.length = (short) calcLength();
-      }
-      else {
+      } else {
         this.length = builder.length;
       }
     }
 
-    /**
-     * @return version
-     */
+    /** @return version */
     public byte getVersion() {
       return version;
     }
 
-    /**
-     * @return version
-     */
+    /** @return version */
     public int getVersionAsInt() {
       return version & 0xFF;
     }
 
-    /**
-     * @return pad
-     */
+    /** @return pad */
     public byte getPad() {
       return pad;
     }
 
-    /**
-     *
-     * @return length
-     */
+    /** @return length */
     public short getLength() {
       return length;
     }
 
-    /**
-     *
-     * @return length
-     */
+    /** @return length */
     public int getLengthAsInt() {
       return 0xFFFF & length;
     }
 
-    /**
-     *
-     * @return presentBitmasks
-     */
+    /** @return presentBitmasks */
     public ArrayList<RadiotapPresentBitmask> getPresentBitmasks() {
       return new ArrayList<RadiotapPresentBitmask>(presentBitmasks);
     }
 
-    /**
-     * @return dataFields
-     */
+    /** @return dataFields */
     public ArrayList<RadiotapData> getDataFields() {
       return new ArrayList<RadiotapData>(dataFields);
     }
@@ -473,10 +414,10 @@ public final class RadiotapPacket extends AbstractPacket {
       rawFields.add(ByteArrays.toByteArray(version));
       rawFields.add(ByteArrays.toByteArray(pad));
       rawFields.add(ByteArrays.toByteArray(length, ByteOrder.LITTLE_ENDIAN));
-      for (RadiotapPresentBitmask mask: presentBitmasks) {
+      for (RadiotapPresentBitmask mask : presentBitmasks) {
         rawFields.add(mask.getRawData());
       }
-      for (RadiotapData field: dataFields) {
+      for (RadiotapData field : dataFields) {
         rawFields.add(field.getRawData());
       }
       return rawFields;
@@ -486,7 +427,7 @@ public final class RadiotapPacket extends AbstractPacket {
     public int calcLength() {
       int len = 1 + 1 + 2;
       len += presentBitmasks.size() * INT_SIZE_IN_BYTES;
-      for (RadiotapData field: dataFields) {
+      for (RadiotapData field : dataFields) {
         len += field.length();
       }
       return len;
@@ -497,25 +438,15 @@ public final class RadiotapPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[Radiotap header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Version: ")
-        .append(getVersionAsInt())
-        .append(ls);
-      sb.append("  Pad: ")
-        .append(pad)
-        .append(ls);
-      sb.append("  Length: ")
-        .append(getLengthAsInt())
-        .append(ls);
-      for (RadiotapPresentBitmask mask: presentBitmasks) {
+      sb.append("[Radiotap header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Version: ").append(getVersionAsInt()).append(ls);
+      sb.append("  Pad: ").append(pad).append(ls);
+      sb.append("  Length: ").append(getLengthAsInt()).append(ls);
+      for (RadiotapPresentBitmask mask : presentBitmasks) {
         sb.append(mask.toString("  "));
       }
-      sb.append("  Data Fields: ")
-        .append(ls);
-      for (RadiotapData field: dataFields) {
+      sb.append("  Data Fields: ").append(ls);
+      for (RadiotapData field : dataFields) {
         sb.append(field.toString("    "));
       }
 
@@ -524,16 +455,19 @@ public final class RadiotapPacket extends AbstractPacket {
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      RadiotapHeader other = (RadiotapHeader)obj;
-      return
-           length == other.length
-        && version == other.version
-        && pad == other.pad
-        && presentBitmasks.equals(other.presentBitmasks)
-        && dataFields.equals(other.dataFields);
+      RadiotapHeader other = (RadiotapHeader) obj;
+      return length == other.length
+          && version == other.version
+          && pad == other.pad
+          && presentBitmasks.equals(other.presentBitmasks)
+          && dataFields.equals(other.dataFields);
     }
 
     @Override
@@ -546,32 +480,24 @@ public final class RadiotapPacket extends AbstractPacket {
       result = 31 * result + dataFields.hashCode();
       return result;
     }
-
   }
 
-
   /**
-   * The interface representing a Radiotap data field.
-   * If you use {@link org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory},
-   * classes which implement this interface must implement the following method:
-   * {@code public static RadiotapDataField newInstance(byte[] rawData, int offset, int length)
-   * throws IllegalRawDataException}
+   * The interface representing a Radiotap data field. If you use {@link
+   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
+   * which implement this interface must implement the following method: {@code public static
+   * RadiotapDataField newInstance(byte[] rawData, int offset, int length) throws
+   * IllegalRawDataException}
    *
    * @author Kaito Yamada
    * @since pcap4j 1.6.5
    */
   public interface RadiotapData extends Serializable {
 
-    /**
-     *
-     * @return length
-     */
+    /** @return length */
     public int length();
 
-    /**
-     *
-     * @return raw data
-     */
+    /** @return raw data */
     public byte[] getRawData();
 
     /**
@@ -579,7 +505,5 @@ public final class RadiotapPacket extends AbstractPacket {
      * @return String representation of this object.
      */
     public String toString(String indent);
-
   }
-
 }

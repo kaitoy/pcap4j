@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,21 +40,17 @@ import org.slf4j.LoggerFactory;
  */
 public final class DnsDomainName implements Serializable {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -9123494137779222577L;
 
   private static final Logger LOG = LoggerFactory.getLogger(DnsDomainName.class);
 
-  /**
-   * The root domain (zero)
-   */
+  /** The root domain (zero) */
   public static final DnsDomainName ROOT_DOMAIN;
 
   static {
     try {
-      ROOT_DOMAIN = new DnsDomainName(new byte[] { 0 }, 0, 1);
+      ROOT_DOMAIN = new DnsDomainName(new byte[] {0}, 0, 1);
     } catch (IllegalRawDataException e) {
       throw new AssertionError("Never get here.");
     }
@@ -66,9 +61,8 @@ public final class DnsDomainName implements Serializable {
   private final Short pointer;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -76,16 +70,13 @@ public final class DnsDomainName implements Serializable {
    * @return a new DnsDomainName object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsDomainName newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsDomainName newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsDomainName(rawData, offset, length);
   }
 
-  private DnsDomainName(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private DnsDomainName(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     this.labels = new ArrayList<String>();
     int cursor = 0;
     Short foundPointer = null;
@@ -103,46 +94,44 @@ public final class DnsDomainName implements Serializable {
         if (length - cursor < len) {
           StringBuilder sb = new StringBuilder(200);
           sb.append("The data is too short to build a DnsDomainName. data: ")
-            .append(ByteArrays.toHexString(rawData, " "))
-            .append(", offset: ")
-            .append(offset)
-            .append(", length: ")
-            .append(length)
-            .append(", cursor: ")
-            .append(cursor);
+              .append(ByteArrays.toHexString(rawData, " "))
+              .append(", offset: ")
+              .append(offset)
+              .append(", length: ")
+              .append(length)
+              .append(", cursor: ")
+              .append(cursor);
           throw new IllegalRawDataException(sb.toString());
         }
 
         labels.add(new String(rawData, offset + cursor, len));
         cursor += len;
         continue;
-      }
-      else if (flag == 0xC0) {
+      } else if (flag == 0xC0) {
         if (length - cursor < SHORT_SIZE_IN_BYTES) {
           StringBuilder sb = new StringBuilder(200);
           sb.append("The data is too short to build a DnsDomainName. data: ")
-            .append(ByteArrays.toHexString(rawData, " "))
-            .append(", offset: ")
-            .append(offset)
-            .append(", length: ")
-            .append(length)
-            .append(", cursor: ")
-            .append(cursor);
+              .append(ByteArrays.toHexString(rawData, " "))
+              .append(", offset: ")
+              .append(offset)
+              .append(", length: ")
+              .append(length)
+              .append(", cursor: ")
+              .append(cursor);
           throw new IllegalRawDataException(sb.toString());
         }
 
         foundPointer = (short) (ByteArrays.getShort(rawData, offset + cursor) & 0x3FFF);
         terminated = true;
         break;
-      }
-      else {
+      } else {
         StringBuilder sb = new StringBuilder(200);
         sb.append("A label must start with 00 or 11. data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
     }
@@ -151,11 +140,11 @@ public final class DnsDomainName implements Serializable {
     if (!terminated) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("No null termination nor pointer. data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -163,29 +152,22 @@ public final class DnsDomainName implements Serializable {
   }
 
   private DnsDomainName(Builder builder) {
-    if (
-         builder == null
-      || builder.labels == null
-    ) {
+    if (builder == null || builder.labels == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder").append(builder)
-        .append(" builder.labels: ").append(builder.labels);
+      sb.append("builder").append(builder).append(" builder.labels: ").append(builder.labels);
       throw new NullPointerException(sb.toString());
     }
 
-    for (String label: builder.labels) {
+    for (String label : builder.labels) {
       if (label.getBytes().length > 63) {
         throw new IllegalArgumentException(
-                "Length of a label must be less than 64. label: " + label
-              );
+            "Length of a label must be less than 64. label: " + label);
       }
     }
 
     if (builder.pointer != null && (builder.pointer & 0xC000) != 0) {
       throw new IllegalArgumentException(
-              "(builder.pointer & 0xC000) must be zero. builder.pointer: "
-                + builder.pointer
-            );
+          "(builder.pointer & 0xC000) must be zero. builder.pointer: " + builder.pointer);
     }
     this.labels = new ArrayList<String>(builder.labels);
     this.name = joinLabels(labels);
@@ -203,43 +185,33 @@ public final class DnsDomainName implements Serializable {
       sb.append(iter.next());
       if (iter.hasNext()) {
         sb.append(".");
-      }
-      else {
+      } else {
         break;
       }
     }
     return sb.toString();
   }
 
-  /**
-   * @return labels
-   */
+  /** @return labels */
   public List<String> getLabels() {
     return new ArrayList<String>(labels);
   }
 
-  /**
-   * @return name, which is made by joining labels with "."
-   */
+  /** @return name, which is made by joining labels with "." */
   public String getName() {
     return name;
   }
 
-  /**
-   * @return pointer (0 - 16383 (inclusive)). May be null.
-   */
+  /** @return pointer (0 - 16383 (inclusive)). May be null. */
   public Short getPointer() {
     return pointer;
   }
 
-  /**
-   * @return pointer (0 - 16383 (inclusive)). May be null.
-   */
+  /** @return pointer (0 - 16383 (inclusive)). May be null. */
   public Integer getPointerAsInt() {
     if (pointer != null) {
       return (int) pointer;
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -247,8 +219,8 @@ public final class DnsDomainName implements Serializable {
   /**
    * @param headerRawData the raw data of the DNS header including this domain name.
    * @return decompressed name.
-   * @throws IllegalRawDataException if an error occurred during decompression
-   *                                 or circular reference is detected.
+   * @throws IllegalRawDataException if an error occurred during decompression or circular reference
+   *     is detected.
    */
   public String decompress(byte[] headerRawData) throws IllegalRawDataException {
     if (headerRawData == null) {
@@ -257,51 +229,42 @@ public final class DnsDomainName implements Serializable {
     return decompress(headerRawData, new ArrayList<Short>());
   }
 
-  private String decompress(
-    byte[] headerRawData, List<Short> pointers
-  ) throws IllegalRawDataException {
+  private String decompress(byte[] headerRawData, List<Short> pointers)
+      throws IllegalRawDataException {
     if (pointer == null) {
       return name;
-    }
-    else {
+    } else {
       if (pointers.contains(pointer)) {
         StringBuilder sb = new StringBuilder(200);
         sb.append("Circular reference detected. data: ")
-          .append(ByteArrays.toHexString(headerRawData, " "))
-          .append(", offset: ")
-          .append(pointer)
-          .append(", name: ")
-          .append(name);
+            .append(ByteArrays.toHexString(headerRawData, " "))
+            .append(", offset: ")
+            .append(pointer)
+            .append(", name: ")
+            .append(name);
         throw new IllegalRawDataException(sb.toString());
       }
       pointers.add(pointer);
       StringBuilder sb = new StringBuilder();
       sb.append(name)
-        .append(".")
-        .append(
-           new DnsDomainName(
-             headerRawData, pointer, headerRawData.length - pointer
-           ).decompress(headerRawData, pointers)
-         );
+          .append(".")
+          .append(
+              new DnsDomainName(headerRawData, pointer, headerRawData.length - pointer)
+                  .decompress(headerRawData, pointers));
       return sb.toString();
     }
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
 
-  /**
-   * @return the raw data.
-   */
+  /** @return the raw data. */
   public byte[] getRawData() {
     byte[] data = new byte[length()];
     int cursor = 0;
-    for (String label: labels) {
+    for (String label : labels) {
       byte[] labelBytes = label.getBytes();
       data[cursor] = (byte) labelBytes.length;
       cursor++;
@@ -316,18 +279,15 @@ public final class DnsDomainName implements Serializable {
     return data;
   }
 
-  /**
-   * @return length
-   */
+  /** @return length */
   public int length() {
     int len = 0;
-    for (String label: labels) {
+    for (String label : labels) {
       len += label.length() + 1;
     }
     if (pointer != null) {
       len += 2;
-    }
-    else {
+    } else {
       len++;
     }
     return len;
@@ -341,14 +301,9 @@ public final class DnsDomainName implements Serializable {
 
     if (pointer == null) {
       return name;
-    }
-    else {
+    } else {
       StringBuilder sb = new StringBuilder();
-      sb.append("[name: ")
-        .append(name)
-        .append(", pointer: ")
-        .append(pointer)
-        .append("]");
+      sb.append("[name: ").append(name).append(", pointer: ").append(pointer).append("]");
       return sb.toString();
     }
   }
@@ -367,8 +322,7 @@ public final class DnsDomainName implements Serializable {
 
     if (pointer == null) {
       return name;
-    }
-    else {
+    } else {
       String decompressedName;
       try {
         decompressedName = decompress(headerRawData);
@@ -378,11 +332,11 @@ public final class DnsDomainName implements Serializable {
       }
       StringBuilder sb = new StringBuilder();
       sb.append(decompressedName)
-        .append(" (name: ")
-        .append(name)
-        .append(", pointer: ")
-        .append(pointer)
-        .append(")");
+          .append(" (name: ")
+          .append(name)
+          .append(", pointer: ")
+          .append(pointer)
+          .append(")");
       return sb.toString();
     }
   }
@@ -415,8 +369,7 @@ public final class DnsDomainName implements Serializable {
       if (other.pointer != null) {
         return false;
       }
-    }
-    else if (!pointer.equals(other.pointer)) {
+    } else if (!pointer.equals(other.pointer)) {
       return false;
     }
     return true;
@@ -431,9 +384,7 @@ public final class DnsDomainName implements Serializable {
     private List<String> labels;
     private Short pointer = null;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(DnsDomainName obj) {
@@ -468,14 +419,9 @@ public final class DnsDomainName implements Serializable {
       return this;
     }
 
-    /**
-     *
-     * @return a new DnsDomainName object.
-     */
+    /** @return a new DnsDomainName object. */
     public DnsDomainName build() {
       return new DnsDomainName(this);
     }
-
   }
-
 }

@@ -13,41 +13,29 @@ package org.pcap4j.packet;
  */
 public final class IllegalRawDataException extends Exception {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -6426401494142677707L;
 
-  /**
-   *
-   */
+  /** */
   public IllegalRawDataException() {
     super();
   }
 
-  /**
-   *
-   * @param message message
-   */
-  public IllegalRawDataException(String message){
+  /** @param message message */
+  public IllegalRawDataException(String message) {
     super(message);
   }
 
   /**
-   *
    * @param message message
    * @param cause cause
    */
-  public IllegalRawDataException(String message, Throwable cause){
-      super(message, cause);
+  public IllegalRawDataException(String message, Throwable cause) {
+    super(message, cause);
   }
 
-  /**
-   *
-   * @param cause cause
-   */
-  public IllegalRawDataException(Throwable cause){
-      super(cause);
+  /** @param cause cause */
+  public IllegalRawDataException(Throwable cause) {
+    super(cause);
   }
-
 }

@@ -7,14 +7,13 @@
 
 package org.pcap4j.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Kaito Yamada
@@ -22,11 +21,9 @@ import com.sun.jna.Structure;
  */
 final class NativePacketDllMappings {
 
-  static final String LIB_NAME
-    = System.getProperty(
-        NativePacketDllMappings.class.getPackage().getName() + ".packetLibName",
-        "Packet"
-      );
+  static final String LIB_NAME =
+      System.getProperty(
+          NativePacketDllMappings.class.getPackage().getName() + ".packetLibName", "Packet");
 
   static final int PACKET_OID_DATA_SIZE;
 
@@ -37,10 +34,7 @@ final class NativePacketDllMappings {
       }
     }
 
-    Native.register(
-      NativePacketDllMappings.class,
-      NativeLibrary.getInstance(LIB_NAME)
-    );
+    Native.register(NativePacketDllMappings.class, NativeLibrary.getInstance(LIB_NAME));
 
     PACKET_OID_DATA_SIZE = new PACKET_OID_DATA().size();
   }
@@ -60,7 +54,8 @@ final class NativePacketDllMappings {
   //     ULONG Oid;       ///< OID code. See the Microsoft DDK documentation or the file ntddndis.h
   //                      ///< for a complete list of valid codes.
   //     ULONG Length;    ///< Length of the data field
-  //     UCHAR Data[1];   ///< variable-lenght field that contains the information passed to or received
+  //     UCHAR Data[1];   ///< variable-lenght field that contains the information passed to or
+  // received
   //                      ///< from the adapter.
   // };
   public static class PACKET_OID_DATA extends Structure {
@@ -76,9 +71,7 @@ final class NativePacketDllMappings {
       read();
     }
 
-    public static
-    class ByReference
-    extends PACKET_OID_DATA implements Structure.ByReference {}
+    public static class ByReference extends PACKET_OID_DATA implements Structure.ByReference {}
 
     @Override
     protected List<String> getFieldOrder() {
@@ -88,7 +81,5 @@ final class NativePacketDllMappings {
       list.add("Data");
       return list;
     }
-
   }
-
 }

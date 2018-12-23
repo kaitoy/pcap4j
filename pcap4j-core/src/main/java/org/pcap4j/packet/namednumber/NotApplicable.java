@@ -7,7 +7,6 @@
 
 package org.pcap4j.packet.namednumber;
 
-
 /**
  * N/A
  *
@@ -16,37 +15,22 @@ package org.pcap4j.packet.namednumber;
  */
 public final class NotApplicable extends NamedNumber<Byte, NotApplicable> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1260181531930282735L;
 
-  /**
-   * Unknown: 0
-   */
-  public static final NotApplicable UNKNOWN
-    = new NotApplicable((byte)0, "Unknown");
+  /** Unknown: 0 */
+  public static final NotApplicable UNKNOWN = new NotApplicable((byte) 0, "Unknown");
+
+  /** Fragmented: 1 */
+  public static final NotApplicable FRAGMENTED = new NotApplicable((byte) 1, "Fragmented");
+
+  /** Compressed: 2 */
+  public static final NotApplicable COMPRESSED = new NotApplicable((byte) 2, "Compressed");
+
+  /** Encrypted: 3 */
+  public static final NotApplicable ENCRYPTED = new NotApplicable((byte) 3, "Encrypted");
 
   /**
-   * Fragmented: 1
-   */
-  public static final NotApplicable FRAGMENTED
-    = new NotApplicable((byte)1, "Fragmented");
-
-  /**
-   * Compressed: 2
-   */
-  public static final NotApplicable COMPRESSED
-    = new NotApplicable((byte)2, "Compressed");
-
-  /**
-   * Encrypted: 3
-   */
-  public static final NotApplicable ENCRYPTED
-    = new NotApplicable((byte)3, "Encrypted");
-
-  /**
-   *
    * @param value value
    * @param name name
    */
@@ -58,5 +42,4 @@ public final class NotApplicable extends NamedNumber<Byte, NotApplicable> {
   public int compareTo(NotApplicable o) {
     return value().compareTo(o.value());
   }
-
 }

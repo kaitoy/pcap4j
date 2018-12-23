@@ -39,6 +39,7 @@ Contents
         * [WinPcap or Npcap](#winpcap-or-npcap)
     * [Docker](#docker)
 * [How to build](#how-to-build)
+* [Contributing Code](#contributing-code)
 * [License](#license)
 * [Contacts](#contacts)
 
@@ -244,6 +245,18 @@ How to build
    Open a command prompt/a terminal, `cd` to the project root directory,
    and execute `gradlew build`.
    Note Administrator/root privileges are needed for the unit tests.
+
+Contributing Code
+-----------------
+
+1. Fork this repository.
+2. Create a branch from v1 branch.
+3. Write code.
+
+    * Please refer to [This PR](https://github.com/kaitoy/pcap4j/pull/70) as an example when adding protocol support.
+    * This project follows [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html). Execute the following command to format your code: `gradlew spotlessApply`
+
+4. Send a PR from the branch.
 
 License
 -------

@@ -7,12 +7,10 @@
 
 package org.pcap4j.packet.factory;
 
-import java.io.ObjectStreamException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.NamedNumber;
 
@@ -24,41 +22,43 @@ final class PacketFactoryBinder {
 
   private static final PacketFactoryBinder INSTANCE = new PacketFactoryBinder();
 
-  private final Map<CacheKey, PacketFactory<?, ?>> cache
-    = new ConcurrentHashMap<CacheKey, PacketFactory<?, ?>>();
+  private final Map<CacheKey, PacketFactory<?, ?>> cache =
+      new ConcurrentHashMap<CacheKey, PacketFactory<?, ?>>();
 
   private PacketFactoryBinder() {}
 
-  public static PacketFactoryBinder getInstance() { return INSTANCE; }
+  public static PacketFactoryBinder getInstance() {
+    return INSTANCE;
+  }
 
   public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
-    Class<T> targetClass, Class<N> numberClass
-  ) {
+      Class<T> targetClass, Class<N> numberClass) {
     if (Packet.class.isAssignableFrom(targetClass)) {
       @SuppressWarnings("unchecked")
-      PacketFactory<T, N> factory
-        = (PacketFactory<T, N>)PropertiesBasedPacketFactory.getInstance();
+      PacketFactory<T, N> factory =
+          (PacketFactory<T, N>) PropertiesBasedPacketFactory.getInstance();
       return factory;
     }
 
     CacheKey key = new CacheKey(targetClass, numberClass);
 
     @SuppressWarnings("unchecked")
-    PacketFactory<T, N> cachedFactory = (PacketFactory<T, N>)cache.get(key);
+    PacketFactory<T, N> cachedFactory = (PacketFactory<T, N>) cache.get(key);
     if (cachedFactory != null) {
       return cachedFactory;
     }
 
     @SuppressWarnings("unchecked")
-    Class<? extends PacketFactory<T, N>> factoryClass
-      = (Class<? extends PacketFactory<T, N>>)PacketFactoryPropertiesLoader
-          .getInstance().getPacketFactoryClass(targetClass, numberClass);
+    Class<? extends PacketFactory<T, N>> factoryClass =
+        (Class<? extends PacketFactory<T, N>>)
+            PacketFactoryPropertiesLoader.getInstance()
+                .getPacketFactoryClass(targetClass, numberClass);
 
     try {
       Method getInstance = factoryClass.getMethod("getInstance");
 
       @SuppressWarnings("unchecked")
-      PacketFactory<T, N> factory = (PacketFactory<T, N>)getInstance.invoke(null);
+      PacketFactory<T, N> factory = (PacketFactory<T, N>) getInstance.invoke(null);
       cache.put(key, factory);
       return factory;
     } catch (SecurityException e) {
@@ -79,20 +79,22 @@ final class PacketFactoryBinder {
     private final Class<?> targetClass;
     private final Class<? extends NamedNumber<?, ?>> numberClass;
 
-    public CacheKey(
-      Class<?> targetClass, Class<? extends NamedNumber<?, ?>> numberClass
-    ) {
+    public CacheKey(Class<?> targetClass, Class<? extends NamedNumber<?, ?>> numberClass) {
       this.targetClass = targetClass;
       this.numberClass = numberClass;
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
-      CacheKey other = (CacheKey)obj;
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
+      CacheKey other = (CacheKey) obj;
       return other.numberClass.equals(this.numberClass)
-             && other.targetClass.equals(this.targetClass);
+          && other.targetClass.equals(this.targetClass);
     }
 
     @Override
@@ -102,7 +104,5 @@ final class PacketFactoryBinder {
       result = 31 * result + numberClass.hashCode();
       return result;
     }
-
   }
-
 }

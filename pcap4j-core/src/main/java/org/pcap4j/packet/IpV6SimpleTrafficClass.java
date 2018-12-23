@@ -16,15 +16,12 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IpV6SimpleTrafficClass implements IpV6TrafficClass {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -5076935770045999373L;
 
   private final byte value;
 
   /**
-   *
    * @param value value
    * @return a new IpV6SimpleTrafficClass object.
    */
@@ -32,9 +29,13 @@ public final class IpV6SimpleTrafficClass implements IpV6TrafficClass {
     return new IpV6SimpleTrafficClass(value);
   }
 
-  private IpV6SimpleTrafficClass(byte value) { this.value = value; }
+  private IpV6SimpleTrafficClass(byte value) {
+    this.value = value;
+  }
 
-  public byte value() { return value; }
+  public byte value() {
+    return value;
+  }
 
   @Override
   public String toString() {
@@ -43,12 +44,17 @@ public final class IpV6SimpleTrafficClass implements IpV6TrafficClass {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     return (getClass().cast(obj)).value() == this.value;
   }
 
   @Override
-  public int hashCode() { return value; }
-
+  public int hashCode() {
+    return value;
+  }
 }

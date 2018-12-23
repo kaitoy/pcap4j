@@ -1,14 +1,8 @@
 package org.pcap4j.packet;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.pcap4j.core.PcapDumper;
-import org.pcap4j.core.PcapHandle;
-import org.pcap4j.core.Pcaps;
-import org.pcap4j.packet.namednumber.DataLinkType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,21 +14,24 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
 import java.time.Instant;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.pcap4j.core.PcapDumper;
+import org.pcap4j.core.PcapHandle;
+import org.pcap4j.core.Pcaps;
+import org.pcap4j.packet.namednumber.DataLinkType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("javadoc")
 public abstract class AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(AbstractPacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(AbstractPacketTest.class);
 
-  public static final String RESOURCE_DIR_PROP
-    = AbstractPacketTest.class.getName() + ".resourceDir";
-  public static final String TMP_DIR_PROP
-    = AbstractPacketTest.class.getName() + ".tmpDir";
+  public static final String RESOURCE_DIR_PROP =
+      AbstractPacketTest.class.getName() + ".resourceDir";
+  public static final String TMP_DIR_PROP = AbstractPacketTest.class.getName() + ".tmpDir";
 
   private String originalLineSeparator;
   protected String resourceDirPath;
@@ -44,7 +41,7 @@ public abstract class AbstractPacketTest {
   public void setUp() throws Exception {
     originalLineSeparator = System.setProperty("line.separator", "\r\n");
     resourceDirPath = System.getProperty(RESOURCE_DIR_PROP, "src/test/resources");
-    tmpDirPath  = System.getProperty(TMP_DIR_PROP, "testdata");
+    tmpDirPath = System.getProperty(TMP_DIR_PROP, "testdata");
 
     File tmpDir = new File(tmpDirPath);
     if (!tmpDir.exists()) {
@@ -57,14 +54,12 @@ public abstract class AbstractPacketTest {
   @After
   public void tearDown() throws Exception {
     System.setProperty("line.separator", originalLineSeparator);
-    logger.info(
-      "=================================================="
-    );
+    logger.info("==================================================");
   }
 
   protected abstract Packet getPacket() throws Exception;
 
-  protected abstract Packet getWholePacket()  throws Exception;
+  protected abstract Packet getWholePacket() throws Exception;
 
   @Test
   public void testGetBuilder() throws Exception {
@@ -79,13 +74,14 @@ public abstract class AbstractPacketTest {
 
   @Test
   public void testToString() throws Exception {
-    FileReader fr
-      = new FileReader(
-          new StringBuilder()
-            .append(resourceDirPath).append("/")
-            .append(getClass().getSimpleName()).append(".log")
-            .toString()
-        );
+    FileReader fr =
+        new FileReader(
+            new StringBuilder()
+                .append(resourceDirPath)
+                .append("/")
+                .append(getClass().getSimpleName())
+                .append(".log")
+                .toString());
     BufferedReader fbr = new BufferedReader(fr);
     StringReader sr = new StringReader(getPacket().toString());
     BufferedReader sbr = new BufferedReader(sr);
@@ -105,10 +101,13 @@ public abstract class AbstractPacketTest {
 
   @Test
   public void testDump() throws Exception {
-    String dumpFile = new StringBuilder()
-                        .append(tmpDirPath).append("/")
-                        .append(getClass().getSimpleName()).append(".pcap")
-                        .toString();
+    String dumpFile =
+        new StringBuilder()
+            .append(tmpDirPath)
+            .append("/")
+            .append(getClass().getSimpleName())
+            .append(".pcap")
+            .toString();
     Packet p = getWholePacket();
 
     PcapHandle handle = Pcaps.openDead(getDataLinkType(), 65536);
@@ -121,13 +120,14 @@ public abstract class AbstractPacketTest {
     assertEquals(p, reader.getNextPacket().getPacket());
     reader.close();
 
-    FileInputStream in1
-      = new FileInputStream(
-          new StringBuilder()
-            .append(resourceDirPath).append("/")
-            .append(getClass().getSimpleName()).append(".pcap")
-            .toString()
-        );
+    FileInputStream in1 =
+        new FileInputStream(
+            new StringBuilder()
+                .append(resourceDirPath)
+                .append("/")
+                .append(getClass().getSimpleName())
+                .append(".pcap")
+                .toString());
     FileInputStream in2 = new FileInputStream(dumpFile);
 
     byte[] buffer1 = new byte[100];
@@ -148,36 +148,33 @@ public abstract class AbstractPacketTest {
 
   @Test
   public void testWriteRead() throws Exception {
-    String objFile = new StringBuilder()
-                       .append(tmpDirPath).append("/")
-                       .append(getClass().getSimpleName()).append(".obj")
-                       .toString();
+    String objFile =
+        new StringBuilder()
+            .append(tmpDirPath)
+            .append("/")
+            .append(getClass().getSimpleName())
+            .append(".obj")
+            .toString();
 
-    ObjectOutputStream oos
-      = new ObjectOutputStream(
-          new FileOutputStream(new File(objFile))
-        );
+    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(objFile)));
     oos.writeObject(getPacket());
     oos.close();
 
-    ObjectInputStream ois1
-      = new ObjectInputStream(new FileInputStream(new File(objFile)));
+    ObjectInputStream ois1 = new ObjectInputStream(new FileInputStream(new File(objFile)));
     assertEquals(getPacket(), ois1.readObject());
     ois1.close();
 
-    ObjectInputStream ois2
-      = new ObjectInputStream(
-          new FileInputStream(
-            new File(
-              new StringBuilder()
-                .append(resourceDirPath).append("/")
-                .append(getClass().getSimpleName()).append(".obj")
-                .toString()
-            )
-          )
-        );
+    ObjectInputStream ois2 =
+        new ObjectInputStream(
+            new FileInputStream(
+                new File(
+                    new StringBuilder()
+                        .append(resourceDirPath)
+                        .append("/")
+                        .append(getClass().getSimpleName())
+                        .append(".obj")
+                        .toString())));
     assertEquals(getPacket(), ois2.readObject());
     ois2.close();
   }
-
 }

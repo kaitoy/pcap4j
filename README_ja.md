@@ -39,6 +39,7 @@ Pcap4J 2.x and newer
         * [WinPcapかNpcapか](#WinPcapかNpcapか)
     * [Docker](#docker)
 * [ビルド](#ビルド)
+* [コードに貢献](#コードに貢献)
 * [ライセンス](#ライセンス)
 * [コンタクト](#コンタクト)
 
@@ -241,6 +242,18 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 5. ビルド:<br>
    プロジェクトのルートディレクトリに`cd`して、`gradlew build` を実行する。
    unit testを通すためにはAdministrator/root権限が必要。
+
+コードに貢献
+------------
+
+1. このリポジトリをフォークする。
+2. v1ブランチからブランチを作る。
+3. コードを書く。
+
+    * プロトコルサポートを追加するときは[このPR](https://github.com/kaitoy/pcap4j/pull/70)を参照。
+    * このプロジェクトは[Google Java Style Guide](https://google.github.io/styleguide/javaguide.html)に従う。「`gradlew spotlessApply`」を実行するとフォーマットできる。
+
+4. そのブランチからPRを送る。
 
 ライセンス
 ----------

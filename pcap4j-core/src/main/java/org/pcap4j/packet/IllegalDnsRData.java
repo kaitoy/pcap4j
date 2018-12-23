@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.DnsResourceRecord.DnsRData;
 import org.pcap4j.util.ByteArrays;
 
@@ -18,18 +17,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IllegalDnsRData implements DnsRData, IllegalRawDataHolder {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 7160504910755325172L;
 
   private final byte[] rawData;
   private final IllegalRawDataException cause;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -38,8 +34,7 @@ public final class IllegalDnsRData implements DnsRData, IllegalRawDataHolder {
    * @return a new IllegalDnsRData object.
    */
   public static IllegalDnsRData newInstance(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     if (cause == null) {
       throw new NullPointerException("cause is null.");
     }
@@ -84,14 +79,17 @@ public final class IllegalDnsRData implements DnsRData, IllegalRawDataHolder {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Illegal Data:")
-      .append(ls)
-      .append(indent).append("  data: ")
-      .append(ByteArrays.toHexString(rawData, ""))
-      .append(ls)
-      .append(indent).append("  cause: ")
-      .append(cause)
-      .append(ls);
+    sb.append(indent)
+        .append("Illegal Data:")
+        .append(ls)
+        .append(indent)
+        .append("  data: ")
+        .append(ByteArrays.toHexString(rawData, ""))
+        .append(ls)
+        .append(indent)
+        .append("  cause: ")
+        .append(cause)
+        .append(ls);
 
     return sb.toString();
   }
@@ -125,5 +123,4 @@ public final class IllegalDnsRData implements DnsRData, IllegalRawDataHolder {
     }
     return true;
   }
-
 }

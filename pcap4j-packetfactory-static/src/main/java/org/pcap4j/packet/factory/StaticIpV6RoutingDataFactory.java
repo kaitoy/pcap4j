@@ -19,23 +19,20 @@ import org.pcap4j.packet.namednumber.IpV6RoutingType;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6RoutingDataFactory
-implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
+    implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
 
-  private static final StaticIpV6RoutingDataFactory INSTANCE
-    = new StaticIpV6RoutingDataFactory();
+  private static final StaticIpV6RoutingDataFactory INSTANCE = new StaticIpV6RoutingDataFactory();
 
   private StaticIpV6RoutingDataFactory() {}
 
-  /**
-   * @return the singleton instance of StaticIpV6RoutingDataFactory.
-   */
+  /** @return the singleton instance of StaticIpV6RoutingDataFactory. */
   public static StaticIpV6RoutingDataFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6RoutingType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6RoutingType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -51,8 +48,8 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6RoutingType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6RoutingType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -61,8 +58,7 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
    * @return see {@link PacketFactory#newInstance}.
    */
   public IpV6RoutingData newInstance(
-    byte[] rawData, int offset, int length, IpV6RoutingType number
-  ) {
+      byte[] rawData, int offset, int length, IpV6RoutingType number) {
     try {
       switch (Byte.toUnsignedInt(number.value())) {
         case 0:
@@ -75,8 +71,8 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6RoutingType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpV6RoutingType...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -86,8 +82,7 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
    * @return see {@link PacketFactory#newInstance}.
    */
   public IpV6RoutingData newInstance(
-    byte[] rawData, int offset, int length, IpV6RoutingType number1, IpV6RoutingType number2
-  ) {
+      byte[] rawData, int offset, int length, IpV6RoutingType number1, IpV6RoutingType number2) {
     try {
       switch (Byte.toUnsignedInt(number1.value())) {
         case 0:
@@ -106,10 +101,9 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
 
   @Override
   public IpV6RoutingData newInstance(
-    byte[] rawData, int offset, int length, IpV6RoutingType... numbers
-  ) {
+      byte[] rawData, int offset, int length, IpV6RoutingType... numbers) {
     try {
-      for (IpV6RoutingType num: numbers) {
+      for (IpV6RoutingType num : numbers) {
         switch (Byte.toUnsignedInt(num.value())) {
           case 0:
             return IpV6RoutingSourceRouteData.newInstance(rawData, offset, length);
@@ -120,5 +114,4 @@ implements PacketFactory<IpV6RoutingData, IpV6RoutingType> {
       return IllegalIpV6RoutingData.newInstance(rawData, offset, length, e);
     }
   }
-
 }

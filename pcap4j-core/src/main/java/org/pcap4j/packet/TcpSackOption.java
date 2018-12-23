@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +42,7 @@ public final class TcpSackOption implements TcpOption {
    *   +--------+--------+--------+--------+
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -3308738405807657257L;
 
   private final TcpOptionKind kind = TcpOptionKind.SACK;
@@ -51,9 +50,8 @@ public final class TcpSackOption implements TcpOption {
   private final List<Sack> sacks = new ArrayList<Sack>();
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -61,9 +59,8 @@ public final class TcpSackOption implements TcpOption {
    * @return a new TcpSackOption object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static TcpSackOption newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static TcpSackOption newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new TcpSackOption(rawData, offset, length);
   }
@@ -72,23 +69,23 @@ public final class TcpSackOption implements TcpOption {
     if (length < 2) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 1. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (rawData[offset] != kind.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The kind must be: ")
-        .append(kind.valueAsString())
-        .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(kind.valueAsString())
+          .append(" rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -96,58 +93,48 @@ public final class TcpSackOption implements TcpOption {
     int lengthFieldAsInt = getLengthAsInt();
     if (lengthFieldAsInt < 2) {
       throw new IllegalRawDataException(
-                  "The value of length field must be  more than 1 but: " + lengthFieldAsInt
-                );
+          "The value of length field must be  more than 1 but: " + lengthFieldAsInt);
     }
 
     if ((lengthFieldAsInt - 2) % (INT_SIZE_IN_BYTES * 2) != 0) {
       StringBuilder sb = new StringBuilder(100);
-      sb.append(
-           "The value of length field must be an integer multiple of 8 octets long but: "
-         )
-        .append(lengthFieldAsInt);
+      sb.append("The value of length field must be an integer multiple of 8 octets long but: ")
+          .append(lengthFieldAsInt);
       throw new IllegalRawDataException(sb.toString());
     }
     if (length < lengthFieldAsInt) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("rawData is too short. length field: ")
-        .append(lengthFieldAsInt)
-        .append(", rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(lengthFieldAsInt)
+          .append(", rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     for (int i = 2; i < lengthFieldAsInt; i += INT_SIZE_IN_BYTES * 2) {
       sacks.add(
-        new Sack(
-          ByteArrays.getInt(rawData, i + offset),
-          ByteArrays.getInt(rawData, i + INT_SIZE_IN_BYTES + offset)
-        )
-      );
+          new Sack(
+              ByteArrays.getInt(rawData, i + offset),
+              ByteArrays.getInt(rawData, i + INT_SIZE_IN_BYTES + offset)));
     }
   }
 
   private TcpSackOption(Builder builder) {
-    if (
-         builder == null
-      || builder.sacks == null
-    ) {
+    if (builder == null || builder.sacks == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.sacks: ").append(builder.sacks);
+      sb.append("builder: ").append(builder).append(" builder.sacks: ").append(builder.sacks);
       throw new NullPointerException(sb.toString());
     }
 
     this.sacks.addAll(builder.sacks);
 
     if (builder.correctLengthAtBuild) {
-      this.length = (byte)length();
-    }
-    else {
+      this.length = (byte) length();
+    } else {
       this.length = builder.length;
     }
   }
@@ -157,17 +144,15 @@ public final class TcpSackOption implements TcpOption {
     return kind;
   }
 
-  /**
-   *
-   * @return length
-   */
-  public byte getLength() { return length; }
+  /** @return length */
+  public byte getLength() {
+    return length;
+  }
 
-  /**
-   *
-   * @return length
-   */
-  public int getLengthAsInt() { return 0xFF & length; }
+  /** @return length */
+  public int getLengthAsInt() {
+    return 0xFF & length;
+  }
 
   @Override
   public int length() {
@@ -181,25 +166,22 @@ public final class TcpSackOption implements TcpOption {
     rawData[1] = length;
 
     int offset = 2;
-    for (Sack sack: sacks) {
+    for (Sack sack : sacks) {
       System.arraycopy(
-        ByteArrays.toByteArray(sack.leftEdge), 0,
-        rawData, offset, INT_SIZE_IN_BYTES
-      );
+          ByteArrays.toByteArray(sack.leftEdge), 0, rawData, offset, INT_SIZE_IN_BYTES);
       System.arraycopy(
-        ByteArrays.toByteArray(sack.rightEdge), 0,
-        rawData, offset + INT_SIZE_IN_BYTES, INT_SIZE_IN_BYTES
-      );
+          ByteArrays.toByteArray(sack.rightEdge),
+          0,
+          rawData,
+          offset + INT_SIZE_IN_BYTES,
+          INT_SIZE_IN_BYTES);
       offset += INT_SIZE_IN_BYTES * 2;
     }
 
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -207,30 +189,29 @@ public final class TcpSackOption implements TcpOption {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("[Kind: ")
-      .append(kind);
-    sb.append("] [Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes]");
-    for (Sack sack: sacks) {
+    sb.append("[Kind: ").append(kind);
+    sb.append("] [Length: ").append(getLengthAsInt()).append(" bytes]");
+    for (Sack sack : sacks) {
       sb.append(" [LE: ")
-        .append(sack.getLeftEdgeAsLong())
-        .append(" RE: ")
-        .append(sack.getRightEdgeAsLong())
-        .append("]");
+          .append(sack.getLeftEdgeAsLong())
+          .append(" RE: ")
+          .append(sack.getRightEdgeAsLong())
+          .append("]");
     }
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    TcpSackOption other = (TcpSackOption)obj;
-    return
-         length == other.length
-      && sacks.equals(other.sacks);
+    TcpSackOption other = (TcpSackOption) obj;
+    return length == other.length && sacks.equals(other.sacks);
   }
 
   @Override
@@ -245,16 +226,13 @@ public final class TcpSackOption implements TcpOption {
    * @author Kaito Yamada
    * @since pcap4j 1.2.0
    */
-  public static final class Builder
-  implements LengthBuilder<TcpSackOption> {
+  public static final class Builder implements LengthBuilder<TcpSackOption> {
 
     private byte length;
     private boolean correctLengthAtBuild;
     private List<Sack> sacks;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(TcpSackOption option) {
@@ -289,7 +267,6 @@ public final class TcpSackOption implements TcpOption {
     public TcpSackOption build() {
       return new TcpSackOption(this);
     }
-
   }
 
   /**
@@ -298,9 +275,7 @@ public final class TcpSackOption implements TcpOption {
    */
   public static final class Sack implements Serializable {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = 1218420566089129438L;
 
     private final int leftEdge;
@@ -315,43 +290,37 @@ public final class TcpSackOption implements TcpOption {
       this.rightEdge = rightEdge;
     }
 
-    /**
-     * @return leftEdge
-     */
+    /** @return leftEdge */
     public int getLeftEdge() {
       return leftEdge;
     }
 
-    /**
-     * @return leftEdge
-     */
+    /** @return leftEdge */
     public long getLeftEdgeAsLong() {
       return 0xFFFFFFFFL & leftEdge;
     }
 
-    /**
-     * @return rightEdge
-     */
+    /** @return rightEdge */
     public int getRightEdge() {
       return rightEdge;
     }
 
-    /**
-     * @return rightEdge
-     */
+    /** @return rightEdge */
     public long getRightEdgeAsLong() {
       return 0xFFFFFFFFL & rightEdge;
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      Sack other = (Sack)obj;
-      return
-           leftEdge == other.leftEdge
-        && rightEdge == other.rightEdge;
+      Sack other = (Sack) obj;
+      return leftEdge == other.leftEdge && rightEdge == other.rightEdge;
     }
 
     @Override
@@ -361,7 +330,5 @@ public final class TcpSackOption implements TcpOption {
       result = 31 * result + rightEdge;
       return result;
     }
-
   }
-
 }

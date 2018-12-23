@@ -34,18 +34,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class DnsRDataHInfo implements DnsRData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -4910328276617707827L;
 
   private final String cpu;
   private final String os;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -53,9 +50,8 @@ public final class DnsRDataHInfo implements DnsRData {
    * @return a new DnsRDataHInfo object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsRDataHInfo newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsRDataHInfo newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsRDataHInfo(rawData, offset, length);
   }
@@ -66,13 +62,13 @@ public final class DnsRDataHInfo implements DnsRData {
     if (cpuLen + 1 > length - cursor) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build cpu and os in DnsRDataHInfo. data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length)
-        .append(", cursor: ")
-        .append(cursor);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length)
+          .append(", cursor: ")
+          .append(cursor);
       throw new IllegalRawDataException(sb.toString());
     }
     this.cpu = new String(rawData, offset + cursor, cpuLen);
@@ -83,56 +79,52 @@ public final class DnsRDataHInfo implements DnsRData {
     if (osLen > length - cursor) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build os in DnsRDataHInfo (")
-        .append(osLen)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length)
-        .append(", cursor: ")
-        .append(cursor);
+          .append(osLen)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length)
+          .append(", cursor: ")
+          .append(cursor);
       throw new IllegalRawDataException(sb.toString());
     }
     this.os = new String(rawData, offset + cursor, osLen);
   }
 
   private DnsRDataHInfo(Builder builder) {
-    if (
-         builder == null
-      || builder.cpu == null
-      || builder.os == null
-    ) {
+    if (builder == null || builder.cpu == null || builder.os == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.cpu: ").append(builder.cpu)
-        .append(" builder.os: ").append(builder.os);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.cpu: ")
+          .append(builder.cpu)
+          .append(" builder.os: ")
+          .append(builder.os);
       throw new NullPointerException(sb.toString());
     }
     if (builder.cpu.getBytes().length > 255) {
       throw new IllegalArgumentException(
-              "Length of cpu must be less than 256. cpu: " + builder.cpu
-            );
+          "Length of cpu must be less than 256. cpu: " + builder.cpu);
     }
     if (builder.os.getBytes().length > 255) {
-      throw new IllegalArgumentException(
-              "Length of os must be less than 256. os: " + builder.os
-            );
+      throw new IllegalArgumentException("Length of os must be less than 256. os: " + builder.os);
     }
 
     this.cpu = builder.cpu;
     this.os = builder.os;
   }
 
-  /**
-   * @return cpu
-   */
-  public String getCpu() { return cpu; }
+  /** @return cpu */
+  public String getCpu() {
+    return cpu;
+  }
 
-  /**
-   * @return os
-   */
-  public String getOs() { return os; }
+  /** @return os */
+  public String getOs() {
+    return os;
+  }
 
   @Override
   public int length() {
@@ -158,10 +150,10 @@ public final class DnsRDataHInfo implements DnsRData {
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -185,14 +177,17 @@ public final class DnsRDataHInfo implements DnsRData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("HINFO RDATA:")
-      .append(ls)
-      .append(indent).append("  CPU: ")
-      .append(cpu)
-      .append(ls)
-      .append(indent).append("  OS: ")
-      .append(os)
-      .append(ls);
+    sb.append(indent)
+        .append("HINFO RDATA:")
+        .append(ls)
+        .append(indent)
+        .append("  CPU: ")
+        .append(cpu)
+        .append(ls)
+        .append(indent)
+        .append("  OS: ")
+        .append(os)
+        .append(ls);
 
     return sb.toString();
   }
@@ -236,9 +231,7 @@ public final class DnsRDataHInfo implements DnsRData {
     private String cpu;
     private String os;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(DnsRDataHInfo obj) {
@@ -264,13 +257,9 @@ public final class DnsRDataHInfo implements DnsRData {
       return this;
     }
 
-    /**
-     * @return a new DnsRDataHInfo object.
-     */
+    /** @return a new DnsRDataHInfo object. */
     public DnsRDataHInfo build() {
       return new DnsRDataHInfo(this);
     }
-
   }
-
 }

@@ -20,20 +20,19 @@ final class SimplePacketFactoryBinder {
 
   private SimplePacketFactoryBinder() {}
 
-  public static SimplePacketFactoryBinder getInstance() { return INSTANCE; }
+  public static SimplePacketFactoryBinder getInstance() {
+    return INSTANCE;
+  }
 
   @SuppressWarnings("unchecked")
   public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
-    Class<T> targetClass, Class<N> numberClass
-  ) {
+      Class<T> targetClass, Class<N> numberClass) {
     if (Packet.class.isAssignableFrom(targetClass)) {
-      return (PacketFactory<T, N>)StaticUnknownPacketFactory.getInstance();
+      return (PacketFactory<T, N>) StaticUnknownPacketFactory.getInstance();
     } else {
       StringBuilder sb = new StringBuilder(100);
-      sb.append("targetClass: ").append(targetClass)
-        .append(" numberClass: ").append(numberClass);
+      sb.append("targetClass: ").append(targetClass).append(" numberClass: ").append(numberClass);
       throw new IllegalArgumentException(sb.toString());
     }
   }
-
 }

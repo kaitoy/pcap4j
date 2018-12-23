@@ -19,10 +19,7 @@ public final class PacketIterator implements Iterator<Packet> {
   private Packet next;
   private Packet previous = null;
 
-  /**
-   *
-   * @param p p
-   */
+  /** @param p p */
   public PacketIterator(Packet p) {
     this.next = p;
   }
@@ -44,12 +41,9 @@ public final class PacketIterator implements Iterator<Packet> {
     return previous;
   }
 
-  /**
-   * @throws UnsupportedOperationException always.
-   */
+  /** @throws UnsupportedOperationException always. */
   @Override
   public void remove() {
     throw new UnsupportedOperationException();
   }
-
 }

@@ -14,16 +14,13 @@ import org.pcap4j.util.ByteArrays;
 /**
  * The Control field of an LLC header in U-format.
  *
- * <pre>
- * {@code
+ * <pre>{@code
  *    0     1     2     3     4     5     6     7
  * +-----+-----+-----+-----+-----+-----+-----+-----+
  * |    modifier     | P/F | modifier  |  1  |  1  |
  * |    func bits    |     | func bits |     |     |
  * +-----+-----+-----+-----+-----+-----+-----+-----+
- * }
- *
- * </pre>
+ * }</pre>
  *
  * @see <a href="http://standards.ieee.org/about/get/802/802.2.html">IEEE 802.2</a>
  * @author Kaito Yamada
@@ -31,9 +28,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class LlcControlUnnumbered implements LlcControl {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 8688698899763120721L;
 
   private final LlcControlModifierFunction modifierFunction;
@@ -52,28 +47,25 @@ public final class LlcControlUnnumbered implements LlcControl {
     if ((value & 0x03) != 0x03) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("Both the lsb and the second lsb of the value must be 1. value: ")
-        .append(ByteArrays.toHexString(value, " "));
+          .append(ByteArrays.toHexString(value, " "));
       throw new IllegalRawDataException(sb.toString());
     }
 
-    this.modifierFunction
-      = LlcControlModifierFunction.getInstance((byte) ((value >> 2) & 0x3B));
+    this.modifierFunction = LlcControlModifierFunction.getInstance((byte) ((value >> 2) & 0x3B));
     if ((value & 0x10) == 0) {
       this.pfBit = false;
-    }
-    else {
+    } else {
       this.pfBit = true;
     }
   }
 
   private LlcControlUnnumbered(Builder builder) {
-    if (
-         builder == null
-      || builder.modifierFunction == null
-    ) {
+    if (builder == null || builder.modifierFunction == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.modifierFunction: ").append(builder.modifierFunction);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.modifierFunction: ")
+          .append(builder.modifierFunction);
       throw new NullPointerException(sb.toString());
     }
 
@@ -81,15 +73,15 @@ public final class LlcControlUnnumbered implements LlcControl {
     this.pfBit = builder.pfBit;
   }
 
-  /**
-   * @return modifierFunction
-   */
-  public LlcControlModifierFunction getModifierFunction() { return modifierFunction; }
+  /** @return modifierFunction */
+  public LlcControlModifierFunction getModifierFunction() {
+    return modifierFunction;
+  }
 
-  /**
-   * @return true if the P/F bit is set to 1; otherwise false.
-   */
-  public boolean getPfBit() { return pfBit; }
+  /** @return true if the P/F bit is set to 1; otherwise false. */
+  public boolean getPfBit() {
+    return pfBit;
+  }
 
   @Override
   public int length() {
@@ -99,26 +91,26 @@ public final class LlcControlUnnumbered implements LlcControl {
   @Override
   public byte[] getRawData() {
     byte[] data = new byte[1];
-    data[0] = (byte) (0x03 | (modifierFunction.value() << 2)) ;
+    data[0] = (byte) (0x03 | (modifierFunction.value() << 2));
     if (pfBit) {
       data[0] |= 0x10;
     }
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[modifier function: ")
-      .append(modifierFunction)
-      .append("] [P/F bit: ")
-      .append(pfBit ? 1 : 0)
-      .append("]");
+        .append(modifierFunction)
+        .append("] [P/F bit: ")
+        .append(pfBit ? 1 : 0)
+        .append("]");
 
     return sb.toString();
   }
@@ -134,11 +126,14 @@ public final class LlcControlUnnumbered implements LlcControl {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     LlcControlUnnumbered other = (LlcControlUnnumbered) obj;
-    return    modifierFunction.equals(other.modifierFunction)
-           && pfBit == other.pfBit;
+    return modifierFunction.equals(other.modifierFunction) && pfBit == other.pfBit;
   }
 
   /**
@@ -150,9 +145,7 @@ public final class LlcControlUnnumbered implements LlcControl {
     private LlcControlModifierFunction modifierFunction;
     private boolean pfBit;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(LlcControlUnnumbered ctrl) {
@@ -178,13 +171,9 @@ public final class LlcControlUnnumbered implements LlcControl {
       return this;
     }
 
-    /**
-     * @return a new LlcControlSupervisory object.
-     */
+    /** @return a new LlcControlSupervisory object. */
     public LlcControlUnnumbered build() {
       return new LlcControlUnnumbered(this);
     }
-
   }
-
 }

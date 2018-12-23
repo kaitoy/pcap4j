@@ -1,5 +1,7 @@
 package org.pcap4j.sample;
 
+import java.io.EOFException;
+import java.util.concurrent.TimeoutException;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapHandle.TimestampPrecision;
@@ -7,18 +9,14 @@ import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.Packet;
 
-import java.io.EOFException;
-import java.util.concurrent.TimeoutException;
-
 @SuppressWarnings("javadoc")
 public class ReadPacketFile {
 
   private static final int COUNT = 5;
 
-  private static final String PCAP_FILE_KEY
-    = ReadPacketFile.class.getName() + ".pcapFile";
-  private static final String PCAP_FILE
-    = System.getProperty(PCAP_FILE_KEY, "src/main/resources/echoAndEchoReply.pcap");
+  private static final String PCAP_FILE_KEY = ReadPacketFile.class.getName() + ".pcapFile";
+  private static final String PCAP_FILE =
+      System.getProperty(PCAP_FILE_KEY, "src/main/resources/echoAndEchoReply.pcap");
 
   private ReadPacketFile() {}
 
@@ -43,5 +41,4 @@ public class ReadPacketFile {
 
     handle.close();
   }
-
 }

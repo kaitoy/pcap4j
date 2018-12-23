@@ -14,7 +14,6 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.UdpPort;
@@ -26,18 +25,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class UdpPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 4638029542367352625L;
 
   private final UdpHeader header;
   private final Packet payload;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -45,9 +41,8 @@ public final class UdpPacket extends AbstractPacket {
    * @return a new UdpPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static UdpPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static UdpPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new UdpPacket(rawData, offset, length);
   }
@@ -58,9 +53,7 @@ public final class UdpPacket extends AbstractPacket {
     int payloadLength = header.getLengthAsInt() - header.length();
     if (payloadLength < 0) {
       throw new IllegalRawDataException(
-              "The value of length field seems to be wrong: "
-                + header.getLengthAsInt()
-            );
+          "The value of length field seems to be wrong: " + header.getLengthAsInt());
     }
 
     if (payloadLength > length - header.length()) {
@@ -68,54 +61,52 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     if (payloadLength != 0) { // payloadLength is positive.
-      this.payload
-        = PacketFactories.getFactory(Packet.class, UdpPort.class)
-            .newInstance(
-               rawData,
-               offset + header.length(),
-               payloadLength,
-               header.getSrcPort(),
-               header.getDstPort()
-             );
-    }
-    else {
+      this.payload =
+          PacketFactories.getFactory(Packet.class, UdpPort.class)
+              .newInstance(
+                  rawData,
+                  offset + header.length(),
+                  payloadLength,
+                  header.getSrcPort(),
+                  header.getDstPort());
+    } else {
       this.payload = null;
     }
   }
 
   private UdpPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.srcPort == null
-      || builder.dstPort == null
-    ) {
+    if (builder == null || builder.srcPort == null || builder.dstPort == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.srcPort: ").append(builder.srcPort)
-        .append(" builder.dstPort: ").append(builder.dstPort);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.srcPort: ")
+          .append(builder.srcPort)
+          .append(" builder.dstPort: ")
+          .append(builder.dstPort);
       throw new NullPointerException(sb.toString());
     }
 
     if (builder.correctChecksumAtBuild) {
       if (builder.srcAddr == null || builder.dstAddr == null) {
         StringBuilder sb = new StringBuilder();
-        sb.append("builder.srcAddr: ").append(builder.srcAddr)
-          .append(" builder.dstAddr: ").append(builder.dstAddr);
+        sb.append("builder.srcAddr: ")
+            .append(builder.srcAddr)
+            .append(" builder.dstAddr: ")
+            .append(builder.dstAddr);
         throw new NullPointerException(sb.toString());
       }
       if (!builder.srcAddr.getClass().isInstance(builder.dstAddr)) {
         StringBuilder sb = new StringBuilder();
-        sb.append("builder.srcAddr: ").append(builder.srcAddr)
-          .append(" builder.dstAddr: ").append(builder.dstAddr);
+        sb.append("builder.srcAddr: ")
+            .append(builder.srcAddr)
+            .append(" builder.dstAddr: ")
+            .append(builder.dstAddr);
         throw new IllegalArgumentException(sb.toString());
       }
     }
 
     this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
-    this.header = new UdpHeader(
-                    builder,
-                    payload != null ? payload.getRawData() : new byte[0]
-                  );
+    this.header = new UdpHeader(builder, payload != null ? payload.getRawData() : new byte[0]);
   }
 
   @Override
@@ -129,34 +120,28 @@ public final class UdpPacket extends AbstractPacket {
   }
 
   /**
-   *
    * checksum verification is necessary for IPv6(i.e. acceptZero must be false)
    *
    * @param srcAddr srcAddr
    * @param dstAddr dstAddr
    * @param acceptZero acceptZero
-   * @return true if the packet represented by this object has a valid checksum;
-   *         false otherwise.
+   * @return true if the packet represented by this object has a valid checksum; false otherwise.
    */
-  public boolean hasValidChecksum(
-    InetAddress srcAddr, InetAddress dstAddr, boolean acceptZero
-  ) {
+  public boolean hasValidChecksum(InetAddress srcAddr, InetAddress dstAddr, boolean acceptZero) {
     if (srcAddr == null || dstAddr == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("srcAddr: ").append(srcAddr)
-        .append(" dstAddr: ").append(dstAddr);
+      sb.append("srcAddr: ").append(srcAddr).append(" dstAddr: ").append(dstAddr);
       throw new NullPointerException(sb.toString());
     }
     if (!srcAddr.getClass().isInstance(dstAddr)) {
       StringBuilder sb = new StringBuilder();
-      sb.append("srcAddr: ").append(srcAddr)
-        .append(" dstAddr: ").append(dstAddr);
+      sb.append("srcAddr: ").append(srcAddr).append(" dstAddr: ").append(dstAddr);
       throw new IllegalArgumentException(sb.toString());
     }
 
     byte[] payloadData = payload != null ? payload.getRawData() : new byte[0];
-    short calculatedChecksum
-      = header.calcChecksum(srcAddr, dstAddr, header.getRawData(), payloadData);
+    short calculatedChecksum =
+        header.calcChecksum(srcAddr, dstAddr, header.getRawData(), payloadData);
     if (calculatedChecksum == 0) {
       return true;
     }
@@ -177,9 +162,8 @@ public final class UdpPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final
-  class Builder extends AbstractBuilder
-  implements LengthBuilder<UdpPacket>, ChecksumBuilder<UdpPacket> {
+  public static final class Builder extends AbstractBuilder
+      implements LengthBuilder<UdpPacket>, ChecksumBuilder<UdpPacket> {
 
     private UdpPort srcPort;
     private UdpPort dstPort;
@@ -191,15 +175,10 @@ public final class UdpPacket extends AbstractPacket {
     private boolean correctLengthAtBuild;
     private boolean correctChecksumAtBuild;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
-    /**
-     *
-     * @param packet packet
-     */
+    /** @param packet packet */
     public Builder(UdpPacket packet) {
       this.srcPort = packet.header.srcPort;
       this.dstPort = packet.header.dstPort;
@@ -209,7 +188,6 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param srcPort srcPort
      * @return this Builder object for method chaining.
      */
@@ -219,7 +197,6 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param dstPort dstPort
      * @return this Builder object for method chaining.
      */
@@ -229,7 +206,6 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param length length
      * @return this Builder object for method chaining.
      */
@@ -239,7 +215,6 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param checksum checksum
      * @return this Builder object for method chaining.
      */
@@ -260,7 +235,6 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     /**
-     *
      * used for checksum calculation.
      *
      * @param srcAddr srcAddr
@@ -272,12 +246,9 @@ public final class UdpPacket extends AbstractPacket {
     }
 
     /**
-     *
-     * used for checksum calculation
-     * If the lower-layer packet is a IPv6 packet and
-     * the extension headers including a routing header,
-     * this parameter is that of the final destination.
-     * (i.e. the last element of the Routing header)
+     * used for checksum calculation If the lower-layer packet is a IPv6 packet and the extension
+     * headers including a routing header, this parameter is that of the final destination. (i.e.
+     * the last element of the Routing header)
      *
      * @param dstAddr dstAddr
      * @return this Builder object for method chaining.
@@ -303,7 +274,6 @@ public final class UdpPacket extends AbstractPacket {
     public UdpPacket build() {
       return new UdpPacket(this);
     }
-
   }
 
   /**
@@ -359,29 +329,18 @@ public final class UdpPacket extends AbstractPacket {
      * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -1746545325551976324L;
 
-    private static final int SRC_PORT_OFFSET
-      = 0;
-    private static final int SRC_PORT_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int DST_PORT_OFFSET
-      = SRC_PORT_OFFSET + SRC_PORT_SIZE;
-    private static final int DST_PORT_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int LENGTH_OFFSET
-      = DST_PORT_OFFSET + DST_PORT_SIZE;
-    private static final int LENGTH_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int CHECKSUM_OFFSET
-      = LENGTH_OFFSET + LENGTH_SIZE;
-    private static final int CHECKSUM_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int UCP_HEADER_SIZE
-      = CHECKSUM_OFFSET + CHECKSUM_SIZE;
+    private static final int SRC_PORT_OFFSET = 0;
+    private static final int SRC_PORT_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int DST_PORT_OFFSET = SRC_PORT_OFFSET + SRC_PORT_SIZE;
+    private static final int DST_PORT_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int LENGTH_OFFSET = DST_PORT_OFFSET + DST_PORT_SIZE;
+    private static final int LENGTH_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int CHECKSUM_OFFSET = LENGTH_OFFSET + LENGTH_SIZE;
+    private static final int CHECKSUM_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int UCP_HEADER_SIZE = CHECKSUM_OFFSET + CHECKSUM_SIZE;
 
     private static final int IPV4_PSEUDO_HEADER_SIZE = 12;
     private static final int IPV6_PSEUDO_HEADER_SIZE = 40;
@@ -395,20 +354,18 @@ public final class UdpPacket extends AbstractPacket {
       if (length < UCP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build a UDP header(")
-          .append(UCP_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(UCP_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.srcPort
-        = UdpPort.getInstance(ByteArrays.getShort(rawData, SRC_PORT_OFFSET + offset));
-      this.dstPort
-        = UdpPort.getInstance(ByteArrays.getShort(rawData, DST_PORT_OFFSET + offset));
+      this.srcPort = UdpPort.getInstance(ByteArrays.getShort(rawData, SRC_PORT_OFFSET + offset));
+      this.dstPort = UdpPort.getInstance(ByteArrays.getShort(rawData, DST_PORT_OFFSET + offset));
       this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET + offset);
       this.checksum = ByteArrays.getShort(rawData, CHECKSUM_OFFSET + offset);
     }
@@ -418,58 +375,39 @@ public final class UdpPacket extends AbstractPacket {
       this.dstPort = builder.dstPort;
 
       if (builder.correctLengthAtBuild) {
-        this.length = (short)(payload.length + length());
-      }
-      else {
+        this.length = (short) (payload.length + length());
+      } else {
         this.length = builder.length;
       }
 
       if (builder.correctChecksumAtBuild) {
-        if (
-          (
-            builder.srcAddr instanceof Inet4Address
-              && PacketPropertiesLoader.getInstance().udpV4CalcChecksum()
-          )
-          ||
-          (
-            builder.srcAddr instanceof Inet6Address
-              && PacketPropertiesLoader.getInstance().udpV6CalcChecksum()
-          )
-        ) {
-          this.checksum
-            = calcChecksum(
-                builder.srcAddr,
-                builder.dstAddr,
-                buildRawData(true),
-                payload
-              );
+        if ((builder.srcAddr instanceof Inet4Address
+                && PacketPropertiesLoader.getInstance().udpV4CalcChecksum())
+            || (builder.srcAddr instanceof Inet6Address
+                && PacketPropertiesLoader.getInstance().udpV6CalcChecksum())) {
+          this.checksum =
+              calcChecksum(builder.srcAddr, builder.dstAddr, buildRawData(true), payload);
+        } else {
+          this.checksum = (short) 0;
         }
-        else {
-          this.checksum = (short)0;
-        }
-      }
-      else {
+      } else {
         this.checksum = builder.checksum;
       }
     }
 
     private short calcChecksum(
-      InetAddress srcAddr, InetAddress dstAddr, byte[] header, byte[] payload
-    ) {
+        InetAddress srcAddr, InetAddress dstAddr, byte[] header, byte[] payload) {
       byte[] data;
       int destPos;
       int totalLength = payload.length + length();
       boolean lowerLayerIsIpV4 = srcAddr instanceof Inet4Address;
 
-      int pseudoHeaderSize
-        = lowerLayerIsIpV4 ? IPV4_PSEUDO_HEADER_SIZE
-                           : IPV6_PSEUDO_HEADER_SIZE;
+      int pseudoHeaderSize = lowerLayerIsIpV4 ? IPV4_PSEUDO_HEADER_SIZE : IPV6_PSEUDO_HEADER_SIZE;
 
       if ((totalLength % 2) != 0) {
         data = new byte[totalLength + 1 + pseudoHeaderSize];
         destPos = totalLength + 1;
-      }
-      else {
+      } else {
         data = new byte[totalLength + pseudoHeaderSize];
         destPos = totalLength;
       }
@@ -478,23 +416,16 @@ public final class UdpPacket extends AbstractPacket {
       System.arraycopy(payload, 0, data, header.length, payload.length);
 
       // pseudo header
-      System.arraycopy(
-        srcAddr.getAddress(), 0,
-        data, destPos, srcAddr.getAddress().length
-      );
+      System.arraycopy(srcAddr.getAddress(), 0, data, destPos, srcAddr.getAddress().length);
       destPos += srcAddr.getAddress().length;
 
-      System.arraycopy(
-        dstAddr.getAddress(), 0,
-        data, destPos, dstAddr.getAddress().length
-      );
+      System.arraycopy(dstAddr.getAddress(), 0, data, destPos, dstAddr.getAddress().length);
       destPos += dstAddr.getAddress().length;
 
       if (lowerLayerIsIpV4) {
-        //data[destPos] = (byte)0;
+        // data[destPos] = (byte)0;
         destPos++;
-      }
-      else {
+      } else {
         destPos += 3;
       }
 
@@ -502,50 +433,33 @@ public final class UdpPacket extends AbstractPacket {
       destPos++;
 
       System.arraycopy(
-        ByteArrays.toByteArray((short)totalLength), 0,
-        data, destPos, SHORT_SIZE_IN_BYTES
-      );
+          ByteArrays.toByteArray((short) totalLength), 0, data, destPos, SHORT_SIZE_IN_BYTES);
       destPos += SHORT_SIZE_IN_BYTES;
 
       return ByteArrays.calcChecksum(data);
     }
 
-    /**
-     *
-     * @return srcPort
-     */
+    /** @return srcPort */
     public UdpPort getSrcPort() {
       return srcPort;
     }
 
-    /**
-     *
-     * @return dstPort
-     */
+    /** @return dstPort */
     public UdpPort getDstPort() {
       return dstPort;
     }
 
-    /**
-     *
-     * @return length
-     */
+    /** @return length */
     public short getLength() {
       return length;
     }
 
-    /**
-     *
-     * @return length
-     */
+    /** @return length */
     public int getLengthAsInt() {
       return 0xFFFF & length;
     }
 
-    /**
-     *
-     * @return checksum
-     */
+    /** @return checksum */
     public short getChecksum() {
       return checksum;
     }
@@ -578,38 +492,29 @@ public final class UdpPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[UDP Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Source port: ")
-        .append(getSrcPort())
-        .append(ls);
-      sb.append("  Destination port: ")
-        .append(getDstPort())
-        .append(ls);
-      sb.append("  Length: ")
-        .append(getLengthAsInt())
-        .append(" [bytes]")
-        .append(ls);
-      sb.append("  Checksum: 0x")
-        .append(ByteArrays.toHexString(checksum, ""))
-        .append(ls);
+      sb.append("[UDP Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Source port: ").append(getSrcPort()).append(ls);
+      sb.append("  Destination port: ").append(getDstPort()).append(ls);
+      sb.append("  Length: ").append(getLengthAsInt()).append(" [bytes]").append(ls);
+      sb.append("  Checksum: 0x").append(ByteArrays.toHexString(checksum, "")).append(ls);
 
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      UdpHeader other = (UdpHeader)obj;
-      return
-           checksum == other.checksum
-        && length == other.length
-        && srcPort.equals(other.srcPort)
-        && dstPort.equals(other.dstPort);
+      UdpHeader other = (UdpHeader) obj;
+      return checksum == other.checksum
+          && length == other.length
+          && srcPort.equals(other.srcPort)
+          && dstPort.equals(other.dstPort);
     }
 
     @Override
@@ -621,7 +526,5 @@ public final class UdpPacket extends AbstractPacket {
       result = 31 * result + checksum;
       return result;
     }
-
   }
-
 }

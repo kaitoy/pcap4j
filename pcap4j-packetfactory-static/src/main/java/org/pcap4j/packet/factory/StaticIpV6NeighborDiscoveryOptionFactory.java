@@ -23,24 +23,21 @@ import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6NeighborDiscoveryOptionFactory
-implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptionType> {
+    implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptionType> {
 
-  private static final StaticIpV6NeighborDiscoveryOptionFactory INSTANCE
-    = new StaticIpV6NeighborDiscoveryOptionFactory();
+  private static final StaticIpV6NeighborDiscoveryOptionFactory INSTANCE =
+      new StaticIpV6NeighborDiscoveryOptionFactory();
 
   private StaticIpV6NeighborDiscoveryOptionFactory() {}
 
-  /**
-   * @return the singleton instance of StaticIpV6NeighborDiscoveryOptionFactory.
-   */
+  /** @return the singleton instance of StaticIpV6NeighborDiscoveryOptionFactory. */
   public static StaticIpV6NeighborDiscoveryOptionFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of
-   * {@link #newInstance(byte[], int, int, IpV6NeighborDiscoveryOptionType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int,
+   * IpV6NeighborDiscoveryOptionType...)} and exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -56,9 +53,8 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
   }
 
   /**
-   * This method is a variant of
-   * {@link #newInstance(byte[], int, int, IpV6NeighborDiscoveryOptionType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int,
+   * IpV6NeighborDiscoveryOptionType...)} and exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -67,19 +63,17 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
    * @return see {@link PacketFactory#newInstance}.
    */
   public IpV6NeighborDiscoveryOption newInstance(
-    byte[] rawData, int offset, int length, IpV6NeighborDiscoveryOptionType number
-  ) {
+      byte[] rawData, int offset, int length, IpV6NeighborDiscoveryOptionType number) {
     try {
       switch (Byte.toUnsignedInt(number.value())) {
         case 1:
-          return IpV6NeighborDiscoverySourceLinkLayerAddressOption
-            .newInstance(rawData, offset, length);
+          return IpV6NeighborDiscoverySourceLinkLayerAddressOption.newInstance(
+              rawData, offset, length);
         case 2:
-          return IpV6NeighborDiscoveryTargetLinkLayerAddressOption
-            .newInstance(rawData, offset, length);
+          return IpV6NeighborDiscoveryTargetLinkLayerAddressOption.newInstance(
+              rawData, offset, length);
         case 3:
-          return IpV6NeighborDiscoveryPrefixInformationOption
-            .newInstance(rawData, offset, length);
+          return IpV6NeighborDiscoveryPrefixInformationOption.newInstance(rawData, offset, length);
         case 4:
           return IpV6NeighborDiscoveryRedirectedHeaderOption.newInstance(rawData, offset, length);
         case 5:
@@ -92,9 +86,8 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
   }
 
   /**
-   * This method is a variant of
-   * {@link #newInstance(byte[], int, int, IpV6NeighborDiscoveryOptionType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int,
+   * IpV6NeighborDiscoveryOptionType...)} and exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -104,20 +97,21 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
    * @return see {@link PacketFactory#newInstance}.
    */
   public IpV6NeighborDiscoveryOption newInstance(
-    byte[] rawData, int offset, int length,
-    IpV6NeighborDiscoveryOptionType number1, IpV6NeighborDiscoveryOptionType number2
-  ) {
+      byte[] rawData,
+      int offset,
+      int length,
+      IpV6NeighborDiscoveryOptionType number1,
+      IpV6NeighborDiscoveryOptionType number2) {
     try {
       switch (Byte.toUnsignedInt(number1.value())) {
         case 1:
-          return IpV6NeighborDiscoverySourceLinkLayerAddressOption
-            .newInstance(rawData, offset, length);
+          return IpV6NeighborDiscoverySourceLinkLayerAddressOption.newInstance(
+              rawData, offset, length);
         case 2:
-          return IpV6NeighborDiscoveryTargetLinkLayerAddressOption
-            .newInstance(rawData, offset, length);
+          return IpV6NeighborDiscoveryTargetLinkLayerAddressOption.newInstance(
+              rawData, offset, length);
         case 3:
-          return IpV6NeighborDiscoveryPrefixInformationOption
-            .newInstance(rawData, offset, length);
+          return IpV6NeighborDiscoveryPrefixInformationOption.newInstance(rawData, offset, length);
         case 4:
           return IpV6NeighborDiscoveryRedirectedHeaderOption.newInstance(rawData, offset, length);
         case 5:
@@ -126,14 +120,13 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
 
       switch (Byte.toUnsignedInt(number2.value())) {
         case 1:
-          return IpV6NeighborDiscoverySourceLinkLayerAddressOption
-            .newInstance(rawData, offset, length);
+          return IpV6NeighborDiscoverySourceLinkLayerAddressOption.newInstance(
+              rawData, offset, length);
         case 2:
-          return IpV6NeighborDiscoveryTargetLinkLayerAddressOption
-            .newInstance(rawData, offset, length);
+          return IpV6NeighborDiscoveryTargetLinkLayerAddressOption.newInstance(
+              rawData, offset, length);
         case 3:
-          return IpV6NeighborDiscoveryPrefixInformationOption
-            .newInstance(rawData, offset, length);
+          return IpV6NeighborDiscoveryPrefixInformationOption.newInstance(rawData, offset, length);
         case 4:
           return IpV6NeighborDiscoveryRedirectedHeaderOption.newInstance(rawData, offset, length);
         case 5:
@@ -147,20 +140,19 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
 
   @Override
   public IpV6NeighborDiscoveryOption newInstance(
-    byte[] rawData, int offset, int length, IpV6NeighborDiscoveryOptionType... numbers
-  ) {
+      byte[] rawData, int offset, int length, IpV6NeighborDiscoveryOptionType... numbers) {
     try {
-      for (IpV6NeighborDiscoveryOptionType num: numbers) {
+      for (IpV6NeighborDiscoveryOptionType num : numbers) {
         switch (Byte.toUnsignedInt(num.value())) {
           case 1:
-            return IpV6NeighborDiscoverySourceLinkLayerAddressOption
-                     .newInstance(rawData, offset, length);
+            return IpV6NeighborDiscoverySourceLinkLayerAddressOption.newInstance(
+                rawData, offset, length);
           case 2:
-            return IpV6NeighborDiscoveryTargetLinkLayerAddressOption
-                     .newInstance(rawData, offset, length);
+            return IpV6NeighborDiscoveryTargetLinkLayerAddressOption.newInstance(
+                rawData, offset, length);
           case 3:
-            return IpV6NeighborDiscoveryPrefixInformationOption
-                     .newInstance(rawData, offset, length);
+            return IpV6NeighborDiscoveryPrefixInformationOption.newInstance(
+                rawData, offset, length);
           case 4:
             return IpV6NeighborDiscoveryRedirectedHeaderOption.newInstance(rawData, offset, length);
           case 5:
@@ -172,5 +164,4 @@ implements PacketFactory<IpV6NeighborDiscoveryOption, IpV6NeighborDiscoveryOptio
       return IllegalIpV6NeighborDiscoveryOption.newInstance(rawData, offset, length, e);
     }
   }
-
 }

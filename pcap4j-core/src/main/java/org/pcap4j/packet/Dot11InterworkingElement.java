@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.namednumber.Dot11AccessNetworkType;
 import org.pcap4j.packet.namednumber.Dot11InformationElementId;
 import org.pcap4j.packet.namednumber.Dot11VenueInfo;
@@ -41,9 +40,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class Dot11InterworkingElement extends Dot11InformationElement {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -5151120333283703306L;
 
   private final Dot11AccessNetworkType accessnetworkType;
@@ -55,9 +52,8 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
   private final byte[] hessid;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -65,9 +61,8 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
    * @return a new Dot11InterworkingElement object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static Dot11InterworkingElement newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static Dot11InterworkingElement newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new Dot11InterworkingElement(rawData, offset, length);
   }
@@ -78,49 +73,37 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
    * @param length length
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  private Dot11InterworkingElement(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private Dot11InterworkingElement(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     super(rawData, offset, length, Dot11InformationElementId.INTERWORKING);
 
     int infoLen = getLengthAsInt();
-    if (
-         infoLen != 1
-      && infoLen != 3
-      && infoLen != 7
-      && infoLen != 9
-    ) {
+    if (infoLen != 1 && infoLen != 3 && infoLen != 7 && infoLen != 9) {
       throw new IllegalRawDataException(
-              "The length must be 1 or 3 or 7 or 9 but is actually: " + infoLen
-            );
+          "The length must be 1 or 3 or 7 or 9 but is actually: " + infoLen);
     }
 
-    this.accessnetworkType
-      = Dot11AccessNetworkType.getInstance((byte) (rawData[offset + 2] & 0x0F));
+    this.accessnetworkType =
+        Dot11AccessNetworkType.getInstance((byte) (rawData[offset + 2] & 0x0F));
     this.internet = (rawData[offset + 2] & 0x10) != 0;
     this.asra = (rawData[offset + 2] & 0x20) != 0;
     this.esr = (rawData[offset + 2] & 0x40) != 0;
     this.uesa = (rawData[offset + 2] & 0x80) != 0;
     if (infoLen == 3 || infoLen == 9) {
       this.venueInfo = Dot11VenueInfo.getInstance(ByteArrays.getShort(rawData, offset + 3));
-    }
-    else {
+    } else {
       this.venueInfo = null;
     }
     if (infoLen == 7) {
       this.hessid = ByteArrays.getSubArray(rawData, offset + 3, 6);
-    }
-    else if (infoLen ==9) {
+    } else if (infoLen == 9) {
       this.hessid = ByteArrays.getSubArray(rawData, offset + 5, 6);
-    }
-    else {
+    } else {
       this.hessid = null;
     }
   }
 
-  /**
-   * @param builder builder
-   */
+  /** @param builder builder */
   private Dot11InterworkingElement(Builder builder) {
     super(builder);
     if (builder.accessnetworkType == null) {
@@ -128,9 +111,8 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
     }
     if (builder.hessid.length != 6) {
       throw new IllegalArgumentException(
-              "builder.hessid.length must be 6. builder.hessid.length: "
-                + ByteArrays.toHexString(builder.hessid, " ")
-            );
+          "builder.hessid.length must be 6. builder.hessid.length: "
+              + ByteArrays.toHexString(builder.hessid, " "));
     }
 
     this.accessnetworkType = builder.accessnetworkType;
@@ -142,56 +124,41 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
     this.hessid = builder.hessid;
   }
 
-  /**
-   * @return accessnetworkType
-   */
+  /** @return accessnetworkType */
   public Dot11AccessNetworkType getAccessnetworkType() {
     return accessnetworkType;
   }
 
-  /**
-   * @return true if the internet field is set to 1; false otherwise.
-   */
+  /** @return true if the internet field is set to 1; false otherwise. */
   public boolean isInternetAccessible() {
     return internet;
   }
 
-  /**
-   * @return true if the ASRA field is set to 1; false otherwise.
-   */
+  /** @return true if the ASRA field is set to 1; false otherwise. */
   public boolean isAsra() {
     return asra;
   }
 
-  /**
-   * @return true if the ESR field is set to 1; false otherwise.
-   */
+  /** @return true if the ESR field is set to 1; false otherwise. */
   public boolean isEsr() {
     return esr;
   }
 
-  /**
-   * @return true if the UESA field is set to 1; false otherwise.
-   */
+  /** @return true if the UESA field is set to 1; false otherwise. */
   public boolean isUesa() {
     return uesa;
   }
 
-  /**
-   * @return venueInfo. May be null.
-   */
+  /** @return venueInfo. May be null. */
   public Dot11VenueInfo getVenueInfo() {
     return venueInfo;
   }
 
-  /**
-   * @return hessid. May be null.
-   */
+  /** @return hessid. May be null. */
   public byte[] getHessid() {
     if (hessid == null) {
       return null;
-    }
-    else {
+    } else {
       return ByteArrays.clone(hessid);
     }
   }
@@ -215,10 +182,18 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
     rawData[0] = getElementId().value();
     rawData[1] = getLength();
     rawData[2] = accessnetworkType.value();
-    if (internet) { rawData[2] |= 0x10; }
-    if (asra) { rawData[2] |= 0x20; }
-    if (esr) { rawData[2] |= 0x40; }
-    if (uesa) { rawData[2] |= 0x80; }
+    if (internet) {
+      rawData[2] |= 0x10;
+    }
+    if (asra) {
+      rawData[2] |= 0x20;
+    }
+    if (esr) {
+      rawData[2] |= 0x40;
+    }
+    if (uesa) {
+      rawData[2] |= 0x80;
+    }
 
     int offset = 3;
     if (venueInfo != null) {
@@ -232,11 +207,10 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public int hashCode() {
@@ -254,31 +228,19 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (!super.equals(obj))
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (!super.equals(obj)) return false;
+    if (getClass() != obj.getClass()) return false;
     Dot11InterworkingElement other = (Dot11InterworkingElement) obj;
-    if (!accessnetworkType.equals(other.accessnetworkType))
-      return false;
-    if (asra != other.asra)
-      return false;
-    if (esr != other.esr)
-      return false;
-    if (!Arrays.equals(hessid, other.hessid))
-      return false;
-    if (internet != other.internet)
-      return false;
-    if (uesa != other.uesa)
-      return false;
+    if (!accessnetworkType.equals(other.accessnetworkType)) return false;
+    if (asra != other.asra) return false;
+    if (esr != other.esr) return false;
+    if (!Arrays.equals(hessid, other.hessid)) return false;
+    if (internet != other.internet) return false;
+    if (uesa != other.uesa) return false;
     if (venueInfo == null) {
-      if (other.venueInfo != null)
-        return false;
-    }
-    else if (!venueInfo.equals(other.venueInfo))
-      return false;
+      if (other.venueInfo != null) return false;
+    } else if (!venueInfo.equals(other.venueInfo)) return false;
     return true;
   }
 
@@ -295,39 +257,22 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Interworking:")
-      .append(ls);
-    sb.append(indent).append("  Element ID: ")
-      .append(getElementId())
-      .append(ls);
-    sb.append(indent).append("  Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes")
-      .append(ls);
-    sb.append(indent).append("  Access Network Type: ")
-      .append(accessnetworkType)
-      .append(ls);
-    sb.append(indent).append("  Internet Accessible: ")
-      .append(internet)
-      .append(ls);
-    sb.append(indent).append("  ASRA: ")
-      .append(asra)
-      .append(ls);
-    sb.append(indent).append("  ESR: ")
-      .append(esr)
-      .append(ls);
-    sb.append(indent).append("  UESA: ")
-      .append(uesa)
-      .append(ls);
+    sb.append(indent).append("Interworking:").append(ls);
+    sb.append(indent).append("  Element ID: ").append(getElementId()).append(ls);
+    sb.append(indent).append("  Length: ").append(getLengthAsInt()).append(" bytes").append(ls);
+    sb.append(indent).append("  Access Network Type: ").append(accessnetworkType).append(ls);
+    sb.append(indent).append("  Internet Accessible: ").append(internet).append(ls);
+    sb.append(indent).append("  ASRA: ").append(asra).append(ls);
+    sb.append(indent).append("  ESR: ").append(esr).append(ls);
+    sb.append(indent).append("  UESA: ").append(uesa).append(ls);
     if (venueInfo != null) {
-      sb.append(indent).append("  Venue Info: ")
-        .append(venueInfo)
-        .append(ls);
+      sb.append(indent).append("  Venue Info: ").append(venueInfo).append(ls);
     }
     if (hessid != null) {
-      sb.append(indent).append("  HESSID: 0x")
-        .append(ByteArrays.toHexString(hessid, ""))
-        .append(ls);
+      sb.append(indent)
+          .append("  HESSID: 0x")
+          .append(ByteArrays.toHexString(hessid, ""))
+          .append(ls);
     }
 
     return sb.toString();
@@ -347,20 +292,13 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
     private Dot11VenueInfo venueInfo;
     private byte[] hessid;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {
       elementId(
-        Dot11InformationElementId.getInstance(
-          Dot11InformationElementId.INTERWORKING.value()
-        )
-      );
+          Dot11InformationElementId.getInstance(Dot11InformationElementId.INTERWORKING.value()));
     }
 
-    /**
-     * @param obj a Dot11InterworkingElement object.
-     */
+    /** @param obj a Dot11InterworkingElement object. */
     private Builder(Dot11InterworkingElement obj) {
       super(obj);
       this.accessnetworkType = obj.accessnetworkType;
@@ -461,7 +399,5 @@ public final class Dot11InterworkingElement extends Dot11InformationElement {
       }
       return new Dot11InterworkingElement(this);
     }
-
   }
-
 }

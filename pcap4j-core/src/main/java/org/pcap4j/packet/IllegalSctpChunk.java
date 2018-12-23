@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.namednumber.SctpChunkType;
 import org.pcap4j.util.ByteArrays;
@@ -22,9 +21,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IllegalSctpChunk implements SctpChunk, IllegalRawDataHolder {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 379650793871792784L;
 
   private final SctpChunkType type;
@@ -32,9 +29,8 @@ public final class IllegalSctpChunk implements SctpChunk, IllegalRawDataHolder {
   private final IllegalRawDataException cause;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -43,8 +39,7 @@ public final class IllegalSctpChunk implements SctpChunk, IllegalRawDataHolder {
    * @return a new UnknownSctpChunk object.
    */
   public static IllegalSctpChunk newInstance(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     if (cause == null) {
       throw new NullPointerException("cause is null.");
     }
@@ -60,10 +55,14 @@ public final class IllegalSctpChunk implements SctpChunk, IllegalRawDataHolder {
   }
 
   @Override
-  public SctpChunkType getType() { return type; }
+  public SctpChunkType getType() {
+    return type;
+  }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -81,12 +80,9 @@ public final class IllegalSctpChunk implements SctpChunk, IllegalRawDataHolder {
   public String toString() {
     StringBuilder sb = new StringBuilder();
 
-    sb.append("[Type: ")
-      .append(type);
-    sb.append(", Illegal Raw Data: 0x")
-      .append(ByteArrays.toHexString(rawData, ""));
-    sb.append(", Cause: ")
-      .append(cause);
+    sb.append("[Type: ").append(type);
+    sb.append(", Illegal Raw Data: 0x").append(ByteArrays.toHexString(rawData, ""));
+    sb.append(", Cause: ").append(cause);
     sb.append("]");
 
     return sb.toString();
@@ -121,5 +117,4 @@ public final class IllegalSctpChunk implements SctpChunk, IllegalRawDataHolder {
     }
     return true;
   }
-
 }

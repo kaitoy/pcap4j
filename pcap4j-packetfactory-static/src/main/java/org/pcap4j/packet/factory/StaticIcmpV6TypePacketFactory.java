@@ -30,21 +30,18 @@ import org.pcap4j.packet.namednumber.IcmpV6Type;
  */
 public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet, IcmpV6Type> {
 
-  private static final StaticIcmpV6TypePacketFactory INSTANCE
-    = new StaticIcmpV6TypePacketFactory();
+  private static final StaticIcmpV6TypePacketFactory INSTANCE = new StaticIcmpV6TypePacketFactory();
 
   private StaticIcmpV6TypePacketFactory() {}
 
-  /**
-   * @return the singleton instance of StaticIcmpV6TypePacketFactory.
-   */
+  /** @return the singleton instance of StaticIcmpV6TypePacketFactory. */
   public static StaticIcmpV6TypePacketFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IcmpV6Type...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IcmpV6Type...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -56,8 +53,8 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IcmpV6Type...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IcmpV6Type...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -98,8 +95,8 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IcmpV6Type...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IcmpV6Type...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -109,8 +106,7 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(
-    byte[] rawData, int offset, int length, IcmpV6Type number1, IcmpV6Type number2
-  ) {
+      byte[] rawData, int offset, int length, IcmpV6Type number1, IcmpV6Type number2) {
     try {
       switch (Byte.toUnsignedInt(number1.value())) {
         case 1:
@@ -170,7 +166,7 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, IcmpV6Type... numbers) {
     try {
-      for (IcmpV6Type num: numbers) {
+      for (IcmpV6Type num : numbers) {
         switch (Byte.toUnsignedInt(num.value())) {
           case 1:
             return IcmpV6DestinationUnreachablePacket.newPacket(rawData, offset, length);
@@ -201,5 +197,4 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
       return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
-
 }

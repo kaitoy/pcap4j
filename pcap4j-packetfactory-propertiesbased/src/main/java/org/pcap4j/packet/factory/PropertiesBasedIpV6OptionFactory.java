@@ -7,8 +7,6 @@
 
 package org.pcap4j.packet.factory;
 
-import java.io.ObjectStreamException;
-
 import org.pcap4j.packet.IllegalIpV6Option;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV6ExtOptionsPacket.IpV6Option;
@@ -18,20 +16,18 @@ import org.pcap4j.packet.namednumber.IpV6OptionType;
  * @author Kaito Yamada
  * @since pcap4j 0.9.14
  */
-public final class
-PropertiesBasedIpV6OptionFactory
-extends AbstractPropertiesBasedFactory<IpV6Option, IpV6OptionType> {
+public final class PropertiesBasedIpV6OptionFactory
+    extends AbstractPropertiesBasedFactory<IpV6Option, IpV6OptionType> {
 
-  private static final PropertiesBasedIpV6OptionFactory INSTANCE
-    = new PropertiesBasedIpV6OptionFactory();
+  private static final PropertiesBasedIpV6OptionFactory INSTANCE =
+      new PropertiesBasedIpV6OptionFactory();
 
   private PropertiesBasedIpV6OptionFactory() {}
 
-  /**
-   *
-   * @return the singleton instance of PropertiesBasedIpV6OptionFactory.
-   */
-  public static PropertiesBasedIpV6OptionFactory getInstance() { return INSTANCE; }
+  /** @return the singleton instance of PropertiesBasedIpV6OptionFactory. */
+  public static PropertiesBasedIpV6OptionFactory getInstance() {
+    return INSTANCE;
+  }
 
   @Override
   protected Class<? extends IpV6Option> getTargetClass(IpV6OptionType number) {
@@ -50,9 +46,7 @@ extends AbstractPropertiesBasedFactory<IpV6Option, IpV6OptionType> {
 
   @Override
   protected IpV6Option newIllegalData(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     return IllegalIpV6Option.newInstance(rawData, offset, length, cause);
   }
-
 }

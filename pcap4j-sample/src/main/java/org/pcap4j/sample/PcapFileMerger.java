@@ -16,7 +16,7 @@ public class PcapFileMerger {
     // args: pcap file list
 
     PcapDumper dumper = null;
-    for (String pcapFile: args) {
+    for (String pcapFile : args) {
       PcapHandle handle = Pcaps.openOffline(pcapFile);
 
       if (dumper == null) {
@@ -34,7 +34,5 @@ public class PcapFileMerger {
     if (dumper != null) {
       dumper.close();
     }
-
   }
-
 }

@@ -16,8 +16,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class LlcInformationPacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(LlcInformationPacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(LlcInformationPacketTest.class);
 
   private final LlcPacket packet;
   private final LlcNumber dsap;
@@ -26,17 +25,15 @@ public class LlcInformationPacketTest extends AbstractPacketTest {
 
   public LlcInformationPacketTest() {
     this.dsap = this.ssap = LlcNumber.NULL_LSAP;
-    this.control
-      = new LlcControlInformation.Builder()
-          .receiveSequenceNumber((byte) 10)
-          .sendSequenceNumber((byte) 100)
-          .pfBit(false)
-          .build();
+    this.control =
+        new LlcControlInformation.Builder()
+            .receiveSequenceNumber((byte) 10)
+            .sendSequenceNumber((byte) 100)
+            .pfBit(false)
+            .build();
 
     LlcPacket.Builder db = new LlcPacket.Builder();
-    db.dsap(dsap)
-      .ssap(ssap)
-      .control(control);
+    db.dsap(dsap).ssap(ssap).control(control);
     this.packet = db.build();
   }
 
@@ -49,29 +46,26 @@ public class LlcInformationPacketTest extends AbstractPacketTest {
   protected Packet getWholePacket() {
     EthernetPacket.Builder eb = new EthernetPacket.Builder();
     eb.dstAddr(MacAddress.getByName("aa:bb:cc:dd:ee:ff"))
-      .srcAddr(MacAddress.getByName("11:22:33:44:55:66"))
-      .type(EtherType.getInstance((short) packet.length()))
-      .payloadBuilder(new SimpleBuilder(packet))
-      .paddingAtBuild(true);
+        .srcAddr(MacAddress.getByName("11:22:33:44:55:66"))
+        .type(EtherType.getInstance((short) packet.length()))
+        .payloadBuilder(new SimpleBuilder(packet))
+        .paddingAtBuild(true);
     return eb.build();
   }
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     logger.info(
-      "########## " + LlcInformationPacketTest.class.getSimpleName() + " START ##########"
-    );
+        "########## " + LlcInformationPacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+  public static void tearDownAfterClass() throws Exception {}
 
   @Test
   public void testNewPacket() {
     try {
-      LlcPacket p
-        = LlcPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
+      LlcPacket p = LlcPacket.newPacket(packet.getRawData(), 0, packet.getRawData().length);
       assertEquals(packet, p);
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
@@ -85,5 +79,4 @@ public class LlcInformationPacketTest extends AbstractPacketTest {
     assertEquals(ssap, h.getSsap());
     assertEquals(control, h.getControl());
   }
-
 }

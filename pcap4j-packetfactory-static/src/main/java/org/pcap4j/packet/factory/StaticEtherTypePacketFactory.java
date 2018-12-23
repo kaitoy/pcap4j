@@ -24,21 +24,18 @@ import org.pcap4j.packet.namednumber.EtherType;
  */
 public final class StaticEtherTypePacketFactory implements PacketFactory<Packet, EtherType> {
 
-  private static final StaticEtherTypePacketFactory INSTANCE
-    = new StaticEtherTypePacketFactory();
+  private static final StaticEtherTypePacketFactory INSTANCE = new StaticEtherTypePacketFactory();
 
   private StaticEtherTypePacketFactory() {}
 
-  /**
-   * @return the singleton instance of StaticEtherTypePacketFactory.
-   */
+  /** @return the singleton instance of StaticEtherTypePacketFactory. */
   public static StaticEtherTypePacketFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, EtherType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, EtherType...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -50,8 +47,8 @@ public final class StaticEtherTypePacketFactory implements PacketFactory<Packet,
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, EtherType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, EtherType...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -82,8 +79,8 @@ public final class StaticEtherTypePacketFactory implements PacketFactory<Packet,
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, EtherType...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, EtherType...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -93,8 +90,7 @@ public final class StaticEtherTypePacketFactory implements PacketFactory<Packet,
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(
-    byte[] rawData, int offset, int length, EtherType number1, EtherType number2
-  ) {
+      byte[] rawData, int offset, int length, EtherType number1, EtherType number2) {
     try {
       short val = number1.value();
       switch (Short.toUnsignedInt(val)) {
@@ -134,7 +130,7 @@ public final class StaticEtherTypePacketFactory implements PacketFactory<Packet,
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, EtherType... numbers) {
     try {
-      for (EtherType num: numbers) {
+      for (EtherType num : numbers) {
         short val = num.value();
         switch (Short.toUnsignedInt(val)) {
           case 0x0800:
@@ -155,5 +151,4 @@ public final class StaticEtherTypePacketFactory implements PacketFactory<Packet,
       return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
-
 }

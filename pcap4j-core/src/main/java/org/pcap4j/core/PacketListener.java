@@ -14,10 +14,6 @@ package org.pcap4j.core;
 @FunctionalInterface
 public interface PacketListener {
 
-  /**
-   *
-   * @param packet packet
-   */
+  /** @param packet packet */
   public void gotPacket(PcapPacket packet);
-
 }

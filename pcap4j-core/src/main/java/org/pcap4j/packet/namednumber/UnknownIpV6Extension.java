@@ -17,13 +17,11 @@ import java.io.ObjectStreamException;
  */
 public final class UnknownIpV6Extension extends IpNumber {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -2782771635662625494L;
 
-  private static UnknownIpV6Extension INSTANCE
-    = new UnknownIpV6Extension((byte) 255, "Unknown IPv6 Extension");
+  private static UnknownIpV6Extension INSTANCE =
+      new UnknownIpV6Extension((byte) 255, "Unknown IPv6 Extension");
 
   /**
    * @param value value
@@ -33,9 +31,7 @@ public final class UnknownIpV6Extension extends IpNumber {
     super(value, name);
   }
 
-  /**
-   * @return the singleton instance of UnknownIpV6Extension.
-   */
+  /** @return the singleton instance of UnknownIpV6Extension. */
   public static UnknownIpV6Extension getInstance() {
     return INSTANCE;
   }
@@ -65,36 +61,28 @@ public final class UnknownIpV6Extension extends IpNumber {
     throw new UnsupportedOperationException();
   }
 
-  /**
-   * @deprecated This method returns a dummy value.
-   */
+  /** @deprecated This method returns a dummy value. */
   @Override
   @Deprecated
   public Byte value() {
     return super.value();
   }
 
-  /**
-   * @deprecated This method returns a dummy name.
-   */
+  /** @deprecated This method returns a dummy name. */
   @Override
   @Deprecated
   public String name() {
     return super.name();
   }
 
-  /**
-   * @deprecated This method returns a dummy value.
-   */
+  /** @deprecated This method returns a dummy value. */
   @Override
   @Deprecated
   public String valueAsString() {
     return super.valueAsString();
   }
 
-  /**
-   * @deprecated Comparing this to an IpNumber instance is no use.
-   */
+  /** @deprecated Comparing this to an IpNumber instance is no use. */
   @Override
   @Deprecated
   public int compareTo(IpNumber o) {
@@ -120,5 +108,4 @@ public final class UnknownIpV6Extension extends IpNumber {
   private Object readResolve() throws ObjectStreamException {
     return INSTANCE;
   }
-
 }

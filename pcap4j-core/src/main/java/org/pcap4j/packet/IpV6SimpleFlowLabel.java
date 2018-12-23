@@ -16,15 +16,12 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IpV6SimpleFlowLabel implements IpV6FlowLabel {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -5076935770045999373L;
 
   private final int value;
 
   /**
-   *
    * @param value value
    * @return a new IpV6SimpleFlowLabel object.
    */
@@ -37,7 +34,9 @@ public final class IpV6SimpleFlowLabel implements IpV6FlowLabel {
   }
 
   @Override
-  public int value() { return value; }
+  public int value() {
+    return value;
+  }
 
   @Override
   public String toString() {
@@ -46,12 +45,17 @@ public final class IpV6SimpleFlowLabel implements IpV6FlowLabel {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     return (getClass().cast(obj)).value() == this.value;
   }
 
   @Override
-  public int hashCode() { return value; }
-
+  public int hashCode() {
+    return value;
+  }
 }

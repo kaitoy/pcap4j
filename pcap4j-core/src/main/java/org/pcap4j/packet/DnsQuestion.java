@@ -10,7 +10,6 @@ package org.pcap4j.packet;
 import static org.pcap4j.util.ByteArrays.*;
 
 import java.io.Serializable;
-
 import org.pcap4j.packet.namednumber.DnsClass;
 import org.pcap4j.packet.namednumber.DnsResourceRecordType;
 import org.pcap4j.util.ByteArrays;
@@ -38,9 +37,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class DnsQuestion implements Serializable {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -709060058515052575L;
 
   private final DnsDomainName qName;
@@ -48,9 +45,8 @@ public final class DnsQuestion implements Serializable {
   private final DnsClass qClass;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -58,16 +54,13 @@ public final class DnsQuestion implements Serializable {
    * @return a new DnsQuestion object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsQuestion newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsQuestion newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsQuestion(rawData, offset, length);
   }
 
-  private DnsQuestion(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private DnsQuestion(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     int cursor = 0;
     this.qName = DnsDomainName.newInstance(rawData, offset, length);
     cursor += qName.length();
@@ -75,13 +68,13 @@ public final class DnsQuestion implements Serializable {
     if (length - cursor < SHORT_SIZE_IN_BYTES * 2) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build qType an qClass of DnsQuestion. data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length)
-        .append(", cursor: ")
-        .append(cursor);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length)
+          .append(", cursor: ")
+          .append(cursor);
       throw new IllegalRawDataException(sb.toString());
     }
     this.qType = DnsResourceRecordType.getInstance(ByteArrays.getShort(rawData, offset + cursor));
@@ -90,17 +83,19 @@ public final class DnsQuestion implements Serializable {
   }
 
   private DnsQuestion(Builder builder) {
-    if (
-         builder == null
-      || builder.qName == null
-      || builder.qType == null
-      || builder.qClass == null
-    ) {
+    if (builder == null
+        || builder.qName == null
+        || builder.qType == null
+        || builder.qClass == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder").append(builder)
-        .append(" builder.qName: ").append(builder.qName)
-        .append(" builder.qType: ").append(builder.qType)
-        .append(" builder.qClass: ").append(builder.qClass);
+      sb.append("builder")
+          .append(builder)
+          .append(" builder.qName: ")
+          .append(builder.qName)
+          .append(" builder.qType: ")
+          .append(builder.qType)
+          .append(" builder.qClass: ")
+          .append(builder.qClass);
       throw new NullPointerException(sb.toString());
     }
 
@@ -109,64 +104,42 @@ public final class DnsQuestion implements Serializable {
     this.qClass = builder.qClass;
   }
 
-  /**
-   * @return qName
-   */
+  /** @return qName */
   public DnsDomainName getQName() {
     return qName;
   }
 
-  /**
-   * @return qType
-   */
+  /** @return qType */
   public DnsResourceRecordType getQType() {
     return qType;
   }
 
-  /**
-   * @return qClass
-   */
+  /** @return qClass */
   public DnsClass getQClass() {
     return qClass;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
 
-  /**
-   * @return the raw data.
-   */
+  /** @return the raw data. */
   public byte[] getRawData() {
     byte[] data = new byte[length()];
     int cursor = 0;
 
     byte[] rawQName = qName.getRawData();
-    System.arraycopy(
-      rawQName, 0,
-      data, 0, rawQName.length
-    );
+    System.arraycopy(rawQName, 0, data, 0, rawQName.length);
     cursor += rawQName.length;
-    System.arraycopy(
-      ByteArrays.toByteArray(qType.value()), 0,
-      data, cursor, SHORT_SIZE_IN_BYTES
-    );
+    System.arraycopy(ByteArrays.toByteArray(qType.value()), 0, data, cursor, SHORT_SIZE_IN_BYTES);
     cursor += SHORT_SIZE_IN_BYTES;
-    System.arraycopy(
-      ByteArrays.toByteArray(qClass.value()), 0,
-      data, cursor, SHORT_SIZE_IN_BYTES
-    );
+    System.arraycopy(ByteArrays.toByteArray(qClass.value()), 0, data, cursor, SHORT_SIZE_IN_BYTES);
 
     return data;
   }
 
-  /**
-   * @return length
-   */
+  /** @return length */
   public int length() {
     return qName.length() + SHORT_SIZE_IN_BYTES * 2;
   }
@@ -200,12 +173,18 @@ public final class DnsQuestion implements Serializable {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("QNAME: ")
-      .append(headerRawData != null ? qName.toString(headerRawData) : qName).append(ls)
-      .append(indent).append("QTYPE: ")
-      .append(qType).append(ls)
-      .append(indent).append("QCLASS: ")
-      .append(qClass).append(ls);
+    sb.append(indent)
+        .append("QNAME: ")
+        .append(headerRawData != null ? qName.toString(headerRawData) : qName)
+        .append(ls)
+        .append(indent)
+        .append("QTYPE: ")
+        .append(qType)
+        .append(ls)
+        .append(indent)
+        .append("QCLASS: ")
+        .append(qClass)
+        .append(ls);
 
     return sb.toString();
   }
@@ -254,9 +233,7 @@ public final class DnsQuestion implements Serializable {
     private DnsResourceRecordType qType;
     private DnsClass qClass;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(DnsQuestion obj) {
@@ -292,14 +269,9 @@ public final class DnsQuestion implements Serializable {
       return this;
     }
 
-    /**
-     *
-     * @return a new DnsQuestion object.
-     */
+    /** @return a new DnsQuestion object. */
     public DnsQuestion build() {
       return new DnsQuestion(this);
     }
-
   }
-
 }

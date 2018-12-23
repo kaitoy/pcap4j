@@ -1,5 +1,13 @@
 package org.pcap4j.sample;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
@@ -28,15 +36,6 @@ import org.pcap4j.util.IcmpV4Helper;
 import org.pcap4j.util.MacAddress;
 import org.pcap4j.util.NifSelector;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 @SuppressWarnings("javadoc")
 public class IcmpV4ErrReplyer {
 
@@ -46,12 +45,13 @@ public class IcmpV4ErrReplyer {
 
   public static void main(String[] args) throws PcapNativeException, NotOpenException {
     String strAddress = args[0];
-    String strType = args[1]; // 3(DESTINATION_UNREACHABLE) or 11(TIME_EXCEEDED) or 12(PARAMETER_PROBLEM)
+    String strType =
+        args[1]; // 3(DESTINATION_UNREACHABLE) or 11(TIME_EXCEEDED) or 12(PARAMETER_PROBLEM)
     String strCode = args[2];
 
     final Inet4Address address;
     try {
-      address = (Inet4Address)InetAddress.getByName(strAddress);
+      address = (Inet4Address) InetAddress.getByName(strAddress);
     } catch (UnknownHostException e1) {
       throw new IllegalArgumentException("args[0]: " + strAddress);
     }
@@ -59,23 +59,19 @@ public class IcmpV4ErrReplyer {
     final IcmpV4Type type;
     try {
       type = IcmpV4Type.getInstance(Byte.parseByte(strType));
-    } catch (NumberFormatException  e) {
+    } catch (NumberFormatException e) {
       throw new IllegalArgumentException("args[1]: " + strType, e);
     }
-    if (
-         !type.equals(IcmpV4Type.DESTINATION_UNREACHABLE)
-      && !type.equals(IcmpV4Type.TIME_EXCEEDED)
-      && !type.equals(IcmpV4Type.PARAMETER_PROBLEM)
-    ) { throw  new IllegalArgumentException("args[1]: " + strType); }
+    if (!type.equals(IcmpV4Type.DESTINATION_UNREACHABLE)
+        && !type.equals(IcmpV4Type.TIME_EXCEEDED)
+        && !type.equals(IcmpV4Type.PARAMETER_PROBLEM)) {
+      throw new IllegalArgumentException("args[1]: " + strType);
+    }
 
     IcmpV4Code code;
     try {
-      code
-        = IcmpV4Code.getInstance(
-            type.value(),
-            Byte.parseByte(strCode)
-          );
-    } catch (NumberFormatException  e) {
+      code = IcmpV4Code.getInstance(type.value(), Byte.parseByte(strCode));
+    } catch (NumberFormatException e) {
       throw new IllegalArgumentException("args[1]: " + strType, e);
     }
 
@@ -93,70 +89,63 @@ public class IcmpV4ErrReplyer {
 
     System.out.println(nif.getName() + "(" + nif.getDescription() + ")");
 
-    final PcapHandle handle4capture
-      = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
+    final PcapHandle handle4capture = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
 
-    final PcapHandle handle4send
-      = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
+    final PcapHandle handle4send = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
 
     handle4capture.setFilter(
-      "(ether dst " + MAC_ADDR + ") or (arp and ether dst "
-        + Pcaps.toBpfString(MacAddress.ETHER_BROADCAST_ADDRESS) +")",
-      BpfCompileMode.OPTIMIZE
-    );
+        "(ether dst "
+            + MAC_ADDR
+            + ") or (arp and ether dst "
+            + Pcaps.toBpfString(MacAddress.ETHER_BROADCAST_ADDRESS)
+            + ")",
+        BpfCompileMode.OPTIMIZE);
 
     Packet.Builder tmp;
     if (type.equals(IcmpV4Type.DESTINATION_UNREACHABLE)) {
       tmp = new IcmpV4DestinationUnreachablePacket.Builder();
-    }
-    else if (type.equals(IcmpV4Type.TIME_EXCEEDED)) {
+    } else if (type.equals(IcmpV4Type.TIME_EXCEEDED)) {
       tmp = new IcmpV4TimeExceededPacket.Builder();
-    }
-    else if (type.equals(IcmpV4Type.PARAMETER_PROBLEM)) {
+    } else if (type.equals(IcmpV4Type.PARAMETER_PROBLEM)) {
       tmp = new IcmpV4ParameterProblemPacket.Builder();
+    } else {
+      throw new AssertionError();
     }
-    else { throw new AssertionError(); }
 
     final Packet.Builder icmpV4errb = tmp;
 
     IcmpV4CommonPacket.Builder icmpV4b = new IcmpV4CommonPacket.Builder();
-    icmpV4b.type(type)
-           .code(code)
-           .payloadBuilder(icmpV4errb)
-           .correctChecksumAtBuild(true);
+    icmpV4b.type(type).code(code).payloadBuilder(icmpV4errb).correctChecksumAtBuild(true);
 
     final IpV4Packet.Builder ipv4b = new IpV4Packet.Builder();
-    ipv4b.version(IpVersion.IPV4)
-         .tos(IpV4Rfc791Tos.newInstance((byte)0))
-         .identification((short)100)
-         .ttl((byte)100)
-         .protocol(IpNumber.ICMPV4)
-         .payloadBuilder(icmpV4b)
-         .correctChecksumAtBuild(true)
-         .correctLengthAtBuild(true);
+    ipv4b
+        .version(IpVersion.IPV4)
+        .tos(IpV4Rfc791Tos.newInstance((byte) 0))
+        .identification((short) 100)
+        .ttl((byte) 100)
+        .protocol(IpNumber.ICMPV4)
+        .payloadBuilder(icmpV4b)
+        .correctChecksumAtBuild(true)
+        .correctLengthAtBuild(true);
 
     final EthernetPacket.Builder eb = new EthernetPacket.Builder();
-    eb.type(EtherType.IPV4)
-      .payloadBuilder(ipv4b)
-      .paddingAtBuild(true);
+    eb.type(EtherType.IPV4).payloadBuilder(ipv4b).paddingAtBuild(true);
 
-    final PacketListener listener
-      = packet -> {
+    final PacketListener listener =
+        packet -> {
           if (packet.contains(IcmpV4EchoPacket.class)) {
             if (type.equals(IcmpV4Type.DESTINATION_UNREACHABLE)) {
-              ((IcmpV4DestinationUnreachablePacket.Builder)icmpV4errb).payload(
-                IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
-              );
-            }
-            else if (type.equals(IcmpV4Type.TIME_EXCEEDED)) {
-              ((IcmpV4TimeExceededPacket.Builder)icmpV4errb).payload(
-                IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
-              );
-            }
-            else if (type.equals(IcmpV4Type.PARAMETER_PROBLEM)) {
-              ((IcmpV4ParameterProblemPacket.Builder)icmpV4errb).payload(
-                IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class))
-              );
+              ((IcmpV4DestinationUnreachablePacket.Builder) icmpV4errb)
+                  .payload(
+                      IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class)));
+            } else if (type.equals(IcmpV4Type.TIME_EXCEEDED)) {
+              ((IcmpV4TimeExceededPacket.Builder) icmpV4errb)
+                  .payload(
+                      IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class)));
+            } else if (type.equals(IcmpV4Type.PARAMETER_PROBLEM)) {
+              ((IcmpV4ParameterProblemPacket.Builder) icmpV4errb)
+                  .payload(
+                      IcmpV4Helper.makePacketForInvokingPacketField(packet.get(IpV4Packet.class)));
             }
 
             ipv4b.srcAddr(packet.get(IpV4Packet.class).getHeader().getDstAddr());
@@ -171,29 +160,26 @@ public class IcmpV4ErrReplyer {
             } catch (NotOpenException e) {
               e.printStackTrace();
             }
-          }
-          else if (packet.contains(ArpPacket.class)) {
+          } else if (packet.contains(ArpPacket.class)) {
             ArpPacket ap = packet.get(ArpPacket.class);
 
-            if (
-              !ap.getHeader().getOperation().equals(ArpOperation.REQUEST)
-            ) { return; }
+            if (!ap.getHeader().getOperation().equals(ArpOperation.REQUEST)) {
+              return;
+            }
             if (!ap.getHeader().getDstProtocolAddr().equals(address)) {
               return;
             }
 
-            EthernetPacket.Builder eb1
-              = (EthernetPacket.Builder)packet.getBuilder();
+            EthernetPacket.Builder eb1 = (EthernetPacket.Builder) packet.getBuilder();
             ArpPacket.Builder ab = eb1.get(ArpPacket.Builder.class);
 
             ab.srcHardwareAddr(MAC_ADDR)
-              .dstHardwareAddr(ap.getHeader().getSrcHardwareAddr())
-              .srcProtocolAddr(ap.getHeader().getDstProtocolAddr())
-              .dstProtocolAddr(ap.getHeader().getSrcProtocolAddr())
-              .operation(ArpOperation.REPLY);
+                .dstHardwareAddr(ap.getHeader().getSrcHardwareAddr())
+                .srcProtocolAddr(ap.getHeader().getDstProtocolAddr())
+                .dstProtocolAddr(ap.getHeader().getSrcProtocolAddr())
+                .operation(ArpOperation.REPLY);
 
-            eb1.dstAddr(ap.getHeader().getSrcHardwareAddr())
-              .srcAddr(MAC_ADDR);
+            eb1.dstAddr(ap.getHeader().getSrcHardwareAddr()).srcAddr(MAC_ADDR);
 
             try {
               handle4send.sendPacket(eb1.build());
@@ -207,23 +193,22 @@ public class IcmpV4ErrReplyer {
 
     ExecutorService executor = Executors.newSingleThreadExecutor();
     executor.execute(
-      new Runnable() {
-        @Override
-        public void run() {
-          while (true) {
-            try {
-              handle4capture.loop(-1, listener);
-            } catch (PcapNativeException e) {
-              e.printStackTrace();
-            } catch (InterruptedException e) {
-              break;
-            } catch (NotOpenException e) {
-              break;
+        new Runnable() {
+          @Override
+          public void run() {
+            while (true) {
+              try {
+                handle4capture.loop(-1, listener);
+              } catch (PcapNativeException e) {
+                e.printStackTrace();
+              } catch (InterruptedException e) {
+                break;
+              } catch (NotOpenException e) {
+                break;
+              }
             }
           }
-        }
-      }
-    );
+        });
 
     block();
     handle4capture.breakLoop();
@@ -236,7 +221,8 @@ public class IcmpV4ErrReplyer {
   private static void block() {
     try {
       Thread.sleep(2000);
-    } catch (InterruptedException e1) {}
+    } catch (InterruptedException e1) {
+    }
 
     BufferedReader r = null;
 
@@ -251,8 +237,8 @@ public class IcmpV4ErrReplyer {
         if (r != null) {
           r.close();
         }
-      } catch (IOException e) {}
+      } catch (IOException e) {
+      }
     }
   }
-
 }

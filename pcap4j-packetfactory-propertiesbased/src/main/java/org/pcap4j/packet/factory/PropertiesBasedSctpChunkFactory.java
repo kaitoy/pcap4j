@@ -7,8 +7,6 @@
 
 package org.pcap4j.packet.factory;
 
-import java.io.ObjectStreamException;
-
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IllegalSctpChunk;
 import org.pcap4j.packet.SctpPacket.SctpChunk;
@@ -19,17 +17,17 @@ import org.pcap4j.packet.namednumber.SctpChunkType;
  * @since pcap4j 1.6.6
  */
 public final class PropertiesBasedSctpChunkFactory
-extends AbstractPropertiesBasedFactory<SctpChunk, SctpChunkType> {
+    extends AbstractPropertiesBasedFactory<SctpChunk, SctpChunkType> {
 
-  private static final PropertiesBasedSctpChunkFactory INSTANCE
-    = new PropertiesBasedSctpChunkFactory();
+  private static final PropertiesBasedSctpChunkFactory INSTANCE =
+      new PropertiesBasedSctpChunkFactory();
 
   private PropertiesBasedSctpChunkFactory() {}
 
-  /**
-   * @return the singleton instance of PropertiesBasedSctpChunkFactory.
-   */
-  public static PropertiesBasedSctpChunkFactory getInstance() { return INSTANCE; }
+  /** @return the singleton instance of PropertiesBasedSctpChunkFactory. */
+  public static PropertiesBasedSctpChunkFactory getInstance() {
+    return INSTANCE;
+  }
 
   @Override
   protected Class<? extends SctpChunk> getTargetClass(SctpChunkType number) {
@@ -48,9 +46,7 @@ extends AbstractPropertiesBasedFactory<SctpChunk, SctpChunkType> {
 
   @Override
   protected SctpChunk newIllegalData(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     return IllegalSctpChunk.newInstance(rawData, offset, length, cause);
   }
-
 }

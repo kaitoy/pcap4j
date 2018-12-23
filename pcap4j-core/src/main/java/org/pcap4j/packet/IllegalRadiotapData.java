@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
@@ -18,18 +17,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IllegalRadiotapData implements RadiotapData, IllegalRawDataHolder {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -707921517685565944L;
 
   private final byte[] rawData;
   private final IllegalRawDataException cause;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -38,8 +34,7 @@ public final class IllegalRadiotapData implements RadiotapData, IllegalRawDataHo
    * @return a new UnknownRadiotapDataField object.
    */
   public static IllegalRadiotapData newInstance(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     if (cause == null) {
       throw new NullPointerException("cause is null.");
     }
@@ -48,8 +43,7 @@ public final class IllegalRadiotapData implements RadiotapData, IllegalRawDataHo
   }
 
   private IllegalRadiotapData(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     this.rawData = ByteArrays.getSubArray(rawData, offset, length);
     this.cause = cause;
   }
@@ -79,14 +73,17 @@ public final class IllegalRadiotapData implements RadiotapData, IllegalRawDataHo
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Illegal Data: ")
-      .append(ls)
-      .append(indent).append("  data: ")
-      .append(ByteArrays.toHexString(rawData, ""))
-      .append(ls)
-      .append(indent).append("  cause: ")
-      .append(cause)
-      .append(ls);
+    sb.append(indent)
+        .append("Illegal Data: ")
+        .append(ls)
+        .append(indent)
+        .append("  data: ")
+        .append(ByteArrays.toHexString(rawData, ""))
+        .append(ls)
+        .append(indent)
+        .append("  cause: ")
+        .append(cause)
+        .append(ls);
 
     return sb.toString();
   }
@@ -120,5 +117,4 @@ public final class IllegalRadiotapData implements RadiotapData, IllegalRawDataHo
     }
     return true;
   }
-
 }

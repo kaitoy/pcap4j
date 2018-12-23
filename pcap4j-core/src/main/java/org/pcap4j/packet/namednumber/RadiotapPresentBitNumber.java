@@ -19,140 +19,90 @@ import java.util.Map;
  */
 public final class RadiotapPresentBitNumber extends NamedNumber<Integer, RadiotapPresentBitNumber> {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1778769702168080669L;
 
-  /**
-   * Radiotap Namespace: 29 (29 + 32*n)
-   */
+  /** Radiotap Namespace: 29 (29 + 32*n) */
   public static final int RADIOTAP_NAMESPACE = 29;
 
-  /**
-   * Vendor Namespace: 30 (30 + 32*n)
-   */
+  /** Vendor Namespace: 30 (30 + 32*n) */
   public static final int VENDOR_NAMESPACE = 30;
 
-  /**
-   * another bitmap follows: 31 (31 + 32*n)
-   */
+  /** another bitmap follows: 31 (31 + 32*n) */
   public static final int ANOTHER_BITMAP_FOLLOWS = 31;
 
-  /**
-   * TSFT: 0
-   */
-  public static final RadiotapPresentBitNumber TSFT
-    = new RadiotapPresentBitNumber(0, "TSFT", 8);
+  /** TSFT: 0 */
+  public static final RadiotapPresentBitNumber TSFT = new RadiotapPresentBitNumber(0, "TSFT", 8);
 
-  /**
-   * Flags: 1
-   */
-  public static final RadiotapPresentBitNumber FLAGS
-    = new RadiotapPresentBitNumber(1, "Flags", 1);
+  /** Flags: 1 */
+  public static final RadiotapPresentBitNumber FLAGS = new RadiotapPresentBitNumber(1, "Flags", 1);
 
-  /**
-   * Rate: 2
-   */
-  public static final RadiotapPresentBitNumber RATE
-    = new RadiotapPresentBitNumber(2, "Rate", 1);
+  /** Rate: 2 */
+  public static final RadiotapPresentBitNumber RATE = new RadiotapPresentBitNumber(2, "Rate", 1);
 
-  /**
-   * Channel: 3
-   */
-  public static final RadiotapPresentBitNumber CHANNEL
-    = new RadiotapPresentBitNumber(3, "Channel", 2);
+  /** Channel: 3 */
+  public static final RadiotapPresentBitNumber CHANNEL =
+      new RadiotapPresentBitNumber(3, "Channel", 2);
 
-  /**
-   * FHSS: 4
-   */
-  public static final RadiotapPresentBitNumber FHSS
-    = new RadiotapPresentBitNumber(4, "FHSS", 1);
+  /** FHSS: 4 */
+  public static final RadiotapPresentBitNumber FHSS = new RadiotapPresentBitNumber(4, "FHSS", 1);
 
-  /**
-   * Antenna signal: 5
-   */
-  public static final RadiotapPresentBitNumber ANTENNA_SIGNAL
-    = new RadiotapPresentBitNumber(5, "Antenna signal", 1);
+  /** Antenna signal: 5 */
+  public static final RadiotapPresentBitNumber ANTENNA_SIGNAL =
+      new RadiotapPresentBitNumber(5, "Antenna signal", 1);
 
-  /**
-   * Antenna noise: 6
-   */
-  public static final RadiotapPresentBitNumber ANTENNA_NOISE
-    = new RadiotapPresentBitNumber(6, "Antenna noise", 1);
+  /** Antenna noise: 6 */
+  public static final RadiotapPresentBitNumber ANTENNA_NOISE =
+      new RadiotapPresentBitNumber(6, "Antenna noise", 1);
 
-  /**
-   * Lock quality: 7
-   */
-  public static final RadiotapPresentBitNumber LOCK_QUALITY
-    = new RadiotapPresentBitNumber(7, "Lock quality", 2);
+  /** Lock quality: 7 */
+  public static final RadiotapPresentBitNumber LOCK_QUALITY =
+      new RadiotapPresentBitNumber(7, "Lock quality", 2);
 
-  /**
-   * TX attenuation: 8
-   */
-  public static final RadiotapPresentBitNumber TX_ATTENUATION
-    = new RadiotapPresentBitNumber(8, "TX attenuation", 2);
+  /** TX attenuation: 8 */
+  public static final RadiotapPresentBitNumber TX_ATTENUATION =
+      new RadiotapPresentBitNumber(8, "TX attenuation", 2);
 
-  /**
-   * dB TX attenuation: 9
-   */
-  public static final RadiotapPresentBitNumber DB_TX_ATTENUATION
-    = new RadiotapPresentBitNumber(9, "dB TX attenuation", 2);
+  /** dB TX attenuation: 9 */
+  public static final RadiotapPresentBitNumber DB_TX_ATTENUATION =
+      new RadiotapPresentBitNumber(9, "dB TX attenuation", 2);
 
-  /**
-   * dBm TX power: 10
-   */
-  public static final RadiotapPresentBitNumber DBM_TX_POWER
-    = new RadiotapPresentBitNumber(10, "dBm TX power", 1);
+  /** dBm TX power: 10 */
+  public static final RadiotapPresentBitNumber DBM_TX_POWER =
+      new RadiotapPresentBitNumber(10, "dBm TX power", 1);
 
-  /**
-   * Antenna: 11
-   */
-  public static final RadiotapPresentBitNumber ANTENNA
-    = new RadiotapPresentBitNumber(11, "Antenna", 1);
+  /** Antenna: 11 */
+  public static final RadiotapPresentBitNumber ANTENNA =
+      new RadiotapPresentBitNumber(11, "Antenna", 1);
 
-  /**
-   * dB antenna signal: 12
-   */
-  public static final RadiotapPresentBitNumber DB_ANTENNA_SIGNAL
-    = new RadiotapPresentBitNumber(12, "dB antenna signal", 1);
+  /** dB antenna signal: 12 */
+  public static final RadiotapPresentBitNumber DB_ANTENNA_SIGNAL =
+      new RadiotapPresentBitNumber(12, "dB antenna signal", 1);
 
-  /**
-   * dB antenna noise: 13
-   */
-  public static final RadiotapPresentBitNumber DB_ANTENNA_NOISE
-    = new RadiotapPresentBitNumber(13, "dB antenna noise", 1);
+  /** dB antenna noise: 13 */
+  public static final RadiotapPresentBitNumber DB_ANTENNA_NOISE =
+      new RadiotapPresentBitNumber(13, "dB antenna noise", 1);
 
-  /**
-   * RX flags: 14
-   */
-  public static final RadiotapPresentBitNumber RX_FLAGS
-    = new RadiotapPresentBitNumber(14, "RX flags", 2);
+  /** RX flags: 14 */
+  public static final RadiotapPresentBitNumber RX_FLAGS =
+      new RadiotapPresentBitNumber(14, "RX flags", 2);
 
-  /**
-   * MCS: 19
-   */
-  public static final RadiotapPresentBitNumber MCS
-    = new RadiotapPresentBitNumber(19, "MCS", 1);
+  /** MCS: 19 */
+  public static final RadiotapPresentBitNumber MCS = new RadiotapPresentBitNumber(19, "MCS", 1);
 
-  /**
-   * A-MPDU status: 20
-   */
-  public static final RadiotapPresentBitNumber A_MPDU_STATUS
-    = new RadiotapPresentBitNumber(20, "A-MPDU status", 4);
+  /** A-MPDU status: 20 */
+  public static final RadiotapPresentBitNumber A_MPDU_STATUS =
+      new RadiotapPresentBitNumber(20, "A-MPDU status", 4);
 
-  /**
-   * Antenna: 21
-   */
-  public static final RadiotapPresentBitNumber VHT
-    = new RadiotapPresentBitNumber(21, "VHT", 2);
+  /** Antenna: 21 */
+  public static final RadiotapPresentBitNumber VHT = new RadiotapPresentBitNumber(21, "VHT", 2);
 
-  private static final Map<String, Map<Integer, RadiotapPresentBitNumber>> registry
-    = new HashMap<String, Map<Integer, RadiotapPresentBitNumber>>();
+  private static final Map<String, Map<Integer, RadiotapPresentBitNumber>> registry =
+      new HashMap<String, Map<Integer, RadiotapPresentBitNumber>>();
 
   static {
-    Map<Integer, RadiotapPresentBitNumber> defaultRegistry
-      = new HashMap<Integer, RadiotapPresentBitNumber>();
+    Map<Integer, RadiotapPresentBitNumber> defaultRegistry =
+        new HashMap<Integer, RadiotapPresentBitNumber>();
     defaultRegistry.put(TSFT.value(), TSFT);
     defaultRegistry.put(FLAGS.value(), FLAGS);
     defaultRegistry.put(RATE.value(), RATE);
@@ -193,8 +143,7 @@ public final class RadiotapPresentBitNumber extends NamedNumber<Integer, Radiota
    * @param requiredAlignment requiredAlignment
    */
   public RadiotapPresentBitNumber(
-    Integer value, String name, String namespace, int requiredAlignment
-  ) {
+      Integer value, String name, String namespace, int requiredAlignment) {
     super(value, name);
     if (value % 32 == RADIOTAP_NAMESPACE) {
       throw new IllegalArgumentException("Reserved for Radiotap Namespace: " + value);
@@ -209,22 +158,17 @@ public final class RadiotapPresentBitNumber extends NamedNumber<Integer, Radiota
     this.requiredAlignment = requiredAlignment;
   }
 
-  /**
-   * @return namespace
-   */
+  /** @return namespace */
   public String getNamespace() {
     return namespace;
   }
 
-  /**
-   * @return requiredAlignment
-   */
+  /** @return requiredAlignment */
   public int getRequiredAlignment() {
     return requiredAlignment;
   }
 
   /**
-   *
    * @param value value
    * @return a RadiotapDataField object.
    */
@@ -233,7 +177,6 @@ public final class RadiotapPresentBitNumber extends NamedNumber<Integer, Radiota
   }
 
   /**
-   *
    * @param value value
    * @param namespace namespace
    * @return a RadiotapDataField object.
@@ -250,7 +193,6 @@ public final class RadiotapPresentBitNumber extends NamedNumber<Integer, Radiota
   }
 
   /**
-   *
    * @param num num
    * @return a RadiotapDataField object.
    */
@@ -264,20 +206,14 @@ public final class RadiotapPresentBitNumber extends NamedNumber<Integer, Radiota
     return namedRegistry.put(num.value(), num);
   }
 
-  /**
-   *
-   */
+  /** */
   @Override
   public String valueAsString() {
     if (namespace.isEmpty()) {
       return String.valueOf(value() & 0xFFFFFFFFL);
-    }
-    else {
-      StringBuilder sb
-        = new StringBuilder(30)
-            .append(namespace)
-            .append("/")
-            .append(value() & 0xFFFFFFFFL);
+    } else {
+      StringBuilder sb =
+          new StringBuilder(30).append(namespace).append("/").append(value() & 0xFFFFFFFFL);
 
       return sb.toString();
     }
@@ -285,12 +221,15 @@ public final class RadiotapPresentBitNumber extends NamedNumber<Integer, Radiota
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
     RadiotapPresentBitNumber other = (RadiotapPresentBitNumber) obj;
-    return    value().equals(other.value())
-           && namespace.equals(other.namespace);
+    return value().equals(other.value()) && namespace.equals(other.namespace);
   }
 
   @Override
@@ -306,5 +245,4 @@ public final class RadiotapPresentBitNumber extends NamedNumber<Integer, Radiota
   public int compareTo(RadiotapPresentBitNumber o) {
     return value().compareTo(o.value());
   }
-
 }

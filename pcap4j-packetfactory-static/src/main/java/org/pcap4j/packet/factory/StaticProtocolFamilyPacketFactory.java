@@ -20,23 +20,21 @@ import org.pcap4j.packet.namednumber.ProtocolFamily;
  * @since pcap4j 1.5.0
  */
 public final class StaticProtocolFamilyPacketFactory
-implements PacketFactory<Packet, ProtocolFamily> {
+    implements PacketFactory<Packet, ProtocolFamily> {
 
-  private static final StaticProtocolFamilyPacketFactory INSTANCE
-    = new StaticProtocolFamilyPacketFactory();
+  private static final StaticProtocolFamilyPacketFactory INSTANCE =
+      new StaticProtocolFamilyPacketFactory();
 
   private StaticProtocolFamilyPacketFactory() {}
 
-  /**
-   * @return the singleton instance of StaticProtocolFamilyPacketFactory.
-   */
+  /** @return the singleton instance of StaticProtocolFamilyPacketFactory. */
   public static StaticProtocolFamilyPacketFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, ProtocolFamily...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, ProtocolFamily...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -48,8 +46,8 @@ implements PacketFactory<Packet, ProtocolFamily> {
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, ProtocolFamily...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, ProtocolFamily...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -61,8 +59,7 @@ implements PacketFactory<Packet, ProtocolFamily> {
     try {
       if (number == ProtocolFamily.PF_INET) {
         return IpV4Packet.newPacket(rawData, offset, length);
-      }
-      else if (number == ProtocolFamily.PF_INET6) {
+      } else if (number == ProtocolFamily.PF_INET6) {
         return IpV6Packet.newPacket(rawData, offset, length);
       }
       return UnknownPacket.newPacket(rawData, offset, length);
@@ -72,8 +69,8 @@ implements PacketFactory<Packet, ProtocolFamily> {
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, ProtocolFamily...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, ProtocolFamily...)} and
+   * exists only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -83,20 +80,17 @@ implements PacketFactory<Packet, ProtocolFamily> {
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(
-    byte[] rawData, int offset, int length, ProtocolFamily number1, ProtocolFamily number2
-  ) {
+      byte[] rawData, int offset, int length, ProtocolFamily number1, ProtocolFamily number2) {
     try {
       if (number1 == ProtocolFamily.PF_INET) {
         return IpV4Packet.newPacket(rawData, offset, length);
-      }
-      else if (number1 == ProtocolFamily.PF_INET6) {
+      } else if (number1 == ProtocolFamily.PF_INET6) {
         return IpV6Packet.newPacket(rawData, offset, length);
       }
 
       if (number2 == ProtocolFamily.PF_INET) {
         return IpV4Packet.newPacket(rawData, offset, length);
-      }
-      else if (number2 == ProtocolFamily.PF_INET6) {
+      } else if (number2 == ProtocolFamily.PF_INET6) {
         return IpV6Packet.newPacket(rawData, offset, length);
       }
       return UnknownPacket.newPacket(rawData, offset, length);
@@ -108,11 +102,10 @@ implements PacketFactory<Packet, ProtocolFamily> {
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, ProtocolFamily... numbers) {
     try {
-      for (ProtocolFamily num: numbers) {
+      for (ProtocolFamily num : numbers) {
         if (num == ProtocolFamily.PF_INET) {
           return IpV4Packet.newPacket(rawData, offset, length);
-        }
-        else if (num == ProtocolFamily.PF_INET6) {
+        } else if (num == ProtocolFamily.PF_INET6) {
           return IpV6Packet.newPacket(rawData, offset, length);
         }
       }
@@ -121,5 +114,4 @@ implements PacketFactory<Packet, ProtocolFamily> {
       return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
-
 }

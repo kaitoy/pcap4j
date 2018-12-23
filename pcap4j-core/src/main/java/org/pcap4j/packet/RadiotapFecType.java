@@ -13,14 +13,10 @@ package org.pcap4j.packet;
  */
 public enum RadiotapFecType {
 
-  /**
-   * BCC
-   */
+  /** BCC */
   BCC(0),
 
-  /**
-   * LDPC
-   */
+  /** LDPC */
   LDPC(1);
 
   private final int value;
@@ -29,12 +25,8 @@ public enum RadiotapFecType {
     this.value = value;
   }
 
-  /**
-   *
-   * @return value
-   */
+  /** @return value */
   public int getValue() {
     return value;
   }
-
 }

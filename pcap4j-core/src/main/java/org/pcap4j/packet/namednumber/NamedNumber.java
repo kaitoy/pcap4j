@@ -15,20 +15,16 @@ import java.io.Serializable;
  * @param <T> number
  * @param <U> named number
  */
-public
-abstract class NamedNumber<T extends Number, U extends NamedNumber<T, ?>>
-implements Comparable<U>, Serializable {
+public abstract class NamedNumber<T extends Number, U extends NamedNumber<T, ?>>
+    implements Comparable<U>, Serializable {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 3858426889927624965L;
 
   private final T value;
   private final String name;
 
   /**
-   *
    * @param value value
    * @param name name
    */
@@ -43,26 +39,17 @@ implements Comparable<U>, Serializable {
     this.name = name;
   }
 
-  /**
-   *
-   * @return value
-   */
+  /** @return value */
   public T value() {
     return value;
   }
 
-  /**
-   *
-   * @return name
-   */
+  /** @return name */
   public String name() {
     return name;
   }
 
-  /**
-   *
-   * @return a string representation of this value.
-   */
+  /** @return a string representation of this value. */
   public String valueAsString() {
     return value.toString();
   }
@@ -73,8 +60,7 @@ implements Comparable<U>, Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder(70);
-    return sb.append(valueAsString()).append(" (")
-             .append(name).append(")").toString();
+    return sb.append(valueAsString()).append(" (").append(name).append(")").toString();
   }
 
   @Override
@@ -106,5 +92,4 @@ implements Comparable<U>, Serializable {
     }
     return true;
   }
-
 }

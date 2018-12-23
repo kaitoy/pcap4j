@@ -9,7 +9,6 @@ package org.pcap4j.packet;
 
 import java.nio.ByteOrder;
 import java.util.Arrays;
-
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.packet.namednumber.RadiotapVhtBandwidth;
 import org.pcap4j.util.ByteArrays;
@@ -23,9 +22,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class RadiotapDataVht implements RadiotapData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -7423738690741454273L;
 
   private static final int LENGTH = 12;
@@ -63,9 +60,8 @@ public final class RadiotapDataVht implements RadiotapData {
   private final short partialAid;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -73,9 +69,8 @@ public final class RadiotapDataVht implements RadiotapData {
    * @return a new RadiotapVht object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static RadiotapDataVht newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static RadiotapDataVht newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new RadiotapDataVht(rawData, offset, length);
   }
@@ -84,13 +79,13 @@ public final class RadiotapDataVht implements RadiotapData {
     if (length < LENGTH) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build a RadiotapVht (")
-        .append(LENGTH)
-        .append(" bytes). data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(LENGTH)
+          .append(" bytes). data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -142,55 +137,52 @@ public final class RadiotapDataVht implements RadiotapData {
   }
 
   private RadiotapDataVht(Builder builder) {
-    if (
-         builder == null
-      || builder.bandwidth == null
-      || builder.mcses == null
-      || builder.nsses == null
-      || builder.fecTypes == null
-    ) {
+    if (builder == null
+        || builder.bandwidth == null
+        || builder.mcses == null
+        || builder.nsses == null
+        || builder.fecTypes == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.bandwidth: ").append(builder.bandwidth)
-        .append(" builder.mcses: ").append(builder.mcses)
-        .append(" builder.nsses: ").append(builder.nsses)
-        .append(" builder.fecTypes: ").append(builder.fecTypes);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.bandwidth: ")
+          .append(builder.bandwidth)
+          .append(" builder.mcses: ")
+          .append(builder.mcses)
+          .append(" builder.nsses: ")
+          .append(builder.nsses)
+          .append(" builder.fecTypes: ")
+          .append(builder.fecTypes);
       throw new NullPointerException(sb.toString());
     }
     if ((builder.unusedInCoding & 0xF0) != 0) {
       throw new IllegalArgumentException(
-              "builder.unusedInCoding & 0xF0 must be 0. builder.unusedInCoding: "
-                + builder.unusedInCoding
-            );
+          "builder.unusedInCoding & 0xF0 must be 0. builder.unusedInCoding: "
+              + builder.unusedInCoding);
     }
     if (builder.mcses.length != 4) {
       throw new IllegalArgumentException(
-              "builder.mcses.length must be 4. builder.mcses: " + Arrays.toString(builder.mcses)
-            );
+          "builder.mcses.length must be 4. builder.mcses: " + Arrays.toString(builder.mcses));
     }
     if (builder.nsses.length != 4) {
       throw new IllegalArgumentException(
-              "builder.nsses.length must be 4. builder.nsses: " + Arrays.toString(builder.nsses)
-            );
+          "builder.nsses.length must be 4. builder.nsses: " + Arrays.toString(builder.nsses));
     }
     if (builder.fecTypes.length != 4) {
       throw new IllegalArgumentException(
-              "builder.fecTypes.length must be 4. builder.fecTypes: "
-                + Arrays.toString(builder.fecTypes)
-            );
+          "builder.fecTypes.length must be 4. builder.fecTypes: "
+              + Arrays.toString(builder.fecTypes));
     }
-    for (byte mcs: builder.mcses) {
+    for (byte mcs : builder.mcses) {
       if ((mcs & 0xF0) != 0) {
         throw new IllegalArgumentException(
-                "(mcs & 0xF0) must be zero. builder.mcses: " + Arrays.toString(builder.mcses)
-              );
+            "(mcs & 0xF0) must be zero. builder.mcses: " + Arrays.toString(builder.mcses));
       }
     }
-    for (byte nss: builder.nsses) {
+    for (byte nss : builder.nsses) {
       if ((nss & 0xF0) != 0) {
         throw new IllegalArgumentException(
-                "(nss & 0xF0) must be zero. builder.nsses: " + Arrays.toString(builder.nsses)
-              );
+            "(nss & 0xF0) must be zero. builder.nsses: " + Arrays.toString(builder.nsses));
       }
     }
 
@@ -227,234 +219,170 @@ public final class RadiotapDataVht implements RadiotapData {
     this.partialAid = builder.partialAid;
   }
 
-  /**
-   * @return true if the STBC is known; false otherwise.
-   */
+  /** @return true if the STBC is known; false otherwise. */
   public boolean isStbcKnown() {
     return stbcKnown;
   }
 
-  /**
-   * @return true if the TXOP_PS_NOT_ALLOWED is known; false otherwise.
-   */
+  /** @return true if the TXOP_PS_NOT_ALLOWED is known; false otherwise. */
   public boolean isTxopPsNotAllowedKnown() {
     return txopPsNotAllowedKnown;
   }
 
-  /**
-   * @return true if the Guard interval is known; false otherwise.
-   */
+  /** @return true if the Guard interval is known; false otherwise. */
   public boolean isGuardIntervalKnown() {
     return guardIntervalKnown;
   }
 
-  /**
-   * @return true if the Short GI NSYM disambiguation is known; false otherwise.
-   */
+  /** @return true if the Short GI NSYM disambiguation is known; false otherwise. */
   public boolean isShortGiNsymDisambiguationKnown() {
     return shortGiNsymDisambiguationKnown;
   }
 
-  /**
-   * @return true if the LDPC extra OFDM symbol is known; false otherwise.
-   */
+  /** @return true if the LDPC extra OFDM symbol is known; false otherwise. */
   public boolean isLdpcExtraOfdmSymbolKnown() {
     return ldpcExtraOfdmSymbolKnown;
   }
 
-  /**
-   * @return true if the Beamformed is known; false otherwise.
-   */
+  /** @return true if the Beamformed is known; false otherwise. */
   public boolean isBeamformedKnown() {
     return beamformedKnown;
   }
 
-  /**
-   * @return true if the Bandwidth is known; false otherwise.
-   */
+  /** @return true if the Bandwidth is known; false otherwise. */
   public boolean isBandwidthKnown() {
     return bandwidthKnown;
   }
 
-  /**
-   * @return true if the Group ID is known; false otherwise.
-   */
+  /** @return true if the Group ID is known; false otherwise. */
   public boolean isGroupIdKnown() {
     return groupIdKnown;
   }
 
-  /**
-   * @return true if the Partial AID is known; false otherwise.
-   */
+  /** @return true if the Partial AID is known; false otherwise. */
   public boolean isPartialAidKnown() {
     return partialAidKnown;
   }
 
-  /**
-   * @return true if the seventh MSB of the known field is set to 1; false otherwise.
-   */
+  /** @return true if the seventh MSB of the known field is set to 1; false otherwise. */
   public boolean getSeventhMsbOfKnown() {
     return seventhMsbOfKnown;
   }
 
-  /**
-   * @return true if the sixth MSB of the known field is set to 1; false otherwise.
-   */
+  /** @return true if the sixth MSB of the known field is set to 1; false otherwise. */
   public boolean getSixthMsbOfKnown() {
     return sixthMsbOfKnown;
   }
 
-  /**
-   * @return true if the fifth MSB of the known field is set to 1; false otherwise.
-   */
+  /** @return true if the fifth MSB of the known field is set to 1; false otherwise. */
   public boolean getFifthMsbOfKnown() {
     return fifthMsbOfKnown;
   }
 
-  /**
-   * @return true if the fourth MSB of the known field is set to 1; false otherwise.
-   */
+  /** @return true if the fourth MSB of the known field is set to 1; false otherwise. */
   public boolean getFourthMsbOfKnown() {
     return fourthMsbOfKnown;
   }
 
-  /**
-   * @return true if the third MSB of the known field is set to 1; false otherwise.
-   */
+  /** @return true if the third MSB of the known field is set to 1; false otherwise. */
   public boolean getThirdMsbOfKnown() {
     return thirdMsbOfKnown;
   }
 
-  /**
-   * @return true if the second MSB of the known field is set to 1; false otherwise.
-   */
+  /** @return true if the second MSB of the known field is set to 1; false otherwise. */
   public boolean getSecondMsbOfKnown() {
     return secondMsbOfKnown;
   }
 
-  /**
-   * @return true if the MSB of the known field is set to 1; false otherwise.
-   */
+  /** @return true if the MSB of the known field is set to 1; false otherwise. */
   public boolean getMsbOfKnown() {
     return msbOfKnown;
   }
 
-  /**
-   * @return true if all spatial streams of all users have STBC; false otherwise.
-   */
+  /** @return true if all spatial streams of all users have STBC; false otherwise. */
   public boolean isStbc() {
     return stbc;
   }
 
-  /**
-   * @return true if STAs may not doze during TXOP or transmitter is non-AP; false otherwise.
-   */
+  /** @return true if STAs may not doze during TXOP or transmitter is non-AP; false otherwise. */
   public boolean isTxopPsNotAllowed() {
     return txopPsNotAllowed;
   }
 
-  /**
-   * @return true if short GI; false otherwise.
-   */
+  /** @return true if short GI; false otherwise. */
   public boolean isShortGuardInterval() {
     return shortGuardInterval;
   }
 
-  /**
-   * @return true if NSYM mod 10 = 9; false otherwise.
-   */
+  /** @return true if NSYM mod 10 = 9; false otherwise. */
   public boolean isShortGiNsymDisambiguation() {
     return shortGiNsymDisambiguation;
   }
 
   /**
    * @return true if one or more users are using LDPC and the encoding process resulted in extra
-   *         OFDM symbol(s); false otherwise.
+   *     OFDM symbol(s); false otherwise.
    */
   public boolean isLdpcExtraOfdmSymbol() {
     return ldpcExtraOfdmSymbol;
   }
 
-  /**
-   * @return true if Beamformed; false otherwise.
-   */
+  /** @return true if Beamformed; false otherwise. */
   public boolean isBeamformed() {
     return beamformed;
   }
 
-  /**
-   * @return true if the second MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the second MSB of the flags field is set to 1; false otherwise. */
   public boolean getSecondMsbOfFlags() {
     return secondMsbOfFlags;
   }
 
-  /**
-   * @return true if the MSB of the flags field is set to 1; false otherwise.
-   */
+  /** @return true if the MSB of the flags field is set to 1; false otherwise. */
   public boolean getMsbOfFlags() {
     return msbOfFlags;
   }
 
-  /**
-   * @return bandwidth
-   */
+  /** @return bandwidth */
   public RadiotapVhtBandwidth getBandwidth() {
     return bandwidth;
   }
 
-  /**
-   * @return MCSes for four users. mcses[n] is for user n.
-   */
+  /** @return MCSes for four users. mcses[n] is for user n. */
   public byte[] getMcses() {
     return ByteArrays.clone(mcses);
   }
 
-  /**
-   * @return NSSes for four users. nsses[n] is for user n.
-   */
+  /** @return NSSes for four users. nsses[n] is for user n. */
   public byte[] getNsses() {
     return ByteArrays.clone(nsses);
   }
 
-  /**
-   * @return FEC types for four users. fecTypes[n] is for user n.
-   */
+  /** @return FEC types for four users. fecTypes[n] is for user n. */
   public RadiotapFecType[] getFecTypes() {
     return fecTypes.clone();
   }
 
-  /**
-   * @return unusedInCoding
-   */
+  /** @return unusedInCoding */
   public byte getUnusedInCoding() {
     return unusedInCoding;
   }
 
-  /**
-   * @return groupId
-   */
+  /** @return groupId */
   public byte getGroupId() {
     return groupId;
   }
 
-  /**
-   * @return groupId
-   */
+  /** @return groupId */
   public int getGroupIdAsInt() {
     return groupId & 0xFF;
   }
 
-  /**
-   * @return partialAid
-   */
+  /** @return partialAid */
   public short getPartialAid() {
     return partialAid;
   }
 
-  /**
-   * @return partialAid
-   */
+  /** @return partialAid */
   public int getPartialAidAsInt() {
     return partialAid & 0xFFFF;
   }
@@ -468,30 +396,78 @@ public final class RadiotapDataVht implements RadiotapData {
   public byte[] getRawData() {
     byte[] data = new byte[LENGTH];
 
-    if (stbcKnown) { data[0] |= 0x01; }
-    if (txopPsNotAllowedKnown) { data[0] |= 0x02; }
-    if (guardIntervalKnown) { data[0] |= 0x04; }
-    if (shortGiNsymDisambiguationKnown) { data[0] |= 0x08; }
-    if (ldpcExtraOfdmSymbolKnown) { data[0] |= 0x10; }
-    if (beamformedKnown) { data[0] |= 0x20; }
-    if (bandwidthKnown) { data[0] |= 0x40; }
-    if (groupIdKnown) { data[0] |= 0x80; }
-    if (partialAidKnown) { data[1] |= 0x01; }
-    if (seventhMsbOfKnown) { data[1] |= 0x02; }
-    if (sixthMsbOfKnown) { data[1] |= 0x04; }
-    if (fifthMsbOfKnown) { data[1] |= 0x08; }
-    if (fourthMsbOfKnown) { data[1] |= 0x10; }
-    if (thirdMsbOfKnown) { data[1] |= 0x20; }
-    if (secondMsbOfKnown) { data[1] |= 0x40; }
-    if (msbOfKnown) { data[1] |= 0x80; }
-    if (stbc) { data[2] |= 0x01; }
-    if (txopPsNotAllowed) { data[2] |= 0x02; }
-    if (shortGuardInterval) { data[2] |= 0x04; }
-    if (shortGiNsymDisambiguation) { data[2] |= 0x08; }
-    if (ldpcExtraOfdmSymbol) { data[2] |= 0x10; }
-    if (beamformed) { data[2] |= 0x20; }
-    if (secondMsbOfFlags) { data[2] |= 0x40; }
-    if (msbOfFlags) { data[2] |= 0x80; }
+    if (stbcKnown) {
+      data[0] |= 0x01;
+    }
+    if (txopPsNotAllowedKnown) {
+      data[0] |= 0x02;
+    }
+    if (guardIntervalKnown) {
+      data[0] |= 0x04;
+    }
+    if (shortGiNsymDisambiguationKnown) {
+      data[0] |= 0x08;
+    }
+    if (ldpcExtraOfdmSymbolKnown) {
+      data[0] |= 0x10;
+    }
+    if (beamformedKnown) {
+      data[0] |= 0x20;
+    }
+    if (bandwidthKnown) {
+      data[0] |= 0x40;
+    }
+    if (groupIdKnown) {
+      data[0] |= 0x80;
+    }
+    if (partialAidKnown) {
+      data[1] |= 0x01;
+    }
+    if (seventhMsbOfKnown) {
+      data[1] |= 0x02;
+    }
+    if (sixthMsbOfKnown) {
+      data[1] |= 0x04;
+    }
+    if (fifthMsbOfKnown) {
+      data[1] |= 0x08;
+    }
+    if (fourthMsbOfKnown) {
+      data[1] |= 0x10;
+    }
+    if (thirdMsbOfKnown) {
+      data[1] |= 0x20;
+    }
+    if (secondMsbOfKnown) {
+      data[1] |= 0x40;
+    }
+    if (msbOfKnown) {
+      data[1] |= 0x80;
+    }
+    if (stbc) {
+      data[2] |= 0x01;
+    }
+    if (txopPsNotAllowed) {
+      data[2] |= 0x02;
+    }
+    if (shortGuardInterval) {
+      data[2] |= 0x04;
+    }
+    if (shortGiNsymDisambiguation) {
+      data[2] |= 0x08;
+    }
+    if (ldpcExtraOfdmSymbol) {
+      data[2] |= 0x10;
+    }
+    if (beamformed) {
+      data[2] |= 0x20;
+    }
+    if (secondMsbOfFlags) {
+      data[2] |= 0x40;
+    }
+    if (msbOfFlags) {
+      data[2] |= 0x80;
+    }
     data[3] = bandwidth.value();
     for (int i = 0; i < 4; i++) {
       data[4 + i] = (byte) (nsses[i] | (mcses[i] << 4));
@@ -515,10 +491,10 @@ public final class RadiotapDataVht implements RadiotapData {
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -530,110 +506,126 @@ public final class RadiotapDataVht implements RadiotapData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("VHT: ")
-      .append(ls)
-      .append(indent).append("  STBC known: ")
-      .append(stbcKnown)
-      .append(ls)
-      .append(indent).append("  TXOP_PS_NOT_ALLOWED known: ")
-      .append(txopPsNotAllowedKnown)
-      .append(ls)
-      .append(indent).append("  Guard interval known: ")
-      .append(guardIntervalKnown)
-      .append(ls)
-      .append(indent).append("  Short GI NSYM disambiguation known: ")
-      .append(shortGiNsymDisambiguationKnown)
-      .append(ls)
-      .append(indent).append("  LDPC extra OFDM symbol known: ")
-      .append(ldpcExtraOfdmSymbolKnown)
-      .append(ls)
-      .append(indent).append("  Beamformed known: ")
-      .append(beamformedKnown)
-      .append(ls)
-      .append(indent).append("  Bandwidth known: ")
-      .append(bandwidthKnown)
-      .append(ls)
-      .append(indent).append("  Group ID known: ")
-      .append(groupIdKnown)
-      .append(ls)
-      .append(indent).append("  Partial AID known: ")
-      .append(partialAidKnown)
-      .append(ls)
-      .append(indent).append("  7th MSB of known: ")
-      .append(seventhMsbOfKnown)
-      .append(ls)
-      .append(indent).append("  6th MSB of known: ")
-      .append(sixthMsbOfKnown)
-      .append(ls)
-      .append(indent).append("  5th MSB of known: ")
-      .append(fifthMsbOfKnown)
-      .append(ls)
-      .append(indent).append("  4th MSB of known: ")
-      .append(fourthMsbOfKnown)
-      .append(ls)
-      .append(indent).append("  3rd MSB of known: ")
-      .append(thirdMsbOfKnown)
-      .append(ls)
-      .append(indent).append("  2nd MSB of known: ")
-      .append(secondMsbOfKnown)
-      .append(ls)
-      .append(indent).append("  MSB of known: ")
-      .append(msbOfKnown)
-      .append(ls)
-      .append(indent).append("  STBC: ")
-      .append(stbc)
-      .append(ls)
-      .append(indent).append("  TXOP_PS_NOT_ALLOWED: ")
-      .append(txopPsNotAllowed)
-      .append(ls)
-      .append(indent).append("  Short Guard interval: ")
-      .append(shortGuardInterval)
-      .append(ls)
-      .append(indent).append("  Short GI NSYM disambiguation: ")
-      .append(shortGiNsymDisambiguation)
-      .append(ls)
-      .append(indent).append("  LDPC extra OFDM symbol: ")
-      .append(ldpcExtraOfdmSymbol)
-      .append(ls)
-      .append(indent).append("  Beamformed: ")
-      .append(beamformed)
-      .append(ls)
-      .append(indent).append("  2nd MSB of flags: ")
-      .append(secondMsbOfFlags)
-      .append(ls)
-      .append(indent).append("  MSB of flags: ")
-      .append(msbOfFlags)
-      .append(ls)
-      .append(indent).append("  Bandwidth: ")
-      .append(bandwidth)
-      .append(ls);
-    for (int i = 0; i < 4; i++) {
-      sb.append(indent).append("  NSS-")
-        .append(i)
-        .append(": ")
-        .append(nsses[i])
+    sb.append(indent)
+        .append("VHT: ")
+        .append(ls)
+        .append(indent)
+        .append("  STBC known: ")
+        .append(stbcKnown)
+        .append(ls)
+        .append(indent)
+        .append("  TXOP_PS_NOT_ALLOWED known: ")
+        .append(txopPsNotAllowedKnown)
+        .append(ls)
+        .append(indent)
+        .append("  Guard interval known: ")
+        .append(guardIntervalKnown)
+        .append(ls)
+        .append(indent)
+        .append("  Short GI NSYM disambiguation known: ")
+        .append(shortGiNsymDisambiguationKnown)
+        .append(ls)
+        .append(indent)
+        .append("  LDPC extra OFDM symbol known: ")
+        .append(ldpcExtraOfdmSymbolKnown)
+        .append(ls)
+        .append(indent)
+        .append("  Beamformed known: ")
+        .append(beamformedKnown)
+        .append(ls)
+        .append(indent)
+        .append("  Bandwidth known: ")
+        .append(bandwidthKnown)
+        .append(ls)
+        .append(indent)
+        .append("  Group ID known: ")
+        .append(groupIdKnown)
+        .append(ls)
+        .append(indent)
+        .append("  Partial AID known: ")
+        .append(partialAidKnown)
+        .append(ls)
+        .append(indent)
+        .append("  7th MSB of known: ")
+        .append(seventhMsbOfKnown)
+        .append(ls)
+        .append(indent)
+        .append("  6th MSB of known: ")
+        .append(sixthMsbOfKnown)
+        .append(ls)
+        .append(indent)
+        .append("  5th MSB of known: ")
+        .append(fifthMsbOfKnown)
+        .append(ls)
+        .append(indent)
+        .append("  4th MSB of known: ")
+        .append(fourthMsbOfKnown)
+        .append(ls)
+        .append(indent)
+        .append("  3rd MSB of known: ")
+        .append(thirdMsbOfKnown)
+        .append(ls)
+        .append(indent)
+        .append("  2nd MSB of known: ")
+        .append(secondMsbOfKnown)
+        .append(ls)
+        .append(indent)
+        .append("  MSB of known: ")
+        .append(msbOfKnown)
+        .append(ls)
+        .append(indent)
+        .append("  STBC: ")
+        .append(stbc)
+        .append(ls)
+        .append(indent)
+        .append("  TXOP_PS_NOT_ALLOWED: ")
+        .append(txopPsNotAllowed)
+        .append(ls)
+        .append(indent)
+        .append("  Short Guard interval: ")
+        .append(shortGuardInterval)
+        .append(ls)
+        .append(indent)
+        .append("  Short GI NSYM disambiguation: ")
+        .append(shortGiNsymDisambiguation)
+        .append(ls)
+        .append(indent)
+        .append("  LDPC extra OFDM symbol: ")
+        .append(ldpcExtraOfdmSymbol)
+        .append(ls)
+        .append(indent)
+        .append("  Beamformed: ")
+        .append(beamformed)
+        .append(ls)
+        .append(indent)
+        .append("  2nd MSB of flags: ")
+        .append(secondMsbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  MSB of flags: ")
+        .append(msbOfFlags)
+        .append(ls)
+        .append(indent)
+        .append("  Bandwidth: ")
+        .append(bandwidth)
         .append(ls);
+    for (int i = 0; i < 4; i++) {
+      sb.append(indent).append("  NSS-").append(i).append(": ").append(nsses[i]).append(ls);
     }
     for (int i = 0; i < 4; i++) {
-      sb.append(indent).append("  MCS-")
-        .append(i)
-        .append(": ")
-        .append(mcses[i])
-        .append(ls);
+      sb.append(indent).append("  MCS-").append(i).append(": ").append(mcses[i]).append(ls);
     }
     for (int i = 0; i < 4; i++) {
-      sb.append(indent).append("  FEC-")
-        .append(i)
-        .append(": ")
-        .append(fecTypes[i])
-        .append(ls);
+      sb.append(indent).append("  FEC-").append(i).append(": ").append(fecTypes[i]).append(ls);
     }
-    sb.append(indent).append("  Group ID: ")
-      .append(getGroupIdAsInt())
-      .append(ls)
-      .append(indent).append("  Partial AID: ")
-      .append(getPartialAidAsInt())
-      .append(ls);
+    sb.append(indent)
+        .append("  Group ID: ")
+        .append(getGroupIdAsInt())
+        .append(ls)
+        .append(indent)
+        .append("  Partial AID: ")
+        .append(getPartialAidAsInt())
+        .append(ls);
 
     return sb.toString();
   }
@@ -678,75 +670,41 @@ public final class RadiotapDataVht implements RadiotapData {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     RadiotapDataVht other = (RadiotapDataVht) obj;
-    if (!bandwidth.equals(other.bandwidth))
-      return false;
-    if (bandwidthKnown != other.bandwidthKnown)
-      return false;
-    if (beamformed != other.beamformed)
-      return false;
-    if (beamformedKnown != other.beamformedKnown)
-      return false;
-    if (!Arrays.equals(fecTypes, other.fecTypes))
-      return false;
-    if (fifthMsbOfKnown != other.fifthMsbOfKnown)
-      return false;
-    if (fourthMsbOfKnown != other.fourthMsbOfKnown)
-      return false;
-    if (groupId != other.groupId)
-      return false;
-    if (groupIdKnown != other.groupIdKnown)
-      return false;
-    if (guardIntervalKnown != other.guardIntervalKnown)
-      return false;
-    if (ldpcExtraOfdmSymbol != other.ldpcExtraOfdmSymbol)
-      return false;
-    if (ldpcExtraOfdmSymbolKnown != other.ldpcExtraOfdmSymbolKnown)
-      return false;
-    if (!Arrays.equals(mcses, other.mcses))
-      return false;
-    if (msbOfFlags != other.msbOfFlags)
-      return false;
-    if (msbOfKnown != other.msbOfKnown)
-      return false;
-    if (!Arrays.equals(nsses, other.nsses))
-      return false;
-    if (partialAid != other.partialAid)
-      return false;
-    if (partialAidKnown != other.partialAidKnown)
-      return false;
-    if (secondMsbOfFlags != other.secondMsbOfFlags)
-      return false;
-    if (secondMsbOfKnown != other.secondMsbOfKnown)
-      return false;
-    if (seventhMsbOfKnown != other.seventhMsbOfKnown)
-      return false;
-    if (shortGiNsymDisambiguation != other.shortGiNsymDisambiguation)
-      return false;
-    if (shortGiNsymDisambiguationKnown != other.shortGiNsymDisambiguationKnown)
-      return false;
-    if (shortGuardInterval != other.shortGuardInterval)
-      return false;
-    if (sixthMsbOfKnown != other.sixthMsbOfKnown)
-      return false;
-    if (stbc != other.stbc)
-      return false;
-    if (stbcKnown != other.stbcKnown)
-      return false;
-    if (thirdMsbOfKnown != other.thirdMsbOfKnown)
-      return false;
-    if (txopPsNotAllowed != other.txopPsNotAllowed)
-      return false;
-    if (txopPsNotAllowedKnown != other.txopPsNotAllowedKnown)
-      return false;
-    if (unusedInCoding != other.unusedInCoding)
-      return false;
+    if (!bandwidth.equals(other.bandwidth)) return false;
+    if (bandwidthKnown != other.bandwidthKnown) return false;
+    if (beamformed != other.beamformed) return false;
+    if (beamformedKnown != other.beamformedKnown) return false;
+    if (!Arrays.equals(fecTypes, other.fecTypes)) return false;
+    if (fifthMsbOfKnown != other.fifthMsbOfKnown) return false;
+    if (fourthMsbOfKnown != other.fourthMsbOfKnown) return false;
+    if (groupId != other.groupId) return false;
+    if (groupIdKnown != other.groupIdKnown) return false;
+    if (guardIntervalKnown != other.guardIntervalKnown) return false;
+    if (ldpcExtraOfdmSymbol != other.ldpcExtraOfdmSymbol) return false;
+    if (ldpcExtraOfdmSymbolKnown != other.ldpcExtraOfdmSymbolKnown) return false;
+    if (!Arrays.equals(mcses, other.mcses)) return false;
+    if (msbOfFlags != other.msbOfFlags) return false;
+    if (msbOfKnown != other.msbOfKnown) return false;
+    if (!Arrays.equals(nsses, other.nsses)) return false;
+    if (partialAid != other.partialAid) return false;
+    if (partialAidKnown != other.partialAidKnown) return false;
+    if (secondMsbOfFlags != other.secondMsbOfFlags) return false;
+    if (secondMsbOfKnown != other.secondMsbOfKnown) return false;
+    if (seventhMsbOfKnown != other.seventhMsbOfKnown) return false;
+    if (shortGiNsymDisambiguation != other.shortGiNsymDisambiguation) return false;
+    if (shortGiNsymDisambiguationKnown != other.shortGiNsymDisambiguationKnown) return false;
+    if (shortGuardInterval != other.shortGuardInterval) return false;
+    if (sixthMsbOfKnown != other.sixthMsbOfKnown) return false;
+    if (stbc != other.stbc) return false;
+    if (stbcKnown != other.stbcKnown) return false;
+    if (thirdMsbOfKnown != other.thirdMsbOfKnown) return false;
+    if (txopPsNotAllowed != other.txopPsNotAllowed) return false;
+    if (txopPsNotAllowedKnown != other.txopPsNotAllowedKnown) return false;
+    if (unusedInCoding != other.unusedInCoding) return false;
     return true;
   }
 
@@ -788,9 +746,7 @@ public final class RadiotapDataVht implements RadiotapData {
     private byte groupId;
     private short partialAid;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(RadiotapDataVht obj) {
@@ -1106,13 +1062,9 @@ public final class RadiotapDataVht implements RadiotapData {
       return this;
     }
 
-    /**
-     * @return a new RadiotapVht object.
-     */
+    /** @return a new RadiotapVht object. */
     public RadiotapDataVht build() {
       return new RadiotapDataVht(this);
     }
-
   }
-
 }

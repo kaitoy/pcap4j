@@ -8,7 +8,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,8 +27,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class DnsPacketTest extends AbstractPacketTest {
 
-  private static final Logger logger
-    = LoggerFactory.getLogger(DnsPacketTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(DnsPacketTest.class);
 
   private final DnsPacket packet;
   private final short id;
@@ -85,390 +83,243 @@ public class DnsPacketTest extends AbstractPacketTest {
     fooDomain.add("foo");
     fooDomain.add("org");
 
-    DnsQuestion question
-      = new DnsQuestion.Builder()
-          .qName(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .qType(DnsResourceRecordType.A)
-          .qClass(DnsClass.IN)
-          .build();
+    DnsQuestion question =
+        new DnsQuestion.Builder()
+            .qName(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .qType(DnsResourceRecordType.A)
+            .qClass(DnsClass.IN)
+            .build();
     questions.add(question);
 
-    DnsResourceRecord aRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.A)
-          .dataClass(DnsClass.ANY)
-          .ttl(123123)
-          .rData(
-             new DnsRDataA.Builder()
-               .address((Inet4Address) InetAddress.getByName("1.2.3.4"))
-               .addressPlainText(false)
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord aRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.A)
+            .dataClass(DnsClass.ANY)
+            .ttl(123123)
+            .rData(
+                new DnsRDataA.Builder()
+                    .address((Inet4Address) InetAddress.getByName("1.2.3.4"))
+                    .addressPlainText(false)
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     answers.add(aRR);
 
-    DnsResourceRecord aaaaRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.AAAA)
-          .dataClass(DnsClass.ANY)
-          .ttl(123123)
-          .rData(
-             new DnsRDataAaaa.Builder()
-               .address((Inet6Address) InetAddress.getByName("2001:db8::3:2:1"))
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord aaaaRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.AAAA)
+            .dataClass(DnsClass.ANY)
+            .ttl(123123)
+            .rData(
+                new DnsRDataAaaa.Builder()
+                    .address((Inet6Address) InetAddress.getByName("2001:db8::3:2:1"))
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     answers.add(aaaaRR);
 
-    DnsResourceRecord cnameRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.CNAME)
-          .dataClass(DnsClass.ANY)
-          .ttl(123123)
-          .rData(
-             new DnsRDataCName.Builder()
-               .cName(
-                  new DnsDomainName.Builder()
-                    .labels(www)
-                    .pointer((short) 12)
-                    .build()
-                )
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord cnameRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.CNAME)
+            .dataClass(DnsClass.ANY)
+            .ttl(123123)
+            .rData(
+                new DnsRDataCName.Builder()
+                    .cName(new DnsDomainName.Builder().labels(www).pointer((short) 12).build())
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     answers.add(cnameRR);
 
-    DnsResourceRecord hinfoRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.HINFO)
-          .dataClass(DnsClass.ANY)
-          .ttl(123123)
-          .rData(
-             new DnsRDataHInfo.Builder()
-               .cpu("AWESOME CPU")
-               .os("Windows")
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord hinfoRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.HINFO)
+            .dataClass(DnsClass.ANY)
+            .ttl(123123)
+            .rData(new DnsRDataHInfo.Builder().cpu("AWESOME CPU").os("Windows").build())
+            .correctLengthAtBuild(true)
+            .build();
     answers.add(hinfoRR);
 
-    DnsResourceRecord mbRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.MB)
-          .dataClass(DnsClass.ANY)
-          .ttl(123123)
-          .rData(
-             new DnsRDataMb.Builder()
-               .maDName(
-                  new DnsDomainName.Builder()
-                    .labels(www)
-                    .pointer((short) 12)
-                    .build()
-                )
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord mbRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.MB)
+            .dataClass(DnsClass.ANY)
+            .ttl(123123)
+            .rData(
+                new DnsRDataMb.Builder()
+                    .maDName(new DnsDomainName.Builder().labels(www).pointer((short) 12).build())
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     answers.add(mbRR);
 
-    DnsResourceRecord aCaaRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.CAA)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataCaa.Builder()
-               .critical(true)
-               .reservedFlags((byte) 0x12)
-               .tag("issue")
-               .value("ca.local")
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord aCaaRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.CAA)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataCaa.Builder()
+                    .critical(true)
+                    .reservedFlags((byte) 0x12)
+                    .tag("issue")
+                    .value("ca.local")
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     answers.add(aCaaRR);
 
-    DnsResourceRecord mdRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.MD)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataMd.Builder()
-               .maDName(
-                  new DnsDomainName.Builder()
-                    .labels(www)
-                    .pointer((short) 12)
-                    .build()
-                )
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord mdRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.MD)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataMd.Builder()
+                    .maDName(new DnsDomainName.Builder().labels(www).pointer((short) 12).build())
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     authorities.add(mdRR);
 
-    DnsResourceRecord mfRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.MF)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataMf.Builder()
-               .maDName(
-                  new DnsDomainName.Builder()
-                    .labels(www)
-                    .pointer((short) 12)
-                    .build()
-                )
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord mfRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.MF)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataMf.Builder()
+                    .maDName(new DnsDomainName.Builder().labels(www).pointer((short) 12).build())
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     authorities.add(mfRR);
 
-    DnsResourceRecord mgRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.MG)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataMg.Builder()
-               .mgMName(
-                  new DnsDomainName.Builder()
-                    .labels(www)
-                    .pointer((short) 12)
-                    .build()
-                )
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord mgRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.MG)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataMg.Builder()
+                    .mgMName(new DnsDomainName.Builder().labels(www).pointer((short) 12).build())
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     authorities.add(mgRR);
 
-    DnsResourceRecord minfoRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.MINFO)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataMInfo.Builder()
-               .eMailBx(
-                  new DnsDomainName.Builder()
-                    .labels(hogeDomain)
-                    .build()
-                )
-               .rMailBx(
-                   new DnsDomainName.Builder()
-                     .labels(fooDomain)
-                     .build()
-                 )
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord minfoRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.MINFO)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataMInfo.Builder()
+                    .eMailBx(new DnsDomainName.Builder().labels(hogeDomain).build())
+                    .rMailBx(new DnsDomainName.Builder().labels(fooDomain).build())
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     authorities.add(minfoRR);
 
-    DnsResourceRecord mrRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.MR)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataMr.Builder()
-               .newName(
-                  new DnsDomainName.Builder()
-                    .labels(fooDomain)
-                    .build()
-                )
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord mrRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.MR)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataMr.Builder()
+                    .newName(new DnsDomainName.Builder().labels(fooDomain).build())
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     authorities.add(mrRR);
 
-    DnsResourceRecord mxRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.MX)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataMx.Builder()
-               .preference((short) -11111)
-               .exchange(
-                  new DnsDomainName.Builder()
-                    .labels(fooDomain)
-                    .build()
-                )
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord mxRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.MX)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataMx.Builder()
+                    .preference((short) -11111)
+                    .exchange(new DnsDomainName.Builder().labels(fooDomain).build())
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     authorities.add(mxRR);
 
-    DnsResourceRecord nsRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.NS)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataNs.Builder()
-               .nsDName(
-                  new DnsDomainName.Builder()
-                    .labels(fooDomain)
-                    .build()
-                )
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord nsRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.NS)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataNs.Builder()
+                    .nsDName(new DnsDomainName.Builder().labels(fooDomain).build())
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     additionalInfo.add(nsRR);
 
-    DnsResourceRecord nullRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.NULL)
-          .dataClass(DnsClass.ANY)
-          .ttl(123456)
-          .rData(
-             new DnsRDataNull.Builder()
-               .rawData(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 })
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord nullRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.NULL)
+            .dataClass(DnsClass.ANY)
+            .ttl(123456)
+            .rData(
+                new DnsRDataNull.Builder().rawData(new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9}).build())
+            .correctLengthAtBuild(true)
+            .build();
     additionalInfo.add(nullRR);
 
-    DnsResourceRecord ptrRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.PTR)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataPtr.Builder()
-               .ptrDName(
-                  new DnsDomainName.Builder()
-                    .labels(fooDomain)
-                    .build()
-                )
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord ptrRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.PTR)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataPtr.Builder()
+                    .ptrDName(new DnsDomainName.Builder().labels(fooDomain).build())
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     additionalInfo.add(ptrRR);
 
-    DnsResourceRecord soaRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.SOA)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataSoa.Builder()
-               .mName(
-                  new DnsDomainName.Builder()
-                    .labels(hogeDomain)
-                    .build()
-                )
-               .rName(
-                   new DnsDomainName.Builder()
-                     .labels(fooDomain)
-                     .build()
-                 )
-               .serial(11111111)
-               .refresh(22222222)
-               .retry(33333333)
-               .expire(44444444)
-               .minimum(55555555)
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord soaRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.SOA)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataSoa.Builder()
+                    .mName(new DnsDomainName.Builder().labels(hogeDomain).build())
+                    .rName(new DnsDomainName.Builder().labels(fooDomain).build())
+                    .serial(11111111)
+                    .refresh(22222222)
+                    .retry(33333333)
+                    .expire(44444444)
+                    .minimum(55555555)
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     additionalInfo.add(soaRR);
 
     List<String> txts = new ArrayList<String>();
@@ -476,123 +327,100 @@ public class DnsPacketTest extends AbstractPacketTest {
     txts.add("Pineapple");
     txts.add("Apple");
     txts.add("Pen");
-    DnsResourceRecord txtRR
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.TXT)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataTxt.Builder()
-               .texts(txts)
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord txtRR =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.TXT)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(new DnsRDataTxt.Builder().texts(txts).build())
+            .correctLengthAtBuild(true)
+            .build();
     additionalInfo.add(txtRR);
 
-    DnsResourceRecord wksRR1
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.WKS)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataWks.Builder()
-               .address((Inet4Address) InetAddress.getByName("4.3.2.1"))
-               .protocol(IpNumber.UDP)
-               .bitMap(new byte[] { 0, 0, 0, 0, (byte) 0x81, 0, 0x10 })
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord wksRR1 =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.WKS)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataWks.Builder()
+                    .address((Inet4Address) InetAddress.getByName("4.3.2.1"))
+                    .protocol(IpNumber.UDP)
+                    .bitMap(new byte[] {0, 0, 0, 0, (byte) 0x81, 0, 0x10})
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     additionalInfo.add(wksRR1);
 
     List<Integer> ports = new ArrayList<Integer>();
     ports.add(20);
     ports.add(300);
     ports.add(4000);
-    DnsResourceRecord wksRR2
-      = new DnsResourceRecord.Builder()
-          .name(
-             new DnsDomainName.Builder()
-               .labels(hogeDomain)
-               .build()
-           )
-          .dataType(DnsResourceRecordType.WKS)
-          .dataClass(DnsClass.ANY)
-          .ttl(321321)
-          .rData(
-             new DnsRDataWks.Builder()
-               .address((Inet4Address) InetAddress.getByName("2.3.2.3"))
-               .protocol(IpNumber.TCP)
-               .portNumbers(ports)
-               .build()
-           )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord wksRR2 =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.WKS)
+            .dataClass(DnsClass.ANY)
+            .ttl(321321)
+            .rData(
+                new DnsRDataWks.Builder()
+                    .address((Inet4Address) InetAddress.getByName("2.3.2.3"))
+                    .protocol(IpNumber.TCP)
+                    .portNumbers(ports)
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     additionalInfo.add(wksRR2);
 
-    DnsResourceRecord aRRStr
-      = new DnsResourceRecord.Builder()
-          .name(
-            new DnsDomainName.Builder()
-              .labels(hogeDomain)
-              .build()
-          )
-          .dataType(DnsResourceRecordType.A)
-          .dataClass(DnsClass.ANY)
-          .ttl(123123)
-          .rData(
-            new DnsRDataA.Builder()
-              .address((Inet4Address) InetAddress.getByName("192.168.0.100"))
-              .addressPlainText(true)
-              .build()
-          )
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord aRRStr =
+        new DnsResourceRecord.Builder()
+            .name(new DnsDomainName.Builder().labels(hogeDomain).build())
+            .dataType(DnsResourceRecordType.A)
+            .dataClass(DnsClass.ANY)
+            .ttl(123123)
+            .rData(
+                new DnsRDataA.Builder()
+                    .address((Inet4Address) InetAddress.getByName("192.168.0.100"))
+                    .addressPlainText(true)
+                    .build())
+            .correctLengthAtBuild(true)
+            .build();
     additionalInfo.add(aRRStr);
 
-    DnsResourceRecord optRR
-      = new DnsResourceRecord.Builder()
-          .name(DnsDomainName.ROOT_DOMAIN)
-          .dataType(DnsResourceRecordType.OPT)
-          .dataClass(DnsClass.ANY)
-          .ttl(123123)
-          .correctLengthAtBuild(true)
-          .build();
+    DnsResourceRecord optRR =
+        new DnsResourceRecord.Builder()
+            .name(DnsDomainName.ROOT_DOMAIN)
+            .dataType(DnsResourceRecordType.OPT)
+            .dataClass(DnsClass.ANY)
+            .ttl(123123)
+            .correctLengthAtBuild(true)
+            .build();
     additionalInfo.add(optRR);
 
-    this.packet
-      = new DnsPacket.Builder()
-          .id(id)
-          .response(response)
-          .opCode(opCode)
-          .authoritativeAnswer(authoritativeAnswer)
-          .truncated(truncated)
-          .recursionDesired(recursionDesired)
-          .recursionAvailable(recursionAvailable)
-          .reserved(reserved)
-          .authenticData(authenticData)
-          .checkingDisabled(checkingDisabled)
-          .rCode(rCode)
-          .qdCount(qdCount)
-          .anCount(anCount)
-          .nsCount(nsCount)
-          .arCount(arCount)
-          .questions(questions)
-          .answers(answers)
-          .authorities(authorities)
-          .additionalInfo(additionalInfo)
-          .build();
+    this.packet =
+        new DnsPacket.Builder()
+            .id(id)
+            .response(response)
+            .opCode(opCode)
+            .authoritativeAnswer(authoritativeAnswer)
+            .truncated(truncated)
+            .recursionDesired(recursionDesired)
+            .recursionAvailable(recursionAvailable)
+            .reserved(reserved)
+            .authenticData(authenticData)
+            .checkingDisabled(checkingDisabled)
+            .rCode(rCode)
+            .qdCount(qdCount)
+            .anCount(anCount)
+            .nsCount(nsCount)
+            .arCount(arCount)
+            .questions(questions)
+            .answers(answers)
+            .authorities(authorities)
+            .additionalInfo(additionalInfo)
+            .build();
   }
 
   @Override
@@ -611,51 +439,47 @@ public class DnsPacketTest extends AbstractPacketTest {
       throw new AssertionError("Never get here.");
     }
 
-    UdpPacket.Builder udpb
-      = new UdpPacket.Builder()
-          .dstPort(UdpPort.DOMAIN)
-          .srcPort(UdpPort.getInstance((short) 32211))
-          .srcAddr(srcAddr)
-          .dstAddr(dstAddr)
-          .correctChecksumAtBuild(true)
-          .correctLengthAtBuild(true)
-          .payloadBuilder(new SimpleBuilder(packet));
+    UdpPacket.Builder udpb =
+        new UdpPacket.Builder()
+            .dstPort(UdpPort.DOMAIN)
+            .srcPort(UdpPort.getInstance((short) 32211))
+            .srcAddr(srcAddr)
+            .dstAddr(dstAddr)
+            .correctChecksumAtBuild(true)
+            .correctLengthAtBuild(true)
+            .payloadBuilder(new SimpleBuilder(packet));
 
-    IpV6Packet.Builder IpV6b
-      = new IpV6Packet.Builder()
-          .version(IpVersion.IPV6)
-          .trafficClass(IpV6SimpleTrafficClass.newInstance((byte)0x12))
-          .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
-          .nextHeader(IpNumber.UDP)
-          .hopLimit((byte)100)
-          .srcAddr(srcAddr)
-          .dstAddr(dstAddr)
-          .payloadBuilder(udpb)
-          .correctLengthAtBuild(true);
+    IpV6Packet.Builder IpV6b =
+        new IpV6Packet.Builder()
+            .version(IpVersion.IPV6)
+            .trafficClass(IpV6SimpleTrafficClass.newInstance((byte) 0x12))
+            .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
+            .nextHeader(IpNumber.UDP)
+            .hopLimit((byte) 100)
+            .srcAddr(srcAddr)
+            .dstAddr(dstAddr)
+            .payloadBuilder(udpb)
+            .correctLengthAtBuild(true);
 
-    EthernetPacket.Builder eb
-      = new EthernetPacket.Builder()
-          .dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
-          .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-          .type(EtherType.IPV6)
-          .payloadBuilder(IpV6b)
-          .paddingAtBuild(true);
+    EthernetPacket.Builder eb =
+        new EthernetPacket.Builder()
+            .dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
+            .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+            .type(EtherType.IPV6)
+            .payloadBuilder(IpV6b)
+            .paddingAtBuild(true);
 
     return eb.build();
   }
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    logger.info(
-      "########## " + DnsPacketTest.class.getSimpleName() + " START ##########"
-    );
+    logger.info("########## " + DnsPacketTest.class.getSimpleName() + " START ##########");
   }
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-    logger.info(
-      "########## " + DnsPacketTest.class.getSimpleName() + " END ##########"
-    );
+    logger.info("########## " + DnsPacketTest.class.getSimpleName() + " END ##########");
   }
 
   @Test
@@ -759,7 +583,5 @@ public class DnsPacketTest extends AbstractPacketTest {
     } catch (IllegalRawDataException e) {
       throw new AssertionError(e);
     }
-
   }
-
 }

@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +20,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 5987521162450318499L;
 
   private final IcmpV4RedirectHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -37,9 +35,8 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
    * @return a new IcmpV4RedirectPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IcmpV4RedirectPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IcmpV4RedirectPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
 
     IcmpV4RedirectHeader header = new IcmpV4RedirectHeader(rawData, offset, length);
@@ -47,8 +44,7 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
       return new IcmpV4RedirectPacket(header, rawData, offset + header.length(), payloadLength);
-    }
-    else {
+    } else {
       return new IcmpV4RedirectPacket(header);
     }
   }
@@ -58,8 +54,7 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
   }
 
   private IcmpV4RedirectPacket(
-    IcmpV4RedirectHeader header, byte[] rawData, int payloadOffset, int payloadLength
-  ) {
+      IcmpV4RedirectHeader header, byte[] rawData, int payloadOffset, int payloadLength) {
     super(rawData, payloadOffset, payloadLength);
     this.header = header;
   }
@@ -69,8 +64,7 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
 
     if (builder.gatewayInternetAddress == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder.gatewayInternetAddress: ")
-        .append(builder.gatewayInternetAddress);
+      sb.append("builder.gatewayInternetAddress: ").append(builder.gatewayInternetAddress);
       throw new NullPointerException(sb.toString());
     }
 
@@ -91,14 +85,11 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  public static final class Builder
-  extends org.pcap4j.packet.IcmpV4InvokingPacketPacket.Builder {
+  public static final class Builder extends org.pcap4j.packet.IcmpV4InvokingPacketPacket.Builder {
 
     private Inet4Address gatewayInternetAddress;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IcmpV4RedirectPacket packet) {
@@ -107,7 +98,6 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
     }
 
     /**
-     *
      * @param gatewayInternetAddress gatewayInternetAddress
      * @return this Builder object for method chaining.
      */
@@ -126,7 +116,6 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
     public IcmpV4RedirectPacket build() {
       return new IcmpV4RedirectPacket(this);
     }
-
   }
 
   /**
@@ -143,48 +132,40 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -7093717116891501880L;
 
-    private static final int GATEWAY_INTERNET_ADDRESS_OFFSET
-      = 0;
-    private static final int GATEWAY_INTERNET_ADDRESS_SIZE
-      = INET4_ADDRESS_SIZE_IN_BYTES;
-    private static final int ICMPV4_REDIRECT_HEADER_SIZE
-      = GATEWAY_INTERNET_ADDRESS_OFFSET + GATEWAY_INTERNET_ADDRESS_SIZE;
+    private static final int GATEWAY_INTERNET_ADDRESS_OFFSET = 0;
+    private static final int GATEWAY_INTERNET_ADDRESS_SIZE = INET4_ADDRESS_SIZE_IN_BYTES;
+    private static final int ICMPV4_REDIRECT_HEADER_SIZE =
+        GATEWAY_INTERNET_ADDRESS_OFFSET + GATEWAY_INTERNET_ADDRESS_SIZE;
 
     private final Inet4Address gatewayInternetAddress;
 
-    private IcmpV4RedirectHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private IcmpV4RedirectHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < ICMPV4_REDIRECT_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ICMPv4 Redirect Header(")
-          .append(ICMPV4_REDIRECT_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(ICMPV4_REDIRECT_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.gatewayInternetAddress
-        = ByteArrays.getInet4Address(rawData, GATEWAY_INTERNET_ADDRESS_OFFSET + offset);
-   }
+      this.gatewayInternetAddress =
+          ByteArrays.getInet4Address(rawData, GATEWAY_INTERNET_ADDRESS_OFFSET + offset);
+    }
 
     private IcmpV4RedirectHeader(Builder builder) {
       this.gatewayInternetAddress = builder.gatewayInternetAddress;
     }
 
-    /**
-     *
-     * @return gatewayInternetAddress
-     */
+    /** @return gatewayInternetAddress */
     public Inet4Address getGatewayInternetAddress() {
       return gatewayInternetAddress;
     }
@@ -206,23 +187,22 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[ICMPv4 Redirect Header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Gateway Internet Address: ")
-        .append(gatewayInternetAddress)
-        .append(ls);
+      sb.append("[ICMPv4 Redirect Header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  Gateway Internet Address: ").append(gatewayInternetAddress).append(ls);
 
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      IcmpV4RedirectHeader other = (IcmpV4RedirectHeader)obj;
+      IcmpV4RedirectHeader other = (IcmpV4RedirectHeader) obj;
       return gatewayInternetAddress.equals(other.gatewayInternetAddress);
     }
 
@@ -232,7 +212,5 @@ public final class IcmpV4RedirectPacket extends IcmpV4InvokingPacketPacket {
       result = 31 * result + gatewayInternetAddress.hashCode();
       return result;
     }
-
   }
-
 }

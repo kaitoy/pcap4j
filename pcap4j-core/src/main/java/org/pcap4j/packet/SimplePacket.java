@@ -16,9 +16,7 @@ import org.pcap4j.util.ByteArrays;
  */
 abstract class SimplePacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -1565433651791063490L;
 
   private final byte[] rawData;
@@ -29,24 +27,20 @@ abstract class SimplePacket extends AbstractPacket {
   }
 
   protected SimplePacket(Builder builder) {
-    if (
-         builder == null
-      || builder.rawData == null
-    ) {
+    if (builder == null || builder.rawData == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.rawData: ").append(builder.rawData);
+      sb.append("builder: ").append(builder).append(" builder.rawData: ").append(builder.rawData);
       throw new NullPointerException(sb.toString());
     }
 
     this.rawData = new byte[builder.rawData.length];
-    System.arraycopy(
-      builder.rawData, 0, this.rawData, 0, builder.rawData.length
-    );
+    System.arraycopy(builder.rawData, 0, this.rawData, 0, builder.rawData.length);
   }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -61,14 +55,12 @@ abstract class SimplePacket extends AbstractPacket {
     String ls = System.getProperty("line.separator");
 
     sb.append("[")
-      .append(modifier())
-      .append("data (")
-      .append(length())
-      .append(" bytes)]")
-      .append(ls);
-    sb.append("  Hex stream: ")
-      .append(ByteArrays.toHexString(rawData, " "))
-      .append(ls);
+        .append(modifier())
+        .append("data (")
+        .append(length())
+        .append(" bytes)]")
+        .append(ls);
+    sb.append("  Hex stream: ").append(ByteArrays.toHexString(rawData, " ")).append(ls);
 
     return sb.toString();
   }
@@ -77,10 +69,14 @@ abstract class SimplePacket extends AbstractPacket {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    SimplePacket other = (SimplePacket)obj;
+    SimplePacket other = (SimplePacket) obj;
     return Arrays.equals(rawData, other.rawData);
   }
 
@@ -93,26 +89,20 @@ abstract class SimplePacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 1.4.0
    */
-  public static abstract class Builder extends AbstractBuilder {
+  public abstract static class Builder extends AbstractBuilder {
 
     private byte[] rawData;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     protected Builder(SimplePacket packet) {
       rawData = packet.rawData;
     }
 
-    /**
-     * @param rawData rawData
-     */
+    /** @param rawData rawData */
     protected void setRawData(byte[] rawData) {
       this.rawData = rawData;
     }
-
   }
-
 }

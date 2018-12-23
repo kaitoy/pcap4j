@@ -9,6 +9,8 @@ package org.pcap4j.core;
 
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
+import java.time.Instant;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.pcap4j.core.NativeMappings.pcap_pkthdr;
 import org.pcap4j.core.NativeMappings.timeval;
 import org.pcap4j.core.PcapHandle.TimestampPrecision;
@@ -16,9 +18,6 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.Instant;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author Kaito Yamada
@@ -39,16 +38,16 @@ public final class PcapDumper implements AutoCloseable {
     this.dumper = dumper;
   }
 
-  Pointer getDumper() { return dumper; }
+  Pointer getDumper() {
+    return dumper;
+  }
+
+  /** @return true if this PcapDumper is open; false otherwise. */
+  public boolean isOpen() {
+    return open;
+  }
 
   /**
-   *
-   * @return true if this PcapDumper is open; false otherwise.
-   */
-  public boolean isOpen() { return open; }
-
-  /**
-   *
    * @param packet packet
    * @throws NotOpenException if this PcapHandle is not open.
    */
@@ -57,7 +56,6 @@ public final class PcapDumper implements AutoCloseable {
   }
 
   /**
-   *
    * @param packet packet
    * @throws NotOpenException if this PcapHandle is not open.
    */
@@ -66,7 +64,6 @@ public final class PcapDumper implements AutoCloseable {
   }
 
   /**
-   *
    * @param packet packet
    * @param timestamp timestamp
    * @throws NotOpenException if this PcapHandle is not open.
@@ -74,8 +71,7 @@ public final class PcapDumper implements AutoCloseable {
   public void dump(Packet packet, Instant timestamp) throws NotOpenException {
     if (packet == null || timestamp == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("packet: ").append(packet)
-        .append(" ts: ").append(timestamp);
+      sb.append("packet: ").append(packet).append(" ts: ").append(timestamp);
       throw new NullPointerException(sb.toString());
     }
 
@@ -86,7 +82,6 @@ public final class PcapDumper implements AutoCloseable {
   }
 
   /**
-   *
    * @param packet packet
    * @throws NotOpenException if this PcapHandle is not open.
    */
@@ -95,7 +90,6 @@ public final class PcapDumper implements AutoCloseable {
   }
 
   /**
-   *
    * @param packet packet
    * @param timestamp timestamp
    * @throws NotOpenException if this PcapHandle is not open.
@@ -103,8 +97,7 @@ public final class PcapDumper implements AutoCloseable {
   public void dumpRaw(byte[] packet, Instant timestamp) throws NotOpenException {
     if (packet == null || timestamp == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("packet: ").append(packet)
-        .append(" timestamp: ").append(timestamp);
+      sb.append("packet: ").append(packet).append(" timestamp: ").append(timestamp);
       throw new NullPointerException(sb.toString());
     }
 
@@ -202,9 +195,7 @@ public final class PcapDumper implements AutoCloseable {
     return position;
   }
 
-  /**
-   * Closes this PcapDumper.
-   */
+  /** Closes this PcapDumper. */
   @Override
   public void close() {
     if (!open) {
@@ -226,5 +217,4 @@ public final class PcapDumper implements AutoCloseable {
     NativeMappings.pcap_dump_close(dumper);
     logger.info("Closed.");
   }
-
 }

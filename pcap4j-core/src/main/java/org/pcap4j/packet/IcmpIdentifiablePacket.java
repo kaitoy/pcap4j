@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import static org.pcap4j.util.ByteArrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.pcap4j.util.ByteArrays;
@@ -18,9 +19,7 @@ import org.pcap4j.util.ByteArrays;
  */
 abstract class IcmpIdentifiablePacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -424401780940103043L;
 
   protected IcmpIdentifiablePacket() {}
@@ -38,14 +37,12 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  static abstract class Builder extends AbstractBuilder {
+  abstract static class Builder extends AbstractBuilder {
 
     private short identifier;
     private short sequenceNumber;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     protected Builder(IcmpIdentifiablePacket packet) {
@@ -54,7 +51,6 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param identifier identifier
      * @return this Builder object for method chaining.
      */
@@ -64,7 +60,6 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
     }
 
     /**
-     *
      * @param sequenceNumber sequenceNumber
      * @return this Builder object for method chaining.
      */
@@ -72,14 +67,13 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
       this.sequenceNumber = sequenceNumber;
       return this;
     }
-
   }
 
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  static abstract class IcmpIdentifiableHeader extends AbstractHeader {
+  abstract static class IcmpIdentifiableHeader extends AbstractHeader {
 
     /*
      *  0                            15
@@ -91,45 +85,38 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = 8141956422232700L;
 
-    private static final int IDENTIFIER_OFFSET
-      = 0;
-    private static final int IDENTIFIER_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    private static final int SEQUENCE_NUMBER_OFFSET
-      = IDENTIFIER_OFFSET + IDENTIFIER_SIZE;
-    private static final int SEQUENCE_NUMBER_SIZE
-      = SHORT_SIZE_IN_BYTES;
-    protected static final int ICMP_IDENTIFIABLE_HEADER_SIZE
-      = SEQUENCE_NUMBER_OFFSET + SEQUENCE_NUMBER_SIZE;
+    private static final int IDENTIFIER_OFFSET = 0;
+    private static final int IDENTIFIER_SIZE = SHORT_SIZE_IN_BYTES;
+    private static final int SEQUENCE_NUMBER_OFFSET = IDENTIFIER_OFFSET + IDENTIFIER_SIZE;
+    private static final int SEQUENCE_NUMBER_SIZE = SHORT_SIZE_IN_BYTES;
+    protected static final int ICMP_IDENTIFIABLE_HEADER_SIZE =
+        SEQUENCE_NUMBER_OFFSET + SEQUENCE_NUMBER_SIZE;
 
     private final short identifier;
     private final short sequenceNumber;
 
-    protected IcmpIdentifiableHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+    protected IcmpIdentifiableHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       if (length < ICMP_IDENTIFIABLE_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build an ")
-          .append(getHeaderName())
-          .append("(")
-          .append(ICMP_IDENTIFIABLE_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(getHeaderName())
+            .append("(")
+            .append(ICMP_IDENTIFIABLE_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
-      this.identifier
-        = ByteArrays.getShort(rawData, IDENTIFIER_OFFSET + offset);
-      this.sequenceNumber
-        = ByteArrays.getShort(rawData, SEQUENCE_NUMBER_OFFSET + offset);
+      this.identifier = ByteArrays.getShort(rawData, IDENTIFIER_OFFSET + offset);
+      this.sequenceNumber = ByteArrays.getShort(rawData, SEQUENCE_NUMBER_OFFSET + offset);
     }
 
     protected IcmpIdentifiableHeader(Builder builder) {
@@ -137,34 +124,22 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
       this.sequenceNumber = builder.sequenceNumber;
     }
 
-    /**
-     *
-     * @return identifier
-     */
+    /** @return identifier */
     public short getIdentifier() {
       return identifier;
     }
 
-    /**
-     *
-     * @return identifier
-     */
+    /** @return identifier */
     public int getIdentifierAsInt() {
       return identifier & 0xFFFF;
     }
 
-    /**
-     *
-     * @return sequenceNumber
-     */
+    /** @return sequenceNumber */
     public short getSequenceNumber() {
       return sequenceNumber;
     }
 
-    /**
-     *
-     * @return sequenceNumber
-     */
+    /** @return sequenceNumber */
     public int getSequenceNumberAsInt() {
       return sequenceNumber & 0xFFFF;
     }
@@ -188,30 +163,28 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
       String ls = System.getProperty("line.separator");
 
       sb.append("[")
-        .append(getHeaderName())
-        .append(" (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  Identifier: ")
-        .append(getIdentifierAsInt())
-        .append(ls);
-      sb.append("  SequenceNumber: ")
-        .append(getSequenceNumberAsInt())
-        .append(ls);
+          .append(getHeaderName())
+          .append(" (")
+          .append(length())
+          .append(" bytes)]")
+          .append(ls);
+      sb.append("  Identifier: ").append(getIdentifierAsInt()).append(ls);
+      sb.append("  SequenceNumber: ").append(getSequenceNumberAsInt()).append(ls);
 
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      IcmpIdentifiableHeader other = (IcmpIdentifiableHeader)obj;
-      return
-           identifier == other.identifier
-        && sequenceNumber == other.sequenceNumber;
+      IcmpIdentifiableHeader other = (IcmpIdentifiableHeader) obj;
+      return identifier == other.identifier && sequenceNumber == other.sequenceNumber;
     }
 
     @Override
@@ -223,7 +196,5 @@ abstract class IcmpIdentifiablePacket extends AbstractPacket {
     }
 
     protected abstract String getHeaderName();
-
   }
-
 }

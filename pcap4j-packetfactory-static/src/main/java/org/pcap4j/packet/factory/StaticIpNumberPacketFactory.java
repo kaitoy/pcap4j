@@ -30,21 +30,18 @@ import org.pcap4j.packet.namednumber.UnknownIpV6Extension;
  */
 public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, IpNumber> {
 
-  private static final StaticIpNumberPacketFactory INSTANCE
-    = new StaticIpNumberPacketFactory();
+  private static final StaticIpNumberPacketFactory INSTANCE = new StaticIpNumberPacketFactory();
 
   private StaticIpNumberPacketFactory() {}
 
-  /**
-   * @return the singleton instance of StaticIpNumberPacketFactory.
-   */
+  /** @return the singleton instance of StaticIpNumberPacketFactory. */
   public static StaticIpNumberPacketFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpNumber...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpNumber...)} and exists only
+   * for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -56,8 +53,8 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpNumber...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpNumber...)} and exists only
+   * for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -88,9 +85,9 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
           return IpV6ExtDestinationOptionsPacket.newPacket(rawData, offset, length);
         case 132:
           return SctpPacket.newPacket(rawData, offset, length);
-//          case 255:
-//            255 conflicts with UnknownIpV6Extension
-//            break;
+          //          case 255:
+          //            255 conflicts with UnknownIpV6Extension
+          //            break;
       }
       if (number == UnknownIpV6Extension.getInstance()) {
         return IpV6ExtUnknownPacket.newPacket(rawData, offset, length);
@@ -102,8 +99,8 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, IpNumber...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, IpNumber...)} and exists only
+   * for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -113,8 +110,7 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(
-    byte[] rawData, int offset, int length, IpNumber number1, IpNumber number2
-  ) {
+      byte[] rawData, int offset, int length, IpNumber number1, IpNumber number2) {
     try {
       switch (Byte.toUnsignedInt(number1.value())) {
         case 0:
@@ -137,9 +133,9 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
           return IpV6ExtDestinationOptionsPacket.newPacket(rawData, offset, length);
         case 132:
           return SctpPacket.newPacket(rawData, offset, length);
-//          case 255:
-//            255 conflicts with UnknownIpV6Extension
-//            break;
+          //          case 255:
+          //            255 conflicts with UnknownIpV6Extension
+          //            break;
       }
       if (number1 == UnknownIpV6Extension.getInstance()) {
         return IpV6ExtUnknownPacket.newPacket(rawData, offset, length);
@@ -166,9 +162,9 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
           return IpV6ExtDestinationOptionsPacket.newPacket(rawData, offset, length);
         case 132:
           return SctpPacket.newPacket(rawData, offset, length);
-//          case 255:
-//            255 conflicts with UnknownIpV6Extension
-//            break;
+          //          case 255:
+          //            255 conflicts with UnknownIpV6Extension
+          //            break;
       }
       if (number2 == UnknownIpV6Extension.getInstance()) {
         return IpV6ExtUnknownPacket.newPacket(rawData, offset, length);
@@ -182,7 +178,7 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, IpNumber... numbers) {
     try {
-      for (IpNumber num: numbers) {
+      for (IpNumber num : numbers) {
         switch (Byte.toUnsignedInt(num.value())) {
           case 0:
             return IpV6ExtHopByHopOptionsPacket.newPacket(rawData, offset, length);
@@ -204,9 +200,9 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
             return IpV6ExtDestinationOptionsPacket.newPacket(rawData, offset, length);
           case 132:
             return SctpPacket.newPacket(rawData, offset, length);
-//          case 255:
-//            255 conflicts with UnknownIpV6Extension
-//            break;
+            //          case 255:
+            //            255 conflicts with UnknownIpV6Extension
+            //            break;
         }
         if (num == UnknownIpV6Extension.getInstance()) {
           return IpV6ExtUnknownPacket.newPacket(rawData, offset, length);
@@ -217,5 +213,4 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
       return IllegalPacket.newPacket(rawData, offset, length, e);
     }
   }
-
 }

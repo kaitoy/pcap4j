@@ -18,17 +18,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public class PppPacket extends AbstractPppPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 6735517864342242611L;
 
   private final PppHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -36,17 +33,15 @@ public class PppPacket extends AbstractPppPacket {
    * @return a new PppPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static PppPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static PppPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     PppHeader header = new PppHeader(rawData, offset, length);
     return new PppPacket(rawData, offset, length, header);
   }
 
-  private PppPacket(
-    byte[] rawData, int offset, int length, PppHeader header
-  ) throws IllegalRawDataException {
+  private PppPacket(byte[] rawData, int offset, int length, PppHeader header)
+      throws IllegalRawDataException {
     super(rawData, offset, length, header);
     this.header = header;
   }
@@ -72,9 +67,7 @@ public class PppPacket extends AbstractPppPacket {
    */
   public static class Builder extends AbstractPppPacket.Builder {
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(PppPacket packet) {
@@ -103,7 +96,6 @@ public class PppPacket extends AbstractPppPacket {
     public PppPacket build() {
       return new PppPacket(this);
     }
-
   }
 
   /**
@@ -119,9 +111,7 @@ public class PppPacket extends AbstractPppPacket {
      * +----------+-------------+---------+
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -8271596051012324861L;
 
     private PppHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
@@ -129,13 +119,13 @@ public class PppPacket extends AbstractPppPacket {
       if (length < PPP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(100);
         sb.append("The data is too short to build an PPP header(")
-          .append(PPP_HEADER_SIZE)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(PPP_HEADER_SIZE)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
     }
@@ -143,7 +133,5 @@ public class PppPacket extends AbstractPppPacket {
     private PppHeader(Builder builder) {
       super(builder);
     }
-
   }
-
 }

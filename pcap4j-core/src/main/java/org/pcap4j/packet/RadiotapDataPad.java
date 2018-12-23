@@ -8,28 +8,25 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.util.ByteArrays;
 
 /**
  * Pad between Radiotap fields.
+ *
  * @author Kaito Yamada
  * @since pcap4j 1.6.5
  */
 public final class RadiotapDataPad implements RadiotapData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 2443487622598511815L;
 
   private final byte[] pad;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param pad pad
    * @param offset offset
@@ -46,13 +43,9 @@ public final class RadiotapDataPad implements RadiotapData {
   }
 
   private RadiotapDataPad(Builder builder) {
-    if (
-         builder == null
-      || builder.pad == null
-    ) {
+    if (builder == null || builder.pad == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.pad: ").append(builder.pad);
+      sb.append("builder: ").append(builder).append(" builder.pad: ").append(builder.pad);
       throw new NullPointerException(sb.toString());
     }
 
@@ -69,10 +62,10 @@ public final class RadiotapDataPad implements RadiotapData {
     return ByteArrays.clone(pad);
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -84,11 +77,13 @@ public final class RadiotapDataPad implements RadiotapData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("Pad: ")
-      .append(ls)
-      .append(indent).append("  data: ")
-      .append(ByteArrays.toHexString(pad, " "))
-      .append(ls);
+    sb.append(indent)
+        .append("Pad: ")
+        .append(ls)
+        .append(indent)
+        .append("  data: ")
+        .append(ByteArrays.toHexString(pad, " "))
+        .append(ls);
 
     return sb.toString();
   }
@@ -100,8 +95,12 @@ public final class RadiotapDataPad implements RadiotapData {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     RadiotapDataPad other = (RadiotapDataPad) obj;
     return Arrays.equals(pad, other.pad);
   }
@@ -114,9 +113,7 @@ public final class RadiotapDataPad implements RadiotapData {
 
     private byte[] pad;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(RadiotapDataPad obj) {
@@ -132,13 +129,9 @@ public final class RadiotapDataPad implements RadiotapData {
       return this;
     }
 
-    /**
-     * @return a new RadiotapDataPad object.
-     */
+    /** @return a new RadiotapDataPad object. */
     public RadiotapDataPad build() {
       return new RadiotapDataPad(this);
     }
-
   }
-
 }

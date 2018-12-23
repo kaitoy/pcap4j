@@ -17,17 +17,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -3293888276359687328L;
 
   private final IpV6ExtDestinationOptionsHeader header;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -35,21 +32,18 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
    * @return a new IpV6ExtDestinationOptionsPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static IpV6ExtDestinationOptionsPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static IpV6ExtDestinationOptionsPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
 
-    IpV6ExtDestinationOptionsHeader optHeader
-      = new IpV6ExtDestinationOptionsHeader(rawData, offset, length);
+    IpV6ExtDestinationOptionsHeader optHeader =
+        new IpV6ExtDestinationOptionsHeader(rawData, offset, length);
 
     int payloadLength = length - optHeader.length();
     if (payloadLength > 0) {
       return new IpV6ExtDestinationOptionsPacket(
-               rawData, offset + optHeader.length(), payloadLength, optHeader
-             );
-    }
-    else {
+          rawData, offset + optHeader.length(), payloadLength, optHeader);
+    } else {
       return new IpV6ExtDestinationOptionsPacket(optHeader);
     }
   }
@@ -59,9 +53,10 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
   }
 
   private IpV6ExtDestinationOptionsPacket(
-    byte[] rawData, int payloadOffset, int payloadLength,
-    IpV6ExtDestinationOptionsHeader optHeader
-  ) {
+      byte[] rawData,
+      int payloadOffset,
+      int payloadLength,
+      IpV6ExtDestinationOptionsHeader optHeader) {
     super(rawData, payloadOffset, payloadLength, optHeader.getNextHeader());
     this.header = optHeader;
   }
@@ -85,12 +80,9 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public static final class Builder
-  extends org.pcap4j.packet.IpV6ExtOptionsPacket.Builder {
+  public static final class Builder extends org.pcap4j.packet.IpV6ExtOptionsPacket.Builder {
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IpV6ExtDestinationOptionsPacket packet) {
@@ -125,15 +117,13 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
     public IpV6ExtDestinationOptionsPacket build() {
       return new IpV6ExtDestinationOptionsPacket(this);
     }
-
   }
 
   /**
    * @author Kaito Yamada
    * @since pcap4j 0.9.10
    */
-  public static
-  final class IpV6ExtDestinationOptionsHeader extends IpV6ExtOptionsHeader {
+  public static final class IpV6ExtDestinationOptionsHeader extends IpV6ExtOptionsHeader {
 
     /*
      *  0                              16                            31
@@ -149,24 +139,21 @@ public final class IpV6ExtDestinationOptionsPacket extends IpV6ExtOptionsPacket 
      *
      */
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = 4686702407537705400L;
 
-    private IpV6ExtDestinationOptionsHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private IpV6ExtDestinationOptionsHeader(byte[] rawData, int offset, int length)
+        throws IllegalRawDataException {
       super(rawData, offset, length);
     }
 
-    private IpV6ExtDestinationOptionsHeader(Builder builder) { super(builder); }
+    private IpV6ExtDestinationOptionsHeader(Builder builder) {
+      super(builder);
+    }
 
     @Override
     protected String getHeaderName() {
       return "IPv6 Destination Options Header";
     }
-
   }
-
 }

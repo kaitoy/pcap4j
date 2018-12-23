@@ -71,9 +71,7 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class DnsRDataSoa implements DnsRData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -5916011849950625284L;
 
   private final DnsDomainName mName;
@@ -85,9 +83,8 @@ public final class DnsRDataSoa implements DnsRData {
   private final int minimum;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -95,9 +92,8 @@ public final class DnsRDataSoa implements DnsRData {
    * @return a new DnsRDataSoa object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsRDataSoa newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsRDataSoa newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsRDataSoa(rawData, offset, length);
   }
@@ -110,13 +106,13 @@ public final class DnsRDataSoa implements DnsRData {
     if (cursor == length) {
       StringBuilder sb = new StringBuilder(200);
       sb.append("The data is too short to build rName in DnsRDataSoa. data: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length)
-        .append(", cursor: ")
-        .append(cursor);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length)
+          .append(", cursor: ")
+          .append(cursor);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -126,16 +122,15 @@ public final class DnsRDataSoa implements DnsRData {
     if (cursor + INT_SIZE_IN_BYTES * 5 > length) {
       StringBuilder sb = new StringBuilder(200);
       sb.append(
-           "The data is too short to build serial, refresh, retry, expire, and minimum"
-             + "in DnsRDataSoa. data: "
-         )
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length)
-        .append(", cursor: ")
-        .append(cursor);
+              "The data is too short to build serial, refresh, retry, expire, and minimum"
+                  + "in DnsRDataSoa. data: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length)
+          .append(", cursor: ")
+          .append(cursor);
       throw new IllegalRawDataException(sb.toString());
     }
 
@@ -151,15 +146,14 @@ public final class DnsRDataSoa implements DnsRData {
   }
 
   private DnsRDataSoa(Builder builder) {
-    if (
-         builder == null
-      || builder.mName == null
-      || builder.rName == null
-    ) {
+    if (builder == null || builder.mName == null || builder.rName == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.mName: ").append(builder.mName)
-        .append(" builder.rName: ").append(builder.rName);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.mName: ")
+          .append(builder.mName)
+          .append(" builder.rName: ")
+          .append(builder.rName);
       throw new NullPointerException(sb.toString());
     }
 
@@ -172,86 +166,62 @@ public final class DnsRDataSoa implements DnsRData {
     this.minimum = builder.minimum;
   }
 
-  /**
-   * @return mName
-   */
+  /** @return mName */
   public DnsDomainName getMName() {
     return mName;
   }
 
-  /**
-   * @return rName
-   */
+  /** @return rName */
   public DnsDomainName getRName() {
     return rName;
   }
 
-  /**
-   * @return serial
-   */
+  /** @return serial */
   public int getSerial() {
     return serial;
   }
 
-  /**
-   * @return serial
-   */
+  /** @return serial */
   public long getSerialAsLong() {
     return serial & 0xFFFFFFFFL;
   }
 
-  /**
-   * @return refresh
-   */
+  /** @return refresh */
   public int getRefresh() {
     return refresh;
   }
 
-  /**
-   * @return refresh
-   */
+  /** @return refresh */
   public long getRefreshAsLong() {
     return refresh & 0xFFFFFFFFL;
   }
 
-  /**
-   * @return retry
-   */
+  /** @return retry */
   public int getRetry() {
     return retry;
   }
 
-  /**
-   * @return retry
-   */
+  /** @return retry */
   public long getRetryAsLong() {
     return retry & 0xFFFFFFFFL;
   }
 
-  /**
-   * @return expire
-   */
+  /** @return expire */
   public int getExpire() {
     return expire;
   }
 
-  /**
-   * @return expire
-   */
+  /** @return expire */
   public long getExpireAsLong() {
     return expire & 0xFFFFFFFFL;
   }
 
-  /**
-   * @return minimum
-   */
+  /** @return minimum */
   public int getMinimum() {
     return minimum;
   }
 
-  /**
-   * @return minimum
-   */
+  /** @return minimum */
   public long getMinimumAsLong() {
     return minimum & 0xFFFFFFFFL;
   }
@@ -285,10 +255,10 @@ public final class DnsRDataSoa implements DnsRData {
     return data;
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -312,29 +282,37 @@ public final class DnsRDataSoa implements DnsRData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("SOA RDATA:")
-      .append(ls)
-      .append(indent).append("  MNAME: ")
-      .append(mName.toString(headerRawData))
-      .append(ls)
-      .append(indent).append("  RNAME: ")
-      .append(rName.toString(headerRawData))
-      .append(ls)
-      .append(indent).append("  SERIAL: ")
-      .append(getSerialAsLong())
-      .append(ls)
-      .append(indent).append("  REFRESH: ")
-      .append(getRefreshAsLong())
-      .append(ls)
-      .append(indent).append("  RETRY: ")
-      .append(getRetryAsLong())
-      .append(ls)
-      .append(indent).append("  EXPIRE: ")
-      .append(getExpireAsLong())
-      .append(ls)
-      .append(indent).append("  MINIMUM: ")
-      .append(getMinimumAsLong())
-      .append(ls);
+    sb.append(indent)
+        .append("SOA RDATA:")
+        .append(ls)
+        .append(indent)
+        .append("  MNAME: ")
+        .append(mName.toString(headerRawData))
+        .append(ls)
+        .append(indent)
+        .append("  RNAME: ")
+        .append(rName.toString(headerRawData))
+        .append(ls)
+        .append(indent)
+        .append("  SERIAL: ")
+        .append(getSerialAsLong())
+        .append(ls)
+        .append(indent)
+        .append("  REFRESH: ")
+        .append(getRefreshAsLong())
+        .append(ls)
+        .append(indent)
+        .append("  RETRY: ")
+        .append(getRetryAsLong())
+        .append(ls)
+        .append(indent)
+        .append("  EXPIRE: ")
+        .append(getExpireAsLong())
+        .append(ls)
+        .append(indent)
+        .append("  MINIMUM: ")
+        .append(getMinimumAsLong())
+        .append(ls);
 
     return sb.toString();
   }
@@ -403,9 +381,7 @@ public final class DnsRDataSoa implements DnsRData {
     private int expire;
     private int minimum;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(DnsRDataSoa obj) {
@@ -481,13 +457,9 @@ public final class DnsRDataSoa implements DnsRData {
       return this;
     }
 
-    /**
-     * @return a new DnsRDataSoa object.
-     */
+    /** @return a new DnsRDataSoa object. */
     public DnsRDataSoa build() {
       return new DnsRDataSoa(this);
     }
-
   }
-
 }

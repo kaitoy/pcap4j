@@ -29,17 +29,14 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class DnsRDataMb implements DnsRData {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -7237273314471356977L;
 
   private final DnsDomainName maDName;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -47,9 +44,8 @@ public final class DnsRDataMb implements DnsRData {
    * @return a new DnsRDataMb object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static DnsRDataMb newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static DnsRDataMb newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new DnsRDataMb(rawData, offset, length);
   }
@@ -59,23 +55,19 @@ public final class DnsRDataMb implements DnsRData {
   }
 
   private DnsRDataMb(Builder builder) {
-    if (
-         builder == null
-      || builder.maDName == null
-    ) {
+    if (builder == null || builder.maDName == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.maDName: ").append(builder.maDName);
+      sb.append("builder: ").append(builder).append(" builder.maDName: ").append(builder.maDName);
       throw new NullPointerException(sb.toString());
     }
 
     this.maDName = builder.maDName;
   }
 
-  /**
-   * @return maDName
-   */
-  public DnsDomainName getMaDName() { return maDName; }
+  /** @return maDName */
+  public DnsDomainName getMaDName() {
+    return maDName;
+  }
 
   @Override
   public int length() {
@@ -87,10 +79,10 @@ public final class DnsRDataMb implements DnsRData {
     return maDName.getRawData();
   }
 
-  /**
-   * @return a new Builder object populated with this object's fields.
-   */
-  public Builder getBuilder() { return new Builder(this); }
+  /** @return a new Builder object populated with this object's fields. */
+  public Builder getBuilder() {
+    return new Builder(this);
+  }
 
   @Override
   public String toString() {
@@ -114,11 +106,13 @@ public final class DnsRDataMb implements DnsRData {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append(indent).append("MB RDATA:")
-      .append(ls)
-      .append(indent).append("  MADNAME: ")
-      .append(maDName.toString(headerRawData))
-      .append(ls);
+    sb.append(indent)
+        .append("MB RDATA:")
+        .append(ls)
+        .append(indent)
+        .append("  MADNAME: ")
+        .append(maDName.toString(headerRawData))
+        .append(ls);
 
     return sb.toString();
   }
@@ -130,8 +124,12 @@ public final class DnsRDataMb implements DnsRData {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
     DnsRDataMb other = (DnsRDataMb) obj;
     return maDName.equals(other.maDName);
   }
@@ -144,9 +142,7 @@ public final class DnsRDataMb implements DnsRData {
 
     private DnsDomainName maDName;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(DnsRDataMb obj) {
@@ -162,13 +158,9 @@ public final class DnsRDataMb implements DnsRData {
       return this;
     }
 
-    /**
-     * @return a new DnsRDataMb object.
-     */
+    /** @return a new DnsRDataMb object. */
     public DnsRDataMb build() {
       return new DnsRDataMb(this);
     }
-
   }
-
 }

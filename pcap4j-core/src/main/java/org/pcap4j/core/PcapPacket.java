@@ -7,22 +7,20 @@
 
 package org.pcap4j.core;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
 import org.pcap4j.packet.AbstractPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.util.LazyValue;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Arrays;
-
 /**
- * Pseudo packet to hold a timestamp, an original length, and a raw data of a captured packet.
- * This class doesn't dissect the raw data until a certain method (refer to each method's javadoc)
- * is called.
- * Instances of this class are not immutable.
+ * Pseudo packet to hold a timestamp, an original length, and a raw data of a captured packet. This
+ * class doesn't dissect the raw data until a certain method (refer to each method's javadoc) is
+ * called. Instances of this class are not immutable.
  *
  * @author Kaito Yamada
  * @since pcap4j 2.0.0
@@ -49,23 +47,19 @@ public final class PcapPacket extends AbstractPacket {
 
     this.timestamp = timestamp;
     this.originalLength = originalLength;
-    this.packet
-      = new LazyValue<Packet>(
-          () -> PacketFactories.getFactory(Packet.class, DataLinkType.class)
-            .newInstance(rawData, 0, rawData.length, dlt)
-        );
+    this.packet =
+        new LazyValue<Packet>(
+            () ->
+                PacketFactories.getFactory(Packet.class, DataLinkType.class)
+                    .newInstance(rawData, 0, rawData.length, dlt));
   }
 
-  /**
-   * @return the timestamp of when this packet was captured.
-   */
+  /** @return the timestamp of when this packet was captured. */
   public Instant getTimestamp() {
     return timestamp;
   }
 
-  /**
-   * @return the original length of this packet.
-   */
+  /** @return the original length of this packet. */
   public int getOriginalLength() {
     return originalLength;
   }
@@ -75,16 +69,19 @@ public final class PcapPacket extends AbstractPacket {
    *
    * @return the captured packet.
    */
-  public Packet getPacket() { return packet.getValue(); }
+  public Packet getPacket() {
+    return packet.getValue();
+  }
 
   /**
-   * An alternative to {@link #getPacket()}.
-   * This method dissect the raw data.
+   * An alternative to {@link #getPacket()}. This method dissect the raw data.
    *
    * @return the same object as {@link #getPacket()}.
    */
   @Override
-  public Packet getPayload() { return packet.getValue(); }
+  public Packet getPayload() {
+    return packet.getValue();
+  }
 
   /**
    * Get the length of the captured packet.
@@ -92,11 +89,13 @@ public final class PcapPacket extends AbstractPacket {
    * @return length
    */
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   /**
-   * Get the raw data of the captured packet.
-   * This method doesn't do a defensive copy for performance reason.
+   * Get the raw data of the captured packet. This method doesn't do a defensive copy for
+   * performance reason.
    *
    * @return raw data
    */
@@ -106,9 +105,8 @@ public final class PcapPacket extends AbstractPacket {
   }
 
   /**
-   * This method returns the same object as
-   * {@link #getPacket()}.{@link Packet#getBuilder() getBuilder()}.
-   * This method dissect the raw data.
+   * This method returns the same object as {@link #getPacket()}.{@link Packet#getBuilder()
+   * getBuilder()}. This method dissect the raw data.
    *
    * @return {@link Builder} instance of the captured packet.
    */
@@ -122,19 +120,19 @@ public final class PcapPacket extends AbstractPacket {
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append("Captured at: ").append(ZonedDateTime.ofInstant(timestamp, ZoneId.systemDefault()))
-      .append(ls)
-      .append("Original length: ").append(originalLength).append(" bytes")
-      .append(ls)
-      .append(packet.getValue());
+    sb.append("Captured at: ")
+        .append(ZonedDateTime.ofInstant(timestamp, ZoneId.systemDefault()))
+        .append(ls)
+        .append("Original length: ")
+        .append(originalLength)
+        .append(" bytes")
+        .append(ls)
+        .append(packet.getValue());
 
     return sb.toString();
   }
 
-  /**
-   * Returns a string representation of the object.
-   * This method dissect the raw data.
-   */
+  /** Returns a string representation of the object. This method dissect the raw data. */
   @Override
   public String toString() {
     return super.toString();
@@ -171,5 +169,4 @@ public final class PcapPacket extends AbstractPacket {
     result = 31 * result + originalLength;
     return result;
   }
-
 }

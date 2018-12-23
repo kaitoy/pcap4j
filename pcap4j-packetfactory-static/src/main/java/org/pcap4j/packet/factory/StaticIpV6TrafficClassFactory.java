@@ -17,23 +17,20 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.16
  */
 public final class StaticIpV6TrafficClassFactory
-implements PacketFactory<IpV6TrafficClass, NotApplicable> {
+    implements PacketFactory<IpV6TrafficClass, NotApplicable> {
 
-  private static final StaticIpV6TrafficClassFactory INSTANCE
-    = new StaticIpV6TrafficClassFactory();
+  private static final StaticIpV6TrafficClassFactory INSTANCE = new StaticIpV6TrafficClassFactory();
 
   private StaticIpV6TrafficClassFactory() {}
 
-  /**
-   * @return the singleton instance of StaticIpV6TrafficClassFactory.
-   */
+  /** @return the singleton instance of StaticIpV6TrafficClassFactory. */
   public static StaticIpV6TrafficClassFactory getInstance() {
     return INSTANCE;
   }
 
   /**
-   * This method is a variant of {@link #newInstance(byte[], int, int, NotApplicable...)}
-   * and exists only for performance reason.
+   * This method is a variant of {@link #newInstance(byte[], int, int, NotApplicable...)} and exists
+   * only for performance reason.
    *
    * @param rawData see {@link PacketFactory#newInstance}.
    * @param offset see {@link PacketFactory#newInstance}.
@@ -47,10 +44,8 @@ implements PacketFactory<IpV6TrafficClass, NotApplicable> {
 
   @Override
   public IpV6TrafficClass newInstance(
-    byte[] rawData, int offset, int length, NotApplicable... numbers
-  ) {
+      byte[] rawData, int offset, int length, NotApplicable... numbers) {
     ByteArrays.validateBounds(rawData, offset, length);
     return IpV6SimpleTrafficClass.newInstance(rawData[offset]);
   }
-
 }

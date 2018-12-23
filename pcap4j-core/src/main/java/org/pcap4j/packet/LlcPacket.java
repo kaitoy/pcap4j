@@ -12,7 +12,6 @@ import static org.pcap4j.util.ByteArrays.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.LlcNumber;
 import org.pcap4j.util.ByteArrays;
@@ -26,18 +25,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class LlcPacket extends AbstractPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -4394376906462242290L;
 
   private final LlcHeader header;
   private final Packet payload;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -45,41 +41,39 @@ public final class LlcPacket extends AbstractPacket {
    * @return a new LlcPacket object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static LlcPacket newPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static LlcPacket newPacket(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new LlcPacket(rawData, offset, length);
   }
 
-  private LlcPacket(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private LlcPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     this.header = new LlcHeader(rawData, offset, length);
 
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
-      this.payload
-        = PacketFactories.getFactory(Packet.class, LlcNumber.class)
-            .newInstance(rawData, offset + header.length(), payloadLength, header.getDsap());
-    }
-    else {
+      this.payload =
+          PacketFactories.getFactory(Packet.class, LlcNumber.class)
+              .newInstance(rawData, offset + header.length(), payloadLength, header.getDsap());
+    } else {
       this.payload = null;
     }
   }
 
   private LlcPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.dsap == null
-      || builder.ssap == null
-      || builder.control == null
-    ) {
+    if (builder == null
+        || builder.dsap == null
+        || builder.ssap == null
+        || builder.control == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.dsap: ").append(builder.dsap)
-        .append(" builder.ssap: ").append(builder.ssap)
-        .append(" builder.control: ").append(builder.control);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.dsap: ")
+          .append(builder.dsap)
+          .append(" builder.ssap: ")
+          .append(builder.ssap)
+          .append(" builder.control: ")
+          .append(builder.control);
       throw new NullPointerException(sb.toString());
     }
 
@@ -113,9 +107,7 @@ public final class LlcPacket extends AbstractPacket {
     private LlcControl control;
     private Packet.Builder payloadBuilder;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(LlcPacket packet) {
@@ -170,23 +162,19 @@ public final class LlcPacket extends AbstractPacket {
     public LlcPacket build() {
       return new LlcPacket(this);
     }
-
   }
 
   /**
-   *
    * LLC (Logical Link Control) Header
    *
-   * <pre>
-   * {@code
+   * <pre>{@code
    *   0                                                          15
    * +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
    * |           DSAP ( 8bits)       |       SSAP (8 bits)           |
    * +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
    * |                    Control (8 or 16 bits)                     |
    * +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
-   * }
-   * </pre>
+   * }</pre>
    *
    * @see <a href="http://standards.ieee.org/about/get/802/802.2.html">IEEE 802.2</a>
    * @author Kaito Yamada
@@ -194,39 +182,30 @@ public final class LlcPacket extends AbstractPacket {
    */
   public static final class LlcHeader extends AbstractHeader {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -6228127495653535606L;
 
-    private static final int DSAP_OFFSET
-      = 0;
-    private static final int DSAP_SIZE
-      = BYTE_SIZE_IN_BYTES;
-    private static final int SSAP_OFFSET
-      = DSAP_OFFSET + DSAP_SIZE;
-    private static final int SSAP_SIZE
-      = BYTE_SIZE_IN_BYTES;
-    private static final int CONTROL_OFFSET
-      = SSAP_OFFSET + SSAP_SIZE;
+    private static final int DSAP_OFFSET = 0;
+    private static final int DSAP_SIZE = BYTE_SIZE_IN_BYTES;
+    private static final int SSAP_OFFSET = DSAP_OFFSET + DSAP_SIZE;
+    private static final int SSAP_SIZE = BYTE_SIZE_IN_BYTES;
+    private static final int CONTROL_OFFSET = SSAP_OFFSET + SSAP_SIZE;
 
     private final LlcNumber dsap;
     private final LlcNumber ssap;
     private final LlcControl control;
 
-    private LlcHeader(
-      byte[] rawData, int offset, int length
-    ) throws IllegalRawDataException {
+    private LlcHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
       if (length < CONTROL_OFFSET + 1) {
         StringBuilder sb = new StringBuilder(200);
         sb.append("The data is too short to build an LLC header(")
-          .append(CONTROL_OFFSET + 1)
-          .append(" bytes). data: ")
-          .append(ByteArrays.toHexString(rawData, " "))
-          .append(", offset: ")
-          .append(offset)
-          .append(", length: ")
-          .append(length);
+            .append(CONTROL_OFFSET + 1)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
         throw new IllegalRawDataException(sb.toString());
       }
 
@@ -236,32 +215,28 @@ public final class LlcPacket extends AbstractPacket {
       byte ctrl = rawData[CONTROL_OFFSET + offset];
       if ((ctrl & 0x03) == 0x03) {
         this.control = LlcControlUnnumbered.newInstance(ctrl);
-      }
-      else {
+      } else {
         if (length < CONTROL_OFFSET + 2) {
           StringBuilder sb = new StringBuilder(200);
           sb.append("The data is too short to build an LLC header(")
-            .append(CONTROL_OFFSET + 2)
-            .append(" bytes). data: ")
-            .append(ByteArrays.toHexString(rawData, " "))
-            .append(", offset: ")
-            .append(offset)
-            .append(", length: ")
-            .append(length);
+              .append(CONTROL_OFFSET + 2)
+              .append(" bytes). data: ")
+              .append(ByteArrays.toHexString(rawData, " "))
+              .append(", offset: ")
+              .append(offset)
+              .append(", length: ")
+              .append(length);
           throw new IllegalRawDataException(sb.toString());
         }
 
         if ((ctrl & 0x03) == 0x01) {
-          this.control
-            = LlcControlSupervisory.newInstance(
-                ByteArrays.getShort(rawData, CONTROL_OFFSET + offset)
-              );
-        }
-        else {
-          this.control
-            = LlcControlInformation.newInstance(
-                ByteArrays.getShort(rawData, CONTROL_OFFSET + offset)
-              );
+          this.control =
+              LlcControlSupervisory.newInstance(
+                  ByteArrays.getShort(rawData, CONTROL_OFFSET + offset));
+        } else {
+          this.control =
+              LlcControlInformation.newInstance(
+                  ByteArrays.getShort(rawData, CONTROL_OFFSET + offset));
         }
       }
     }
@@ -272,23 +247,19 @@ public final class LlcPacket extends AbstractPacket {
       this.control = builder.control;
     }
 
-    /**
-     * @return dsap
-     */
+    /** @return dsap */
     public LlcNumber getDsap() {
       return dsap;
     }
 
-    /**
-     * @return ssap
-     */
+    /** @return ssap */
     public LlcNumber getSsap() {
       return ssap;
     }
 
     /**
-     * @return an instance of {@link LlcControlInformation}, {@link LlcControlSupervisory}
-     *         or {@link LlcControlUnnumbered}.
+     * @return an instance of {@link LlcControlInformation}, {@link LlcControlSupervisory} or {@link
+     *     LlcControlUnnumbered}.
      */
     public LlcControl getControl() {
       return control;
@@ -313,33 +284,25 @@ public final class LlcPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       String ls = System.getProperty("line.separator");
 
-      sb.append("[Logical Link Control header (")
-        .append(length())
-        .append(" bytes)]")
-        .append(ls);
-      sb.append("  DSAP: ")
-        .append(dsap)
-        .append(ls);
-      sb.append("  SSAP: ")
-        .append(ssap)
-        .append(ls);
-      sb.append("  Control: ")
-        .append(control)
-        .append(ls);
+      sb.append("[Logical Link Control header (").append(length()).append(" bytes)]").append(ls);
+      sb.append("  DSAP: ").append(dsap).append(ls);
+      sb.append("  SSAP: ").append(ssap).append(ls);
+      sb.append("  Control: ").append(control).append(ls);
 
       return sb.toString();
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj == this) { return true; }
-      if (!this.getClass().isInstance(obj)) { return false; }
+      if (obj == this) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
 
-      LlcHeader other = (LlcHeader)obj;
-      return
-           dsap.equals(other.dsap)
-        && control.equals(other.control)
-        && ssap.equals(other.ssap);
+      LlcHeader other = (LlcHeader) obj;
+      return dsap.equals(other.dsap) && control.equals(other.control) && ssap.equals(other.ssap);
     }
 
     @Override
@@ -350,7 +313,6 @@ public final class LlcPacket extends AbstractPacket {
       result = 31 * result + control.hashCode();
       return result;
     }
-
   }
 
   /**
@@ -361,18 +323,10 @@ public final class LlcPacket extends AbstractPacket {
    */
   public interface LlcControl extends Serializable {
 
-    /**
-     *
-     * @return length
-     */
+    /** @return length */
     public int length();
 
-    /**
-     *
-     * @return raw data
-     */
+    /** @return raw data */
     public byte[] getRawData();
-
   }
-
 }

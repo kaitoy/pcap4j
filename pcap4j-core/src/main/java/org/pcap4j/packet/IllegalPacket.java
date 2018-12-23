@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.util.ByteArrays;
 
 /**
@@ -17,18 +16,15 @@ import org.pcap4j.util.ByteArrays;
  */
 public final class IllegalPacket extends AbstractPacket implements IllegalRawDataPacket {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -8570543867382087471L;
 
   private final byte[] rawData;
   private final IllegalRawDataException cause;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -37,8 +33,7 @@ public final class IllegalPacket extends AbstractPacket implements IllegalRawDat
    * @return a new IllegalPacket object.
    */
   public static IllegalPacket newPacket(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     if (cause == null) {
       throw new NullPointerException("cause is null.");
     }
@@ -53,27 +48,26 @@ public final class IllegalPacket extends AbstractPacket implements IllegalRawDat
   }
 
   private IllegalPacket(Builder builder) {
-    if (
-         builder == null
-      || builder.rawData == null
-      || builder.cause == null
-    ) {
+    if (builder == null || builder.rawData == null || builder.cause == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append("builder: ").append(builder)
-        .append(" builder.rawData: ").append(builder.rawData)
-        .append(" builder.cause").append(builder.cause);
+      sb.append("builder: ")
+          .append(builder)
+          .append(" builder.rawData: ")
+          .append(builder.rawData)
+          .append(" builder.cause")
+          .append(builder.cause);
       throw new NullPointerException(sb.toString());
     }
 
     this.rawData = new byte[builder.rawData.length];
-    System.arraycopy(
-      builder.rawData, 0, this.rawData, 0, builder.rawData.length
-    );
+    System.arraycopy(builder.rawData, 0, this.rawData, 0, builder.rawData.length);
     this.cause = builder.cause;
   }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -87,9 +81,7 @@ public final class IllegalPacket extends AbstractPacket implements IllegalRawDat
     return cause;
   }
 
-  /**
-   *
-   */
+  /** */
   @Override
   public Builder getBuilder() {
     return new Builder(this);
@@ -100,27 +92,23 @@ public final class IllegalPacket extends AbstractPacket implements IllegalRawDat
     StringBuilder sb = new StringBuilder();
     String ls = System.getProperty("line.separator");
 
-    sb.append("[Illegal Packet (")
-      .append(length())
-      .append(" bytes)]")
-      .append(ls);
-    sb.append("  Hex stream: ")
-      .append(ByteArrays.toHexString(rawData, " "))
-      .append(ls);
-    sb.append("  Cause: ")
-      .append(cause)
-      .append(ls);
+    sb.append("[Illegal Packet (").append(length()).append(" bytes)]").append(ls);
+    sb.append("  Hex stream: ").append(ByteArrays.toHexString(rawData, " ")).append(ls);
+    sb.append("  Cause: ").append(cause).append(ls);
 
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
-    IllegalPacket other = (IllegalPacket)obj;
-    return    Arrays.equals(rawData, other.rawData)
-           && cause.equals(other.cause);
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
+    IllegalPacket other = (IllegalPacket) obj;
+    return Arrays.equals(rawData, other.rawData) && cause.equals(other.cause);
   }
 
   @Override
@@ -141,9 +129,7 @@ public final class IllegalPacket extends AbstractPacket implements IllegalRawDat
     private byte[] rawData = new byte[0];
     private IllegalRawDataException cause;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(IllegalPacket packet) {
@@ -173,7 +159,5 @@ public final class IllegalPacket extends AbstractPacket implements IllegalRawDat
     public IllegalPacket build() {
       return new IllegalPacket(this);
     }
-
   }
-
 }

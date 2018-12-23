@@ -26,9 +26,7 @@ public final class TcpTimestampsOption implements TcpOption {
    *       1       1              4                     4
    */
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -7134215148170658739L;
 
   private final TcpOptionKind kind = TcpOptionKind.TIMESTAMPS;
@@ -37,9 +35,8 @@ public final class TcpTimestampsOption implements TcpOption {
   private final int tsEchoReply;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -47,44 +44,40 @@ public final class TcpTimestampsOption implements TcpOption {
    * @return a new TcpTimestampsOption object.
    * @throws IllegalRawDataException if parsing the raw data fails.
    */
-  public static TcpTimestampsOption newInstance(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  public static TcpTimestampsOption newInstance(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     ByteArrays.validateBounds(rawData, offset, length);
     return new TcpTimestampsOption(rawData, offset, length);
   }
 
-  private TcpTimestampsOption(
-    byte[] rawData, int offset, int length
-  ) throws IllegalRawDataException {
+  private TcpTimestampsOption(byte[] rawData, int offset, int length)
+      throws IllegalRawDataException {
     if (length < 10) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("The raw data length must be more than 9. rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
     if (rawData[offset] != kind.value()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The kind must be: ")
-        .append(kind.valueAsString())
-        .append(" rawData: ")
-        .append(ByteArrays.toHexString(rawData, " "))
-        .append(", offset: ")
-        .append(offset)
-        .append(", length: ")
-        .append(length);
+          .append(kind.valueAsString())
+          .append(" rawData: ")
+          .append(ByteArrays.toHexString(rawData, " "))
+          .append(", offset: ")
+          .append(offset)
+          .append(", length: ")
+          .append(length);
       throw new IllegalRawDataException(sb.toString());
     }
 
     this.length = rawData[1 + offset];
     if (this.length != 10) {
-      throw new IllegalRawDataException(
-                  "The value of length field must be 10 but: " + this.length
-                );
+      throw new IllegalRawDataException("The value of length field must be 10 but: " + this.length);
     }
 
     this.tsValue = ByteArrays.getInt(rawData, 2 + offset);
@@ -100,9 +93,8 @@ public final class TcpTimestampsOption implements TcpOption {
     this.tsEchoReply = builder.tsEchoReply;
 
     if (builder.correctLengthAtBuild) {
-      this.length = (byte)length();
-    }
-    else {
+      this.length = (byte) length();
+    } else {
       this.length = builder.length;
     }
   }
@@ -112,67 +104,53 @@ public final class TcpTimestampsOption implements TcpOption {
     return kind;
   }
 
-  /**
-   *
-   * @return length
-   */
-  public byte getLength() { return length; }
+  /** @return length */
+  public byte getLength() {
+    return length;
+  }
 
-  /**
-   *
-   * @return length
-   */
-  public int getLengthAsInt() { return 0xFF & length; }
+  /** @return length */
+  public int getLengthAsInt() {
+    return 0xFF & length;
+  }
 
-  /**
-   * @return tsValue
-   */
+  /** @return tsValue */
   public int getTsValue() {
     return tsValue;
   }
 
-  /**
-   * @return tsValue
-   */
+  /** @return tsValue */
   public long getTsValueAsLong() {
     return 0xFFFFFFFFL & tsValue;
   }
 
-  /**
-   * @return tsEchoReply
-   */
+  /** @return tsEchoReply */
   public int getTsEchoReply() {
     return tsEchoReply;
   }
 
-  /**
-   * @return tsEchoReply
-   */
+  /** @return tsEchoReply */
   public long getTsEchoReplyAsLong() {
     return 0xFFFFFFFFL & tsEchoReply;
   }
 
   @Override
-  public int length() { return 10; }
+  public int length() {
+    return 10;
+  }
 
   @Override
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[0] = kind.value();
     rawData[1] = length;
+    System.arraycopy(ByteArrays.toByteArray(tsValue), 0, rawData, 2, ByteArrays.INT_SIZE_IN_BYTES);
     System.arraycopy(
-      ByteArrays.toByteArray(tsValue), 0, rawData, 2, ByteArrays.INT_SIZE_IN_BYTES
-    );
-    System.arraycopy(
-      ByteArrays.toByteArray(tsEchoReply), 0, rawData, 6, ByteArrays.INT_SIZE_IN_BYTES
-    );
+        ByteArrays.toByteArray(tsEchoReply), 0, rawData, 6, ByteArrays.INT_SIZE_IN_BYTES);
     return rawData;
   }
 
-  /**
-   *
-   * @return a new Builder object populated with this object's fields.
-   */
+  /** @return a new Builder object populated with this object's fields. */
   public Builder getBuilder() {
     return new Builder(this);
   }
@@ -181,27 +159,28 @@ public final class TcpTimestampsOption implements TcpOption {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[Kind: ")
-      .append(kind)
-      .append("] [Length: ")
-      .append(getLengthAsInt())
-      .append(" bytes] [TS Value: ")
-      .append(getTsValueAsLong())
-      .append("] [TS Echo Reply: ")
-      .append(getTsEchoReplyAsLong())
-      .append("]");
+        .append(kind)
+        .append("] [Length: ")
+        .append(getLengthAsInt())
+        .append(" bytes] [TS Value: ")
+        .append(getTsValueAsLong())
+        .append("] [TS Echo Reply: ")
+        .append(getTsEchoReplyAsLong())
+        .append("]");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) { return true; }
-    if (!this.getClass().isInstance(obj)) { return false; }
+    if (obj == this) {
+      return true;
+    }
+    if (!this.getClass().isInstance(obj)) {
+      return false;
+    }
 
-    TcpTimestampsOption other = (TcpTimestampsOption)obj;
-    return
-         length == other.length
-      && tsValue == other.tsValue
-      && tsEchoReply == other.tsEchoReply;
+    TcpTimestampsOption other = (TcpTimestampsOption) obj;
+    return length == other.length && tsValue == other.tsValue && tsEchoReply == other.tsEchoReply;
   }
 
   @Override
@@ -217,17 +196,14 @@ public final class TcpTimestampsOption implements TcpOption {
    * @author Kaito Yamada
    * @since pcap4j 1.2.0
    */
-  public static final class Builder
-  implements LengthBuilder<TcpTimestampsOption> {
+  public static final class Builder implements LengthBuilder<TcpTimestampsOption> {
 
     private byte length;
     private int tsValue;
     private int tsEchoReply;
     private boolean correctLengthAtBuild;
 
-    /**
-     *
-     */
+    /** */
     public Builder() {}
 
     private Builder(TcpTimestampsOption option) {
@@ -235,7 +211,6 @@ public final class TcpTimestampsOption implements TcpOption {
     }
 
     /**
-     *
      * @param length length
      * @return this Builder object for method chaining.
      */
@@ -245,7 +220,6 @@ public final class TcpTimestampsOption implements TcpOption {
     }
 
     /**
-     *
      * @param tsValue tsValue
      * @return this Builder object for method chaining.
      */
@@ -255,7 +229,6 @@ public final class TcpTimestampsOption implements TcpOption {
     }
 
     /**
-     *
      * @param tsEchoReply tsEchoReply
      * @return this Builder object for method chaining.
      */
@@ -274,7 +247,5 @@ public final class TcpTimestampsOption implements TcpOption {
     public TcpTimestampsOption build() {
       return new TcpTimestampsOption(this);
     }
-
   }
-
 }

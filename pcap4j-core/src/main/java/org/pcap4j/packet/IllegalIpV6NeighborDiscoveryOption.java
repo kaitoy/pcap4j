@@ -8,7 +8,6 @@
 package org.pcap4j.packet;
 
 import java.util.Arrays;
-
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 import org.pcap4j.util.ByteArrays;
@@ -18,11 +17,9 @@ import org.pcap4j.util.ByteArrays;
  * @since pcap4j 0.9.15
  */
 public final class IllegalIpV6NeighborDiscoveryOption
-implements IpV6NeighborDiscoveryOption, IllegalRawDataHolder {
+    implements IpV6NeighborDiscoveryOption, IllegalRawDataHolder {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = -6156417526745835637L;
 
   private final IpV6NeighborDiscoveryOptionType type;
@@ -30,9 +27,8 @@ implements IpV6NeighborDiscoveryOption, IllegalRawDataHolder {
   private final IllegalRawDataException cause;
 
   /**
-   * A static factory method.
-   * This method validates the arguments by {@link ByteArrays#validateBounds(byte[], int, int)},
-   * which may throw exceptions undocumented here.
+   * A static factory method. This method validates the arguments by {@link
+   * ByteArrays#validateBounds(byte[], int, int)}, which may throw exceptions undocumented here.
    *
    * @param rawData rawData
    * @param offset offset
@@ -41,8 +37,7 @@ implements IpV6NeighborDiscoveryOption, IllegalRawDataHolder {
    * @return a new IllegalIpV6NeighborDiscoveryOption object.
    */
   public static IllegalIpV6NeighborDiscoveryOption newInstance(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     if (cause == null) {
       throw new NullPointerException("cause is null.");
     }
@@ -51,8 +46,7 @@ implements IpV6NeighborDiscoveryOption, IllegalRawDataHolder {
   }
 
   private IllegalIpV6NeighborDiscoveryOption(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  ) {
+      byte[] rawData, int offset, int length, IllegalRawDataException cause) {
     this.type = IpV6NeighborDiscoveryOptionType.getInstance(rawData[offset]);
     this.rawData = new byte[length];
     System.arraycopy(rawData, offset, this.rawData, 0, length);
@@ -60,10 +54,14 @@ implements IpV6NeighborDiscoveryOption, IllegalRawDataHolder {
   }
 
   @Override
-  public IpV6NeighborDiscoveryOptionType getType() { return type; }
+  public IpV6NeighborDiscoveryOptionType getType() {
+    return type;
+  }
 
   @Override
-  public int length() { return rawData.length; }
+  public int length() {
+    return rawData.length;
+  }
 
   @Override
   public byte[] getRawData() {
@@ -81,12 +79,12 @@ implements IpV6NeighborDiscoveryOption, IllegalRawDataHolder {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[Type: ")
-      .append(type)
-      .append("] [Illegal Raw Data: 0x")
-      .append(ByteArrays.toHexString(rawData, ""))
-      .append("] [cause: ")
-      .append(cause)
-      .append("]");
+        .append(type)
+        .append("] [Illegal Raw Data: 0x")
+        .append(ByteArrays.toHexString(rawData, ""))
+        .append("] [cause: ")
+        .append(cause)
+        .append("]");
     return sb.toString();
   }
 
@@ -119,5 +117,4 @@ implements IpV6NeighborDiscoveryOption, IllegalRawDataHolder {
     }
     return true;
   }
-
 }

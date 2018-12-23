@@ -9,7 +9,6 @@ package org.pcap4j.packet.factory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.namednumber.NamedNumber;
 
@@ -22,13 +21,11 @@ import org.pcap4j.packet.namednumber.NamedNumber;
  * @since pcap4j 2.0.0
  */
 public abstract class AbstractPropertiesBasedFactory<T, N extends NamedNumber<?, ?>>
-implements PacketFactory<T, N> {
+    implements PacketFactory<T, N> {
 
   @SuppressWarnings("unchecked") // instead of @SafeVarargs which can use only for final method.
   @Override
-  public T newInstance(
-    byte[] rawData, int offset, int length, N... numbers
-  ) {
+  public T newInstance(byte[] rawData, int offset, int length, N... numbers) {
     if (rawData == null) {
       throw new NullPointerException("rawData is null.");
     }
@@ -38,7 +35,7 @@ implements PacketFactory<T, N> {
       throw new NullPointerException("getUnknownClass() returned null.");
     }
 
-    for (N num: numbers) {
+    for (N num : numbers) {
       Class<? extends T> target = getTargetClass(num);
       if (target != unknown) {
         return newInstance(rawData, offset, length, target);
@@ -47,31 +44,26 @@ implements PacketFactory<T, N> {
     return newInstance(rawData, offset, length, unknown);
   }
 
-  private T newInstance(
-    byte[] rawData, int offset, int length, Class<? extends T> target
-  ) {
+  private T newInstance(byte[] rawData, int offset, int length, Class<? extends T> target) {
     if (target == null) {
       throw new NullPointerException("target is null");
     }
 
     try {
-      Method factoryMethod
-        = target.getMethod(getStaticFactoryMethodName(), byte[].class, int.class, int.class);
+      Method factoryMethod =
+          target.getMethod(getStaticFactoryMethodName(), byte[].class, int.class, int.class);
       @SuppressWarnings("unchecked")
       T instance = (T) factoryMethod.invoke(null, rawData, offset, length);
       return instance;
-    } catch (
-        SecurityException
-      | NoSuchMethodException
-      | IllegalArgumentException
-      | IllegalAccessException e
-    ) {
+    } catch (SecurityException
+        | NoSuchMethodException
+        | IllegalArgumentException
+        | IllegalAccessException e) {
       throw new IllegalStateException(e);
     } catch (InvocationTargetException e) {
       if (e.getTargetException() instanceof IllegalRawDataException) {
         return newIllegalData(
-                 rawData, offset, length, (IllegalRawDataException) e.getTargetException()
-               );
+            rawData, offset, length, (IllegalRawDataException) e.getTargetException());
       }
       throw new IllegalArgumentException(e);
     }
@@ -89,15 +81,15 @@ implements PacketFactory<T, N> {
   protected abstract Class<? extends T> getUnknownClass();
 
   /**
-   * @return the name of the static factory method to instantiate classes
-   *         {@link #getTargetClass getTargetClass(N)} and {@link #getUnknownClass()} return.
+   * @return the name of the static factory method to instantiate classes {@link #getTargetClass
+   *     getTargetClass(N)} and {@link #getUnknownClass()} return.
    */
   protected abstract String getStaticFactoryMethodName();
 
   /**
-   * This method is called when {@link IllegalRawDataException} is thrown during instantiating
-   * a class {@link #getTargetClass getTargetClass(N)} or {@link #getUnknownClass()} return and
-   * create an object representing an illegal packet or packet field.
+   * This method is called when {@link IllegalRawDataException} is thrown during instantiating a
+   * class {@link #getTargetClass getTargetClass(N)} or {@link #getUnknownClass()} return and create
+   * an object representing an illegal packet or packet field.
    *
    * @param rawData rawData
    * @param offset offset
@@ -106,7 +98,5 @@ implements PacketFactory<T, N> {
    * @return a new object.
    */
   protected abstract T newIllegalData(
-    byte[] rawData, int offset, int length, IllegalRawDataException cause
-  );
-
+      byte[] rawData, int offset, int length, IllegalRawDataException cause);
 }
