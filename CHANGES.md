@@ -4,6 +4,7 @@ Future
 * [PR#196](https://github.com/kaitoy/pcap4j/pull/196): add protocol implementations for 4 icmpv6 types (RFC6275).
 
 ### Bug Fixes ###
+* [Issues#200](https://github.com/kaitoy/pcap4j/issues/200): Fix a bug that causes NullPointerException in DnsDomainName#toString(byte[]).
 
 ### Other Changes ###
 

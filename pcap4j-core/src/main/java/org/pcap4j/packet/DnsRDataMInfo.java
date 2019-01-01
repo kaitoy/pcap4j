@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2019  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -162,11 +162,11 @@ public final class DnsRDataMInfo implements DnsRData {
         .append(ls)
         .append(indent)
         .append("  RMAILBX: ")
-        .append(rMailBx.toString(headerRawData))
+        .append(headerRawData != null ? rMailBx.toString(headerRawData) : rMailBx.toString())
         .append(ls)
         .append(indent)
         .append("  EMAILBX: ")
-        .append(eMailBx.toString(headerRawData))
+        .append(headerRawData != null ? eMailBx.toString(headerRawData) : eMailBx.toString())
         .append(ls);
 
     return sb.toString();

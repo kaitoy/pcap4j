@@ -584,4 +584,17 @@ public class DnsPacketTest extends AbstractPacketTest {
       throw new AssertionError(e);
     }
   }
+
+  @Test
+  public void testToString() {
+    for (DnsResourceRecord r : packet.getHeader().getAnswers()) {
+      logger.info(r.toString());
+    }
+    for (DnsResourceRecord r : packet.getHeader().getAuthorities()) {
+      logger.info(r.toString());
+    }
+    for (DnsResourceRecord r : packet.getHeader().getAdditionalInfo()) {
+      logger.info(r.toString());
+    }
+  }
 }

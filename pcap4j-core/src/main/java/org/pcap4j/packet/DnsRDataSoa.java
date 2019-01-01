@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2019  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -287,11 +287,11 @@ public final class DnsRDataSoa implements DnsRData {
         .append(ls)
         .append(indent)
         .append("  MNAME: ")
-        .append(mName.toString(headerRawData))
+        .append(headerRawData != null ? mName.toString(headerRawData) : mName.toString())
         .append(ls)
         .append(indent)
         .append("  RNAME: ")
-        .append(rName.toString(headerRawData))
+        .append(headerRawData != null ? rName.toString(headerRawData) : rName.toString())
         .append(ls)
         .append(indent)
         .append("  SERIAL: ")
