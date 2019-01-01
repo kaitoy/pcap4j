@@ -11,9 +11,14 @@ package org.pcap4j.packet.namednumber;
  * Transport layer Port
  *
  * @author Ferran Altimiras
+ * @since pcap4j 1.7.5
  */
 public abstract class Port extends NamedNumber<Short, Port> {
 
+  /**
+   * @param value value
+   * @param name name
+   */
   public Port(Short value, String name) {
     super(value, name);
   }
@@ -23,7 +28,6 @@ public abstract class Port extends NamedNumber<Short, Port> {
     return 0xFFFF & value();
   }
 
-  /** @return a string representation of this value. */
   @Override
   public String valueAsString() {
     return String.valueOf(valueAsInt());

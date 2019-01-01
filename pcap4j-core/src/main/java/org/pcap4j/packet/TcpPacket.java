@@ -739,13 +739,11 @@ public final class TcpPacket extends AbstractPacket implements TransportPacket {
       return ByteArrays.calcChecksum(data);
     }
 
-    /** @return srcPort */
     @Override
     public TcpPort getSrcPort() {
       return srcPort;
     }
 
-    /** @return dstPort */
     @Override
     public TcpPort getDstPort() {
       return dstPort;

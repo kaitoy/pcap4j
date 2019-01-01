@@ -439,13 +439,11 @@ public final class UdpPacket extends AbstractPacket implements TransportPacket {
       return ByteArrays.calcChecksum(data);
     }
 
-    /** @return srcPort */
     @Override
     public UdpPort getSrcPort() {
       return srcPort;
     }
 
-    /** @return dstPort */
     @Override
     public UdpPort getDstPort() {
       return dstPort;
