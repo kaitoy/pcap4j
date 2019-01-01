@@ -2,9 +2,7 @@ package org.pcap4j.packet;
 
 import org.pcap4j.packet.namednumber.Port;
 
-/**
- * @author Ferran Altimiras
- */
+/** @author Ferran Altimiras */
 public interface TransportPacket extends Packet {
 
   @Override
@@ -16,14 +14,10 @@ public interface TransportPacket extends Packet {
    * @author Ferran Altimiras
    */
   public interface TransportHeader extends Header {
-	/**
-	 * @return Source port
-	 */
-	public Port getSrcPort();
+    /** @return Source port */
+    public Port getSrcPort();
 
-	/**
-	 * @return Destination port
-	 */
-	public Port getDstPort();
+    /** @return Destination port */
+    public Port getDstPort();
   }
 }

@@ -7,7 +7,8 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
+import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 import java.io.Serializable;
 import java.net.Inet4Address;
@@ -739,11 +740,13 @@ public final class TcpPacket extends AbstractPacket implements TransportPacket {
     }
 
     /** @return srcPort */
+    @Override
     public TcpPort getSrcPort() {
       return srcPort;
     }
 
     /** @return dstPort */
+    @Override
     public TcpPort getDstPort() {
       return dstPort;
     }

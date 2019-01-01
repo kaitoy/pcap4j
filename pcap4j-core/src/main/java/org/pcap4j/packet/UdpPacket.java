@@ -7,7 +7,7 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -280,7 +280,7 @@ public final class UdpPacket extends AbstractPacket implements TransportPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class UdpHeader extends AbstractHeader implements TransportHeader{
+  public static final class UdpHeader extends AbstractHeader implements TransportHeader {
 
     /*
      *  0                              16                            31
@@ -440,11 +440,13 @@ public final class UdpPacket extends AbstractPacket implements TransportPacket {
     }
 
     /** @return srcPort */
+    @Override
     public UdpPort getSrcPort() {
       return srcPort;
     }
 
     /** @return dstPort */
+    @Override
     public UdpPort getDstPort() {
       return dstPort;
     }
