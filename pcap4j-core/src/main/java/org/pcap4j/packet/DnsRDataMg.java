@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2019  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -113,7 +113,7 @@ public final class DnsRDataMg implements DnsRData {
         .append(ls)
         .append(indent)
         .append("  MGMNAME: ")
-        .append(mgMName.toString(headerRawData))
+        .append(headerRawData != null ? mgMName.toString(headerRawData) : mgMName.toString())
         .append(ls);
 
     return sb.toString();
