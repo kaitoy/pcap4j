@@ -1,6 +1,9 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -178,5 +181,14 @@ public class UdpPacketTest extends AbstractPacketTest {
 
     assertEquals((short) 0xFFFF, udpPacket.getHeader().getChecksum());
     assertTrue(udpPacket.hasValidChecksum(ipV4Header.getSrcAddr(), ipV4Header.getDstAddr(), false));
+  }
+
+  @Test
+  public void testGetPacketWithTransportPacket() {
+    Packet wholePacket = getWholePacket();
+    TransportPacket tPacket = wholePacket.get(TransportPacket.class);
+    assertNotNull(tPacket);
+    assertEquals(0, tPacket.getHeader().getDstPort().compareTo(dstPort));
+    assertEquals(0, tPacket.getHeader().getSrcPort().compareTo(srcPort));
   }
 }

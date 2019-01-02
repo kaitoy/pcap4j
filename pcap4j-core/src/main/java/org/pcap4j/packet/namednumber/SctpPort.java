@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2019  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -19,7 +19,7 @@ import java.util.Map;
  * @author Jeff Myers (myersj@gmail.com)
  * @since pcap4j 1.6.6
  */
-public final class SctpPort extends NamedNumber<Short, SctpPort> {
+public final class SctpPort extends Port {
 
   /** */
   private static final long serialVersionUID = 8265462534894583620L;
@@ -83,21 +83,5 @@ public final class SctpPort extends NamedNumber<Short, SctpPort> {
    */
   public static SctpPort register(SctpPort port) {
     return registry.put(port.value(), port);
-  }
-
-  /** @return the value of this object as an int. */
-  public int valueAsInt() {
-    return 0xFFFF & value();
-  }
-
-  /** @return a string representation of this value. */
-  @Override
-  public String valueAsString() {
-    return String.valueOf(valueAsInt());
-  }
-
-  @Override
-  public int compareTo(SctpPort o) {
-    return value().compareTo(o.value());
   }
 }
