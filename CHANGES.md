@@ -1,6 +1,25 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 2.0.0-alpha.2 (2-Jan-2019)
+==================================
+### New Features ###
+* [PR#196](https://github.com/kaitoy/pcap4j/pull/196): add protocol implementations for 4 icmpv6 types (RFC6275).
+* [PR#144](https://github.com/kaitoy/pcap4j/pull/144): Generalize TcpPacket and UdpPacket to same abstract TransportPacket class.
+
+### Bug Fixes ###
+* [Issues#200](https://github.com/kaitoy/pcap4j/issues/200): Fix a bug that causes NullPointerException in DnsDomainName#toString(byte[]).
+
+### Other Changes ###
+
+Release 1.7.5 (2-Jan-2019)
+==========================
+### New Features ###
 * [PR#196](https://github.com/kaitoy/pcap4j/pull/196): add protocol implementations for 4 icmpv6 types (RFC6275).
 * [PR#144](https://github.com/kaitoy/pcap4j/pull/144): Generalize TcpPacket and UdpPacket to same abstract TransportPacket class.
 
