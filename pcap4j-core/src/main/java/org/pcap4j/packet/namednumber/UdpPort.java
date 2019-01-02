@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2016  Pcap4J.org
+  _##  Copyright (C) 2011-2019  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -19,7 +19,7 @@ import java.util.Map;
  * @author Kaito Yamada
  * @since pcap4j 0.9.6
  */
-public final class UdpPort extends NamedNumber<Short, UdpPort> {
+public final class UdpPort extends Port {
 
   /** */
   private static final long serialVersionUID = -7898348444366318292L;
@@ -2863,21 +2863,5 @@ public final class UdpPort extends NamedNumber<Short, UdpPort> {
    */
   public static UdpPort register(UdpPort port) {
     return registry.put(port.value(), port);
-  }
-
-  /** @return the value of this object as an int. */
-  public int valueAsInt() {
-    return 0xFFFF & value();
-  }
-
-  /** @return a string representation of this value. */
-  @Override
-  public String valueAsString() {
-    return String.valueOf(valueAsInt());
-  }
-
-  @Override
-  public int compareTo(UdpPort o) {
-    return value().compareTo(o.value());
   }
 }

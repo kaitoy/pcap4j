@@ -1,13 +1,13 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2017  Pcap4J.org
+  _##  Copyright (C) 2011-2019  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -23,7 +23,7 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
  */
-public final class UdpPacket extends AbstractPacket {
+public final class UdpPacket extends AbstractPacket implements TransportPacket {
 
   /** */
   private static final long serialVersionUID = 4638029542367352625L;
@@ -280,7 +280,7 @@ public final class UdpPacket extends AbstractPacket {
    * @author Kaito Yamada
    * @since pcap4j 0.9.1
    */
-  public static final class UdpHeader extends AbstractHeader {
+  public static final class UdpHeader extends AbstractHeader implements TransportHeader {
 
     /*
      *  0                              16                            31
@@ -439,12 +439,12 @@ public final class UdpPacket extends AbstractPacket {
       return ByteArrays.calcChecksum(data);
     }
 
-    /** @return srcPort */
+    @Override
     public UdpPort getSrcPort() {
       return srcPort;
     }
 
-    /** @return dstPort */
+    @Override
     public UdpPort getDstPort() {
       return dstPort;
     }
