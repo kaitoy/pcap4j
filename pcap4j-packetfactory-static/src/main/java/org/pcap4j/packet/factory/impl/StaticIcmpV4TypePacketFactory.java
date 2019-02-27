@@ -5,7 +5,7 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import org.pcap4j.packet.IcmpV4DestinationUnreachablePacket;
 import org.pcap4j.packet.IcmpV4EchoPacket;

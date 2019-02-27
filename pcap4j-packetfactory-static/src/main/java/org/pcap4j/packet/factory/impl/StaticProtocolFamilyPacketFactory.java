@@ -5,27 +5,27 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV4Packet;
 import org.pcap4j.packet.IpV6Packet;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.namednumber.PppDllProtocol;
+import org.pcap4j.packet.namednumber.ProtocolFamily;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 1.4.0
+ * @since pcap4j 1.5.0
  */
-public final class StaticPppDllProtocolPacketFactory
-    extends AbstractStaticPacketFactory<PppDllProtocol> {
+public final class StaticProtocolFamilyPacketFactory
+    extends AbstractStaticPacketFactory<ProtocolFamily> {
 
-  private static final StaticPppDllProtocolPacketFactory INSTANCE =
-      new StaticPppDllProtocolPacketFactory();
+  private static final StaticProtocolFamilyPacketFactory INSTANCE =
+      new StaticProtocolFamilyPacketFactory();
 
-  private StaticPppDllProtocolPacketFactory() {
+  private StaticProtocolFamilyPacketFactory() {
     instantiaters.put(
-        PppDllProtocol.IPV4,
+        ProtocolFamily.PF_INET,
         new PacketInstantiater() {
           @Override
           public Packet newInstance(byte[] rawData, int offset, int length)
@@ -39,7 +39,7 @@ public final class StaticPppDllProtocolPacketFactory
           }
         });
     instantiaters.put(
-        PppDllProtocol.IPV6,
+        ProtocolFamily.PF_INET6,
         new PacketInstantiater() {
           @Override
           public Packet newInstance(byte[] rawData, int offset, int length)
@@ -54,8 +54,8 @@ public final class StaticPppDllProtocolPacketFactory
         });
   };
 
-  /** @return the singleton instance of StaticPppDllProtocolPacketFactory. */
-  public static StaticPppDllProtocolPacketFactory getInstance() {
+  /** @return the singleton instance of StaticProtocolFamilyPacketFactory. */
+  public static StaticProtocolFamilyPacketFactory getInstance() {
     return INSTANCE;
   }
 }

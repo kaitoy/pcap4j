@@ -5,32 +5,14 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.pcap4j.packet.DnsRDataA;
-import org.pcap4j.packet.DnsRDataAaaa;
-import org.pcap4j.packet.DnsRDataCName;
-import org.pcap4j.packet.DnsRDataCaa;
-import org.pcap4j.packet.DnsRDataHInfo;
-import org.pcap4j.packet.DnsRDataMInfo;
-import org.pcap4j.packet.DnsRDataMb;
-import org.pcap4j.packet.DnsRDataMd;
-import org.pcap4j.packet.DnsRDataMf;
-import org.pcap4j.packet.DnsRDataMg;
-import org.pcap4j.packet.DnsRDataMr;
-import org.pcap4j.packet.DnsRDataMx;
-import org.pcap4j.packet.DnsRDataNs;
-import org.pcap4j.packet.DnsRDataNull;
-import org.pcap4j.packet.DnsRDataPtr;
-import org.pcap4j.packet.DnsRDataSoa;
-import org.pcap4j.packet.DnsRDataTxt;
-import org.pcap4j.packet.DnsRDataWks;
+
+import org.pcap4j.packet.*;
 import org.pcap4j.packet.DnsResourceRecord.DnsRData;
-import org.pcap4j.packet.IllegalDnsRData;
-import org.pcap4j.packet.IllegalRawDataException;
-import org.pcap4j.packet.UnknownDnsRData;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.DnsResourceRecordType;
 
 /**

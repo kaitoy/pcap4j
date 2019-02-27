@@ -5,10 +5,11 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IllegalIpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IllegalRawDataException;
@@ -18,6 +19,7 @@ import org.pcap4j.packet.IpV6NeighborDiscoveryRedirectedHeaderOption;
 import org.pcap4j.packet.IpV6NeighborDiscoverySourceLinkLayerAddressOption;
 import org.pcap4j.packet.IpV6NeighborDiscoveryTargetLinkLayerAddressOption;
 import org.pcap4j.packet.UnknownIpV6NeighborDiscoveryOption;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 
 /**

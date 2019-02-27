@@ -5,32 +5,14 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.pcap4j.packet.IllegalRadiotapData;
-import org.pcap4j.packet.IllegalRawDataException;
-import org.pcap4j.packet.RadiotapDataAMpduStatus;
-import org.pcap4j.packet.RadiotapDataAntenna;
-import org.pcap4j.packet.RadiotapDataAntennaNoise;
-import org.pcap4j.packet.RadiotapDataAntennaSignal;
-import org.pcap4j.packet.RadiotapDataChannel;
-import org.pcap4j.packet.RadiotapDataDbAntennaNoise;
-import org.pcap4j.packet.RadiotapDataDbAntennaSignal;
-import org.pcap4j.packet.RadiotapDataDbTxAttenuation;
-import org.pcap4j.packet.RadiotapDataDbmTxPower;
-import org.pcap4j.packet.RadiotapDataFhss;
-import org.pcap4j.packet.RadiotapDataFlags;
-import org.pcap4j.packet.RadiotapDataLockQuality;
-import org.pcap4j.packet.RadiotapDataMcs;
-import org.pcap4j.packet.RadiotapDataRate;
-import org.pcap4j.packet.RadiotapDataRxFlags;
-import org.pcap4j.packet.RadiotapDataTsft;
-import org.pcap4j.packet.RadiotapDataTxAttenuation;
-import org.pcap4j.packet.RadiotapDataVht;
+
+import org.pcap4j.packet.*;
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
-import org.pcap4j.packet.UnknownRadiotapData;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
 
 /**

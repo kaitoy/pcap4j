@@ -5,10 +5,11 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.pcap4j.packet.IllegalIpV4InternetTimestampOptionData;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;
@@ -16,6 +17,7 @@ import org.pcap4j.packet.IpV4InternetTimestampOptionAddressPrespecified;
 import org.pcap4j.packet.IpV4InternetTimestampOptionTimestamps;
 import org.pcap4j.packet.IpV4InternetTimestampOptionTimestampsWithAddresses;
 import org.pcap4j.packet.UnknownIpV4InternetTimestampOptionData;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 
 /**

@@ -105,6 +105,18 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Provides a module name since Java 9 modularity -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>org.pcap4j.core</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
     </plugins>
 
     <pluginManagement>

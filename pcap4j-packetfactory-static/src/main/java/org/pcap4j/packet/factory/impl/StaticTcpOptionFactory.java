@@ -5,10 +5,11 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IllegalTcpOption;
 import org.pcap4j.packet.TcpEndOfOptionList;
@@ -20,6 +21,7 @@ import org.pcap4j.packet.TcpSackPermittedOption;
 import org.pcap4j.packet.TcpTimestampsOption;
 import org.pcap4j.packet.TcpWindowScaleOption;
 import org.pcap4j.packet.UnknownTcpOption;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 
 /**
