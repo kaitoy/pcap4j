@@ -1,11 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import org.pcap4j.packet.namednumber.SctpPort;
 
@@ -32,7 +32,7 @@ public final class StaticSctpPortPacketFactory extends AbstractStaticPacketFacto
     //        }
     //      }
     //    );
-  };
+  }
 
   /** @return the singleton instance of StaticSctpPortPacketFactory. */
   public static StaticSctpPortPacketFactory getInstance() {

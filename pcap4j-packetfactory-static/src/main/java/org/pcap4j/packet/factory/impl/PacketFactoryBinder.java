@@ -5,7 +5,7 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +22,8 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.TcpPacket.TcpOption;
+import org.pcap4j.packet.factory.PacketFactory;
+import org.pcap4j.packet.factory.StaticUnknownPacketFactory;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.Dot11FrameType;
 import org.pcap4j.packet.namednumber.EtherType;

@@ -1,11 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +20,7 @@ import org.pcap4j.packet.TcpSackPermittedOption;
 import org.pcap4j.packet.TcpTimestampsOption;
 import org.pcap4j.packet.TcpWindowScaleOption;
 import org.pcap4j.packet.UnknownTcpOption;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.TcpOptionKind;
 
 /**
@@ -131,7 +132,7 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
             return TcpTimestampsOption.class;
           }
         });
-  };
+  }
 
   /** @return the singleton instance of StaticTcpOptionFactory. */
   public static StaticTcpOptionFactory getInstance() {

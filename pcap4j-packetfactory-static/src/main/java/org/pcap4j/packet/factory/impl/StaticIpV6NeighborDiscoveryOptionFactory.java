@@ -1,11 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +18,7 @@ import org.pcap4j.packet.IpV6NeighborDiscoveryRedirectedHeaderOption;
 import org.pcap4j.packet.IpV6NeighborDiscoverySourceLinkLayerAddressOption;
 import org.pcap4j.packet.IpV6NeighborDiscoveryTargetLinkLayerAddressOption;
 import org.pcap4j.packet.UnknownIpV6NeighborDiscoveryOption;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
 
 /**
@@ -106,7 +107,7 @@ public final class StaticIpV6NeighborDiscoveryOptionFactory
             return IpV6NeighborDiscoveryMtuOption.class;
           }
         });
-  };
+  }
 
   /** @return the singleton instance of StaticIpV6NeighborDiscoveryOptionFactory. */
   public static StaticIpV6NeighborDiscoveryOptionFactory getInstance() {

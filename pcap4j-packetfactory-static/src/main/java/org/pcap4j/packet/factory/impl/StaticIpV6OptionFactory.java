@@ -1,11 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +15,7 @@ import org.pcap4j.packet.IpV6ExtOptionsPacket.IpV6Option;
 import org.pcap4j.packet.IpV6Pad1Option;
 import org.pcap4j.packet.IpV6PadNOption;
 import org.pcap4j.packet.UnknownIpV6Option;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
 
 /**

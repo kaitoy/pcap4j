@@ -1,11 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2016  Pcap4J.org
+  _##  Copyright (C) 2012-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import org.pcap4j.packet.IcmpV4CommonPacket;
 import org.pcap4j.packet.IcmpV6CommonPacket;
@@ -170,7 +170,7 @@ public final class StaticIpNumberPacketFactory extends AbstractStaticPacketFacto
             return SctpPacket.class;
           }
         });
-  };
+  }
 
   /** @return the singleton instance of StaticIpNumberPacketFactory. */
   public static StaticIpNumberPacketFactory getInstance() {

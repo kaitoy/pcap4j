@@ -1,11 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +16,7 @@ import org.pcap4j.packet.IpV4InternetTimestampOptionAddressPrespecified;
 import org.pcap4j.packet.IpV4InternetTimestampOptionTimestamps;
 import org.pcap4j.packet.IpV4InternetTimestampOptionTimestampsWithAddresses;
 import org.pcap4j.packet.UnknownIpV4InternetTimestampOptionData;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 
 /**
@@ -75,7 +76,7 @@ public final class StaticIpV4InternetTimestampOptionDataFactory
             return IpV4InternetTimestampOptionAddressPrespecified.class;
           }
         });
-  };
+  }
 
   /** @return the singleton instance of StaticIpV4InternetTimestampOptionDataFactory. */
   public static StaticIpV4InternetTimestampOptionDataFactory getInstance() {

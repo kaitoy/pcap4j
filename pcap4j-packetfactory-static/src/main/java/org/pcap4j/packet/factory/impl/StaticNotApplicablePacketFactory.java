@@ -1,11 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2014  Pcap4J.org
+  _##  Copyright (C) 2014-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import org.pcap4j.packet.CompressedPacket;
 import org.pcap4j.packet.EncryptedPacket;
@@ -31,8 +31,7 @@ public final class StaticNotApplicablePacketFactory
         NotApplicable.UNKNOWN,
         new PacketInstantiater() {
           @Override
-          public Packet newInstance(byte[] rawData, int offset, int length)
-              throws IllegalRawDataException {
+          public Packet newInstance(byte[] rawData, int offset, int length) {
             return UnknownPacket.newPacket(rawData, offset, length);
           }
 
@@ -45,8 +44,7 @@ public final class StaticNotApplicablePacketFactory
         NotApplicable.FRAGMENTED,
         new PacketInstantiater() {
           @Override
-          public Packet newInstance(byte[] rawData, int offset, int length)
-              throws IllegalRawDataException {
+          public Packet newInstance(byte[] rawData, int offset, int length) {
             return FragmentedPacket.newPacket(rawData, offset, length);
           }
 
@@ -73,8 +71,7 @@ public final class StaticNotApplicablePacketFactory
         NotApplicable.COMPRESSED,
         new PacketInstantiater() {
           @Override
-          public Packet newInstance(byte[] rawData, int offset, int length)
-              throws IllegalRawDataException {
+          public Packet newInstance(byte[] rawData, int offset, int length) {
             return CompressedPacket.newPacket(rawData, offset, length);
           }
 
@@ -87,8 +84,7 @@ public final class StaticNotApplicablePacketFactory
         NotApplicable.ENCRYPTED,
         new PacketInstantiater() {
           @Override
-          public Packet newInstance(byte[] rawData, int offset, int length)
-              throws IllegalRawDataException {
+          public Packet newInstance(byte[] rawData, int offset, int length) {
             return EncryptedPacket.newPacket(rawData, offset, length);
           }
 
@@ -97,7 +93,7 @@ public final class StaticNotApplicablePacketFactory
             return EncryptedPacket.class;
           }
         });
-  };
+  }
 
   /** @return the singleton instance of StaticNaPacketFactory. */
   public static StaticNotApplicablePacketFactory getInstance() {

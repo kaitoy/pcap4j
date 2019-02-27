@@ -1,11 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +13,7 @@ import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IllegalSctpChunk;
 import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.UnknownSctpChunk;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.SctpChunkType;
 
 /**
@@ -40,7 +41,7 @@ public final class StaticSctpChunkFactory implements PacketFactory<SctpChunk, Sc
     //        }
     //      }
     //    );
-  };
+  }
 
   /** @return the singleton instance of StaticSctpChunkFactory. */
   public static StaticSctpChunkFactory getInstance() {

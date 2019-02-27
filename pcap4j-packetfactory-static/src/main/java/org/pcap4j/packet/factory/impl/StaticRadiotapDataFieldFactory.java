@@ -1,11 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +31,7 @@ import org.pcap4j.packet.RadiotapDataTxAttenuation;
 import org.pcap4j.packet.RadiotapDataVht;
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.packet.UnknownRadiotapData;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
 
 /**
@@ -298,7 +299,7 @@ public final class StaticRadiotapDataFieldFactory
             return RadiotapDataVht.class;
           }
         });
-  };
+  }
 
   /** @return the singleton instance of StaticRadiotapDataFieldFactory. */
   public static StaticRadiotapDataFieldFactory getInstance() {

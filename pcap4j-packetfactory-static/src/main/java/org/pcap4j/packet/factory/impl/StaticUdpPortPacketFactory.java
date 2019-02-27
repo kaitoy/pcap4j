@@ -1,11 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2016  Pcap4J.org
+  _##  Copyright (C) 2013-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.impl;
 
 import org.pcap4j.packet.DnsPacket;
 import org.pcap4j.packet.GtpSelector;
@@ -78,7 +78,7 @@ public final class StaticUdpPortPacketFactory extends AbstractStaticPacketFactor
             return DnsPacket.class;
           }
         });
-  };
+  }
 
   /** @return the singleton instance of StaticUdpPortPacketFactory. */
   public static StaticUdpPortPacketFactory getInstance() {
