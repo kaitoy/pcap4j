@@ -272,57 +272,6 @@ public class PcapHandleTest {
   }
 
   @Test
-  public void testSetFilterIcmp() throws Exception {
-    PcapHandle handle = null;
-    try {
-      handle = Pcaps.openOffline("src/test/resources/org/pcap4j/core/udp_tcp_icmp.pcap");
-      handle.setFilter("icmp", BpfCompileMode.OPTIMIZE);
-      int count = 0;
-      try {
-        while (true) {
-          Packet p = handle.getNextPacketEx();
-          assertNotNull(p.get(IcmpV4CommonPacket.class));
-          count++;
-        }
-      } catch (EOFException e) {
-      }
-      assertEquals(1, count);
-    } finally {
-      if (handle != null) {
-        handle.close();
-      }
-    }
-  }
-
-  @Test
-  public void testSetFilterUdp() throws Exception {
-    PcapHandle handle = null;
-    BpfProgram prog = null;
-    try {
-      handle = Pcaps.openOffline("src/test/resources/org/pcap4j/core/udp_tcp_icmp.pcap");
-      prog = handle.compileFilter("udp", BpfCompileMode.OPTIMIZE, PcapHandle.PCAP_NETMASK_UNKNOWN);
-      handle.setFilter(prog);
-      int count = 0;
-      try {
-        while (true) {
-          Packet p = handle.getNextPacketEx();
-          assertNotNull(p.get(UdpPacket.class));
-          count++;
-        }
-      } catch (EOFException e) {
-      }
-      assertEquals(1, count);
-    } finally {
-      if (handle != null) {
-        handle.close();
-      }
-      if (prog != null) {
-        prog.free();
-      }
-    }
-  }
-
-  @Test
   public void testSendPacket() throws Exception {
     if (System.getenv("TRAVIS") != null) {
       // run only on Travis CI

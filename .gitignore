@@ -11,4 +11,5 @@ bin/
 **/*.iml
 gradle-app.setting
 .gradletasknamecache
+testdata/
 
