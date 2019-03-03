@@ -30,13 +30,6 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skipTests>true</skipTests>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
@@ -71,6 +64,26 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <!-- Run 'mvn test -P factory-static' to run the test for the module org.pcap4j-packetfactry-static -->
+    <profile>
+      <id>factory-static</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.pcap4j</groupId>
+          <artifactId>pcap4j-packetfactory-static</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+    <!-- Run 'mvn test -P factory-propertiesbased' to run the test for the module org.pcap4j-packetfactry-proprtiesbased -->
+    <profile>
+      <id>factory-propertiesbased</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.pcap4j</groupId>
+          <artifactId>pcap4j-packetfactory-propertiesbased</artifactId>
+        </dependency>
+      </dependencies>
     </profile>
   </profiles>
 </project>

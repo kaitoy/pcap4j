@@ -20,12 +20,6 @@
       <artifactId>pcap4j-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.pcap4j</groupId>
-      <artifactId>pcap4j-packettest</artifactId>
-      <scope>test</scope>
-      <type>test-jar</type>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -51,43 +45,12 @@
         </includes>
         <filtering>false</filtering>
       </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
     </resources>
 
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack-dependencies</id>
-            <phase>process-test-classes</phase>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <configuration>
-              <includeArtifactIds>pcap4j-packettest</includeArtifactIds>
-              <outputDirectory>${project.build.directory}/test-classes</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <org.pcap4j.packet.AbstractPacketTest.resourceDir>
-              target/test-classes
-            </org.pcap4j.packet.AbstractPacketTest.resourceDir>
-            <org.pcap4j.packet.AbstractPacketTest.tmpDir>
-              target/test
-            </org.pcap4j.packet.AbstractPacketTest.tmpDir>
-            <org.pcap4j.core.PcapDumperTest.tmpDir>
-              target/test
-            </org.pcap4j.core.PcapDumperTest.tmpDir>
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
       <!-- Provides a module name since Java 9 modularity -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
