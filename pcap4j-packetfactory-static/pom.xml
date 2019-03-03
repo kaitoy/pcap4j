@@ -82,7 +82,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Automatic-Module-Name>org.pcap4j.packet.factory.impl</Automatic-Module-Name>
+              <Automatic-Module-Name>org.pcap4j.packet.factory.statik</Automatic-Module-Name>
             </manifestEntries>
           </archive>
         </configuration>

@@ -47,7 +47,7 @@ How to add a protocol support
   use it instead of packet-factory.properties in Properties-Based Packet Factory module.
 
   2.2. Using [Static Packet Factory](https://github.com/kaitoy/pcap4j/blob/v1/www/PacketFactory.md#static-packet-factory)<br>
-  Modify the source [StaticTcpPortPacketFactory.java](https://github.com/kaitoy/pcap4j/blob/v1/pcap4j-packetfactory-static/src/main/java/org/pcap4j/packet/factory/StaticTcpPortPacketFactory.java)
+  Modify the source [StaticTcpPortPacketFactory.java](https://github.com/kaitoy/pcap4j/blob/v1/pcap4j-packetfactory-static/src/main/java/org/pcap4j/packet/factory/statik/StaticTcpPortPacketFactory.java)
   and add the following to its constructor:
 
   ```java

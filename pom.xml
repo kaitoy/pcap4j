@@ -388,12 +388,6 @@
               <instrumentation>
                 <excludes>
                   <exclude>org/pcap4j/sample/**/*.class</exclude>
-                  <!--
-                    2015/6/10 cobertura-maven-plugin 3.1.0 doesn't work
-                    on a multiple module project with exact same name files.
-                    (https://github.com/trautonen/coveralls-maven-plugin/issues/56)
-                  -->
-                  <exclude>org/pcap4j/packet/factory/PacketFactoryBinder*.class</exclude>
                 </excludes>
               </instrumentation>
             </configuration>
