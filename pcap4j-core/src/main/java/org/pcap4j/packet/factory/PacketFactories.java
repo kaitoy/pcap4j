@@ -29,8 +29,7 @@ public final class PacketFactories {
     PacketFactoryBinder factoryBinder = null;
     try {
       ServiceLoader<PacketFactoryBinderProvider> loader = ServiceLoader.load(PacketFactoryBinderProvider.class);
-      Optional<PacketFactoryBinderProvider> findFirst = loader.findFirst();
-      PacketFactoryBinderProvider packetFactoryBinderProvider = findFirst.get();
+      PacketFactoryBinderProvider packetFactoryBinderProvider = loader.iterator().next();
       factoryBinder = packetFactoryBinderProvider.getInstance();
       logger.info("Succeeded in FactoryBinder.getInstance()");
     } catch (NoClassDefFoundError | NoSuchMethodError | NoSuchElementException | ServiceConfigurationError e) {
