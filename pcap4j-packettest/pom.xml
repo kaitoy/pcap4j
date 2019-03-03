@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (C) 2011-2015  Pcap4J.org -->
+<!-- Copyright (C) 2011-2015 Pcap4J.org -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>pcap4j-packettest</artifactId>
   <packaging>jar</packaging>
@@ -39,6 +41,15 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Tests are skipped by default because they are run separatly with 
+        the profiles below -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -65,7 +76,8 @@
         </plugins>
       </build>
     </profile>
-    <!-- Run 'mvn test -P factory-static' to run the test for the module org.pcap4j-packetfactry-static -->
+    <!-- Run 'mvn test -P factory-static' to run the test for the module 
+      org.pcap4j-packetfactry-static -->
     <profile>
       <id>factory-static</id>
       <dependencies>
@@ -75,7 +87,8 @@
         </dependency>
       </dependencies>
     </profile>
-    <!-- Run 'mvn test -P factory-propertiesbased' to run the test for the module org.pcap4j-packetfactry-proprtiesbased -->
+    <!-- Run 'mvn test -P factory-propertiesbased' to run the test for the 
+      module org.pcap4j-packetfactry-proprtiesbased -->
     <profile>
       <id>factory-propertiesbased</id>
       <dependencies>
