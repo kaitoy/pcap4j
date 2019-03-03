@@ -5,7 +5,7 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.propertiesbased;
 
 import org.pcap4j.packet.DnsResourceRecord.DnsRData;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
@@ -33,6 +33,7 @@ import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.UnknownRadiotapData;
 import org.pcap4j.packet.UnknownSctpChunk;
 import org.pcap4j.packet.UnknownTcpOption;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.DnsResourceRecordType;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;

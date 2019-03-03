@@ -5,39 +5,41 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.propertiesbased;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import org.pcap4j.packet.DnsResourceRecord.DnsRData;
+import org.pcap4j.packet.IllegalDnsRData;
 import org.pcap4j.packet.IllegalRawDataException;
-import org.pcap4j.packet.IllegalSctpChunk;
-import org.pcap4j.packet.SctpPacket.SctpChunk;
-import org.pcap4j.packet.namednumber.SctpChunkType;
+import org.pcap4j.packet.factory.PacketFactory;
+import org.pcap4j.packet.namednumber.DnsResourceRecordType;
 
 /**
  * @author Kaito Yamada
- * @since pcap4j 1.6.6
+ * @since pcap4j 1.7.1
  */
-public final class PropertiesBasedSctpChunkFactory
-    implements PacketFactory<SctpChunk, SctpChunkType> {
+public final class PropertiesBasedDnsRDataFactory
+    implements PacketFactory<DnsRData, DnsResourceRecordType> {
 
-  private static final PropertiesBasedSctpChunkFactory INSTANCE =
-      new PropertiesBasedSctpChunkFactory();
+  private static final PropertiesBasedDnsRDataFactory INSTANCE =
+      new PropertiesBasedDnsRDataFactory();
 
-  private PropertiesBasedSctpChunkFactory() {}
+  private PropertiesBasedDnsRDataFactory() {}
 
-  /** @return the singleton instance of PropertiesBasedSctpChunkFactory. */
-  public static PropertiesBasedSctpChunkFactory getInstance() {
+  /** @return the singleton instance of PropertiesBasedDnsRDataFactory. */
+  public static PropertiesBasedDnsRDataFactory getInstance() {
     return INSTANCE;
   }
 
   @Override
-  public SctpChunk newInstance(byte[] rawData, int offset, int length, SctpChunkType number) {
-    return newInstance(rawData, offset, length, getTargetClass(number));
+  public DnsRData newInstance(byte[] rawData, int offset, int length, DnsResourceRecordType num) {
+    return newInstance(rawData, offset, length, getTargetClass(num));
   }
 
   @Override
-  public SctpChunk newInstance(byte[] rawData, int offset, int length) {
+  public DnsRData newInstance(byte[] rawData, int offset, int length) {
     return newInstance(rawData, offset, length, getTargetClass());
   }
 
@@ -46,14 +48,14 @@ public final class PropertiesBasedSctpChunkFactory
    * @param offset offset
    * @param length length
    * @param dataClass dataClass
-   * @return a new SctpChunk object.
+   * @return a new DnsRDataField object.
    * @throws IllegalStateException if an access to the newInstance method of the dataClass fails.
    * @throws IllegalArgumentException if an exception other than {@link IllegalRawDataException} is
    *     thrown by newInstance method of the dataClass.
    * @throws NullPointerException if any of arguments are null.
    */
-  public SctpChunk newInstance(
-      byte[] rawData, int offset, int length, Class<? extends SctpChunk> dataClass) {
+  public DnsRData newInstance(
+      byte[] rawData, int offset, int length, Class<? extends DnsRData> dataClass) {
     if (rawData == null || dataClass == null) {
       StringBuilder sb = new StringBuilder(50);
       sb.append("rawData: ").append(rawData).append(" dataClass: ").append(dataClass);
@@ -62,7 +64,7 @@ public final class PropertiesBasedSctpChunkFactory
 
     try {
       Method newInstance = dataClass.getMethod("newInstance", byte[].class, int.class, int.class);
-      return (SctpChunk) newInstance.invoke(null, rawData, offset, length);
+      return (DnsRData) newInstance.invoke(null, rawData, offset, length);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -73,22 +75,22 @@ public final class PropertiesBasedSctpChunkFactory
       throw new IllegalStateException(e);
     } catch (InvocationTargetException e) {
       if (e.getTargetException() instanceof IllegalRawDataException) {
-        return IllegalSctpChunk.newInstance(rawData, offset, length);
+        return IllegalDnsRData.newInstance(rawData, offset, length);
       }
       throw new IllegalArgumentException(e);
     }
   }
 
   @Override
-  public Class<? extends SctpChunk> getTargetClass(SctpChunkType number) {
-    if (number == null) {
-      throw new NullPointerException("number: " + number);
+  public Class<? extends DnsRData> getTargetClass(DnsResourceRecordType num) {
+    if (num == null) {
+      throw new NullPointerException("num must not be null");
     }
-    return PacketFactoryPropertiesLoader.getInstance().getSctpChunkClass(number);
+    return PacketFactoryPropertiesLoader.getInstance().getDnsRDataClass(num);
   }
 
   @Override
-  public Class<? extends SctpChunk> getTargetClass() {
-    return PacketFactoryPropertiesLoader.getInstance().getUnknownSctpChunkClass();
+  public Class<? extends DnsRData> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance().getUnknownDnsRDataClass();
   }
 }

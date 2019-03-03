@@ -7,6 +7,11 @@
 
 package org.pcap4j.packet.factory;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
+
 import org.pcap4j.packet.namednumber.NamedNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +28,13 @@ public final class PacketFactories {
   static {
     PacketFactoryBinder factoryBinder = null;
     try {
-      factoryBinder = PacketFactoryBinder.getInstance();
+      ServiceLoader<PacketFactoryBinderProvider> loader = ServiceLoader.load(PacketFactoryBinderProvider.class);
+      Optional<PacketFactoryBinderProvider> findFirst = loader.findFirst();
+      PacketFactoryBinderProvider packetFactoryBinderProvider = findFirst.get();
+      factoryBinder = packetFactoryBinderProvider.getInstance();
       logger.info("Succeeded in FactoryBinder.getInstance()");
-    } catch (NoClassDefFoundError e) {
-      logger.warn(NoClassDefFoundError.class.getName() + ":" + e.getMessage());
-    } catch (NoSuchMethodError e) {
-      logger.warn(NoSuchMethodError.class.getName() + ":" + e.getMessage());
+    } catch (NoClassDefFoundError | NoSuchMethodError | NoSuchElementException | ServiceConfigurationError e) {
+      logger.warn(e.getClass().getName() + ":" + e.getMessage());
     }
     FACTORY_BINDER = factoryBinder;
   }

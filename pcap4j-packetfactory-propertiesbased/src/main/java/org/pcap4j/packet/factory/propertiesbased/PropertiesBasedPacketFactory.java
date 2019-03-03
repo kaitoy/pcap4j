@@ -5,13 +5,15 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.propertiesbased;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import org.pcap4j.packet.IllegalPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.NamedNumber;
 
 /**

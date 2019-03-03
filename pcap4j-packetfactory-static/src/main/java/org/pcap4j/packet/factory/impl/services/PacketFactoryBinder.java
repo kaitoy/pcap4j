@@ -5,7 +5,7 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory.impl;
+package org.pcap4j.packet.factory.impl.services;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +25,7 @@ import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.factory.StaticUnknownPacketFactory;
+import org.pcap4j.packet.factory.impl.*;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.Dot11FrameType;
 import org.pcap4j.packet.namednumber.EtherType;
@@ -44,16 +45,14 @@ import org.pcap4j.packet.namednumber.UdpPort;
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */
-final class PacketFactoryBinder {
-
-  private static final PacketFactoryBinder INSTANCE = new PacketFactoryBinder();
+final class PacketFactoryBinder implements org.pcap4j.packet.factory.PacketFactoryBinder {
 
   private final Map<Class<? extends NamedNumber<?, ?>>, PacketFactory<?, ?>> packetFactories =
       new HashMap<Class<? extends NamedNumber<?, ?>>, PacketFactory<?, ?>>();
   private final Map<Class<?>, PacketFactory<?, ?>> packetpPieceFactories =
       new HashMap<Class<?>, PacketFactory<?, ?>>();
 
-  private PacketFactoryBinder() {
+  PacketFactoryBinder() {
     packetFactories.put(DataLinkType.class, StaticDataLinkTypePacketFactory.getInstance());
     packetFactories.put(EtherType.class, StaticEtherTypePacketFactory.getInstance());
     packetFactories.put(LlcNumber.class, StaticLlcNumberPacketFactory.getInstance());
@@ -83,10 +82,6 @@ final class PacketFactoryBinder {
     packetpPieceFactories.put(RadiotapData.class, StaticRadiotapDataFieldFactory.getInstance());
     packetpPieceFactories.put(SctpChunk.class, StaticSctpChunkFactory.getInstance());
     packetpPieceFactories.put(DnsRData.class, StaticDnsRDataFactory.getInstance());
-  }
-
-  public static PacketFactoryBinder getInstance() {
-    return INSTANCE;
   }
 
   @SuppressWarnings("unchecked")

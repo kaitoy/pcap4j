@@ -5,29 +5,27 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.propertiesbased.services;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.factory.PacketFactory;
+import org.pcap4j.packet.factory.propertiesbased.PacketFactoryPropertiesLoader;
+import org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory;
 import org.pcap4j.packet.namednumber.NamedNumber;
 
 /**
  * @author Kaito Yamada
  * @since pcap4j 0.9.16
  */
-final class PacketFactoryBinder {
-
-  private static final PacketFactoryBinder INSTANCE = new PacketFactoryBinder();
+final class PacketFactoryBinder implements org.pcap4j.packet.factory.PacketFactoryBinder {
 
   private final Map<CacheKey, PacketFactory<?, ?>> cache =
       new ConcurrentHashMap<CacheKey, PacketFactory<?, ?>>();
-
-  public static PacketFactoryBinder getInstance() {
-    return INSTANCE;
-  }
 
   public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
       Class<T> targetClass, Class<N> numberClass) {

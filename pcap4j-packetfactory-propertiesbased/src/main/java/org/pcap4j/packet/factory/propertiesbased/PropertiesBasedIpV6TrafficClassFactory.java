@@ -5,13 +5,13 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
-
-import static org.pcap4j.util.ByteArrays.*;
+package org.pcap4j.packet.factory.propertiesbased;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import org.pcap4j.packet.IpV6Packet.IpV6FlowLabel;
+
+import org.pcap4j.packet.IpV6Packet.IpV6TrafficClass;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
@@ -19,27 +19,28 @@ import org.pcap4j.util.ByteArrays;
  * @author Kaito Yamada
  * @since pcap4j 0.9.14
  */
-public final class PropertiesBasedIpV6FlowLabelFactory
-    implements PacketFactory<IpV6FlowLabel, NotApplicable> {
+public final class PropertiesBasedIpV6TrafficClassFactory
+    implements PacketFactory<IpV6TrafficClass, NotApplicable> {
 
-  private static final PropertiesBasedIpV6FlowLabelFactory INSTANCE =
-      new PropertiesBasedIpV6FlowLabelFactory();
+  private static final PropertiesBasedIpV6TrafficClassFactory INSTANCE =
+      new PropertiesBasedIpV6TrafficClassFactory();
 
-  private PropertiesBasedIpV6FlowLabelFactory() {}
+  private PropertiesBasedIpV6TrafficClassFactory() {}
 
-  /** @return the singleton instance of PropertiesBasedIpV6FlowLabelFactory. */
-  public static PropertiesBasedIpV6FlowLabelFactory getInstance() {
+  /** @return the singleton instance of PropertiesBasedIpV6TrafficClassFactory. */
+  public static PropertiesBasedIpV6TrafficClassFactory getInstance() {
     return INSTANCE;
   }
 
   @Override
   @Deprecated
-  public IpV6FlowLabel newInstance(byte[] rawData, int offset, int length, NotApplicable number) {
+  public IpV6TrafficClass newInstance(
+      byte[] rawData, int offset, int length, NotApplicable number) {
     return newInstance(rawData, offset, length);
   }
 
   @Override
-  public IpV6FlowLabel newInstance(byte[] rawData, int offset, int length) {
+  public IpV6TrafficClass newInstance(byte[] rawData, int offset, int length) {
     return newInstance(rawData, offset, length, getTargetClass());
   }
 
@@ -51,24 +52,21 @@ public final class PropertiesBasedIpV6FlowLabelFactory
    * @param offset offset
    * @param length length
    * @param clazz clazz
-   * @return a new IpV6FlowLabel object.
+   * @return a new IpV6TrafficClass object.
    * @throws IllegalStateException if an access to the newInstance method of the clazz fails.
    * @throws IllegalArgumentException if an exception is thrown by newInstance method of the clazz.
    * @throws NullPointerException if any of arguments are null.
    */
-  public IpV6FlowLabel newInstance(
-      byte[] rawData, int offset, int length, Class<? extends IpV6FlowLabel> clazz) {
+  public IpV6TrafficClass newInstance(
+      byte[] rawData, int offset, int length, Class<? extends IpV6TrafficClass> clazz) {
     ByteArrays.validateBounds(rawData, offset, length);
     if (clazz == null) {
       throw new NullPointerException("clazz is null.");
     }
-    if (length < INT_SIZE_IN_BYTES) {
-      throw new IllegalArgumentException("rawData is too short: " + length);
-    }
 
     try {
-      Method newInstance = clazz.getMethod("newInstance", int.class);
-      return (IpV6FlowLabel) newInstance.invoke(null, ByteArrays.getInt(rawData, offset));
+      Method newInstance = clazz.getMethod("newInstance", byte.class);
+      return (IpV6TrafficClass) newInstance.invoke(null, rawData[offset]);
     } catch (SecurityException e) {
       throw new IllegalStateException(e);
     } catch (NoSuchMethodException e) {
@@ -84,12 +82,12 @@ public final class PropertiesBasedIpV6FlowLabelFactory
 
   @Override
   @Deprecated
-  public Class<? extends IpV6FlowLabel> getTargetClass(NotApplicable number) {
+  public Class<? extends IpV6TrafficClass> getTargetClass(NotApplicable number) {
     return getTargetClass();
   }
 
   @Override
-  public Class<? extends IpV6FlowLabel> getTargetClass() {
-    return PacketFactoryPropertiesLoader.getInstance().getIpV6FlowLabelClass();
+  public Class<? extends IpV6TrafficClass> getTargetClass() {
+    return PacketFactoryPropertiesLoader.getInstance().getIpV6TrafficClassClass();
   }
 }
