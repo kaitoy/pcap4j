@@ -42,8 +42,8 @@ script:
     then
       export /usr/lib/jvm/java-6-openjdk-amd64/
     fi
-    sudo $TRAVIS_BUILD_DIR/mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B clean test -P factory-static -pl :pcap4j-core,:pcap4j-packetfactory-propertiesbased,:pcap4j-packettest
-    sudo $TRAVIS_BUILD_DIR/mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B clean test -P factory-propertiesbased -pl :pcap4j-core,:pcap4j-packetfactory-static,:pcap4j-packettest
+    sudo $TRAVIS_BUILD_DIR/mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B clean test -P factory-propertiesbased -pl :pcap4j-core,:pcap4j-packetfactory-propertiesbased,:pcap4j-packettest
+    sudo $TRAVIS_BUILD_DIR/mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B clean test -P factory-static -pl :pcap4j-core,:pcap4j-packetfactory-static,:pcap4j-packettest
     if [ "${COVERALLS}" = "yes"  ]
     then
       sudo $TRAVIS_BUILD_DIR/mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -DserviceJobId=$TRAVIS_JOB_ID -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage package coveralls:report
