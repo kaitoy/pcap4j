@@ -3,6 +3,7 @@ Future
 ### New Features ###
 
 ### Bug Fixes ###
+* [Issues#209](https://github.com/kaitoy/pcap4j/issues/209): SIGSEGV in finalizer for BpfProgram.
 
 ### Other Changes ###
 

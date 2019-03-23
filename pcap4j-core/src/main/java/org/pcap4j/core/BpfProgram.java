@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2016  Pcap4J.org
+  _##  Copyright (C) 2013-2019  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -97,12 +97,6 @@ public final class BpfProgram {
       NativeMappings.pcap_freecode(program);
       freed = true;
     }
-  }
-
-  @Override
-  protected void finalize() throws Throwable {
-    super.finalize();
-    free();
   }
 
   /**
