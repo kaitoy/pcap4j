@@ -3,6 +3,14 @@ Future
 ### New Features ###
 
 ### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.7.6 (24-Mar-2019)
+==========================
+### New Features ###
+
+### Bug Fixes ###
 * [Issues#209](https://github.com/kaitoy/pcap4j/issues/209): SIGSEGV in finalizer for BpfProgram.
 
 ### Other Changes ###
