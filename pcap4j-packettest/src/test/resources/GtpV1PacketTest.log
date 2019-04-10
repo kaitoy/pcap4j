@@ -1,15 +1,23 @@
-[GTPv1 Header (12 bytes)]
+[GTPv1 Header (20 bytes)]
   Version: V1
   Protocol Type: GTP
   Reserved Flag: false
-  Extension Flag: false
+  Extension Flag: true
   Sequence Flag: true
   NPDU Flag: true
   Message Type: 2 (Echo Response)
-  Length: 8 [bytes]
+  Length: 16 [bytes]
   Tunnel ID: 1234567890
   Sequence Number: 4321
   NPDU Number: 222
-  Next Extension Header: 0xc0 (PDCP PDU number)
+  Next Extension Header Type: 0x85 (PDU Session Container)
+[GTP Pdu Session Container Extension Header (8 bytes)]
+  length: 2
+  pdu type: 0
+  Paging Policy Presence: true
+  Reflective QoS Indicator: false
+  Qos Flow Identifier: 15
+  Paging Policy Indicator: 12
+  nextExtensionHeaderType: 0x00 (No more extension headers)
 [data (4 bytes)]
   Hex stream: 00 01 02 03

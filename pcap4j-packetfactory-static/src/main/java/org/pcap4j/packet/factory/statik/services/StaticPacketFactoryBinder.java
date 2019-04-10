@@ -10,6 +10,7 @@ package org.pcap4j.packet.factory.statik.services;
 import java.util.HashMap;
 import java.util.Map;
 import org.pcap4j.packet.DnsResourceRecord.DnsRData;
+import org.pcap4j.packet.GtpV1Packet.GtpV1ExtensionHeader;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IpV4InternetTimestampOption;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
@@ -108,6 +109,8 @@ final class StaticPacketFactoryBinder implements PacketFactoryBinder {
     packetpPieceFactories.put(RadiotapData.class, StaticRadiotapDataFieldFactory.getInstance());
     packetpPieceFactories.put(SctpChunk.class, StaticSctpChunkFactory.getInstance());
     packetpPieceFactories.put(DnsRData.class, StaticDnsRDataFactory.getInstance());
+    packetpPieceFactories.put(
+        GtpV1ExtensionHeader.class, StaticGtpV1ExtensionHeaderFactory.getInstance());
   }
 
   public static PacketFactoryBinder getInstance() {

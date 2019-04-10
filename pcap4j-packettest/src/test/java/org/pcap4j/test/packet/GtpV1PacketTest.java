@@ -1,16 +1,22 @@
 package org.pcap4j.test.packet;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.GtpV1Packet;
+import org.pcap4j.packet.GtpV1Packet.GtpV1ExtensionHeader;
 import org.pcap4j.packet.GtpV1Packet.GtpV1Header;
 import org.pcap4j.packet.GtpV1Packet.ProtocolType;
+import org.pcap4j.packet.GtpV1PduSessionContainerExtensionHeader;
 import org.pcap4j.packet.GtpVersion;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV6Packet;
@@ -32,200 +38,229 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("javadoc")
 public class GtpV1PacketTest extends AbstractPacketTest {
 
-  private static final Logger logger = LoggerFactory.getLogger(GtpV1PacketTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(GtpV1PacketTest.class);
 
-  private final GtpVersion version;
-  private final ProtocolType protocolType;
-  private final boolean reserved;
-  private final boolean extensionHeaderFlag;
-  private final boolean sequenceNumberFlag;
-  private final boolean nPduNumberFlag;
-  private final GtpV1MessageType messageType;
-  private final short length;
-  private final int teid;
-  private final Short sequenceNumber;
-  private final Byte nPduNumber;
-  private final GtpV1ExtensionHeaderType nextExtensionHeaderType;
-  private final GtpV1Packet packet;
+    private final GtpVersion version;
+    private final ProtocolType protocolType;
+    private final boolean reserved;
+    private final boolean extensionHeaderFlag;
+    private final boolean sequenceNumberFlag;
+    private final boolean nPduNumberFlag;
+    private final GtpV1MessageType messageType;
+    private final int teid;
+    private final short sequenceNumber;
+    private final byte nPduNumber;
+    private final GtpV1ExtensionHeaderType nextExtensionHeaderType;
+    private final List<GtpV1Packet.GtpV1ExtensionHeader> gtpV1ExtensionHeaderList;
+    private final byte extensionPduType;
+    private final GtpV1Packet packet;
+    private final boolean extensionPppFlag;
+    private final byte extensionQfi;
+    private final byte extensionPpi;
 
-  public GtpV1PacketTest() throws Exception {
-    this.version = GtpVersion.V1;
-    this.protocolType = ProtocolType.GTP;
-    this.reserved = false;
-    this.extensionHeaderFlag = false;
-    this.sequenceNumberFlag = true;
-    this.nPduNumberFlag = true;
-    this.messageType = GtpV1MessageType.ECHO_RESPONSE;
-    this.length = 8;
-    this.teid = 1234567890;
-    this.sequenceNumber = 4321;
-    this.nPduNumber = (byte) 222;
-    this.nextExtensionHeaderType = GtpV1ExtensionHeaderType.PDCP_PDU_NUMBER;
+    public GtpV1PacketTest() throws Exception {
+        this.version = GtpVersion.V1;
+        this.protocolType = ProtocolType.GTP;
+        this.reserved = false;
+        this.extensionHeaderFlag = true;
+        this.sequenceNumberFlag = true;
+        this.nPduNumberFlag = true;
+        this.messageType = GtpV1MessageType.ECHO_RESPONSE;
+        this.teid = 1234567890;
+        this.sequenceNumber = 4321;
+        this.nPduNumber = (byte) 222;
+        this.nextExtensionHeaderType = GtpV1ExtensionHeaderType.PDU_SESSION_CONTAINER;
+        this.gtpV1ExtensionHeaderList = new ArrayList<>();
+        this.extensionPduType = (byte) 0;
+        this.extensionPppFlag = true;
+        this.extensionQfi = (byte) 15;
+        this.extensionPpi = (byte) 12;
 
-    Builder unknownb = new Builder();
-    unknownb.rawData(new byte[] {(byte) 0, (byte) 1, (byte) 2, (byte) 3});
+        GtpV1PduSessionContainerExtensionHeader.Builder extensionHeaderBuilder = new GtpV1PduSessionContainerExtensionHeader.Builder();
+        GtpV1Packet.GtpV1ExtensionHeader extensionHeader = extensionHeaderBuilder
+                .correctLengthAtBuild(true)
+                .pduType(extensionPduType)
+                .ppp(extensionPppFlag)
+                .qfi(extensionQfi)
+                .ppi(extensionPpi)
+                .nextExtensionHeaderType(GtpV1ExtensionHeaderType.getInstance((byte) 0))
+                .build();
+        gtpV1ExtensionHeaderList.add(extensionHeader);
 
-    GtpV1Packet.Builder b = new GtpV1Packet.Builder();
-    b.version(version)
-        .protocolType(protocolType)
-        .reserved(reserved)
-        .extensionHeaderFlag(extensionHeaderFlag)
-        .sequenceNumberFlag(sequenceNumberFlag)
-        .nPduNumberFlag(nPduNumberFlag)
-        .messageType(messageType)
-        .length(length)
-        .teid(teid)
-        .sequenceNumber(sequenceNumber)
-        .nPduNumber(nPduNumber)
-        .nextExtensionHeaderType(nextExtensionHeaderType)
-        .payloadBuilder(unknownb);
+        Builder unknownb = new Builder();
+        unknownb.rawData(new byte[] { (byte) 0, (byte) 1, (byte) 2, (byte) 3 });
 
-    this.packet = b.build();
-  }
+        GtpV1Packet.Builder b = new GtpV1Packet.Builder();
+        b.correctLengthAtBuild(true)
+                .version(version)
+                .protocolType(protocolType)
+                .reserved(reserved)
+                .extensionHeaderFlag(extensionHeaderFlag)
+                .sequenceNumberFlag(sequenceNumberFlag)
+                .nPduNumberFlag(nPduNumberFlag)
+                .messageType(messageType)
+                .teid(teid)
+                .sequenceNumber(sequenceNumber)
+                .nPduNumber(nPduNumber)
+                .nextExtensionHeaderType(nextExtensionHeaderType)
+                .gtpV1ExtensionHeaders(gtpV1ExtensionHeaderList)
+                .payloadBuilder(unknownb);
 
-  @Override
-  protected Packet getPacket() {
-    return packet;
-  }
-
-  @Override
-  protected Packet getWholePacket() {
-    Inet6Address srcAddr;
-    Inet6Address dstAddr;
-    try {
-      srcAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:1");
-      dstAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:2");
-    } catch (Exception e) {
-      throw new AssertionError("Never get here.");
+        this.packet = b.build();
     }
 
-    UdpPacket.Builder b = new UdpPacket.Builder();
-    b.dstPort(UdpPort.GTP_C)
-        .srcPort(UdpPort.getInstance((short) 12345))
-        .correctChecksumAtBuild(true)
-        .correctLengthAtBuild(true)
-        .payloadBuilder(packet.getBuilder().correctLengthAtBuild(true));
-
-    IpV6Packet.Builder IpV6b = new IpV6Packet.Builder();
-    IpV6b.version(IpVersion.IPV6)
-        .trafficClass(IpV6SimpleTrafficClass.newInstance((byte) 0x12))
-        .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
-        .nextHeader(IpNumber.UDP)
-        .hopLimit((byte) 100)
-        .srcAddr(srcAddr)
-        .dstAddr(dstAddr)
-        .payloadBuilder(b)
-        .correctLengthAtBuild(true);
-
-    EthernetPacket.Builder eb = new EthernetPacket.Builder();
-    eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
-        .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
-        .type(EtherType.IPV6)
-        .payloadBuilder(IpV6b)
-        .paddingAtBuild(true);
-
-    eb.get(UdpPacket.Builder.class).dstAddr(dstAddr).srcAddr(srcAddr);
-    return eb.build();
-  }
-
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-    logger.info("########## " + GtpV1PacketTest.class.getSimpleName() + " START ##########");
-  }
-
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {}
-
-  @Test
-  public void testNewPacket() {
-    try {
-      GtpV1Packet p = GtpV1Packet.newPacket(packet.getRawData(), 0, packet.getRawData().length);
-      assertEquals(packet, p);
-    } catch (IllegalRawDataException e) {
-      throw new AssertionError(e);
+    @Override
+    protected Packet getPacket() {
+        return packet;
     }
-  }
 
-  @Test
-  public void testGetHeader() {
-    GtpV1Header h = packet.getHeader();
-    assertEquals(version, h.getVersion());
-    assertEquals(protocolType, h.getProtocolType());
-    assertEquals(extensionHeaderFlag, h.isExtensionHeaderFieldPresent());
-    assertEquals(sequenceNumberFlag, h.isSequenceNumberFieldPresent());
-    assertEquals(nPduNumberFlag, h.isNPduNumberFieldPresent());
-    assertEquals(messageType, h.getMessageType());
-    assertEquals(length, h.getLength());
-    assertEquals(teid, h.getTeid());
-    assertEquals(sequenceNumber, h.getSequenceNumber());
-    assertEquals(nPduNumber, h.getNPduNumber());
-    assertEquals(nextExtensionHeaderType, h.getNextExtensionHeaderType());
+    @Override
+    protected Packet getWholePacket() {
+        Inet6Address srcAddr;
+        Inet6Address dstAddr;
+        try {
+            srcAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:1");
+            dstAddr = (Inet6Address) InetAddress.getByName("2001:db8::3:2:2");
+        } catch (Exception e) {
+            throw new AssertionError("Never get here.");
+        }
 
-    GtpV1Packet.Builder b = packet.getBuilder();
-    GtpV1Packet p;
+        UdpPacket.Builder b = new UdpPacket.Builder();
+        b.dstPort(UdpPort.GTP_C)
+                .srcPort(UdpPort.getInstance((short) 12345))
+                .correctChecksumAtBuild(true)
+                .correctLengthAtBuild(true)
+                .payloadBuilder(packet.getBuilder().correctLengthAtBuild(true));
 
-    b.length((short) 0);
-    p = b.build();
-    assertEquals((short) 0, (short) p.getHeader().getLengthAsInt());
+        IpV6Packet.Builder IpV6b = new IpV6Packet.Builder();
+        IpV6b.version(IpVersion.IPV6)
+                .trafficClass(IpV6SimpleTrafficClass.newInstance((byte) 0x12))
+                .flowLabel(IpV6SimpleFlowLabel.newInstance(0x12345))
+                .nextHeader(IpNumber.UDP)
+                .hopLimit((byte) 100)
+                .srcAddr(srcAddr)
+                .dstAddr(dstAddr)
+                .payloadBuilder(b)
+                .correctLengthAtBuild(true);
 
-    b.length((short) -1);
-    p = b.build();
-    assertEquals((short) -1, (short) p.getHeader().getLengthAsInt());
+        EthernetPacket.Builder eb = new EthernetPacket.Builder();
+        eb.dstAddr(MacAddress.getByName("fe:00:00:00:00:02"))
+                .srcAddr(MacAddress.getByName("fe:00:00:00:00:01"))
+                .type(EtherType.IPV6)
+                .payloadBuilder(IpV6b)
+                .paddingAtBuild(true);
 
-    b.length((short) 32767);
-    p = b.build();
-    assertEquals((short) 32767, (short) p.getHeader().getLengthAsInt());
+        eb.get(UdpPacket.Builder.class).dstAddr(dstAddr).srcAddr(srcAddr);
+        return eb.build();
+    }
 
-    b.length((short) -32768);
-    p = b.build();
-    assertEquals((short) -32768, (short) p.getHeader().getLengthAsInt());
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        logger.info("########## " + GtpV1PacketTest.class.getSimpleName() + " START ##########");
+    }
 
-    b.teid(0);
-    p = b.build();
-    assertEquals(0, (int) p.getHeader().getTeidAsLong());
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {}
 
-    b.teid(-1);
-    p = b.build();
-    assertEquals(-1, (int) p.getHeader().getTeidAsLong());
+    @Test
+    public void testNewPacket() {
+        try {
+            GtpV1Packet p = GtpV1Packet.newPacket(packet.getRawData(), 0, packet.getRawData().length);
+            assertEquals(packet, p);
+        } catch (IllegalRawDataException e) {
+            throw new AssertionError(e);
+        }
+    }
 
-    b.teid(2147483647);
-    p = b.build();
-    assertEquals(2147483647, (int) p.getHeader().getTeidAsLong());
+    @Test
+    public void testGetHeader() {
+        GtpV1Header h = packet.getHeader();
+        assertEquals(version, h.getVersion());
+        assertEquals(protocolType, h.getProtocolType());
+        assertEquals(extensionHeaderFlag, h.isExtensionHeaderFieldPresent());
+        assertEquals(sequenceNumberFlag, h.isSequenceNumberFieldPresent());
+        assertEquals(nPduNumberFlag, h.isNPduNumberFieldPresent());
+        assertEquals(messageType, h.getMessageType());
+        assertEquals(teid, h.getTeid());
+        assertEquals(sequenceNumber, h.getSequenceNumber().shortValue());
+        assertEquals(nPduNumber, h.getNPduNumber().byteValue());
+        assertEquals(nextExtensionHeaderType, h.getNextExtensionHeaderType());
 
-    b.teid(-2147483648);
-    p = b.build();
-    assertEquals(-2147483648, (int) p.getHeader().getTeidAsLong());
+        GtpV1ExtensionHeader extensionHeader = h.getExtensionHeaders().get(0);
+        assertEquals(extensionHeader.getClass(), GtpV1PduSessionContainerExtensionHeader.class);
 
-    b.sequenceNumber((short) 0);
-    p = b.build();
-    assertEquals((short) 0, p.getHeader().getSequenceNumberAsInt().shortValue());
+        GtpV1PduSessionContainerExtensionHeader pduSessionContainerExtentionHeader = (GtpV1PduSessionContainerExtensionHeader) extensionHeader;
+        assertEquals(2, pduSessionContainerExtentionHeader.getLength());
+        assertEquals(extensionPduType, pduSessionContainerExtentionHeader.getPduType());
+        assertTrue(extensionPppFlag);
+        assertEquals(extensionQfi, pduSessionContainerExtentionHeader.getQfi());
+        assertEquals(extensionPpi, pduSessionContainerExtentionHeader.getPpi());
 
-    b.sequenceNumber((short) -1);
-    p = b.build();
-    assertEquals((short) -1, p.getHeader().getSequenceNumberAsInt().shortValue());
+        GtpV1Packet.Builder b = packet.getBuilder();
+        GtpV1Packet p;
 
-    b.sequenceNumber((short) 32767);
-    p = b.build();
-    assertEquals((short) 32767, p.getHeader().getSequenceNumberAsInt().shortValue());
+        b.length((short) 0);
+        p = b.build();
+        assertEquals((short) 0, (short) p.getHeader().getLengthAsInt());
 
-    b.sequenceNumber((short) -32768);
-    p = b.build();
-    assertEquals((short) -32768, p.getHeader().getSequenceNumberAsInt().shortValue());
+        b.length((short) -1);
+        p = b.build();
+        assertEquals((short) -1, (short) p.getHeader().getLengthAsInt());
 
-    b.nPduNumber((byte) 0);
-    p = b.build();
-    assertEquals((byte) 0, p.getHeader().getNPduNumberAsInt().byteValue());
+        b.length((short) 32767);
+        p = b.build();
+        assertEquals((short) 32767, (short) p.getHeader().getLengthAsInt());
 
-    b.nPduNumber((byte) -1);
-    p = b.build();
-    assertEquals((byte) -1, p.getHeader().getNPduNumberAsInt().byteValue());
+        b.length((short) -32768);
+        p = b.build();
+        assertEquals((short) -32768, (short) p.getHeader().getLengthAsInt());
 
-    b.nPduNumber((byte) 127);
-    p = b.build();
-    assertEquals((byte) 127, p.getHeader().getNPduNumberAsInt().byteValue());
+        b.teid(0);
+        p = b.build();
+        assertEquals(0, (int) p.getHeader().getTeidAsLong());
 
-    b.nPduNumber((byte) -128);
-    p = b.build();
-    assertEquals((byte) -128, p.getHeader().getNPduNumberAsInt().byteValue());
-  }
+        b.teid(-1);
+        p = b.build();
+        assertEquals(-1, (int) p.getHeader().getTeidAsLong());
+
+        b.teid(2147483647);
+        p = b.build();
+        assertEquals(2147483647, (int) p.getHeader().getTeidAsLong());
+
+        b.teid(-2147483648);
+        p = b.build();
+        assertEquals(-2147483648, (int) p.getHeader().getTeidAsLong());
+
+        b.sequenceNumber((short) 0);
+        p = b.build();
+        assertEquals((short) 0, p.getHeader().getSequenceNumberAsInt().shortValue());
+
+        b.sequenceNumber((short) -1);
+        p = b.build();
+        assertEquals((short) -1, p.getHeader().getSequenceNumberAsInt().shortValue());
+
+        b.sequenceNumber((short) 32767);
+        p = b.build();
+        assertEquals((short) 32767, p.getHeader().getSequenceNumberAsInt().shortValue());
+
+        b.sequenceNumber((short) -32768);
+        p = b.build();
+        assertEquals((short) -32768, p.getHeader().getSequenceNumberAsInt().shortValue());
+
+        b.nPduNumber((byte) 0);
+        p = b.build();
+        assertEquals((byte) 0, p.getHeader().getNPduNumberAsInt().byteValue());
+
+        b.nPduNumber((byte) -1);
+        p = b.build();
+        assertEquals((byte) -1, p.getHeader().getNPduNumberAsInt().byteValue());
+
+        b.nPduNumber((byte) 127);
+        p = b.build();
+        assertEquals((byte) 127, p.getHeader().getNPduNumberAsInt().byteValue());
+
+        b.nPduNumber((byte) -128);
+        p = b.build();
+        assertEquals((byte) -128, p.getHeader().getNPduNumberAsInt().byteValue());
+    }
 }

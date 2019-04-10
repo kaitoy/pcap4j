@@ -49,6 +49,10 @@ public final class GtpV1ExtensionHeaderType extends NamedNumber<Byte, GtpV1Exten
   public static final GtpV1ExtensionHeaderType SUSPEND_RESPONSE =
       new GtpV1ExtensionHeaderType((byte) 0xC2, "Suspend Response");
 
+  /** PDU Session Container: 1000 0101 */
+  public static final GtpV1ExtensionHeaderType PDU_SESSION_CONTAINER =
+      new GtpV1ExtensionHeaderType((byte) 0x85, "PDU Session Container");
+
   private static final Map<Byte, GtpV1ExtensionHeaderType> registry =
       new HashMap<Byte, GtpV1ExtensionHeaderType>();
 
@@ -61,6 +65,7 @@ public final class GtpV1ExtensionHeaderType extends NamedNumber<Byte, GtpV1Exten
     registry.put(PDCP_PDU_NUMBER.value(), PDCP_PDU_NUMBER);
     registry.put(SUSPEND_REQUEST.value(), SUSPEND_REQUEST);
     registry.put(SUSPEND_RESPONSE.value(), SUSPEND_RESPONSE);
+    registry.put(PDU_SESSION_CONTAINER.value(), PDU_SESSION_CONTAINER);
   }
 
   /** @return a ComprehensionRequirement object. */
