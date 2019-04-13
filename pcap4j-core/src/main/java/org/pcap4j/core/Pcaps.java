@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2018  Pcap4J.org
+  _##  Copyright (C) 2011-2019  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -35,13 +35,14 @@ import org.slf4j.LoggerFactory;
 public final class Pcaps {
 
   private static final Logger logger = LoggerFactory.getLogger(Pcaps.class);
+  private static final Object lock = new Object();
 
   private Pcaps() {
     throw new AssertionError();
   }
 
   /**
-   * Gets all devices. This method is not thread-safe.
+   * Gets all devices.
    *
    * @return a list of PcapNetworkInterfaces.
    * @throws PcapNativeException if an error occurs in the pcap native library.
@@ -50,37 +51,39 @@ public final class Pcaps {
     PointerByReference alldevsPP = new PointerByReference();
     PcapErrbuf errbuf = new PcapErrbuf();
 
-    int rc = NativeMappings.pcap_findalldevs(alldevsPP, errbuf);
-    if (rc != 0) {
-      StringBuilder sb = new StringBuilder(50);
-      sb.append("Return code: ").append(rc).append(", Message: ").append(errbuf);
-      throw new PcapNativeException(sb.toString(), rc);
-    }
-    if (errbuf.length() != 0) {
-      logger.warn("{}", errbuf);
-    }
-
-    Pointer alldevsp = alldevsPP.getValue();
-    if (alldevsp == null) {
-      logger.info("No NIF was found.");
-      return Collections.<PcapNetworkInterface>emptyList();
-    }
-
-    pcap_if pcapIf = new pcap_if(alldevsp);
-
     List<PcapNetworkInterface> ifList = new ArrayList<PcapNetworkInterface>();
-    for (pcap_if pif = pcapIf; pif != null; pif = pif.next) {
-      ifList.add(PcapNetworkInterface.newInstance(pif, true));
-    }
+    synchronized (lock) {
+      int rc = NativeMappings.pcap_findalldevs(alldevsPP, errbuf);
+      if (rc != 0) {
+        StringBuilder sb = new StringBuilder(50);
+        sb.append("Return code: ").append(rc).append(", Message: ").append(errbuf);
+        throw new PcapNativeException(sb.toString(), rc);
+      }
+      if (errbuf.length() != 0) {
+        logger.warn("{}", errbuf);
+      }
 
-    NativeMappings.pcap_freealldevs(pcapIf.getPointer());
+      Pointer alldevsp = alldevsPP.getValue();
+      if (alldevsp == null) {
+        logger.info("No NIF was found.");
+        return Collections.<PcapNetworkInterface>emptyList();
+      }
+
+      pcap_if pcapIf = new pcap_if(alldevsp);
+
+      for (pcap_if pif = pcapIf; pif != null; pif = pif.next) {
+        ifList.add(PcapNetworkInterface.newInstance(pif, true));
+      }
+
+      NativeMappings.pcap_freealldevs(pcapIf.getPointer());
+    }
 
     logger.info("{} NIF(s) found.", ifList.size());
     return ifList;
   }
 
   /**
-   * Gets a device by IP address. This method is not thread-safe.
+   * Gets a device by IP address.
    *
    * @param addr addr
    * @return a PcapNetworkInterface.
@@ -106,7 +109,7 @@ public final class Pcaps {
   }
 
   /**
-   * Gets a device by name. This method is not thread-safe.
+   * Gets a device by name.
    *
    * @param name name
    * @return a PcapNetworkInterface.

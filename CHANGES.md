@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* [Issues#210](https://github.com/kaitoy/pcap4j/issues/210): `findAllDevs()`, `getDevByAddress()`, and `getDevByName()` of `Pcaps` are now thread-safe.
 
 ### Bug Fixes ###
 
@@ -8,17 +9,6 @@ Future
 
 Release 2.0.0-alpha.2 (2-Jan-2019)
 ==================================
-### New Features ###
-* [PR#196](https://github.com/kaitoy/pcap4j/pull/196): add protocol implementations for 4 icmpv6 types (RFC6275).
-* [PR#144](https://github.com/kaitoy/pcap4j/pull/144): Generalize TcpPacket and UdpPacket to same abstract TransportPacket class.
-
-### Bug Fixes ###
-* [Issues#200](https://github.com/kaitoy/pcap4j/issues/200): Fix a bug that causes NullPointerException in DnsDomainName#toString(byte[]).
-
-### Other Changes ###
-
-Release 1.7.5 (2-Jan-2019)
-==========================
 ### New Features ###
 * [PR#196](https://github.com/kaitoy/pcap4j/pull/196): add protocol implementations for 4 icmpv6 types (RFC6275).
 * [PR#144](https://github.com/kaitoy/pcap4j/pull/144): Generalize TcpPacket and UdpPacket to same abstract TransportPacket class.
@@ -36,6 +26,26 @@ Release 2.0.0-alpha.1 (12-Nov-2018)
 
 ### Other Changes ###
 * [Issues#191](https://github.com/kaitoy/pcap4j/issues/191): Change to use Native.POINTER_SIZE instead of Pointer.SIZE that is deprecated in JNA 5.
+
+Release 1.7.6 (24-Mar-2019)
+==========================
+### New Features ###
+
+### Bug Fixes ###
+* [Issues#209](https://github.com/kaitoy/pcap4j/issues/209): SIGSEGV in finalizer for BpfProgram.
+
+### Other Changes ###
+
+Release 1.7.5 (2-Jan-2019)
+==========================
+### New Features ###
+* [PR#196](https://github.com/kaitoy/pcap4j/pull/196): add protocol implementations for 4 icmpv6 types (RFC6275).
+* [PR#144](https://github.com/kaitoy/pcap4j/pull/144): Generalize TcpPacket and UdpPacket to same abstract TransportPacket class.
+
+### Bug Fixes ###
+* [Issues#200](https://github.com/kaitoy/pcap4j/issues/200): Fix a bug that causes NullPointerException in DnsDomainName#toString(byte[]).
+
+### Other Changes ###
 
 Release 1.7.4 (12-Nov-2018)
 ======
