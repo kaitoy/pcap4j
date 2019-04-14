@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2017  Pcap4J.org
+  _##  Copyright (C) 2011-2019  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -697,12 +697,11 @@ public final class ByteArrays {
 
     try {
       if (bo.equals(LITTLE_ENDIAN)) {
-        return (Inet6Address)
-            InetAddress.getByAddress(
-                reverse(getSubArray(array, offset, INET6_ADDRESS_SIZE_IN_BYTES)));
+        return Inet6Address.getByAddress(
+            null, reverse(getSubArray(array, offset, INET6_ADDRESS_SIZE_IN_BYTES)), -1);
       } else {
-        return (Inet6Address)
-            InetAddress.getByAddress(getSubArray(array, offset, INET6_ADDRESS_SIZE_IN_BYTES));
+        return Inet6Address.getByAddress(
+            null, getSubArray(array, offset, INET6_ADDRESS_SIZE_IN_BYTES), -1);
       }
     } catch (UnknownHostException e) {
       throw new AssertionError(e);
