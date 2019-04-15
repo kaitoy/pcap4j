@@ -274,7 +274,7 @@ public class GtpV1PduSessionContainerExtensionHeader implements GtpV1ExtensionHe
 
   @Override
   public byte[] getRawData() {
-    List<byte[]> rawFields = new ArrayList<>();
+    List<byte[]> rawFields = new ArrayList<byte[]>();
     rawFields.add(ByteArrays.toByteArray(length));
     rawFields.add(ByteArrays.toByteArray((byte) (pduType << 4)));
     if (pduType == 0) {

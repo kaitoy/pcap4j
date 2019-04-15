@@ -48,8 +48,8 @@ public class GtpV1PacketTest extends AbstractPacketTest {
     private final boolean nPduNumberFlag;
     private final GtpV1MessageType messageType;
     private final int teid;
-    private final short sequenceNumber;
-    private final byte nPduNumber;
+    private final Short sequenceNumber;
+    private final Byte nPduNumber;
     private final GtpV1ExtensionHeaderType nextExtensionHeaderType;
     private final List<GtpV1Packet.GtpV1ExtensionHeader> gtpV1ExtensionHeaderList;
     private final byte extensionPduType;
@@ -182,8 +182,8 @@ public class GtpV1PacketTest extends AbstractPacketTest {
         assertEquals(nPduNumberFlag, h.isNPduNumberFieldPresent());
         assertEquals(messageType, h.getMessageType());
         assertEquals(teid, h.getTeid());
-        assertEquals(sequenceNumber, h.getSequenceNumber().shortValue());
-        assertEquals(nPduNumber, h.getNPduNumber().byteValue());
+        assertEquals(sequenceNumber, h.getSequenceNumber());
+        assertEquals(nPduNumber, h.getNPduNumber());
         assertEquals(nextExtensionHeaderType, h.getNextExtensionHeaderType());
 
         GtpV1ExtensionHeader extensionHeader = h.getExtensionHeaders().get(0);
