@@ -8,6 +8,7 @@
 package org.pcap4j.packet.factory.propertiesbased;
 
 import org.pcap4j.packet.DnsResourceRecord.DnsRData;
+import org.pcap4j.packet.GtpV1Packet.GtpV1ExtensionHeader;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IpV4InternetTimestampOption.IpV4InternetTimestampOptionData;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
@@ -24,6 +25,7 @@ import org.pcap4j.packet.RadiotapPacket.RadiotapData;
 import org.pcap4j.packet.SctpPacket.SctpChunk;
 import org.pcap4j.packet.TcpPacket.TcpOption;
 import org.pcap4j.packet.UnknownDnsRData;
+import org.pcap4j.packet.UnknownGtpV1ExtensionHeader;
 import org.pcap4j.packet.UnknownIpV4InternetTimestampOptionData;
 import org.pcap4j.packet.UnknownIpV4Option;
 import org.pcap4j.packet.UnknownIpV6NeighborDiscoveryOption;
@@ -36,6 +38,7 @@ import org.pcap4j.packet.UnknownTcpOption;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.DnsResourceRecordType;
 import org.pcap4j.packet.namednumber.EtherType;
+import org.pcap4j.packet.namednumber.GtpV1ExtensionHeaderType;
 import org.pcap4j.packet.namednumber.IpV4InternetTimestampOptionFlag;
 import org.pcap4j.packet.namednumber.IpV4OptionType;
 import org.pcap4j.packet.namednumber.IpV6NeighborDiscoveryOptionType;
@@ -135,6 +138,14 @@ public final class PacketFactoryPropertiesLoader {
 
   /** */
   public static final String IPV6_FLOW_LABEL_CLASS_KEY = IpV6FlowLabel.class.getName() + ".class";
+
+  /** */
+  public static final String GTPV1_EXTENSION_HEADER_KEY_BASE =
+      GtpV1ExtensionHeader.class.getName() + ".classFor.";
+
+  /** */
+  public static final String UNKNOWN_GTPV1_EXTENSION_HEADER_KEY =
+      GTPV1_EXTENSION_HEADER_KEY_BASE + "unknownNumber";
 
   private static final PacketFactoryPropertiesLoader INSTANCE = new PacketFactoryPropertiesLoader();
 
@@ -395,5 +406,26 @@ public final class PacketFactoryPropertiesLoader {
   /** @return a class which implements IpV6FlowLabel. */
   public Class<? extends IpV6FlowLabel> getIpV6FlowLabelClass() {
     return loader.<IpV6FlowLabel>getClass(IPV6_FLOW_LABEL_CLASS_KEY, IpV6SimpleFlowLabel.class);
+  }
+
+  /**
+   * @param type type
+   * @return a class which implements GtpV1ExtensionHeader for a specified type.
+   */
+  public Class<? extends GtpV1ExtensionHeader> getGtpV1ExtensionHeaderClass(
+      GtpV1ExtensionHeaderType type) {
+    StringBuilder sb = new StringBuilder(120);
+    sb.append(GTPV1_EXTENSION_HEADER_KEY_BASE)
+        .append(type.getClass().getName())
+        .append(".")
+        .append(type.valueAsString());
+    return loader.<GtpV1ExtensionHeader>getClass(
+        sb.toString(), getUnKnownGtpV1ExtensionHeaderClass());
+  }
+
+  /** @return a class which implements GtpV1ExtensionHeader for an unknown type. */
+  public Class<? extends GtpV1ExtensionHeader> getUnKnownGtpV1ExtensionHeaderClass() {
+    return loader.<GtpV1ExtensionHeader>getClass(
+        UNKNOWN_GTPV1_EXTENSION_HEADER_KEY, UnknownGtpV1ExtensionHeader.class);
   }
 }
