@@ -48,8 +48,8 @@ Pcap4J 2.x and newer
 
 Maven Central Repositoryからダウンロードできる。
 
-* Pcap4J 2.0.0-alpha.2
-    * [pcap4j-2.0.0-alpha.2-distribution.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/2.0.0-alpha.2/pcap4j-2.0.0-alpha.2-distribution.zip)
+* Pcap4J 2.0.0-alpha.3
+    * [pcap4j-2.0.0-alpha.3-distribution.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/2.0.0-alpha.3/pcap4j-2.0.0-alpha.3-distribution.zip)
 * スナップショットビルド
     * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j/
 
@@ -117,7 +117,7 @@ Pcap4Jは管理者権限で実行する必要がある。
 ケーパビリティを付与するには次のコマンドを実行する: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### ドキュメント ####
-最新のJavaDocは[こちら](http://www.javadoc.io/doc/org.pcap4j/pcap4j/2.0.0-alpha.2)。
+最新のJavaDocは[こちら](http://www.javadoc.io/doc/org.pcap4j/pcap4j/2.0.0-alpha.3)。
 各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22)からダウンロードできる。
 
 Pcap4Jのモジュール構成については[こちら](https://github.com/kaitoy/pcap4j/blob/master/www/pcap4j_modules.md)。
@@ -155,8 +155,8 @@ pcap4j-packetfactory-staticプロジェクトかpcap4j-packetfactory-propertiesb
 
     ```
     dependencies {
-      compile 'org.pcap4j:pcap4j-core:2.0.0-alpha.2'
-      compile 'org.pcap4j:pcap4j-packetfactory-static:2.0.0-alpha.2'
+      compile 'org.pcap4j:pcap4j-core:2.0.0-alpha.3'
+      compile 'org.pcap4j:pcap4j-packetfactory-static:2.0.0-alpha.3'
     }
     ```
 
@@ -174,12 +174,12 @@ pcap4j-packetfactory-staticプロジェクトかpcap4j-packetfactory-propertiesb
         <dependency>
           <groupId>org.pcap4j</groupId>
           <artifactId>pcap4j-core</artifactId>
-          <version>2.0.0-alpha.2</version>
+          <version>2.0.0-alpha.3</version>
         </dependency>
         <dependency>
           <groupId>org.pcap4j</groupId>
           <artifactId>pcap4j-packetfactory-static</artifactId>
-          <version>2.0.0-alpha.2</version>
+          <version>2.0.0-alpha.3</version>
         </dependency>
            ...
       </dependencies>

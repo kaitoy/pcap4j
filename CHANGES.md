@@ -6,6 +6,16 @@ Future
 
 ### Other Changes ###
 
+Release 2.0.0-alpha.3 (21-Apr-2019)
+===================================
+### New Features ###
+* [Issues#210](https://github.com/kaitoy/pcap4j/issues/210): `findAllDevs()`, `getDevByAddress()`, and `getDevByName()` of `Pcaps` are now thread-safe.
+
+### Bug Fixes ###
+* [Issues#214](https://github.com/kaitoy/pcap4j/issues/214): Fix a bug where ClassCastException is thrown when parsing a packet that contains IPv4-Mapped IPv6 Addresses.
+
+### Other Changes ###
+
 Release 2.0.0-alpha.2 (2-Jan-2019)
 ==================================
 ### New Features ###
