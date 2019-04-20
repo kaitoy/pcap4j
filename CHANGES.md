@@ -1,6 +1,14 @@
 Future
 ======
 ### New Features ###
+
+### Bug Fixes ###
+
+### Other Changes ###
+
+Release 1.7.7 (21-Apr-2019)
+==========================
+### New Features ###
 * [Issues#210](https://github.com/kaitoy/pcap4j/issues/210): `findAllDevs()`, `getDevByAddress()`, and `getDevByName()` of `Pcaps` are now thread-safe.
 
 ### Bug Fixes ###
