@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2017  Pcap4J.org
+  _##  Copyright (C) 2017-2019  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Objects;
 import org.pcap4j.packet.AbstractPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.factory.PacketFactories;
@@ -19,7 +20,7 @@ import org.pcap4j.util.LazyValue;
 
 /**
  * Pseudo packet to hold a timestamp, an original length, and a raw data of a captured packet. This
- * class doesn't dissect the raw data until a certain method (refer to each method's javadoc) is
+ * class doesn't dissect the raw data until certain methods (refer to each method's javadoc) are
  * called. Instances of this class are not immutable.
  *
  * @author Kaito Yamada
@@ -52,6 +53,18 @@ public final class PcapPacket extends AbstractPacket {
             () ->
                 PacketFactories.getFactory(Packet.class, DataLinkType.class)
                     .newInstance(rawData, 0, rawData.length, dlt));
+  }
+
+  private PcapPacket(PcapPacket.Builder builder) {
+    Objects.requireNonNull(builder);
+    Objects.requireNonNull(builder.timestamp);
+    Objects.requireNonNull(builder.payloadBuilder);
+
+    this.timestamp = builder.timestamp;
+    this.originalLength = builder.originalLength;
+    Packet.Builder payloadBuilder = builder.payloadBuilder;
+    this.packet = new LazyValue<>(payloadBuilder::build);
+    this.rawData = packet.getValue().getRawData();
   }
 
   /** @return the timestamp of when this packet was captured. */
@@ -104,15 +117,9 @@ public final class PcapPacket extends AbstractPacket {
     return rawData;
   }
 
-  /**
-   * This method returns the same object as {@link #getPacket()}.{@link Packet#getBuilder()
-   * getBuilder()}. This method dissect the raw data.
-   *
-   * @return {@link Builder} instance of the captured packet.
-   */
   @Override
   public Builder getBuilder() {
-    return packet.getValue().getBuilder();
+    return new Builder(this);
   }
 
   @Override
@@ -168,5 +175,58 @@ public final class PcapPacket extends AbstractPacket {
     result = 31 * result + timestamp.hashCode();
     result = 31 * result + originalLength;
     return result;
+  }
+
+  /**
+   * @author Ferran Altimiras
+   * @since pcap4j 2.0.0
+   */
+  public static final class Builder extends AbstractBuilder {
+
+    private Instant timestamp;
+    private int originalLength;
+    private Packet.Builder payloadBuilder;
+    /** */
+    public Builder() {}
+
+    private Builder(PcapPacket packet) {
+      this.timestamp = packet.timestamp;
+      this.originalLength = packet.originalLength;
+      this.payloadBuilder = packet.getPayload() != null ? packet.getPayload().getBuilder() : null;
+    }
+
+    /**
+     * @param timestamp timestamp
+     * @return this Builder object for method chaining.
+     */
+    public PcapPacket.Builder timestamp(Instant timestamp) {
+      this.timestamp = timestamp;
+      return this;
+    }
+
+    /**
+     * @param originalLength originalLength
+     * @return this Builder object for method chaining.
+     */
+    public PcapPacket.Builder originalLength(int originalLength) {
+      this.originalLength = originalLength;
+      return this;
+    }
+
+    @Override
+    public PcapPacket.Builder payloadBuilder(Packet.Builder payloadBuilder) {
+      this.payloadBuilder = payloadBuilder;
+      return this;
+    }
+
+    @Override
+    public Packet.Builder getPayloadBuilder() {
+      return payloadBuilder;
+    }
+
+    @Override
+    public PcapPacket build() {
+      return new PcapPacket(this);
+    }
   }
 }
