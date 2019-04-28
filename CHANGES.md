@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* [PR#208](https://github.com/kaitoy/pcap4j/pull/208): Change the core module to use ServiceLoader to load a packet factory module.
 
 ### Bug Fixes ###
 
