@@ -7,13 +7,12 @@
 
 package org.pcap4j.packet.factory;
 
-import org.pcap4j.packet.namednumber.NamedNumber;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Iterator;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
+import org.pcap4j.packet.namednumber.NamedNumber;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kaito Yamada
@@ -32,8 +31,19 @@ public final class PacketFactories {
       Iterator<PacketFactoryBinderProvider> iter = loader.iterator();
       if (iter.hasNext()) {
         PacketFactoryBinderProvider packetFactoryBinderProvider = iter.next();
+        logger.info(
+            "A PacketFactoryBinderProvider implementation is found. ClassLoader: {}, URL: {}",
+            packetFactoryBinderProvider.getClass().getClassLoader().toString(),
+            packetFactoryBinderProvider
+                .getClass()
+                .getProtectionDomain()
+                .getCodeSource()
+                .getLocation());
         factoryBinder = packetFactoryBinderProvider.getBinder();
         logger.info("Succeeded in PacketFactoryBinderProvider.getBinder()");
+      } else {
+        logger.warn(
+            "No PacketFactoryBinder is available. All packets will be captured as UnknownPacket.");
       }
     } catch (ServiceConfigurationError e) {
       logger.warn(e.getClass().getName() + ": " + e.getMessage());
