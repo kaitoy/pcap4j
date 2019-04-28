@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2014  Pcap4J.org
+  _##  Copyright (C) 2011-2019 Pcap4J.org
   _##
   _##########################################################################
 */
@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 /**
  * The interface representing a packet which consists of a header and a payload. If you use {@link
- * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
+ * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
  * which implement this interface must implement the following method: {@code public static Packet
  * newPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException}
  *

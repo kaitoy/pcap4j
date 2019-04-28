@@ -1,18 +1,12 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
-
-import java.io.Serializable;
-import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.DataLinkType;
@@ -20,6 +14,15 @@ import org.pcap4j.packet.namednumber.RadiotapPresentBitNumber;
 import org.pcap4j.util.ByteArrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.Serializable;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 /**
  * Radiotap packet
@@ -502,7 +505,7 @@ public final class RadiotapPacket extends AbstractPacket {
 
   /**
    * The interface representing a Radiotap data field. If you use {@link
-   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
    * which implement this interface must implement the following method: {@code public static
    * RadiotapDataField newInstance(byte[] rawData, int offset, int length) throws
    * IllegalRawDataException}
