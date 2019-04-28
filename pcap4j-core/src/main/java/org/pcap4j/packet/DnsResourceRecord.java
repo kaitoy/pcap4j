@@ -7,15 +7,14 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
+
+import java.io.Serializable;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.DnsClass;
 import org.pcap4j.packet.namednumber.DnsResourceRecordType;
 import org.pcap4j.util.ByteArrays;
-
-import java.io.Serializable;
-
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 /**
  * DNS Resource record
@@ -441,9 +440,10 @@ public final class DnsResourceRecord implements Serializable {
 
   /**
    * The interface representing an RDATA. If you use {@link
-   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
-   * which implement this interface must implement the following method: {@code public static
-   * IpV4Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException}
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+   * PropertiesBasedPacketFactory}, classes which implement this interface must implement the
+   * following method: {@code public static IpV4Option newInstance(byte[] rawData, int offset, int
+   * length) throws IllegalRawDataException}
    *
    * @author Kaito Yamada
    * @since pcap4j 1.7.1

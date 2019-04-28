@@ -1,5 +1,12 @@
 package org.pcap4j.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.EOFException;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.PcapHandle.PcapDirection;
@@ -9,14 +16,6 @@ import org.pcap4j.packet.IcmpV4EchoPacket;
 import org.pcap4j.packet.IcmpV4EchoReplyPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.UdpPacket;
-
-import java.io.EOFException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("javadoc")
 public class PcapHandleTest {
@@ -35,13 +34,13 @@ public class PcapHandleTest {
 
       final List<Packet> packets = new ArrayList<Packet>();
       handle.loop(
-        3,
-        new PacketListener() {
-          @Override
-          public void gotPacket(Packet packet) {
-            packets.add(packet);
-          }
-        });
+          3,
+          new PacketListener() {
+            @Override
+            public void gotPacket(Packet packet) {
+              packets.add(packet);
+            }
+          });
       handle.close();
       process.destroy();
 
@@ -57,12 +56,12 @@ public class PcapHandleTest {
     if (System.getenv("TRAVIS") != null) {
       // run only on Travis CI
       PcapHandle handle =
-        new PcapHandle.Builder("any")
-          .direction(PcapDirection.IN)
-          .promiscuousMode(PromiscuousMode.PROMISCUOUS)
-          .snaplen(65536)
-          .timeoutMillis(10)
-          .build();
+          new PcapHandle.Builder("any")
+              .direction(PcapDirection.IN)
+              .promiscuousMode(PromiscuousMode.PROMISCUOUS)
+              .snaplen(65536)
+              .timeoutMillis(10)
+              .build();
       handle.setFilter("icmp", BpfCompileMode.OPTIMIZE);
 
       ProcessBuilder pb = new ProcessBuilder("/bin/ping", "www.google.com");
@@ -70,13 +69,13 @@ public class PcapHandleTest {
 
       final List<Packet> packets = new ArrayList<Packet>();
       handle.loop(
-        3,
-        new PacketListener() {
-          @Override
-          public void gotPacket(Packet packet) {
-            packets.add(packet);
-          }
-        });
+          3,
+          new PacketListener() {
+            @Override
+            public void gotPacket(Packet packet) {
+              packets.add(packet);
+            }
+          });
       handle.close();
       process.destroy();
 

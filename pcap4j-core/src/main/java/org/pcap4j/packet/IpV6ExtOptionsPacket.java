@@ -7,18 +7,17 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpV6OptionType;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
 
 /**
  * @author Kaito Yamada
@@ -385,9 +384,10 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
   /**
    * The interface representing an IPv6 option. If you use {@link
-   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
-   * which implement this interface must implement the following method: {@code public static
-   * IpV6Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException}
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+   * PropertiesBasedPacketFactory}, classes which implement this interface must implement the
+   * following method: {@code public static IpV6Option newInstance(byte[] rawData, int offset, int
+   * length) throws IllegalRawDataException}
    *
    * @author Kaito Yamada
    * @since pcap4j 0.9.11

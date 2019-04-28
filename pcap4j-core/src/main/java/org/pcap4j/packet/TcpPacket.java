@@ -7,14 +7,8 @@
 
 package org.pcap4j.packet;
 
-import org.pcap4j.packet.factory.PacketFactories;
-import org.pcap4j.packet.factory.PacketFactory;
-import org.pcap4j.packet.namednumber.IpNumber;
-import org.pcap4j.packet.namednumber.TcpOptionKind;
-import org.pcap4j.packet.namednumber.TcpPort;
-import org.pcap4j.util.ByteArrays;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 import java.io.Serializable;
 import java.net.Inet4Address;
@@ -23,9 +17,14 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
+import org.pcap4j.packet.factory.PacketFactories;
+import org.pcap4j.packet.factory.PacketFactory;
+import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.packet.namednumber.TcpOptionKind;
+import org.pcap4j.packet.namednumber.TcpPort;
+import org.pcap4j.util.ByteArrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kaito Yamada
@@ -1008,9 +1007,10 @@ public final class TcpPacket extends AbstractPacket implements TransportPacket {
 
   /**
    * The interface representing a TCP option. If you use {@link
-   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
-   * which implement this interface must implement the following method: {@code public static
-   * TcpOption newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException}
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+   * PropertiesBasedPacketFactory}, classes which implement this interface must implement the
+   * following method: {@code public static TcpOption newInstance(byte[] rawData, int offset, int
+   * length) throws IllegalRawDataException}
    *
    * @author Kaito Yamada
    * @since pcap4j 0.9.12

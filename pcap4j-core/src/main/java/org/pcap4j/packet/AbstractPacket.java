@@ -7,19 +7,18 @@
 
 package org.pcap4j.packet;
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.util.LazyValue;
 import org.pcap4j.util.LazyValue.BuildValueCommand;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
 /**
  * Abstract immutable packet class. If you use {@link
- * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, this
- * subclass must implement the following method: {@code public static Packet newPacket(byte[]
- * rawData, int offset, int length) throws IllegalRawDataException}
+ * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+ * PropertiesBasedPacketFactory}, this subclass must implement the following method: {@code public
+ * static Packet newPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException}
  *
  * @author Kaito Yamada
  * @since pcap4j 0.9.1

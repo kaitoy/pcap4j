@@ -7,17 +7,16 @@
 
 package org.pcap4j.packet.factory.propertiesbased.services;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.factory.PacketFactoryBinder;
 import org.pcap4j.packet.factory.propertiesbased.PacketFactoryPropertiesLoader;
 import org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory;
 import org.pcap4j.packet.namednumber.NamedNumber;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Kaito Yamada
