@@ -154,7 +154,7 @@ Learn more about Pcap4j from the following documents:
 #### How to run samples ####
 See the following examples:
 
-* [org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/blob/v1/www/Packet.md)
+* [org.pcap4j.sample.Loop](https://github.com/kaitoy/pcap4j/blob/v1/www/sample_Loop.md)
 * [org.pcap4j.sample.SendArpRequest](https://github.com/kaitoy/pcap4j/blob/v1/www/sample_SendArpRequest.md)
 
 If you want to run a sample in pcap4j-sample on Eclipse,

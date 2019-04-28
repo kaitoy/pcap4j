@@ -9,9 +9,8 @@ Pcap4J has two Packet Factory modules, [Static Packet Factory](#static-packet-fa
 
 ### Packet Factory Binder ###
 Packet Factory Binder binds Packet Factory implementations to the Pcap4J core module.
-Pcap4J core module's source includes the dummy implementation of Packet Factory Binder ([src](https://github.com/kaitoy/pcap4j/blob/v1/pcap4j-core/src/main/java/org/pcap4j/packet/factory/PacketFactoryBinder.java)).
-This dummy is removed when Pcap4J core module is built.
-An actual implementation of Packet Factory Binder is included in a Packet Factory module which also has Packet Factory implementations.
+Pcap4J core module's source includes [the interface of Packet Factory Binder](https://github.com/kaitoy/pcap4j/blob/v1/pcap4j-core/src/main/java/org/pcap4j/packet/factory/PacketFactoryBinder.java).
+An implementation of Packet Factory Binder is included in a Packet Factory module which also has Packet Factory implementations.
 
 A Packet Factory implementation is used to find a packet class (e.g. [IpV4Packet](https://github.com/kaitoy/pcap4j/blob/v1/pcap4j-core/src/main/java/org/pcap4j/packet/IpV4Packet.java))
 or a packet piece class (e.g. [IpV4Rfc1349Tos](https://github.com/kaitoy/pcap4j/blob/v1/pcap4j-core/src/main/java/org/pcap4j/packet/IpV4Rfc1349Tos.java))
