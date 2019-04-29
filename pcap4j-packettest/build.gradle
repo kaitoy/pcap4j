@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016-2017  Pcap4J.org
+  _##  Copyright (C) 2016 Pcap4J.org
   _##
   _##########################################################################
 */
@@ -13,8 +13,9 @@ configurations {
 }
 
 dependencies {
-  testCompile project(':pcap4j-core')
-  testCompile "junit:junit:${junitVer}"
+  testImplementation project(':pcap4j-core')
+  testImplementation "junit:junit:${junitVer}"
+  testImplementation "org.slf4j:slf4j-api:${slf4jVer}"
 }
 
 // jar is needed to sync to the Central, although it's empty.

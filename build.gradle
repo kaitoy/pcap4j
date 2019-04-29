@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016-2018  Pcap4J.org
+  _##  Copyright (C) 2016 Pcap4J.org
   _##
   _##########################################################################
 */
@@ -19,7 +19,7 @@ buildscript {
 }
 
 allprojects {
-  apply plugin: 'java'
+  apply plugin: 'java-library'
   apply plugin: "com.diffplug.gradle.spotless"
 
   group = 'org.pcap4j'
@@ -84,8 +84,8 @@ configurations {
 
 dependencies {
   // for javadoc task
-  compile "org.slf4j:slf4j-api:${slf4jVer}"
-  compile "net.java.dev.jna:jna:${jnaVer}"
+  implementation "org.slf4j:slf4j-api:${slf4jVer}"
+  implementation "net.java.dev.jna:jna:${jnaVer}"
 }
 
 jar.enabled = false

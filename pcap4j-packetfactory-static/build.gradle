@@ -15,11 +15,11 @@ configurations {
 }
 
 dependencies {
-  compile project(':pcap4j-core')
+  implementation project(':pcap4j-core')
   packetTests project(path: ':pcap4j-packettest', configuration: 'testJar')
-  testRuntime "ch.qos.logback:logback-core:${logbackVer}"
-  testRuntime "ch.qos.logback:logback-classic:${logbackVer}"
-  testCompile "junit:junit:${junitVer}"
+  testRuntimeOnly "ch.qos.logback:logback-core:${logbackVer}"
+  testRuntimeOnly "ch.qos.logback:logback-classic:${logbackVer}"
+  testImplementation "junit:junit:${junitVer}"
 }
 
 task extractTests(type: Copy, dependsOn: [testClasses, ':pcap4j-packettest:jarTests']) {
