@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016 Pcap4J.org
   _##
   _##########################################################################
 */
@@ -26,7 +26,7 @@ task extractTests(type: Copy, dependsOn: [testClasses, ':pcap4j-packettest:jarTe
   from {
     configurations.packetTests.collect { zipTree it }
   }
-  into sourceSets.test.output.classesDir
+  into sourceSets.test.output.classesDirs[0]
 }
 
 test {
@@ -34,6 +34,6 @@ test {
   systemProperties System.getProperties().findAll({
     it.key.startsWith 'org.pcap4j.' or it.key == 'jna.library.path' or it.key == 'jna.nosys'
   })
-  systemProperty 'org.pcap4j.packet.AbstractPacketTest.resourceDir', sourceSets.test.output.classesDir
+  systemProperty 'org.pcap4j.packet.AbstractPacketTest.resourceDir', sourceSets.test.output.classesDirs[0]
   systemProperty 'org.pcap4j.packet.AbstractPacketTest.tmpDir', temporaryDir
 }
