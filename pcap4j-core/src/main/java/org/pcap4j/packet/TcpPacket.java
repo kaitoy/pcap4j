@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2019  Pcap4J.org
+  _##  Copyright (C) 2011-2019 Pcap4J.org
   _##
   _##########################################################################
 */
@@ -1001,9 +1001,10 @@ public final class TcpPacket extends AbstractPacket implements TransportPacket {
 
   /**
    * The interface representing a TCP option. If you use {@link
-   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
-   * which implement this interface must implement the following method: {@code public static
-   * TcpOption newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException}
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+   * PropertiesBasedPacketFactory}, classes which implement this interface must implement the
+   * following method: {@code public static TcpOption newInstance(byte[] rawData, int offset, int
+   * length) throws IllegalRawDataException}
    *
    * @author Kaito Yamada
    * @since pcap4j 0.9.12

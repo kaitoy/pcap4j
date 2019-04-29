@@ -1,13 +1,13 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2016  Pcap4J.org
+  _##  Copyright (C) 2012-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -376,9 +376,10 @@ public abstract class IpV6ExtOptionsPacket extends AbstractPacket {
 
   /**
    * The interface representing an IPv6 option. If you use {@link
-   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
-   * which implement this interface must implement the following method: {@code public static
-   * IpV6Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException}
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+   * PropertiesBasedPacketFactory}, classes which implement this interface must implement the
+   * following method: {@code public static IpV6Option newInstance(byte[] rawData, int offset, int
+   * length) throws IllegalRawDataException}
    *
    * @author Kaito Yamada
    * @since pcap4j 0.9.11

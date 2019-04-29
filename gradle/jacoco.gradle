@@ -41,9 +41,4 @@ jacocoTestReport {
   sourceDirectories = files sourceDirList
   classDirectories = files classDirList
   executionData = files execDataList
-
-  // remove PacketFactoryBinder becuase Jacoco can't process classes that have the same name
-  classDirectories = files(classDirectories.files.collect {
-    fileTree(dir: it,  exclude: ['**/PacketFactoryBinder*.class'])
-  })
 }

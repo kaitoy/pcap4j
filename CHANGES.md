@@ -1,7 +1,8 @@
 Future
 ======
 ### New Features ###
-* [PR#146](https://github.com/kaitoy/pcap4j/pull/146): Add PcapPacket builder. `PcapPacket#getBuilder()` is changed such that it returns a PcapPacket builder instance instead of payload's builder. 
+* [PR#146](https://github.com/kaitoy/pcap4j/pull/146): Add PcapPacket builder. `PcapPacket#getBuilder()` is changed such that it returns a PcapPacket builder instance instead of payload's builder.
+* [PR#208](https://github.com/kaitoy/pcap4j/pull/208): Change the core module to use ServiceLoader to load a packet factory module.
 
 ### Bug Fixes ###
 

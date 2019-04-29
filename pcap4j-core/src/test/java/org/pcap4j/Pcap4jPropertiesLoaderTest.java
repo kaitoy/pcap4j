@@ -1,59 +1,20 @@
 package org.pcap4j;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.sun.jna.Platform;
-import java.util.Arrays;
-import java.util.Collection;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.pcap4j.util.PropertiesLoader;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.rule.PowerMockRule;
-import org.powermock.reflect.Whitebox;
 
 @SuppressWarnings("javadoc")
-@RunWith(Parameterized.class)
-@PrepareForTest(Platform.class)
 public class Pcap4jPropertiesLoaderTest {
 
   private Pcap4jPropertiesLoader propertiesLoader;
 
-  private final int osType;
-
-  @Rule public PowerMockRule powerMockRule = new PowerMockRule();
-
-  public Pcap4jPropertiesLoaderTest(int osType) {
-    this.osType = osType;
-  }
-
-  @Parameterized.Parameters
-  public static Collection<Object[]> osType() {
-    return Arrays.asList(
-        new Object[][] {
-          {Platform.WINDOWS},
-          {Platform.MAC},
-          {Platform.LINUX},
-          {Platform.FREEBSD},
-          {Platform.OPENBSD}
-        });
-  }
-
   @Before
-  public void setUp() throws Exception {
-    PowerMockito.mockStatic(Platform.class);
-    PowerMockito.when(Platform.getOSType()).thenReturn(osType);
-
+  public void setUp() {
     this.propertiesLoader = Pcap4jPropertiesLoader.getInstance();
-
-    Whitebox.setInternalState(
-        propertiesLoader,
-        "loader",
-        new PropertiesLoader("org/pcap4j/pcap4j-test.properties", false, false));
   }
 
   @Test
@@ -87,7 +48,7 @@ public class Pcap4jPropertiesLoaderTest {
   }
 
   private int getExpectedDefaultAfInet6() {
-    switch (osType) {
+    switch (Platform.getOSType()) {
       case Platform.MAC:
         return 30;
       case Platform.FREEBSD:
@@ -102,7 +63,7 @@ public class Pcap4jPropertiesLoaderTest {
   }
 
   private int getExpectedDefaultDltRaw() {
-    switch (osType) {
+    switch (Platform.getOSType()) {
       case Platform.OPENBSD:
         return 14;
       default:

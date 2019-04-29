@@ -1,13 +1,15 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2017  Pcap4J.org
+  _##  Copyright (C) 2011-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 import java.io.Serializable;
 import java.net.Inet4Address;
@@ -867,9 +869,10 @@ public final class IpV4Packet extends AbstractPacket implements IpPacket {
 
   /**
    * The interface representing an IPv4 option. If you use {@link
-   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
-   * which implement this interface must implement the following method: {@code public static
-   * IpV4Option newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException}
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+   * PropertiesBasedPacketFactory}, classes which implement this interface must implement the
+   * following method: {@code public static IpV4Option newInstance(byte[] rawData, int offset, int
+   * length) throws IllegalRawDataException}
    *
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
@@ -888,9 +891,9 @@ public final class IpV4Packet extends AbstractPacket implements IpPacket {
 
   /**
    * The interface representing an IPv4 TOS. If you use {@link
-   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
-   * which implement this interface must implement the following method: {@code public static
-   * IpV4Tos newInstance(byte value)}
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+   * PropertiesBasedPacketFactory}, classes which implement this interface must implement the
+   * following method: {@code public static IpV4Tos newInstance(byte value)}
    *
    * @author Kaito Yamada
    * @since pcap4j 0.9.11

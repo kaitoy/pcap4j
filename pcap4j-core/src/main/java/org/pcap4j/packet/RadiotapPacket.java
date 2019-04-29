@@ -1,13 +1,15 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 import java.io.Serializable;
 import java.nio.ByteOrder;
@@ -484,10 +486,10 @@ public final class RadiotapPacket extends AbstractPacket {
 
   /**
    * The interface representing a Radiotap data field. If you use {@link
-   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
-   * which implement this interface must implement the following method: {@code public static
-   * RadiotapDataField newInstance(byte[] rawData, int offset, int length) throws
-   * IllegalRawDataException}
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+   * PropertiesBasedPacketFactory}, classes which implement this interface must implement the
+   * following method: {@code public static RadiotapDataField newInstance(byte[] rawData, int
+   * offset, int length) throws IllegalRawDataException}
    *
    * @author Kaito Yamada
    * @since pcap4j 1.6.5

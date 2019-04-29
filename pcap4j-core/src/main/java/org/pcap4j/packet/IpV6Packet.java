@@ -1,13 +1,16 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2016  Pcap4J.org
+  _##  Copyright (C) 2012-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INET6_ADDRESS_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 import java.io.Serializable;
 import java.net.Inet6Address;
@@ -509,9 +512,9 @@ public final class IpV6Packet extends AbstractPacket implements IpPacket {
 
   /**
    * The interface representing an IPv6 traffic class. If you use {@link
-   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
-   * which implement this interface must implement the following method: {@code public static
-   * IpV6TrafficClass newInstance(byte value)}
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+   * PropertiesBasedPacketFactory}, classes which implement this interface must implement the
+   * following method: {@code public static IpV6TrafficClass newInstance(byte value)}
    *
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
@@ -524,9 +527,9 @@ public final class IpV6Packet extends AbstractPacket implements IpPacket {
 
   /**
    * The interface representing an IPv6 flow label. If you use {@link
-   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
-   * which implement this interface must implement the following method: {@code public static
-   * IpV6FlowLabel newInstance(int value)}
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+   * PropertiesBasedPacketFactory}, classes which implement this interface must implement the
+   * following method: {@code public static IpV6FlowLabel newInstance(int value)}
    *
    * @author Kaito Yamada
    * @since pcap4j 0.9.11

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016-2019  Pcap4J.org
+  _##  Copyright (C) 2016-2019 Pcap4J.org
   _##
   _##########################################################################
 */
@@ -412,9 +412,10 @@ public final class SctpPacket extends AbstractPacket implements TransportPacket 
 
   /**
    * The interface representing an SCTP Chunk Field. If you use {@link
-   * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, classes
-   * which implement this interface must implement the following method: {@code public static
-   * SctpChunk newInstance(byte[] rawData, int offset, int length) throws IllegalRawDataException}
+   * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+   * PropertiesBasedPacketFactory}, classes which implement this interface must implement the
+   * following method: {@code public static SctpChunk newInstance(byte[] rawData, int offset, int
+   * length) throws IllegalRawDataException}
    *
    * @see <a href="https://tools.ietf.org/html/rfc4960#section-3.2">RFC 4960</a>
    * @author Kaito Yamada

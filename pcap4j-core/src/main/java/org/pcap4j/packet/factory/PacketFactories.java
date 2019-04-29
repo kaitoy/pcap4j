@@ -1,12 +1,15 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Pcap4J.org
+  _##  Copyright (C) 2012-2019 Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet.factory;
 
+import java.util.Iterator;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 import org.pcap4j.packet.namednumber.NamedNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +26,27 @@ public final class PacketFactories {
   static {
     PacketFactoryBinder factoryBinder = null;
     try {
-      factoryBinder = PacketFactoryBinder.getInstance();
-      logger.info("Succeeded in FactoryBinder.getInstance()");
-    } catch (NoClassDefFoundError e) {
-      logger.warn(NoClassDefFoundError.class.getName() + ":" + e.getMessage());
-    } catch (NoSuchMethodError e) {
-      logger.warn(NoSuchMethodError.class.getName() + ":" + e.getMessage());
+      ServiceLoader<PacketFactoryBinderProvider> loader =
+          ServiceLoader.load(PacketFactoryBinderProvider.class);
+      Iterator<PacketFactoryBinderProvider> iter = loader.iterator();
+      if (iter.hasNext()) {
+        PacketFactoryBinderProvider packetFactoryBinderProvider = iter.next();
+        logger.info(
+            "A PacketFactoryBinderProvider implementation is found. ClassLoader: {}, URL: {}",
+            packetFactoryBinderProvider.getClass().getClassLoader().toString(),
+            packetFactoryBinderProvider
+                .getClass()
+                .getProtectionDomain()
+                .getCodeSource()
+                .getLocation());
+        factoryBinder = packetFactoryBinderProvider.getBinder();
+        logger.info("Succeeded in PacketFactoryBinderProvider.getBinder()");
+      } else {
+        logger.warn(
+            "No PacketFactoryBinder is available. All packets will be captured as UnknownPacket.");
+      }
+    } catch (ServiceConfigurationError e) {
+      logger.warn(e.getClass().getName() + ": " + e.getMessage());
     }
     FACTORY_BINDER = factoryBinder;
   }

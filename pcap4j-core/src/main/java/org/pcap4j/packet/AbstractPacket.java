@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2017  Pcap4J.org
+  _##  Copyright (C) 2011-2019 Pcap4J.org
   _##
   _##########################################################################
 */
@@ -15,9 +15,9 @@ import org.pcap4j.util.LazyValue.BuildValueCommand;
 
 /**
  * Abstract immutable packet class. If you use {@link
- * org.pcap4j.packet.factory.PropertiesBasedPacketFactory PropertiesBasedPacketFactory}, this
- * subclass must implement the following method: {@code public static Packet newPacket(byte[]
- * rawData, int offset, int length) throws IllegalRawDataException}
+ * org.pcap4j.packet.factory.propertiesbased.PropertiesBasedPacketFactory
+ * PropertiesBasedPacketFactory}, this subclass must implement the following method: {@code public
+ * static Packet newPacket(byte[] rawData, int offset, int length) throws IllegalRawDataException}
  *
  * @author Kaito Yamada
  * @since pcap4j 0.9.1
