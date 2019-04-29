@@ -2,16 +2,15 @@
 # Dockerfile for Pcap4J
 #
 
-FROM java:8
-MAINTAINER Kaito Yamada <kaitoy@pcap4j.org>
+FROM openjdk:8-jdk-slim
 
 # Install libpcap.
 RUN apt-get update && \
-    apt-get install -y libpcap0.8
+  apt-get install -y libpcap0.8
 
 # Build Pcap4J.
 RUN cd /usr/local/src/ && \
-    git clone -b master git://github.com/kaitoy/pcap4j.git
+  git clone -b master git://github.com/kaitoy/pcap4j.git
 WORKDIR /usr/local/src/pcap4j
 RUN ./gradlew build --info 2>&1 | tee build.log
 
