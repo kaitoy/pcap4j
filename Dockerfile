@@ -6,7 +6,7 @@ FROM openjdk:8-jdk-slim
 
 # Install libpcap.
 RUN apt-get update && \
-  apt-get install -y libpcap0.8
+  apt-get install -y libpcap0.8 git
 
 # Build Pcap4J.
 RUN cd /usr/local/src/ && \
