@@ -1,12 +1,12 @@
 package org.pcap4j.core;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,12 +15,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pcap4j.core.PcapHandle.PcapDirection;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
@@ -33,18 +32,18 @@ public class PcapHandleTest {
 
   private PcapHandle ph;
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() throws Exception {}
 
-  @AfterClass
+  @AfterAll
   public static void tearDownAfterClass() throws Exception {}
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     ph = Pcaps.openOffline("src/test/resources/org/pcap4j/core/PcapHandleTest.pcap");
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     if (ph != null) {
       ph.close();
@@ -312,7 +311,7 @@ public class PcapHandleTest {
                   packet -> {
                     byte[] p = packet.getRawData();
                     if (p[0] == 1 && p[1] == 2 && p[2] == 3 && p[3] == 4 && p[4] == 5) {
-                      Assert.assertEquals(result.length, p.length);
+                      assertEquals(result.length, p.length);
                       System.arraycopy(p, 0, result, 0, result.length);
                       future.run();
                     }

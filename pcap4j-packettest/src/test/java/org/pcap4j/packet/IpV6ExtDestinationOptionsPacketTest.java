@@ -1,6 +1,6 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -8,9 +8,9 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.pcap4j.packet.IpV6ExtDestinationOptionsPacket.IpV6ExtDestinationOptionsHeader;
 import org.pcap4j.packet.IpV6ExtOptionsPacket.IpV6Option;
 import org.pcap4j.packet.namednumber.EtherType;
@@ -100,7 +100,7 @@ public class IpV6ExtDestinationOptionsPacketTest extends AbstractPacketTest {
     return eb.build();
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() throws Exception {
     logger.info(
         "########## "
@@ -108,7 +108,7 @@ public class IpV6ExtDestinationOptionsPacketTest extends AbstractPacketTest {
             + " START ##########");
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDownAfterClass() throws Exception {}
 
   @Test

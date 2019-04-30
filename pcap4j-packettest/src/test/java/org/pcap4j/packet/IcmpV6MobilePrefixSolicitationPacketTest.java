@@ -1,13 +1,13 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.pcap4j.packet.IcmpV6MobilePrefixSolicitationPacket.IcmpV6MobilePrefixSolicitationHeader;
 import org.pcap4j.packet.namednumber.EtherType;
 import org.pcap4j.packet.namednumber.IcmpV6Code;
@@ -37,10 +37,12 @@ public class IcmpV6MobilePrefixSolicitationPacketTest extends AbstractPacketTest
     this.packet = b.build();
   }
 
+  @Override
   public Packet getPacket() {
     return packet;
   }
 
+  @Override
   protected Packet getWholePacket() {
     Inet6Address srcAddr;
     Inet6Address dstAddr;
@@ -80,7 +82,7 @@ public class IcmpV6MobilePrefixSolicitationPacketTest extends AbstractPacketTest
     return eb.build();
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() throws Exception {
     logger.info(
         "########## "
@@ -88,7 +90,7 @@ public class IcmpV6MobilePrefixSolicitationPacketTest extends AbstractPacketTest
             + " START ##########");
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDownAfterClass() throws Exception {}
 
   @Test

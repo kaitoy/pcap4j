@@ -1,13 +1,13 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.pcap4j.packet.BsdLoopbackPacket.BsdLoopbackHeader;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.IcmpV4Code;
@@ -83,12 +83,12 @@ public class BsdLoopbackPacketTest extends AbstractPacketTest {
     return DataLinkType.NULL;
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() throws Exception {
     logger.info("########## " + BsdLoopbackPacketTest.class.getSimpleName() + " START ##########");
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDownAfterClass() throws Exception {}
 
   @Test

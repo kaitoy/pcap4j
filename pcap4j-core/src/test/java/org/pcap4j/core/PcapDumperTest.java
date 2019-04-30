@@ -1,15 +1,15 @@
 package org.pcap4j.core;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pcap4j.packet.ArpPacket;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.Packet;
@@ -59,13 +59,13 @@ public class PcapDumperTest {
     }
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() throws Exception {}
 
-  @AfterClass
+  @AfterAll
   public static void tearDownAfterClass() throws Exception {}
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     tmpDirPath = System.getProperty(TMP_DIR_PROP, "testdata");
 
@@ -83,7 +83,7 @@ public class PcapDumperTest {
     dumper = handle.dumpOpen(dumpFile.getAbsolutePath());
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     if (dumper != null) {
       dumper.close();

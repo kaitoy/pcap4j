@@ -20,7 +20,8 @@ dependencies {
   packetTests project(path: ':pcap4j-packettest', configuration: 'testJar')
   testRuntimeOnly "ch.qos.logback:logback-core:${logbackVer}"
   testRuntimeOnly "ch.qos.logback:logback-classic:${logbackVer}"
-  testImplementation "junit:junit:${junitVer}"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVer}"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVer}"
 }
 
 task extractTests(type: Copy, dependsOn: [testClasses, ':pcap4j-packettest:jarTests']) {

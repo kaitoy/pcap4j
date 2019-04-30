@@ -6,8 +6,8 @@
 */
 package org.pcap4j.util;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,11 +18,11 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pcap4j.core.PcapDumper;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.Pcaps;
@@ -47,13 +47,13 @@ public class IpV4HelperTest {
   private String resourceDir;
   private String tmpDirPath;
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() throws Exception {}
 
-  @AfterClass
+  @AfterAll
   public static void tearDownAfterClass() throws Exception {}
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     resourceDir = System.getProperty(AbstractPacketTest.RESOURCE_DIR_PROP, "src/test/resources");
     tmpDirPath = System.getProperty(AbstractPacketTest.TMP_DIR_PROP, "testdata");
@@ -66,7 +66,7 @@ public class IpV4HelperTest {
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {}
 
   @Test

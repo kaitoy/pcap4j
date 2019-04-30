@@ -12,7 +12,8 @@ ext.moduleName = 'org.pcap4j.core'
 dependencies {
   implementation "org.slf4j:slf4j-api:${slf4jVer}"
   implementation "net.java.dev.jna:jna:${jnaVer}"
-  testImplementation "junit:junit:${junitVer}"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVer}"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVer}"
   testRuntimeOnly "ch.qos.logback:logback-core:${logbackVer}"
   testRuntimeOnly "ch.qos.logback:logback-classic:${logbackVer}"
 }

@@ -68,6 +68,10 @@ allprojects {
 }
 
 subprojects {
+  test {
+    useJUnitPlatform()
+  }
+
   afterEvaluate {
     jar {
       inputs.property("moduleName", moduleName)

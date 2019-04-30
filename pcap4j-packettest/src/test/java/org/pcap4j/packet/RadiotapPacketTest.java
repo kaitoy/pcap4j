@@ -6,14 +6,14 @@
 */
 package org.pcap4j.packet;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.pcap4j.packet.RadiotapDataMcs.Bandwidth;
 import org.pcap4j.packet.RadiotapDataMcs.HtFormat;
 import org.pcap4j.packet.RadiotapPacket.RadiotapData;
@@ -278,12 +278,12 @@ public class RadiotapPacketTest extends AbstractPacketTest {
     return DataLinkType.IEEE802_11_RADIO;
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() throws Exception {
     logger.info("########## " + RadiotapPacketTest.class.getSimpleName() + " START ##########");
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDownAfterClass() throws Exception {}
 
   @Test

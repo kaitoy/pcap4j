@@ -15,7 +15,7 @@ configurations {
 
 dependencies {
   testImplementation project(':pcap4j-core')
-  testImplementation "junit:junit:${junitVer}"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVer}"
   testImplementation "org.slf4j:slf4j-api:${slf4jVer}"
 }
 

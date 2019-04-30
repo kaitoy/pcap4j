@@ -1,6 +1,7 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -160,7 +161,7 @@ public class RandomPacketTester {
           }
         }
       }
-      assertEquals("Got failures: " + failures + "\n" + details, 0, failures.size());
+      assertEquals(0, failures.size());
 
       return String.format("Processed %d randomized packets", loopCount);
     }

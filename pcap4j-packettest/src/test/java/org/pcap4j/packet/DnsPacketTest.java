@@ -1,6 +1,6 @@
 package org.pcap4j.packet;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -8,9 +8,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.pcap4j.packet.DnsPacket.DnsHeader;
 import org.pcap4j.packet.namednumber.DnsClass;
 import org.pcap4j.packet.namednumber.DnsOpCode;
@@ -472,12 +472,12 @@ public class DnsPacketTest extends AbstractPacketTest {
     return eb.build();
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() throws Exception {
     logger.info("########## " + DnsPacketTest.class.getSimpleName() + " START ##########");
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDownAfterClass() throws Exception {
     logger.info("########## " + DnsPacketTest.class.getSimpleName() + " END ##########");
   }
@@ -585,6 +585,7 @@ public class DnsPacketTest extends AbstractPacketTest {
     }
   }
 
+  @Override
   @Test
   public void testToString() {
     for (DnsResourceRecord r : packet.getHeader().getAnswers()) {
