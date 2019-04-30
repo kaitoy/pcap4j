@@ -7,6 +7,7 @@
 
 archivesBaseName = 'pcap4j-packetfactory-propertiesbased'
 description = 'Properties-Based Packet Factory.'
+ext.moduleName = 'org.pcap4j.packet.factory.propertiesbased'
 
 configurations {
   packetTests {

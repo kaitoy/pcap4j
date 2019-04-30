@@ -67,6 +67,17 @@ allprojects {
   }
 }
 
+subprojects {
+  afterEvaluate {
+    jar {
+      inputs.property("moduleName", moduleName)
+      manifest {
+        attributes('Automatic-Module-Name': moduleName)
+      }
+    }
+  }
+}
+
 if (!gradle.startParameter.taskNames.find({ it.endsWith('javadoc') })) {
   subprojects {
     if (project.hasProperty('javadoc')) {

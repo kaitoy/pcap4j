@@ -7,6 +7,7 @@
 
 archivesBaseName = 'pcap4j-core'
 description = 'The core module of Pcap4J.'
+ext.moduleName = 'org.pcap4j.core'
 
 dependencies {
   implementation "org.slf4j:slf4j-api:${slf4jVer}"
