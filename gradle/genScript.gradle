@@ -1,11 +1,11 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016 Pcap4J.org
   _##
   _##########################################################################
 */
 
-import org.gradle.internal.os.OperatingSystem;
+import org.gradle.internal.os.OperatingSystem
 
 configurations {
   captureScript
@@ -24,22 +24,21 @@ task genScript(
 ) {
   from configurations.captureScript
   into scriptDir
-}
-
-genScript << {
-  def jars = new File(scriptDir).listFiles()
-               .findAll { it.name.endsWith '.jar' }
-               .collect { it.name }
-  if (OperatingSystem.current().isWindows()) {
-    new File("${scriptDir}/capture.bat").withWriter { out ->
-      out.println "@echo off"
-      out.println "\"%JAVA_HOME%\\bin\\java\" -cp ${String.join ';', jars.toArray(new String[0])} org.pcap4j.sample.Loop"
+  doLast {
+    def jars = new File(scriptDir).listFiles()
+            .findAll { it.name.endsWith '.jar' }
+            .collect { it.name }
+    if (OperatingSystem.current().isWindows()) {
+      new File("${scriptDir}/capture.bat").withWriter { out ->
+        out.println "@echo off"
+        out.println "\"%JAVA_HOME%\\bin\\java\" -cp ${String.join ';', jars.toArray(new String[0])} org.pcap4j.sample.Loop"
+      }
     }
-  }
-  else {
-    new File("${scriptDir}/capture.sh").withWriter { out ->
-      out.println "#!/bin/sh"
-      out.println "\$JAVA_HOME/bin/java -cp ${String.join ':', jars.toArray(new String[0])} org.pcap4j.sample.Loop"
+    else {
+      new File("${scriptDir}/capture.sh").withWriter { out ->
+        out.println "#!/bin/sh"
+        out.println "\$JAVA_HOME/bin/java -cp ${String.join ':', jars.toArray(new String[0])} org.pcap4j.sample.Loop"
+      }
     }
   }
 }

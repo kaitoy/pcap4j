@@ -1,12 +1,9 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2016  Pcap4J.org
+  _##  Copyright (C) 2016 Pcap4J.org
   _##
   _##########################################################################
 */
-
-import org.gradle.internal.os.OperatingSystem;
-
 configurations {
   captureScript
 }
@@ -24,16 +21,17 @@ task genScriptForDocker(
 ) {
   from configurations.captureScript
   into scriptDir
-}
+  doLast {
+    def jars = new File(scriptDir).listFiles()
+            .findAll { it.name.endsWith '.jar' }
+            .collect { it.name }
 
-genScriptForDocker << {
-  def jars = new File(scriptDir).listFiles()
-               .findAll { it.name.endsWith '.jar' }
-               .collect { it.name }
-
-  new File("${scriptDir}/capture.sh").withWriter { out ->
-    out.println "#!/bin/sh"
-    out.println "java -cp ${String.join ':', jars.toArray(new String[0])} -Dorg.pcap4j.sample.Docker.nifName=\$1 -Dorg.pcap4j.sample.Docker.wait=\$2 -Dorg.pcap4j.sample.Docker.count=10 org.pcap4j.sample.Docker \$3"
+    new File("${scriptDir}/capture.sh").withWriter { out ->
+      out.println "#!/bin/sh"
+      out.println "java -cp ${String.join ':', jars.toArray(new String[0])} -Dorg.pcap4j.sample.Docker.nifName=\$1 -Dorg.pcap4j.sample.Docker.wait=\$2 -Dorg.pcap4j.sample.Docker.count=10 org.pcap4j.sample.Docker \$3"
+    }
   }
 }
+
+
 
