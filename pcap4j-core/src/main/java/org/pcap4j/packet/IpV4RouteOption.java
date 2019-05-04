@@ -1,13 +1,13 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2012-2014  Pcap4J.org
+  _##  Copyright (C) 2012 Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
+import static org.pcap4j.util.ByteArrays.INET4_ADDRESS_SIZE_IN_BYTES;
 
 import java.net.Inet4Address;
 import java.util.ArrayList;
@@ -197,7 +197,7 @@ abstract class IpV4RouteOption implements IpV4Option {
    * @author Kaito Yamada
    * @since pcap4j 0.9.11
    */
-  abstract static class Builder<T extends IpV4RouteOption> implements LengthBuilder<T> {
+  public abstract static class Builder<T extends IpV4RouteOption> implements LengthBuilder<T> {
 
     private byte length;
     private byte pointer;

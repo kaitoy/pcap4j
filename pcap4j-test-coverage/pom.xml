@@ -119,12 +119,12 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <systemPropertyVariables>
-                <org.pcap4j.packet.AbstractPacketTest.resourceDir>
+                <org.pcap4j.test.packet.AbstractPacketTest.resourceDir>
                   target/test-classes
-                </org.pcap4j.packet.AbstractPacketTest.resourceDir>
-                <org.pcap4j.packet.AbstractPacketTest.tmpDir>
+                </org.pcap4j.test.packet.AbstractPacketTest.resourceDir>
+                <org.pcap4j.test.packet.AbstractPacketTest.tmpDir>
                   target/test
-                </org.pcap4j.packet.AbstractPacketTest.tmpDir>
+                </org.pcap4j.test.packet.AbstractPacketTest.tmpDir>
               </systemPropertyVariables>
             </configuration>
           </plugin>
