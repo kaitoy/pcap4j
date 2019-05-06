@@ -17,10 +17,10 @@ RUN ./mvnw --global-toolchains /usr/local/src/pcap4j/mvn/toolchains_docker_11.xm
 # Collect libraries.
 RUN mkdir bin && \
     cd pcap4j-packetfactory-static && \
-    mvn -DoutputDirectory=/usr/local/src/pcap4j/bin -Dmdep.stripVersion=true -DincludeScope=compile dependency:copy-dependencies && \
-    mvn -DoutputDirectory=/usr/local/src/pcap4j/bin -Dmdep.stripVersion=true -DincludeGroupIds=ch.qos.logback dependency:copy-dependencies && \
+    ../mvnw -DoutputDirectory=/usr/local/src/pcap4j/bin -Dmdep.stripVersion=true -DincludeScope=compile dependency:copy-dependencies && \
+    ../mvnw -DoutputDirectory=/usr/local/src/pcap4j/bin -Dmdep.stripVersion=true -DincludeGroupIds=ch.qos.logback dependency:copy-dependencies && \
     cd ../pcap4j-distribution && \
-    mvn -DoutputDirectory=/usr/local/src/pcap4j/bin -Dmdep.stripVersion=true -DincludeArtifactIds=pcap4j-packetfactory-static,pcap4j-sample dependency:copy-dependencies
+    ../mvnw -DoutputDirectory=/usr/local/src/pcap4j/bin -Dmdep.stripVersion=true -DincludeArtifactIds=pcap4j-packetfactory-static,pcap4j-sample dependency:copy-dependencies
 
 # Generate sample script. (/usr/local/src/pcap4j/bin/capture.sh)
 RUN echo '#!/bin/sh' > bin/capture.sh && \

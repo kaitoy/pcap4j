@@ -40,7 +40,7 @@ script:
     then
       sudo $TRAVIS_BUILD_DIR/mvnw --global-toolchains $TRAVIS_BUILD_DIR/mvn/toolchains_travis_9.xml -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -DserviceJobId=$TRAVIS_JOB_ID -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage verify coveralls:report
     else
-      sudo $TRAVIS_BUILD_DIR/mvnw --global-toolchains $TRAVIS_BUILD_DIR/mvn/toolchains_travis_11.xml -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Djvm=/usr/lib/jvm/java-6-openjdk-amd64/bin/javaw -B install
+      sudo $TRAVIS_BUILD_DIR/mvnw --global-toolchains $TRAVIS_BUILD_DIR/mvn/toolchains_travis_11.xml -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Djvm=/usr/lib/jvm/java-6-openjdk-amd64/jre/bin/java -B install
     fi
 
 notifications:
