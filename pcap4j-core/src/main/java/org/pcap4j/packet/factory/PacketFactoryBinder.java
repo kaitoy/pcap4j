@@ -22,6 +22,8 @@ public interface PacketFactoryBinder {
    *
    * @param targetClass targetClass
    * @param numberClass numberClass
+   * @param <T> the type of object the factory method returns.
+   * @param <N> the type of object that is given to the factory method.
    * @return the factory
    */
   public <T, N extends NamedNumber<?, ?>> PacketFactory<T, N> getPacketFactory(
