@@ -238,22 +238,50 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 ビルド
 ------
 
-1. WinPcap/Npcap/libpcapインストール:<br>
-   WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
-   ビルド時に実行されるunit testで必要なので。
-2. JDK 1.6+インストール:<br>
-   JDKの1.6以上をダウンロードしてインストール。JAVA_HOMEを設定する。
-3. Mavenインストール:<br>
-   Mavenの3.0.5以上をインストールして、そのbinディレクトリにPATHを通す。
-4. Gitをインストール:<br>
-   [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
-   Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
-5. Pcap4Jのレポジトリのダウンロード:<br>
-   Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-   インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/v1)でダウンロードして展開する。
-6. ビルド:<br>
-   プロジェクトのルートディレクトリに`cd`して、`./mvnw install` を実行する。
-   unit testを通すためにはAdministrator/root権限が必要。
+1. WinPcap/Npcap/libpcapインストール:
+
+    WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
+    ビルド時に実行されるunit testで必要なので。
+   
+2. JDK インストール:
+
+    JDKの9か10か11をダウンロードしてインストール。JAVA_HOMEを設定する。
+
+3. そのJDKを[Maven toolchains](https://maven.apache.org/guides/mini/guide-using-toolchains.html)に追加:
+    
+    インストールしたJDKを[toolchains.xml](https://maven.apache.org/ref/3.6.1/maven-core/toolchains.html)に書いて`~/.m2/`に置く.
+    `toolchains.xml`は以下のような感じになるはず。
+    
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/TOOLCHAINS/1.1.0 http://maven.apache.org/xsd/toolchains-1.1.0.xsd">
+      <toolchain>
+        <type>jdk</type>
+        <provides>
+          <version>11</version>
+        </provides>
+        <configuration>
+          <jdkHome>/path/to/jdk-11</jdkHome>
+        </configuration>
+      </toolchain>
+    </toolchains>
+    ```
+
+4. Gitをインストール:
+
+    [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
+    Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
+   
+5. Pcap4Jのレポジトリのダウンロード:
+
+    Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
+    インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/v1)でダウンロードして展開する。
+   
+6. ビルド:
+
+    プロジェクトのルートディレクトリに`cd`して、`./mvnw install` を実行する。
+    unit testを通すためにはAdministrator/root権限が必要。
 
 コードに貢献
 ------------

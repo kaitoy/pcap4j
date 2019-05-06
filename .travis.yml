@@ -13,15 +13,13 @@ branches:
 
 matrix:
   include:
-    - jdk: oraclejdk8
-    - jdk: openjdk7
+    - jdk: oraclejdk9
       env: COVERALLS=yes
-    - addons:
+    - jdk: openjdk11
+      addons:
         apt:
           packages:
             - openjdk-6-jdk
-      jdk: openjdk7
-      env: JDK6=yes
   fast_finish: true
 
 cache:
@@ -38,15 +36,11 @@ install:
 
 script:
   - |
-    if [ "${JDK6}" = "yes"  ]
-    then
-      export /usr/lib/jvm/java-6-openjdk-amd64/
-    fi
     if [ "${COVERALLS}" = "yes"  ]
     then
-      sudo $TRAVIS_BUILD_DIR/mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -DserviceJobId=$TRAVIS_JOB_ID -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage verify coveralls:report
+      sudo $TRAVIS_BUILD_DIR/mvnw --global-toolchains $TRAVIS_BUILD_DIR/mvn/toolchains_travis_9.xml -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -DserviceJobId=$TRAVIS_JOB_ID -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage verify coveralls:report
     else
-      sudo $TRAVIS_BUILD_DIR/mvnw -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B install
+      sudo $TRAVIS_BUILD_DIR/mvnw --global-toolchains $TRAVIS_BUILD_DIR/mvn/toolchains_travis_11.xml -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Djvm=/usr/lib/jvm/java-6-openjdk-amd64/bin/javaw -B install
     fi
 
 notifications:

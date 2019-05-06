@@ -239,24 +239,50 @@ This image is built everytime a commit is made on the Git repositry.
 How to build
 ------------
 
-1. Install libpcap, WinPcap, or Npcap:<br>
-   Install WinPcap (if Windows) or libpcap (if Linux/UNIX).
-   It's needed for the unit tests which are run during a build.
-2. Install JDK 1.6+:<br>
-   Download and install JDK 1.6 (or newer), and set the environment variable ***JAVA_HOME*** properly.
-3. Install Maven<br>
-   Download and install Maven 3.0.5 (or newer).
-   Then, add the path of the Maven bin directory to the environment variable ***PATH***.
-4. Install Git:<br>
-   Download [Git](http://git-scm.com/downloads) and install it.
-   This step is optional.
-5. Clone the Pcap4J repository:<br>
-   If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
-   Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/v1) and extract it.
-6. Build:<br>
-   Open a command prompt/a terminal, `cd` to the project root directory,
-   and execute `./mvnw install`.
-   Note Administrator/root privileges are needed for the unit tests.
+1. Install libpcap, WinPcap, or Npcap:
+
+    Install WinPcap (if Windows) or libpcap (if Linux/UNIX).
+    It's needed for the unit tests which are run during a build.
+
+2. Install JDK:
+
+    Download and install JDK 9, 10, or 11, and set the environment variable ***JAVA_HOME*** properly.
+   
+3. Add the JDK to [Maven toolchains](https://maven.apache.org/guides/mini/guide-using-toolchains.html):
+    
+    Create [toolchains.xml](https://maven.apache.org/ref/3.6.1/maven-core/toolchains.html) describing the JDK installed at the previous step and put it into `~/.m2/`.
+    `toolchains.xml` is like below:
+    
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/TOOLCHAINS/1.1.0 http://maven.apache.org/xsd/toolchains-1.1.0.xsd">
+      <toolchain>
+        <type>jdk</type>
+        <provides>
+          <version>11</version>
+        </provides>
+        <configuration>
+          <jdkHome>/path/to/jdk-11</jdkHome>
+        </configuration>
+      </toolchain>
+    </toolchains>
+    ```
+   
+4. Install Git:
+
+    Download [Git](http://git-scm.com/downloads) and install it.
+    This step is optional.
+    
+5. Clone the Pcap4J repository:
+
+    If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
+    Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/v1) and extract it.
+    
+6. Build:
+
+    Open a command prompt/a terminal, `cd` to the project root directory, and execute `./mvnw install`.
+    Note Administrator/root privileges are needed for the unit tests.
 
 Contributing Code
 -----------------

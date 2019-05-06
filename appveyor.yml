@@ -73,6 +73,7 @@ platform: Any CPU
 before_build:
   - cmd: if not exist %userprofile%\.m2 (mkdir %userprofile%\.m2)
   - cmd: copy /y mvn\settings.xml %userprofile%\.m2
+  - cmd: copy /y mvn\toolchains_appvayor_11.xml %userprofile%\.m2\toolchains.xml
   - ps: if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) {$env:MAVEN_PHASE = 'deploy'} else {$env:MAVEN_PHASE = 'install'}
 
 build_script:
