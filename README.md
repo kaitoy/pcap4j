@@ -98,7 +98,7 @@ How to use
 #### System requirements ####
 
 ##### Dependencies #####
-Pcap4j 1.1.0 or older needs J2SE 5.0+. Pcap4j 1.2.0 or newer needs J2SE 6.0+.
+Pcap4j 1.1.0 or older needs Java 5.0+. Pcap4j 1.2.0 or newer needs Java 6.0+.
 And also a pcap native library (libpcap 1.0.0+, WinPcap 3.0+, or Npcap), jna, slf4j-api, and an implementation of logger for slf4j are required.
 I'm using the following libraries for the test.
 

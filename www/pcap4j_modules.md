@@ -4,12 +4,20 @@ Pcap4j modules
 Pcap4j consists of the following modules:
 
 * pcap4j-core: The core module which includes pcap API wrappers, packet classes, and so on.
+
+  module name: `org.pcap4j.core`
 * pcap4j-packetfactory-static: [The Static Packet Factory](/www/PacketFactory.md#static-packet-factory) module.
+
+  module name: `org.pcap4j.packetfactory.statik`
 * pcap4j-packetfactory-propertiesbased: [The Properties-Based Packet Factory](/www/PacketFactory.md#properties-based-packet-factory) module.
+
+  module name: `org.pcap4j.packetfactory.propertiesbased`
 * pcap4j-sample: The sample module.
 * pcap4j-packettest: The module including test cases for packet classes.
   The tests are not run in this module. Instead, they are copied to pcap4j-packetfactory-static and
   pcap4j-packetfactory-propertiesbased and then run in the modules respectively.
+  
+  module name: `org.pcap4j.packettest`
 * pcap4j-distribution: The distribution module.
   This module is not built unless the maven profile ***distribution-assembly*** is activated.
   To build Pcap4J with it activated, for example, execute `mvn -P distribution-assembly install`.

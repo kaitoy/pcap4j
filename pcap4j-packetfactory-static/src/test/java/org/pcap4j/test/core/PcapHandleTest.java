@@ -1,4 +1,4 @@
-package org.pcap4j.core;
+package org.pcap4j.test.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -8,9 +8,14 @@ import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
+import org.pcap4j.core.BpfProgram;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
+import org.pcap4j.core.PacketListener;
+import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapHandle.PcapDirection;
+import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
+import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.IcmpV4CommonPacket;
 import org.pcap4j.packet.IcmpV4EchoPacket;
 import org.pcap4j.packet.IcmpV4EchoReplyPacket;
@@ -90,7 +95,7 @@ public class PcapHandleTest {
   public void testSetFilterIcmp() throws Exception {
     PcapHandle handle = null;
     try {
-      handle = Pcaps.openOffline("src/test/resources/org/pcap4j/core/udp_tcp_icmp.pcap");
+      handle = Pcaps.openOffline("src/test/resources/org/pcap4j/test/core/udp_tcp_icmp.pcap");
       handle.setFilter("icmp", BpfCompileMode.OPTIMIZE);
       int count = 0;
       try {
@@ -114,7 +119,7 @@ public class PcapHandleTest {
     PcapHandle handle = null;
     BpfProgram prog = null;
     try {
-      handle = Pcaps.openOffline("src/test/resources/org/pcap4j/core/udp_tcp_icmp.pcap");
+      handle = Pcaps.openOffline("src/test/resources/org/pcap4j/test/core/udp_tcp_icmp.pcap");
       prog = handle.compileFilter("udp", BpfCompileMode.OPTIMIZE, PcapHandle.PCAP_NETMASK_UNKNOWN);
       handle.setFilter(prog);
       int count = 0;
