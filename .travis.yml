@@ -8,7 +8,13 @@ branches:
 
 matrix:
   include:
-    - jdk: oraclejdk8
+    - jdk: openjdk8
+      env: COVERALLS=yes
+    - jdk: oraclejdk12
+      addons:
+        apt:
+          packages:
+            - openjdk-8-jdk
   fast_finish: true
 
 cache:
@@ -27,10 +33,20 @@ install:
 
 script:
   # sudo is needed for some unit tests.
-  - sudo ./gradlew build jacocoTestReport --info --no-daemon -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true
+  - |
+    if [ "${COVERALLS}" = "yes"  ]
+    then
+      sudo ./gradlew build jacocoTestReport --info --no-daemon -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true
+    else
+      sudo ./gradlew build jacocoTestReport --info --no-daemon -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -Pjre8_bin_path=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+    fi
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - |
+    if [ "${COVERALLS}" = "yes"  ]
+    then
+      bash <(curl -s https://codecov.io/bash)
+    fi
 
 notifications:
   email:

@@ -23,10 +23,16 @@ dependencies {
 // jar.enabled = false
 
 test.enabled = false
+testJre8.enabled = false
 
 task jarTests(type: Jar, dependsOn: testClasses) {
   classifier = 'tests'
   from sourceSets.test.output
+
+  inputs.property("moduleName", moduleName)
+  manifest {
+    attributes('Automatic-Module-Name': moduleName)
+  }
 }
 testClasses.finalizedBy jarTests
 

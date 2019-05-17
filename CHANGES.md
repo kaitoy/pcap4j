@@ -3,6 +3,13 @@ Future
 ### New Features ###
 * [PR#146](https://github.com/kaitoy/pcap4j/pull/146): Add PcapPacket builder. `PcapPacket#getBuilder()` is changed such that it returns a PcapPacket builder instance instead of payload's builder.
 * [PR#208](https://github.com/kaitoy/pcap4j/pull/208): Change the core module to use ServiceLoader to load a packet factory module.
+* pcap4j-core, pcap4j-packetfactory-static, and pcap4j-packetfactory-propertiesbased are now Java 9 modules with module-info.java.
+    The module names are as follows:
+  
+    * pcap4j-core: org.pcap4j.core
+    * pcap4j-packetfactory-static: org.pcap4j.packetfactory.statik
+    * pcap4j-packetfactory-propertiesbased: org.pcap4j.packetfactory.propertiesbased
+* Pcap4J is now built with JDK 11.
 
 ### Bug Fixes ###
 

@@ -35,7 +35,7 @@ environment:
     secure: DDwS0DjK9j/d79DuAlJy3A==
   SONATYPE_NEXUS_PASSWORD:
     secure: mr5kcUXHVYPmF+7bXPi2Ow==
-  JAVA_HOME: C:\Program Files (x86)\Java\jdk1.8.0
+  JAVA_HOME: C:\Program Files\Java\jdk11
 
 # scripts that run after cloning repository
 install:
@@ -55,8 +55,6 @@ install:
 platform: Any CPU
 
 # scripts to run before build
-#before_build:
-#  - ps: if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) {$env:MAVEN_PHASE = 'deploy'} else {$env:MAVEN_PHASE = 'install'}
 
 build_script:
   # jna.nosys=true is not to use an older jna pre-installed in AppVeyor VMs.

@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2013  Pcap4J.org
+  _##  Copyright (C) 2011 Pcap4J.org
   _##
   _##########################################################################
 */
@@ -71,37 +71,37 @@ public final class PacketPropertiesLoader {
 
   /** @return a value of the property. */
   public boolean icmpV4CalcChecksum() {
-    return loader.getBoolean(ICMPV4_CALC_CHECKSUM_KEY, Boolean.FALSE).booleanValue();
+    return loader.getBoolean(ICMPV4_CALC_CHECKSUM_KEY, Boolean.TRUE).booleanValue();
   }
 
   /** @return a value of the property. */
   public boolean icmpV6CalcChecksum() {
-    return loader.getBoolean(ICMPV6_CALC_CHECKSUM_KEY, Boolean.FALSE).booleanValue();
+    return loader.getBoolean(ICMPV6_CALC_CHECKSUM_KEY, Boolean.TRUE).booleanValue();
   }
 
   /** @return a value of the property. */
   public boolean ipV4CalcChecksum() {
-    return loader.getBoolean(IPV4_CALC_CHECKSUM_KEY, Boolean.FALSE).booleanValue();
+    return loader.getBoolean(IPV4_CALC_CHECKSUM_KEY, Boolean.TRUE).booleanValue();
   }
 
   /** @return a value of the property. */
   public boolean tcpV4CalcChecksum() {
-    return loader.getBoolean(TCPV4_CALC_CHECKSUM_KEY, Boolean.FALSE).booleanValue();
+    return loader.getBoolean(TCPV4_CALC_CHECKSUM_KEY, Boolean.TRUE).booleanValue();
   }
 
   /** @return a value of the property. */
   public boolean tcpV6CalcChecksum() {
-    return loader.getBoolean(TCPV6_CALC_CHECKSUM_KEY, Boolean.FALSE).booleanValue();
+    return loader.getBoolean(TCPV6_CALC_CHECKSUM_KEY, Boolean.TRUE).booleanValue();
   }
 
   /** @return a value of the property. */
   public boolean udpV4CalcChecksum() {
-    return loader.getBoolean(UDPV4_CALC_CHECKSUM_KEY, Boolean.FALSE).booleanValue();
+    return loader.getBoolean(UDPV4_CALC_CHECKSUM_KEY, Boolean.TRUE).booleanValue();
   }
 
   /** @return a value of the property. */
   public boolean udpV6CalcChecksum() {
-    return loader.getBoolean(UDPV6_CALC_CHECKSUM_KEY, Boolean.FALSE).booleanValue();
+    return loader.getBoolean(UDPV6_CALC_CHECKSUM_KEY, Boolean.TRUE).booleanValue();
   }
 
   /** @return a value of the property. */

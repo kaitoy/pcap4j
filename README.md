@@ -84,7 +84,7 @@ How to use
 
 ##### Dependencies #####
 Pcap4j needs JRE 8+.
-And also a pcap native library (libpcap 1.0.0+, Npcap or WinPcap 3.0+), JNA 4+, slf4j-api, and an implementation of logger for slf4j are required.
+And also a pcap native library (libpcap 1.0.0+, Npcap or WinPcap 3.0+), JNA 5+, slf4j-api, and an implementation of logger for slf4j are required.
 I'm using the following libraries for the test.
 
 * libpcap 1.1.1
@@ -230,21 +230,30 @@ This image is built everytime a commit is made on the Git repositry.
 How to build
 ------------
 
-1. Install libpcap, WinPcap, or Npcap:<br>
-   Install Npcap or WinPcap (if Windows), or libpcap (if Linux/UNIX).
-   It's needed for the unit tests which are run during a build.
-2. Install JDK 8+:<br>
-   Download and install JDK 8+, and set the environment variable ***JAVA_HOME*** properly.
-3. Install Git:<br>
-   Download [Git](http://git-scm.com/downloads) and install it.
-   This step is optional.
-4. Clone the Pcap4J repository:<br>
-   If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
-   Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
-5. Build:<br>
-   Open a command prompt/a terminal, `cd` to the project root directory,
-   and execute `gradlew build`.
-   Note Administrator/root privileges are needed for the unit tests.
+1. Install libpcap, WinPcap, or Npcap:
+
+    Install Npcap or WinPcap (if Windows), or libpcap (if Linux/UNIX).
+    It's needed for the unit tests which are run during a build.
+    
+2. Install JDK:
+
+    Download and install JDK 9, 10, 11, or 12, and set the environment variable ***JAVA_HOME*** properly.
+
+3. Install Git:
+
+    Download [Git](http://git-scm.com/downloads) and install it.
+    This step is optional.
+   
+4. Clone the Pcap4J repository:
+
+    If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
+    Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/master) and extract it.
+
+5. Build:
+
+    Open a command prompt/a terminal, `cd` to the project root directory,
+    and execute `gradlew build`.
+    Note Administrator/root privileges are needed for the unit tests.
 
 Contributing Code
 -----------------

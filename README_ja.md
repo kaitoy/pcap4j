@@ -85,7 +85,7 @@ Maven Central Repositoryからダウンロードできる。
 ##### ライブラリ等の依存 #####
 JRE 8以降で動く。
 UNIX系ならlibpcap 1.0.0以降、WindowsならNpcapかWinPcap (多分)3.0以降がインストールされている必要がある。
-jna 4以降、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。
+JNA 5以降、slf4j-api(と適当なロガー実装モジュール)もクラスパスに含める必要がある。
 
 動作確認に使っているバージョンは以下。
 
@@ -228,20 +228,29 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 ビルド
 ------
 
-1. WinPcap/Npcap/libpcapインストール:<br>
-   WindowsであればNpcapかWinPcap、Linux/Unixであればlibpcapをインストールする。
-   ビルド時に実行されるunit testで必要なので。
-2. JDK 8+インストール:<br>
-   JDKの8以上をダウンロードしてインストール。JAVA_HOMEを設定する。
-3. Gitをインストール:<br>
-   [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
-   Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
-4. Pcap4Jのレポジトリのダウンロード:<br>
-   Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
-   インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
-5. ビルド:<br>
-   プロジェクトのルートディレクトリに`cd`して、`gradlew build` を実行する。
-   unit testを通すためにはAdministrator/root権限が必要。
+1. WinPcap/Npcap/libpcapインストール:
+
+    WindowsであればNpcapかWinPcap、Linux/Unixであればlibpcapをインストールする。
+    ビルド時に実行されるunit testで必要なので。
+    
+2. JDK インストール:
+
+    JDKの9か10か11か12をダウンロードしてインストール。JAVA_HOMEを設定する。
+    
+3. Gitをインストール:
+
+    [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
+    Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
+    
+4. Pcap4Jのレポジトリのダウンロード:
+
+    Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
+    インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
+    
+5. ビルド:
+
+    プロジェクトのルートディレクトリに`cd`して、`gradlew build` を実行する。
+    unit testを通すためにはAdministrator/root権限が必要。
 
 コードに貢献
 ------------

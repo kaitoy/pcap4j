@@ -2,11 +2,10 @@
 # Dockerfile for Pcap4J
 #
 
-FROM openjdk:8-jdk-slim
+FROM openjdk:12-jdk-oraclelinux7
 
 # Install libpcap.
-RUN apt-get update && \
-  apt-get install -y libpcap0.8 git
+RUN yum install -y libpcap git
 
 # Build Pcap4J.
 RUN cd /usr/local/src/ && \

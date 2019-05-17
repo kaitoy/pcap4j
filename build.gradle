@@ -53,8 +53,6 @@ allprojects {
   }
 
   [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
 
   repositories {
     jcenter()
@@ -68,18 +66,60 @@ allprojects {
 }
 
 subprojects {
-  test {
-    useJUnitPlatform()
-  }
-
-  afterEvaluate {
-    jar {
-      inputs.property("moduleName", moduleName)
-      manifest {
-        attributes('Automatic-Module-Name': moduleName)
-      }
+  compileJava {
+    doFirst {
+      options.compilerArgs = [
+        '--module-path', classpath.asPath,
+        '--release', "9",
+      ]
+      classpath = files()
     }
   }
+
+  task compileJava8 (type: JavaCompile) {
+    sourceCompatibility = 8
+    targetCompatibility = 8
+    source = compileJava.source
+    destinationDir = compileJava.destinationDir
+    classpath = compileJava.classpath
+    excludes = ['**/module-info.java']
+  }
+  compileJava.finalizedBy compileJava8
+
+  compileTestJava {
+    sourceCompatibility = 8
+    targetCompatibility = 8
+  }
+
+  test {
+    useJUnitPlatform()
+
+    ext.junitModuleName = 'org.junit.jupiter.api'
+    ext.junitPlatformCommonsName = 'org.junit.platform.commons'
+    doLast {
+      jvmArgs = [
+        '--module-path', classpath.asPath,
+        '--add-modules', 'ALL-MODULE-PATH',
+        '--add-reads', "$moduleName=$junitModuleName",
+        '--add-reads', "$moduleName=slf4j.api",
+        '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
+        '--add-opens', "$moduleName/org.pcap4j.test.core=$junitPlatformCommonsName",
+        '--add-opens', "$moduleName/org.pcap4j.test.packet=$junitPlatformCommonsName",
+        '--add-opens', "$moduleName/org.pcap4j=$junitPlatformCommonsName",
+      ]
+      classpath = files()
+    }
+  }
+
+  task testJre8 (type: Test) {
+    useJUnitPlatform()
+    if (project.hasProperty('jre8_bin_path')) {
+      executable = project.findProperty('jre8_bin_path')
+    } else {
+      enabled = false
+    }
+  }
+  test.finalizedBy testJre8
 }
 
 if (!gradle.startParameter.taskNames.find({ it.endsWith('javadoc') })) {

@@ -7,7 +7,7 @@
 
 archivesBaseName = 'pcap4j-packetfactory-propertiesbased'
 description = 'Properties-Based Packet Factory.'
-ext.moduleName = 'org.pcap4j.packet.factory.propertiesbased'
+ext.moduleName = 'org.pcap4j.packetfactory.propertiesbased'
 
 configurations {
   packetTests {
@@ -35,6 +35,15 @@ test {
   systemProperties System.getProperties().findAll({
     it.key.startsWith 'org.pcap4j.' or it.key == 'jna.library.path' or it.key == 'jna.nosys'
   })
-  systemProperty 'org.pcap4j.packet.AbstractPacketTest.resourceDir', sourceSets.test.output.classesDirs[0]
-  systemProperty 'org.pcap4j.packet.AbstractPacketTest.tmpDir', temporaryDir
+  systemProperty 'org.pcap4j.test.packet.AbstractPacketTest.resourceDir', sourceSets.test.output.classesDirs[0]
+  systemProperty 'org.pcap4j.test.packet.AbstractPacketTest.tmpDir', temporaryDir
+}
+
+testJre8 {
+  dependsOn extractTests
+  systemProperties System.getProperties().findAll({
+    it.key.startsWith 'org.pcap4j.' or it.key == 'jna.library.path' or it.key == 'jna.nosys'
+  })
+  systemProperty 'org.pcap4j.test.packet.AbstractPacketTest.resourceDir', sourceSets.test.output.classesDirs[0]
+  systemProperty 'org.pcap4j.test.packet.AbstractPacketTest.tmpDir', temporaryDir
 }
