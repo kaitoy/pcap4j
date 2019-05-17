@@ -13,10 +13,12 @@ Pcap4j consists of the following modules:
 
   module name: `org.pcap4j.packetfactory.propertiesbased`
 * pcap4j-sample: The sample module.
+
+  module name: `org.pcap4j.sample`
 * pcap4j-packettest: The module including test cases for packet classes.
   The tests are not run in this module. Instead, they are copied to pcap4j-packetfactory-static and
   pcap4j-packetfactory-propertiesbased and then run in the modules respectively.
-  
+
   module name: `org.pcap4j.packettest`
 * pcap4j-distribution: The distribution module.
   This module is not built unless the maven profile ***distribution-assembly*** is activated.
