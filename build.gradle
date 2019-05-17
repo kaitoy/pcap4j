@@ -157,6 +157,7 @@ javadoc {
     srcDirs.addAll proj.sourceSets.main.java.srcDirs
   }
   source srcDirs
+  excludes = ['**/module-info.java']
 }
 
 artifacts {
