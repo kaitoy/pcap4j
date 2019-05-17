@@ -10,6 +10,9 @@ module org.pcap4j.core {
   opens org.pcap4j.packet.namednumber;
 
   requires java.sql;
+
+  // These transitive modifiers are needed to avoid weird surefire errors
+  // during pcap4j-packetfactory-* testing (due to maybe surefire's bug).
   requires transitive com.sun.jna;
   requires transitive slf4j.api;
 
