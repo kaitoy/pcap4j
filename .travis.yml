@@ -8,9 +8,9 @@ branches:
 
 matrix:
   include:
-    - jdk: openjdk8
+    - jdk: oraclejdk9
       env: COVERALLS=yes
-    - jdk: oraclejdk12
+    - jdk: openjdk12
       addons:
         apt:
           packages:
