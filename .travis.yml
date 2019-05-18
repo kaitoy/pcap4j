@@ -38,7 +38,7 @@ script:
     then
       sudo ./gradlew build jacocoTestReport --info --no-daemon -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true
     else
-      sudo ./gradlew build jacocoTestReport --info --no-daemon -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -Pjre8_bin_path=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+      sudo ./gradlew build --info --no-daemon -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -Pjre8_bin_path=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
     fi
 
 after_success:

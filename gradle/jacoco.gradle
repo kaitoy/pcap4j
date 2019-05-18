@@ -35,10 +35,12 @@ jacocoTestReport {
   reportingProjs.each {
     dependsOn it.test
     sourceDirList.add files(it.sourceSets.main.java.srcDirs)
-    classDirList.add it.sourceSets.main.output
+    // https://github.com/jacoco/jacoco/pull/859
+    classDirList.add it.sourceSets.main.output.asFileTree.matching { exclude("module-info.class") }
     execDataList.add it.jacocoTestReport.executionData
   }
   sourceDirectories = files sourceDirList
   classDirectories = files classDirList
   executionData = files execDataList
+
 }
