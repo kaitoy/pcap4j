@@ -40,6 +40,7 @@ allprojects {
       showFromProtected()
       addStringOption 'Xdoclint:all,-reference', '-quiet'
     }
+    excludes = ['**/module-info.java']
   }
 
   spotless {
