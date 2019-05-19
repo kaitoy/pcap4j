@@ -31,7 +31,7 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>${project.parent.build.directory}</directory>
+      <directory>${project.build.directory}</directory>
       <outputDirectory>./</outputDirectory>
       <includes>
         <include>*-javadoc.jar</include>

@@ -356,17 +356,7 @@
             <artifactId>maven-javadoc-plugin</artifactId>
             <executions>
               <execution>
-                <id>aggregate-jar</id>
-                <goals>
-                  <goal>aggregate-jar</goal>
-                </goals>
-                <phase>package</phase>
-                <configuration>
-                  <excludePackageNames>org.pcap4j.sample</excludePackageNames>
-                </configuration>
-              </execution>
-              <execution>
-                <id>attach-javadocs</id>
+                <id>javadoc-jar</id>
                 <goals>
                   <goal>jar</goal>
                 </goals>
@@ -382,7 +372,7 @@
             <artifactId>maven-source-plugin</artifactId>
             <executions>
               <execution>
-                <id>attach-sources</id>
+                <id>source-jar</id>
                 <goals>
                   <goal>jar-no-fork</goal>
                 </goals>
@@ -410,6 +400,23 @@
       <modules>
         <module>pcap4j-distribution</module>
       </modules>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>source-jar</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>test-coverage</id>
