@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pcap4j</groupId>
   <artifactId>pcap4j</artifactId>
-  <version>1.8.0</version>
+  <version>1.8.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Pcap4J</name>
   <description>A Java library for capturing, crafting and sending packets.</description>
@@ -23,7 +23,7 @@
     <connection>scm:git:git@github.com:kaitoy/pcap4j.git</connection>
     <developerConnection>scm:git:git@github.com:kaitoy/pcap4j.git</developerConnection>
     <url>https://github.com/kaitoy/pcap4j.git</url>
-    <tag>pcap4j-1.8.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <developers>
