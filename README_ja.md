@@ -102,8 +102,8 @@ x86かx64プロセッサ上の以下のOSで動作することを確認した。
 * Windows: XP, Vista, 7, [10](http://tbd.kaitoy.xyz/2016/01/12/pcap4j-with-four-native-libraries-on-windows10/), 2003 R2, 2008, 2008 R2, and 2012
 * OS X
 * Linux
-    * RHEL: 5 and 6
-    * CentOS: 5
+    * RHEL: 5, 6, and 7
+    * CentOS: 5, 6, and 7
     * Ubuntu: 13
 * UNIX
     * Solaris: 10
@@ -232,21 +232,21 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 
     WindowsであればNpcapかWinPcap、Linux/Unixであればlibpcapをインストールする。
     ビルド時に実行されるunit testで必要なので。
-    
+
 2. JDK インストール:
 
     JDKの9か10か11か12をダウンロードしてインストール。JAVA_HOMEを設定する。
-    
+
 3. Gitをインストール:
 
     [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
     Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
-    
+
 4. Pcap4Jのレポジトリのダウンロード:
 
     Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
     インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/master)でダウンロードして展開する。
-    
+
 5. ビルド:
 
     プロジェクトのルートディレクトリに`cd`して、`gradlew build` を実行する。

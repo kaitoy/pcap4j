@@ -20,3 +20,5 @@ gradle-app.setting
 .idea
 **/*.iml
 
+# Misc
+.java-version

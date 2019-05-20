@@ -100,8 +100,8 @@ I tested Pcap4j on the following OSes with x86 or x64 processors.
 * Windows: XP, Vista, 7, [10](http://tbd.kaitoy.xyz/2016/01/12/pcap4j-with-four-native-libraries-on-windows10/), 2003 R2, 2008, 2008 R2, and 2012
 * OS X
 * Linux
-    * RHEL: 5 and 6
-    * CentOS: 5
+    * RHEL: 5, 6, and 7
+    * CentOS: 5, 6, and 7
     * Ubuntu: 13
 * UNIX
     * Solaris: 10
@@ -234,7 +234,7 @@ How to build
 
     Install Npcap or WinPcap (if Windows), or libpcap (if Linux/UNIX).
     It's needed for the unit tests which are run during a build.
-    
+
 2. Install JDK:
 
     Download and install JDK 9, 10, 11, or 12, and set the environment variable ***JAVA_HOME*** properly.
@@ -243,7 +243,7 @@ How to build
 
     Download [Git](http://git-scm.com/downloads) and install it.
     This step is optional.
-   
+
 4. Clone the Pcap4J repository:
 
     If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
