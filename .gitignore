@@ -12,3 +12,5 @@ bin/
 gradle-app.setting
 .gradletasknamecache
 
+.java-version
+
