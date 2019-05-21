@@ -131,7 +131,7 @@ Or, if on Linux, you can run Pcap4J with a non-root user by granting capabilitie
 to your java command by the following command: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### Documents ####
-The latest JavaDoc is [here](http://www.javadoc.io/doc/org.pcap4j/pcap4j/1.8.0).
+The latest JavaDoc is [here](https://www.javadoc.io/doc/org.pcap4j/pcap4j-distribution/1.8.0).
 Each version's JavaDoc is on the [Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22).
 
 Refer to [here](https://github.com/kaitoy/pcap4j/blob/v1/www/pcap4j_modules.md) for information about Pcap4J modules.
@@ -247,12 +247,12 @@ How to build
 2. Install JDK:
 
     Download and install JDK 9, 10, or 11, and set the environment variable ***JAVA_HOME*** properly.
-   
+
 3. Add the JDK to [Maven toolchains](https://maven.apache.org/guides/mini/guide-using-toolchains.html):
-    
+
     Create [toolchains.xml](https://maven.apache.org/ref/3.6.1/maven-core/toolchains.html) describing the JDK installed at the previous step and put it into `~/.m2/`.
     `toolchains.xml` is like below:
-    
+
     ```xml
     <?xml version="1.0" encoding="UTF-8"?>
     <toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -268,17 +268,17 @@ How to build
       </toolchain>
     </toolchains>
     ```
-   
+
 4. Install Git:
 
     Download [Git](http://git-scm.com/downloads) and install it.
     This step is optional.
-    
+
 5. Clone the Pcap4J repository:
 
     If you installed Git, execute the following command: `git clone git@github.com:kaitoy/pcap4j.git`<br>
     Otherwise, download the repository as a [zip ball](https://github.com/kaitoy/pcap4j/zipball/v1) and extract it.
-    
+
 6. Build:
 
     Open a command prompt/a terminal, `cd` to the project root directory, and execute `./mvnw install`.

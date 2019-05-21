@@ -133,7 +133,7 @@ Pcap4Jは管理者権限で実行する必要がある。
 ケーパビリティを付与するには次のコマンドを実行する: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### ドキュメント ####
-最新のJavaDocは[こちら](http://www.javadoc.io/doc/org.pcap4j/pcap4j/1.8.0)。
+最新のJavaDocは[こちら](https://www.javadoc.io/doc/org.pcap4j/pcap4j-distribution/1.8.0)。
 各バージョンのJavaDocは[Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22)からダウンロードできる。
 
 Pcap4Jのモジュール構成については[こちら](https://github.com/kaitoy/pcap4j/blob/v1/www/pcap4j_modules.md)。
@@ -242,16 +242,16 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 
     WindowsであればWinPcap、Linux/Unixであればlibpcapをインストールする。
     ビルド時に実行されるunit testで必要なので。
-   
+
 2. JDK インストール:
 
     JDKの9か10か11をダウンロードしてインストール。JAVA_HOMEを設定する。
 
 3. そのJDKを[Maven toolchains](https://maven.apache.org/guides/mini/guide-using-toolchains.html)に追加:
-    
+
     インストールしたJDKを[toolchains.xml](https://maven.apache.org/ref/3.6.1/maven-core/toolchains.html)に書いて`~/.m2/`に置く.
     `toolchains.xml`は以下のような感じになるはず。
-    
+
     ```xml
     <?xml version="1.0" encoding="UTF-8"?>
     <toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -272,12 +272,12 @@ CentOSのPcap4J実行環境を構築したDockerイメージが[Docker Hub](http
 
     [Git](http://git-scm.com/downloads)をダウンロードしてインストールする。
     Gitのインストールはビルドに必須ではないので、このステップはスキップしてもよい。
-   
+
 5. Pcap4Jのレポジトリのダウンロード:
 
     Gitをインストールした場合は`git clone git@github.com:kaitoy/pcap4j.git` を実行する。
     インストールしていない場合は、[zip](https://github.com/kaitoy/pcap4j/zipball/v1)でダウンロードして展開する。
-   
+
 6. ビルド:
 
     プロジェクトのルートディレクトリに`cd`して、`./mvnw install` を実行する。
