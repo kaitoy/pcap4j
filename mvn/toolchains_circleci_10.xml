@@ -5,10 +5,10 @@
   <toolchain>
     <type>jdk</type>
     <provides>
-      <version>11</version>
+      <version>10</version>
     </provides>
     <configuration>
-      <jdkHome>/Library/Java/JavaVirtualMachines/jdk-11.0.2.jdk</jdkHome>
+      <jdkHome>/usr/lib/jvm/java-10-openjdk-amd64</jdkHome>
     </configuration>
   </toolchain>
 

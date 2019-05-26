@@ -1,28 +1,25 @@
 version: 2.1
 
 executors:
-  macos:
-    macos:
-      xcode: "10.2.1"
+  docker-jdk10:
+    docker:
+      image: 10.0.2-13-jdk
 
 jobs:
   test:
     branches:
       only: v1
-    executor: macos
+    executor: docker-jdk10
     steps:
       - checkout
       - run:
           name: Install libpcap
-          command: port install --verbose libpcap
-      - run:
-          name: Install JDK 11
           command: |
-            curl -L https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_osx-x64_bin.tar.gz | tar zx -C /Library/Java/JavaVirtualMachines/
-            echo 'export JAVA_HOME=`/usr/libexec/java_home -v 11`' >> $BASH_ENV
+            apt-get update
+            apt-get install -y libpcap0.8
       - run:
           name: Run mvnw verify
-          command: ./mvnw verify --global-toolchains mvn/toolchains_circleci_11.xml -Dorg.pcap4j.core.pcapLibName=libpcap.dylib
+          command: ./mvnw verify --global-toolchains mvn/toolchains_circleci_10.xml
 
 workflows:
   version: 2
