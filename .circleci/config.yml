@@ -16,8 +16,11 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y libpcap0.8
       - run:
+          name: Set capabilities on java
+          command: sudo setcap cap_net_raw,cap_net_admin=eip //usr/lib/jvm/java-10-openjdk-amd64/bin/java
+      - run:
           name: Run mvnw verify
-          command: sudo ./mvnw verify --global-toolchains mvn/toolchains_circleci_10.xml
+          command: ./mvnw verify --global-toolchains mvn/toolchains_circleci_10.xml
 
 workflows:
   version: 2
