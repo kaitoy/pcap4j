@@ -1,6 +1,7 @@
 package org.pcap4j.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -35,7 +36,13 @@ public class PcapNetworkInterfaceTest {
       handle = Pcaps.findAllDevs().get(0).openLive(55555, PromiscuousMode.PROMISCUOUS, 100);
     } catch (IndexOutOfBoundsException e) {
       return;
+    } catch (PcapNativeException e) {
+      assertTrue(
+          "The exception should complain about permission to capture.",
+          e.getMessage().contains("You don't have permission to capture on that device"));
+      return;
     }
+
     assertNotNull(handle);
     assertTrue(handle.isOpen());
 
