@@ -20,7 +20,7 @@ jobs:
           command: sudo setcap cap_net_raw,cap_net_admin=eip //usr/lib/jvm/java-10-openjdk-amd64/bin/java
       - run:
           name: Run mvnw verify
-          command: ./mvnw verify --global-toolchains mvn/toolchains_circleci_10.xml
+          command: sudo ./mvnw verify --global-toolchains mvn/toolchains_circleci_10.xml
 
 workflows:
   version: 2
