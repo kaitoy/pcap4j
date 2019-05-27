@@ -13,11 +13,11 @@ jobs:
       - run:
           name: Install libpcap
           command: |
-            apt-get update
-            apt-get install -y libpcap0.8
+            sudo apt-get update
+            sudo apt-get install -y libpcap0.8
       - run:
           name: Run mvnw verify
-          command: ./mvnw verify --global-toolchains mvn/toolchains_circleci_10.xml
+          command: sudo ./mvnw verify --global-toolchains mvn/toolchains_circleci_10.xml
 
 workflows:
   version: 2
