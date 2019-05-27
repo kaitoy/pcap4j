@@ -3,7 +3,7 @@ version: 2.1
 executors:
   docker-jdk10:
     docker:
-      - image: 10.0.2-13-jdk
+      - image: circleci/openjdk:10.0.2-13-jdk
 
 jobs:
   test:
