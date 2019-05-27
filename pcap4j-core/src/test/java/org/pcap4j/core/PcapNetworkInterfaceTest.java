@@ -36,7 +36,13 @@ public class PcapNetworkInterfaceTest {
       handle = Pcaps.findAllDevs().get(0).openLive(55555, PromiscuousMode.PROMISCUOUS, 100);
     } catch (IndexOutOfBoundsException e) {
       return;
+    } catch (PcapNativeException e) {
+      assertTrue(
+          e.getMessage().contains("You don't have permission to capture on that device"),
+          "The exception should complain about permission to capture.");
+      return;
     }
+
     assertNotNull(handle);
     assertTrue(handle.isOpen());
 

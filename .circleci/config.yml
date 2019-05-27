@@ -1,0 +1,29 @@
+version: 2.1
+
+executors:
+  docker-jdk10:
+    docker:
+      - image: circleci/openjdk:10.0.2-13-jdk
+
+jobs:
+  test:
+    executor: docker-jdk10
+    steps:
+      - checkout
+      - run:
+          name: Install libpcap
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y libpcap0.8
+      - run:
+          name: Run gradlew build verify
+          command: ./gradlew build --info --no-daemon
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: master

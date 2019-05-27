@@ -1,7 +1,0 @@
-machine:
-  java:
-    version:
-      oraclejdk8
-
-  pre:
-    - sudo apt-get update; sudo apt-get install libpcap-dev

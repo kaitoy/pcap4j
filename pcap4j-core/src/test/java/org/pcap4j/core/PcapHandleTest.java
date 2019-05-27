@@ -66,9 +66,15 @@ public class PcapHandleTest {
         assertEquals("Statistics aren't available from a pcap_open_dead pcap_t", e.getMessage());
       }
     } else {
-      ph = nifs.get(0).openLive(55555, PromiscuousMode.PROMISCUOUS, 100);
-      PcapStat ps = ph.getStats();
-      assertNotNull(ps);
+      try {
+        ph = nifs.get(0).openLive(55555, PromiscuousMode.PROMISCUOUS, 100);
+        PcapStat ps = ph.getStats();
+        assertNotNull(ps);
+      } catch (PcapNativeException e) {
+        assertTrue(
+            e.getMessage().contains("You don't have permission to capture on that device"),
+            "The exception should complain about permission to capture.");
+      }
     }
   }
 
