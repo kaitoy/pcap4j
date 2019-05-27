@@ -1,11 +1,13 @@
 version: 2.1
 
+executors:
+  docker-jdk10:
+    docker:
+      image: 10.0.2-13-jdk
+
 jobs:
   test:
-    branches:
-      only: v1
-    docker:
-      - image: 10.0.2-13-jdk
+    executor: docker-jdk10
     steps:
       - checkout
       - run:
@@ -21,4 +23,7 @@ workflows:
   version: 2
   test:
     jobs:
-      - test
+      - test:
+          filters:
+            branches:
+              only: v1
