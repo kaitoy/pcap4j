@@ -7,6 +7,8 @@
 
 package org.pcap4j.packet.factory;
 
+import java.net.URL;
+import java.security.ProtectionDomain;
 import java.util.Iterator;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
@@ -31,14 +33,15 @@ public final class PacketFactories {
       Iterator<PacketFactoryBinderProvider> iter = loader.iterator();
       if (iter.hasNext()) {
         PacketFactoryBinderProvider packetFactoryBinderProvider = iter.next();
+        ProtectionDomain pd = packetFactoryBinderProvider.getClass().getProtectionDomain();
+        URL codeSrcLocation = null;
+        if (pd != null) {
+          codeSrcLocation = pd.getCodeSource().getLocation();
+        }
         logger.info(
             "A PacketFactoryBinderProvider implementation is found. ClassLoader: {}, URL: {}",
             packetFactoryBinderProvider.getClass().getClassLoader().toString(),
-            packetFactoryBinderProvider
-                .getClass()
-                .getProtectionDomain()
-                .getCodeSource()
-                .getLocation());
+            codeSrcLocation);
         factoryBinder = packetFactoryBinderProvider.getBinder();
         logger.info("Succeeded in PacketFactoryBinderProvider.getBinder()");
       } else {
