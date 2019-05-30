@@ -23,7 +23,7 @@ allprojects {
   apply plugin: "com.diffplug.gradle.spotless"
 
   group = 'org.pcap4j'
-  version = '2.0.0-alpha.5-SNAPSHOT'
+  version = '2.0.0-alpha.5'
 
   javadoc {
     def currentYear = Calendar.getInstance().get Calendar.YEAR

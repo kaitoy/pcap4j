@@ -48,8 +48,8 @@ Download
 
 Pcap4J is available on the Maven Central Repository.
 
-* Pcap4J 2.0.0-alpha.4
-    * [pcap4j-2.0.0-alpha.4-distribution.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/2.0.0-alpha.4/pcap4j-2.0.0-alpha.4-distribution.zip)
+* Pcap4J 2.0.0-alpha.5
+    * [pcap4j-2.0.0-alpha.5-distribution.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j/2.0.0-alpha.5/pcap4j-2.0.0-alpha.5-distribution.zip)
 * Snapshot builds
     * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j/
 
@@ -115,7 +115,7 @@ Or, if on Linux, you can run Pcap4J with a non-root user by granting capabilitie
 to your java command by the following command: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### Documents ####
-The latest JavaDoc is [here](http://www.javadoc.io/doc/org.pcap4j/pcap4j/2.0.0-alpha.4).
+The latest JavaDoc is [here](http://www.javadoc.io/doc/org.pcap4j/pcap4j/2.0.0-alpha.5).
 Each version's JavaDoc is on the [Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22).
 
 Refer to [here](https://github.com/kaitoy/pcap4j/blob/master/www/pcap4j_modules.md) for information about Pcap4J modules.
@@ -153,8 +153,8 @@ to the top of User Entries in Classpath tab of the Run Configuration for the sam
 
     ```
     dependencies {
-      compile 'org.pcap4j:pcap4j-core:2.0.0-alpha.4'
-      compile 'org.pcap4j:pcap4j-packetfactory-static:2.0.0-alpha.4'
+      compile 'org.pcap4j:pcap4j-core:2.0.0-alpha.5'
+      compile 'org.pcap4j:pcap4j-packetfactory-static:2.0.0-alpha.5'
     }
     ```
 
@@ -172,12 +172,12 @@ to the top of User Entries in Classpath tab of the Run Configuration for the sam
         <dependency>
           <groupId>org.pcap4j</groupId>
           <artifactId>pcap4j-core</artifactId>
-          <version>2.0.0-alpha.4</version>
+          <version>2.0.0-alpha.5</version>
         </dependency>
         <dependency>
           <groupId>org.pcap4j</groupId>
           <artifactId>pcap4j-packetfactory-static</artifactId>
-          <version>2.0.0-alpha.4</version>
+          <version>2.0.0-alpha.5</version>
         </dependency>
            ...
       </dependencies>

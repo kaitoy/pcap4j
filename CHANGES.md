@@ -6,6 +6,15 @@ Future
 
 ### Other Changes ###
 
+Release 2.0.0-alpha.5 (30-May-2019)
+===================================
+### New Features ###
+
+### Bug Fixes ###
+* [Issues#225](https://github.com/kaitoy/pcap4j/issues/225): Fix to avoid 'java.lang.NullPointerException: Attempt to invoke virtual method 'java.security.CodeSource java.security.ProtectionDomain.getCodeSource()' on a null object reference' with Android Java.
+
+### Other Changes ###
+
 Release 2.0.0-alpha.4 (20-May-2019)
 ===================================
 ### New Features ###
