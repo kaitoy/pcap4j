@@ -45,13 +45,22 @@ Release 2.0.0-alpha.2 (2-Jan-2019)
 ### Other Changes ###
 
 Release 2.0.0-alpha.1 (12-Nov-2018)
-======
+===================================
 ### New Features ###
 
 ### Bug Fixes ###
 
 ### Other Changes ###
 * [Issues#191](https://github.com/kaitoy/pcap4j/issues/191): Change to use Native.POINTER_SIZE instead of Pointer.SIZE that is deprecated in JNA 5.
+
+Release 1.8.1 (30-May-2019)
+==========================
+### New Features ###
+
+### Bug Fixes ###
+* [Issues#225](https://github.com/kaitoy/pcap4j/issues/225): Fix to avoid 'java.lang.NullPointerException: Attempt to invoke virtual method 'java.security.CodeSource java.security.ProtectionDomain.getCodeSource()' on a null object reference' with Android Java.
+
+### Other Changes ###
 
 Release 1.8.0 (20-May-2019)
 ==========================
