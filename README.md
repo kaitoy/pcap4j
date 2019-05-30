@@ -49,9 +49,9 @@ Download
 
 Pcap4J is available on the Maven Central Repository.
 
-* Pcap4J 1.8.0
-    * without source: [pcap4j-distribution-1.8.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.8.0/pcap4j-distribution-1.8.0-bin.zip)
-    * with    source: [pcap4j-distribution-1.8.0-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.8.0/pcap4j-distribution-1.8.0-src.zip)
+* Pcap4J 1.8.1
+    * without source: [pcap4j-distribution-1.8.1-bin.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.8.1/pcap4j-distribution-1.8.1-bin.zip)
+    * with    source: [pcap4j-distribution-1.8.1-src.zip](http://search.maven.org/remotecontent?filepath=org/pcap4j/pcap4j-distribution/1.8.1/pcap4j-distribution-1.8.1-src.zip)
 * Snapshot builds
     * https://oss.sonatype.org/content/repositories/snapshots/org/pcap4j/pcap4j-distribution/
 
@@ -131,7 +131,7 @@ Or, if on Linux, you can run Pcap4J with a non-root user by granting capabilitie
 to your java command by the following command: `setcap cap_net_raw,cap_net_admin=eip /path/to/java`
 
 #### Documents ####
-The latest JavaDoc is [here](https://www.javadoc.io/doc/org.pcap4j/pcap4j-distribution/1.8.0).
+The latest JavaDoc is [here](https://www.javadoc.io/doc/org.pcap4j/pcap4j-distribution/1.8.1).
 Each version's JavaDoc is on the [Maven Central Repository](http://search.maven.org/#search|ga|1|g%3A%22org.pcap4j%22).
 
 Refer to [here](https://github.com/kaitoy/pcap4j/blob/v1/www/pcap4j_modules.md) for information about Pcap4J modules.
@@ -174,12 +174,12 @@ Add a dependency to the pom.xml as like below:
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-core</artifactId>
-      <version>1.8.0</version>
+      <version>1.8.1</version>
     </dependency>
     <dependency>
       <groupId>org.pcap4j</groupId>
       <artifactId>pcap4j-packetfactory-static</artifactId>
-      <version>1.8.0</version>
+      <version>1.8.1</version>
     </dependency>
        ...
   </dependencies>
