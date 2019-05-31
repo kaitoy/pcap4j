@@ -13,13 +13,21 @@ branches:
 
 matrix:
   include:
-    - jdk: oraclejdk9
+    - os: linux
+      jdk: oraclejdk9
       env: COVERALLS=yes
-    - jdk: openjdk11
+    - os: linux
+      jdk: openjdk11
       addons:
         apt:
           packages:
             - openjdk-6-jdk
+    - os: osx
+      osx_image: xcode10.1 # OracleJDK 11.0.1+13
+      addons:
+        homebrew:
+          packages:
+            - libpcap
   fast_finish: true
 
 cache:
@@ -27,20 +35,24 @@ cache:
     - $HOME/.m2
 
 install:
-  - git clone -b libpcap-1.7.4 git://github.com/the-tcpdump-group/libpcap.git libpcap
-  - cd libpcap
-  - ./configure
-  - make && sudo make install
-  - cd ..
-  - $TRAVIS_BUILD_DIR/mvnw --version
+  - |
+    if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      git clone -b libpcap-1.7.4 git://github.com/the-tcpdump-group/libpcap.git libpcap
+      cd libpcap
+      ./configure
+      make && sudo make install
+    fi
 
 script:
   - |
-    if [ "${COVERALLS}" = "yes"  ]
-    then
-      sudo $TRAVIS_BUILD_DIR/mvnw --global-toolchains $TRAVIS_BUILD_DIR/mvn/toolchains_travis_9.xml -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -DserviceJobId=$TRAVIS_JOB_ID -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage verify coveralls:report
+    if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      if [ "${COVERALLS}" = "yes"  ]; then
+        sudo $TRAVIS_BUILD_DIR/mvnw --global-toolchains $TRAVIS_BUILD_DIR/mvn/toolchains_travis_9.xml -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -B -DserviceJobId=$TRAVIS_JOB_ID -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -P test-coverage verify coveralls:report
+      else
+        sudo $TRAVIS_BUILD_DIR/mvnw --global-toolchains $TRAVIS_BUILD_DIR/mvn/toolchains_travis_11.xml -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.jre6-test.jvm=/usr/lib/jvm/java-6-openjdk-amd64/jre/bin/java -B install
+      fi
     else
-      sudo $TRAVIS_BUILD_DIR/mvnw --global-toolchains $TRAVIS_BUILD_DIR/mvn/toolchains_travis_11.xml -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.jre6-test.jvm=/usr/lib/jvm/java-6-openjdk-amd64/jre/bin/java -B install
+      sudo $TRAVIS_BUILD_DIR/mvnw --global-toolchains $TRAVIS_BUILD_DIR/mvn/toolchains_travis_mac.xml -Dorg.pcap4j.core.pcapLibName=libpcap.dylib -B install
     fi
 
 notifications:
