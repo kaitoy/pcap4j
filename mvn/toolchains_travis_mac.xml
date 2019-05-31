@@ -8,7 +8,7 @@
       <version>11</version>
     </provides>
     <configuration>
-      <jdkHome>/Library/Java/JavaVirtualMachines/openjdk-11.0.1.jdk</jdkHome>
+      <jdkHome>/Library/Java/JavaVirtualMachines/openjdk-11.0.1.jdk/Contents/Home</jdkHome>
     </configuration>
   </toolchain>
 
