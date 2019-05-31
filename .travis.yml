@@ -57,7 +57,7 @@ script:
         sudo ./mvnw --global-toolchains mvn/toolchains_travis_11.xml -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.jre6-test.jvm=/usr/lib/jvm/java-6-openjdk-amd64/jre/bin/java -B install
       fi
     else
-      sudo ./mvnw --global-toolchains mvn/toolchains_travis_mac.xml -Dorg.pcap4j.core.pcapLibName=libpcap.dylib -B install
+      sudo ./mvnw --global-toolchains mvn/toolchains_travis_mac.xml -B install
     fi
 
 notifications:
