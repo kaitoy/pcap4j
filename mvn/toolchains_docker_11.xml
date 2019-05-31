@@ -8,7 +8,7 @@
       <version>11</version>
     </provides>
     <configuration>
-      <jdkHome>/docker-java-home</jdkHome>
+      <jdkHome>/usr/local/openjdk-11/</jdkHome>
     </configuration>
   </toolchain>
 
