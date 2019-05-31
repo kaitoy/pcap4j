@@ -73,7 +73,7 @@ test_script:
 
 deploy_script:
   - ps: >-
-      if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) {
+      if ((-not $env:APPVEYOR_PULL_REQUEST_NUMBER) -and (sls "version = '.*SNAPSHOT'" build.gradle)) {
         ./gradlew.bat uploadArchives --info --no-daemon -Psonatype_user=%SONATYPE_NEXUS_USERNAME% -Psonatype_password=%SONATYPE_NEXUS_PASSWORD%
         if ($LastExitCode -eq 0) {
           # The following warning is written to stderr that causes AppVayor builds to fail.
