@@ -62,6 +62,7 @@ script:
       fi
     else
       sudo ./gradlew build --info --no-daemon -Djna.library.path="$(find /usr/local/Cellar/libpcap/ -name lib)"
+    fi
 
 after_success:
   - |
