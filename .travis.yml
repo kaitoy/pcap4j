@@ -2,19 +2,36 @@ sudo: required
 
 language: java
 
+addons:
+  hosts:
+    - pcap4j-test
+  hostname: pcap4j-test
+
+git:
+  quiet: true
+  depth: 1
+
 branches:
   except:
     - gh-pages
 
 matrix:
   include:
-    - jdk: oraclejdk9
+    - os: linux
+      jdk: oraclejdk9
       env: COVERALLS=yes
-    - jdk: openjdk12
+    - os: linux
+      jdk: openjdk12
       addons:
         apt:
           packages:
             - openjdk-8-jdk
+    - os: osx
+      osx_image: xcode10.1 # OpenJDK 11.0.1+13
+      addons:
+        homebrew:
+          packages:
+            - libpcap
   fast_finish: true
 
 cache:
@@ -25,21 +42,26 @@ cache:
 #    - $HOME/.gradle/caches
 
 install:
-  - git clone -b libpcap-1.7.4 git://github.com/the-tcpdump-group/libpcap.git libpcap
-  - cd libpcap
-  - ./configure
-  - make && sudo make install
-  - cd ..
+  - |
+    if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      git clone -b libpcap-1.7.4 --depth 1 git://github.com/the-tcpdump-group/libpcap.git libpcap
+      cd libpcap
+      ./configure
+      make && sudo make install
+    fi
 
 script:
   # sudo is needed for some unit tests.
   - |
-    if [ "${COVERALLS}" = "yes"  ]
-    then
-      sudo ./gradlew build jacocoTestReport --info --no-daemon -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true
+    cd "${TRAVIS_BUILD_DIR}"
+    if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      if [ "${COVERALLS}" = "yes"  ]; then
+        sudo ./gradlew build jacocoTestReport --info --no-daemon -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true
+      else
+        sudo ./gradlew build --info --no-daemon -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -Pjre8_bin_path=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+      fi
     else
-      sudo ./gradlew build --info --no-daemon -Dorg.pcap4j.core.pcapLibName=/usr/local/lib/libpcap.so -Dorg.pcap4j.core.test.enableTimestampPrecisionTests=true -Pjre8_bin_path=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
-    fi
+      sudo ./gradlew build --info --no-daemon -Djna.library.path="$(find /usr/local/Cellar/libpcap/ -name lib)"
 
 after_success:
   - |
