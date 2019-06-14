@@ -5,6 +5,9 @@ Future
 ### Bug Fixes ###
 
 ### Other Changes ###
+* Change method names:
+    * Packet#getOuterOf() => Packet#getLowerLayerOf()
+    * Packet.Builder#getOuterOf() => Packet.Builder#getLowerLayerOf()
 
 Release 2.0.0-alpha.5 (30-May-2019)
 ===================================

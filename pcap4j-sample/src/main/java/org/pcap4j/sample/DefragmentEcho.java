@@ -55,7 +55,7 @@ public class DefragmentEcho {
 
       Packet.Builder builder = originalPackets.get(id).getBuilder();
       builder
-          .getOuterOf(IpV4Packet.Builder.class)
+          .getLowerLayerOf(IpV4Packet.Builder.class)
           .payloadBuilder(new SimpleBuilder(defragmentedIpV4Packet));
 
       System.out.println(builder.build());

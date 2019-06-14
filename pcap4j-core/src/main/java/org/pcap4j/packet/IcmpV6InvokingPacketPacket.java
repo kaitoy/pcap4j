@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2016  Pcap4J.org
+  _##  Copyright (C) 2013  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -50,7 +50,7 @@ abstract class IcmpV6InvokingPacketPacket extends AbstractPacket {
       Packet.Builder builder = p.getBuilder();
       byte[] ipRawData = p.get(IllegalRawDataPacket.class).getRawData();
       builder
-          .getOuterOf(IllegalRawDataPacket.Builder.class)
+          .getLowerLayerOf(IllegalRawDataPacket.Builder.class)
           .payloadBuilder(
               PacketFactories.getFactory(Packet.class, NotApplicable.class)
                   .newInstance(ipRawData, 0, ipRawData.length, NotApplicable.UNKNOWN)

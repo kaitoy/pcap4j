@@ -1,13 +1,15 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2014  Pcap4J.org
+  _##  Copyright (C) 2013  Pcap4J.org
   _##
   _##########################################################################
 */
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 import java.util.Arrays;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
@@ -136,7 +138,7 @@ public final class IpV6NeighborDiscoveryRedirectedHeaderOption
       Packet.Builder builder = p.getBuilder();
       byte[] ipRawData = p.get(IllegalRawDataPacket.class).getRawData();
       builder
-          .getOuterOf(IllegalRawDataPacket.Builder.class)
+          .getLowerLayerOf(IllegalRawDataPacket.Builder.class)
           .payloadBuilder(
               PacketFactories.getFactory(Packet.class, NotApplicable.class)
                   .newInstance(ipRawData, 0, ipRawData.length)

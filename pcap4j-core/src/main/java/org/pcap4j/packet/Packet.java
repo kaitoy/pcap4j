@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2019 Pcap4J.org
+  _##  Copyright (C) 2011 Pcap4J.org
   _##
   _##########################################################################
 */
@@ -82,7 +82,7 @@ public interface Packet extends Iterable<Packet>, Serializable {
    * @param clazz the packet class of the object whose outer packet object is what you want to get
    * @return a packet object if found; otherwise null
    */
-  public default Packet getOuterOf(Class<? extends Packet> clazz) {
+  public default Packet getLowerLayerOf(Class<? extends Packet> clazz) {
     for (Packet p : this) {
       if (clazz.isInstance(p.getPayload())) {
         return p;
@@ -149,7 +149,7 @@ public interface Packet extends Iterable<Packet>, Serializable {
      *     get
      * @return a builder object if found; otherwise null
      */
-    public default Builder getOuterOf(Class<? extends Builder> clazz) {
+    public default Builder getLowerLayerOf(Class<? extends Builder> clazz) {
       for (Builder b : this) {
         if (clazz.isInstance(b.getPayloadBuilder())) {
           return b;
