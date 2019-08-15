@@ -57,7 +57,7 @@ public final class StaticDot11FrameTypePacketFactory
    */
   public Packet newInstance(byte[] rawData, int offset, int length, Dot11FrameType number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 4:
           return Dot11ProbeRequestPacket.newPacket(rawData, offset, length);
       }
@@ -81,12 +81,12 @@ public final class StaticDot11FrameTypePacketFactory
   public Packet newInstance(
       byte[] rawData, int offset, int length, Dot11FrameType number1, Dot11FrameType number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 4:
           return Dot11ProbeRequestPacket.newPacket(rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 4:
           return Dot11ProbeRequestPacket.newPacket(rawData, offset, length);
       }
@@ -100,7 +100,7 @@ public final class StaticDot11FrameTypePacketFactory
   public Packet newInstance(byte[] rawData, int offset, int length, Dot11FrameType... numbers) {
     try {
       for (Dot11FrameType num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 4:
             return Dot11ProbeRequestPacket.newPacket(rawData, offset, length);
         }

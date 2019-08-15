@@ -60,7 +60,7 @@ public final class StaticEtherTypePacketFactory implements PacketFactory<Packet,
   public Packet newInstance(byte[] rawData, int offset, int length, EtherType number) {
     try {
       short val = number.value();
-      switch (Short.toUnsignedInt(val)) {
+      switch (val & 0xffff) {
         case 0x0800:
           return IpV4Packet.newPacket(rawData, offset, length);
         case 0x0806:
@@ -94,7 +94,7 @@ public final class StaticEtherTypePacketFactory implements PacketFactory<Packet,
       byte[] rawData, int offset, int length, EtherType number1, EtherType number2) {
     try {
       short val = number1.value();
-      switch (Short.toUnsignedInt(val)) {
+      switch (val & 0xffff) {
         case 0x0800:
           return IpV4Packet.newPacket(rawData, offset, length);
         case 0x0806:
@@ -109,7 +109,7 @@ public final class StaticEtherTypePacketFactory implements PacketFactory<Packet,
       }
 
       val = number2.value();
-      switch (Short.toUnsignedInt(val)) {
+      switch (val & 0xffff) {
         case 0x0800:
           return IpV4Packet.newPacket(rawData, offset, length);
         case 0x0806:
@@ -133,7 +133,7 @@ public final class StaticEtherTypePacketFactory implements PacketFactory<Packet,
     try {
       for (EtherType num : numbers) {
         short val = num.value();
-        switch (Short.toUnsignedInt(val)) {
+        switch (val & 0xffff) {
           case 0x0800:
             return IpV4Packet.newPacket(rawData, offset, length);
           case 0x0806:

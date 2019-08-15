@@ -69,7 +69,7 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
    */
   public Packet newInstance(byte[] rawData, int offset, int length, IcmpV6Type number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 1:
           return IcmpV6DestinationUnreachablePacket.newPacket(rawData, offset, length);
         case 2:
@@ -121,7 +121,7 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
   public Packet newInstance(
       byte[] rawData, int offset, int length, IcmpV6Type number1, IcmpV6Type number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 1:
           return IcmpV6DestinationUnreachablePacket.newPacket(rawData, offset, length);
         case 2:
@@ -154,7 +154,7 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
           return IcmpV6MobilePrefixAdvertisementPacket.newPacket(rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 1:
           return IcmpV6DestinationUnreachablePacket.newPacket(rawData, offset, length);
         case 2:
@@ -196,7 +196,7 @@ public final class StaticIcmpV6TypePacketFactory implements PacketFactory<Packet
   public Packet newInstance(byte[] rawData, int offset, int length, IcmpV6Type... numbers) {
     try {
       for (IcmpV6Type num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 1:
             return IcmpV6DestinationUnreachablePacket.newPacket(rawData, offset, length);
           case 2:

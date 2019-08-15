@@ -66,7 +66,7 @@ public final class StaticIpV6NeighborDiscoveryOptionFactory
   public IpV6NeighborDiscoveryOption newInstance(
       byte[] rawData, int offset, int length, IpV6NeighborDiscoveryOptionType number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 1:
           return IpV6NeighborDiscoverySourceLinkLayerAddressOption.newInstance(
               rawData, offset, length);
@@ -104,7 +104,7 @@ public final class StaticIpV6NeighborDiscoveryOptionFactory
       IpV6NeighborDiscoveryOptionType number1,
       IpV6NeighborDiscoveryOptionType number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 1:
           return IpV6NeighborDiscoverySourceLinkLayerAddressOption.newInstance(
               rawData, offset, length);
@@ -119,7 +119,7 @@ public final class StaticIpV6NeighborDiscoveryOptionFactory
           return IpV6NeighborDiscoveryMtuOption.newInstance(rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 1:
           return IpV6NeighborDiscoverySourceLinkLayerAddressOption.newInstance(
               rawData, offset, length);
@@ -144,7 +144,7 @@ public final class StaticIpV6NeighborDiscoveryOptionFactory
       byte[] rawData, int offset, int length, IpV6NeighborDiscoveryOptionType... numbers) {
     try {
       for (IpV6NeighborDiscoveryOptionType num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 1:
             return IpV6NeighborDiscoverySourceLinkLayerAddressOption.newInstance(
                 rawData, offset, length);

@@ -56,7 +56,7 @@ public final class StaticUdpPortPacketFactory implements PacketFactory<Packet, U
    */
   public Packet newInstance(byte[] rawData, int offset, int length, UdpPort number) {
     try {
-      switch (Short.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xffff) {
         case 53:
           return DnsPacket.newPacket(rawData, offset, length);
         case 2123:
@@ -86,7 +86,7 @@ public final class StaticUdpPortPacketFactory implements PacketFactory<Packet, U
   public Packet newInstance(
       byte[] rawData, int offset, int length, UdpPort number1, UdpPort number2) {
     try {
-      switch (Short.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xffff) {
         case 53:
           return DnsPacket.newPacket(rawData, offset, length);
         case 2123:
@@ -97,7 +97,7 @@ public final class StaticUdpPortPacketFactory implements PacketFactory<Packet, U
           return GtpSelector.newPacket(rawData, offset, length);
       }
 
-      switch (Short.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xffff) {
         case 53:
           return DnsPacket.newPacket(rawData, offset, length);
         case 2123:
@@ -117,7 +117,7 @@ public final class StaticUdpPortPacketFactory implements PacketFactory<Packet, U
   public Packet newInstance(byte[] rawData, int offset, int length, UdpPort... numbers) {
     try {
       for (UdpPort num : numbers) {
-        switch (Short.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xffff) {
           case 53:
             return DnsPacket.newPacket(rawData, offset, length);
           case 2123:

@@ -65,7 +65,7 @@ public final class StaticIcmpV4TypePacketFactory implements PacketFactory<Packet
    */
   public Packet newInstance(byte[] rawData, int offset, int length, IcmpV4Type number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 0:
           return IcmpV4EchoReplyPacket.newPacket(rawData, offset, length);
         case 3:
@@ -109,7 +109,7 @@ public final class StaticIcmpV4TypePacketFactory implements PacketFactory<Packet
   public Packet newInstance(
       byte[] rawData, int offset, int length, IcmpV4Type number1, IcmpV4Type number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 0:
           return IcmpV4EchoReplyPacket.newPacket(rawData, offset, length);
         case 3:
@@ -134,7 +134,7 @@ public final class StaticIcmpV4TypePacketFactory implements PacketFactory<Packet
           return IcmpV4InformationReplyPacket.newPacket(rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 0:
           return IcmpV4EchoReplyPacket.newPacket(rawData, offset, length);
         case 3:
@@ -168,7 +168,7 @@ public final class StaticIcmpV4TypePacketFactory implements PacketFactory<Packet
   public Packet newInstance(byte[] rawData, int offset, int length, IcmpV4Type... numbers) {
     try {
       for (IcmpV4Type num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 0:
             return IcmpV4EchoReplyPacket.newPacket(rawData, offset, length);
           case 3:

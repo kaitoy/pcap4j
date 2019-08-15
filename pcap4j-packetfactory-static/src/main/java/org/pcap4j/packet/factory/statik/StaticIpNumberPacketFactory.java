@@ -65,7 +65,7 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
    */
   public Packet newInstance(byte[] rawData, int offset, int length, IpNumber number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 0:
           return IpV6ExtHopByHopOptionsPacket.newPacket(rawData, offset, length);
         case 1:
@@ -113,7 +113,7 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
   public Packet newInstance(
       byte[] rawData, int offset, int length, IpNumber number1, IpNumber number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 0:
           return IpV6ExtHopByHopOptionsPacket.newPacket(rawData, offset, length);
         case 1:
@@ -142,7 +142,7 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
         return IpV6ExtUnknownPacket.newPacket(rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 0:
           return IpV6ExtHopByHopOptionsPacket.newPacket(rawData, offset, length);
         case 1:
@@ -180,7 +180,7 @@ public final class StaticIpNumberPacketFactory implements PacketFactory<Packet, 
   public Packet newInstance(byte[] rawData, int offset, int length, IpNumber... numbers) {
     try {
       for (IpNumber num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 0:
             return IpV6ExtHopByHopOptionsPacket.newPacket(rawData, offset, length);
           case 1:

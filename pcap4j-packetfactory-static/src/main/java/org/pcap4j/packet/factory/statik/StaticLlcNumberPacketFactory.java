@@ -56,7 +56,7 @@ public final class StaticLlcNumberPacketFactory implements PacketFactory<Packet,
    */
   public Packet newInstance(byte[] rawData, int offset, int length, LlcNumber number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 152:
           return ArpPacket.newPacket(rawData, offset, length);
         case 170:
@@ -82,14 +82,14 @@ public final class StaticLlcNumberPacketFactory implements PacketFactory<Packet,
   public Packet newInstance(
       byte[] rawData, int offset, int length, LlcNumber number1, LlcNumber number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 152:
           return ArpPacket.newPacket(rawData, offset, length);
         case 170:
           return SnapPacket.newPacket(rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 152:
           return ArpPacket.newPacket(rawData, offset, length);
         case 170:
@@ -105,7 +105,7 @@ public final class StaticLlcNumberPacketFactory implements PacketFactory<Packet,
   public Packet newInstance(byte[] rawData, int offset, int length, LlcNumber... numbers) {
     try {
       for (LlcNumber num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 152:
             return ArpPacket.newPacket(rawData, offset, length);
           case 170:

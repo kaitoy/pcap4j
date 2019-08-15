@@ -60,7 +60,7 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
    */
   public IpV6Option newInstance(byte[] rawData, int offset, int length, IpV6OptionType number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 0:
           return IpV6Pad1Option.newInstance(rawData, offset, length);
         case 1:
@@ -86,14 +86,14 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
   public IpV6Option newInstance(
       byte[] rawData, int offset, int length, IpV6OptionType number1, IpV6OptionType number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 0:
           return IpV6Pad1Option.newInstance(rawData, offset, length);
         case 1:
           return IpV6PadNOption.newInstance(rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 0:
           return IpV6Pad1Option.newInstance(rawData, offset, length);
         case 1:
@@ -109,7 +109,7 @@ public final class StaticIpV6OptionFactory implements PacketFactory<IpV6Option, 
   public IpV6Option newInstance(byte[] rawData, int offset, int length, IpV6OptionType... numbers) {
     try {
       for (IpV6OptionType num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 0:
             return IpV6Pad1Option.newInstance(rawData, offset, length);
           case 1:

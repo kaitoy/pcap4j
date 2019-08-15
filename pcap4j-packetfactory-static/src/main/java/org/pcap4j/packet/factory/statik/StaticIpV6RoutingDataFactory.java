@@ -61,7 +61,7 @@ public final class StaticIpV6RoutingDataFactory
   public IpV6RoutingData newInstance(
       byte[] rawData, int offset, int length, IpV6RoutingType number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 0:
           return IpV6RoutingSourceRouteData.newInstance(rawData, offset, length);
       }
@@ -85,12 +85,12 @@ public final class StaticIpV6RoutingDataFactory
   public IpV6RoutingData newInstance(
       byte[] rawData, int offset, int length, IpV6RoutingType number1, IpV6RoutingType number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 0:
           return IpV6RoutingSourceRouteData.newInstance(rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 0:
           return IpV6RoutingSourceRouteData.newInstance(rawData, offset, length);
       }
@@ -105,7 +105,7 @@ public final class StaticIpV6RoutingDataFactory
       byte[] rawData, int offset, int length, IpV6RoutingType... numbers) {
     try {
       for (IpV6RoutingType num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 0:
             return IpV6RoutingSourceRouteData.newInstance(rawData, offset, length);
         }

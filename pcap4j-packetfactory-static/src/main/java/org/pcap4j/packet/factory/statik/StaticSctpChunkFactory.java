@@ -58,7 +58,7 @@ public final class StaticSctpChunkFactory implements PacketFactory<SctpChunk, Sc
    */
   public SctpChunk newInstance(byte[] rawData, int offset, int length, SctpChunkType number) {
     try {
-      //      switch (Byte.toUnsignedInt(number.value())) {
+      //      switch (number.value() & 0xff) {
       //        case 0:
       //          return SctpChunkPayloadData.newInstance(rawData, offset, length);
       //      }
@@ -82,12 +82,12 @@ public final class StaticSctpChunkFactory implements PacketFactory<SctpChunk, Sc
   public SctpChunk newInstance(
       byte[] rawData, int offset, int length, SctpChunkType number1, SctpChunkType number2) {
     try {
-      //      switch (Byte.toUnsignedInt(number1.value())) {
+      //      switch (number1.value() & 0xff) {
       //        case 0:
       //          return SctpChunkPayloadData.newInstance(rawData, offset, length);
       //      }
       //
-      //      switch (Byte.toUnsignedInt(number2.value())) {
+      //      switch (number2.value() & 0xff) {
       //        case 0:
       //          return SctpChunkPayloadData.newInstance(rawData, offset, length);
       //      }
@@ -101,7 +101,7 @@ public final class StaticSctpChunkFactory implements PacketFactory<SctpChunk, Sc
   public SctpChunk newInstance(byte[] rawData, int offset, int length, SctpChunkType... numbers) {
     try {
       //      for (SctpChunkType num: numbers) {
-      //        switch (Byte.toUnsignedInt(num.value())) {
+      //        switch (num.value() & 0xff) {
       //          case 0:
       //            return SctpChunkPayloadData.newInstance(rawData, offset, length);
       //        }

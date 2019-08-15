@@ -60,7 +60,7 @@ public final class StaticIpV4InternetTimestampOptionDataFactory
   public IpV4InternetTimestampOptionData newInstance(
       byte[] rawData, int offset, int length, IpV4InternetTimestampOptionFlag number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 0:
           return IpV4InternetTimestampOptionTimestamps.newInstance(rawData, offset, length);
         case 1:
@@ -94,7 +94,7 @@ public final class StaticIpV4InternetTimestampOptionDataFactory
       IpV4InternetTimestampOptionFlag number1,
       IpV4InternetTimestampOptionFlag number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 0:
           return IpV4InternetTimestampOptionTimestamps.newInstance(rawData, offset, length);
         case 1:
@@ -105,7 +105,7 @@ public final class StaticIpV4InternetTimestampOptionDataFactory
               rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 0:
           return IpV4InternetTimestampOptionTimestamps.newInstance(rawData, offset, length);
         case 1:
@@ -126,7 +126,7 @@ public final class StaticIpV4InternetTimestampOptionDataFactory
       byte[] rawData, int offset, int length, IpV4InternetTimestampOptionFlag... numbers) {
     try {
       for (IpV4InternetTimestampOptionFlag num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 0:
             return IpV4InternetTimestampOptionTimestamps.newInstance(rawData, offset, length);
           case 1:

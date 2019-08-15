@@ -73,7 +73,7 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
   public DnsRData newInstance(
       byte[] rawData, int offset, int length, DnsResourceRecordType number) {
     try {
-      switch (Short.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xffff) {
         case 1:
           return DnsRDataA.newInstance(rawData, offset, length);
         case 2:
@@ -135,7 +135,7 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
       DnsResourceRecordType number1,
       DnsResourceRecordType number2) {
     try {
-      switch (Short.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xffff) {
         case 1:
           return DnsRDataA.newInstance(rawData, offset, length);
         case 2:
@@ -174,7 +174,7 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
           return DnsRDataCaa.newInstance(rawData, offset, length);
       }
 
-      switch (Short.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xffff) {
         case 1:
           return DnsRDataA.newInstance(rawData, offset, length);
         case 2:
@@ -223,7 +223,7 @@ public final class StaticDnsRDataFactory implements PacketFactory<DnsRData, DnsR
       byte[] rawData, int offset, int length, DnsResourceRecordType... numbers) {
     try {
       for (DnsResourceRecordType num : numbers) {
-        switch (Short.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xffff) {
           case 1:
             return DnsRDataA.newInstance(rawData, offset, length);
           case 2:

@@ -56,7 +56,7 @@ public final class StaticNotApplicablePacketFactory
    * @return see {@link PacketFactory#newInstance}.
    */
   public Packet newInstance(byte[] rawData, int offset, int length, NotApplicable number) {
-    switch (Byte.toUnsignedInt(number.value())) {
+    switch (number.value() & 0xff) {
       case 0:
         return UnknownPacket.newPacket(rawData, offset, length);
       case 1:
@@ -82,7 +82,7 @@ public final class StaticNotApplicablePacketFactory
    */
   public Packet newInstance(
       byte[] rawData, int offset, int length, NotApplicable number1, NotApplicable number2) {
-    switch (Byte.toUnsignedInt(number1.value())) {
+    switch (number1.value() & 0xff) {
       case 0:
         return UnknownPacket.newPacket(rawData, offset, length);
       case 1:
@@ -93,7 +93,7 @@ public final class StaticNotApplicablePacketFactory
         return EncryptedPacket.newPacket(rawData, offset, length);
     }
 
-    switch (Byte.toUnsignedInt(number2.value())) {
+    switch (number2.value() & 0xff) {
       case 0:
         return UnknownPacket.newPacket(rawData, offset, length);
       case 1:
@@ -109,7 +109,7 @@ public final class StaticNotApplicablePacketFactory
   @Override
   public Packet newInstance(byte[] rawData, int offset, int length, NotApplicable... numbers) {
     for (NotApplicable num : numbers) {
-      switch (Byte.toUnsignedInt(num.value())) {
+      switch (num.value() & 0xff) {
         case 0:
           return UnknownPacket.newPacket(rawData, offset, length);
         case 1:

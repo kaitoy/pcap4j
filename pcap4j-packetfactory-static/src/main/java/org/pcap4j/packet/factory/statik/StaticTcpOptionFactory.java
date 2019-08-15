@@ -65,7 +65,7 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
    */
   public TcpOption newInstance(byte[] rawData, int offset, int length, TcpOptionKind number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 0:
           return TcpEndOfOptionList.newInstance(rawData, offset, length);
         case 1:
@@ -101,7 +101,7 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
   public TcpOption newInstance(
       byte[] rawData, int offset, int length, TcpOptionKind number1, TcpOptionKind number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 0:
           return TcpEndOfOptionList.newInstance(rawData, offset, length);
         case 1:
@@ -118,7 +118,7 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
           return TcpTimestampsOption.newInstance(rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 0:
           return TcpEndOfOptionList.newInstance(rawData, offset, length);
         case 1:
@@ -144,7 +144,7 @@ public final class StaticTcpOptionFactory implements PacketFactory<TcpOption, Tc
   public TcpOption newInstance(byte[] rawData, int offset, int length, TcpOptionKind... numbers) {
     try {
       for (TcpOptionKind num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 0:
             return TcpEndOfOptionList.newInstance(rawData, offset, length);
           case 1:

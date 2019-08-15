@@ -54,7 +54,7 @@ public final class StaticSctpPortPacketFactory implements PacketFactory<Packet, 
   public Packet newInstance(byte[] rawData, int offset, int length, SctpPort number) {
     return UnknownPacket.newPacket(rawData, offset, length);
     //    try {
-    //      switch (Short.toUnsignedInt(number.value())) {
+    //      switch (number.value() & 0xffff) {
     //        case 80:
     //          return HttpPacket.newPacket(rawData, offset, length);
     //      }
@@ -79,12 +79,12 @@ public final class StaticSctpPortPacketFactory implements PacketFactory<Packet, 
       byte[] rawData, int offset, int length, SctpPort number1, SctpPort number2) {
     return UnknownPacket.newPacket(rawData, offset, length);
     //    try {
-    //      switch (Short.toUnsignedInt(number1.value())) {
+    //      switch (number1.value() & 0xffff) {
     //        case 80:
     //          return HttpPacket.newPacket(rawData, offset, length);
     //      }
     //
-    //      switch (Short.toUnsignedInt(number2.value())) {
+    //      switch (number2.value() & 0xffff) {
     //        case 80:
     //          return HttpPacket.newPacket(rawData, offset, length);
     //      }
@@ -99,7 +99,7 @@ public final class StaticSctpPortPacketFactory implements PacketFactory<Packet, 
     return UnknownPacket.newPacket(rawData, offset, length);
     //    try {
     //      for (SctpPort num: numbers) {
-    //        switch (Short.toUnsignedInt(num.value())) {
+    //        switch (num.value() & 0xffff) {
     //          case 80:
     //            return HttpPacket.newPacket(rawData, offset, length);
     //        }

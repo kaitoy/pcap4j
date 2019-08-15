@@ -58,7 +58,7 @@ public final class StaticPppDllProtocolPacketFactory
    */
   public Packet newInstance(byte[] rawData, int offset, int length, PppDllProtocol number) {
     try {
-      switch (Short.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xffff) {
         case 0x0021:
           return IpV4Packet.newPacket(rawData, offset, length);
         case 0x0057:
@@ -84,14 +84,14 @@ public final class StaticPppDllProtocolPacketFactory
   public Packet newInstance(
       byte[] rawData, int offset, int length, PppDllProtocol number1, PppDllProtocol number2) {
     try {
-      switch (Short.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xffff) {
         case 0x0021:
           return IpV4Packet.newPacket(rawData, offset, length);
         case 0x0057:
           return IpV6Packet.newPacket(rawData, offset, length);
       }
 
-      switch (Short.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xffff) {
         case 0x0021:
           return IpV4Packet.newPacket(rawData, offset, length);
         case 0x0057:
@@ -107,7 +107,7 @@ public final class StaticPppDllProtocolPacketFactory
   public Packet newInstance(byte[] rawData, int offset, int length, PppDllProtocol... numbers) {
     try {
       for (PppDllProtocol num : numbers) {
-        switch (Short.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xffff) {
           case 0x0021:
             return IpV4Packet.newPacket(rawData, offset, length);
           case 0x0057:

@@ -55,7 +55,7 @@ public final class StaticTcpPortPacketFactory implements PacketFactory<Packet, T
    */
   public Packet newInstance(byte[] rawData, int offset, int length, TcpPort number) {
     try {
-      switch (Short.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xffff) {
         case 53:
           return DnsPacket.newPacket(rawData, offset, length);
       }
@@ -79,12 +79,12 @@ public final class StaticTcpPortPacketFactory implements PacketFactory<Packet, T
   public Packet newInstance(
       byte[] rawData, int offset, int length, TcpPort number1, TcpPort number2) {
     try {
-      switch (Short.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xffff) {
         case 53:
           return DnsPacket.newPacket(rawData, offset, length);
       }
 
-      switch (Short.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xffff) {
         case 53:
           return DnsPacket.newPacket(rawData, offset, length);
       }
@@ -98,7 +98,7 @@ public final class StaticTcpPortPacketFactory implements PacketFactory<Packet, T
   public Packet newInstance(byte[] rawData, int offset, int length, TcpPort... numbers) {
     try {
       for (TcpPort num : numbers) {
-        switch (Short.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xffff) {
           case 53:
             return DnsPacket.newPacket(rawData, offset, length);
         }

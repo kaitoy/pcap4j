@@ -57,7 +57,7 @@ public final class StaticSsh2MessageNumberPacketFactory
    */
   public Packet newInstance(byte[] rawData, int offset, int length, Ssh2MessageNumber number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 20:
           return Ssh2KexInitPacket.newPacket(rawData, offset, length);
       }
@@ -85,12 +85,12 @@ public final class StaticSsh2MessageNumberPacketFactory
       Ssh2MessageNumber number1,
       Ssh2MessageNumber number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 20:
           return Ssh2KexInitPacket.newPacket(rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 20:
           return Ssh2KexInitPacket.newPacket(rawData, offset, length);
       }
@@ -104,7 +104,7 @@ public final class StaticSsh2MessageNumberPacketFactory
   public Packet newInstance(byte[] rawData, int offset, int length, Ssh2MessageNumber... numbers) {
     try {
       for (Ssh2MessageNumber num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 20:
             return Ssh2KexInitPacket.newPacket(rawData, offset, length);
         }

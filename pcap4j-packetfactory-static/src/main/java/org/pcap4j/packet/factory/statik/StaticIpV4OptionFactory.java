@@ -66,7 +66,7 @@ public final class StaticIpV4OptionFactory implements PacketFactory<IpV4Option, 
    */
   public IpV4Option newInstance(byte[] rawData, int offset, int length, IpV4OptionType number) {
     try {
-      switch (Byte.toUnsignedInt(number.value())) {
+      switch (number.value() & 0xff) {
         case 0:
           return IpV4EndOfOptionList.newInstance(rawData, offset, length);
         case 1:
@@ -104,7 +104,7 @@ public final class StaticIpV4OptionFactory implements PacketFactory<IpV4Option, 
   public IpV4Option newInstance(
       byte[] rawData, int offset, int length, IpV4OptionType number1, IpV4OptionType number2) {
     try {
-      switch (Byte.toUnsignedInt(number1.value())) {
+      switch (number1.value() & 0xff) {
         case 0:
           return IpV4EndOfOptionList.newInstance(rawData, offset, length);
         case 1:
@@ -123,7 +123,7 @@ public final class StaticIpV4OptionFactory implements PacketFactory<IpV4Option, 
           return IpV4StrictSourceRouteOption.newInstance(rawData, offset, length);
       }
 
-      switch (Byte.toUnsignedInt(number2.value())) {
+      switch (number2.value() & 0xff) {
         case 0:
           return IpV4EndOfOptionList.newInstance(rawData, offset, length);
         case 1:
@@ -151,7 +151,7 @@ public final class StaticIpV4OptionFactory implements PacketFactory<IpV4Option, 
   public IpV4Option newInstance(byte[] rawData, int offset, int length, IpV4OptionType... numbers) {
     try {
       for (IpV4OptionType num : numbers) {
-        switch (Byte.toUnsignedInt(num.value())) {
+        switch (num.value() & 0xff) {
           case 0:
             return IpV4EndOfOptionList.newInstance(rawData, offset, length);
           case 1:
