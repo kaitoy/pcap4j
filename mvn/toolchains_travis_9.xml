@@ -8,7 +8,7 @@
       <version>9</version>
     </provides>
     <configuration>
-      <jdkHome>/usr/lib/jvm/java-9-oracle</jdkHome>
+      <jdkHome>/home/travis/oraclejdk9</jdkHome>
     </configuration>
   </toolchain>
 
