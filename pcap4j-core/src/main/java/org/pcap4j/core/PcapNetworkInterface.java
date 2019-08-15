@@ -87,6 +87,12 @@ public final class PcapNetworkInterface {
           } else if (addr.length == 0) {
             continue;
           } else {
+            // addrLength (i.e. sll_halen) may exceed addr.length (i.e. sll.sll_addr.length).
+            // If it's the case, need to shorten addrLength here to avoid
+            // ArrayIndexOutOfBoundsException in
+            // the succeeding ByteArrays.getSubArray().
+            // https://github.com/kaitoy/pcap4j/issues/228
+            addrLength = addrLength <= addr.length ? addrLength : addr.length;
             linkLayerAddresses.add(
                 LinkLayerAddress.getByAddress(ByteArrays.getSubArray(addr, 0, addrLength)));
           }
