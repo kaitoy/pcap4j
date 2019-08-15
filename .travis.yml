@@ -21,6 +21,7 @@ matrix:
       jdk: oraclejdk9
       env: COVERALLS=yes
     - os: linux
+      dist: trusty
       jdk: openjdk11
       addons:
         apt:
