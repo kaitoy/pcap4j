@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2011-2019  Pcap4J.org
+  _##  Copyright (C) 2011 Pcap4J.org
   _##
   _##########################################################################
 */
@@ -73,8 +73,7 @@ public final class UdpPacket extends AbstractPacket implements TransportPacket {
         serverPort = header.getDstPort();
       }
       this.payload =
-          PacketFactories.getFactory(Packet.class, UdpPort.class)
-              .newInstance(rawData, offset + header.length(), payloadLength, serverPort);
+          factory.newInstance(rawData, offset + header.length(), payloadLength, serverPort);
     } else {
       this.payload = null;
     }

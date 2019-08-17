@@ -12,6 +12,8 @@ import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
+import java.util.ArrayList;
+import java.util.List;
 import org.pcap4j.core.NativeMappings.PcapErrbuf;
 import org.pcap4j.core.NativeMappings.PcapLibrary;
 import org.pcap4j.core.NativeMappings.pcap_addr;
@@ -26,9 +28,6 @@ import org.pcap4j.util.LinkLayerAddress;
 import org.pcap4j.util.MacAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Kaito Yamada
@@ -89,7 +88,8 @@ public final class PcapNetworkInterface {
             continue;
           } else {
             // addrLength (i.e. sll_halen) may exceed addr.length (i.e. sll.sll_addr.length).
-            // If it's the case, need to shorten addrLength here to avoid ArrayIndexOutOfBoundsException in
+            // If it's the case, need to shorten addrLength here to avoid
+            // ArrayIndexOutOfBoundsException in
             // the succeeding ByteArrays.getSubArray().
             // https://github.com/kaitoy/pcap4j/issues/228
             addrLength = addrLength <= addr.length ? addrLength : addr.length;
