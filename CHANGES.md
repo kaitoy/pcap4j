@@ -6,6 +6,15 @@ Future
 
 ### Other Changes ###
 
+Release 1.8.2 (17-Aug-2019)
+==========================
+### New Features ###
+
+### Bug Fixes ###
+* [Issues#228](https://github.com/kaitoy/pcap4j/issues/228): Fix a bug where ArrayIndexOutOfBoundsException can be thrown during instantiating a PcapNetworkInterface that represents a NIF with Infiniband addresses.
+
+### Other Changes ###
+
 Release 1.8.1 (30-May-2019)
 ==========================
 ### New Features ###
