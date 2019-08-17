@@ -17,6 +17,7 @@ Release 2.0.0-alpha.6 (17-Aug-2019)
 * Change method names:
     * Packet#getOuterOf() => Packet#getLowerLayerOf()
     * Packet.Builder#getOuterOf() => Packet.Builder#getLowerLayerOf()
+* [Issues#227](https://github.com/kaitoy/pcap4j/issues/227) Change to avoid using toUnsignedInt that's not implemented in Android Java.
 
 Release 2.0.0-alpha.5 (30-May-2019)
 ===================================
