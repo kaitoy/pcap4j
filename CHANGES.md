@@ -5,6 +5,15 @@ Future
 ### Bug Fixes ###
 
 ### Other Changes ###
+
+Release 2.0.0-alpha.6 (17-Aug-2019)
+===================================
+### New Features ###
+
+### Bug Fixes ###
+* [Issues#228](https://github.com/kaitoy/pcap4j/issues/228): Fix a bug where ArrayIndexOutOfBoundsException can be thrown during instantiating a PcapNetworkInterface that represents a NIF with Infiniband addresses.
+
+### Other Changes ###
 * Change method names:
     * Packet#getOuterOf() => Packet#getLowerLayerOf()
     * Packet.Builder#getOuterOf() => Packet.Builder#getLowerLayerOf()
@@ -64,6 +73,15 @@ Release 2.0.0-alpha.1 (12-Nov-2018)
 
 ### Other Changes ###
 * [Issues#191](https://github.com/kaitoy/pcap4j/issues/191): Change to use Native.POINTER_SIZE instead of Pointer.SIZE that is deprecated in JNA 5.
+
+Release 1.8.2 (17-Aug-2019)
+==========================
+### New Features ###
+
+### Bug Fixes ###
+* [Issues#228](https://github.com/kaitoy/pcap4j/issues/228): Fix a bug where ArrayIndexOutOfBoundsException can be thrown during instantiating a PcapNetworkInterface that represents a NIF with Infiniband addresses.
+
+### Other Changes ###
 
 Release 1.8.1 (30-May-2019)
 ==========================
