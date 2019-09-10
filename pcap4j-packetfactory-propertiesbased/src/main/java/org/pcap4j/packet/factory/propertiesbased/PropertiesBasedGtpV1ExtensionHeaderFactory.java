@@ -5,11 +5,12 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.propertiesbased;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.pcap4j.packet.GtpV1Packet.GtpV1ExtensionHeader;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.IllegalGtpV1ExtensionHeader;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.namednumber.GtpV1ExtensionHeaderType;

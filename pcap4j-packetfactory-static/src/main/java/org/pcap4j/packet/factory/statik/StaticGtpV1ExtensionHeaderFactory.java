@@ -5,11 +5,12 @@
   _##########################################################################
 */
 
-package org.pcap4j.packet.factory;
+package org.pcap4j.packet.factory.statik;
 
 import java.util.HashMap;
 import java.util.Map;
 import org.pcap4j.packet.GtpV1Packet.GtpV1ExtensionHeader;
+import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.GtpV1PduSessionContainerExtensionHeader;
 import org.pcap4j.packet.IllegalGtpV1ExtensionHeader;
 import org.pcap4j.packet.IllegalRawDataException;
