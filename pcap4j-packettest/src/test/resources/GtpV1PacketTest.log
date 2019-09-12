@@ -1,4 +1,4 @@
-[GTPv1 Header (20 bytes)]
+[GTPv1 Header (12 bytes)]
   Version: V1
   Protocol Type: GTP
   Reserved Flag: false
@@ -14,10 +14,12 @@
 [GTP Pdu Session Container Extension Header (8 bytes)]
   length: 2
   pdu type: 0
+  first spare: 0
   Paging Policy Presence: true
   Reflective QoS Indicator: false
   Qos Flow Identifier: 15
-  Paging Policy Indicator: 12
+  Paging Policy Indicator: 7
+  second spare: 0
   nextExtensionHeaderType: 0x00 (No more extension headers)
 [data (4 bytes)]
   Hex stream: 00 01 02 03

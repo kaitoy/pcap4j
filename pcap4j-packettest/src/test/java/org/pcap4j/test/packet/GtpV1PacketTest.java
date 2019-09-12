@@ -5,18 +5,16 @@ import static org.junit.Assert.assertTrue;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.GtpV1Packet;
-import org.pcap4j.packet.GtpV1Packet.GtpV1ExtensionHeader;
 import org.pcap4j.packet.GtpV1Packet.GtpV1Header;
 import org.pcap4j.packet.GtpV1Packet.ProtocolType;
-import org.pcap4j.packet.GtpV1PduSessionContainerExtensionHeader;
+import org.pcap4j.packet.GtpV1ExtPduSessionContainerPacket;
+import org.pcap4j.packet.GtpV1ExtPduSessionContainerPacket.GtpV1ExtPduSessionContainerHeader;
 import org.pcap4j.packet.GtpVersion;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.IpV6Packet;
@@ -51,7 +49,6 @@ public class GtpV1PacketTest extends AbstractPacketTest {
     private final Short sequenceNumber;
     private final Byte nPduNumber;
     private final GtpV1ExtensionHeaderType nextExtensionHeaderType;
-    private final List<GtpV1Packet.GtpV1ExtensionHeader> gtpV1ExtensionHeaderList;
     private final byte extensionPduType;
     private final GtpV1Packet packet;
     private final boolean extensionPppFlag;
@@ -70,25 +67,22 @@ public class GtpV1PacketTest extends AbstractPacketTest {
         this.sequenceNumber = 4321;
         this.nPduNumber = (byte) 222;
         this.nextExtensionHeaderType = GtpV1ExtensionHeaderType.PDU_SESSION_CONTAINER;
-        this.gtpV1ExtensionHeaderList = new ArrayList<>();
         this.extensionPduType = (byte) 0;
         this.extensionPppFlag = true;
         this.extensionQfi = (byte) 15;
-        this.extensionPpi = (byte) 12;
+        this.extensionPpi = (byte) 7;
 
-        GtpV1PduSessionContainerExtensionHeader.Builder extensionHeaderBuilder = new GtpV1PduSessionContainerExtensionHeader.Builder();
-        GtpV1Packet.GtpV1ExtensionHeader extensionHeader = extensionHeaderBuilder
+        Builder unknownb = new Builder();
+        unknownb.rawData(new byte[] { (byte) 0, (byte) 1, (byte) 2, (byte) 3 });
+        
+        GtpV1ExtPduSessionContainerPacket.Builder extensionHeaderBuilder = new GtpV1ExtPduSessionContainerPacket.Builder()
                 .correctLengthAtBuild(true)
                 .pduType(extensionPduType)
                 .ppp(extensionPppFlag)
                 .qfi(extensionQfi)
                 .ppi(extensionPpi)
                 .nextExtensionHeaderType(GtpV1ExtensionHeaderType.getInstance((byte) 0))
-                .build();
-        gtpV1ExtensionHeaderList.add(extensionHeader);
-
-        Builder unknownb = new Builder();
-        unknownb.rawData(new byte[] { (byte) 0, (byte) 1, (byte) 2, (byte) 3 });
+                .payloadBuilder(unknownb);
 
         GtpV1Packet.Builder b = new GtpV1Packet.Builder();
         b.correctLengthAtBuild(true)
@@ -103,8 +97,7 @@ public class GtpV1PacketTest extends AbstractPacketTest {
                 .sequenceNumber(sequenceNumber)
                 .nPduNumber(nPduNumber)
                 .nextExtensionHeaderType(nextExtensionHeaderType)
-                .gtpV1ExtensionHeaders(gtpV1ExtensionHeaderList)
-                .payloadBuilder(unknownb);
+                .payloadBuilder(extensionHeaderBuilder);
 
         this.packet = b.build();
     }
@@ -186,15 +179,15 @@ public class GtpV1PacketTest extends AbstractPacketTest {
         assertEquals(nPduNumber, h.getNPduNumber());
         assertEquals(nextExtensionHeaderType, h.getNextExtensionHeaderType());
 
-        GtpV1ExtensionHeader extensionHeader = h.getExtensionHeaders().get(0);
-        assertEquals(extensionHeader.getClass(), GtpV1PduSessionContainerExtensionHeader.class);
+        Packet payload = packet.getPayload();
+        assertEquals(payload.getClass(), GtpV1ExtPduSessionContainerPacket.class);
 
-        GtpV1PduSessionContainerExtensionHeader pduSessionContainerExtentionHeader = (GtpV1PduSessionContainerExtensionHeader) extensionHeader;
-        assertEquals(2, pduSessionContainerExtentionHeader.getLength());
+        GtpV1ExtPduSessionContainerHeader pduSessionContainerExtentionHeader = ((GtpV1ExtPduSessionContainerPacket)payload).getHeader();
+        assertEquals(2, pduSessionContainerExtentionHeader.getExtensionHeaderLength());
         assertEquals(extensionPduType, pduSessionContainerExtentionHeader.getPduType());
         assertTrue(extensionPppFlag);
         assertEquals(extensionQfi, pduSessionContainerExtentionHeader.getQfi());
-        assertEquals(extensionPpi, pduSessionContainerExtentionHeader.getPpi());
+        assertEquals(extensionPpi, pduSessionContainerExtentionHeader.getPpi().byteValue());
 
         GtpV1Packet.Builder b = packet.getBuilder();
         GtpV1Packet p;

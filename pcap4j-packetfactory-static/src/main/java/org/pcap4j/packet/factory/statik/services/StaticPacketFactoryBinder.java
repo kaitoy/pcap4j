@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pcap4j.packet.DnsResourceRecord.DnsRData;
-import org.pcap4j.packet.GtpV1Packet.GtpV1ExtensionHeader;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IpV4InternetTimestampOption;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
@@ -32,7 +31,7 @@ import org.pcap4j.packet.factory.statik.StaticDataLinkTypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticDnsRDataFactory;
 import org.pcap4j.packet.factory.statik.StaticDot11FrameTypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticEtherTypePacketFactory;
-import org.pcap4j.packet.factory.statik.StaticGtpV1ExtensionHeaderFactory;
+import org.pcap4j.packet.factory.statik.StaticGtpV1ExtensionPacketFactory;
 import org.pcap4j.packet.factory.statik.StaticIcmpV4TypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticIcmpV6TypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticIpNumberPacketFactory;
@@ -57,6 +56,7 @@ import org.pcap4j.packet.factory.statik.StaticUdpPortPacketFactory;
 import org.pcap4j.packet.namednumber.DataLinkType;
 import org.pcap4j.packet.namednumber.Dot11FrameType;
 import org.pcap4j.packet.namednumber.EtherType;
+import org.pcap4j.packet.namednumber.GtpV1ExtensionHeaderType;
 import org.pcap4j.packet.namednumber.IcmpV4Type;
 import org.pcap4j.packet.namednumber.IcmpV6Type;
 import org.pcap4j.packet.namednumber.IpNumber;
@@ -94,6 +94,7 @@ final class StaticPacketFactoryBinder implements PacketFactoryBinder {
         packetFactories.put(PppDllProtocol.class, StaticPppDllProtocolPacketFactory.getInstance());
         packetFactories.put(ProtocolFamily.class, StaticProtocolFamilyPacketFactory.getInstance());
         packetFactories.put(Dot11FrameType.class, StaticDot11FrameTypePacketFactory.getInstance());
+        packetFactories.put(GtpV1ExtensionHeaderType.class, StaticGtpV1ExtensionPacketFactory.getInstance());
 
         packetpPieceFactories.put(IpV4Option.class, StaticIpV4OptionFactory.getInstance());
         packetpPieceFactories.put(
@@ -110,8 +111,6 @@ final class StaticPacketFactoryBinder implements PacketFactoryBinder {
         packetpPieceFactories.put(RadiotapData.class, StaticRadiotapDataFieldFactory.getInstance());
         packetpPieceFactories.put(SctpChunk.class, StaticSctpChunkFactory.getInstance());
         packetpPieceFactories.put(DnsRData.class, StaticDnsRDataFactory.getInstance());
-        packetpPieceFactories.put(
-                GtpV1ExtensionHeader.class, StaticGtpV1ExtensionHeaderFactory.getInstance());
     }
 
     public static PacketFactoryBinder getInstance() {
