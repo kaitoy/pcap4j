@@ -501,7 +501,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
 
       @Override
       protected List<byte[]> getRawFields() {
-        List<byte[]> rawFields = new ArrayList<>();
+        List<byte[]> rawFields = new ArrayList<byte[]>();
         rawFields.add(ByteArrays.toByteArray(extHeaderlength));
         rawFields.add(ByteArrays.toByteArray((byte) ((pduType << 4) | (spare1 & 0x0F))));
         if (pduType == 0) {
