@@ -7,13 +7,13 @@
 
 package org.pcap4j.packet;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.GtpV1ExtensionHeaderType;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Leo Ma
@@ -22,7 +22,7 @@ import org.pcap4j.util.ByteArrays;
 public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
 
   private static final long serialVersionUID = 7361463927403478495L;
-  
+
   private final GtpV1ExtPduSessionContainerHeader header;
   private final Packet payload;
 
@@ -41,7 +41,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
     ByteArrays.validateBounds(rawData, offset, length);
     return new GtpV1ExtPduSessionContainerPacket(rawData, offset, length);
   }
-  
+
   private GtpV1ExtPduSessionContainerPacket(byte[] rawData, int offset, int length)
           throws IllegalRawDataException {
     this.header = new GtpV1ExtPduSessionContainerHeader(rawData, offset, length);
@@ -62,7 +62,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       this.payload = null;
     }
   }
-  
+
   private GtpV1ExtPduSessionContainerPacket(Builder builder) {
     if (builder == null || builder.nextExtHeaderType == null) {
       StringBuilder sb = new StringBuilder();
@@ -76,7 +76,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
     this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new GtpV1ExtPduSessionContainerHeader(builder);
   }
-  
+
   @Override
   public GtpV1ExtPduSessionContainerHeader getHeader() {
     return header;
@@ -245,7 +245,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       return new GtpV1ExtPduSessionContainerPacket(this);
     }
   }
-  
+
   /**
    * @author Leo Ma
    * @since pcap4j 1.8.3
@@ -307,9 +307,9 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       * +-----+-----+-----+-----+-----+-----+-----+-----+
       * </pre>
       */
-      
+
       private static final long serialVersionUID = 7361463927403475935L;
-      
+
       private static final int LENGTH_OFFSET = 0;
       private static final int LENGTH_SIZE = ByteArrays.BYTE_SIZE_IN_BYTES;
       private static final int PDU_TYPE_AND_SPARE_OFFSET = LENGTH_OFFSET + LENGTH_SIZE;
