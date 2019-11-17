@@ -7,9 +7,6 @@
 
 package org.pcap4j.packet.factory.statik;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.pcap4j.packet.factory.PacketFactory;
 import org.pcap4j.packet.GtpV1ExtPduSessionContainerPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
@@ -17,7 +14,7 @@ import org.pcap4j.packet.namednumber.GtpV1ExtensionHeaderType;
 
 /**
  * @author Leo Ma
- * @since pcap4j 1.7.7
+ * @since pcap4j 1.8.3
  */
 public final class StaticGtpV1ExtensionPacketFactory
     extends AbstractStaticPacketFactory<GtpV1ExtensionHeaderType> {
@@ -40,7 +37,7 @@ public final class StaticGtpV1ExtensionPacketFactory
             return GtpV1ExtPduSessionContainerPacket.class;
           }
         });
-  };
+  }
 
   /** @return the singleton instance of StaticIpV4OptionFactory. */
   public static StaticGtpV1ExtensionPacketFactory getInstance() {
