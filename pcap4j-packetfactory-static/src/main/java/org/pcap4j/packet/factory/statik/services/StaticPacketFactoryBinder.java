@@ -7,9 +7,8 @@
 
 package org.pcap4j.packet.factory.statik.services;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.pcap4j.packet.DnsResourceRecord.DnsRData;
+import org.pcap4j.packet.GtpV1Packet.GtpV1ExtensionHeader;
 import org.pcap4j.packet.IcmpV6CommonPacket.IpV6NeighborDiscoveryOption;
 import org.pcap4j.packet.IpV4InternetTimestampOption;
 import org.pcap4j.packet.IpV4Packet.IpV4Option;
@@ -29,6 +28,7 @@ import org.pcap4j.packet.factory.statik.StaticDataLinkTypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticDnsRDataFactory;
 import org.pcap4j.packet.factory.statik.StaticDot11FrameTypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticEtherTypePacketFactory;
+import org.pcap4j.packet.factory.statik.StaticGtpV1ExtensionHeaderFactory;
 import org.pcap4j.packet.factory.statik.StaticIcmpV4TypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticIcmpV6TypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticIpNumberPacketFactory;
@@ -64,6 +64,9 @@ import org.pcap4j.packet.namednumber.ProtocolFamily;
 import org.pcap4j.packet.namednumber.SctpPort;
 import org.pcap4j.packet.namednumber.TcpPort;
 import org.pcap4j.packet.namednumber.UdpPort;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Kaito Yamada
@@ -108,6 +111,8 @@ final class StaticPacketFactoryBinder implements PacketFactoryBinder {
     packetpPieceFactories.put(RadiotapData.class, StaticRadiotapDataFieldFactory.getInstance());
     packetpPieceFactories.put(SctpChunk.class, StaticSctpChunkFactory.getInstance());
     packetpPieceFactories.put(DnsRData.class, StaticDnsRDataFactory.getInstance());
+    packetpPieceFactories.put(
+        GtpV1ExtensionHeader.class, StaticGtpV1ExtensionHeaderFactory.getInstance());
   }
 
   public static PacketFactoryBinder getInstance() {
