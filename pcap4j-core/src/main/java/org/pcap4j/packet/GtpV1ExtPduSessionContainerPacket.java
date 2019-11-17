@@ -102,11 +102,11 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
     private byte extHeaderLength;
     private byte pduType;
     private byte spare1;
-    private byte spare2;
     private boolean ppp; // Paging Policy Presence field
     private boolean rqi; // Reflective QoS Indicator field
     private byte qfi; // Qos Flow Identifier field
     private Byte ppi; // Paging Policy Indicator field
+    private Byte spare2;
     private byte[] padding = new byte[] {0x00, 0x00, 0x00};
     private GtpV1ExtensionHeaderType nextExtHeaderType;
     private Packet.Builder payloadBuilder;
@@ -122,11 +122,11 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       this.extHeaderLength = packet.header.extHeaderlength;
       this.pduType = packet.header.pduType;
       this.spare1 = packet.header.spare1;
-      this.spare2 = packet.header.spare2;
       this.ppp = packet.header.ppp;
       this.rqi = packet.header.rqi;
       this.qfi = packet.header.qfi;
       this.ppi = packet.header.ppi;
+      this.spare2 = packet.header.spare2;
       this.padding = packet.header.padding;
       this.nextExtHeaderType = packet.header.nextExtHeaderType;
       this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
@@ -156,15 +156,6 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
      */
     public Builder spare1(byte spare1) {
       this.spare1 = spare1;
-      return this;
-    }
-
-    /**
-     * @param spare2 second spare field
-     * @return this Builder object for method chaining.
-     */
-    public Builder spare2(byte spare2) {
-      this.spare2 = spare2;
       return this;
     }
 
@@ -201,6 +192,15 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
      */
     public Builder ppi(byte ppi) {
       this.ppi = ppi;
+      return this;
+    }
+
+    /**
+     * @param spare2 second spare field
+     * @return this Builder object for method chaining.
+     */
+    public Builder spare2(Byte spare2) {
+      this.spare2 = spare2;
       return this;
     }
 
@@ -353,11 +353,11 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       private byte extHeaderlength;
       private final byte pduType;
       private final byte spare1;
-      private byte spare2;
       private boolean ppp; // Paging Policy Presence field
       private boolean rqi; // Reflective QoS Indicator field
       private byte qfi; // Qos Flow Identifier field
       private Byte ppi; // Paging Policy Indicator field
+      private Byte spare2;
       private byte[] padding;
       private GtpV1ExtensionHeaderType nextExtHeaderType =
           GtpV1ExtensionHeaderType.NO_MORE_EXTENSION_HEADERS;
@@ -432,11 +432,11 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       private GtpV1ExtPduSessionContainerHeader(Builder builder) {
         this.pduType = builder.pduType;
         this.spare1 = builder.spare1;
-        this.spare2 = builder.spare2;
         this.ppp = builder.ppp;
         this.rqi = builder.rqi;
         this.qfi = builder.qfi;
         this.ppi = builder.ppi;
+        this.spare2 = builder.spare2;
         this.padding = builder.padding;
         this.nextExtHeaderType = builder.nextExtHeaderType;
 
