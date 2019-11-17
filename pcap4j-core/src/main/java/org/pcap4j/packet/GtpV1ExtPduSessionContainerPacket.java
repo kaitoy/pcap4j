@@ -438,7 +438,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         this.qfi = builder.qfi;
         this.ppi = builder.ppi;
         this.spare2 = builder.spare2;
-        this.padding = builder.padding;
+        this.padding = Arrays.copyOf(builder.padding, builder.padding.length);
         this.nextExtHeaderType = builder.nextExtHeaderType;
 
         if (builder.correctLengthAtBuild) {
@@ -488,7 +488,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
 
       /** @return padding */
       public byte[] getPadding() {
-        return padding;
+        return Arrays.copyOf(padding, padding.length) ;
       }
 
       /** @return nextExtensionHeaderType */
