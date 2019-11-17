@@ -637,30 +637,63 @@ public final class GtpV1Packet extends AbstractPacket {
     }
 
     @Override
-    public boolean equals(Object o) {
-      if (this == o) {
+    public boolean equals(Object obj) {
+      if (this == obj) {
         return true;
       }
-      if (o == null || getClass() != o.getClass()) {
+      if (!this.getClass().isInstance(obj)) {
         return false;
       }
-      if (!super.equals(o)) {
+      GtpV1Header other = (GtpV1Header) obj;
+      if (extensionHeaderFlag != other.extensionHeaderFlag) {
         return false;
       }
-      GtpV1Header that = (GtpV1Header) o;
-
-      return reserved == that.reserved
-          && extensionHeaderFlag == that.extensionHeaderFlag
-          && sequenceNumberFlag == that.sequenceNumberFlag
-          && nPduNumberFlag == that.nPduNumberFlag
-          && length == that.length
-          && teid == that.teid
-          && version == that.version
-          && protocolType == that.protocolType
-          && messageType.equals(that.messageType)
-          && sequenceNumber.equals(that.sequenceNumber)
-          && nPduNumber.equals(that.nPduNumber)
-          && nextExtensionHeaderType.equals(that.nextExtensionHeaderType);
+      if (length != other.length) {
+        return false;
+      }
+      if (!messageType.equals(other.messageType)) {
+        return false;
+      }
+      if (nPduNumber == null) {
+        if (other.nPduNumber != null) {
+          return false;
+        }
+      } else if (!nPduNumber.equals(other.nPduNumber)) {
+        return false;
+      }
+      if (nPduNumberFlag != other.nPduNumberFlag) {
+        return false;
+      }
+      if (nextExtensionHeaderType == null) {
+        if (other.nextExtensionHeaderType != null) {
+          return false;
+        }
+      } else if (!nextExtensionHeaderType.equals(other.nextExtensionHeaderType)) {
+        return false;
+      }
+      if (protocolType != other.protocolType) {
+        return false;
+      }
+      if (reserved != other.reserved) {
+        return false;
+      }
+      if (sequenceNumber == null) {
+        if (other.sequenceNumber != null) {
+          return false;
+        }
+      } else if (!sequenceNumber.equals(other.sequenceNumber)) {
+        return false;
+      }
+      if (sequenceNumberFlag != other.sequenceNumberFlag) {
+        return false;
+      }
+      if (teid != other.teid) {
+        return false;
+      }
+      if (version != other.version) {
+        return false;
+      }
+      return true;
     }
   }
 
