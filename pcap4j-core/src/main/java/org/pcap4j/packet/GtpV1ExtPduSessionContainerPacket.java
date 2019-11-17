@@ -13,6 +13,7 @@ import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -570,41 +571,65 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         return sb.toString();
       }
 
-      @Override
-      public int hashCode() {
-        final int prime = 31;
-        int result = 17;
-        result = prime * result + extHeaderlength;
-        result = prime * result + pduType;
-        result = prime * result + spare1;
-        result = prime * result + spare2;
-        result = prime * result + (ppp ? 1231 : 1237);
-        result = prime * result + (rqi ? 1231 : 1237);
-        result = prime * result + qfi;
-        result = prime * result + ppi.byteValue();
-        result = prime * result + nextExtHeaderType.hashCode();
-        return result;
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      if (!super.equals(o)) {
+        return false;
       }
 
-        @Override
-        public boolean equals(Object o) {
-          if (this == o) {
-            return true;
-          }
-          if (o == null || getClass() != o.getClass()) {
-            return false;
-          }
+      GtpV1ExtPduSessionContainerHeader that = (GtpV1ExtPduSessionContainerHeader) o;
 
-          GtpV1ExtPduSessionContainerHeader that = (GtpV1ExtPduSessionContainerHeader) o;
-          return extHeaderlength == that.extHeaderlength
-              && pduType == that.pduType
-              && spare1 == that.spare1
-              && spare2 == that.spare2
-              && ppp == that.ppp
-              && rqi == that.rqi
-              && qfi == that.qfi
-              && ppi.equals(that.ppi)
-              && nextExtHeaderType.equals(that.nextExtHeaderType);
-        }
+      if (extHeaderlength != that.extHeaderlength) {
+        return false;
+      }
+      if (pduType != that.pduType) {
+        return false;
+      }
+      if (spare1 != that.spare1) {
+        return false;
+      }
+      if (ppp != that.ppp) {
+        return false;
+      }
+      if (rqi != that.rqi) {
+        return false;
+      }
+      if (qfi != that.qfi) {
+        return false;
+      }
+      if (ppi != null ? !ppi.equals(that.ppi) : that.ppi != null) {
+        return false;
+      }
+      if (spare2 != null ? !spare2.equals(that.spare2) : that.spare2 != null) {
+        return false;
+      }
+      if (!Arrays.equals(padding, that.padding)) {
+        return false;
+      }
+      return nextExtHeaderType.equals(that.nextExtHeaderType);
+
+    }
+
+    @Override
+    protected int calcHashCode() {
+      int result = super.hashCode();
+      result = 31 * result + (int) extHeaderlength;
+      result = 31 * result + (int) pduType;
+      result = 31 * result + (int) spare1;
+      result = 31 * result + (ppp ? 1 : 0);
+      result = 31 * result + (rqi ? 1 : 0);
+      result = 31 * result + (int) qfi;
+      result = 31 * result + (ppi != null ? ppi.hashCode() : 0);
+      result = 31 * result + (spare2 != null ? spare2.hashCode() : 0);
+      result = 31 * result + Arrays.hashCode(padding);
+      result = 31 * result + nextExtHeaderType.hashCode();
+      return result;
+    }
   }
 }
