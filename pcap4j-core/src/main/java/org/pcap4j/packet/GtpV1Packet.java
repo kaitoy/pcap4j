@@ -430,23 +430,12 @@ public final class GtpV1Packet extends AbstractPacket {
       this.reserved = builder.reserved;
       this.messageType = builder.messageType;
       this.nPduNumberFlag = builder.nPduNumberFlag;
+      this.sequenceNumber = builder.sequenceNumber;
+      this.nPduNumber = builder.nPduNumber;
+      this.nextExtensionHeaderType = builder.nextExtensionHeaderType;
       this.sequenceNumberFlag = builder.sequenceNumberFlag;
       this.teid = builder.teid;
       this.extensionHeaderFlag = builder.extensionHeaderFlag;
-
-      if (sequenceNumberFlag || nPduNumberFlag || extensionHeaderFlag) {
-        this.sequenceNumber =
-            builder.sequenceNumber == null ? Short.valueOf("0") : builder.sequenceNumber;
-        this.nPduNumber = builder.nPduNumber == null ? Byte.valueOf("0") : builder.nPduNumber;
-        this.nextExtensionHeaderType =
-            builder.nextExtensionHeaderType == null
-                ? GtpV1ExtensionHeaderType.NO_MORE_EXTENSION_HEADERS
-                : builder.nextExtensionHeaderType;
-      } else {
-        this.sequenceNumber = builder.sequenceNumber;
-        this.nPduNumber = builder.nPduNumber;
-        this.nextExtensionHeaderType = builder.nextExtensionHeaderType;
-      }
 
       if (builder.correctLengthAtBuild) {
         if (sequenceNumberFlag || nPduNumberFlag || extensionHeaderFlag) {
