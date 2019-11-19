@@ -50,9 +50,9 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
     int payloadLength = length - header.length();
     if (payloadLength > 0) {
       Packet nextPacket;
-      if (!header.nextExtHeaderType.equals(GtpV1ExtensionHeaderType.NO_MORE_EXTENSION_HEADERS)) {
+      if (!header.nextExtensionHeaderType.equals(GtpV1ExtensionHeaderType.NO_MORE_EXTENSION_HEADERS)) {
         nextPacket = PacketFactories.getFactory(Packet.class, GtpV1ExtensionHeaderType.class)
-                .newInstance(rawData, offset + header.length(), payloadLength, header.nextExtHeaderType);
+                .newInstance(rawData, offset + header.length(), payloadLength, header.nextExtensionHeaderType);
       } else {
         nextPacket =
                 PacketFactories.getFactory(Packet.class, NotApplicable.class)
@@ -69,7 +69,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       StringBuilder sb = new StringBuilder();
       sb.append("builder: ")
           .append(builder)
-          .append(" builder.nextExtHeaderType: ")
+          .append(" builder.nextExtensionHeaderType: ")
           .append(builder.nextExtHeaderType);
       throw new NullPointerException(sb.toString());
     }
@@ -120,7 +120,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
 
     /** @param packet packet */
     public Builder(GtpV1ExtPduSessionContainerPacket packet) {
-      this.extHeaderLength = packet.header.extHeaderlength;
+      this.extHeaderLength = packet.header.extensionHeaderLength;
       this.pduType = packet.header.pduType;
       this.spare1 = packet.header.spare1;
       this.ppp = packet.header.ppp;
@@ -129,7 +129,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       this.ppi = packet.header.ppi;
       this.spare2 = packet.header.spare2;
       this.padding = packet.header.padding;
-      this.nextExtHeaderType = packet.header.nextExtHeaderType;
+      this.nextExtHeaderType = packet.header.nextExtensionHeaderType;
       this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
     }
 
@@ -351,7 +351,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       private static final int GTPV1_PDU_SESSION_CONTAINER_EXTENSION_MAX_LENGTH =
           PADDING_AND_NEXT_EXTENSION_HEADER_TYPE_OFFSET + PADDING_AND_NEXT_EXTENSION_HEADER_TYPE_SIZE;
 
-      private byte extHeaderlength;
+      private byte extensionHeaderLength;
       private final byte pduType;
       private final byte spare1;
       private boolean ppp; // Paging Policy Presence field
@@ -360,7 +360,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       private Byte ppi; // Paging Policy Indicator field
       private Byte spare2;
       private byte[] padding;
-      private GtpV1ExtensionHeaderType nextExtHeaderType =
+      private GtpV1ExtensionHeaderType nextExtensionHeaderType =
           GtpV1ExtensionHeaderType.NO_MORE_EXTENSION_HEADERS;
 
       private GtpV1ExtPduSessionContainerHeader(byte[] rawData, int offset, int length)
@@ -391,7 +391,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
           throw new IllegalRawDataException(sb.toString());
         }
 
-        this.extHeaderlength = (byte) extHeaderLengthInRaw;
+        this.extensionHeaderLength = (byte) extHeaderLengthInRaw;
 
         byte pduTypeAndSpare = ByteArrays.getByte(rawData, PDU_TYPE_AND_SPARE_OFFSET + offset);
         this.pduType = (byte) ((pduTypeAndSpare & 0xF0) >>> 4);
@@ -412,11 +412,11 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
             this.padding = new byte[] {(byte) ((paddingAndNextExtHeaderType >> 24) & 0xFF),
                                        (byte) ((paddingAndNextExtHeaderType >> 16) & 0xFF),
                                        (byte) ((paddingAndNextExtHeaderType >> 8) & 0xFF)};
-            this.nextExtHeaderType =
+            this.nextExtensionHeaderType =
                 GtpV1ExtensionHeaderType.getInstance(
                     (byte) (paddingAndNextExtHeaderType & 0x000000FF));
           } else {
-            this.nextExtHeaderType =
+            this.nextExtensionHeaderType =
                 GtpV1ExtensionHeaderType.getInstance(
                     ByteArrays.getByte(rawData, NEXT_EXTENSION_HEADER_TYPE_OFFSET + offset));
           }
@@ -424,7 +424,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
           byte spareAndQfi = ByteArrays.getByte(rawData, SPARE_AND_QFI_OFFSET + offset);
           this.spare2 = (byte) ((spareAndQfi & 0xC0) >>> 6);
           this.qfi = (byte) (spareAndQfi & 0x3F);
-          this.nextExtHeaderType =
+          this.nextExtensionHeaderType =
               GtpV1ExtensionHeaderType.getInstance(
                   ByteArrays.getByte(rawData, NEXT_EXTENSION_HEADER_TYPE_OFFSET + offset));
         }
@@ -439,23 +439,23 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         this.ppi = builder.ppi;
         this.spare2 = builder.spare2;
         this.padding = Arrays.copyOf(builder.padding, builder.padding.length);
-        this.nextExtHeaderType = builder.nextExtHeaderType;
+        this.nextExtensionHeaderType = builder.nextExtHeaderType;
 
         if (builder.correctLengthAtBuild) {
-          this.extHeaderlength = (byte) (length() / 4);
+          this.extensionHeaderLength = (byte) (length() / 4);
         } else {
-          this.extHeaderlength = builder.extHeaderLength;
+          this.extensionHeaderLength = builder.extHeaderLength;
         }
       }
 
-      /** @return extHeaderlength */
+      /** @return extensionHeaderLength */
       public byte getExtensionHeaderLength() {
-        return extHeaderlength;
+        return extensionHeaderLength;
       }
 
-      /** @return extHeaderlength as int */
-      public int getLengthAsInt() {
-        return 0xFF & extHeaderlength;
+      /** @return extensionHeaderLength as int */
+      public int getExtensionHeaderLengthAsInt() {
+        return 0xFF & extensionHeaderLength;
       }
 
       /** @return pduType */
@@ -463,13 +463,16 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         return pduType;
       }
 
-      /** @return ppp */
-      public boolean isPpp() {
+    /** @return spare 1 (the spare field between PDU type and PPP) */
+      public byte getSpare1() { return spare1; }
+
+      /** @return true if the value of PPP field (the 9th bit of PDU Session Container) is 0; false otherwise. */
+      public boolean getPpp() {
         return ppp;
       }
 
-      /** @return rqi */
-      public boolean isRqi() {
+      /** @return true if the value of RQI field (the 10th bit of PDU Session Container) is 0; false otherwise. */
+      public boolean getRqi() {
         return rqi;
       }
 
@@ -483,6 +486,13 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         return ppi;
       }
 
+      /**
+       * @return spare 2 (the spare field between PPI and padding) if ppi is not null; null otherwise.
+       */
+      public Byte getSpare2() {
+      return spare2;
+    }
+
       /** @return padding */
       public byte[] getPadding() {
         return Arrays.copyOf(padding, padding.length) ;
@@ -490,13 +500,13 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
 
       /** @return nextExtensionHeaderType */
       public GtpV1ExtensionHeaderType getNextExtensionHeaderType() {
-        return nextExtHeaderType;
+        return nextExtensionHeaderType;
       }
 
       @Override
       protected List<byte[]> getRawFields() {
         List<byte[]> rawFields = new ArrayList<byte[]>();
-        rawFields.add(ByteArrays.toByteArray(extHeaderlength));
+        rawFields.add(ByteArrays.toByteArray(extensionHeaderLength));
         rawFields.add(ByteArrays.toByteArray((byte) ((pduType << 4) | (spare1 & 0x0F))));
         if (pduType == 0) {
           byte firstByte = 0;
@@ -516,7 +526,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
           byte oneByte = (byte) ((spare2 << 6) | (qfi & 0x3F));
           rawFields.add(ByteArrays.toByteArray(oneByte));
         }
-        rawFields.add(ByteArrays.toByteArray((byte) (nextExtHeaderType.value().byteValue() & 0xFF)));
+        rawFields.add(ByteArrays.toByteArray((byte) (nextExtensionHeaderType.value().byteValue() & 0xFF)));
         return rawFields;
       }
 
@@ -537,7 +547,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
             .append(" bytes)]")
             .append(ls)
             .append("  Extension Header Length: ")
-            .append(extHeaderlength).append(" (").append(extHeaderlength * 4).append(" [bytes])")
+            .append(extensionHeaderLength).append(" (").append(extensionHeaderLength * 4).append(" [bytes])")
             .append(ls)
             .append("  PDU Type: ")
             .append(pduType)
@@ -579,7 +589,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
             .append(ls);
         }
         sb.append("  Next Extension Header Type: ")
-          .append(nextExtHeaderType)
+          .append(nextExtensionHeaderType)
           .append(ls);
 
         return sb.toString();
@@ -599,7 +609,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
 
       GtpV1ExtPduSessionContainerHeader that = (GtpV1ExtPduSessionContainerHeader) o;
 
-      if (extHeaderlength != that.extHeaderlength) {
+      if (extensionHeaderLength != that.extensionHeaderLength) {
         return false;
       }
       if (pduType != that.pduType) {
@@ -626,14 +636,14 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       if (!Arrays.equals(padding, that.padding)) {
         return false;
       }
-      return nextExtHeaderType.equals(that.nextExtHeaderType);
+      return nextExtensionHeaderType.equals(that.nextExtensionHeaderType);
 
     }
 
     @Override
     protected int calcHashCode() {
       int result = super.hashCode();
-      result = 31 * result + (int) extHeaderlength;
+      result = 31 * result + (int) extensionHeaderLength;
       result = 31 * result + (int) pduType;
       result = 31 * result + (int) spare1;
       result = 31 * result + (ppp ? 1 : 0);
@@ -642,7 +652,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       result = 31 * result + (ppi != null ? ppi.hashCode() : 0);
       result = 31 * result + (spare2 != null ? spare2.hashCode() : 0);
       result = 31 * result + Arrays.hashCode(padding);
-      result = 31 * result + nextExtHeaderType.hashCode();
+      result = 31 * result + nextExtensionHeaderType.hashCode();
       return result;
     }
   }
