@@ -442,10 +442,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         this.nextExtHeaderType = builder.nextExtHeaderType;
 
         if (builder.correctLengthAtBuild) {
-          this.extHeaderlength = 1;
-          if (pduType == 0 && ppp) {
-            this.extHeaderlength = 2;
-          }
+          this.extHeaderlength = (byte) (length() / 4);
         } else {
           this.extHeaderlength = builder.extHeaderLength;
         }
@@ -521,6 +518,14 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         }
         rawFields.add(ByteArrays.toByteArray((byte) (nextExtHeaderType.value().byteValue() & 0xFF)));
         return rawFields;
+      }
+
+      @Override
+      protected int calcLength() {
+        if (ppi != null) {
+          return 5 + padding.length;
+        }
+        return 4 + padding.length;
       }
 
       @Override
