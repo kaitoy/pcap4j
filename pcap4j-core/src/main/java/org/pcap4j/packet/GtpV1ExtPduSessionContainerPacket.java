@@ -305,8 +305,8 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
    * </pre>
    *
    * @see <a href=
-   *     "https://www.etsi.org/deliver/etsi_ts/129200_129299/129281/15.04.00_60/ts_129281v150400p.pdf">ETSI
-   *     TS 129 281 V15.4.0(2018-09)</a>
+   *     "https://www.etsi.org/deliver/etsi_ts/138400_138499/138415/15.02.00_60/ts_138415v150200p.pdf">ETSI
+   *     TS 138 415 V15.2.0</a>
    * @author Leo Ma
    * @since pcap4j 1.8.3
    */
@@ -529,50 +529,59 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       }
 
       @Override
-      public String toString() {
+      protected String buildString() {
         StringBuilder sb = new StringBuilder();
         String ls = System.getProperty("line.separator");
-        sb.append("[GTP Pdu Session Container Extension Header (")
+        sb.append("[GTP Extension PDU Session Container Header (")
             .append(this.length())
             .append(" bytes)]")
             .append(ls)
-            .append("  length: ")
-            .append(extHeaderlength)
+            .append("  Extension Header Length: ")
+            .append(extHeaderlength).append(" (").append(extHeaderlength * 4).append(" [bytes])")
             .append(ls)
-            .append("  pdu type: ")
+            .append("  PDU Type: ")
             .append(pduType)
             .append(ls)
-            .append("  first spare: ")
-            .append(spare1)
+            .append("  spare 1: 0x")
+            .append(ByteArrays.toHexString(spare1, ""))
             .append(ls);
         if (pduType == 0) {
           sb.append("  Paging Policy Presence: ")
-              .append(ppp)
-              .append(ls)
-              .append("  Reflective QoS Indicator: ")
-              .append(rqi)
-              .append(ls)
-              .append("  Qos Flow Identifier: ")
-              .append(qfi)
-              .append(ls);
-          if (ppp) {
-            sb.append("  Paging Policy Indicator: ")
-            	.append(ppi)
-            	.append(ls)
-              .append("  second spare: ")
-            	.append(spare2)
-            	.append(ls);
-          }
-        } else if (pduType == 1) {
-          sb.append("  second spare: ")
-          	.append(spare2)
-          	.append(ls)
-            .append("  Qos Flow Identifier: ")
-          	.append(qfi)
-          	.append(ls);
+            .append(ppp)
+            .append(ppp ? " (Paging Policy Indicator present)" : " (Paging Policy Indicator not present)")
+            .append(ls)
+            .append("  Reflective QoS Indicator: ")
+            .append(rqi)
+            .append(rqi ? " (Reflective QoS activation triggered)" : " (Reflective QoS activation not triggered)")
+            .append(ls);
+        } else {
+          sb.append("  Spare bit 1: ")
+            .append(ppp ? 1 : 0)
+            .append(ls)
+            .append("  Spare bit 2: ")
+            .append(rqi ? 1 : 0)
+            .append(ls);
         }
+        sb.append("  Qos Flow Identifier: ")
+          .append(qfi)
+          .append(ls);
+        if (ppi != null) {
+          sb.append("  Paging Policy Indicator: ")
+            .append(ppi)
+            .append(ls)
+            .append("  spare 2: ")
+            .append(ByteArrays.toHexString(spare2, ""))
+            .append(ls);
+        }
+        if (padding.length != 0) {
+          sb.append("  Padding: 0x")
+            .append(ByteArrays.toHexString(padding, " "))
+            .append(ls);
+        }
+        sb.append("  Next Extension Header Type: ")
+          .append(nextExtHeaderType)
+          .append(ls);
 
-        sb.append("  nextExtensionHeaderType: ").append(nextExtHeaderType).append(ls);
         return sb.toString();
       }
 
