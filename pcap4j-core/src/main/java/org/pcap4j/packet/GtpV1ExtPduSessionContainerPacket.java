@@ -332,60 +332,37 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
 
       private static final long serialVersionUID = 7361463927403475935L;
 
-      private static final int LENGTH_OFFSET = 0;
-      private static final int LENGTH_SIZE = ByteArrays.BYTE_SIZE_IN_BYTES;
-      private static final int PDU_TYPE_AND_SPARE_OFFSET = LENGTH_OFFSET + LENGTH_SIZE;
+      private static final int EXTENSION_HEADER_LENGTH_OFFSET = 0;
+      private static final int EXTENSION_HEADER_LENGTH_SIZE = ByteArrays.BYTE_SIZE_IN_BYTES;
+      private static final int PDU_TYPE_AND_SPARE_OFFSET = EXTENSION_HEADER_LENGTH_OFFSET + EXTENSION_HEADER_LENGTH_SIZE;
       private static final int PDU_TYPE_AND_SPARE_SIZE = ByteArrays.BYTE_SIZE_IN_BYTES;
-
-      // DL PDU SESSION INFORMATION (PDU Type 0)
-      // Common fields
       private static final int PPP_AND_RQI_AND_QFI_OFFSET =
           PDU_TYPE_AND_SPARE_OFFSET + PDU_TYPE_AND_SPARE_SIZE;
-
       private static final int PPP_AND_RQI_AND_QFI_SIZE = ByteArrays.BYTE_SIZE_IN_BYTES;
-
-      // PPI field(presene in case PPP is true)
       private static final int PPI_AND_SPARE_OFFSET =
           PPP_AND_RQI_AND_QFI_OFFSET
-              + PPP_AND_RQI_AND_QFI_SIZE; // should be exist only when PDU Type=0 and PPP flag is true.
-
-      private static final int PPI_AND_SPARE_SIZE = ByteArrays.BYTE_SIZE_IN_BYTES;
-      private static final int PADDING_AND_NEXT_EXTENSION_HEADER_TYPE_OFFSET =
-          PPI_AND_SPARE_OFFSET
-              + PPI_AND_SPARE_SIZE; // should be exist only when PDU Type=0 and PPP flag is true.
-      private static final int PADDING_AND_NEXT_EXTENSION_HEADER_TYPE_SIZE =
-          ByteArrays.INT_SIZE_IN_BYTES;
-
-      // UL PDU SESSION INFORMATION (PUD Type 1)
-      private static final int SPARE_AND_QFI_OFFSET =
-          PDU_TYPE_AND_SPARE_OFFSET + PDU_TYPE_AND_SPARE_SIZE;
-
-      private static final int NEXT_EXTENSION_HEADER_TYPE_OFFSET =
-          PPP_AND_RQI_AND_QFI_OFFSET + PPP_AND_RQI_AND_QFI_SIZE;
+              + PPP_AND_RQI_AND_QFI_SIZE;
       private static final int NEXT_EXTENSION_HEADER_TYPE_SIZE = ByteArrays.BYTE_SIZE_IN_BYTES;
 
       private static final int GTPV1_PDU_SESSION_CONTAINER_EXTENSION_MIN_LENGTH =
-          NEXT_EXTENSION_HEADER_TYPE_OFFSET + NEXT_EXTENSION_HEADER_TYPE_SIZE;
-      private static final int GTPV1_PDU_SESSION_CONTAINER_EXTENSION_MAX_LENGTH =
-          PADDING_AND_NEXT_EXTENSION_HEADER_TYPE_OFFSET + PADDING_AND_NEXT_EXTENSION_HEADER_TYPE_SIZE;
+        PPI_AND_SPARE_OFFSET + NEXT_EXTENSION_HEADER_TYPE_SIZE;
 
-      private byte extensionHeaderLength;
+      private final byte extensionHeaderLength;
       private final byte pduType;
       private final byte spare1;
-      private boolean ppp;
-      private boolean rqi;
-      private byte qfi;
-      private Byte ppi;
-      private Byte spare2;
-      private byte[] padding;
-      private GtpV1ExtensionHeaderType nextExtensionHeaderType =
-          GtpV1ExtensionHeaderType.NO_MORE_EXTENSION_HEADERS;
+      private final boolean ppp;
+      private final boolean rqi;
+      private final byte qfi;
+      private final Byte ppi;
+      private final Byte spare2;
+      private final byte[] padding;
+      private final GtpV1ExtensionHeaderType nextExtensionHeaderType;
 
       private GtpV1ExtPduSessionContainerHeader(byte[] rawData, int offset, int length)
           throws IllegalRawDataException {
         if (length < GTPV1_PDU_SESSION_CONTAINER_EXTENSION_MIN_LENGTH) {
-          StringBuilder sb = new StringBuilder(80);
-          sb.append("The data is too short to build an GTP Pdu session container extension header(")
+          StringBuilder sb = new StringBuilder(100);
+          sb.append("The data is too short to build an GTP PDU Session Container Extension header (")
               .append(GTPV1_PDU_SESSION_CONTAINER_EXTENSION_MIN_LENGTH)
               .append(" bytes). data: ")
               .append(ByteArrays.toHexString(rawData, " "))
@@ -396,56 +373,68 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
           throw new IllegalRawDataException(sb.toString());
         }
 
-        int extHeaderLengthInRaw = (ByteArrays.getByte(rawData, LENGTH_OFFSET + offset)) & 0xFF;
-        if (extHeaderLengthInRaw != GTPV1_PDU_SESSION_CONTAINER_EXTENSION_MIN_LENGTH / 4
-            && extHeaderLengthInRaw != GTPV1_PDU_SESSION_CONTAINER_EXTENSION_MAX_LENGTH / 4) {
+        this.extensionHeaderLength = ByteArrays.getByte(rawData, EXTENSION_HEADER_LENGTH_OFFSET + offset);
+
+        byte pduTypeAndSpare = ByteArrays.getByte(rawData, PDU_TYPE_AND_SPARE_OFFSET + offset);
+        this.pduType = (byte) ((pduTypeAndSpare & 0xF0) >> 4);
+        this.spare1 = (byte) (pduTypeAndSpare & 0x0F);
+
+        byte pppAndRqiAndQfi = ByteArrays.getByte(rawData, PPP_AND_RQI_AND_QFI_OFFSET + offset);
+
+        this.ppp = (pppAndRqiAndQfi & 0x80) != 0;
+        this.rqi = (pppAndRqiAndQfi & 0x40) != 0;
+        this.qfi = (byte) (pppAndRqiAndQfi & 0x3F);
+
+        if (ppp && length < GTPV1_PDU_SESSION_CONTAINER_EXTENSION_MIN_LENGTH + 1) {
           StringBuilder sb = new StringBuilder(100);
-          sb.append("The length filed value must be ")
-              .append(GTPV1_PDU_SESSION_CONTAINER_EXTENSION_MIN_LENGTH / 4)
-              .append(" or ")
-              .append(GTPV1_PDU_SESSION_CONTAINER_EXTENSION_MAX_LENGTH / 4)
-              .append(", but it is ")
-              .append(extHeaderLengthInRaw);
+          sb.append("The data is too short to build an GTP PDU Session Container Extension header with PPI (")
+            .append(GTPV1_PDU_SESSION_CONTAINER_EXTENSION_MIN_LENGTH + 1)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
           throw new IllegalRawDataException(sb.toString());
         }
 
-        this.extensionHeaderLength = (byte) extHeaderLengthInRaw;
-
-        byte pduTypeAndSpare = ByteArrays.getByte(rawData, PDU_TYPE_AND_SPARE_OFFSET + offset);
-        this.pduType = (byte) ((pduTypeAndSpare & 0xF0) >>> 4);
-        this.spare1 = (byte) (pduTypeAndSpare & 0x0F);
-
-        if (pduType == 0) {
-          byte pppAndRqiAndQfi = ByteArrays.getByte(rawData, PPP_AND_RQI_AND_QFI_OFFSET + offset);
-          this.ppp = ((pppAndRqiAndQfi & 0x80) >>> 7) != 0;
-          this.rqi = ((pppAndRqiAndQfi & 0x40) >> 6) != 0;
-          this.qfi = (byte) (pppAndRqiAndQfi & 0x3F);
-
-          if (ppp) {
-            byte ppiAndSpare = ByteArrays.getByte(rawData, PPI_AND_SPARE_OFFSET + offset);
-            this.ppi = (byte) ((ppiAndSpare & 0xF0) >>> 5);
-            this.spare2 = (byte) (ppiAndSpare & 0x1F);
-            int paddingAndNextExtHeaderType =
-                ByteArrays.getInt(rawData, PADDING_AND_NEXT_EXTENSION_HEADER_TYPE_OFFSET + offset);
-            this.padding = new byte[] {(byte) ((paddingAndNextExtHeaderType >> 24) & 0xFF),
-                                       (byte) ((paddingAndNextExtHeaderType >> 16) & 0xFF),
-                                       (byte) ((paddingAndNextExtHeaderType >> 8) & 0xFF)};
-            this.nextExtensionHeaderType =
-                GtpV1ExtensionHeaderType.getInstance(
-                    (byte) (paddingAndNextExtHeaderType & 0x000000FF));
-          } else {
-            this.nextExtensionHeaderType =
-                GtpV1ExtensionHeaderType.getInstance(
-                    ByteArrays.getByte(rawData, NEXT_EXTENSION_HEADER_TYPE_OFFSET + offset));
-          }
-        } else if (pduType == 1) {
-          byte spareAndQfi = ByteArrays.getByte(rawData, SPARE_AND_QFI_OFFSET + offset);
-          this.spare2 = (byte) ((spareAndQfi & 0xC0) >>> 6);
-          this.qfi = (byte) (spareAndQfi & 0x3F);
-          this.nextExtensionHeaderType =
-              GtpV1ExtensionHeaderType.getInstance(
-                  ByteArrays.getByte(rawData, NEXT_EXTENSION_HEADER_TYPE_OFFSET + offset));
+        int headerLength = (0xFF & extensionHeaderLength) * 4;
+        if (length < headerLength) {
+          StringBuilder sb = new StringBuilder(100);
+          sb.append("The data is too short to build an GTP PDU Session Container Extension header (")
+            .append(headerLength)
+            .append(" bytes). data: ")
+            .append(ByteArrays.toHexString(rawData, " "))
+            .append(", offset: ")
+            .append(offset)
+            .append(", length: ")
+            .append(length);
+          throw new IllegalRawDataException(sb.toString());
         }
+
+        int currentOffsetInHeader = 2;
+        if (ppp) {
+          byte ppiAndSpare = ByteArrays.getByte(rawData, PPI_AND_SPARE_OFFSET + offset);
+          this.ppi = (byte) ((ppiAndSpare & 0xE0) >> 5);
+          this.spare2 = (byte) (ppiAndSpare & 0x1F);
+          currentOffsetInHeader++;
+        } else {
+          this.ppi = null;
+          this.spare2 = null;
+        }
+
+        int paddingLength = headerLength - currentOffsetInHeader;
+        if (paddingLength != 0) {
+          this.padding =
+            ByteArrays.getSubArray(rawData, currentOffsetInHeader + offset, paddingLength);
+          currentOffsetInHeader += padding.length;
+        } else {
+          this.padding = new byte[0];
+        }
+
+        this.nextExtensionHeaderType =
+            GtpV1ExtensionHeaderType.getInstance(
+                ByteArrays.getByte(rawData, currentOffsetInHeader + offset));
       }
 
       private GtpV1ExtPduSessionContainerHeader(Builder builder) {
