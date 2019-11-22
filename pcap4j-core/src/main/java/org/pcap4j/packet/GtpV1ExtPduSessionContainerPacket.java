@@ -82,6 +82,21 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       throw new NullPointerException("builder.spare2 must not be null if builder.ppi is not null.");
     }
 
+    if ((builder.spare1 & 0xF0) != 0) {
+      throw new IllegalArgumentException("(builder.spare1 & 0xF0) must be zero. builder.spare1: " + builder.spare1);
+    }
+    if ((builder.qfi & 0xC0) != 0) {
+      throw new IllegalArgumentException("(builder.qfi & 0xC0) must be zero. builder.qfi: " + builder.qfi);
+    }
+    if (builder.ppi != null) {
+      if ((builder.ppi & 0xF8) != 0) {
+        throw new IllegalArgumentException("(builder.ppi & 0xF8) must be zero. builder.ppi: " + builder.ppi);
+      }
+      if ((builder.spare2 & 0xE0) != 0) {
+        throw new IllegalArgumentException("(builder.spare2 & 0xE0) must be zero. builder.spare2: " + builder.spare2);
+      }
+    }
+
     this.payload = builder.payloadBuilder != null ? builder.payloadBuilder.build() : null;
     this.header = new GtpV1ExtPduSessionContainerHeader(builder);
   }
@@ -550,26 +565,23 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       protected List<byte[]> getRawFields() {
         List<byte[]> rawFields = new ArrayList<byte[]>();
         rawFields.add(ByteArrays.toByteArray(extensionHeaderLength));
-        rawFields.add(ByteArrays.toByteArray((byte) ((pduType.value() << 4) | (spare1 & 0x0F))));
-        if (pduType.value() == 0) {
-          byte firstByte = 0;
-          if (ppp) {
-            firstByte |= 0x80;
-          }
-          if (rqi) {
-            firstByte |= 0x40;
-          }
-          firstByte |= qfi & 0x3F;
-          rawFields.add(ByteArrays.toByteArray(firstByte));
-          if (ppp) {
-              rawFields.add(ByteArrays.toByteArray((byte) ((ppi.byteValue() << 5) | (spare2 & 0x1F))));
-              rawFields.add(padding);
-          }
-        } else if (pduType.value() == 1) {
-          byte oneByte = (byte) ((spare2 << 6) | (qfi & 0x3F));
-          rawFields.add(ByteArrays.toByteArray(oneByte));
+        rawFields.add(ByteArrays.toByteArray((byte) ((pduType.value() << 4) | spare1)));
+
+        byte pppRqiQfi = qfi;
+        if (ppp) {
+            pppRqiQfi |= 0x80;
         }
-        rawFields.add(ByteArrays.toByteArray((byte) (nextExtensionHeaderType.value().byteValue() & 0xFF)));
+        if (rqi) {
+            pppRqiQfi |= 0x40;
+        }
+        rawFields.add(ByteArrays.toByteArray(pppRqiQfi));
+
+        if (ppp) {
+            rawFields.add(ByteArrays.toByteArray((byte) ((ppi << 5) | spare2)));
+        }
+
+        rawFields.add(padding);
+        rawFields.add(ByteArrays.toByteArray(nextExtensionHeaderType.value()));
         return rawFields;
       }
 
