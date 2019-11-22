@@ -7,7 +7,9 @@
 
 package org.pcap4j.packet;
 
-import static org.pcap4j.util.ByteArrays.*;
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,7 @@ public final class GtpV1Packet extends AbstractPacket {
   private GtpV1Packet(byte[] rawData, int offset, int length) throws IllegalRawDataException {
     this.header = new GtpV1Header(rawData, offset, length);
 
+    int remainingRawDataLength = length - header.length();
     int payloadLength = header.getLengthAsInt();
     if (header.isExtensionHeaderFieldPresent()
         || header.isSequenceNumberFieldPresent()
@@ -66,9 +69,13 @@ public final class GtpV1Packet extends AbstractPacket {
           "The value of length field seems to be wrong: " + header.getLengthAsInt());
     }
 
-    if (payloadLength != 0) {
+    if (payloadLength > remainingRawDataLength) {
+      payloadLength = remainingRawDataLength;
+    }
+
+    if (payloadLength != 0) { // payloadLength is positive.
       GtpV1ExtensionHeaderType type = header.getNextExtensionHeaderType();
-      if (type != null) {
+      if (type != null && !type.equals(GtpV1ExtensionHeaderType.NO_MORE_EXTENSION_HEADERS)) {
         this.payload =
             PacketFactories.getFactory(Packet.class, GtpV1ExtensionHeaderType.class)
                 .newInstance(rawData, offset + header.length(), payloadLength, type);
@@ -344,7 +351,7 @@ public final class GtpV1Packet extends AbstractPacket {
     private static final int LENGTH_SIZE = SHORT_SIZE_IN_BYTES;
     private static final int TUNNEL_ID_OFFSET = LENGTH_OFFSET + LENGTH_SIZE;
     private static final int TUNNEL_ID_SIZE = INT_SIZE_IN_BYTES;
-    private static final int GTP_V1_HEADER_MIM_SIZE = TUNNEL_ID_OFFSET + TUNNEL_ID_SIZE;
+    private static final int GTP_V1_HEADER_MIN_SIZE = TUNNEL_ID_OFFSET + TUNNEL_ID_SIZE;
     private static final int SEQ_OFFSET = TUNNEL_ID_OFFSET + TUNNEL_ID_SIZE;
     private static final int SEQ_SIZE = SHORT_SIZE_IN_BYTES;
     private static final int NPDU_OFFSET = SEQ_OFFSET + SEQ_SIZE;
@@ -367,10 +374,10 @@ public final class GtpV1Packet extends AbstractPacket {
     private final GtpV1ExtensionHeaderType nextExtensionHeaderType;
 
     private GtpV1Header(byte[] rawData, int offset, int length) throws IllegalRawDataException {
-      if (length < GTP_V1_HEADER_MIM_SIZE) {
+      if (length < GTP_V1_HEADER_MIN_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build a GTPv1 header(")
-            .append(GTP_V1_HEADER_MIM_SIZE)
+            .append(GTP_V1_HEADER_MIN_SIZE)
             .append(" bytes). data: ")
             .append(ByteArrays.toHexString(rawData, " "))
             .append(", offset: ")
@@ -392,7 +399,7 @@ public final class GtpV1Packet extends AbstractPacket {
       this.length = ByteArrays.getShort(rawData, LENGTH_OFFSET + offset);
       this.teid = ByteArrays.getInt(rawData, TUNNEL_ID_OFFSET + offset);
 
-      if (sequenceNumberFlag | nPduNumberFlag | extensionHeaderFlag) {
+      if (sequenceNumberFlag || nPduNumberFlag || extensionHeaderFlag) {
         if (length < GTP_V1_HEADER_MAX_SIZE) {
           StringBuilder sb = new StringBuilder(80);
           sb.append("The data is too short to build a GTPv1 header(")
@@ -431,7 +438,7 @@ public final class GtpV1Packet extends AbstractPacket {
       this.extensionHeaderFlag = builder.extensionHeaderFlag;
 
       if (builder.correctLengthAtBuild) {
-        if (sequenceNumberFlag | nPduNumberFlag | extensionHeaderFlag) {
+        if (sequenceNumberFlag || nPduNumberFlag || extensionHeaderFlag) {
           this.length = (short) (payloadLen + 4);
         } else {
           this.length = (short) payloadLen;
@@ -566,8 +573,7 @@ public final class GtpV1Packet extends AbstractPacket {
 
     @Override
     protected int calcLength() {
-      int len = GTP_V1_HEADER_MIM_SIZE;
-
+      int len = GTP_V1_HEADER_MIN_SIZE;
       if (sequenceNumber != null) {
         len += SHORT_SIZE_IN_BYTES;
       }
@@ -603,7 +609,7 @@ public final class GtpV1Packet extends AbstractPacket {
         sb.append("  NPDU Number: ").append(getNPduNumberAsInt()).append(ls);
       }
       if (nextExtensionHeaderType != null) {
-        sb.append("  Next Extension Header: ").append(getNextExtensionHeaderType()).append(ls);
+        sb.append("  Next Extension Header Type: ").append(getNextExtensionHeaderType()).append(ls);
       }
 
       return sb.toString();
@@ -616,14 +622,14 @@ public final class GtpV1Packet extends AbstractPacket {
       result = prime * result + (extensionHeaderFlag ? 1231 : 1237);
       result = prime * result + length;
       result = prime * result + messageType.hashCode();
-      result = prime * result + ((nPduNumber == null) ? 0 : nPduNumber.hashCode());
+      result = prime * result + (nPduNumber == null ? 0 : nPduNumber.hashCode());
       result = prime * result + (nPduNumberFlag ? 1231 : 1237);
       result =
           prime * result
-              + ((nextExtensionHeaderType == null) ? 0 : nextExtensionHeaderType.hashCode());
+              + (nextExtensionHeaderType == null ? 0 : nextExtensionHeaderType.hashCode());
       result = prime * result + protocolType.hashCode();
       result = prime * result + (reserved ? 1231 : 1237);
-      result = prime * result + ((sequenceNumber == null) ? 0 : sequenceNumber.hashCode());
+      result = prime * result + (sequenceNumber == null ? 0 : sequenceNumber.hashCode());
       result = prime * result + (sequenceNumberFlag ? 1231 : 1237);
       result = prime * result + teid;
       result = prime * result + version.hashCode();
@@ -632,27 +638,61 @@ public final class GtpV1Packet extends AbstractPacket {
 
     @Override
     public boolean equals(Object obj) {
-      if (this == obj) return true;
-      if (!this.getClass().isInstance(obj)) return false;
+      if (this == obj) {
+        return true;
+      }
+      if (!this.getClass().isInstance(obj)) {
+        return false;
+      }
       GtpV1Header other = (GtpV1Header) obj;
-      if (extensionHeaderFlag != other.extensionHeaderFlag) return false;
-      if (length != other.length) return false;
-      if (!messageType.equals(other.messageType)) return false;
+      if (extensionHeaderFlag != other.extensionHeaderFlag) {
+        return false;
+      }
+      if (length != other.length) {
+        return false;
+      }
+      if (!messageType.equals(other.messageType)) {
+        return false;
+      }
       if (nPduNumber == null) {
-        if (other.nPduNumber != null) return false;
-      } else if (!nPduNumber.equals(other.nPduNumber)) return false;
-      if (nPduNumberFlag != other.nPduNumberFlag) return false;
+        if (other.nPduNumber != null) {
+          return false;
+        }
+      } else if (!nPduNumber.equals(other.nPduNumber)) {
+        return false;
+      }
+      if (nPduNumberFlag != other.nPduNumberFlag) {
+        return false;
+      }
       if (nextExtensionHeaderType == null) {
-        if (other.nextExtensionHeaderType != null) return false;
-      } else if (!nextExtensionHeaderType.equals(other.nextExtensionHeaderType)) return false;
-      if (protocolType != other.protocolType) return false;
-      if (reserved != other.reserved) return false;
+        if (other.nextExtensionHeaderType != null) {
+          return false;
+        }
+      } else if (!nextExtensionHeaderType.equals(other.nextExtensionHeaderType)) {
+        return false;
+      }
+      if (protocolType != other.protocolType) {
+        return false;
+      }
+      if (reserved != other.reserved) {
+        return false;
+      }
       if (sequenceNumber == null) {
-        if (other.sequenceNumber != null) return false;
-      } else if (!sequenceNumber.equals(other.sequenceNumber)) return false;
-      if (sequenceNumberFlag != other.sequenceNumberFlag) return false;
-      if (teid != other.teid) return false;
-      if (version != other.version) return false;
+        if (other.sequenceNumber != null) {
+          return false;
+        }
+      } else if (!sequenceNumber.equals(other.sequenceNumber)) {
+        return false;
+      }
+      if (sequenceNumberFlag != other.sequenceNumberFlag) {
+        return false;
+      }
+      if (teid != other.teid) {
+        return false;
+      }
+      if (version != other.version) {
+        return false;
+      }
       return true;
     }
   }

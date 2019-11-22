@@ -1,6 +1,6 @@
 /*_##########################################################################
   _##
-  _##  Copyright (C) 2013-2019 Pcap4J.org
+  _##  Copyright (C) 2019  Pcap4J.org
   _##
   _##########################################################################
 */
@@ -14,6 +14,7 @@ import org.pcap4j.packet.factory.statik.StaticDataLinkTypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticDnsRDataFactory;
 import org.pcap4j.packet.factory.statik.StaticDot11FrameTypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticEtherTypePacketFactory;
+import org.pcap4j.packet.factory.statik.StaticGtpV1ExtensionPacketFactory;
 import org.pcap4j.packet.factory.statik.StaticIcmpV4TypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticIcmpV6TypePacketFactory;
 import org.pcap4j.packet.factory.statik.StaticIpNumberPacketFactory;
@@ -84,6 +85,8 @@ final class StaticPacketFactoryBinder implements PacketFactoryBinder {
             return (PacketFactory<T, N>) StaticProtocolFamilyPacketFactory.getInstance();
           case "org.pcap4j.packet.namednumber.Dot11FrameType":
             return (PacketFactory<T, N>) StaticDot11FrameTypePacketFactory.getInstance();
+          case "org.pcap4j.packet.namednumber.GtpV1ExtensionHeaderType":
+            return (PacketFactory<T, N>) StaticGtpV1ExtensionPacketFactory.getInstance();
           default:
             return (PacketFactory<T, N>) StaticUnknownPacketFactory.getInstance();
         }

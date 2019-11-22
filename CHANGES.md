@@ -1,6 +1,7 @@
 Future
 ======
 ### New Features ###
+* [PR#216](https://github.com/kaitoy/pcap4j/pull/216): Add support for GTP Extension PDU Session Container.
 
 ### Bug Fixes ###
 
