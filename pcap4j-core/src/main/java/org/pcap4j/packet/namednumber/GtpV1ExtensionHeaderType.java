@@ -17,6 +17,9 @@ import org.pcap4j.util.ByteArrays;
  * @see <a
  *     href="http://www.etsi.org/deliver/etsi_ts/129000_129099/129060/12.06.00_60/ts_129060v120600p.pdf">ETSI
  *     TS 129 060 V12.6.0</a>
+ * @see <a
+ *     href="https://www.etsi.org/deliver/etsi_ts/129200_129299/129281/15.03.00_60/ts_129281v150300p.pdf">ETSI
+ *     TS 129 281 V15.3.0</a>
  * @author Kaito Yamada
  * @since pcap4j 1.6.6
  */
@@ -36,6 +39,38 @@ public final class GtpV1ExtensionHeaderType extends NamedNumber<Byte, GtpV1Exten
   /** MS Info Change Reporting support indication: 0000 0010 */
   public static final GtpV1ExtensionHeaderType MS_INFO_CHANGE_REPORTING_SUPPORT_INDICATION =
       new GtpV1ExtensionHeaderType((byte) 0x02, "MS Info Change Reporting support indication");
+
+  /** Long PDCP PDU Number: 0000 0011 */
+  public static final GtpV1ExtensionHeaderType LONG_PDCP_PDU_NUMBER =
+      new GtpV1ExtensionHeaderType((byte) 0x03, "Long PDCP PDU Number");
+
+  /** Service Class Indicator: 0010 0000 */
+  public static final GtpV1ExtensionHeaderType SERVICE_CLASS_INDICATOR =
+      new GtpV1ExtensionHeaderType((byte) 0x20, "Service Class Indicator");
+
+  /** UDP Port: 0100 0000 */
+  public static final GtpV1ExtensionHeaderType UDP_PORT =
+      new GtpV1ExtensionHeaderType((byte) 0x40, "UDP Port");
+
+  /** RAN Container: 1000 0001 */
+  public static final GtpV1ExtensionHeaderType RAN_CONTAINER =
+      new GtpV1ExtensionHeaderType((byte) 0x81, "RAN Container");
+
+  /** Long PDCP PDU Number: 1000 0010 */
+  public static final GtpV1ExtensionHeaderType LONG_PDCP_PDU_NUMBER_OBSOLETED =
+      new GtpV1ExtensionHeaderType((byte) 0x82, "Long PDCP PDU Number (obsoleted)");
+
+  /** Xw RAN Container: 1000 0011 */
+  public static final GtpV1ExtensionHeaderType XW_RAN_CONTAINER =
+      new GtpV1ExtensionHeaderType((byte) 0x83, "Xw RAN Container");
+
+  /** NR RAN Container: 1000 0100 */
+  public static final GtpV1ExtensionHeaderType NR_RAN_CONTAINER =
+      new GtpV1ExtensionHeaderType((byte) 0x84, "NR RAN Container");
+
+  /** PDU Session Container: 1000 0101 */
+  public static final GtpV1ExtensionHeaderType PDU_SESSION_CONTAINER =
+      new GtpV1ExtensionHeaderType((byte) 0x85, "PDU Session Container");
 
   /** PDCP PDU number: 1100 0000 */
   public static final GtpV1ExtensionHeaderType PDCP_PDU_NUMBER =
@@ -58,6 +93,14 @@ public final class GtpV1ExtensionHeaderType extends NamedNumber<Byte, GtpV1Exten
     registry.put(
         MS_INFO_CHANGE_REPORTING_SUPPORT_INDICATION.value(),
         MS_INFO_CHANGE_REPORTING_SUPPORT_INDICATION);
+    registry.put(LONG_PDCP_PDU_NUMBER.value(), LONG_PDCP_PDU_NUMBER);
+    registry.put(SERVICE_CLASS_INDICATOR.value(), SERVICE_CLASS_INDICATOR);
+    registry.put(UDP_PORT.value(), UDP_PORT);
+    registry.put(RAN_CONTAINER.value(), RAN_CONTAINER);
+    registry.put(LONG_PDCP_PDU_NUMBER_OBSOLETED.value(), LONG_PDCP_PDU_NUMBER_OBSOLETED);
+    registry.put(XW_RAN_CONTAINER.value(), XW_RAN_CONTAINER);
+    registry.put(NR_RAN_CONTAINER.value(), NR_RAN_CONTAINER);
+    registry.put(PDU_SESSION_CONTAINER.value(), PDU_SESSION_CONTAINER);
     registry.put(PDCP_PDU_NUMBER.value(), PDCP_PDU_NUMBER);
     registry.put(SUSPEND_REQUEST.value(), SUSPEND_REQUEST);
     registry.put(SUSPEND_RESPONSE.value(), SUSPEND_RESPONSE);
