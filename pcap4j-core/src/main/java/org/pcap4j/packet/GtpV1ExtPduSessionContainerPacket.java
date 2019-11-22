@@ -445,7 +445,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         throw new IllegalRawDataException(sb.toString());
       }
 
-      int currentOffsetInHeader = 2;
+      int currentOffsetInHeader = PPI_AND_SPARE_OFFSET;
       if (ppp) {
         byte ppiAndSpare = ByteArrays.getByte(rawData, PPI_AND_SPARE_OFFSET + offset);
         this.ppi = (byte) ((ppiAndSpare & 0xE0) >> 5);
@@ -456,7 +456,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         this.spare2 = null;
       }
 
-      int paddingLength = headerLength - currentOffsetInHeader;
+      int paddingLength = headerLength - currentOffsetInHeader - 1;
       if (paddingLength != 0) {
         this.padding =
             ByteArrays.getSubArray(rawData, currentOffsetInHeader + offset, paddingLength);
@@ -623,7 +623,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
           .append(extensionHeaderLength)
           .append(" (")
           .append(extensionHeaderLength * 4)
-          .append(" [bytes])")
+          .append(" bytes)")
           .append(ls)
           .append("  PDU Type: ")
           .append(pduType)
@@ -659,12 +659,12 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         sb.append("  Paging Policy Indicator: ")
             .append(ppi)
             .append(ls)
-            .append("  spare 2: ")
+            .append("  spare 2: 0x")
             .append(ByteArrays.toHexString(spare2, ""))
             .append(ls);
       }
       if (padding.length != 0) {
-        sb.append("  Padding: 0x").append(ByteArrays.toHexString(padding, " ")).append(ls);
+        sb.append("  Padding: ").append(ByteArrays.toHexString(padding, " ")).append(ls);
       }
       sb.append("  Next Extension Header Type: ").append(nextExtensionHeaderType).append(ls);
 
@@ -717,7 +717,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
 
     @Override
     protected int calcHashCode() {
-      int result = super.hashCode();
+      int result = 17;
       result = 31 * result + (int) extensionHeaderLength;
       result = 31 * result + pduType.hashCode();
       result = 31 * result + (int) spare1;

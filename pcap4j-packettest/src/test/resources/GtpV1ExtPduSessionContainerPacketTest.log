@@ -1,0 +1,13 @@
+[GTP Extension PDU Session Container Header (8 bytes)]
+  Extension Header Length: 2 (8 bytes)
+  PDU Type: 0 (DL PDU SESSION INFORMATION)
+  spare 1: 0x05
+  Paging Policy Presence: true (Paging Policy Indicator present)
+  Reflective QoS Indicator: false (Reflective QoS activation not triggered)
+  Qos Flow Identifier: 15
+  Paging Policy Indicator: 7
+  spare 2: 0x12
+  Padding: 03 02 01
+  Next Extension Header Type: 0x00 (No more extension headers)
+[data (4 bytes)]
+  Hex stream: 00 01 02 03
