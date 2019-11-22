@@ -39,7 +39,7 @@ public final class StaticGtpV1ExtensionPacketFactory
         });
   }
 
-  /** @return the singleton instance of StaticIpV4OptionFactory. */
+  /** @return the singleton instance of StaticGtpV1ExtensionPacketFactory. */
   public static StaticGtpV1ExtensionPacketFactory getInstance() {
     return INSTANCE;
   }
