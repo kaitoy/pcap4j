@@ -8,6 +8,7 @@
 package org.pcap4j.packet;
 
 import org.pcap4j.packet.factory.PacketFactories;
+import org.pcap4j.packet.namednumber.GtpV1ExtPduSessionContainerPduType;
 import org.pcap4j.packet.namednumber.GtpV1ExtensionHeaderType;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
@@ -18,6 +19,7 @@ import java.util.List;
 
 /**
  * @author Leo Ma
+ * @author Kaito Yamada
  * @since pcap4j 1.8.3
  */
 public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
@@ -68,10 +70,12 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
     if (builder == null) {
       throw new NullPointerException("builder must not be null.");
     }
-    if (builder.nextExtensionHeaderType == null) {
+    if (builder.pduType == null || builder.nextExtensionHeaderType == null) {
       StringBuilder sb = new StringBuilder();
-      sb.append(" builder.nextExtensionHeaderType: ")
-          .append(builder.nextExtensionHeaderType);
+      sb.append(" builder.pduType: ")
+        .append(builder.pduType)
+        .append(" builder.nextExtensionHeaderType: ")
+        .append(builder.nextExtensionHeaderType);
       throw new NullPointerException(sb.toString());
     }
     if (builder.ppi != null && builder.spare2 == null) {
@@ -99,13 +103,14 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
 
   /**
    * @author Leo Ma
+   * @author Kaito Yamada
    * @since pcap4j 1.8.3
    */
   public static final class Builder extends AbstractBuilder
       implements LengthBuilder<GtpV1ExtPduSessionContainerPacket> {
 
     private byte extensionHeaderLength;
-    private byte pduType;
+    private GtpV1ExtPduSessionContainerPduType pduType;
     private byte spare1;
     private boolean ppp;
     private boolean rqi;
@@ -148,10 +153,10 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
     }
 
     /**
-     * @param pduType pdu type
+     * @param pduType PDU type
      * @return this Builder object for method chaining.
      */
-    public Builder pduType(byte pduType) {
+    public Builder pduType(GtpV1ExtPduSessionContainerPduType pduType) {
       this.pduType = pduType;
       return this;
     }
@@ -326,6 +331,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
    *     "https://www.etsi.org/deliver/etsi_ts/138400_138499/138415/15.02.00_60/ts_138415v150200p.pdf">ETSI
    *     TS 138 415 V15.2.0</a>
    * @author Leo Ma
+   * @author Kaito Yamada
    * @since pcap4j 1.8.3
    */
   public static final class GtpV1ExtPduSessionContainerHeader extends AbstractHeader {
@@ -348,7 +354,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         PPI_AND_SPARE_OFFSET + NEXT_EXTENSION_HEADER_TYPE_SIZE;
 
       private final byte extensionHeaderLength;
-      private final byte pduType;
+      private final GtpV1ExtPduSessionContainerPduType pduType;
       private final byte spare1;
       private final boolean ppp;
       private final boolean rqi;
@@ -376,7 +382,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         this.extensionHeaderLength = ByteArrays.getByte(rawData, EXTENSION_HEADER_LENGTH_OFFSET + offset);
 
         byte pduTypeAndSpare = ByteArrays.getByte(rawData, PDU_TYPE_AND_SPARE_OFFSET + offset);
-        this.pduType = (byte) ((pduTypeAndSpare & 0xF0) >> 4);
+        this.pduType = GtpV1ExtPduSessionContainerPduType.getInstance((byte) ((pduTypeAndSpare & 0xF0) >> 4));
         this.spare1 = (byte) (pduTypeAndSpare & 0x0F);
 
         byte pppAndRqiAndQfi = ByteArrays.getByte(rawData, PPP_AND_RQI_AND_QFI_OFFSET + offset);
@@ -481,7 +487,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       }
 
       /** @return pduType */
-      public byte getPduType() {
+      public GtpV1ExtPduSessionContainerPduType getPduType() {
         return pduType;
       }
 
@@ -544,8 +550,8 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
       protected List<byte[]> getRawFields() {
         List<byte[]> rawFields = new ArrayList<byte[]>();
         rawFields.add(ByteArrays.toByteArray(extensionHeaderLength));
-        rawFields.add(ByteArrays.toByteArray((byte) ((pduType << 4) | (spare1 & 0x0F))));
-        if (pduType == 0) {
+        rawFields.add(ByteArrays.toByteArray((byte) ((pduType.value() << 4) | (spare1 & 0x0F))));
+        if (pduType.value() == 0) {
           byte firstByte = 0;
           if (ppp) {
             firstByte |= 0x80;
@@ -559,7 +565,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
               rawFields.add(ByteArrays.toByteArray((byte) ((ppi.byteValue() << 5) | (spare2 & 0x1F))));
               rawFields.add(padding);
           }
-        } else if (pduType == 1) {
+        } else if (pduType.value() == 1) {
           byte oneByte = (byte) ((spare2 << 6) | (qfi & 0x3F));
           rawFields.add(ByteArrays.toByteArray(oneByte));
         }
@@ -593,7 +599,7 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
             .append("  spare 1: 0x")
             .append(ByteArrays.toHexString(spare1, ""))
             .append(ls);
-        if (pduType == 0) {
+        if (pduType.value() == 0) {
           sb.append("  Paging Policy Presence: ")
             .append(ppp)
             .append(ppp ? " (Paging Policy Indicator present)" : " (Paging Policy Indicator not present)")
@@ -633,65 +639,66 @@ public class GtpV1ExtPduSessionContainerPacket extends AbstractPacket {
         return sb.toString();
       }
 
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-        return false;
-      }
-      if (!super.equals(o)) {
-        return false;
+      @Override
+      public boolean equals(Object o) {
+        if (this == o) {
+          return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+          return false;
+        }
+        if (!super.equals(o)) {
+          return false;
+        }
+
+        GtpV1ExtPduSessionContainerHeader that = (GtpV1ExtPduSessionContainerHeader) o;
+
+        if (extensionHeaderLength != that.extensionHeaderLength) {
+          return false;
+        }
+        if (spare1 != that.spare1) {
+          return false;
+        }
+        if (ppp != that.ppp) {
+          return false;
+        }
+        if (rqi != that.rqi) {
+          return false;
+        }
+        if (qfi != that.qfi) {
+          return false;
+        }
+        if (!pduType.equals(that.pduType)) {
+          return false;
+        }
+        if (ppi != null ? !ppi.equals(that.ppi) : that.ppi != null) {
+          return false;
+        }
+        if (spare2 != null ? !spare2.equals(that.spare2) : that.spare2 != null) {
+          return false;
+        }
+        if (!Arrays.equals(padding, that.padding)) {
+          return false;
+        }
+        return nextExtensionHeaderType.equals(that.nextExtensionHeaderType);
+
       }
 
-      GtpV1ExtPduSessionContainerHeader that = (GtpV1ExtPduSessionContainerHeader) o;
+      @Override
+      protected int calcHashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (int) extensionHeaderLength;
+        result = 31 * result + pduType.hashCode();
+        result = 31 * result + (int) spare1;
+        result = 31 * result + (ppp ? 1 : 0);
+        result = 31 * result + (rqi ? 1 : 0);
+        result = 31 * result + (int) qfi;
+        result = 31 * result + (ppi != null ? ppi.hashCode() : 0);
+        result = 31 * result + (spare2 != null ? spare2.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(padding);
+        result = 31 * result + nextExtensionHeaderType.hashCode();
+        return result;
+      }
 
-      if (extensionHeaderLength != that.extensionHeaderLength) {
-        return false;
-      }
-      if (pduType != that.pduType) {
-        return false;
-      }
-      if (spare1 != that.spare1) {
-        return false;
-      }
-      if (ppp != that.ppp) {
-        return false;
-      }
-      if (rqi != that.rqi) {
-        return false;
-      }
-      if (qfi != that.qfi) {
-        return false;
-      }
-      if (ppi != null ? !ppi.equals(that.ppi) : that.ppi != null) {
-        return false;
-      }
-      if (spare2 != null ? !spare2.equals(that.spare2) : that.spare2 != null) {
-        return false;
-      }
-      if (!Arrays.equals(padding, that.padding)) {
-        return false;
-      }
-      return nextExtensionHeaderType.equals(that.nextExtensionHeaderType);
-
-    }
-
-    @Override
-    protected int calcHashCode() {
-      int result = super.hashCode();
-      result = 31 * result + (int) extensionHeaderLength;
-      result = 31 * result + (int) pduType;
-      result = 31 * result + (int) spare1;
-      result = 31 * result + (ppp ? 1 : 0);
-      result = 31 * result + (rqi ? 1 : 0);
-      result = 31 * result + (int) qfi;
-      result = 31 * result + (ppi != null ? ppi.hashCode() : 0);
-      result = 31 * result + (spare2 != null ? spare2.hashCode() : 0);
-      result = 31 * result + Arrays.hashCode(padding);
-      result = 31 * result + nextExtensionHeaderType.hashCode();
-      return result;
-    }
   }
 }
