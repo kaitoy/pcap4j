@@ -29,6 +29,7 @@ matrix:
             - openjdk-6-jdk
     - os: osx
       osx_image: xcode10.1 # OpenJDK 11.0.1+13
+      jdk: openjdk11
       addons:
         homebrew:
           update: true
