@@ -7,10 +7,9 @@
 
 package org.pcap4j.packet.namednumber;
 
-import org.pcap4j.util.ByteArrays;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.pcap4j.util.ByteArrays;
 
 /**
  * GTPv1 Extension Header Type
@@ -43,35 +42,35 @@ public final class GtpV1ExtensionHeaderType extends NamedNumber<Byte, GtpV1Exten
 
   /** Long PDCP PDU Number: 0000 0011 */
   public static final GtpV1ExtensionHeaderType LONG_PDCP_PDU_NUMBER =
-    new GtpV1ExtensionHeaderType((byte) 0x03, "Long PDCP PDU Number");
+      new GtpV1ExtensionHeaderType((byte) 0x03, "Long PDCP PDU Number");
 
   /** Service Class Indicator: 0010 0000 */
   public static final GtpV1ExtensionHeaderType SERVICE_CLASS_INDICATOR =
-    new GtpV1ExtensionHeaderType((byte) 0x20, "Service Class Indicator");
+      new GtpV1ExtensionHeaderType((byte) 0x20, "Service Class Indicator");
 
   /** UDP Port: 0100 0000 */
   public static final GtpV1ExtensionHeaderType UDP_PORT =
-    new GtpV1ExtensionHeaderType((byte) 0x40, "UDP Port");
+      new GtpV1ExtensionHeaderType((byte) 0x40, "UDP Port");
 
   /** RAN Container: 1000 0001 */
   public static final GtpV1ExtensionHeaderType RAN_CONTAINER =
-    new GtpV1ExtensionHeaderType((byte) 0x81, "RAN Container");
+      new GtpV1ExtensionHeaderType((byte) 0x81, "RAN Container");
 
   /** Long PDCP PDU Number: 1000 0010 */
   public static final GtpV1ExtensionHeaderType LONG_PDCP_PDU_NUMBER_OBSOLETED =
-    new GtpV1ExtensionHeaderType((byte) 0x82, "Long PDCP PDU Number (obsoleted)");
+      new GtpV1ExtensionHeaderType((byte) 0x82, "Long PDCP PDU Number (obsoleted)");
 
   /** Xw RAN Container: 1000 0011 */
   public static final GtpV1ExtensionHeaderType XW_RAN_CONTAINER =
-    new GtpV1ExtensionHeaderType((byte) 0x83, "Xw RAN Container");
+      new GtpV1ExtensionHeaderType((byte) 0x83, "Xw RAN Container");
 
   /** NR RAN Container: 1000 0100 */
   public static final GtpV1ExtensionHeaderType NR_RAN_CONTAINER =
-    new GtpV1ExtensionHeaderType((byte) 0x84, "NR RAN Container");
+      new GtpV1ExtensionHeaderType((byte) 0x84, "NR RAN Container");
 
   /** PDU Session Container: 1000 0101 */
   public static final GtpV1ExtensionHeaderType PDU_SESSION_CONTAINER =
-    new GtpV1ExtensionHeaderType((byte) 0x85, "PDU Session Container");
+      new GtpV1ExtensionHeaderType((byte) 0x85, "PDU Session Container");
 
   /** PDCP PDU number: 1100 0000 */
   public static final GtpV1ExtensionHeaderType PDCP_PDU_NUMBER =

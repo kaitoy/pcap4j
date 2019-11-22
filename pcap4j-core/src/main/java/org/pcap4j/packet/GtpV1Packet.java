@@ -7,18 +7,17 @@
 
 package org.pcap4j.packet;
 
+import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
+import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.GtpV1ExtensionHeaderType;
 import org.pcap4j.packet.namednumber.GtpV1MessageType;
 import org.pcap4j.packet.namednumber.NotApplicable;
 import org.pcap4j.util.ByteArrays;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.INT_SIZE_IN_BYTES;
-import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 /**
  * GTPv1 Packet.
@@ -67,7 +66,7 @@ public final class GtpV1Packet extends AbstractPacket {
 
     if (payloadLength < 0) {
       throw new IllegalRawDataException(
-      		"The value of length field seems to be wrong: " + header.getLengthAsInt());
+          "The value of length field seems to be wrong: " + header.getLengthAsInt());
     }
 
     if (payloadLength > remainingRawDataLength) {
@@ -75,15 +74,16 @@ public final class GtpV1Packet extends AbstractPacket {
     }
 
     if (payloadLength != 0) { // payloadLength is positive.
-    	GtpV1ExtensionHeaderType type = header.getNextExtensionHeaderType();
+      GtpV1ExtensionHeaderType type = header.getNextExtensionHeaderType();
       if (type != null && !type.equals(GtpV1ExtensionHeaderType.NO_MORE_EXTENSION_HEADERS)) {
         this.payload =
             PacketFactories.getFactory(Packet.class, GtpV1ExtensionHeaderType.class)
                 .newInstance(rawData, offset + header.length(), payloadLength, type);
       } else {
-      	this.payload =
-      			PacketFactories.getFactory(Packet.class, NotApplicable.class)
-      					.newInstance(rawData, offset + header.length(), payloadLength, NotApplicable.UNKNOWN);
+        this.payload =
+            PacketFactories.getFactory(Packet.class, NotApplicable.class)
+                .newInstance(
+                    rawData, offset + header.length(), payloadLength, NotApplicable.UNKNOWN);
       }
     } else {
       this.payload = null;
