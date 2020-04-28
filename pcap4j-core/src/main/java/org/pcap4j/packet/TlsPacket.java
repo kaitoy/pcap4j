@@ -84,13 +84,16 @@ public class TlsPacket extends AbstractPacket {
         private static final int LENGTH_OFFSET = VERSION_OFFSET + SHORT_SIZE_IN_BYTES;
         private static final int RECORD_OFFSET = LENGTH_OFFSET + SHORT_SIZE_IN_BYTES;
 
-        private ContentType contentType;
-        private TlsVersion version;
-        private short recordLength;
-        private TlsRecord record;
+        private final ContentType contentType;
+        private final TlsVersion version;
+        private final short recordLength;
+        private final TlsRecord record;
 
         private TlsHeader(Builder builder) {
-            //TODO
+            this.contentType = builder.contentType;
+            this.version = builder.version;
+            this.recordLength = builder.recordLength;
+            this.record = builder.record;
         }
 
         private TlsHeader(byte[] rawData, int offset, int length) {
@@ -122,6 +125,10 @@ public class TlsPacket extends AbstractPacket {
             return version;
         }
 
+        public short getRecordLength() {
+            return recordLength;
+        }
+
         public TlsRecord getRecord() {
             return record;
         }
@@ -137,7 +144,7 @@ public class TlsPacket extends AbstractPacket {
         }
 
         @Override
-        public int length() {
+        protected int calcLength() {
             return RECORD_OFFSET + recordLength;
         }
 
@@ -152,6 +159,11 @@ public class TlsPacket extends AbstractPacket {
 
     public static final class Builder extends AbstractBuilder {
 
+        private ContentType contentType;
+        private TlsVersion version;
+        private short recordLength;
+        private TlsRecord record;
+
         private Packet.Builder payloadBuilder;
 
         public Builder() {
@@ -159,6 +171,30 @@ public class TlsPacket extends AbstractPacket {
 
         public Builder(TlsPacket packet) {
             this.payloadBuilder = packet.payload != null ? packet.payload.getBuilder() : null;
+            this.contentType = packet.header.contentType;
+            this.version = packet.header.version;
+            this.recordLength = packet.header.recordLength;
+            this.record = packet.header.record;
+        }
+
+        public Builder contentType(ContentType contentType) {
+            this.contentType = contentType;
+            return this;
+        }
+
+        public Builder version(TlsVersion version) {
+            this.version = version;
+            return this;
+        }
+
+        public Builder recordLength(short recordLength) {
+            this.recordLength = recordLength;
+            return this;
+        }
+
+        public Builder record(TlsRecord record) {
+            this.record = record;
+            return this;
         }
 
         @Override

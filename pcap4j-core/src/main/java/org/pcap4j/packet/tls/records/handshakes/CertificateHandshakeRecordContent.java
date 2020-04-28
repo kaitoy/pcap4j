@@ -21,8 +21,8 @@ public class CertificateHandshakeRecordContent implements HandshakeRecordContent
     private static final int CERTIFICATES_LENGTH_OFFSET = 0;
     private static final int CERTIFICATES_OFFSET = 3;
 
-    private int certificatesLength;
-    private List<byte[]> rawCertificates = new ArrayList<>();
+    private final int certificatesLength;
+    private final List<byte[]> rawCertificates;
 
     public static CertificateHandshakeRecordContent newInstance(byte[] rawData, int offset, int length) {
         return new CertificateHandshakeRecordContent(rawData, offset, length);
@@ -30,6 +30,7 @@ public class CertificateHandshakeRecordContent implements HandshakeRecordContent
 
     public CertificateHandshakeRecordContent(byte[] rawData, int offset, int length) {
         this.certificatesLength = ByteArrays.getThreeBytesInt(rawData, CERTIFICATES_LENGTH_OFFSET + offset);
+        this.rawCertificates = new ArrayList<>();
 
         int cursor = CERTIFICATES_OFFSET + offset;
         while (cursor < offset + length) {
@@ -41,6 +42,15 @@ public class CertificateHandshakeRecordContent implements HandshakeRecordContent
             rawCertificates.add(certData);
             cursor += certificateLength;
         }
+    }
+
+    public CertificateHandshakeRecordContent(int certificatesLength, List<byte[]> rawCertificates) {
+        this.certificatesLength = certificatesLength;
+        this.rawCertificates = rawCertificates;
+    }
+
+    public int getCertificatesLength() {
+        return certificatesLength;
     }
 
     public List<byte[]> getRawCertificates() {

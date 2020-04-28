@@ -1,10 +1,13 @@
 package org.pcap4j.packet.tls.records.handshakes;
 
+import org.pcap4j.packet.namednumber.tls.TlsVersion;
+import org.pcap4j.packet.tls.extensions.TlsExtension;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.packet.namednumber.tls.CipherSuite;
 import org.pcap4j.packet.namednumber.tls.CompressionMethod;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
@@ -28,8 +31,8 @@ public class ServerHelloHandshakeRecordContent extends HelloHandshakeRecordConte
     private static final int EXTENSIONS_LENGTH_OFFSET = COMPRESSION_METHOD_OFFSET + BYTE_SIZE_IN_BYTES;  // + sessionIdLength
     private static final int EXTENSIONS_OFFSET = EXTENSIONS_LENGTH_OFFSET + SHORT_SIZE_IN_BYTES;  // + sessionIdLength
 
-    private CipherSuite cipherSuite;
-    private CompressionMethod compressionMethod;
+    private final CipherSuite cipherSuite;
+    private final CompressionMethod compressionMethod;
 
     public static ServerHelloHandshakeRecordContent newInstance(byte[] rawData, int offset, int length) {
         ByteArrays.validateBounds(rawData, offset, length);
@@ -47,6 +50,14 @@ public class ServerHelloHandshakeRecordContent extends HelloHandshakeRecordConte
         this.extensionsLength = ByteArrays.getShort(rawData,
                 EXTENSIONS_LENGTH_OFFSET + sessionIdLength + offset);
         readExtensions(rawData, EXTENSIONS_OFFSET + sessionIdLength + offset, false);
+    }
+
+    public ServerHelloHandshakeRecordContent(TlsVersion version, byte[] random, byte[] sessionId,
+                                             short extensionsLength, List<TlsExtension> extensions,
+                                             CipherSuite cipherSuite, CompressionMethod compressionMethod) {
+        super(version, random, sessionId, extensionsLength, extensions);
+        this.cipherSuite = cipherSuite;
+        this.compressionMethod = compressionMethod;
     }
 
     public CipherSuite getCipherSuite() {

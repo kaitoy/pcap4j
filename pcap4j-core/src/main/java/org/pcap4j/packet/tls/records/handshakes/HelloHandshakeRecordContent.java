@@ -27,6 +27,19 @@ public abstract class HelloHandshakeRecordContent implements HandshakeRecordCont
     protected short extensionsLength;
     private List<TlsExtension> extensions;
 
+    protected HelloHandshakeRecordContent(){
+    }
+
+    public HelloHandshakeRecordContent(TlsVersion version, byte[] random, byte[] sessionId,
+                                       short extensionsLength, List<TlsExtension> extensions) {
+        this.version = version;
+        this.random = random;
+        this.sessionIdLength = (byte) sessionId.length;
+        this.sessionId = sessionId;
+        this.extensionsLength = extensionsLength;
+        this.extensions = extensions;
+    }
+
     protected void readCommonPart(byte[] rawData, int offset) {
         this.version = TlsVersion.getInstance(ByteArrays.getShort(rawData, VERSION_OFFSET + offset));
         System.arraycopy(rawData, RANDOM_OFFSET + offset, random, 0, 32);
@@ -66,6 +79,10 @@ public abstract class HelloHandshakeRecordContent implements HandshakeRecordCont
 
     public byte[] getSessionId() {
         return sessionId;
+    }
+
+    public short getExtensionsLength() {
+        return extensionsLength;
     }
 
     public List<TlsExtension> getExtensions() {

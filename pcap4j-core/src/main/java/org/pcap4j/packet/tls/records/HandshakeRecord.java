@@ -21,9 +21,9 @@ public class HandshakeRecord implements TlsRecord {
     private static final int LENGTH_OFFSET = HANDSHAKE_TYPE_OFFSET + BYTE_SIZE_IN_BYTES;
     private static final int CONTENT_OFFSET = LENGTH_OFFSET + 3;
 
-    private HandshakeType handshakeType;
-    private int handshakeLength;  // 3 bytes
-    private HandshakeRecordContent content;
+    private final HandshakeType handshakeType;
+    private final int handshakeLength;  // 3 bytes
+    private final HandshakeRecordContent content;
 
     public static HandshakeRecord newInstance(byte[] rawData, int offset, int length) {
         ByteArrays.validateBounds(rawData, offset, length);
@@ -57,8 +57,18 @@ public class HandshakeRecord implements TlsRecord {
         }
     }
 
+    public HandshakeRecord(HandshakeType handshakeType, int handshakeLength, HandshakeRecordContent content) {
+        this.handshakeType = handshakeType;
+        this.handshakeLength = handshakeLength;
+        this.content = content;
+    }
+
     public HandshakeType getHandshakeType() {
         return handshakeType;
+    }
+
+    public int getHandshakeLength() {
+        return handshakeLength;
     }
 
     public HandshakeRecordContent getContent() {

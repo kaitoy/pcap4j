@@ -9,7 +9,7 @@ public class ChangeCipherSpecRecord implements TlsRecord {
     0x1 - End
      */
 
-    private byte changeCipherSpecMessage;
+    private final byte changeCipherSpecMessage;
 
     public static ChangeCipherSpecRecord newInstance(byte[] rawData, int offset, int length) {
         ByteArrays.validateBounds(rawData, offset, length);
@@ -18,6 +18,14 @@ public class ChangeCipherSpecRecord implements TlsRecord {
 
     private ChangeCipherSpecRecord(byte[] rawData, int offset) {
         this.changeCipherSpecMessage = ByteArrays.getByte(rawData, offset);
+    }
+
+    public ChangeCipherSpecRecord(byte changeCipherSpecMessage) {
+        this.changeCipherSpecMessage = changeCipherSpecMessage;
+    }
+
+    public byte getChangeCipherSpecMessage() {
+        return changeCipherSpecMessage;
     }
 
     @Override

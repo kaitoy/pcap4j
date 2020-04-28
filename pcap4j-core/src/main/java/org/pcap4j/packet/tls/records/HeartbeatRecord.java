@@ -1,7 +1,7 @@
 package org.pcap4j.packet.tls.records;
 
-import org.pcap4j.util.ByteArrays;
 import org.pcap4j.packet.namednumber.tls.HeartbeatMessageType;
+import org.pcap4j.util.ByteArrays;
 
 import java.util.Arrays;
 
@@ -23,21 +23,28 @@ public class HeartbeatRecord implements TlsRecord {
     private static final int PAYLOAD_LENGTH_OFFSET = TYPE_OFFSET + BYTE_SIZE_IN_BYTES;
     private static final int PAYLOAD_OFFSET = PAYLOAD_LENGTH_OFFSET + SHORT_SIZE_IN_BYTES;
 
-    private HeartbeatMessageType type;
-    private short payloadLength;
-    private byte[] payload;
-    private byte[] padding;
+    private final HeartbeatMessageType type;
+    private final short payloadLength;
+    private final byte[] payload;
+    private final byte[] padding;
 
     public static HeartbeatRecord newInstance(byte[] rawData, int offset, int length) {
         ByteArrays.validateBounds(rawData, offset, length);
-        return new HeartbeatRecord(rawData, offset, length);
+        return new HeartbeatRecord(rawData, offset);
     }
 
-    public HeartbeatRecord(byte[] rawData, int offset, int length) {
+    public HeartbeatRecord(byte[] rawData, int offset) {
         this.type = HeartbeatMessageType.getInstance(ByteArrays.getByte(rawData, TYPE_OFFSET + offset));
         this.payloadLength = ByteArrays.getShort(rawData, PAYLOAD_LENGTH_OFFSET + offset);
         this.payload = ByteArrays.getSubArray(rawData, PAYLOAD_OFFSET + offset, payloadLength);
         this.padding = ByteArrays.getSubArray(rawData, PAYLOAD_OFFSET + payloadLength + offset);
+    }
+
+    public HeartbeatRecord(HeartbeatMessageType type, short payloadLength, byte[] payload, byte[] padding) {
+        this.type = type;
+        this.payloadLength = payloadLength;
+        this.payload = payload;
+        this.padding = padding;
     }
 
     public HeartbeatMessageType getType() {
@@ -68,4 +75,5 @@ public class HeartbeatRecord implements TlsRecord {
                 padding
         ));
     }
+
 }

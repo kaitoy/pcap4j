@@ -1,5 +1,7 @@
 package org.pcap4j.packet.tls.records.handshakes;
 
+import org.pcap4j.packet.namednumber.tls.TlsVersion;
+import org.pcap4j.packet.tls.extensions.TlsExtension;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.packet.namednumber.tls.CipherSuite;
 import org.pcap4j.packet.namednumber.tls.CompressionMethod;
@@ -37,10 +39,10 @@ public class ClientHelloHandshakeRecordContent extends HelloHandshakeRecordConte
             COMPRESSION_METHOD_OFFSET; // + sessionIdLength + cipherSuitesLength + compressionMethodsLength
     private static final int EXTENSIONS_OFFSET = COMPRESSION_METHOD_OFFSET + SHORT_SIZE_IN_BYTES;
 
-    private short cipherSuitesLength;
-    private List<CipherSuite> cipherSuites;
-    private byte compressionMethodsLength;
-    private List<CompressionMethod> compressionMethods;
+    private final short cipherSuitesLength;
+    private final List<CipherSuite> cipherSuites;
+    private final byte compressionMethodsLength;
+    private final List<CompressionMethod> compressionMethods;
 
     public static ClientHelloHandshakeRecordContent newInstance(byte[] rawData, int offset, int length) {
         ByteArrays.validateBounds(rawData, offset, length);
@@ -73,6 +75,33 @@ public class ClientHelloHandshakeRecordContent extends HelloHandshakeRecordConte
 
         readExtensions(rawData, EXTENSIONS_OFFSET + compressionMethodsLength +
                 sessionIdLength + cipherSuitesLength + offset, true);
+    }
+
+    public ClientHelloHandshakeRecordContent(TlsVersion version, byte[] random, byte[] sessionId,
+                                             short extensionsLength, List<TlsExtension> extensions,
+                                             List<CipherSuite> cipherSuites,
+                                             List<CompressionMethod> compressionMethods) {
+        super(version, random, sessionId, extensionsLength, extensions);
+        this.cipherSuitesLength = (short) (cipherSuites.size() * SHORT_SIZE_IN_BYTES);
+        this.cipherSuites = cipherSuites;
+        this.compressionMethodsLength = (byte) compressionMethods.size();
+        this.compressionMethods = compressionMethods;
+    }
+
+    public short getCipherSuitesLength() {
+        return cipherSuitesLength;
+    }
+
+    public List<CipherSuite> getCipherSuites() {
+        return cipherSuites;
+    }
+
+    public byte getCompressionMethodsLength() {
+        return compressionMethodsLength;
+    }
+
+    public List<CompressionMethod> getCompressionMethods() {
+        return compressionMethods;
     }
 
     @Override

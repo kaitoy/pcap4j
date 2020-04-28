@@ -9,7 +9,7 @@ public class ApplicationDataRecord implements TlsRecord {
      * 0x0 + length - End
      */
 
-    private byte[] data;
+    private final byte[] data;
 
     public static ApplicationDataRecord newInstance(byte[] rawData, int offset, int length) {
         ByteArrays.validateBounds(rawData, offset, length);
@@ -19,6 +19,10 @@ public class ApplicationDataRecord implements TlsRecord {
     public ApplicationDataRecord(byte[] rawData, int offset, int length) {
         data = new byte[length];
         System.arraycopy(rawData, offset, data, 0, length);
+    }
+
+    public ApplicationDataRecord(byte[] data) {
+        this.data = data;
     }
 
     public byte[] getData() {

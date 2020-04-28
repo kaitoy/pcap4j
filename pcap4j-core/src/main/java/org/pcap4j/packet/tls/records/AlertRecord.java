@@ -17,8 +17,8 @@ public class AlertRecord implements TlsRecord {
     private static final int LEVEL_OFFSET = 0;
     private static final int DESCRIPTION_OFFSET = LEVEL_OFFSET + BYTE_SIZE_IN_BYTES;
 
-    private AlertLevel level;
-    private AlertDescription description;
+    private final AlertLevel level;
+    private final AlertDescription description;
 
     public static AlertRecord newInstance(byte[] rawData, int offset, int length) {
         ByteArrays.validateBounds(rawData, offset, length);
@@ -28,6 +28,19 @@ public class AlertRecord implements TlsRecord {
     public AlertRecord(byte[] rawData, int offset) {
         this.level = AlertLevel.getInstance(ByteArrays.getByte(rawData, LEVEL_OFFSET + offset));
         this.description = AlertDescription.getInstance(ByteArrays.getByte(rawData, DESCRIPTION_OFFSET + offset));
+    }
+
+    public AlertRecord(AlertLevel level, AlertDescription description) {
+        this.level = level;
+        this.description = description;
+    }
+
+    public AlertLevel getLevel() {
+        return level;
+    }
+
+    public AlertDescription getDescription() {
+        return description;
     }
 
     @Override

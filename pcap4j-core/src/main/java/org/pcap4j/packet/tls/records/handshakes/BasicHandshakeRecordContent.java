@@ -9,7 +9,7 @@ public class BasicHandshakeRecordContent implements HandshakeRecordContent {
      * 0x0 + length - End
      */
 
-    private byte[] content;
+    private final byte[] content;
 
     public static BasicHandshakeRecordContent newInstance(byte[] rawData, int offset, int length) {
         if(length > 0) {
@@ -23,6 +23,10 @@ public class BasicHandshakeRecordContent implements HandshakeRecordContent {
         if (length > 0) {
             System.arraycopy(rawData, offset, content, 0, length);
         }
+    }
+
+    public BasicHandshakeRecordContent(byte[] content) {
+        this.content = content;
     }
 
     public byte[] getContent() {
