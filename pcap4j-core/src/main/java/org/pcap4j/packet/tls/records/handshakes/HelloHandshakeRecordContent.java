@@ -6,6 +6,7 @@ import org.pcap4j.packet.namednumber.tls.ExtensionType;
 import org.pcap4j.packet.namednumber.tls.TlsVersion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
@@ -77,5 +78,25 @@ public abstract class HelloHandshakeRecordContent implements HandshakeRecordCont
                 "    Random: " + ByteArrays.toHexString(random, "") + "\n" +
                 "    Session id: " + (sessionIdLength > 0 ? ByteArrays.toHexString(sessionId, "") : "null") + "\n" +
                 "    Extensions: " + extensions.toString();
+    }
+
+    protected byte[] commonPartToByteArray() {
+        return ByteArrays.concatenate(Arrays.asList(
+                ByteArrays.toByteArray(version.value()),
+                random,
+                ByteArrays.toByteArray(sessionIdLength),
+                sessionId
+        ));
+    }
+
+    protected byte[] extensionsToByteArray() {
+        List<byte[]> list = new ArrayList<>();
+
+        list.add(ByteArrays.toByteArray(extensionsLength));
+        for (TlsExtension extension : extensions) {
+            list.add(extension.toByteArray());
+        }
+
+        return ByteArrays.concatenate(list);
     }
 }

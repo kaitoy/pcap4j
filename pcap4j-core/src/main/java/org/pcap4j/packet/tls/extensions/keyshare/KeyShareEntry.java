@@ -3,6 +3,8 @@ package org.pcap4j.packet.tls.extensions.keyshare;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.packet.namednumber.tls.KeyGroup;
 
+import java.util.Arrays;
+
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 public class KeyShareEntry {
@@ -30,4 +32,13 @@ public class KeyShareEntry {
     public String toString() {
         return group.name();
     }
+
+    public byte[] toByteArray() {
+        return ByteArrays.concatenate(Arrays.asList(
+                ByteArrays.toByteArray(group.value()),
+                ByteArrays.toByteArray(keyExhangeLength),
+                keyExchange
+        ));
+    }
+
 }

@@ -34,4 +34,12 @@ public class AlertRecord implements TlsRecord {
     public String toString() {
         return "  Alert [level: " + level.name() + ", description: " + description.name() + "]";
     }
+
+    @Override
+    public byte[] toByteArray() {
+        byte[] content = new byte[2];
+        content[0] = level.value();
+        content[1] = description.value();
+        return content;
+    }
 }

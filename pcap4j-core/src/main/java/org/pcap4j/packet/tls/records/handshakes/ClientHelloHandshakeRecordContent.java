@@ -5,6 +5,7 @@ import org.pcap4j.packet.namednumber.tls.CipherSuite;
 import org.pcap4j.packet.namednumber.tls.CompressionMethod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
@@ -13,16 +14,17 @@ import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 public class ClientHelloHandshakeRecordContent extends HelloHandshakeRecordContent {
 
     /*
-    0x0                  - Client random
-    0x20                 - Session id length (sidl)
-    0x21                 - Session id
-    0x21+sidl            - Cipher suites length (csl)
-    0x23+sidl            - Cipher suite 1..(csl/2)
-    0x23+sidl+csl        - Compression methods length (cml)
-    0x24+sidl+csl        - Compression method 1..cml
-    0x24+sidl+csl+cml    - Extensions Length (el)
-    0x26+sidl+csl+cml    - Extension 1..N
-    0x26+sidl+csl+cml+el - End
+    0x0                  - TLS version
+    0x2                  - Client random
+    0x22                 - Session id length (sidl)
+    0x23                 - Session id
+    0x23+sidl            - Cipher suites length (csl)
+    0x25+sidl            - Cipher suite 1..(csl/2)
+    0x25+sidl+csl        - Compression methods length (cml)
+    0x26+sidl+csl        - Compression method 1..cml
+    0x26+sidl+csl+cml    - Extensions Length (el)
+    0x28+sidl+csl+cml    - Extension 1..N
+    0x28+sidl+csl+cml+el - End
      */
 
     private static final int CIPHER_SUITES_LENGTH_OFFSET = HelloHandshakeRecordContent.SESSION_ID_OFFSET;  // + sessionIdLength
@@ -79,4 +81,37 @@ public class ClientHelloHandshakeRecordContent extends HelloHandshakeRecordConte
                 "    Cipher suites: " + cipherSuites.toString() + "\n" +
                 "    Compression methods: " + compressionMethods.toString();
     }
+
+    @Override
+    public byte[] toByteArray() {
+        return ByteArrays.concatenate(Arrays.asList(
+                commonPartToByteArray(),
+                ByteArrays.toByteArray(cipherSuitesLength),
+                cipherSuitesToByteArray(),
+                ByteArrays.toByteArray(compressionMethodsLength),
+                compressionMethodsToByteArray(),
+                extensionsToByteArray()
+        ));
+    }
+
+    private byte[] cipherSuitesToByteArray() {
+        List<byte[]> list = new ArrayList<>();
+
+        for (CipherSuite suite : cipherSuites) {
+            list.add(ByteArrays.toByteArray(suite.value()));
+        }
+
+        return ByteArrays.concatenate(list);
+    }
+
+    private byte[] compressionMethodsToByteArray() {
+        byte[] array = new byte[compressionMethods.size()];
+
+        for (int i = 0; i < compressionMethods.size(); i++) {
+            array[i] = compressionMethods.get(i).value();
+        }
+
+        return array;
+    }
+
 }

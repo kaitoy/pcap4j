@@ -1,4 +1,4 @@
-package org.pcap4j.packet.tls.keys;
+package org.pcap4j.util;
 
 import org.pcap4j.packet.tls.keys.enums.CurveType;
 import org.pcap4j.packet.tls.keys.enums.NamedCurve;
@@ -13,6 +13,9 @@ import java.nio.ByteBuffer;
 public final class TlsKeyUtils {
 
     // https://wiki.osdev.org/TLS_Handshake
+
+    private TlsKeyUtils() {
+    }
 
     public static DhClientParams parseServerDH(byte[] rawData, int offset) {
         ByteBuffer bb = ByteBuffer.wrap(rawData).position(offset);
@@ -50,7 +53,7 @@ public final class TlsKeyUtils {
         ByteBuffer bb = ByteBuffer.wrap(rawData).position(offset);
 
         byte curveTypeId = bb.get();
-        if(curveTypeId != 0x03) {
+        if (curveTypeId != 0x03) {
             throw new IllegalArgumentException("Unsupported curve type");
         }
 
@@ -83,6 +86,7 @@ public final class TlsKeyUtils {
 
     /**
      * Suitable for both DH and ECDHE
+     *
      * @param rawData Handshake record content
      */
     public static byte[] getClientDHPubkey(byte[] rawData, int offset) {

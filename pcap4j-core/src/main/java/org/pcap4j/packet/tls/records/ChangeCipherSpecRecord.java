@@ -24,4 +24,9 @@ public class ChangeCipherSpecRecord implements TlsRecord {
     public String toString() {
         return "  Change Cipher Spec Message: " + changeCipherSpecMessage;
     }
+
+    @Override
+    public byte[] toByteArray() {
+        return new byte[] { changeCipherSpecMessage };
+    }
 }

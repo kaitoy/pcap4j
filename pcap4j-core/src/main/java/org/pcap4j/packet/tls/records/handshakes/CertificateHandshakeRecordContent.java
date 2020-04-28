@@ -3,9 +3,20 @@ package org.pcap4j.packet.tls.records.handshakes;
 import org.pcap4j.util.ByteArrays;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CertificateHandshakeRecordContent implements HandshakeRecordContent {
+
+    /**
+     * 0x0 - Certificates length
+     * 0x3 - Certificate 1
+     * <p>
+     * Certificate:
+     * 0x0    - Certificate length (cl)
+     * 0x3    - Certificate data
+     * 0x3+cl - Next certificate
+     */
 
     private static final int CERTIFICATES_LENGTH_OFFSET = 0;
     private static final int CERTIFICATES_OFFSET = 3;
@@ -48,4 +59,22 @@ public class CertificateHandshakeRecordContent implements HandshakeRecordContent
         return sb.toString();
     }
 
+    @Override
+    public byte[] toByteArray() {
+        List<byte[]> list = new ArrayList<>();
+
+        list.add(ByteArrays.threeBytesIntToByteArray(certificatesLength));
+        for (byte[] cert : rawCertificates) {
+            list.addAll(certificateToByteArray(cert));
+        }
+
+        return ByteArrays.concatenate(list);
+    }
+
+    private List<byte[]> certificateToByteArray(byte[] certificate) {
+        return Arrays.asList(
+                ByteArrays.threeBytesIntToByteArray(certificate.length),
+                certificate
+        );
+    }
 }

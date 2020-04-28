@@ -4,6 +4,8 @@ import org.pcap4j.packet.tls.records.handshakes.*;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.packet.namednumber.tls.HandshakeType;
 
+import java.util.Arrays;
+
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
 
 public class HandshakeRecord implements TlsRecord {
@@ -68,5 +70,14 @@ public class HandshakeRecord implements TlsRecord {
         return "    Handshake length: " + handshakeLength + "\n" +
                 "    Handshake type: " + handshakeType + "\n" +
                 content.toString();
+    }
+
+    @Override
+    public byte[] toByteArray() {
+        return ByteArrays.concatenate(Arrays.asList(
+                ByteArrays.toByteArray(handshakeType.value()),
+                ByteArrays.toByteArray(handshakeLength),
+                content.toByteArray()
+        ));
     }
 }

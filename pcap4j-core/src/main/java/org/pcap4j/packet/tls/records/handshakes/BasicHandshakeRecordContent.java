@@ -33,4 +33,9 @@ public class BasicHandshakeRecordContent implements HandshakeRecordContent {
     public String toString() {
         return "    [" + content.length + " bytes]";
     }
+
+    @Override
+    public byte[] toByteArray() {
+        return content;
+    }
 }

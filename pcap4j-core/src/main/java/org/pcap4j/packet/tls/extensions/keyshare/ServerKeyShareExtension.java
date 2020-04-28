@@ -1,6 +1,9 @@
 package org.pcap4j.packet.tls.extensions.keyshare;
 
 import org.pcap4j.packet.namednumber.tls.ExtensionType;
+import org.pcap4j.util.ByteArrays;
+
+import java.util.Arrays;
 
 public class ServerKeyShareExtension extends KeyShareExtension {
 
@@ -11,4 +14,11 @@ public class ServerKeyShareExtension extends KeyShareExtension {
         readEntry(rawData, KEY_SHARE_ENTRY_OFFSET + offset);
     }
 
+    @Override
+    public byte[] toByteArray() {
+        return ByteArrays.concatenate(Arrays.asList(
+                ByteArrays.toByteArray(type.value()),
+                ByteArrays.toByteArray(extensionLength),
+                entriesToByteArray()));
+    }
 }

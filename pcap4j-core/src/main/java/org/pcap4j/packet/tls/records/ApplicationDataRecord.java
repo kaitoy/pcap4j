@@ -30,4 +30,8 @@ public class ApplicationDataRecord implements TlsRecord {
         return "  Encrypted data: [" + data.length + " bytes]";
     }
 
+    @Override
+    public byte[] toByteArray() {
+        return data;
+    }
 }

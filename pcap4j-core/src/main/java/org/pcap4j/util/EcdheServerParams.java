@@ -1,4 +1,4 @@
-package org.pcap4j.packet.tls.keys;
+package org.pcap4j.util;
 
 import org.pcap4j.packet.tls.keys.enums.CurveType;
 import org.pcap4j.packet.tls.keys.enums.NamedCurve;

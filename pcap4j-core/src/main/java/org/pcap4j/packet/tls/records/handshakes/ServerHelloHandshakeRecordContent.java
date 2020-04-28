@@ -4,20 +4,23 @@ import org.pcap4j.util.ByteArrays;
 import org.pcap4j.packet.namednumber.tls.CipherSuite;
 import org.pcap4j.packet.namednumber.tls.CompressionMethod;
 
+import java.util.Arrays;
+
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 public class ServerHelloHandshakeRecordContent extends HelloHandshakeRecordContent {
 
     /*
-    0x0          - Server random
-    0x20         - Session id length (sidl)
-    0x21         - Session id
-    0x21+si      - Cipher suite
-    0x23+sidl    - Compression method
-    0x24+sidl    - Extensions Length (el)
-    0x26+sidl    - Extension 1..N
-    0x26+sidl+el - End
+    0x0          - TLS version
+    0x2          - Server random
+    0x22         - Session id length (sidl)
+    0x23         - Session id
+    0x23+si      - Cipher suite
+    0x25+sidl    - Compression method
+    0x26+sidl    - Extensions Length (el)
+    0x28+sidl    - Extension 1..N
+    0x28+sidl+el - End
      */
 
     private static final int CIPHER_SUITE_OFFSET = HelloHandshakeRecordContent.SESSION_ID_OFFSET;  // + sessionIdLength
@@ -61,4 +64,14 @@ public class ServerHelloHandshakeRecordContent extends HelloHandshakeRecordConte
                 "    Compression method: " + compressionMethod.toString();
     }
 
+    @Override
+    public byte[] toByteArray() {
+        return ByteArrays.concatenate(Arrays.asList(
+                commonPartToByteArray(),
+                ByteArrays.toByteArray(cipherSuite.value()),
+                ByteArrays.toByteArray(compressionMethod.value()),
+                ByteArrays.toByteArray(extensionsLength),
+                extensionsToByteArray()
+        ));
+    }
 }

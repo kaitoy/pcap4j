@@ -3,12 +3,21 @@ package org.pcap4j.packet.tls.records;
 import org.pcap4j.util.ByteArrays;
 import org.pcap4j.packet.namednumber.tls.HeartbeatMessageType;
 
+import java.util.Arrays;
+
 import static org.pcap4j.util.ByteArrays.BYTE_SIZE_IN_BYTES;
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
 public class HeartbeatRecord implements TlsRecord {
 
     //https://tools.ietf.org/html/rfc6520
+
+    /**
+     * 0x0 - type
+     * 0x1 - payload length
+     * 0x3 - payload
+     * 0x3+length - padding
+     */
 
     private static final int TYPE_OFFSET = 0;
     private static final int PAYLOAD_LENGTH_OFFSET = TYPE_OFFSET + BYTE_SIZE_IN_BYTES;
@@ -50,4 +59,13 @@ public class HeartbeatRecord implements TlsRecord {
                 padding.length + " bytes padding]";
     }
 
+    @Override
+    public byte[] toByteArray() {
+        return ByteArrays.concatenate(Arrays.asList(
+                ByteArrays.toByteArray(type.value()),
+                ByteArrays.toByteArray(payloadLength),
+                payload,
+                padding
+        ));
+    }
 }

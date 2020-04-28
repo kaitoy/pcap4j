@@ -1,6 +1,9 @@
 package org.pcap4j.packet.tls.extensions;
 
 import org.pcap4j.packet.namednumber.tls.ExtensionType;
+import org.pcap4j.util.ByteArrays;
+
+import java.util.Arrays;
 
 public class UnimplementedTlsExtension extends TlsExtension {
 
@@ -20,5 +23,14 @@ public class UnimplementedTlsExtension extends TlsExtension {
         } else {
             return type.name();
         }
+    }
+
+    @Override
+    public byte[] toByteArray() {
+        return ByteArrays.concatenate(Arrays.asList(
+                ByteArrays.toByteArray(type.value()),
+                ByteArrays.toByteArray(extensionLength),
+                data
+        ));
     }
 }

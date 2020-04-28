@@ -43,4 +43,15 @@ public abstract class KeyShareExtension extends TlsExtension {
     public String toString() {
         return type.name() + " " + entries.toString();
     }
+
+    protected byte[] entriesToByteArray() {
+        List<byte[]> list = new ArrayList<>();
+
+        for (KeyShareEntry entry : entries) {
+            list.add(entry.toByteArray());
+        }
+
+        return ByteArrays.concatenate(list);
+    }
+
 }

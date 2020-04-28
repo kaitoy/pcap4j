@@ -93,7 +93,7 @@ public class TlsPacket extends AbstractPacket {
             //TODO
         }
 
-        private TlsHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
+        private TlsHeader(byte[] rawData, int offset, int length) {
             ByteArrays.validateBounds(rawData, offset, RECORD_OFFSET);
             this.contentType = ContentType.getInstance(ByteArrays.getByte(rawData, CONTENT_TYPE_OFFSET + offset));
             this.version = TlsVersion.getInstance(ByteArrays.getShort(rawData, VERSION_OFFSET + offset));
@@ -132,7 +132,7 @@ public class TlsPacket extends AbstractPacket {
             rawFields.add(new byte[]{contentType.value()});
             rawFields.add(ByteArrays.toByteArray(version.value()));
             rawFields.add(ByteArrays.toByteArray(recordLength));
-            //TODO
+            rawFields.add(record.toByteArray());
             return rawFields;
         }
 

@@ -46,4 +46,7 @@ public abstract class TlsExtension {
     public String toString() {
         return type.name();
     }
+
+    public abstract byte[] toByteArray();
+
 }
