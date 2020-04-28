@@ -315,6 +315,39 @@ public final class ByteArrays {
   }
 
   /**
+   * @param array  array
+   * @param offset offset
+   * @return int value.
+   */
+  public static int getThreeBytesInt(byte[] array, int offset) {
+    return getThreeBytesInt(array, offset, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   * @param array  array
+   * @param offset offset
+   * @param bo     bo
+   * @return int value.
+   */
+  public static int getThreeBytesInt(byte[] array, int offset, ByteOrder bo) {
+    ByteArrays.validateBounds(array, offset, 3);
+
+    if (bo == null) {
+      throw new NullPointerException(" bo: null");
+    }
+
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
+              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
+              | ((0xFF & array[offset]));
+    } else {
+      return ((0xFF & array[offset]) << (BYTE_SIZE_IN_BITS * 2))
+              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
+              | ((0xFF & array[offset + 2]));
+    }
+  }
+
+  /**
    * @param value value
    * @return byte array
    */
