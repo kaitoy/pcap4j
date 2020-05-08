@@ -13,17 +13,15 @@ public class AlertLevel extends NamedNumber<Byte, AlertLevel> {
     public static final AlertLevel WARNING = new AlertLevel((byte) 1, "warning");
     public static final AlertLevel FATAL = new AlertLevel((byte) 2, "fatal");
 
+    public static final AlertLevel ENCRYPTED_ALERT = new AlertLevel((byte) 0, "encrypted alert");
+
     public AlertLevel(Byte value, String name) {
         super(value, name);
         registry.put(value, this);
     }
 
     public static AlertLevel getInstance(Byte value) {
-        if (registry.containsKey(value)) {
-            return registry.get(value);
-        } else {
-            throw new IllegalArgumentException("Unknown alert level: " + value);
-        }
+        return registry.getOrDefault(value, ENCRYPTED_ALERT);
     }
 
     @Override

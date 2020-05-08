@@ -17,42 +17,38 @@ public class AlertRecord implements TlsRecord {
     private static final int LEVEL_OFFSET = 0;
     private static final int DESCRIPTION_OFFSET = LEVEL_OFFSET + BYTE_SIZE_IN_BYTES;
 
-    private final AlertLevel level;
-    private final AlertDescription description;
+    private int length;
+    private byte[] content;
+
+    private AlertLevel level;
+    private AlertDescription description;
 
     public static AlertRecord newInstance(byte[] rawData, int offset, int length) {
         ByteArrays.validateBounds(rawData, offset, length);
-        return new AlertRecord(rawData, offset);
+        return new AlertRecord(rawData, offset, length);
     }
 
-    public AlertRecord(byte[] rawData, int offset) {
+    public AlertRecord(byte[] rawData, int offset, int length) {
+        this.length = length;
+        this.content = ByteArrays.getSubArray(rawData, offset, length);
         this.level = AlertLevel.getInstance(ByteArrays.getByte(rawData, LEVEL_OFFSET + offset));
-        this.description = AlertDescription.getInstance(ByteArrays.getByte(rawData, DESCRIPTION_OFFSET + offset));
-    }
 
-    public AlertRecord(AlertLevel level, AlertDescription description) {
-        this.level = level;
-        this.description = description;
-    }
-
-    public AlertLevel getLevel() {
-        return level;
-    }
-
-    public AlertDescription getDescription() {
-        return description;
-    }
-
-    @Override
-    public String toString() {
-        return "  Alert [level: " + level.name() + ", description: " + description.name() + "]";
+        if (level != AlertLevel.ENCRYPTED_ALERT) {
+            this.description = AlertDescription.getInstance(ByteArrays.getByte(rawData, DESCRIPTION_OFFSET + offset));
+        }
     }
 
     @Override
     public byte[] toByteArray() {
-        byte[] content = new byte[2];
-        content[0] = level.value();
-        content[1] = description.value();
         return content;
+    }
+
+    @Override
+    public String toString() {
+        if (level != AlertLevel.ENCRYPTED_ALERT) {
+            return "  Alert [level: " + level.name() + ", description: " + description.name() + "]";
+        } else {
+            return "  Encrypted Alert [" + length + " bytes]";
+        }
     }
 }
