@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class AlertDescription extends NamedNumber<Byte, AlertDescription> {
 
-    private static final Map<Byte, AlertDescription> registry = new HashMap<>();
+    private static final Map<Byte, AlertDescription> registry = new HashMap<Byte, AlertDescription>();
 
     // https://techcommunity.microsoft.com/t5/iis-support-blog/ssl-tls-alert-protocol-and-the-alert-codes/ba-p/377132
 

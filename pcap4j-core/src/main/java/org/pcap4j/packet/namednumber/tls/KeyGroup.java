@@ -10,7 +10,7 @@ public class KeyGroup extends NamedNumber<Short, KeyGroup> {
 
     // https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml
 
-    private static final Map<Short, KeyGroup> registry = new HashMap<>();
+    private static final Map<Short, KeyGroup> registry = new HashMap<Short, KeyGroup>();
 
     public static final KeyGroup RESERVED_GREASE_0 = new KeyGroup((short) 0, "Reserved (GREASE)");
     public static final KeyGroup SECT163K1 = new KeyGroup((short) 1, "sect163k1");

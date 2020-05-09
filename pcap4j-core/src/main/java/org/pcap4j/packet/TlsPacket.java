@@ -135,7 +135,7 @@ public class TlsPacket extends AbstractPacket {
 
         @Override
         protected List<byte[]> getRawFields() {
-            List<byte[]> rawFields = new ArrayList<>();
+            List<byte[]> rawFields = new ArrayList<byte[]>();
             rawFields.add(new byte[]{contentType.value()});
             rawFields.add(ByteArrays.toByteArray(version.value()));
             rawFields.add(ByteArrays.toByteArray(recordLength));

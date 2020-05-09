@@ -52,7 +52,7 @@ public abstract class HelloHandshakeRecordContent implements HandshakeRecordCont
     }
 
     protected void readExtensions(byte[] rawData, int offset, boolean client) {
-        extensions = new ArrayList<>(extensionsLength);
+        extensions = new ArrayList<TlsExtension>(extensionsLength);
 
         int cursor = offset;
         int extensionsEnd = cursor + extensionsLength;
@@ -107,7 +107,7 @@ public abstract class HelloHandshakeRecordContent implements HandshakeRecordCont
     }
 
     protected byte[] extensionsToByteArray() {
-        List<byte[]> list = new ArrayList<>();
+        List<byte[]> list = new ArrayList<byte[]>();
 
         list.add(ByteArrays.toByteArray(extensionsLength));
         for (TlsExtension extension : extensions) {

@@ -8,7 +8,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class CipherSuite extends NamedNumber<Short, CipherSuite> {
 
-    private static final Map<Short, CipherSuite> registry = new HashMap<>();
+    private static final Map<Short, CipherSuite> registry = new HashMap<Short, CipherSuite>();
 
     // https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml
 

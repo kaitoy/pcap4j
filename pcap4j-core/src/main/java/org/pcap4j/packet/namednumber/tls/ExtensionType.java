@@ -8,7 +8,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class ExtensionType extends NamedNumber<Short, ExtensionType> {
 
-    private static final Map<Short, ExtensionType> registry = new HashMap<>();
+    private static final Map<Short, ExtensionType> registry = new HashMap<Short, ExtensionType>();
 
     public static final ExtensionType SERVER_NAME = new ExtensionType((short) 0, "server_name");
     public static final ExtensionType MAX_FRAGMENT_LENGTH = new ExtensionType((short) 1, "max_fragment_length");

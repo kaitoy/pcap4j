@@ -35,7 +35,7 @@ public enum SignatureScheme {
 
     private final short value;
 
-    private static final Map<Short, SignatureScheme> map = new HashMap<>();
+    private static final Map<Short, SignatureScheme> map = new HashMap<Short, SignatureScheme>();
 
     SignatureScheme(short value) {
         this.value = value;

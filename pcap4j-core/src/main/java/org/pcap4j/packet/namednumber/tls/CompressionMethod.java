@@ -13,7 +13,7 @@ public class CompressionMethod extends NamedNumber<Byte, CompressionMethod> {
     public static final CompressionMethod DEFLATE = new CompressionMethod((byte) 1, "Deflate");
     public static final CompressionMethod LZS = new CompressionMethod((byte) 64, "LZS");
 
-    private static final Map<Byte, CompressionMethod> registry = new HashMap<>();
+    private static final Map<Byte, CompressionMethod> registry = new HashMap<Byte, CompressionMethod>();
 
     static {
         registry.put(NULL.value(), NULL);

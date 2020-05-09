@@ -35,7 +35,7 @@ public enum NamedCurve {
 
     private final short value;
 
-    private static final Map<Short, NamedCurve> map = new HashMap<>();
+    private static final Map<Short, NamedCurve> map = new HashMap<Short, NamedCurve>();
 
     NamedCurve(short value) {
         this.value = value;

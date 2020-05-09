@@ -15,7 +15,7 @@ public class ContentType extends NamedNumber<Byte, ContentType> {
     public static final ContentType APPLICATION_DATA = new ContentType((byte) 23, "Application Data");
     public static final ContentType HEARTBEAT = new ContentType((byte) 24, "Heartbeat");
 
-    private static final Map<Byte, ContentType> registry = new HashMap<>();
+    private static final Map<Byte, ContentType> registry = new HashMap<Byte, ContentType>();
 
     static {
         registry.put(CHANGE_CIPHER_SPEC.value(), CHANGE_CIPHER_SPEC);

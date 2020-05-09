@@ -30,7 +30,7 @@ public class CertificateHandshakeRecordContent implements HandshakeRecordContent
 
     public CertificateHandshakeRecordContent(byte[] rawData, int offset, int length) {
         this.certificatesLength = ByteArrays.getThreeBytesInt(rawData, CERTIFICATES_LENGTH_OFFSET + offset);
-        this.rawCertificates = new ArrayList<>();
+        this.rawCertificates = new ArrayList<byte[]>();
 
         int cursor = CERTIFICATES_OFFSET + offset;
         while (cursor < offset + length) {
@@ -71,7 +71,7 @@ public class CertificateHandshakeRecordContent implements HandshakeRecordContent
 
     @Override
     public byte[] toByteArray() {
-        List<byte[]> list = new ArrayList<>();
+        List<byte[]> list = new ArrayList<byte[]>();
 
         list.add(ByteArrays.threeBytesIntToByteArray(certificatesLength));
         for (byte[] cert : rawCertificates) {

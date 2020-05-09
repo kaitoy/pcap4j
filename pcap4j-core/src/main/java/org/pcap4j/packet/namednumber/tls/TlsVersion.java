@@ -12,7 +12,7 @@ public class TlsVersion extends NamedNumber<Short, TlsVersion> {
     public static final TlsVersion TLS_1_2 = new TlsVersion((short) 0x0303, "TLS 1.2");
     public static final TlsVersion TLS_1_3 = new TlsVersion((short) 0x0304, "TLS 1.3");
 
-    private static final Map<Short, TlsVersion> registry = new HashMap<>();
+    private static final Map<Short, TlsVersion> registry = new HashMap<Short, TlsVersion>();
 
     static {
         registry.put(TLS_1_0.value(), TLS_1_0);

@@ -54,7 +54,7 @@ public class ClientHelloHandshakeRecordContent extends HelloHandshakeRecordConte
 
         this.cipherSuitesLength = ByteArrays.getShort(rawData, CIPHER_SUITES_LENGTH_OFFSET + sessionIdLength + offset);
         int cipherSuitesAmount = cipherSuitesLength / SHORT_SIZE_IN_BYTES;
-        this.cipherSuites = new ArrayList<>(cipherSuitesAmount);
+        this.cipherSuites = new ArrayList<CipherSuite>(cipherSuitesAmount);
 
         for (int i = 0; i < cipherSuitesAmount; i++) {
             this.cipherSuites.add(CipherSuite.getInstance(ByteArrays.getShort(rawData,
@@ -63,7 +63,7 @@ public class ClientHelloHandshakeRecordContent extends HelloHandshakeRecordConte
 
         this.compressionMethodsLength = ByteArrays.getByte(rawData,
                 COMPRESSION_METHODS_LENGTH_OFFSET + cipherSuitesLength + sessionIdLength + offset);
-        this.compressionMethods = new ArrayList<>(compressionMethodsLength);
+        this.compressionMethods = new ArrayList<CompressionMethod>(compressionMethodsLength);
 
         for (byte i = 0; i < compressionMethodsLength; i++) {
             this.compressionMethods.add(CompressionMethod.getInstance(ByteArrays.getByte(rawData,
@@ -124,7 +124,7 @@ public class ClientHelloHandshakeRecordContent extends HelloHandshakeRecordConte
     }
 
     private byte[] cipherSuitesToByteArray() {
-        List<byte[]> list = new ArrayList<>();
+        List<byte[]> list = new ArrayList<byte[]>();
 
         for (CipherSuite suite : cipherSuites) {
             list.add(ByteArrays.toByteArray(suite.value()));

@@ -8,7 +8,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class HandshakeType extends NamedNumber<Byte, HandshakeType> {
 
-    private static final Map<Byte, HandshakeType> registry = new HashMap<>();
+    private static final Map<Byte, HandshakeType> registry = new HashMap<Byte, HandshakeType>();
 
     // https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml
 
@@ -42,7 +42,11 @@ public class HandshakeType extends NamedNumber<Byte, HandshakeType> {
     }
 
     public static HandshakeType getInstance(Byte value) {
-        return registry.getOrDefault(value, ENCRYPTED_HANDSHAKE_MESSAGE);
+        if (registry.containsKey(value)) {
+            return registry.get(value);
+        } else {
+            return ENCRYPTED_HANDSHAKE_MESSAGE;
+        }
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class HeartbeatMessageType extends NamedNumber<Byte, HeartbeatMessageType> {
 
-    private static final Map<Byte, HeartbeatMessageType> registry = new HashMap<>();
+    private static final Map<Byte, HeartbeatMessageType> registry = new HashMap<Byte, HeartbeatMessageType>();
 
     public static final HeartbeatMessageType HEARTBEAT_REQUEST = new HeartbeatMessageType((byte) 1, "heartbeat_request");
     public static final HeartbeatMessageType HEARTBEAT_RESPONSE = new HeartbeatMessageType((byte) 2, "heartbeat_response");
