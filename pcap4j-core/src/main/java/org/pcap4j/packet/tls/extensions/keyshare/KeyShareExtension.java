@@ -9,7 +9,7 @@ import java.util.List;
 
 public abstract class KeyShareExtension extends TlsExtension {
 
-    private final List<KeyShareEntry> entries = new ArrayList<KeyShareEntry>();
+    protected List<KeyShareEntry> entries;
 
     public static KeyShareExtension newInstance(ExtensionType type, byte[] rawData, int offset,
                                                 short extensionLength, boolean client) {
@@ -24,6 +24,7 @@ public abstract class KeyShareExtension extends TlsExtension {
 
     protected KeyShareExtension(ExtensionType type, short extensionLength) {
         super(type, extensionLength);
+        this.entries = new ArrayList<KeyShareEntry>();
     }
 
     protected void readEntries(byte[] rawData, int cursor, int end) {

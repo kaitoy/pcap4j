@@ -4,6 +4,7 @@ import org.pcap4j.packet.namednumber.tls.ExtensionType;
 import org.pcap4j.util.ByteArrays;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.pcap4j.util.ByteArrays.SHORT_SIZE_IN_BYTES;
 
@@ -20,6 +21,12 @@ public class ClientKeyShareExtension extends KeyShareExtension {
         int cursor = KEY_SHARE_ENTRY_OFFSET + offset;
         ByteArrays.validateBounds(rawData, cursor, keyShareLength);
         readEntries(rawData, KEY_SHARE_ENTRY_OFFSET + offset, offset + keyShareLength);
+    }
+
+    public ClientKeyShareExtension(ExtensionType type, short extensionLength, short keyShareLength, List<KeyShareEntry> entries) {
+        super(type, extensionLength);
+        this.keyShareLength = keyShareLength;
+        this.entries = entries;
     }
 
     @Override

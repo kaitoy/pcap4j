@@ -14,6 +14,8 @@ import org.pcap4j.packet.namednumber.TcpPort;
 import org.pcap4j.packet.namednumber.tls.*;
 import org.pcap4j.packet.tls.extensions.TlsExtension;
 import org.pcap4j.packet.tls.extensions.UnimplementedTlsExtension;
+import org.pcap4j.packet.tls.extensions.keyshare.KeyShareEntry;
+import org.pcap4j.packet.tls.extensions.keyshare.ServerKeyShareExtension;
 import org.pcap4j.packet.tls.records.ApplicationDataRecord;
 import org.pcap4j.packet.tls.records.HandshakeRecord;
 import org.pcap4j.packet.tls.records.TlsRecord;
@@ -46,30 +48,37 @@ public class TlsPacketTest extends AbstractPacketTest {
         Arrays.fill(random, (byte) 0x11);
         Arrays.fill(sessionId, (byte) 0x22);
 
-        TlsExtension extension = new UnimplementedTlsExtension(ExtensionType.PADDING,
+        TlsExtension paddingExtension = new UnimplementedTlsExtension(
+                ExtensionType.PADDING,
                 (short) 3,
                 new byte[]{0, 0, 0});
+
+        TlsExtension keyShareExtension = new ServerKeyShareExtension(
+                ExtensionType.KEY_SHARE,
+                (short) 8,
+                Collections.singletonList(new KeyShareEntry(KeyGroup.X25519, (short) 4, new byte[]{1, 2, 3, 4}))
+        );
 
         HandshakeRecordContent handshakeRecordContent = new ServerHelloHandshakeRecordContent(
                 TlsVersion.TLS_1_0,
                 random,
                 sessionId,
-                (short) 7,
-                Collections.singletonList(extension),
+                (short) 19,
+                Arrays.asList(keyShareExtension, paddingExtension),
                 CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA,
                 CompressionMethod.NULL
         );
 
         TlsRecord handshakeRecord = new HandshakeRecord(
                 HandshakeType.SERVER_HELLO,
-                79,
+                91,
                 handshakeRecordContent);
 
         TlsRecord dataRecord = new ApplicationDataRecord(new byte[]{1, 2, 3, 4, 5});
 
         b.contentType(ContentType.HANDSHAKE)
                 .version(TlsVersion.TLS_1_2)
-                .recordLength((short) 83)
+                .recordLength((short) 95)
                 .record(handshakeRecord)
                 .payloadBuilder(new TlsPacket.Builder()
                         .version(TlsVersion.TLS_1_2)
