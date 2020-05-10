@@ -16,6 +16,7 @@ import org.pcap4j.packet.tls.extensions.TlsExtension;
 import org.pcap4j.packet.tls.extensions.UnimplementedTlsExtension;
 import org.pcap4j.packet.tls.extensions.keyshare.KeyShareEntry;
 import org.pcap4j.packet.tls.extensions.keyshare.ServerKeyShareExtension;
+import org.pcap4j.packet.tls.records.AlertRecord;
 import org.pcap4j.packet.tls.records.ApplicationDataRecord;
 import org.pcap4j.packet.tls.records.HandshakeRecord;
 import org.pcap4j.packet.tls.records.TlsRecord;
@@ -76,6 +77,8 @@ public class TlsPacketTest extends AbstractPacketTest {
 
         TlsRecord dataRecord = new ApplicationDataRecord(new byte[]{1, 2, 3, 4, 5});
 
+        TlsRecord alertRecord = new AlertRecord(AlertLevel.WARNING, AlertDescription.unknown_ca);
+
         b.contentType(ContentType.HANDSHAKE)
                 .version(TlsVersion.TLS_1_2)
                 .recordLength((short) 95)
@@ -84,7 +87,12 @@ public class TlsPacketTest extends AbstractPacketTest {
                         .version(TlsVersion.TLS_1_2)
                         .contentType(ContentType.APPLICATION_DATA)
                         .recordLength((short) 5)
-                        .record(dataRecord));
+                        .record(dataRecord)
+                        .payloadBuilder(new TlsPacket.Builder()
+                                .version(TlsVersion.TLS_1_2)
+                                .contentType(ContentType.ALERT)
+                                .recordLength((short) 2)
+                                .record(alertRecord)));
 
         this.packet = b.build();
     }
