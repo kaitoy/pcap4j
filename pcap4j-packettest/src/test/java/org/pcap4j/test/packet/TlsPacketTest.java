@@ -14,7 +14,9 @@ import org.pcap4j.packet.namednumber.TcpPort;
 import org.pcap4j.packet.namednumber.tls.*;
 import org.pcap4j.packet.tls.extensions.TlsExtension;
 import org.pcap4j.packet.tls.extensions.UnimplementedTlsExtension;
+import org.pcap4j.packet.tls.records.ApplicationDataRecord;
 import org.pcap4j.packet.tls.records.HandshakeRecord;
+import org.pcap4j.packet.tls.records.TlsRecord;
 import org.pcap4j.packet.tls.records.handshakes.HandshakeRecordContent;
 import org.pcap4j.packet.tls.records.handshakes.ServerHelloHandshakeRecordContent;
 import org.pcap4j.util.MacAddress;
@@ -46,9 +48,9 @@ public class TlsPacketTest extends AbstractPacketTest {
 
         TlsExtension extension = new UnimplementedTlsExtension(ExtensionType.PADDING,
                 (short) 3,
-                new byte[] {0, 0, 0});
+                new byte[]{0, 0, 0});
 
-        HandshakeRecordContent recordContent = new ServerHelloHandshakeRecordContent(
+        HandshakeRecordContent handshakeRecordContent = new ServerHelloHandshakeRecordContent(
                 TlsVersion.TLS_1_0,
                 random,
                 sessionId,
@@ -58,15 +60,22 @@ public class TlsPacketTest extends AbstractPacketTest {
                 CompressionMethod.NULL
         );
 
-        HandshakeRecord record = new HandshakeRecord(
+        TlsRecord handshakeRecord = new HandshakeRecord(
                 HandshakeType.SERVER_HELLO,
                 79,
-                recordContent);
+                handshakeRecordContent);
+
+        TlsRecord dataRecord = new ApplicationDataRecord(new byte[]{1, 2, 3, 4, 5});
 
         b.contentType(ContentType.HANDSHAKE)
                 .version(TlsVersion.TLS_1_2)
                 .recordLength((short) 83)
-                .record(record);
+                .record(handshakeRecord)
+                .payloadBuilder(new TlsPacket.Builder()
+                        .version(TlsVersion.TLS_1_2)
+                        .contentType(ContentType.APPLICATION_DATA)
+                        .recordLength((short) 5)
+                        .record(dataRecord));
 
         this.packet = b.build();
     }

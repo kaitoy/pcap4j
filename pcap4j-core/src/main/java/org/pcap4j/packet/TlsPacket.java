@@ -198,6 +198,17 @@ public class TlsPacket extends AbstractPacket {
         }
 
         @Override
+        public TlsPacket.Builder payloadBuilder(Packet.Builder payloadBuilder) {
+            this.payloadBuilder = payloadBuilder;
+            return this;
+        }
+
+        @Override
+        public Packet.Builder getPayloadBuilder() {
+            return payloadBuilder;
+        }
+
+        @Override
         public TlsPacket build() {
             return new TlsPacket(this);
         }

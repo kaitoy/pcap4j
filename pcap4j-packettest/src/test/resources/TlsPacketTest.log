@@ -9,3 +9,7 @@
     Extensions: [padding [3 bytes]]
     Cipher suite: 53 (TLS_RSA_WITH_AES_256_CBC_SHA)
     Compression method: 0 (null)
+[TLS Header (10 bytes)]
+  Version: 771 (TLS 1.2)
+  Type: 23 (Application Data)
+  Encrypted data: [5 bytes]
