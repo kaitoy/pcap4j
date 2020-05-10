@@ -1,6 +1,14 @@
 module org.pcap4j.core {
   exports org.pcap4j.core;
   exports org.pcap4j.packet;
+
+  exports org.pcap4j.packet.tls.records;
+  exports org.pcap4j.packet.tls.records.handshakes;
+  exports org.pcap4j.packet.tls.extensions;
+  exports org.pcap4j.packet.tls.extensions.keyshare;
+  exports org.pcap4j.packet.tls.keys.enums;
+  exports org.pcap4j.packet.namednumber.tls;
+
   exports org.pcap4j.packet.factory;
   exports org.pcap4j.packet.namednumber;
   exports org.pcap4j.packet.constant;

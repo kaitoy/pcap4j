@@ -404,6 +404,60 @@ public final class ByteArrays {
     return toHexString(toByteArray(value, bo), separator);
   }
 
+
+  /**
+   * @param array  array
+   * @param offset offset
+   * @return int value.
+   */
+  public static int getThreeBytesInt(byte[] array, int offset) {
+    return getThreeBytesInt(array, offset, ByteOrder.BIG_ENDIAN);
+  }
+
+  /**
+   * @param array  array
+   * @param offset offset
+   * @param bo     bo
+   * @return int value.
+   */
+  public static int getThreeBytesInt(byte[] array, int offset, ByteOrder bo) {
+    ByteArrays.validateBounds(array, offset, 3);
+
+    if (bo == null) {
+      throw new NullPointerException(" bo: null");
+    }
+
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return ((0xFF & array[offset + 2]) << (BYTE_SIZE_IN_BITS * 2))
+              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
+              | ((0xFF & array[offset]));
+    } else {
+      return ((0xFF & array[offset]) << (BYTE_SIZE_IN_BITS * 2))
+              | ((0xFF & array[offset + 1]) << (BYTE_SIZE_IN_BITS * 1))
+              | ((0xFF & array[offset + 2]));
+    }
+  }
+
+  public static byte[] threeBytesIntToByteArray(int value) {
+    return threeBytesIntToByteArray(value, BIG_ENDIAN);
+  }
+
+  public static byte[] threeBytesIntToByteArray(int value, ByteOrder bo) {
+    if (bo.equals(LITTLE_ENDIAN)) {
+      return new byte[] {
+              (byte) (value),
+              (byte) (value >> BYTE_SIZE_IN_BITS * 1),
+              (byte) (value >> BYTE_SIZE_IN_BITS * 2),
+      };
+    } else {
+      return new byte[] {
+              (byte) (value >> BYTE_SIZE_IN_BITS * 2),
+              (byte) (value >> BYTE_SIZE_IN_BITS * 1),
+              (byte) (value)
+      };
+    }
+  }
+
   /**
    * @param array array
    * @param offset offset

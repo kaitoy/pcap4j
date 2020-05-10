@@ -1,0 +1,19 @@
+[TLS Header (100 bytes)]
+  Version: 771 (TLS 1.2)
+  Type: 22 (Handshake)
+    Handshake length: 91
+    Handshake type: 2 (Server Hello)
+    TLS version: 769 (TLS 1.0)
+    Random: 1111111111111111111111111111111111111111111111111111111111111111
+    Session id: 2222222222222222222222222222222222222222222222222222222222222222
+    Extensions: [key_share [x25519], padding [3 bytes]]
+    Cipher suite: 53 (TLS_RSA_WITH_AES_256_CBC_SHA)
+    Compression method: 0 (null)
+[TLS Header (10 bytes)]
+  Version: 771 (TLS 1.2)
+  Type: 23 (Application Data)
+  Encrypted data: [5 bytes]
+[TLS Header (7 bytes)]
+  Version: 771 (TLS 1.2)
+  Type: 21 (Alert)
+  Alert [level: warning, description: unknown_ca]
