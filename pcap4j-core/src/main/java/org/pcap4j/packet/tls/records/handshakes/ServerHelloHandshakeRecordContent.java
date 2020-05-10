@@ -19,7 +19,7 @@ public class ServerHelloHandshakeRecordContent extends HelloHandshakeRecordConte
     0x2          - Server random
     0x22         - Session id length (sidl)
     0x23         - Session id
-    0x23+si      - Cipher suite
+    0x23+sidl    - Cipher suite
     0x25+sidl    - Compression method
     0x26+sidl    - Extensions Length (el)
     0x28+sidl    - Extension 1..N
@@ -81,7 +81,6 @@ public class ServerHelloHandshakeRecordContent extends HelloHandshakeRecordConte
                 commonPartToByteArray(),
                 ByteArrays.toByteArray(cipherSuite.value()),
                 ByteArrays.toByteArray(compressionMethod.value()),
-                ByteArrays.toByteArray(extensionsLength),
                 extensionsToByteArray()
         ));
     }

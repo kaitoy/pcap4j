@@ -86,7 +86,7 @@ public class HandshakeRecord implements TlsRecord {
     public byte[] toByteArray() {
         return ByteArrays.concatenate(Arrays.asList(
                 ByteArrays.toByteArray(handshakeType.value()),
-                ByteArrays.toByteArray(handshakeLength),
+                ByteArrays.threeBytesIntToByteArray(handshakeLength),
                 content.toByteArray()
         ));
     }

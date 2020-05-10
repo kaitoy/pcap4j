@@ -16,6 +16,11 @@ public class UnimplementedTlsExtension extends TlsExtension {
         System.arraycopy(rawData, offset, data, 0, extensionLength);
     }
 
+    public UnimplementedTlsExtension(ExtensionType type, short extensionLength, byte[] data) {
+        super(type, extensionLength);
+        this.data = data;
+    }
+
     @Override
     public String toString() {
         if(extensionLength > 0) {

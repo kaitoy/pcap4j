@@ -4,7 +4,9 @@ import org.pcap4j.packet.namednumber.tls.ExtensionType;
 import org.pcap4j.packet.tls.extensions.keyshare.KeyShareExtension;
 import org.pcap4j.util.ByteArrays;
 
-public abstract class TlsExtension {
+import java.io.Serializable;
+
+public abstract class TlsExtension implements Serializable {
 
     /*
     0x0        - Type

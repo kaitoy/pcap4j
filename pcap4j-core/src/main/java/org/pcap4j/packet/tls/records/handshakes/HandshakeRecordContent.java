@@ -1,6 +1,8 @@
 package org.pcap4j.packet.tls.records.handshakes;
 
-public interface HandshakeRecordContent {
+import java.io.Serializable;
+
+public interface HandshakeRecordContent extends Serializable {
 
     byte[] toByteArray();
 

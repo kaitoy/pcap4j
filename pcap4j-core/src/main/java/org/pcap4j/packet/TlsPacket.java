@@ -150,7 +150,7 @@ public class TlsPacket extends AbstractPacket {
 
         @Override
         protected String buildString() {
-            return "TLS Header [" + length() + " bytes]\n" +
+            return "[TLS Header (" + length() + " bytes)]\n" +
                     "  Version: " + version + "\n" +
                     "  Type: " + contentType + "\n" +
                     record.toString();
@@ -198,7 +198,7 @@ public class TlsPacket extends AbstractPacket {
         }
 
         @Override
-        public Packet build() {
+        public TlsPacket build() {
             return new TlsPacket(this);
         }
     }
