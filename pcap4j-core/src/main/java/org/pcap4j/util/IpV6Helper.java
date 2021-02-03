@@ -13,13 +13,10 @@ import org.pcap4j.packet.*;
 import org.pcap4j.packet.factory.PacketFactories;
 import org.pcap4j.packet.namednumber.IpNumber;
 
-/** @author tkunovsky */
 public final class IpV6Helper {
   private static final Comparator<IpV6Packet> comparator = new ComparatorImpl();
 
-  private IpV6Helper() {
-    throw new AssertionError();
-  }
+  private IpV6Helper() {}
 
   /**
    * @param ipV6Packet fragmented ivp6 packet
@@ -74,9 +71,6 @@ public final class IpV6Helper {
     list.sort(comparator);
     IpV6Packet lastPacket = list.get(list.size() - 1);
     IpV6ExtFragmentPacket ipV6LastFragmentPacket = lastPacket.get(IpV6ExtFragmentPacket.class);
-    if (ipV6LastFragmentPacket == null) {
-      throw new IllegalArgumentException("Can't defragment: " + lastPacket);
-    }
 
     int payloadTotalLength =
         ipV6LastFragmentPacket.getHeader().getFragmentOffset() * 8
