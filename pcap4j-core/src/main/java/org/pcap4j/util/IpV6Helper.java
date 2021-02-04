@@ -89,11 +89,7 @@ public final class IpV6Helper {
         System.arraycopy(rawPayload, 0, defragmentedPayload, destPos, rawPayload.length);
         destPos += rawPayload.length;
       }
-    } catch (NullPointerException e) {
-      throw new IllegalArgumentException("Can't defragment: " + list, e);
-    } catch (ArrayStoreException e) {
-      throw new IllegalArgumentException("Can't defragment: " + list, e);
-    } catch (IndexOutOfBoundsException e) {
+    } catch (Throwable e) {
       throw new IllegalArgumentException("Can't defragment: " + list, e);
     }
 

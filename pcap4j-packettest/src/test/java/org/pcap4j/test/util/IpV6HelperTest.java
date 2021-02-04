@@ -8,6 +8,7 @@
 package org.pcap4j.test.util;
 
 import static org.junit.Assert.*;
+
 import java.io.EOFException;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -31,6 +32,12 @@ public class IpV6HelperTest {
           "src/test/resources/org/pcap4j/test/core/"
               + IpV6HelperTest.class.getSimpleName()
               + ".pcap");
+
+  enum ExtHeader {
+    DESTINATION,
+    ROUTING,
+    NO_HEADER
+  };
 
   private EthernetPacket getPacket(boolean fragmented) throws UnknownHostException {
     UnknownPacket.Builder unknownb = new UnknownPacket.Builder();
@@ -109,6 +116,37 @@ public class IpV6HelperTest {
     return packetb.build();
   }
 
+  private Packet addExtDestinationHeader(Packet packet, boolean isFragmented)
+      throws IllegalRawDataException, UnknownHostException {
+    IpV6ExtDestinationOptionsPacket.Builder ipV6ExtDestinationOptionsPacketb =
+        new IpV6ExtDestinationOptionsPacket.Builder();
+    ipV6ExtDestinationOptionsPacketb
+        .nextHeader(isFragmented ? IpNumber.IPV6_FRAG : IpNumber.UDP)
+        .correctLengthAtBuild(true)
+        .options(
+            new ArrayList<IpV6ExtOptionsPacket.IpV6Option>(
+                Arrays.asList(
+                    new IpV6ExtOptionsPacket.IpV6Option[] {
+                      new IpV6PadNOption.Builder()
+                          .correctLengthAtBuild(true)
+                          .data(new byte[] {0, 0, 0, 0})
+                          .build()
+                    })))
+        .payloadBuilder(
+            isFragmented
+                ? packet.get(IpV6ExtFragmentPacket.class).getBuilder()
+                : packet.get(UdpPacket.class).getBuilder());
+
+    Packet.Builder packetb = packet.getBuilder();
+    packetb
+        .get(IpV6Packet.Builder.class)
+        .correctLengthAtBuild(true)
+        .payloadBuilder(ipV6ExtDestinationOptionsPacketb)
+        .nextHeader(IpNumber.IPV6_ROUTE);
+
+    return packetb.build();
+  }
+
   @Test(expected = IllegalArgumentException.class)
   public void twoNoFragmentedPackets() throws UnknownHostException {
     List<IpV6Packet> ipV6Packets = new ArrayList<IpV6Packet>();
@@ -126,10 +164,12 @@ public class IpV6HelperTest {
     IpV6Helper.defragment(ipV6Packets);
   }
 
-  private void testDefragment(boolean routingHeader) throws Exception {
+  private void testDefragment(ExtHeader extHeader) throws Exception {
     EthernetPacket expectedPacket;
-    if (routingHeader) {
+    if (extHeader == ExtHeader.ROUTING) {
       expectedPacket = (EthernetPacket) addExtRoutingHeader(getPacket(false), false);
+    } else if (extHeader == ExtHeader.DESTINATION) {
+      expectedPacket = (EthernetPacket) addExtDestinationHeader(getPacket(false), false);
     } else {
       expectedPacket = getPacket(false);
     }
@@ -141,8 +181,10 @@ public class IpV6HelperTest {
     while (true) {
       try {
         Packet packet;
-        if (routingHeader) {
+        if (extHeader == ExtHeader.ROUTING) {
           packet = addExtRoutingHeader(handle.getNextPacketEx(), true);
+        } else if (extHeader == ExtHeader.DESTINATION) {
+          packet = addExtDestinationHeader(handle.getNextPacketEx(), true);
         } else {
           packet = handle.getNextPacketEx();
         }
@@ -171,11 +213,16 @@ public class IpV6HelperTest {
 
   @Test
   public void testDefragmentWithRoutingHeader() throws Exception {
-    testDefragment(true);
+    testDefragment(ExtHeader.ROUTING);
   }
 
   @Test
   public void testDefragmentWithoutExtHeaders() throws Exception {
-    testDefragment(false);
+    testDefragment(ExtHeader.NO_HEADER);
+  }
+
+  @Test
+  public void testDefragmentWithDestinationExtHeaders() throws Exception {
+    testDefragment(ExtHeader.DESTINATION);
   }
 }
