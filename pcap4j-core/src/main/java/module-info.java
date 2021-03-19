@@ -14,7 +14,7 @@ module org.pcap4j.core {
   // These transitive modifiers are needed to avoid weird surefire errors
   // during pcap4j-packetfactory-* testing (due to maybe surefire's bug).
   requires transitive com.sun.jna;
-  requires transitive slf4j.api;
+  requires transitive org.slf4j;
 
   uses org.pcap4j.packet.factory.PacketFactoryBinderProvider;
 }
