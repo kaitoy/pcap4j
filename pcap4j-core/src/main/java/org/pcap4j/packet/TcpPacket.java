@@ -926,7 +926,7 @@ public final class TcpPacket extends AbstractPacket implements TransportPacket {
       sb.append("  Sequence Number: ").append(getSequenceNumberAsLong()).append(ls);
       sb.append("  Acknowledgment Number: ").append(getAcknowledgmentNumberAsLong()).append(ls);
       sb.append("  Data Offset: ")
-          .append(dataOffset)
+          .append(getDataOffsetAsInt())
           .append(" (")
           .append(dataOffset * 4)
           .append(" [bytes])")
