@@ -345,7 +345,7 @@ public final class UdpPacket extends AbstractPacket implements TransportPacket {
     private static final int LENGTH_SIZE = SHORT_SIZE_IN_BYTES;
     private static final int CHECKSUM_OFFSET = LENGTH_OFFSET + LENGTH_SIZE;
     private static final int CHECKSUM_SIZE = SHORT_SIZE_IN_BYTES;
-    private static final int UCP_HEADER_SIZE = CHECKSUM_OFFSET + CHECKSUM_SIZE;
+    private static final int UDP_HEADER_SIZE = CHECKSUM_OFFSET + CHECKSUM_SIZE;
 
     private static final int IPV4_PSEUDO_HEADER_SIZE = 12;
     private static final int IPV6_PSEUDO_HEADER_SIZE = 40;
@@ -356,10 +356,10 @@ public final class UdpPacket extends AbstractPacket implements TransportPacket {
     private final short checksum;
 
     private UdpHeader(byte[] rawData, int offset, int length) throws IllegalRawDataException {
-      if (length < UCP_HEADER_SIZE) {
+      if (length < UDP_HEADER_SIZE) {
         StringBuilder sb = new StringBuilder(80);
         sb.append("The data is too short to build a UDP header(")
-            .append(UCP_HEADER_SIZE)
+            .append(UDP_HEADER_SIZE)
             .append(" bytes). data: ")
             .append(ByteArrays.toHexString(rawData, " "))
             .append(", offset: ")
@@ -489,7 +489,7 @@ public final class UdpPacket extends AbstractPacket implements TransportPacket {
 
     @Override
     public int length() {
-      return UCP_HEADER_SIZE;
+      return UDP_HEADER_SIZE;
     }
 
     @Override
