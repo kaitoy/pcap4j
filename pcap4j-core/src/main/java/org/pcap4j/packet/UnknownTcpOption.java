@@ -22,7 +22,7 @@ public final class UnknownTcpOption implements TcpOption {
   private static final long serialVersionUID = -893085251311518110L;
 
   private final TcpOptionKind kind;
-  private final short length;
+  private final byte length;
   private final byte[] data;
 
   /**
@@ -54,8 +54,8 @@ public final class UnknownTcpOption implements TcpOption {
     }
 
     this.kind = TcpOptionKind.getInstance(rawData[offset]);
-    this.length = (short) (rawData[1 + offset] & 0xff);
-    if (length < this.length) {
+    this.length = rawData[1 + offset];
+    if (length < getLengthAsInt()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option(")
           .append(this.length)
@@ -68,7 +68,7 @@ public final class UnknownTcpOption implements TcpOption {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    if (this.length > 2) this.data = ByteArrays.getSubArray(rawData, 2 + offset, this.length - 2);
+    if (this.length > 2) this.data = ByteArrays.getSubArray(rawData, 2 + offset, getLengthAsInt() - 2);
     else this.data = new byte[] {};
   }
 
@@ -101,7 +101,7 @@ public final class UnknownTcpOption implements TcpOption {
   }
 
   /** @return length */
-  public short getLength() {
+  public byte getLength() {
     return length;
   }
 
@@ -121,7 +121,7 @@ public final class UnknownTcpOption implements TcpOption {
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[0] = kind.value();
-    rawData[1] = (byte) length;
+    rawData[1] = length;
     System.arraycopy(data, 0, rawData, 2, data.length);
     return rawData;
   }
@@ -178,7 +178,7 @@ public final class UnknownTcpOption implements TcpOption {
   public static final class Builder implements LengthBuilder<UnknownTcpOption> {
 
     private TcpOptionKind kind;
-    private short length;
+    private byte length;
     private byte[] data;
     private boolean correctLengthAtBuild;
 
