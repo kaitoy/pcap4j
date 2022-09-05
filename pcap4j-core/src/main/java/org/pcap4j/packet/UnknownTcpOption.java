@@ -55,7 +55,7 @@ public final class UnknownTcpOption implements TcpOption {
 
     this.kind = TcpOptionKind.getInstance(rawData[offset]);
     this.length = rawData[1 + offset];
-    if (length < this.length) {
+    if (length < getLengthAsInt()) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option(")
           .append(this.length)
@@ -68,7 +68,7 @@ public final class UnknownTcpOption implements TcpOption {
       throw new IllegalRawDataException(sb.toString());
     }
 
-    if (this.length > 2) this.data = ByteArrays.getSubArray(rawData, 2 + offset, this.length - 2);
+    if (this.length > 2) this.data = ByteArrays.getSubArray(rawData, 2 + offset, getLengthAsInt() - 2);
     else this.data = new byte[] {};
   }
 
