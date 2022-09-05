@@ -7,10 +7,11 @@
 
 package org.pcap4j.packet;
 
-import java.util.Arrays;
-import org.pcap4j.packet.TcpPacket.TcpOption;
-import org.pcap4j.packet.namednumber.TcpOptionKind;
-import org.pcap4j.util.ByteArrays;
+import org.pcap4j.packet.TcpPacket.*;
+import org.pcap4j.packet.namednumber.*;
+import org.pcap4j.util.*;
+
+import java.util.*;
 
 /**
  * @author Kaito Yamada
@@ -22,7 +23,7 @@ public final class UnknownTcpOption implements TcpOption {
   private static final long serialVersionUID = -893085251311518110L;
 
   private final TcpOptionKind kind;
-  private final byte length;
+  private final short length;
   private final byte[] data;
 
   /**
@@ -54,7 +55,7 @@ public final class UnknownTcpOption implements TcpOption {
     }
 
     this.kind = TcpOptionKind.getInstance(rawData[offset]);
-    this.length = rawData[1 + offset];
+    this.length = (short) (rawData[1 + offset] & 0xff);
     if (length < this.length) {
       StringBuilder sb = new StringBuilder(100);
       sb.append("The raw data is too short to build this option(")
@@ -101,7 +102,7 @@ public final class UnknownTcpOption implements TcpOption {
   }
 
   /** @return length */
-  public byte getLength() {
+  public short getLength() {
     return length;
   }
 
@@ -121,7 +122,7 @@ public final class UnknownTcpOption implements TcpOption {
   public byte[] getRawData() {
     byte[] rawData = new byte[length()];
     rawData[0] = kind.value();
-    rawData[1] = length;
+    rawData[1] = (byte) length;
     System.arraycopy(data, 0, rawData, 2, data.length);
     return rawData;
   }
@@ -178,7 +179,7 @@ public final class UnknownTcpOption implements TcpOption {
   public static final class Builder implements LengthBuilder<UnknownTcpOption> {
 
     private TcpOptionKind kind;
-    private byte length;
+    private short length;
     private byte[] data;
     private boolean correctLengthAtBuild;
 
