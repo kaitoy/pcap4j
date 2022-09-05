@@ -7,11 +7,10 @@
 
 package org.pcap4j.packet;
 
-import org.pcap4j.packet.TcpPacket.*;
-import org.pcap4j.packet.namednumber.*;
-import org.pcap4j.util.*;
-
-import java.util.*;
+import java.util.Arrays;
+import org.pcap4j.packet.TcpPacket.TcpOption;
+import org.pcap4j.packet.namednumber.TcpOptionKind;
+import org.pcap4j.util.ByteArrays;
 
 /**
  * @author Kaito Yamada
